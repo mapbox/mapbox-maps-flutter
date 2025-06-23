@@ -22,6 +22,14 @@ class PointAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Registers tap event callbacks for the annotations managed by this instance.
+  Cancelable tapEvents({required Function(PointAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/tap/$id")
+        .cast<PointAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
+  }
+
   /// Registers drag event callbacks for the annotations managed by this instance.
   ///
   /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
@@ -49,7 +57,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
     Function(PointAnnotation)? onChanged,
     Function(PointAnnotation)? onEnd,
   }) {
-    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/drag/$id")
         .cast<PointAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
@@ -469,11 +478,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getIconHaloWidth() =>
       _annotationMessenger.getIconHaloWidth(id);
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
   Future<void> setIconImageCrossFade(double iconImageCrossFade) =>
       _annotationMessenger.setIconImageCrossFade(id, iconImageCrossFade);
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
   Future<double?> getIconImageCrossFade() =>
       _annotationMessenger.getIconImageCrossFade(id);
 

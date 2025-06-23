@@ -42,6 +42,7 @@ void main() {
       fillOpacity: 1.0,
       fillOutlineColor: Colors.red.value,
       fillPattern: "abc",
+      fillPatternCrossFade: 1.0,
       fillTranslate: [0.0, 1.0],
       fillTranslateAnchor: FillTranslateAnchor.MAP,
       fillTunnelStructureColor: Colors.red.value,
@@ -63,6 +64,7 @@ void main() {
     expect(layer.fillOpacity, 1.0);
     expect(layer.fillOutlineColor, Colors.red.value);
     expect(layer.fillPattern, "abc");
+    expect(layer.fillPatternCrossFade, 1.0);
     expect(layer.fillTranslate, [0.0, 1.0]);
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
     expect(layer.fillTunnelStructureColor, Colors.red.value);
@@ -107,6 +109,7 @@ void main() {
       fillOpacityExpression: ['number', 1.0],
       fillOutlineColorExpression: ['rgba', 255, 0, 0, 1],
       fillPatternExpression: ['image', "abc"],
+      fillPatternCrossFadeExpression: ['number', 1.0],
       fillTranslateExpression: [
         'literal',
         [0.0, 1.0]
@@ -136,6 +139,7 @@ void main() {
     expect(layer.fillOpacity, 1.0);
     expect(layer.fillOutlineColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillPatternExpression, ['image', "abc"]);
+    expect(layer.fillPatternCrossFade, 1.0);
     expect(layer.fillTranslate, [0.0, 1.0]);
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
     expect(layer.fillTunnelStructureColorExpression, ['rgba', 255, 0, 0, 1]);

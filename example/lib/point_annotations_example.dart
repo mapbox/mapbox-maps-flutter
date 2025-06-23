@@ -56,6 +56,9 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
       pointAnnotationManager?.createMulti(carOptions);
       pointAnnotationManager
           ?.addOnPointAnnotationClickListener(AnnotationClickListener());
+      pointAnnotationManager?.tapEvents(onTap: (PointAnnotation annotation) {
+        print("[mai] onTap, id: ${annotation.id}");
+      });
     });
   }
 

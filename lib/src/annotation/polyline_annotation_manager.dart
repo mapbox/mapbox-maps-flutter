@@ -22,6 +22,14 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Registers tap event callbacks for the annotations managed by this instance.
+  Cancelable tapEvents({required Function(PolylineAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/tap/$id")
+        .cast<PolylineAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
+  }
+
   /// Registers drag event callbacks for the annotations managed by this instance.
   ///
   /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
@@ -49,7 +57,8 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
     Function(PolylineAnnotation)? onChanged,
     Function(PolylineAnnotation)? onEnd,
   }) {
-    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/drag/$id")
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

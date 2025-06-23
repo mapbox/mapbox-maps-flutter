@@ -18,8 +18,17 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnCircleAnnotationClickListener(
       OnCircleAnnotationClickListener listener) {
-    OnCircleAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    tapEvents(
+        onTap: (CircleAnnotation annotation) =>
+            listener.onCircleAnnotationClick(annotation));
+  }
+
+  /// Registers tap event callbacks for the annotations managed by this instance.
+  Cancelable tapEvents({required Function(CircleAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/tap/$id")
+        .cast<CircleAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
   }
 
   /// Registers drag event callbacks for the annotations managed by this instance.
@@ -49,7 +58,8 @@ class CircleAnnotationManager extends BaseAnnotationManager {
     Function(CircleAnnotation)? onChanged,
     Function(CircleAnnotation)? onEnd,
   }) {
-    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/drag/$id")
         .cast<CircleAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

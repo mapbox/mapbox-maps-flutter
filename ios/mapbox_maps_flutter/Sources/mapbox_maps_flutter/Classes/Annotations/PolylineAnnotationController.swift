@@ -4,8 +4,6 @@
 import Foundation
 import Flutter
 
-extension MapboxMaps.PolylineAnnotation: InteractableAnnotation {}
-
 final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnotationManager>, _PolylineAnnotationMessenger {
     private static let errorCode = "0"
     private typealias AnnotationManager = PolylineAnnotationManager
@@ -25,24 +23,31 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toPolylineAnnotation()
+                annotation.tapHandler = { [weak self] (context) in
+                    let context = PolylineAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolylineAnnotation(),
+                        gestureState: .ended)
+                    self?.tap(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PolylineAnnotationInteractionContext(
                         annotation: annotation.toFLTPolylineAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PolylineAnnotationInteractionContext(
                         annotation: annotation.toFLTPolylineAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PolylineAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPolylineAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
                 return annotation
             })

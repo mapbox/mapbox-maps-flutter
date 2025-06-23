@@ -4,8 +4,6 @@
 import Foundation
 import Flutter
 
-extension MapboxMaps.CircleAnnotation: InteractableAnnotation {}
-
 final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotationManager>, _CircleAnnotationMessenger {
     private static let errorCode = "0"
     private typealias AnnotationManager = CircleAnnotationManager
@@ -25,24 +23,31 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toCircleAnnotation()
+                annotation.tapHandler = { [weak self] (context) in
+                    let context = CircleAnnotationInteractionContext(
+                        annotation: annotation.toFLTCircleAnnotation(),
+                        gestureState: .ended)
+                    self?.tap(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = CircleAnnotationInteractionContext(
                         annotation: annotation.toFLTCircleAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = CircleAnnotationInteractionContext(
                         annotation: annotation.toFLTCircleAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = CircleAnnotationInteractionContext(
                 	    annotation: annotation.toFLTCircleAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
                 return annotation
             })

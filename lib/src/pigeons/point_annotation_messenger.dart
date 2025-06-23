@@ -290,7 +290,6 @@ class PointAnnotation {
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
-    @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
     this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
@@ -409,9 +408,9 @@ class PointAnnotation {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   double? iconHaloWidth;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
-  @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
@@ -634,7 +633,6 @@ class PointAnnotationOptions {
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
-    @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
     this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
@@ -750,9 +748,9 @@ class PointAnnotationOptions {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   double? iconHaloWidth;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
-  @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.

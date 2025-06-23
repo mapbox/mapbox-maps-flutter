@@ -38,7 +38,7 @@ extension AnnotationController: AnnotationInteractionDelegate {
     }
 }
 
-private class AnyAnnotationDragEventsStreamHandler: AnnotationDragEventsStreamHandler {
+private class AnyAnnotationInteractionEventsStreamHandler: AnnotationInteractionEventsStreamHandler {
     private var sink: PigeonEventSink<AnnotationInteractionContext>?
 
     override func onListen(withArguments arguments: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
@@ -61,6 +61,9 @@ private class AnyAnnotationDragEventsStreamHandler: AnnotationDragEventsStreamHa
         sink?.endOfStream()
     }
 }
+
+private class AnnotationTapEventsStreamHandler: AnyAnnotationInteractionEventsStreamHandler {}
+private class AnnotationDragEventsStreamHandler: AnyAnnotationInteractionEventsStreamHandler {}
 
 class AnnotationController {
     private let mapView: MapView
@@ -96,7 +99,9 @@ class AnnotationController {
             belowLayerId = nil
         }
 
-        let streamHandler = AnyAnnotationDragEventsStreamHandler()
+        let dragStream = AnyAnnotationInteractionEventsStreamHandler()
+        let tapStream = AnyAnnotationInteractionEventsStreamHandler()
+
         if let manager: AnnotationManager = {
             switch type {
             case "circle":
@@ -104,8 +109,11 @@ class AnnotationController {
                     id: id,
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
-                circleManager.delegate = self
-                    circleAnnotationController.add(controller: circleManager, sendGestureEvents: streamHandler.send(event:))
+                circleAnnotationController.add(
+                    controller: circleManager,
+                    onTap: tapStream.send(event:),
+                    onDrag: dragStream.send(event:)
+                )
                 disposal[id] = circleAnnotationController.removeController(id:)
                 return circleManager
             case "point":
@@ -113,8 +121,10 @@ class AnnotationController {
                     id: id,
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
-                pointManager.delegate = self
-                    pointAnnotationController.add(controller: pointManager, sendGestureEvents: streamHandler.send(event:))
+                pointAnnotationController.add(
+                    controller: pointManager,
+                    onTap: tapStream.send(event:)
+                    , onDrag: dragStream.send(event:))
                 disposal[id] = pointAnnotationController.removeController(id:)
                 return pointManager
             case "polygon":
@@ -122,8 +132,10 @@ class AnnotationController {
                     id: id,
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
-                polygonManager.delegate = self
-                    polygonAnnotationController.add(controller: polygonManager, sendGestureEvents: streamHandler.send(event:))
+                polygonAnnotationController.add(
+                    controller: polygonManager,
+                    onTap: tapStream.send(event:),
+                    onDrag: dragStream.send(event:))
                 disposal[id] = polygonAnnotationController.removeController(id:)
                 return polygonManager
             case "polyline":
@@ -131,18 +143,25 @@ class AnnotationController {
                     id: id,
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
-                polylineManager.delegate = self
-                    polylineAnnotationController.add(controller: polylineManager, sendGestureEvents: streamHandler.send(event:))
+                polylineAnnotationController.add(
+                    controller: polylineManager,
+                    onTap: tapStream.send(event:),
+                    onDrag: dragStream.send(event:)
+                )
                 disposal[id] = polylineAnnotationController.removeController(id:)
                 return polylineManager
             default:
                 return nil
             }
         }() {
-            AnnotationDragEventsStreamHandler.register(
+            AnnotationInteractionEventsStreamHandler.register(
                 with: binaryMessenger.messenger,
-                instanceName: binaryMessenger.suffix + "/" + id,
-                streamHandler: streamHandler)
+                instanceName: binaryMessenger.suffix + "/" + id + "/tap",
+                streamHandler: tapStream)
+            AnnotationInteractionEventsStreamHandler.register(
+                with: binaryMessenger.messenger,
+                instanceName: binaryMessenger.suffix + "/" + id + "/drag",
+                streamHandler: dragStream)
             result(manager.id)
         } else {
             result(AnnotationControllerError.wrongManagerType)
