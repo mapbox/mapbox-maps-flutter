@@ -16,6 +16,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
+  @Deprecated('Use [tapEvents] instead.')
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
     OnPolygonAnnotationClickListener.setUp(listener,
@@ -24,7 +25,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Registers tap event callbacks for the annotations managed by this instance.
   Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) {
-    return _annotationInteractionEvents(instanceName: "$_channelSuffix/tap/$id")
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) => onTap(data.annotation))
         .asCancelable();
@@ -58,7 +59,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
     Function(PolygonAnnotation)? onEnd,
   }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/drag/$id")
+            instanceName: "$_channelSuffix/$id/drag")
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

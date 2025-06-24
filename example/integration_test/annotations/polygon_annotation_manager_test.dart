@@ -94,6 +94,53 @@ void main() {
     expect(1.0, fillZOffset);
   });
 
+  testWidgets('annotation tap events', (tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+
+    final geometry = Polygon(coordinates: [
+      [
+        Position(0, 0),
+        Position(1.754703, -19.716317),
+        Position(-15.747196, -21.085074),
+        Position(-3.363937, -10.733102)
+      ]
+    ]);
+
+    final createdAnnotation = await manager.create(PolygonAnnotationOptions(
+      geometry: geometry,
+    ));
+
+    // Mock tap events
+    final eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/tap",
+        pigeonMethodCodec);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockStreamHandler(eventChannel,
+            MockStreamHandler.inline(onListen: (arguments, events) {
+      events.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      events.endOfStream();
+    }));
+
+    final onTap = Completer();
+    manager.tapEvents(
+      onTap: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onTap.complete();
+      },
+    );
+
+    await onTap.future;
+    expect(onTap.isCompleted, isTrue);
+  });
+
   testWidgets('annotation drag events', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -118,7 +165,7 @@ void main() {
 
     // Mock drag events
     final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents.0/${manager.id}",
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/drag",
         pigeonMethodCodec);
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(eventChannel,

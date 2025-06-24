@@ -223,24 +223,24 @@ class AnnotationController(
       var dragEventsSink: PigeonEventSink<AnnotationInteractionContext>? = null
 
       fun register(messenger: BinaryMessenger, channelName: String) {
-          val tapEvents = object : AnnotationInteractionEventsStreamHandler() {
-            override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
-              tapEventsSink = sink
-            }
-
-            override fun onCancel(p0: Any?) {
-              tapEventsSink = null
-            }
+        val tapEvents = object : AnnotationInteractionEventsStreamHandler() {
+          override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
+            tapEventsSink = sink
           }
-          val dragEvents = object : AnnotationInteractionEventsStreamHandler() {
-            override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
-              dragEventsSink = sink
-            }
 
-            override fun onCancel(p0: Any?) {
-              dragEventsSink = null
-            }
+          override fun onCancel(p0: Any?) {
+            tapEventsSink = null
           }
+        }
+        val dragEvents = object : AnnotationInteractionEventsStreamHandler() {
+          override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
+            dragEventsSink = sink
+          }
+
+          override fun onCancel(p0: Any?) {
+            dragEventsSink = null
+          }
+        }
         AnnotationInteractionEventsStreamHandler.register(messenger, tapEvents, "$channelName/tap")
         AnnotationInteractionEventsStreamHandler.register(messenger, tapEvents, "$channelName/drag")
       }

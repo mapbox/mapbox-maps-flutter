@@ -16,6 +16,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
+  @Deprecated('Use [tapEvents] instead.')
   void addOnPolylineAnnotationClickListener(
       OnPolylineAnnotationClickListener listener) {
     OnPolylineAnnotationClickListener.setUp(listener,
@@ -24,7 +25,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
 
   /// Registers tap event callbacks for the annotations managed by this instance.
   Cancelable tapEvents({required Function(PolylineAnnotation) onTap}) {
-    return _annotationInteractionEvents(instanceName: "$_channelSuffix/tap/$id")
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) => onTap(data.annotation))
         .asCancelable();
@@ -58,7 +59,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
     Function(PolylineAnnotation)? onEnd,
   }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/drag/$id")
+            instanceName: "$_channelSuffix/$id/drag")
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
