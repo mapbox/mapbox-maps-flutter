@@ -19,8 +19,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
   @Deprecated('Use [tapEvents] instead.')
   void addOnPointAnnotationClickListener(
       OnPointAnnotationClickListener listener) {
-    OnPointAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPointAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPointAnnotationClick), _channelSuffix);
   }
 
   /// Registers tap event callbacks for the annotations managed by this instance.

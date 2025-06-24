@@ -8,36 +8,6 @@ enum AnnotationControllerError: Error {
     case wrongManagerType
 }
 
-extension AnnotationController: AnnotationInteractionDelegate {
-    func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
-        let annotation = annotations.first
-        switch annotation {
-        case let annotation as MapboxMaps.PointAnnotation:
-            self.onPointAnnotationClickListener?.onPointAnnotationClick(
-                annotation: annotation.toFLTPointAnnotation(),
-                completion: {_ in }
-            )
-        case let annotation as MapboxMaps.CircleAnnotation:
-            self.onCircleAnnotationClickListener?.onCircleAnnotationClick(
-                annotation: annotation.toFLTCircleAnnotation(),
-                completion: {_ in }
-            )
-        case let annotation as MapboxMaps.PolygonAnnotation:
-            self.onPolygonAnnotationClickListener?.onPolygonAnnotationClick(
-                annotation: annotation.toFLTPolygonAnnotation(),
-                completion: {_ in }
-            )
-        case let annotation as MapboxMaps.PolylineAnnotation:
-            self.onPolylineAnnotationClickListener?.onPolylineAnnotationClick(
-                annotation: annotation.toFLTPolylineAnnotation(),
-                completion: {_ in }
-            )
-        default:
-            print("Can't detemine the type of annotation: \(String(describing: annotation))")
-        }
-    }
-}
-
 private class AnyAnnotationInteractionEventsStreamHandler: AnnotationInteractionEventsStreamHandler {
     private var sink: PigeonEventSink<AnnotationInteractionContext>?
 
@@ -74,10 +44,6 @@ class AnnotationController {
     private let pointAnnotationController: PointAnnotationController
     private let polygonAnnotationController: PolygonAnnotationController
     private let polylineAnnotationController: PolylineAnnotationController
-    private var onPointAnnotationClickListener: OnPointAnnotationClickListener?
-    private var onCircleAnnotationClickListener: OnCircleAnnotationClickListener?
-    private var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener?
-    private var onPolylineAnnotationClickListener: OnPolylineAnnotationClickListener?
 
     init(withMapView mapView: MapView, messenger: SuffixBinaryMessenger) {
         self.mapView = mapView
@@ -183,10 +149,6 @@ class AnnotationController {
         _PointAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: pointAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
         _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: polygonAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
         _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: polylineAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
-        onPointAnnotationClickListener = OnPointAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
-        onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
-        onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
-        onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
     }
 
     func tearDown() {
@@ -194,9 +156,5 @@ class AnnotationController {
         _PointAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        onPointAnnotationClickListener = nil
-        onCircleAnnotationClickListener = nil
-        onPolygonAnnotationClickListener = nil
-        onPolylineAnnotationClickListener = nil
     }
 }

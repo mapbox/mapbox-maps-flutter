@@ -19,8 +19,8 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   @Deprecated('Use [tapEvents] instead.')
   void addOnPolylineAnnotationClickListener(
       OnPolylineAnnotationClickListener listener) {
-    OnPolylineAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPolylineAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPolylineAnnotationClick), _channelSuffix);
   }
 
   /// Registers tap event callbacks for the annotations managed by this instance.

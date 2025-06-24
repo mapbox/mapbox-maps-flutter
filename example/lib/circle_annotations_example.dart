@@ -55,11 +55,10 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
         ));
       }
       circleAnnotationManager?.createMulti(options);
-      circleAnnotationManager?.addOnCircleAnnotationClickListener(
-        AnnotationClickListener(
-          onAnnotationClick: (annotation) => circleAnnotation = annotation,
-        ),
-      );
+      circleAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
+      });
     });
   }
 

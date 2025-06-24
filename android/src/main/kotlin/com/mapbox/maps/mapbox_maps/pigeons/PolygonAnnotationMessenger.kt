@@ -34,10 +34,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
-}
-
 /**
  * Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
  * Default value: "none".
@@ -338,31 +334,6 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
   }
 }
 
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class OnPolygonAnnotationClickListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by OnPolygonAnnotationClickListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      PolygonAnnotationMessengerPigeonCodec()
-    }
-  }
-  fun onPolygonAnnotationClick(annotationArg: PolygonAnnotation, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(annotationArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-}
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PolygonAnnotationMessenger {
   fun create(managerId: String, annotationOption: PolygonAnnotationOptions, callback: (Result<PolygonAnnotation>) -> Unit)

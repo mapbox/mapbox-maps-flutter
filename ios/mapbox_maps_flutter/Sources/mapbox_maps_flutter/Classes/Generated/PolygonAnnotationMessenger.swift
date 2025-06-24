@@ -56,10 +56,6 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
-private func createConnectionError(withChannelName channelName: String) -> PolygonAnnotationMessengerError {
-  return PolygonAnnotationMessengerError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -320,39 +316,6 @@ class PolygonAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unche
   static let shared = PolygonAnnotationMessengerPigeonCodec(readerWriter: PolygonAnnotationMessengerPigeonCodecReaderWriter())
 }
 
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol OnPolygonAnnotationClickListenerProtocol {
-  func onPolygonAnnotationClick(annotation annotationArg: PolygonAnnotation, completion: @escaping (Result<Void, PolygonAnnotationMessengerError>) -> Void)
-}
-class OnPolygonAnnotationClickListener: OnPolygonAnnotationClickListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: PolygonAnnotationMessengerPigeonCodec {
-    return PolygonAnnotationMessengerPigeonCodec.shared
-  }
-  func onPolygonAnnotationClick(annotation annotationArg: PolygonAnnotation, completion: @escaping (Result<Void, PolygonAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([annotationArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PolygonAnnotationMessengerError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _PolygonAnnotationMessenger {
   func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void)

@@ -54,10 +54,9 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
             geometry: createRandomPoint(), iconImage: "car-15"));
       }
       pointAnnotationManager?.createMulti(carOptions);
-      pointAnnotationManager
-          ?.addOnPointAnnotationClickListener(AnnotationClickListener());
-      pointAnnotationManager?.tapEvents(onTap: (PointAnnotation annotation) {
-        print("[mai] onTap, id: ${annotation.id}");
+      pointAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
       });
     });
   }

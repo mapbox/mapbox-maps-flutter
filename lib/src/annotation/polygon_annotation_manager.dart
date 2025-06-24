@@ -19,8 +19,8 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   @Deprecated('Use [tapEvents] instead.')
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
-    OnPolygonAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPolygonAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPolygonAnnotationClick), _channelSuffix);
   }
 
   /// Registers tap event callbacks for the annotations managed by this instance.

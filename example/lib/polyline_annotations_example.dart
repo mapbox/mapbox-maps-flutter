@@ -46,8 +46,10 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
               geometry: LineString(coordinates: e),
               lineColor: createRandomColor()))
           .toList());
-      polylineAnnotationManager
-          ?.addOnPolylineAnnotationClickListener(AnnotationClickListener());
+      polylineAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
+      });
     });
   }
 

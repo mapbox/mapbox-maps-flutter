@@ -1074,51 +1074,6 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
   }
 }
 
-abstract class OnPointAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      PointAnnotationMessenger_PigeonCodec();
-
-  void onPointAnnotationClick(PointAnnotation annotation);
-
-  static void setUp(
-    OnPointAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final PointAnnotation? arg_annotation = (args[0] as PointAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick was null, expected non-null PointAnnotation.');
-          try {
-            api.onPointAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
-  }
-}
-
 class _PointAnnotationMessenger {
   /// Constructor for [_PointAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default

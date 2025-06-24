@@ -327,52 +327,6 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
   }
 }
 
-abstract class OnPolygonAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      PolygonAnnotationMessenger_PigeonCodec();
-
-  void onPolygonAnnotationClick(PolygonAnnotation annotation);
-
-  static void setUp(
-    OnPolygonAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final PolygonAnnotation? arg_annotation =
-              (args[0] as PolygonAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick was null, expected non-null PolygonAnnotation.');
-          try {
-            api.onPolygonAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
-  }
-}
-
 class _PolygonAnnotationMessenger {
   /// Constructor for [_PolygonAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default

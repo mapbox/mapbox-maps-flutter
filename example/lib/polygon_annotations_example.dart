@@ -54,11 +54,10 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
             fillColor: createRandomColor()));
       }
       polygonAnnotationManager?.createMulti(options);
-      polygonAnnotationManager?.addOnPolygonAnnotationClickListener(
-        AnnotationClickListener(
-          onAnnotationClick: (annotation) => polygonAnnotation = annotation,
-        ),
-      );
+      polygonAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
+      });
     });
   }
 

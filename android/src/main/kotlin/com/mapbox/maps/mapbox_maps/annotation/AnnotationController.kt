@@ -2,10 +2,6 @@ package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.MapView
 import com.mapbox.maps.mapbox_maps.pigeons.*
-import com.mapbox.maps.mapbox_maps.pigeons.OnCircleAnnotationClickListener
-import com.mapbox.maps.mapbox_maps.pigeons.OnPointAnnotationClickListener
-import com.mapbox.maps.mapbox_maps.pigeons.OnPolygonAnnotationClickListener
-import com.mapbox.maps.mapbox_maps.pigeons.OnPolylineAnnotationClickListener
 import com.mapbox.maps.mapbox_maps.pigeons.PointAnnotation
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
@@ -144,6 +140,13 @@ class AnnotationController(
         return
       }
     }
+    managerMap[id] = manager
+    val eventsHandler = InteractionEventsHandler()
+    eventsHandler.register(
+      messenger,
+      "$channelSuffix/$id"
+    )
+    streamSinkMap[id] = eventsHandler
     result.success(id)
   }
 
