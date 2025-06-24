@@ -1,7 +1,5 @@
 ### main
 
-* Fixed an issue where style expressions did not override constant values when both were present.
-* [ios] Fix crash when force unwrapping UIImage for point annotations.
 * Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
 
 ### 2.9.0
@@ -45,6 +43,8 @@
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
 * Move experimental `modelElevationReference` property to `LocationPuck3D`. 
+* Fixed an issue where style expressions did not override constant values when both were present.
+* [ios] Fix crash when force unwrapping UIImage for point annotations.
 * Update MapboxMaps to v11.13.0
 
 ### 2.8.0 
