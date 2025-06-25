@@ -1,8 +1,19 @@
 ### main
 
-* Fixed an issue where style expressions did not override constant values when both were present.
-* [ios] Fix crash when force unwrapping UIImage for point annotations.
 * Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
+* Introduce `tapEvents` API to the Annotation Managers to handle tap event callbacks for annotations:
+  * `onTap`: Called when an annotation is tapped.
+
+  Example usage:
+  ```dart
+  manager.tapEvents(
+    onTap: (annotation) {
+      print("Tapped annotation: ${annotation.id}");
+    },
+  );
+  ```
+  > [!NOTE]
+  > Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
 
 ### 2.9.0
 
@@ -45,6 +56,8 @@
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
 * Move experimental `modelElevationReference` property to `LocationPuck3D`. 
+* Fixed an issue where style expressions did not override constant values when both were present.
+* [ios] Fix crash when force unwrapping UIImage for point annotations.
 * Update MapboxMaps to v11.13.0
 
 ### 2.8.0 
