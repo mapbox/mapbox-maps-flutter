@@ -42,7 +42,6 @@ void main() {
       fillExtrusionLineWidth: 1.0,
       fillExtrusionOpacity: 1.0,
       fillExtrusionPattern: "abc",
-      fillExtrusionPatternCrossFade: 1.0,
       fillExtrusionRoundedRoof: true,
       fillExtrusionTranslate: [0.0, 1.0],
       fillExtrusionTranslateAnchor: FillExtrusionTranslateAnchor.MAP,
@@ -78,7 +77,6 @@ void main() {
     expect(layer.fillExtrusionLineWidth, 1.0);
     expect(layer.fillExtrusionOpacity, 1.0);
     expect(layer.fillExtrusionPattern, "abc");
-    expect(layer.fillExtrusionPatternCrossFade, 1.0);
     expect(layer.fillExtrusionRoundedRoof, true);
     expect(layer.fillExtrusionTranslate, [0.0, 1.0]);
     expect(
@@ -127,7 +125,6 @@ void main() {
       fillExtrusionLineWidthExpression: ['number', 1.0],
       fillExtrusionOpacityExpression: ['number', 1.0],
       fillExtrusionPatternExpression: ['image', "abc"],
-      fillExtrusionPatternCrossFadeExpression: ['number', 1.0],
       fillExtrusionRoundedRoofExpression: ['==', true, true],
       fillExtrusionTranslateExpression: [
         'literal',
@@ -172,7 +169,6 @@ void main() {
     expect(layer.fillExtrusionLineWidth, 1.0);
     expect(layer.fillExtrusionOpacity, 1.0);
     expect(layer.fillExtrusionPatternExpression, ['image', "abc"]);
-    expect(layer.fillExtrusionPatternCrossFade, 1.0);
     expect(layer.fillExtrusionRoundedRoof, true);
     expect(layer.fillExtrusionTranslate, [0.0, 1.0]);
     expect(
