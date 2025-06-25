@@ -30,6 +30,13 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
                     self?.tap(context, managerId: managerId)
                     return true
                 }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = PointAnnotationInteractionContext(
+                        annotation: annotation.toFLTPointAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PointAnnotationInteractionContext(
                         annotation: annotation.toFLTPointAnnotation(),

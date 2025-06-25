@@ -67,6 +67,7 @@ class AnnotationController {
 
         let dragStream = AnyAnnotationInteractionEventsStreamHandler()
         let tapStream = AnyAnnotationInteractionEventsStreamHandler()
+        let longPressStream = AnyAnnotationInteractionEventsStreamHandler()
 
         if let manager: AnnotationManager = {
             switch type {
@@ -78,7 +79,8 @@ class AnnotationController {
                 circleAnnotationController.add(
                     controller: circleManager,
                     onTap: tapStream.send(event:),
-                    onDrag: dragStream.send(event:)
+                    onDrag: dragStream.send(event:),
+                    onLongPress: longPressStream.send(event:)
                 )
                 disposal[id] = circleAnnotationController.removeController(id:)
                 return circleManager
@@ -89,8 +91,10 @@ class AnnotationController {
                 )
                 pointAnnotationController.add(
                     controller: pointManager,
-                    onTap: tapStream.send(event:)
-                    , onDrag: dragStream.send(event:))
+                    onTap: tapStream.send(event:),
+                    onDrag: dragStream.send(event:),
+                    onLongPress: longPressStream.send(event:)
+                )
                 disposal[id] = pointAnnotationController.removeController(id:)
                 return pointManager
             case "polygon":
@@ -101,7 +105,8 @@ class AnnotationController {
                 polygonAnnotationController.add(
                     controller: polygonManager,
                     onTap: tapStream.send(event:),
-                    onDrag: dragStream.send(event:))
+                    onDrag: dragStream.send(event:),
+                    onLongPress: longPressStream.send(event:)                )
                 disposal[id] = polygonAnnotationController.removeController(id:)
                 return polygonManager
             case "polyline":
@@ -112,8 +117,8 @@ class AnnotationController {
                 polylineAnnotationController.add(
                     controller: polylineManager,
                     onTap: tapStream.send(event:),
-                    onDrag: dragStream.send(event:)
-                )
+                    onDrag: dragStream.send(event:),
+                    onLongPress: longPressStream.send(event:)                )
                 disposal[id] = polylineAnnotationController.removeController(id:)
                 return polylineManager
             default:
@@ -128,6 +133,10 @@ class AnnotationController {
                 with: binaryMessenger.messenger,
                 instanceName: binaryMessenger.suffix + "/" + id + "/drag",
                 streamHandler: dragStream)
+            AnnotationInteractionEventsStreamHandler.register(
+                with: binaryMessenger.messenger,
+                instanceName: binaryMessenger.suffix + "/" + id + "/long_press",
+                streamHandler: longPressStream)
             result(manager.id)
         } else {
             result(AnnotationControllerError.wrongManagerType)

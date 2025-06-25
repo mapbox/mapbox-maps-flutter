@@ -30,6 +30,13 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
                     self?.tap(context, managerId: managerId)
                     return true
                 }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),

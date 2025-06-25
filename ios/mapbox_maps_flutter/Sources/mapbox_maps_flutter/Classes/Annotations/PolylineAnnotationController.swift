@@ -30,6 +30,13 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
                     self?.tap(context, managerId: managerId)
                     return true
                 }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = PolylineAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolylineAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PolylineAnnotationInteractionContext(
                         annotation: annotation.toFLTPolylineAnnotation(),

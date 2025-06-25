@@ -30,6 +30,13 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
                     self?.tap(context, managerId: managerId)
                     return true
                 }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = CircleAnnotationInteractionContext(
+                        annotation: annotation.toFLTCircleAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = CircleAnnotationInteractionContext(
                         annotation: annotation.toFLTCircleAnnotation(),

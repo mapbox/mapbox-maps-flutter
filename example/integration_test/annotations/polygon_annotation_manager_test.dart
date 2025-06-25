@@ -141,6 +141,53 @@ void main() {
     expect(onTap.isCompleted, isTrue);
   });
 
+  testWidgets('annotation long press events', (tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+
+    final geometry = Polygon(coordinates: [
+      [
+        Position(0, 0),
+        Position(1.754703, -19.716317),
+        Position(-15.747196, -21.085074),
+        Position(-3.363937, -10.733102)
+      ]
+    ]);
+
+    final createdAnnotation = await manager.create(PolygonAnnotationOptions(
+      geometry: geometry,
+    ));
+
+    // Mock long press events
+    final eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/long_press",
+        pigeonMethodCodec);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockStreamHandler(eventChannel,
+            MockStreamHandler.inline(onListen: (arguments, events) {
+      events.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      events.endOfStream();
+    }));
+
+    final onLongPress = Completer();
+    manager.longPressEvents(
+      onLongPress: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onLongPress.complete();
+      },
+    );
+
+    await onLongPress.future;
+    expect(onLongPress.isCompleted, isTrue);
+  });
+
   testWidgets('annotation drag events', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();

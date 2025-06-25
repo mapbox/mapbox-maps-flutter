@@ -16,6 +16,7 @@ class BaseAnnotationMessenger<C: AnnotationControllable> {
         let controller: C
         let onTap: (AnnotationInteractionContext) -> Void
         let onDrag: (AnnotationInteractionContext) -> Void
+        let onLongPress: (AnnotationInteractionContext) -> Void
     }
     private var storage: [String: Storage] = [:]
 
@@ -27,6 +28,10 @@ class BaseAnnotationMessenger<C: AnnotationControllable> {
         storage[managerId]?.onDrag(context)
     }
 
+    func longPress(_ context: AnnotationInteractionContext, managerId: String) {
+        storage[managerId]?.onLongPress(context)
+    }
+
     private subscript(id: String) -> C? {
         return storage[id]?.controller
     }
@@ -34,9 +39,10 @@ class BaseAnnotationMessenger<C: AnnotationControllable> {
     func add(
         controller: C,
         onTap: @escaping (AnnotationInteractionContext) -> Void,
-        onDrag: @escaping (AnnotationInteractionContext) -> Void
+        onDrag: @escaping (AnnotationInteractionContext) -> Void,
+        onLongPress: @escaping (AnnotationInteractionContext) -> Void
     ) {
-        storage[controller.id] = Storage(controller: controller, onTap: onTap, onDrag: onDrag)
+        storage[controller.id] = Storage(controller: controller, onTap: onTap, onDrag: onDrag, onLongPress: onLongPress)
     }
 
     func removeController(id: String) {

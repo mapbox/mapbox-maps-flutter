@@ -1,9 +1,7 @@
 ### main
 
 * Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
-* Introduce `tapEvents` API to the Annotation Managers to handle tap event callbacks for annotations:
-  * `onTap`: Called when an annotation is tapped.
-
+* Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
   Example usage:
   ```dart
   manager.tapEvents(
@@ -11,9 +9,14 @@
       print("Tapped annotation: ${annotation.id}");
     },
   );
+  manager.longPressEvents(
+    onLongPress: (annotation) {
+      print("Long press annotation: ${annotation.id}");
+    },
+  );
   ```
-  > [!NOTE]
-  > Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+> [!NOTE]
+> Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
 
 ### 2.9.0
 
