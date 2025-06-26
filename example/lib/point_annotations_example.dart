@@ -17,13 +17,6 @@ class PointAnnotationExample extends StatefulWidget implements Example {
   State<StatefulWidget> createState() => PointAnnotationExampleState();
 }
 
-class AnnotationClickListener extends OnPointAnnotationClickListener {
-  @override
-  void onPointAnnotationClick(PointAnnotation annotation) {
-    print("onAnnotationClick, id: ${annotation.id}");
-  }
-}
-
 class PointAnnotationExampleState extends State<PointAnnotationExample> {
   PointAnnotationExampleState();
 
@@ -57,6 +50,10 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
       pointAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
+      });
+      pointAnnotationManager?.longPressEvents(onLongPress: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationLongPress, id: ${annotation.id}");
       });
     });
   }

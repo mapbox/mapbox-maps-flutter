@@ -16,20 +16,6 @@ class PolygonAnnotationExample extends StatefulWidget implements Example {
   State<StatefulWidget> createState() => PolygonAnnotationExampleState();
 }
 
-class AnnotationClickListener extends OnPolygonAnnotationClickListener {
-  AnnotationClickListener({
-    required this.onAnnotationClick,
-  });
-
-  final void Function(PolygonAnnotation annotation) onAnnotationClick;
-
-  @override
-  void onPolygonAnnotationClick(PolygonAnnotation annotation) {
-    print("onAnnotationClick, id: ${annotation.id}");
-    onAnnotationClick(annotation);
-  }
-}
-
 class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
   PolygonAnnotationExampleState();
 
@@ -57,6 +43,10 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
       polygonAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
+      });
+      polygonAnnotationManager?.longPressEvents(onLongPress: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationLongPress, id: ${annotation.id}");
       });
     });
   }
