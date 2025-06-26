@@ -23,7 +23,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         tapEvents(onTap: listener.onPolylineAnnotationClick), _channelSuffix);
   }
 
-  /// Registers tap event callbacks for the annotations managed by this instance.
+  /// Registers tap event callbacks for the annotations managed by this manager.
   ///
   /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
   Cancelable tapEvents({required Function(PolylineAnnotation) onTap}) {
@@ -33,7 +33,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         .asCancelable();
   }
 
-  /// Registers long press event callbacks for the annotations managed by this instance.
+  /// Registers long press event callbacks for the annotations managed by this manager.
   ///
   /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
   Cancelable longPressEvents(
@@ -45,7 +45,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         .asCancelable();
   }
 
-  /// Registers drag event callbacks for the annotations managed by this instance.
+  /// Registers drag event callbacks for the annotations managed by this manager.
   ///
   /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
   /// - [onChanged]: Triggered continuously as the annotation is being dragged.

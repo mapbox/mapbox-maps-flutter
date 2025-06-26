@@ -15,7 +15,9 @@
     },
   );
   ```
+
 > [!NOTE]
+> As part of this change, `AnnotationOnClickListener` is now deprecated.
 > Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
 
 ### 2.9.0
