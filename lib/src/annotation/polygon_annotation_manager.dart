@@ -16,13 +16,36 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
+  @Deprecated('Use [tapEvents] instead.')
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
-    OnPolygonAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPolygonAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPolygonAnnotationClick), _channelSuffix);
   }
 
-  /// Registers drag event callbacks for the annotations managed by this instance.
+  /// Registers tap event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+  Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
+        .cast<PolygonAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers long press event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
+  Cancelable longPressEvents(
+      {required Function(PolygonAnnotation) onLongPress}) {
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/long_press")
+        .cast<PolygonAnnotationInteractionContext>()
+        .listen((data) => onLongPress(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers drag event callbacks for the annotations managed by this manager.
   ///
   /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
   /// - [onChanged]: Triggered continuously as the annotation is being dragged.
@@ -49,7 +72,8 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
     Function(PolygonAnnotation)? onChanged,
     Function(PolygonAnnotation)? onEnd,
   }) {
-    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/drag")
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

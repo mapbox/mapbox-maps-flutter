@@ -2,10 +2,6 @@ package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.MapView
 import com.mapbox.maps.mapbox_maps.pigeons.*
-import com.mapbox.maps.mapbox_maps.pigeons.OnCircleAnnotationClickListener
-import com.mapbox.maps.mapbox_maps.pigeons.OnPointAnnotationClickListener
-import com.mapbox.maps.mapbox_maps.pigeons.OnPolygonAnnotationClickListener
-import com.mapbox.maps.mapbox_maps.pigeons.OnPolylineAnnotationClickListener
 import com.mapbox.maps.mapbox_maps.pigeons.PointAnnotation
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
@@ -18,6 +14,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import kotlin.collections.set
 
 class AnnotationController(
   private val mapView: MapView,
@@ -25,15 +22,11 @@ class AnnotationController(
   private val channelSuffix: String
 ) : ControllerDelegate {
   private val managerMap = mutableMapOf<String, AnnotationManager<*, *, *, *, *, *, *>>()
-  private val streamSinkMap = mutableMapOf<String, PigeonEventSink<AnnotationInteractionContext>>()
+  private val streamSinkMap = mutableMapOf<String, InteractionEventsHandler>()
   private val pointAnnotationController = PointAnnotationController(this)
   private val circleAnnotationController = CircleAnnotationController(this)
   private val polygonAnnotationController = PolygonAnnotationController(this)
   private val polylineAnnotationController = PolylineAnnotationController(this)
-  private var onPointAnnotationClickListener: OnPointAnnotationClickListener? = null
-  private var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener? = null
-  private var onPolylineAnnotationClickListener: OnPolylineAnnotationClickListener? = null
-  private var onCircleAnnotationClickListener: OnCircleAnnotationClickListener? = null
   private var index = 0
 
   fun handleCreateManager(call: MethodCall, result: MethodChannel.Result) {
@@ -50,7 +43,13 @@ class AnnotationController(
         mapView.annotations.createCircleAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnCircleAnnotationClickListener { annotation ->
-              onCircleAnnotationClickListener?.onCircleAnnotationClick(annotation.toFLTCircleAnnotation()) {}
+              sendTapEvent(id, annotation)
+              false
+            }
+          )
+          this.addLongClickListener(
+            OnCircleAnnotationLongClickListener { annotation ->
+              sendLongPressEvent(id, annotation)
               false
             }
           )
@@ -74,7 +73,13 @@ class AnnotationController(
         mapView.annotations.createPointAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
-              onPointAnnotationClickListener?.onPointAnnotationClick(annotation.toFLTPointAnnotation()) {}
+              sendTapEvent(id, annotation)
+              false
+            }
+          )
+          this.addLongClickListener(
+            OnPointAnnotationLongClickListener { annotation ->
+              sendLongPressEvent(id, annotation)
               false
             }
           )
@@ -98,7 +103,13 @@ class AnnotationController(
         mapView.annotations.createPolygonAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListener { annotation ->
-              onPolygonAnnotationClickListener?.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation()) {}
+              sendTapEvent(id, annotation)
+              false
+            }
+          )
+          this.addLongClickListener(
+            OnPolygonAnnotationLongClickListener { annotation ->
+              sendLongPressEvent(id, annotation)
               false
             }
           )
@@ -122,7 +133,13 @@ class AnnotationController(
         mapView.annotations.createPolylineAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickListener { annotation ->
-              onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation()) {}
+              sendTapEvent(id, annotation)
+              false
+            }
+          )
+          this.addLongClickListener(
+            OnPolylineAnnotationLongClickListener { annotation ->
+              sendLongPressEvent(id, annotation)
               false
             }
           )
@@ -147,23 +164,13 @@ class AnnotationController(
         return
       }
     }
-
-    val interactionEvents = object : AnnotationDragEventsStreamHandler() {
-      override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
-        streamSinkMap[id] = sink
-      }
-
-      override fun onCancel(p0: Any?) {
-        streamSinkMap.remove(id)
-      }
-    }
-
-    AnnotationDragEventsStreamHandler.register(
-      messenger,
-      interactionEvents, "$channelSuffix/$id"
-    )
-
     managerMap[id] = manager
+    val eventsHandler = InteractionEventsHandler()
+    eventsHandler.register(
+      messenger,
+      "$channelSuffix/$id"
+    )
+    streamSinkMap[id] = eventsHandler
     result.success(id)
   }
 
@@ -176,10 +183,6 @@ class AnnotationController(
   }
 
   fun setup() {
-    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger, channelSuffix)
-    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger, channelSuffix)
-    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger, channelSuffix)
-    onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(messenger, channelSuffix)
     _PointAnnotationMessenger.setUp(messenger, pointAnnotationController, channelSuffix)
     _CircleAnnotationMessenger.setUp(
       messenger,
@@ -200,10 +203,6 @@ class AnnotationController(
     _CircleAnnotationMessenger.setUp(messenger, null, channelSuffix)
     _PolylineAnnotationMessenger.setUp(messenger, null, channelSuffix)
     _PolygonAnnotationMessenger.setUp(messenger, null, channelSuffix)
-    onPointAnnotationClickListener = null
-    onCircleAnnotationClickListener = null
-    onPolygonAnnotationClickListener = null
-    onPolylineAnnotationClickListener = null
   }
 
   fun sendDragEvent(managerId: String, annotation: Annotation<*>, gestureState: GestureState) {
@@ -219,7 +218,39 @@ class AnnotationController(
 
       else -> throw IllegalArgumentException("$annotation is unsupported")
     }
-    streamSinkMap[managerId]?.success(context)
+    streamSinkMap[managerId]?.dragEventsSink?.success(context)
+  }
+
+  fun sendTapEvent(managerId: String, annotation: Annotation<*>) {
+    val context: AnnotationInteractionContext = when (annotation) {
+      is com.mapbox.maps.plugin.annotation.generated.PointAnnotation ->
+        PointAnnotationInteractionContext(annotation.toFLTPointAnnotation(), GestureState.ENDED)
+      is CircleAnnotation ->
+        CircleAnnotationInteractionContext(annotation.toFLTCircleAnnotation(), GestureState.ENDED)
+      is PolygonAnnotation ->
+        PolygonAnnotationInteractionContext(annotation.toFLTPolygonAnnotation(), GestureState.ENDED)
+      is PolylineAnnotation ->
+        PolylineAnnotationInteractionContext(annotation.toFLTPolylineAnnotation(), GestureState.ENDED)
+
+      else -> throw IllegalArgumentException("$annotation is unsupported")
+    }
+    streamSinkMap[managerId]?.tapEventsSink?.success(context)
+  }
+
+  fun sendLongPressEvent(managerId: String, annotation: Annotation<*>) {
+    val context: AnnotationInteractionContext = when (annotation) {
+      is com.mapbox.maps.plugin.annotation.generated.PointAnnotation ->
+        PointAnnotationInteractionContext(annotation.toFLTPointAnnotation(), GestureState.ENDED)
+      is CircleAnnotation ->
+        CircleAnnotationInteractionContext(annotation.toFLTCircleAnnotation(), GestureState.ENDED)
+      is PolygonAnnotation ->
+        PolygonAnnotationInteractionContext(annotation.toFLTPolygonAnnotation(), GestureState.ENDED)
+      is PolylineAnnotation ->
+        PolylineAnnotationInteractionContext(annotation.toFLTPolylineAnnotation(), GestureState.ENDED)
+
+      else -> throw IllegalArgumentException("$annotation is unsupported")
+    }
+    streamSinkMap[managerId]?.longPressEventsSink?.success(context)
   }
 
   override fun getManager(managerId: String): AnnotationManager<*, *, *, *, *, *, *> {
@@ -227,5 +258,46 @@ class AnnotationController(
       throw(Throwable("No manager found with id: $managerId"))
     }
     return managerMap[managerId]!!
+  }
+
+  companion object {
+    class InteractionEventsHandler {
+      var tapEventsSink: PigeonEventSink<AnnotationInteractionContext>? = null
+      var dragEventsSink: PigeonEventSink<AnnotationInteractionContext>? = null
+      var longPressEventsSink: PigeonEventSink<AnnotationInteractionContext>? = null
+
+      fun register(messenger: BinaryMessenger, channelName: String) {
+        val tapEvents = object : AnnotationInteractionEventsStreamHandler() {
+          override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
+            tapEventsSink = sink
+          }
+
+          override fun onCancel(p0: Any?) {
+            tapEventsSink = null
+          }
+        }
+        val longPressEvents = object : AnnotationInteractionEventsStreamHandler() {
+          override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
+            longPressEventsSink = sink
+          }
+
+          override fun onCancel(p0: Any?) {
+            longPressEventsSink = null
+          }
+        }
+        val dragEvents = object : AnnotationInteractionEventsStreamHandler() {
+          override fun onListen(p0: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
+            dragEventsSink = sink
+          }
+
+          override fun onCancel(p0: Any?) {
+            dragEventsSink = null
+          }
+        }
+        AnnotationInteractionEventsStreamHandler.register(messenger, tapEvents, "$channelName/tap")
+        AnnotationInteractionEventsStreamHandler.register(messenger, tapEvents, "$channelName/drag")
+        AnnotationInteractionEventsStreamHandler.register(messenger, longPressEvents, "$channelName/long_press")
+      }
+    }
   }
 }

@@ -335,52 +335,6 @@ class CircleAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
   }
 }
 
-abstract class OnCircleAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      CircleAnnotationMessenger_PigeonCodec();
-
-  void onCircleAnnotationClick(CircleAnnotation annotation);
-
-  static void setUp(
-    OnCircleAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final CircleAnnotation? arg_annotation =
-              (args[0] as CircleAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick was null, expected non-null CircleAnnotation.');
-          try {
-            api.onCircleAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
-  }
-}
-
 class _CircleAnnotationMessenger {
   /// Constructor for [_CircleAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default

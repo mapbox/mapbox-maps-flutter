@@ -56,10 +56,6 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
-private func createConnectionError(withChannelName channelName: String) -> CircleAnnotationMessengerError {
-  return CircleAnnotationMessengerError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -338,39 +334,6 @@ class CircleAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unchec
   static let shared = CircleAnnotationMessengerPigeonCodec(readerWriter: CircleAnnotationMessengerPigeonCodecReaderWriter())
 }
 
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol OnCircleAnnotationClickListenerProtocol {
-  func onCircleAnnotationClick(annotation annotationArg: CircleAnnotation, completion: @escaping (Result<Void, CircleAnnotationMessengerError>) -> Void)
-}
-class OnCircleAnnotationClickListener: OnCircleAnnotationClickListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: CircleAnnotationMessengerPigeonCodec {
-    return CircleAnnotationMessengerPigeonCodec.shared
-  }
-  func onCircleAnnotationClick(annotation annotationArg: CircleAnnotation, completion: @escaping (Result<Void, CircleAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([annotationArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(CircleAnnotationMessengerError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _CircleAnnotationMessenger {
   func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void)

@@ -4,8 +4,6 @@
 import Foundation
 import Flutter
 
-extension MapboxMaps.PolygonAnnotation: InteractableAnnotation {}
-
 final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotationManager>, _PolygonAnnotationMessenger {
     private static let errorCode = "0"
     private typealias AnnotationManager = PolygonAnnotationManager
@@ -25,24 +23,38 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toPolygonAnnotation()
+                annotation.tapHandler = { [weak self] (context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .ended)
+                    self?.tap(context, managerId: managerId)
+                    return true
+                }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PolygonAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
                 return annotation
             })
