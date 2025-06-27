@@ -8,6 +8,18 @@ orbs:
 
 commands:
 
+  check-api-breakage:
+    steps:
+      - run:
+          name: Add pub-cache to PATH
+          command: echo 'export PATH="$HOME/.pub-cache/bin:$PATH"' >> $BASH_ENV
+      - run:
+          name: Install dart_apitool
+          command: dart pub global activate dart_apitool 0.21.1
+      - run:
+          name: Check API breakage
+          command: bash scripts/check_api_breakage.sh
+
   inject-netrc-credentials:
     steps:
       - run:
@@ -224,7 +236,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.24.3
+          version: 3.27.0
       - run:
           name: Check license
           command: bash scripts/license.sh --mode validate
@@ -235,6 +247,7 @@ jobs:
           name: Check all tests are in the test suite
           command: dart ../scripts/check_test_suite.dart
           working_directory: example
+      - check-api-breakage
 
 workflows:
   build:
