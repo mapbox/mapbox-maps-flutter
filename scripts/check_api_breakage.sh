@@ -9,7 +9,7 @@ fi
 
 # Get the current stable version of mapbox_maps_flutter on pub.dev
 PACKAGE_NAME="mapbox_maps_flutter"
-PACKAGE_VERSION=$(curl -s "https://pub.dev/api/packages/$PACKAGE_NAME" | grep -o '"latest":{"version":"[^"]*' | grep -o '[0-9]\+\(\.[0-9]\+\)*')
+PACKAGE_VERSION=$(curl -s "https://pub.dev/api/packages/$PACKAGE_NAME") | jq  .latest.version
 echo "Current stable version of mapbox_maps_flutter: $PACKAGE_VERSION"
 
 # Get the path of local mapbox-maps-flutter
