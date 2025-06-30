@@ -7,6 +7,19 @@ orbs:
   slack: circleci/slack@5
 
 commands:
+
+  check-api-breakage:
+    steps:
+      - run:
+          name: Add pub-cache to PATH
+          command: echo 'export PATH="$HOME/.pub-cache/bin:$PATH"' >> $BASH_ENV
+      - run:
+          name: Install dart_apitool
+          command: dart pub global activate dart_apitool 0.21.1
+      - run:
+          name: Check API breakage
+          command: bash scripts/check_api_breakage.sh
+
   inject-netrc-credentials:
     steps:
       - run:
@@ -226,6 +239,7 @@ jobs:
           name: Check all tests are in the mobile test suite
           working_directory: mapbox_maps_flutter_mobile/example
           command: dart ../../scripts/check_test_suite.dart
+      - check-api-breakage
 
 workflows:
   build:
@@ -249,4 +263,4 @@ executors:
   firebase-test-runner:
     resource_class: small
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.13

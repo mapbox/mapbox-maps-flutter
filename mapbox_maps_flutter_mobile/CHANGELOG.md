@@ -1,7 +1,32 @@
 ### main
 
+* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
+* Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
+  Example usage:
+  ```dart
+  manager.tapEvents(
+    onTap: (annotation) {
+      print("Tapped annotation: ${annotation.id}");
+    },
+  );
+  manager.longPressEvents(
+    onLongPress: (annotation) {
+      print("Long press annotation: ${annotation.id}");
+    },
+  );
+  ```
+
+> [!NOTE]
+> As part of this change, `AnnotationOnClickListener` is now deprecated.
+> Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+
+### 2.9.0
+
 > [!IMPORTANT]
-> [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
+> ⚠️ Breaking changes
+> * [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
+> * `PointAnnotation.iconImageCrossFade` has been deprecated and setting a value to it will not have any impact. Use `PointAnnotationManager.iconImageCrossFade` instead.
+> * The STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
 
 * In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
   * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
@@ -35,8 +60,10 @@
   * `MapboxMap.removeFeatureStateForFeaturesetFeature`
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
-* Additionally, the STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
 * Move experimental `modelElevationReference` property to `LocationPuck3D`. 
+* Fixed an issue where style expressions did not override constant values when both were present.
+* [ios] Fix crash when force unwrapping UIImage for point annotations.
+* Update MapboxMaps to v11.13.0
 
 ### 2.8.0 
 

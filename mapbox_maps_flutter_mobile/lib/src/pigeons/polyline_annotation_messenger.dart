@@ -445,52 +445,6 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
   }
 }
 
-abstract class OnPolylineAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      PolylineAnnotationMessenger_PigeonCodec();
-
-  void onPolylineAnnotationClick(PolylineAnnotation annotation);
-
-  static void setUp(
-    OnPolylineAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolylineAnnotationClickListener.onPolylineAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolylineAnnotationClickListener.onPolylineAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final PolylineAnnotation? arg_annotation =
-              (args[0] as PolylineAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolylineAnnotationClickListener.onPolylineAnnotationClick was null, expected non-null PolylineAnnotation.');
-          try {
-            api.onPolylineAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
-  }
-}
-
 class _PolylineAnnotationMessenger {
   /// Constructor for [_PolylineAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default

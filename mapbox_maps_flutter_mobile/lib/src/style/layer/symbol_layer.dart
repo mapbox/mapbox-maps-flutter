@@ -567,11 +567,11 @@ class SymbolLayer extends Layer {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   List<Object>? iconHaloWidthExpression;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
   double? iconImageCrossFade;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
   List<Object>? iconImageCrossFadeExpression;
 
@@ -1030,149 +1030,128 @@ class SymbolLayer extends Layer {
     var paint = {};
     if (iconColorExpression != null) {
       paint["icon-color"] = iconColorExpression;
-    }
-    if (iconColor != null) {
+    } else if (iconColor != null) {
       paint["icon-color"] = iconColor?.toRGBA();
     }
 
     if (iconColorSaturationExpression != null) {
       paint["icon-color-saturation"] = iconColorSaturationExpression;
-    }
-    if (iconColorSaturation != null) {
+    } else if (iconColorSaturation != null) {
       paint["icon-color-saturation"] = iconColorSaturation;
     }
 
     if (iconEmissiveStrengthExpression != null) {
       paint["icon-emissive-strength"] = iconEmissiveStrengthExpression;
-    }
-    if (iconEmissiveStrength != null) {
+    } else if (iconEmissiveStrength != null) {
       paint["icon-emissive-strength"] = iconEmissiveStrength;
     }
 
     if (iconHaloBlurExpression != null) {
       paint["icon-halo-blur"] = iconHaloBlurExpression;
-    }
-    if (iconHaloBlur != null) {
+    } else if (iconHaloBlur != null) {
       paint["icon-halo-blur"] = iconHaloBlur;
     }
 
     if (iconHaloColorExpression != null) {
       paint["icon-halo-color"] = iconHaloColorExpression;
-    }
-    if (iconHaloColor != null) {
+    } else if (iconHaloColor != null) {
       paint["icon-halo-color"] = iconHaloColor?.toRGBA();
     }
 
     if (iconHaloWidthExpression != null) {
       paint["icon-halo-width"] = iconHaloWidthExpression;
-    }
-    if (iconHaloWidth != null) {
+    } else if (iconHaloWidth != null) {
       paint["icon-halo-width"] = iconHaloWidth;
     }
 
     if (iconImageCrossFadeExpression != null) {
       paint["icon-image-cross-fade"] = iconImageCrossFadeExpression;
-    }
-    if (iconImageCrossFade != null) {
+    } else if (iconImageCrossFade != null) {
       paint["icon-image-cross-fade"] = iconImageCrossFade;
     }
 
     if (iconOcclusionOpacityExpression != null) {
       paint["icon-occlusion-opacity"] = iconOcclusionOpacityExpression;
-    }
-    if (iconOcclusionOpacity != null) {
+    } else if (iconOcclusionOpacity != null) {
       paint["icon-occlusion-opacity"] = iconOcclusionOpacity;
     }
 
     if (iconOpacityExpression != null) {
       paint["icon-opacity"] = iconOpacityExpression;
-    }
-    if (iconOpacity != null) {
+    } else if (iconOpacity != null) {
       paint["icon-opacity"] = iconOpacity;
     }
 
     if (iconTranslateExpression != null) {
       paint["icon-translate"] = iconTranslateExpression;
-    }
-    if (iconTranslate != null) {
+    } else if (iconTranslate != null) {
       paint["icon-translate"] = iconTranslate;
     }
 
     if (iconTranslateAnchorExpression != null) {
       paint["icon-translate-anchor"] = iconTranslateAnchorExpression;
-    }
-    if (iconTranslateAnchor != null) {
+    } else if (iconTranslateAnchor != null) {
       paint["icon-translate-anchor"] =
           iconTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (symbolZOffsetExpression != null) {
       paint["symbol-z-offset"] = symbolZOffsetExpression;
-    }
-    if (symbolZOffset != null) {
+    } else if (symbolZOffset != null) {
       paint["symbol-z-offset"] = symbolZOffset;
     }
 
     if (textColorExpression != null) {
       paint["text-color"] = textColorExpression;
-    }
-    if (textColor != null) {
+    } else if (textColor != null) {
       paint["text-color"] = textColor?.toRGBA();
     }
 
     if (textEmissiveStrengthExpression != null) {
       paint["text-emissive-strength"] = textEmissiveStrengthExpression;
-    }
-    if (textEmissiveStrength != null) {
+    } else if (textEmissiveStrength != null) {
       paint["text-emissive-strength"] = textEmissiveStrength;
     }
 
     if (textHaloBlurExpression != null) {
       paint["text-halo-blur"] = textHaloBlurExpression;
-    }
-    if (textHaloBlur != null) {
+    } else if (textHaloBlur != null) {
       paint["text-halo-blur"] = textHaloBlur;
     }
 
     if (textHaloColorExpression != null) {
       paint["text-halo-color"] = textHaloColorExpression;
-    }
-    if (textHaloColor != null) {
+    } else if (textHaloColor != null) {
       paint["text-halo-color"] = textHaloColor?.toRGBA();
     }
 
     if (textHaloWidthExpression != null) {
       paint["text-halo-width"] = textHaloWidthExpression;
-    }
-    if (textHaloWidth != null) {
+    } else if (textHaloWidth != null) {
       paint["text-halo-width"] = textHaloWidth;
     }
 
     if (textOcclusionOpacityExpression != null) {
       paint["text-occlusion-opacity"] = textOcclusionOpacityExpression;
-    }
-    if (textOcclusionOpacity != null) {
+    } else if (textOcclusionOpacity != null) {
       paint["text-occlusion-opacity"] = textOcclusionOpacity;
     }
 
     if (textOpacityExpression != null) {
       paint["text-opacity"] = textOpacityExpression;
-    }
-    if (textOpacity != null) {
+    } else if (textOpacity != null) {
       paint["text-opacity"] = textOpacity;
     }
 
     if (textTranslateExpression != null) {
       paint["text-translate"] = textTranslateExpression;
-    }
-    if (textTranslate != null) {
+    } else if (textTranslate != null) {
       paint["text-translate"] = textTranslate;
     }
 
     if (textTranslateAnchorExpression != null) {
       paint["text-translate-anchor"] = textTranslateAnchorExpression;
-    }
-    if (textTranslateAnchor != null) {
+    } else if (textTranslateAnchor != null) {
       paint["text-translate-anchor"] =
           textTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }

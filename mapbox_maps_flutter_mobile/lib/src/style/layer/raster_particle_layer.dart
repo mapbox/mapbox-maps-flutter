@@ -126,46 +126,40 @@ class RasterParticleLayer extends Layer {
     var paint = {};
     if (rasterParticleArrayBandExpression != null) {
       paint["raster-particle-array-band"] = rasterParticleArrayBandExpression;
-    }
-    if (rasterParticleArrayBand != null) {
+    } else if (rasterParticleArrayBand != null) {
       paint["raster-particle-array-band"] = rasterParticleArrayBand;
     }
 
     if (rasterParticleColorExpression != null) {
       paint["raster-particle-color"] = rasterParticleColorExpression;
-    }
-    if (rasterParticleColor != null) {
+    } else if (rasterParticleColor != null) {
       paint["raster-particle-color"] = rasterParticleColor?.toRGBA();
     }
 
     if (rasterParticleCountExpression != null) {
       paint["raster-particle-count"] = rasterParticleCountExpression;
-    }
-    if (rasterParticleCount != null) {
+    } else if (rasterParticleCount != null) {
       paint["raster-particle-count"] = rasterParticleCount;
     }
 
     if (rasterParticleFadeOpacityFactorExpression != null) {
       paint["raster-particle-fade-opacity-factor"] =
           rasterParticleFadeOpacityFactorExpression;
-    }
-    if (rasterParticleFadeOpacityFactor != null) {
+    } else if (rasterParticleFadeOpacityFactor != null) {
       paint["raster-particle-fade-opacity-factor"] =
           rasterParticleFadeOpacityFactor;
     }
 
     if (rasterParticleMaxSpeedExpression != null) {
       paint["raster-particle-max-speed"] = rasterParticleMaxSpeedExpression;
-    }
-    if (rasterParticleMaxSpeed != null) {
+    } else if (rasterParticleMaxSpeed != null) {
       paint["raster-particle-max-speed"] = rasterParticleMaxSpeed;
     }
 
     if (rasterParticleResetRateFactorExpression != null) {
       paint["raster-particle-reset-rate-factor"] =
           rasterParticleResetRateFactorExpression;
-    }
-    if (rasterParticleResetRateFactor != null) {
+    } else if (rasterParticleResetRateFactor != null) {
       paint["raster-particle-reset-rate-factor"] =
           rasterParticleResetRateFactor;
     }
@@ -173,8 +167,7 @@ class RasterParticleLayer extends Layer {
     if (rasterParticleSpeedFactorExpression != null) {
       paint["raster-particle-speed-factor"] =
           rasterParticleSpeedFactorExpression;
-    }
-    if (rasterParticleSpeedFactor != null) {
+    } else if (rasterParticleSpeedFactor != null) {
       paint["raster-particle-speed-factor"] = rasterParticleSpeedFactor;
     }
 

@@ -16,13 +16,6 @@ class PolylineAnnotationExample extends StatefulWidget implements Example {
   State<StatefulWidget> createState() => PolylineAnnotationExampleState();
 }
 
-class AnnotationClickListener extends OnPolylineAnnotationClickListener {
-  @override
-  void onPolylineAnnotationClick(PolylineAnnotation annotation) {
-    print("onAnnotationClick, id: ${annotation.id}");
-  }
-}
-
 class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
   MapboxMap? mapboxMap;
   PolylineAnnotation? polylineAnnotation;
@@ -46,8 +39,14 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
               geometry: LineString(coordinates: e),
               lineColor: createRandomColor()))
           .toList());
-      polylineAnnotationManager
-          ?.addOnPolylineAnnotationClickListener(AnnotationClickListener());
+      polylineAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
+      });
+      polylineAnnotationManager?.longPressEvents(onLongPress: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationLongPress, id: ${annotation.id}");
+      });
     });
   }
 

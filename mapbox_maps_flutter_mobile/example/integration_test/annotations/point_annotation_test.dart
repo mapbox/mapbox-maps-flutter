@@ -46,7 +46,6 @@ void main() {
       iconHaloBlur: 1.0,
       iconHaloColor: Colors.red.value,
       iconHaloWidth: 1.0,
-      iconImageCrossFade: 1.0,
       iconOcclusionOpacity: 1.0,
       iconOpacity: 1.0,
       symbolZOffset: 1.0,
@@ -87,7 +86,6 @@ void main() {
     expect(1.0, annotation.iconHaloBlur);
     expect(Colors.red.value, annotation.iconHaloColor);
     expect(1.0, annotation.iconHaloWidth);
-    expect(1.0, annotation.iconImageCrossFade);
     expect(1.0, annotation.iconOcclusionOpacity);
     expect(1.0, annotation.iconOpacity);
     expect(1.0, annotation.symbolZOffset);

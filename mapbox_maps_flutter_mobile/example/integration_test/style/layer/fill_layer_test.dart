@@ -32,9 +32,11 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      fillConstructBridgeGuardRail: true,
       fillElevationReference: FillElevationReference.NONE,
       fillSortKey: 1.0,
       fillAntialias: true,
+      fillBridgeGuardRailColor: Colors.red.value,
       fillColor: Colors.red.value,
       fillEmissiveStrength: 1.0,
       fillOpacity: 1.0,
@@ -42,6 +44,7 @@ void main() {
       fillPattern: "abc",
       fillTranslate: [0.0, 1.0],
       fillTranslateAnchor: FillTranslateAnchor.MAP,
+      fillTunnelStructureColor: Colors.red.value,
       fillZOffset: 1.0,
     ));
     var layer = await mapboxMap.style.getLayer('layer') as FillLayer;
@@ -50,9 +53,11 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.fillConstructBridgeGuardRail, true);
     expect(layer.fillElevationReference, FillElevationReference.NONE);
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
+    expect(layer.fillBridgeGuardRailColor, Colors.red.value);
     expect(layer.fillColor, Colors.red.value);
     expect(layer.fillEmissiveStrength, 1.0);
     expect(layer.fillOpacity, 1.0);
@@ -60,6 +65,7 @@ void main() {
     expect(layer.fillPattern, "abc");
     expect(layer.fillTranslate, [0.0, 1.0]);
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
+    expect(layer.fillTunnelStructureColor, Colors.red.value);
     expect(layer.fillZOffset, 1.0);
   });
 
@@ -91,9 +97,11 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      fillConstructBridgeGuardRailExpression: ['==', true, true],
       fillElevationReferenceExpression: ['string', 'none'],
       fillSortKeyExpression: ['number', 1.0],
       fillAntialiasExpression: ['==', true, true],
+      fillBridgeGuardRailColorExpression: ['rgba', 255, 0, 0, 1],
       fillColorExpression: ['rgba', 255, 0, 0, 1],
       fillEmissiveStrengthExpression: ['number', 1.0],
       fillOpacityExpression: ['number', 1.0],
@@ -104,6 +112,7 @@ void main() {
         [0.0, 1.0]
       ],
       fillTranslateAnchorExpression: ['string', 'map'],
+      fillTunnelStructureColorExpression: ['rgba', 255, 0, 0, 1],
       fillZOffsetExpression: ['number', 1.0],
     ));
     var layer = await mapboxMap.style.getLayer('layer') as FillLayer;
@@ -117,9 +126,11 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+    expect(layer.fillConstructBridgeGuardRail, true);
     expect(layer.fillElevationReference, FillElevationReference.NONE);
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
+    expect(layer.fillBridgeGuardRailColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillEmissiveStrength, 1.0);
     expect(layer.fillOpacity, 1.0);
@@ -127,6 +138,7 @@ void main() {
     expect(layer.fillPatternExpression, ['image', "abc"]);
     expect(layer.fillTranslate, [0.0, 1.0]);
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
+    expect(layer.fillTunnelStructureColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillZOffset, 1.0);
   });
 }

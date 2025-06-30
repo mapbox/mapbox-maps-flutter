@@ -183,100 +183,86 @@ class RasterLayer extends Layer {
     var paint = {};
     if (rasterArrayBandExpression != null) {
       paint["raster-array-band"] = rasterArrayBandExpression;
-    }
-    if (rasterArrayBand != null) {
+    } else if (rasterArrayBand != null) {
       paint["raster-array-band"] = rasterArrayBand;
     }
 
     if (rasterBrightnessMaxExpression != null) {
       paint["raster-brightness-max"] = rasterBrightnessMaxExpression;
-    }
-    if (rasterBrightnessMax != null) {
+    } else if (rasterBrightnessMax != null) {
       paint["raster-brightness-max"] = rasterBrightnessMax;
     }
 
     if (rasterBrightnessMinExpression != null) {
       paint["raster-brightness-min"] = rasterBrightnessMinExpression;
-    }
-    if (rasterBrightnessMin != null) {
+    } else if (rasterBrightnessMin != null) {
       paint["raster-brightness-min"] = rasterBrightnessMin;
     }
 
     if (rasterColorExpression != null) {
       paint["raster-color"] = rasterColorExpression;
-    }
-    if (rasterColor != null) {
+    } else if (rasterColor != null) {
       paint["raster-color"] = rasterColor?.toRGBA();
     }
 
     if (rasterColorMixExpression != null) {
       paint["raster-color-mix"] = rasterColorMixExpression;
-    }
-    if (rasterColorMix != null) {
+    } else if (rasterColorMix != null) {
       paint["raster-color-mix"] = rasterColorMix;
     }
 
     if (rasterColorRangeExpression != null) {
       paint["raster-color-range"] = rasterColorRangeExpression;
-    }
-    if (rasterColorRange != null) {
+    } else if (rasterColorRange != null) {
       paint["raster-color-range"] = rasterColorRange;
     }
 
     if (rasterContrastExpression != null) {
       paint["raster-contrast"] = rasterContrastExpression;
-    }
-    if (rasterContrast != null) {
+    } else if (rasterContrast != null) {
       paint["raster-contrast"] = rasterContrast;
     }
 
     if (rasterElevationExpression != null) {
       paint["raster-elevation"] = rasterElevationExpression;
-    }
-    if (rasterElevation != null) {
+    } else if (rasterElevation != null) {
       paint["raster-elevation"] = rasterElevation;
     }
 
     if (rasterEmissiveStrengthExpression != null) {
       paint["raster-emissive-strength"] = rasterEmissiveStrengthExpression;
-    }
-    if (rasterEmissiveStrength != null) {
+    } else if (rasterEmissiveStrength != null) {
       paint["raster-emissive-strength"] = rasterEmissiveStrength;
     }
 
     if (rasterFadeDurationExpression != null) {
       paint["raster-fade-duration"] = rasterFadeDurationExpression;
-    }
-    if (rasterFadeDuration != null) {
+    } else if (rasterFadeDuration != null) {
       paint["raster-fade-duration"] = rasterFadeDuration;
     }
 
     if (rasterHueRotateExpression != null) {
       paint["raster-hue-rotate"] = rasterHueRotateExpression;
-    }
-    if (rasterHueRotate != null) {
+    } else if (rasterHueRotate != null) {
       paint["raster-hue-rotate"] = rasterHueRotate;
     }
 
     if (rasterOpacityExpression != null) {
       paint["raster-opacity"] = rasterOpacityExpression;
-    }
-    if (rasterOpacity != null) {
+    } else if (rasterOpacity != null) {
       paint["raster-opacity"] = rasterOpacity;
     }
 
     if (rasterResamplingExpression != null) {
       paint["raster-resampling"] = rasterResamplingExpression;
-    }
-    if (rasterResampling != null) {
+    } else if (rasterResampling != null) {
       paint["raster-resampling"] =
           rasterResampling?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (rasterSaturationExpression != null) {
       paint["raster-saturation"] = rasterSaturationExpression;
-    }
-    if (rasterSaturation != null) {
+    } else if (rasterSaturation != null) {
       paint["raster-saturation"] = rasterSaturation;
     }
 

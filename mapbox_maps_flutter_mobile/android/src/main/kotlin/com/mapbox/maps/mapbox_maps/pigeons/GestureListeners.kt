@@ -463,10 +463,10 @@ class PigeonEventSink<T>(private val sink: EventChannel.EventSink) {
   }
 }
 
-abstract class AnnotationDragEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<AnnotationInteractionContext> {
+abstract class AnnotationInteractionEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<AnnotationInteractionContext> {
   companion object {
-    fun register(messenger: BinaryMessenger, streamHandler: AnnotationDragEventsStreamHandler, instanceName: String = "") {
-      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationDragEvents"
+    fun register(messenger: BinaryMessenger, streamHandler: AnnotationInteractionEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationInteractionEvents"
       if (instanceName.isNotEmpty()) {
         channelName += ".$instanceName"
       }

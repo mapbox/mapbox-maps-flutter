@@ -25,8 +25,7 @@ class AnimatedRouteExample extends StatefulWidget implements Example {
 }
 
 class AnimatedRouteExampleState extends State<AnimatedRouteExample>
-    with TickerProviderStateMixin
-    implements OnPointAnnotationClickListener {
+    with TickerProviderStateMixin {
   final defaultEdgeInsets =
       MbxEdgeInsets(top: 100, left: 100, bottom: 100, right: 100);
 
@@ -186,7 +185,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
         pointAnnotationManager?.addAnnotation(imageData, coordinate);
       }
 
-      pointAnnotationManager?.addOnPointAnnotationClickListener(this);
+      pointAnnotationManager?.tapEvents(onTap: onPointAnnotationClick);
 
       // animate camera to view annotations + puck position
       final camera = await mapboxMap.cameraForCoordinates(
@@ -210,7 +209,6 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
         null);
   }
 
-  @override
   void onPointAnnotationClick(PointAnnotation annotation) async {
     // build route from puck position to the clicked annotation
     final start = await mapboxMap.style.getPuckPosition();

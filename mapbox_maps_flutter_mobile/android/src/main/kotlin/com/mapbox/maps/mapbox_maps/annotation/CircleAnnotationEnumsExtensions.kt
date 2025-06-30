@@ -4,6 +4,13 @@ import com.mapbox.maps.mapbox_maps.pigeons.*
 
 // FLT to Android
 
+fun CircleElevationReference.toCircleElevationReference(): com.mapbox.maps.extension.style.layers.properties.generated.CircleElevationReference {
+  return when (this) {
+    CircleElevationReference.NONE -> com.mapbox.maps.extension.style.layers.properties.generated.CircleElevationReference.NONE
+    CircleElevationReference.HD_ROAD_MARKUP -> com.mapbox.maps.extension.style.layers.properties.generated.CircleElevationReference.HD_ROAD_MARKUP
+    else -> throw(RuntimeException("Unsupported CircleElevationReference: $this"))
+  }
+}
 fun CirclePitchAlignment.toCirclePitchAlignment(): com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment {
   return when (this) {
     CirclePitchAlignment.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.MAP
@@ -28,6 +35,13 @@ fun CircleTranslateAnchor.toCircleTranslateAnchor(): com.mapbox.maps.extension.s
 
 // Android to FLT
 
+fun com.mapbox.maps.extension.style.layers.properties.generated.CircleElevationReference.toFLTCircleElevationReference(): CircleElevationReference {
+  return when (this) {
+    com.mapbox.maps.extension.style.layers.properties.generated.CircleElevationReference.NONE -> CircleElevationReference.NONE
+    com.mapbox.maps.extension.style.layers.properties.generated.CircleElevationReference.HD_ROAD_MARKUP -> CircleElevationReference.HD_ROAD_MARKUP
+    else -> throw(RuntimeException("Unsupported CircleElevationReference: $this"))
+  }
+}
 fun com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.toFLTCirclePitchAlignment(): CirclePitchAlignment {
   return when (this) {
     com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.MAP -> CirclePitchAlignment.MAP

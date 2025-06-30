@@ -429,11 +429,11 @@ class PigeonEventSink<ReturnType> {
 
 }
 
-class AnnotationDragEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInteractionContext> {
+class AnnotationInteractionEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInteractionContext> {
   static func register(with messenger: FlutterBinaryMessenger,
                       instanceName: String = "",
-                      streamHandler: AnnotationDragEventsStreamHandler) {
-    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationDragEvents"
+                      streamHandler: AnnotationInteractionEventsStreamHandler) {
+    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationInteractionEvents"
     if !instanceName.isEmpty {
       channelName += ".\(instanceName)"
     }

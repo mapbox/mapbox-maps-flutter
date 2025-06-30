@@ -4,8 +4,6 @@
 import Foundation
 import Flutter
 
-extension MapboxMaps.PolygonAnnotation: InteractableAnnotation {}
-
 final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotationManager>, _PolygonAnnotationMessenger {
     private static let errorCode = "0"
     private typealias AnnotationManager = PolygonAnnotationManager
@@ -25,24 +23,38 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toPolygonAnnotation()
+                annotation.tapHandler = { [weak self] (context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .ended)
+                    self?.tap(context, managerId: managerId)
+                    return true
+                }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PolygonAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
                 return annotation
             })
@@ -74,6 +86,24 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
     }
 
     // MARK: Properties
+
+    func getFillConstructBridgeGuardRail(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillConstructBridgeGuardRail, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillConstructBridgeGuardRail(managerId: String, fillConstructBridgeGuardRail: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = fillConstructBridgeGuardRail
+            try set(\.fillConstructBridgeGuardRail, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 
     func getFillElevationReference(managerId: String, completion: @escaping (Result<FillElevationReference?, Error>) -> Void) {
         do {
@@ -123,6 +153,24 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
         do {
             let newValue = fillAntialias
             try set(\.fillAntialias, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillBridgeGuardRailColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillBridgeGuardRailColor, managerId: managerId)?.intValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillBridgeGuardRailColor(managerId: String, fillBridgeGuardRailColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = StyleColor(rgb: fillBridgeGuardRailColor)
+            try set(\.fillBridgeGuardRailColor, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -255,6 +303,24 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
         }
     }
 
+    func getFillTunnelStructureColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillTunnelStructureColor, managerId: managerId)?.intValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillTunnelStructureColor(managerId: String, fillTunnelStructureColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = StyleColor(rgb: fillTunnelStructureColor)
+            try set(\.fillTunnelStructureColor, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getFillZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             completion(.success(try get(\.fillZOffset, managerId: managerId)))
@@ -278,8 +344,14 @@ extension PolygonAnnotationOptions {
 
     func toPolygonAnnotation() -> MapboxMaps.PolygonAnnotation {
         var annotation = MapboxMaps.PolygonAnnotation(polygon: geometry)
+        if let fillConstructBridgeGuardRail {
+            annotation.fillConstructBridgeGuardRail = fillConstructBridgeGuardRail
+        }
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
+        }
+        if let fillBridgeGuardRailColor {
+            annotation.fillBridgeGuardRailColor = StyleColor(rgb: fillBridgeGuardRailColor)
         }
         if let fillColor {
             annotation.fillColor = StyleColor(rgb: fillColor)
@@ -292,6 +364,9 @@ extension PolygonAnnotationOptions {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
+        }
+        if let fillTunnelStructureColor {
+            annotation.fillTunnelStructureColor = StyleColor(rgb: fillTunnelStructureColor)
         }
         if let fillZOffset {
             annotation.fillZOffset = fillZOffset
@@ -307,8 +382,14 @@ extension PolygonAnnotation {
 
     func toPolygonAnnotation() -> MapboxMaps.PolygonAnnotation {
         var annotation = MapboxMaps.PolygonAnnotation(id: self.id, polygon: geometry)
+        if let fillConstructBridgeGuardRail {
+            annotation.fillConstructBridgeGuardRail = fillConstructBridgeGuardRail
+        }
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
+        }
+        if let fillBridgeGuardRailColor {
+            annotation.fillBridgeGuardRailColor = StyleColor(rgb: fillBridgeGuardRailColor)
         }
         if let fillColor {
             annotation.fillColor = StyleColor(rgb: fillColor)
@@ -321,6 +402,9 @@ extension PolygonAnnotation {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
+        }
+        if let fillTunnelStructureColor {
+            annotation.fillTunnelStructureColor = StyleColor(rgb: fillTunnelStructureColor)
         }
         if let fillZOffset {
             annotation.fillZOffset = fillZOffset
@@ -337,11 +421,14 @@ extension MapboxMaps.PolygonAnnotation {
         PolygonAnnotation(
             id: id,
             geometry: polygon,
+            fillConstructBridgeGuardRail: fillConstructBridgeGuardRail,
             fillSortKey: fillSortKey,
+            fillBridgeGuardRailColor: fillBridgeGuardRailColor?.intValue,
             fillColor: fillColor?.intValue,
             fillOpacity: fillOpacity,
             fillOutlineColor: fillOutlineColor?.intValue,
             fillPattern: fillPattern,
+            fillTunnelStructureColor: fillTunnelStructureColor?.intValue,
             fillZOffset: fillZOffset,
             isDraggable: isDraggable
         )

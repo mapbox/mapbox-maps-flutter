@@ -127,65 +127,56 @@ class SkyLayer extends Layer {
     var paint = {};
     if (skyAtmosphereColorExpression != null) {
       paint["sky-atmosphere-color"] = skyAtmosphereColorExpression;
-    }
-    if (skyAtmosphereColor != null) {
+    } else if (skyAtmosphereColor != null) {
       paint["sky-atmosphere-color"] = skyAtmosphereColor?.toRGBA();
     }
 
     if (skyAtmosphereHaloColorExpression != null) {
       paint["sky-atmosphere-halo-color"] = skyAtmosphereHaloColorExpression;
-    }
-    if (skyAtmosphereHaloColor != null) {
+    } else if (skyAtmosphereHaloColor != null) {
       paint["sky-atmosphere-halo-color"] = skyAtmosphereHaloColor?.toRGBA();
     }
 
     if (skyAtmosphereSunExpression != null) {
       paint["sky-atmosphere-sun"] = skyAtmosphereSunExpression;
-    }
-    if (skyAtmosphereSun != null) {
+    } else if (skyAtmosphereSun != null) {
       paint["sky-atmosphere-sun"] = skyAtmosphereSun;
     }
 
     if (skyAtmosphereSunIntensityExpression != null) {
       paint["sky-atmosphere-sun-intensity"] =
           skyAtmosphereSunIntensityExpression;
-    }
-    if (skyAtmosphereSunIntensity != null) {
+    } else if (skyAtmosphereSunIntensity != null) {
       paint["sky-atmosphere-sun-intensity"] = skyAtmosphereSunIntensity;
     }
 
     if (skyGradientExpression != null) {
       paint["sky-gradient"] = skyGradientExpression;
-    }
-    if (skyGradient != null) {
+    } else if (skyGradient != null) {
       paint["sky-gradient"] = skyGradient?.toRGBA();
     }
 
     if (skyGradientCenterExpression != null) {
       paint["sky-gradient-center"] = skyGradientCenterExpression;
-    }
-    if (skyGradientCenter != null) {
+    } else if (skyGradientCenter != null) {
       paint["sky-gradient-center"] = skyGradientCenter;
     }
 
     if (skyGradientRadiusExpression != null) {
       paint["sky-gradient-radius"] = skyGradientRadiusExpression;
-    }
-    if (skyGradientRadius != null) {
+    } else if (skyGradientRadius != null) {
       paint["sky-gradient-radius"] = skyGradientRadius;
     }
 
     if (skyOpacityExpression != null) {
       paint["sky-opacity"] = skyOpacityExpression;
-    }
-    if (skyOpacity != null) {
+    } else if (skyOpacity != null) {
       paint["sky-opacity"] = skyOpacity;
     }
 
     if (skyTypeExpression != null) {
       paint["sky-type"] = skyTypeExpression;
-    }
-    if (skyType != null) {
+    } else if (skyType != null) {
       paint["sky-type"] = skyType?.name.toLowerCase().replaceAll("_", "-");
     }
 

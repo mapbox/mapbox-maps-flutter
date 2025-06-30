@@ -25,11 +25,14 @@ void main() {
 
     var polygonAnnotationOptions = PolygonAnnotationOptions(
       geometry: geometry,
+      fillConstructBridgeGuardRail: true,
       fillSortKey: 1.0,
+      fillBridgeGuardRailColor: Colors.red.value,
       fillColor: Colors.red.value,
       fillOpacity: 1.0,
       fillOutlineColor: Colors.red.value,
       fillPattern: "abc",
+      fillTunnelStructureColor: Colors.red.value,
       fillZOffset: 1.0,
     );
     final annotation = await manager.create(polygonAnnotationOptions);
@@ -41,11 +44,14 @@ void main() {
     expect(-10.733102, points.first.lat);
     expect(-3.363937, points.last.lng);
     expect(-10.733102, points.last.lat);
+    expect(true, annotation.fillConstructBridgeGuardRail);
     expect(1.0, annotation.fillSortKey);
+    expect(Colors.red.value, annotation.fillBridgeGuardRailColor);
     expect(Colors.red.value, annotation.fillColor);
     expect(1.0, annotation.fillOpacity);
     expect(Colors.red.value, annotation.fillOutlineColor);
     expect("abc", annotation.fillPattern);
+    expect(Colors.red.value, annotation.fillTunnelStructureColor);
     expect(1.0, annotation.fillZOffset);
   });
 

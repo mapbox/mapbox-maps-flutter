@@ -259,118 +259,102 @@ class ModelLayer extends Layer {
     if (modelAmbientOcclusionIntensityExpression != null) {
       paint["model-ambient-occlusion-intensity"] =
           modelAmbientOcclusionIntensityExpression;
-    }
-    if (modelAmbientOcclusionIntensity != null) {
+    } else if (modelAmbientOcclusionIntensity != null) {
       paint["model-ambient-occlusion-intensity"] =
           modelAmbientOcclusionIntensity;
     }
 
     if (modelCastShadowsExpression != null) {
       paint["model-cast-shadows"] = modelCastShadowsExpression;
-    }
-    if (modelCastShadows != null) {
+    } else if (modelCastShadows != null) {
       paint["model-cast-shadows"] = modelCastShadows;
     }
 
     if (modelColorExpression != null) {
       paint["model-color"] = modelColorExpression;
-    }
-    if (modelColor != null) {
+    } else if (modelColor != null) {
       paint["model-color"] = modelColor?.toRGBA();
     }
 
     if (modelColorMixIntensityExpression != null) {
       paint["model-color-mix-intensity"] = modelColorMixIntensityExpression;
-    }
-    if (modelColorMixIntensity != null) {
+    } else if (modelColorMixIntensity != null) {
       paint["model-color-mix-intensity"] = modelColorMixIntensity;
     }
 
     if (modelCutoffFadeRangeExpression != null) {
       paint["model-cutoff-fade-range"] = modelCutoffFadeRangeExpression;
-    }
-    if (modelCutoffFadeRange != null) {
+    } else if (modelCutoffFadeRange != null) {
       paint["model-cutoff-fade-range"] = modelCutoffFadeRange;
     }
 
     if (modelElevationReferenceExpression != null) {
       paint["model-elevation-reference"] = modelElevationReferenceExpression;
-    }
-    if (modelElevationReference != null) {
+    } else if (modelElevationReference != null) {
       paint["model-elevation-reference"] =
           modelElevationReference?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (modelEmissiveStrengthExpression != null) {
       paint["model-emissive-strength"] = modelEmissiveStrengthExpression;
-    }
-    if (modelEmissiveStrength != null) {
+    } else if (modelEmissiveStrength != null) {
       paint["model-emissive-strength"] = modelEmissiveStrength;
     }
 
     if (modelHeightBasedEmissiveStrengthMultiplierExpression != null) {
       paint["model-height-based-emissive-strength-multiplier"] =
           modelHeightBasedEmissiveStrengthMultiplierExpression;
-    }
-    if (modelHeightBasedEmissiveStrengthMultiplier != null) {
+    } else if (modelHeightBasedEmissiveStrengthMultiplier != null) {
       paint["model-height-based-emissive-strength-multiplier"] =
           modelHeightBasedEmissiveStrengthMultiplier;
     }
 
     if (modelOpacityExpression != null) {
       paint["model-opacity"] = modelOpacityExpression;
-    }
-    if (modelOpacity != null) {
+    } else if (modelOpacity != null) {
       paint["model-opacity"] = modelOpacity;
     }
 
     if (modelReceiveShadowsExpression != null) {
       paint["model-receive-shadows"] = modelReceiveShadowsExpression;
-    }
-    if (modelReceiveShadows != null) {
+    } else if (modelReceiveShadows != null) {
       paint["model-receive-shadows"] = modelReceiveShadows;
     }
 
     if (modelRotationExpression != null) {
       paint["model-rotation"] = modelRotationExpression;
-    }
-    if (modelRotation != null) {
+    } else if (modelRotation != null) {
       paint["model-rotation"] = modelRotation;
     }
 
     if (modelRoughnessExpression != null) {
       paint["model-roughness"] = modelRoughnessExpression;
-    }
-    if (modelRoughness != null) {
+    } else if (modelRoughness != null) {
       paint["model-roughness"] = modelRoughness;
     }
 
     if (modelScaleExpression != null) {
       paint["model-scale"] = modelScaleExpression;
-    }
-    if (modelScale != null) {
+    } else if (modelScale != null) {
       paint["model-scale"] = modelScale;
     }
 
     if (modelScaleModeExpression != null) {
       paint["model-scale-mode"] = modelScaleModeExpression;
-    }
-    if (modelScaleMode != null) {
+    } else if (modelScaleMode != null) {
       paint["model-scale-mode"] =
           modelScaleMode?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (modelTranslationExpression != null) {
       paint["model-translation"] = modelTranslationExpression;
-    }
-    if (modelTranslation != null) {
+    } else if (modelTranslation != null) {
       paint["model-translation"] = modelTranslation;
     }
 
     if (modelTypeExpression != null) {
       paint["model-type"] = modelTypeExpression;
-    }
-    if (modelType != null) {
+    } else if (modelType != null) {
       paint["model-type"] = modelType?.name.toLowerCase().replaceAll("_", "-");
     }
 

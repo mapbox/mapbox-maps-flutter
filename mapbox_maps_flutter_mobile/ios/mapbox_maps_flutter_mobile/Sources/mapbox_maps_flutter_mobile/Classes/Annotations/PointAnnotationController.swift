@@ -4,8 +4,6 @@
 import Foundation
 import Flutter
 
-extension MapboxMaps.PointAnnotation: InteractableAnnotation {}
-
 final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationManager>, _PointAnnotationMessenger {
     private static let errorCode = "0"
     private typealias AnnotationManager = PointAnnotationManager
@@ -25,24 +23,38 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toPointAnnotation()
+                annotation.tapHandler = { [weak self] (context) in
+                    let context = PointAnnotationInteractionContext(
+                        annotation: annotation.toFLTPointAnnotation(),
+                        gestureState: .ended)
+                    self?.tap(context, managerId: managerId)
+                    return true
+                }
+                annotation.longPressHandler = { [weak self] (context) in
+                    let context = PointAnnotationInteractionContext(
+                        annotation: annotation.toFLTPointAnnotation(),
+                        gestureState: .ended)
+                    self?.longPress(context, managerId: managerId)
+                    return true
+                }
                 annotation.dragBeginHandler = { [weak self] (annotation, context) in
                     let context = PointAnnotationInteractionContext(
                         annotation: annotation.toFLTPointAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PointAnnotationInteractionContext(
                         annotation: annotation.toFLTPointAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PointAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPointAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context, managerId: managerId)
+                    self?.drag(context, managerId: managerId)
                 }
                 return annotation
             })
@@ -1351,8 +1363,8 @@ extension PointAnnotation {
 
     func toPointAnnotation() -> MapboxMaps.PointAnnotation {
         var annotation = MapboxMaps.PointAnnotation(id: self.id, point: geometry)
-        if let image = self.image {
-            annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
+        if let image = image, let uiImage = UIImage(data: image.data, scale: UIScreen.main.scale) {
+            annotation.image = .init(image: uiImage, name: iconImage ?? UUID().uuidString)
         }
         if let iconAnchor {
             annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
