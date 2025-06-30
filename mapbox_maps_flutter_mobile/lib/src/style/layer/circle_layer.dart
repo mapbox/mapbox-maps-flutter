@@ -13,6 +13,8 @@ class CircleLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+    CircleElevationReference? this.circleElevationReference,
+    List<Object>? this.circleElevationReferenceExpression,
     double? this.circleSortKey,
     List<Object>? this.circleSortKeyExpression,
     double? this.circleBlur,
@@ -56,6 +58,16 @@ class CircleLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
+
+  /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+  /// Default value: "none".
+  @experimental
+  CircleElevationReference? circleElevationReference;
+
+  /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+  /// Default value: "none".
+  @experimental
+  List<Object>? circleElevationReferenceExpression;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? circleSortKey;
@@ -170,6 +182,14 @@ class CircleLayer extends Layer {
           visibility!.name.toLowerCase().replaceAll("_", "-");
     }
 
+    if (circleElevationReferenceExpression != null) {
+      layout["circle-elevation-reference"] = circleElevationReferenceExpression;
+    }
+
+    if (circleElevationReference != null) {
+      layout["circle-elevation-reference"] =
+          circleElevationReference?.name.toLowerCase().replaceAll("_", "-");
+    }
     if (circleSortKeyExpression != null) {
       layout["circle-sort-key"] = circleSortKeyExpression;
     }
@@ -180,87 +200,75 @@ class CircleLayer extends Layer {
     var paint = {};
     if (circleBlurExpression != null) {
       paint["circle-blur"] = circleBlurExpression;
-    }
-    if (circleBlur != null) {
+    } else if (circleBlur != null) {
       paint["circle-blur"] = circleBlur;
     }
 
     if (circleColorExpression != null) {
       paint["circle-color"] = circleColorExpression;
-    }
-    if (circleColor != null) {
+    } else if (circleColor != null) {
       paint["circle-color"] = circleColor?.toRGBA();
     }
 
     if (circleEmissiveStrengthExpression != null) {
       paint["circle-emissive-strength"] = circleEmissiveStrengthExpression;
-    }
-    if (circleEmissiveStrength != null) {
+    } else if (circleEmissiveStrength != null) {
       paint["circle-emissive-strength"] = circleEmissiveStrength;
     }
 
     if (circleOpacityExpression != null) {
       paint["circle-opacity"] = circleOpacityExpression;
-    }
-    if (circleOpacity != null) {
+    } else if (circleOpacity != null) {
       paint["circle-opacity"] = circleOpacity;
     }
 
     if (circlePitchAlignmentExpression != null) {
       paint["circle-pitch-alignment"] = circlePitchAlignmentExpression;
-    }
-    if (circlePitchAlignment != null) {
+    } else if (circlePitchAlignment != null) {
       paint["circle-pitch-alignment"] =
           circlePitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (circlePitchScaleExpression != null) {
       paint["circle-pitch-scale"] = circlePitchScaleExpression;
-    }
-    if (circlePitchScale != null) {
+    } else if (circlePitchScale != null) {
       paint["circle-pitch-scale"] =
           circlePitchScale?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (circleRadiusExpression != null) {
       paint["circle-radius"] = circleRadiusExpression;
-    }
-    if (circleRadius != null) {
+    } else if (circleRadius != null) {
       paint["circle-radius"] = circleRadius;
     }
 
     if (circleStrokeColorExpression != null) {
       paint["circle-stroke-color"] = circleStrokeColorExpression;
-    }
-    if (circleStrokeColor != null) {
+    } else if (circleStrokeColor != null) {
       paint["circle-stroke-color"] = circleStrokeColor?.toRGBA();
     }
 
     if (circleStrokeOpacityExpression != null) {
       paint["circle-stroke-opacity"] = circleStrokeOpacityExpression;
-    }
-    if (circleStrokeOpacity != null) {
+    } else if (circleStrokeOpacity != null) {
       paint["circle-stroke-opacity"] = circleStrokeOpacity;
     }
 
     if (circleStrokeWidthExpression != null) {
       paint["circle-stroke-width"] = circleStrokeWidthExpression;
-    }
-    if (circleStrokeWidth != null) {
+    } else if (circleStrokeWidth != null) {
       paint["circle-stroke-width"] = circleStrokeWidth;
     }
 
     if (circleTranslateExpression != null) {
       paint["circle-translate"] = circleTranslateExpression;
-    }
-    if (circleTranslate != null) {
+    } else if (circleTranslate != null) {
       paint["circle-translate"] = circleTranslate;
     }
 
     if (circleTranslateAnchorExpression != null) {
       paint["circle-translate-anchor"] = circleTranslateAnchorExpression;
-    }
-    if (circleTranslateAnchor != null) {
+    } else if (circleTranslateAnchor != null) {
       paint["circle-translate-anchor"] =
           circleTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
@@ -314,6 +322,15 @@ class CircleLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
+      circleElevationReference:
+          map["layout"]["circle-elevation-reference"] == null
+              ? null
+              : CircleElevationReference.values.firstWhere((e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["circle-elevation-reference"])),
+      circleElevationReferenceExpression:
+          _optionalCastList(map["layout"]["circle-elevation-reference"]),
       circleSortKey: _optionalCast(map["layout"]["circle-sort-key"]),
       circleSortKeyExpression:
           _optionalCastList(map["layout"]["circle-sort-key"]),

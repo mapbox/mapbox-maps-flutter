@@ -16,20 +16,6 @@ class CircleAnnotationExample extends StatefulWidget implements Example {
   State<StatefulWidget> createState() => CircleAnnotationExampleState();
 }
 
-class AnnotationClickListener extends OnCircleAnnotationClickListener {
-  AnnotationClickListener({
-    required this.onAnnotationClick,
-  });
-
-  final void Function(CircleAnnotation annotation) onAnnotationClick;
-
-  @override
-  void onCircleAnnotationClick(CircleAnnotation annotation) {
-    print("onAnnotationClick, id: ${annotation.id}");
-    onAnnotationClick(annotation);
-  }
-}
-
 class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
   CircleAnnotationExampleState();
 
@@ -56,11 +42,14 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
         ));
       }
       circleAnnotationManager?.createMulti(options);
-      circleAnnotationManager?.addOnCircleAnnotationClickListener(
-        AnnotationClickListener(
-          onAnnotationClick: (annotation) => circleAnnotation = annotation,
-        ),
-      );
+      circleAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
+      });
+      circleAnnotationManager?.longPressEvents(onLongPress: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationLongPress, id: ${annotation.id}");
+      });
     });
   }
 

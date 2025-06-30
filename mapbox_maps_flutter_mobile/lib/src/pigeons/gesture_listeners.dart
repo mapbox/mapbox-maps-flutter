@@ -502,15 +502,15 @@ abstract class GestureListener {
   }
 }
 
-Stream<AnnotationInteractionContext> _annotationDragEvents(
+Stream<AnnotationInteractionContext> _annotationInteractionEvents(
     {String instanceName = ''}) {
   if (instanceName.isNotEmpty) {
     instanceName = '.$instanceName';
   }
-  final EventChannel _annotationDragEventsChannel = EventChannel(
-      'dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents$instanceName',
+  final EventChannel _annotationInteractionEventsChannel = EventChannel(
+      'dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents$instanceName',
       pigeonMethodCodec);
-  return _annotationDragEventsChannel
+  return _annotationInteractionEventsChannel
       .receiveBroadcastStream()
       .map((dynamic event) {
     return event as AnnotationInteractionContext;

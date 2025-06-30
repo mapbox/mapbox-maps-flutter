@@ -76,9 +76,6 @@ class AnnotationManager {
 /// The super class for all AnnotationManagers.
 class BaseAnnotationManager {
   BaseAnnotationManager._(
-      {required String id, required BinaryMessenger messenger})
-      : this.id = id,
-        _messenger = messenger;
+      {required this.id, required BinaryMessenger messenger});
   final String id;
-  final BinaryMessenger _messenger;
 }

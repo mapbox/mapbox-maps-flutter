@@ -1,12 +1,6 @@
 import MapboxMaps
 import Flutter
 
-protocol InteractableAnnotation: Annotation {
-    var dragBeginHandler: ((inout Self, InteractionContext) -> Bool)? { get set }
-    var dragChangeHandler: ((inout Self, InteractionContext) -> Void)? { get set }
-    var dragEndHandler: ((inout Self, InteractionContext) -> Void)? { get set }
-}
-
 protocol AnnotationControllable: AnnotationManager {
     associatedtype Child: Annotation
     var annotations: [Child] { get set }
@@ -20,31 +14,46 @@ extension PolygonAnnotationManager: AnnotationControllable {}
 class BaseAnnotationMessenger<C: AnnotationControllable> {
     private struct Storage {
         let controller: C
-        let sendGestureEvents: (AnnotationInteractionContext) -> Void
+        let onTap: (AnnotationInteractionContext) -> Void
+        let onDrag: (AnnotationInteractionContext) -> Void
+        let onLongPress: (AnnotationInteractionContext) -> Void
     }
     private var storage: [String: Storage] = [:]
 
-    func sendGestureEvent(_ context: AnnotationInteractionContext, managerId: String) {
-        storage[managerId]?.sendGestureEvents(context)
+    func tap(_ context: AnnotationInteractionContext, managerId: String) {
+        storage[managerId]?.onTap(context)
+    }
+
+    func drag(_ context: AnnotationInteractionContext, managerId: String) {
+        storage[managerId]?.onDrag(context)
+    }
+
+    func longPress(_ context: AnnotationInteractionContext, managerId: String) {
+        storage[managerId]?.onLongPress(context)
     }
 
     private subscript(id: String) -> C? {
         return storage[id]?.controller
     }
 
-    func add(controller: C, sendGestureEvents: @escaping (AnnotationInteractionContext) -> Void) {
-        storage[controller.id] = Storage(controller: controller, sendGestureEvents: sendGestureEvents)
+    func add(
+        controller: C,
+        onTap: @escaping (AnnotationInteractionContext) -> Void,
+        onDrag: @escaping (AnnotationInteractionContext) -> Void,
+        onLongPress: @escaping (AnnotationInteractionContext) -> Void
+    ) {
+        storage[controller.id] = Storage(controller: controller, onTap: onTap, onDrag: onDrag, onLongPress: onLongPress)
     }
 
     func removeController(id: String) {
         storage[id] = nil
     }
 
-    func append<T: InteractableAnnotation>(_ annotation: T, managerId: String) throws where T == C.Child {
+    func append(_ annotation: C.Child, managerId: String) throws {
         try append([annotation], managerId: managerId)
     }
 
-    func append<T: InteractableAnnotation>(_ annotations: [T], managerId: String) throws where T == C.Child {
+    func append(_ annotations: [C.Child], managerId: String) throws {
         guard let annotationManager = self[managerId] else {
             throw AnnotationControllerError.noManagerFound
         }

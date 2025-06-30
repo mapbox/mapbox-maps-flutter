@@ -35,6 +35,10 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
 
+    await manager.setCircleElevationReference(CircleElevationReference.NONE);
+    var circleElevationReference = await manager.getCircleElevationReference();
+    expect(CircleElevationReference.NONE, circleElevationReference);
+
     await manager.setCircleSortKey(1.0);
     var circleSortKey = await manager.getCircleSortKey();
     expect(1.0, circleSortKey);
@@ -88,6 +92,84 @@ void main() {
     expect(CircleTranslateAnchor.MAP, circleTranslateAnchor);
   });
 
+  testWidgets('annotation tap events', (tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager = await mapboxMap.annotations.createCircleAnnotationManager();
+
+    final geometry = Point(coordinates: Position(0, 0));
+
+    final createdAnnotation = await manager.create(CircleAnnotationOptions(
+      geometry: geometry,
+    ));
+
+    // Mock tap events
+    final eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/tap",
+        pigeonMethodCodec);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockStreamHandler(eventChannel,
+            MockStreamHandler.inline(onListen: (arguments, events) {
+      events.success(CircleAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      events.endOfStream();
+    }));
+
+    final onTap = Completer();
+    manager.tapEvents(
+      onTap: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onTap.complete();
+      },
+    );
+
+    await onTap.future;
+    expect(onTap.isCompleted, isTrue);
+  });
+
+  testWidgets('annotation long press events', (tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager = await mapboxMap.annotations.createCircleAnnotationManager();
+
+    final geometry = Point(coordinates: Position(0, 0));
+
+    final createdAnnotation = await manager.create(CircleAnnotationOptions(
+      geometry: geometry,
+    ));
+
+    // Mock long press events
+    final eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/long_press",
+        pigeonMethodCodec);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockStreamHandler(eventChannel,
+            MockStreamHandler.inline(onListen: (arguments, events) {
+      events.success(CircleAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      events.endOfStream();
+    }));
+
+    final onLongPress = Completer();
+    manager.longPressEvents(
+      onLongPress: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onLongPress.complete();
+      },
+    );
+
+    await onLongPress.future;
+    expect(onLongPress.isCompleted, isTrue);
+  });
+
   testWidgets('annotation drag events', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -104,7 +186,7 @@ void main() {
 
     // Mock drag events
     final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents.0/${manager.id}",
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/drag",
         pigeonMethodCodec);
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(eventChannel,

@@ -33,10 +33,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
     )
   }
 }
-
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
-}
 private fun deepEqualsPointAnnotationMessenger(a: Any?, b: Any?): Boolean {
   if (a is ByteArray && b is ByteArray) {
     return a.contentEquals(b)
@@ -521,8 +517,9 @@ data class PointAnnotation(
    */
   val iconHaloWidth: Double? = null,
   /**
-   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
    * Default value: 0. Value range: [0, 1]
+   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
    */
   val iconImageCrossFade: Double? = null,
   /**
@@ -841,8 +838,9 @@ data class PointAnnotationOptions(
    */
   val iconHaloWidth: Double? = null,
   /**
-   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
    * Default value: 0. Value range: [0, 1]
+   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
    */
   val iconImageCrossFade: Double? = null,
   /**
@@ -1217,31 +1215,6 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
   }
 }
 
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class OnPointAnnotationClickListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by OnPointAnnotationClickListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      PointAnnotationMessengerPigeonCodec()
-    }
-  }
-  fun onPointAnnotationClick(annotationArg: PointAnnotation, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(annotationArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-}
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PointAnnotationMessenger {
   fun create(managerId: String, annotationOption: PointAnnotationOptions, callback: (Result<PointAnnotation>) -> Unit)

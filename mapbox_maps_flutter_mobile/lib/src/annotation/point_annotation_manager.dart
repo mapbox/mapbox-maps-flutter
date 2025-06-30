@@ -16,13 +16,35 @@ class PointAnnotationManager extends BaseAnnotationManager {
   final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
+  @Deprecated('Use [tapEvents] instead.')
   void addOnPointAnnotationClickListener(
       OnPointAnnotationClickListener listener) {
-    OnPointAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPointAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPointAnnotationClick), _channelSuffix);
   }
 
-  /// Registers drag event callbacks for the annotations managed by this instance.
+  /// Registers tap event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+  Cancelable tapEvents({required Function(PointAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
+        .cast<PointAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers long press event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
+  Cancelable longPressEvents({required Function(PointAnnotation) onLongPress}) {
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/long_press")
+        .cast<PointAnnotationInteractionContext>()
+        .listen((data) => onLongPress(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers drag event callbacks for the annotations managed by this manager.
   ///
   /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
   /// - [onChanged]: Triggered continuously as the annotation is being dragged.
@@ -49,7 +71,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
     Function(PointAnnotation)? onChanged,
     Function(PointAnnotation)? onEnd,
   }) {
-    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/drag")
         .cast<PointAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
@@ -469,11 +492,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getIconHaloWidth() =>
       _annotationMessenger.getIconHaloWidth(id);
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Default value: 0. Value range: [0, 1]
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
   Future<void> setIconImageCrossFade(double iconImageCrossFade) =>
       _annotationMessenger.setIconImageCrossFade(id, iconImageCrossFade);
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Default value: 0. Value range: [0, 1]
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
   Future<double?> getIconImageCrossFade() =>
       _annotationMessenger.getIconImageCrossFade(id);
 

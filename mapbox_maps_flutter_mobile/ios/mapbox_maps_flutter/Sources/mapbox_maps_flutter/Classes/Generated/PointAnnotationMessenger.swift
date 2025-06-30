@@ -56,10 +56,6 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
-private func createConnectionError(withChannelName channelName: String) -> PointAnnotationMessengerError {
-  return PointAnnotationMessengerError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -356,8 +352,9 @@ struct PointAnnotation {
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   var iconHaloWidth: Double? = nil
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
@@ -600,8 +597,9 @@ struct PointAnnotationOptions {
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   var iconHaloWidth: Double? = nil
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
@@ -954,39 +952,6 @@ class PointAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @uncheck
   static let shared = PointAnnotationMessengerPigeonCodec(readerWriter: PointAnnotationMessengerPigeonCodecReaderWriter())
 }
 
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol OnPointAnnotationClickListenerProtocol {
-  func onPointAnnotationClick(annotation annotationArg: PointAnnotation, completion: @escaping (Result<Void, PointAnnotationMessengerError>) -> Void)
-}
-class OnPointAnnotationClickListener: OnPointAnnotationClickListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: PointAnnotationMessengerPigeonCodec {
-    return PointAnnotationMessengerPigeonCodec.shared
-  }
-  func onPointAnnotationClick(annotation annotationArg: PointAnnotation, completion: @escaping (Result<Void, PointAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([annotationArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PointAnnotationMessengerError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _PointAnnotationMessenger {
   func create(managerId: String, annotationOption: PointAnnotationOptions, completion: @escaping (Result<PointAnnotation, Error>) -> Void)
