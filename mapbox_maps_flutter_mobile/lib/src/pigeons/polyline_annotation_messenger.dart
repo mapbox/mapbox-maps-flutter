@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// The display of line endings.
 /// Default value: "butt".
@@ -464,7 +464,7 @@ class _PolylineAnnotationMessenger {
   Future<PolylineAnnotation> create(
       String managerId, PolylineAnnotationOptions annotationOption) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.create$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.create$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -496,7 +496,7 @@ class _PolylineAnnotationMessenger {
   Future<List<PolylineAnnotation>> createMulti(String managerId,
       List<PolylineAnnotationOptions> annotationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.createMulti$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.createMulti$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -528,7 +528,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> update(String managerId, PolylineAnnotation annotation) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.update$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.update$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -554,7 +554,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> delete(String managerId, PolylineAnnotation annotation) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.delete$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.delete$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -580,7 +580,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> deleteAll(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.deleteAll$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.deleteAll$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -606,7 +606,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineCap(String managerId, LineCap lineCap) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCap$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineCap$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -632,7 +632,7 @@ class _PolylineAnnotationMessenger {
 
   Future<LineCap?> getLineCap(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCap$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineCap$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -659,7 +659,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineCrossSlope(
       String managerId, double lineCrossSlope) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCrossSlope$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineCrossSlope$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -685,7 +685,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineCrossSlope(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineCrossSlope$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -712,7 +712,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineElevationReference(
       String managerId, LineElevationReference lineElevationReference) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineElevationReference$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -739,7 +739,7 @@ class _PolylineAnnotationMessenger {
   Future<LineElevationReference?> getLineElevationReference(
       String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationReference$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineElevationReference$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -765,7 +765,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineJoin(String managerId, LineJoin lineJoin) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineJoin$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -791,7 +791,7 @@ class _PolylineAnnotationMessenger {
 
   Future<LineJoin?> getLineJoin(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineJoin$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineJoin$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -818,7 +818,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineMiterLimit(
       String managerId, double lineMiterLimit) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineMiterLimit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineMiterLimit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -844,7 +844,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineMiterLimit(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineMiterLimit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineMiterLimit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -871,7 +871,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineRoundLimit(
       String managerId, double lineRoundLimit) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineRoundLimit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineRoundLimit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -897,7 +897,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineRoundLimit(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineRoundLimit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineRoundLimit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -923,7 +923,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineSortKey(String managerId, double lineSortKey) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineSortKey$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineSortKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -949,7 +949,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineSortKey(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineSortKey$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineSortKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -976,7 +976,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineWidthUnit(
       String managerId, LineWidthUnit lineWidthUnit) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidthUnit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineWidthUnit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1002,7 +1002,7 @@ class _PolylineAnnotationMessenger {
 
   Future<LineWidthUnit?> getLineWidthUnit(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidthUnit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineWidthUnit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1028,7 +1028,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineZOffset(String managerId, double lineZOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineZOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineZOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1054,7 +1054,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineZOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineZOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineZOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1080,7 +1080,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineBlur(String managerId, double lineBlur) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBlur$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineBlur$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1106,7 +1106,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineBlur(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBlur$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineBlur$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1132,7 +1132,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineBorderColor(String managerId, int lineBorderColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineBorderColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1158,7 +1158,7 @@ class _PolylineAnnotationMessenger {
 
   Future<int?> getLineBorderColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineBorderColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1185,7 +1185,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineBorderWidth(
       String managerId, double lineBorderWidth) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineBorderWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1211,7 +1211,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineBorderWidth(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineBorderWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1237,7 +1237,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineColor(String managerId, int lineColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1263,7 +1263,7 @@ class _PolylineAnnotationMessenger {
 
   Future<int?> getLineColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1290,7 +1290,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineDasharray(
       String managerId, List<double?> lineDasharray) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDasharray$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineDasharray$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1316,7 +1316,7 @@ class _PolylineAnnotationMessenger {
 
   Future<List<double?>?> getLineDasharray(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDasharray$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineDasharray$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1343,7 +1343,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineDepthOcclusionFactor(
       String managerId, double lineDepthOcclusionFactor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDepthOcclusionFactor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineDepthOcclusionFactor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1369,7 +1369,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineDepthOcclusionFactor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDepthOcclusionFactor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineDepthOcclusionFactor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1396,7 +1396,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineEmissiveStrength(
       String managerId, double lineEmissiveStrength) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineEmissiveStrength$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineEmissiveStrength$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1422,7 +1422,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineEmissiveStrength(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineEmissiveStrength$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineEmissiveStrength$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1448,7 +1448,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineGapWidth(String managerId, double lineGapWidth) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineGapWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineGapWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1474,7 +1474,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineGapWidth(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineGapWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineGapWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1501,7 +1501,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineOcclusionOpacity(
       String managerId, double lineOcclusionOpacity) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineOcclusionOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1527,7 +1527,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineOcclusionOpacity(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOcclusionOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineOcclusionOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1553,7 +1553,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineOffset(String managerId, double lineOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1579,7 +1579,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1605,7 +1605,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineOpacity(String managerId, double lineOpacity) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1631,7 +1631,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineOpacity(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1657,7 +1657,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLinePattern(String managerId, String linePattern) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLinePattern$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLinePattern$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1683,7 +1683,7 @@ class _PolylineAnnotationMessenger {
 
   Future<String?> getLinePattern(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLinePattern$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLinePattern$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1710,7 +1710,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineTranslate(
       String managerId, List<double?> lineTranslate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1736,7 +1736,7 @@ class _PolylineAnnotationMessenger {
 
   Future<List<double?>?> getLineTranslate(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1763,7 +1763,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineTranslateAnchor(
       String managerId, LineTranslateAnchor lineTranslateAnchor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslateAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTranslateAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1789,7 +1789,7 @@ class _PolylineAnnotationMessenger {
 
   Future<LineTranslateAnchor?> getLineTranslateAnchor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslateAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTranslateAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1815,7 +1815,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineTrimColor(String managerId, int lineTrimColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTrimColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1841,7 +1841,7 @@ class _PolylineAnnotationMessenger {
 
   Future<int?> getLineTrimColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTrimColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1868,7 +1868,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineTrimFadeRange(
       String managerId, List<double?> lineTrimFadeRange) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimFadeRange$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTrimFadeRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1894,7 +1894,7 @@ class _PolylineAnnotationMessenger {
 
   Future<List<double?>?> getLineTrimFadeRange(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimFadeRange$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTrimFadeRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1921,7 +1921,7 @@ class _PolylineAnnotationMessenger {
   Future<void> setLineTrimOffset(
       String managerId, List<double?> lineTrimOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTrimOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1947,7 +1947,7 @@ class _PolylineAnnotationMessenger {
 
   Future<List<double?>?> getLineTrimOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTrimOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1973,7 +1973,7 @@ class _PolylineAnnotationMessenger {
 
   Future<void> setLineWidth(String managerId, double lineWidth) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1999,7 +1999,7 @@ class _PolylineAnnotationMessenger {
 
   Future<double?> getLineWidth(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

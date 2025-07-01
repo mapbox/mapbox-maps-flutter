@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../mapbox_maps_flutter_mobile.dart';
 
 /// A convenience object to access [the style ID](https://docs.mapbox.com/help/glossary/style-id/) strings of the professionally-designed
 /// map styles made by Mapbox.

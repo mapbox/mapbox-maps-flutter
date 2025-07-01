@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Samplers which can be optionally enabled to collect performance statistics.
 enum PerformanceSamplerOptions {
@@ -453,7 +453,7 @@ abstract class PerformanceStatisticsListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.PerformanceStatisticsListener.onPerformanceStatisticsCollected$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -461,12 +461,12 @@ abstract class PerformanceStatisticsListener {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final PerformanceStatistics? arg_statistics =
               (args[0] as PerformanceStatistics?);
           assert(arg_statistics != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null, expected non-null PerformanceStatistics.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null, expected non-null PerformanceStatistics.');
           try {
             api.onPerformanceStatisticsCollected(arg_statistics!);
             return wrapResponse(empty: true);
@@ -501,7 +501,7 @@ class _PerformanceStatisticsApi {
   Future<void> startPerformanceStatisticsCollection(
       PerformanceStatisticsOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.startPerformanceStatisticsCollection$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PerformanceStatisticsApi.startPerformanceStatisticsCollection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -527,7 +527,7 @@ class _PerformanceStatisticsApi {
 
   Future<void> stopPerformanceStatisticsCollection() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.stopPerformanceStatisticsCollection$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PerformanceStatisticsApi.stopPerformanceStatisticsCollection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

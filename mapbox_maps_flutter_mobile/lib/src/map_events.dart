@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../mapbox_maps_flutter_mobile.dart';
 
 final class _MapEvents {
   OnStyleLoadedListener? _onStyleLoadedListener;

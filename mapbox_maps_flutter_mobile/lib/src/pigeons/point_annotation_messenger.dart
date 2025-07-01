@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Part of the icon placed closest to the anchor.
 /// Default value: "center".
@@ -1093,7 +1093,7 @@ class _PointAnnotationMessenger {
   Future<PointAnnotation> create(
       String managerId, PointAnnotationOptions annotationOption) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.create$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.create$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1125,7 +1125,7 @@ class _PointAnnotationMessenger {
   Future<List<PointAnnotation>> createMulti(
       String managerId, List<PointAnnotationOptions> annotationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.createMulti$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.createMulti$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1157,7 +1157,7 @@ class _PointAnnotationMessenger {
 
   Future<void> update(String managerId, PointAnnotation annotation) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.update$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.update$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1183,7 +1183,7 @@ class _PointAnnotationMessenger {
 
   Future<void> delete(String managerId, PointAnnotation annotation) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.delete$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.delete$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1209,7 +1209,7 @@ class _PointAnnotationMessenger {
 
   Future<void> deleteAll(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.deleteAll$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.deleteAll$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1236,7 +1236,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconAllowOverlap(
       String managerId, bool iconAllowOverlap) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAllowOverlap$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconAllowOverlap$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1262,7 +1262,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getIconAllowOverlap(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAllowOverlap$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconAllowOverlap$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1288,7 +1288,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconAnchor(String managerId, IconAnchor iconAnchor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1314,7 +1314,7 @@ class _PointAnnotationMessenger {
 
   Future<IconAnchor?> getIconAnchor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1341,7 +1341,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconIgnorePlacement(
       String managerId, bool iconIgnorePlacement) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconIgnorePlacement$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconIgnorePlacement$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1367,7 +1367,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getIconIgnorePlacement(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconIgnorePlacement$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconIgnorePlacement$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1393,7 +1393,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconImage(String managerId, String iconImage) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1419,7 +1419,7 @@ class _PointAnnotationMessenger {
 
   Future<String?> getIconImage(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1446,7 +1446,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconKeepUpright(
       String managerId, bool iconKeepUpright) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconKeepUpright$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconKeepUpright$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1472,7 +1472,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getIconKeepUpright(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconKeepUpright$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconKeepUpright$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1498,7 +1498,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconOffset(String managerId, List<double?> iconOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1524,7 +1524,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getIconOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1550,7 +1550,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconOptional(String managerId, bool iconOptional) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOptional$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOptional$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1576,7 +1576,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getIconOptional(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOptional$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOptional$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1602,7 +1602,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconPadding(String managerId, double iconPadding) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1628,7 +1628,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconPadding(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1655,7 +1655,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconPitchAlignment(
       String managerId, IconPitchAlignment iconPitchAlignment) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconPitchAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconPitchAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1681,7 +1681,7 @@ class _PointAnnotationMessenger {
 
   Future<IconPitchAlignment?> getIconPitchAlignment(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconPitchAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconPitchAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1707,7 +1707,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconRotate(String managerId, double iconRotate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconRotate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1733,7 +1733,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconRotate(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconRotate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1760,7 +1760,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconRotationAlignment(
       String managerId, IconRotationAlignment iconRotationAlignment) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotationAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconRotationAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1787,7 +1787,7 @@ class _PointAnnotationMessenger {
   Future<IconRotationAlignment?> getIconRotationAlignment(
       String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotationAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconRotationAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1813,7 +1813,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconSize(String managerId, double iconSize) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1839,7 +1839,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconSize(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1866,7 +1866,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconSizeScaleRange(
       String managerId, List<double?> iconSizeScaleRange) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSizeScaleRange$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconSizeScaleRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1892,7 +1892,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getIconSizeScaleRange(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSizeScaleRange$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconSizeScaleRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1918,7 +1918,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconTextFit(String managerId, IconTextFit iconTextFit) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTextFit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1944,7 +1944,7 @@ class _PointAnnotationMessenger {
 
   Future<IconTextFit?> getIconTextFit(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFit$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTextFit$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1971,7 +1971,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconTextFitPadding(
       String managerId, List<double?> iconTextFitPadding) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFitPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTextFitPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1997,7 +1997,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getIconTextFitPadding(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFitPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTextFitPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2024,7 +2024,7 @@ class _PointAnnotationMessenger {
   Future<void> setSymbolAvoidEdges(
       String managerId, bool symbolAvoidEdges) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolAvoidEdges$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolAvoidEdges$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2050,7 +2050,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getSymbolAvoidEdges(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolAvoidEdges$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolAvoidEdges$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2077,7 +2077,7 @@ class _PointAnnotationMessenger {
   Future<void> setSymbolElevationReference(String managerId,
       SymbolElevationReference symbolElevationReference) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolElevationReference$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2104,7 +2104,7 @@ class _PointAnnotationMessenger {
   Future<SymbolElevationReference?> getSymbolElevationReference(
       String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolElevationReference$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2131,7 +2131,7 @@ class _PointAnnotationMessenger {
   Future<void> setSymbolPlacement(
       String managerId, SymbolPlacement symbolPlacement) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolPlacement$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolPlacement$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2157,7 +2157,7 @@ class _PointAnnotationMessenger {
 
   Future<SymbolPlacement?> getSymbolPlacement(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolPlacement$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolPlacement$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2183,7 +2183,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setSymbolSortKey(String managerId, double symbolSortKey) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSortKey$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolSortKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2209,7 +2209,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getSymbolSortKey(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSortKey$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolSortKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2235,7 +2235,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setSymbolSpacing(String managerId, double symbolSpacing) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSpacing$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolSpacing$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2261,7 +2261,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getSymbolSpacing(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSpacing$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolSpacing$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2287,7 +2287,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setSymbolZElevate(String managerId, bool symbolZElevate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZElevate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolZElevate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2313,7 +2313,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getSymbolZElevate(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZElevate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolZElevate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2340,7 +2340,7 @@ class _PointAnnotationMessenger {
   Future<void> setSymbolZOrder(
       String managerId, SymbolZOrder symbolZOrder) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOrder$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolZOrder$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2366,7 +2366,7 @@ class _PointAnnotationMessenger {
 
   Future<SymbolZOrder?> getSymbolZOrder(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOrder$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolZOrder$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2393,7 +2393,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextAllowOverlap(
       String managerId, bool textAllowOverlap) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAllowOverlap$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextAllowOverlap$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2419,7 +2419,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getTextAllowOverlap(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAllowOverlap$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextAllowOverlap$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2445,7 +2445,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextAnchor(String managerId, TextAnchor textAnchor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2471,7 +2471,7 @@ class _PointAnnotationMessenger {
 
   Future<TextAnchor?> getTextAnchor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2497,7 +2497,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextField(String managerId, String textField) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextField$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextField$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2523,7 +2523,7 @@ class _PointAnnotationMessenger {
 
   Future<String?> getTextField(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextField$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextField$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2549,7 +2549,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextFont(String managerId, List<String?> textFont) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextFont$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2575,7 +2575,7 @@ class _PointAnnotationMessenger {
 
   Future<List<String?>?> getTextFont(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextFont$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextFont$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2602,7 +2602,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextIgnorePlacement(
       String managerId, bool textIgnorePlacement) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextIgnorePlacement$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextIgnorePlacement$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2628,7 +2628,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getTextIgnorePlacement(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextIgnorePlacement$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextIgnorePlacement$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2654,7 +2654,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextJustify(String managerId, TextJustify textJustify) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextJustify$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextJustify$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2680,7 +2680,7 @@ class _PointAnnotationMessenger {
 
   Future<TextJustify?> getTextJustify(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextJustify$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextJustify$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2707,7 +2707,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextKeepUpright(
       String managerId, bool textKeepUpright) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextKeepUpright$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextKeepUpright$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2733,7 +2733,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getTextKeepUpright(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextKeepUpright$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextKeepUpright$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2760,7 +2760,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextLetterSpacing(
       String managerId, double textLetterSpacing) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLetterSpacing$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextLetterSpacing$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2786,7 +2786,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextLetterSpacing(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLetterSpacing$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextLetterSpacing$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2813,7 +2813,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextLineHeight(
       String managerId, double textLineHeight) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLineHeight$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextLineHeight$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2839,7 +2839,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextLineHeight(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLineHeight$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextLineHeight$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2865,7 +2865,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextMaxAngle(String managerId, double textMaxAngle) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxAngle$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextMaxAngle$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2891,7 +2891,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextMaxAngle(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxAngle$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextMaxAngle$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2917,7 +2917,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextMaxWidth(String managerId, double textMaxWidth) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextMaxWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2943,7 +2943,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextMaxWidth(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextMaxWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2969,7 +2969,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextOffset(String managerId, List<double?> textOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -2995,7 +2995,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getTextOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3021,7 +3021,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextOptional(String managerId, bool textOptional) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOptional$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOptional$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3047,7 +3047,7 @@ class _PointAnnotationMessenger {
 
   Future<bool?> getTextOptional(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOptional$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOptional$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3073,7 +3073,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextPadding(String managerId, double textPadding) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3099,7 +3099,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextPadding(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3126,7 +3126,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextPitchAlignment(
       String managerId, TextPitchAlignment textPitchAlignment) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextPitchAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextPitchAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3152,7 +3152,7 @@ class _PointAnnotationMessenger {
 
   Future<TextPitchAlignment?> getTextPitchAlignment(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextPitchAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextPitchAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3179,7 +3179,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextRadialOffset(
       String managerId, double textRadialOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRadialOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextRadialOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3205,7 +3205,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextRadialOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRadialOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextRadialOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3231,7 +3231,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextRotate(String managerId, double textRotate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextRotate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3257,7 +3257,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextRotate(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextRotate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3284,7 +3284,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextRotationAlignment(
       String managerId, TextRotationAlignment textRotationAlignment) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotationAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextRotationAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3311,7 +3311,7 @@ class _PointAnnotationMessenger {
   Future<TextRotationAlignment?> getTextRotationAlignment(
       String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotationAlignment$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextRotationAlignment$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3337,7 +3337,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextSize(String managerId, double textSize) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3363,7 +3363,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextSize(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3390,7 +3390,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextSizeScaleRange(
       String managerId, List<double?> textSizeScaleRange) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSizeScaleRange$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextSizeScaleRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3416,7 +3416,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getTextSizeScaleRange(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSizeScaleRange$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextSizeScaleRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3443,7 +3443,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextTransform(
       String managerId, TextTransform textTransform) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextTransform$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3469,7 +3469,7 @@ class _PointAnnotationMessenger {
 
   Future<TextTransform?> getTextTransform(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTransform$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextTransform$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3495,7 +3495,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconColor(String managerId, int iconColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3521,7 +3521,7 @@ class _PointAnnotationMessenger {
 
   Future<int?> getIconColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3548,7 +3548,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconColorSaturation(
       String managerId, double iconColorSaturation) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconColorSaturation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3574,7 +3574,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconColorSaturation(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorSaturation$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconColorSaturation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3601,7 +3601,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconEmissiveStrength(
       String managerId, double iconEmissiveStrength) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconEmissiveStrength$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconEmissiveStrength$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3627,7 +3627,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconEmissiveStrength(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconEmissiveStrength$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconEmissiveStrength$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3653,7 +3653,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconHaloBlur(String managerId, double iconHaloBlur) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloBlur$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconHaloBlur$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3679,7 +3679,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconHaloBlur(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloBlur$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconHaloBlur$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3705,7 +3705,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconHaloColor(String managerId, int iconHaloColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconHaloColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3731,7 +3731,7 @@ class _PointAnnotationMessenger {
 
   Future<int?> getIconHaloColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconHaloColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3757,7 +3757,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconHaloWidth(String managerId, double iconHaloWidth) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconHaloWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3783,7 +3783,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconHaloWidth(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconHaloWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3810,7 +3810,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconImageCrossFade(
       String managerId, double iconImageCrossFade) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImageCrossFade$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconImageCrossFade$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3836,7 +3836,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconImageCrossFade(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImageCrossFade$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconImageCrossFade$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3863,7 +3863,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconOcclusionOpacity(
       String managerId, double iconOcclusionOpacity) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOcclusionOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOcclusionOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3889,7 +3889,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconOcclusionOpacity(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOcclusionOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOcclusionOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3915,7 +3915,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setIconOpacity(String managerId, double iconOpacity) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3941,7 +3941,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getIconOpacity(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3968,7 +3968,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconTranslate(
       String managerId, List<double?> iconTranslate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3994,7 +3994,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getIconTranslate(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4021,7 +4021,7 @@ class _PointAnnotationMessenger {
   Future<void> setIconTranslateAnchor(
       String managerId, IconTranslateAnchor iconTranslateAnchor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslateAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTranslateAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4047,7 +4047,7 @@ class _PointAnnotationMessenger {
 
   Future<IconTranslateAnchor?> getIconTranslateAnchor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslateAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTranslateAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4073,7 +4073,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setSymbolZOffset(String managerId, double symbolZOffset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolZOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4099,7 +4099,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getSymbolZOffset(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOffset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolZOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4125,7 +4125,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextColor(String managerId, int textColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4151,7 +4151,7 @@ class _PointAnnotationMessenger {
 
   Future<int?> getTextColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4178,7 +4178,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextEmissiveStrength(
       String managerId, double textEmissiveStrength) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextEmissiveStrength$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextEmissiveStrength$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4204,7 +4204,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextEmissiveStrength(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextEmissiveStrength$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextEmissiveStrength$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4230,7 +4230,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextHaloBlur(String managerId, double textHaloBlur) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloBlur$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextHaloBlur$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4256,7 +4256,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextHaloBlur(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloBlur$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextHaloBlur$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4282,7 +4282,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextHaloColor(String managerId, int textHaloColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextHaloColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4308,7 +4308,7 @@ class _PointAnnotationMessenger {
 
   Future<int?> getTextHaloColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextHaloColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4334,7 +4334,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextHaloWidth(String managerId, double textHaloWidth) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextHaloWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4360,7 +4360,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextHaloWidth(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloWidth$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextHaloWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4387,7 +4387,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextOcclusionOpacity(
       String managerId, double textOcclusionOpacity) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOcclusionOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOcclusionOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4413,7 +4413,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextOcclusionOpacity(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOcclusionOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOcclusionOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4439,7 +4439,7 @@ class _PointAnnotationMessenger {
 
   Future<void> setTextOpacity(String managerId, double textOpacity) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4465,7 +4465,7 @@ class _PointAnnotationMessenger {
 
   Future<double?> getTextOpacity(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOpacity$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOpacity$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4492,7 +4492,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextTranslate(
       String managerId, List<double?> textTranslate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4518,7 +4518,7 @@ class _PointAnnotationMessenger {
 
   Future<List<double?>?> getTextTranslate(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4545,7 +4545,7 @@ class _PointAnnotationMessenger {
   Future<void> setTextTranslateAnchor(
       String managerId, TextTranslateAnchor textTranslateAnchor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslateAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextTranslateAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4571,7 +4571,7 @@ class _PointAnnotationMessenger {
 
   Future<TextTranslateAnchor?> getTextTranslateAnchor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslateAnchor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextTranslateAnchor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

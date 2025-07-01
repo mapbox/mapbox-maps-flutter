@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../mapbox_maps_flutter_mobile.dart';
 
 /// Definition for listener invoked when the map is created.
 typedef MapCreatedCallback = void Function(MapboxMap controller);

@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../mapbox_maps_flutter_mobile.dart';
 
 /// A class that allows to configure Mapbox SDKs logging per application.
 final class LogConfiguration {
