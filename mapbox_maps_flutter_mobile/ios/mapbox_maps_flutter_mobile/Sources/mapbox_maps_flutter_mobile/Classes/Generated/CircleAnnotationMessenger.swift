@@ -482,7 +482,7 @@ class _CircleAnnotationMessengerSetup {
     } else {
       setCircleElevationReferenceChannel.setMessageHandler(nil)
     }
-    let getCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CircleAnnotationMessenger.getCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCircleElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -499,7 +499,7 @@ class _CircleAnnotationMessengerSetup {
     } else {
       getCircleElevationReferenceChannel.setMessageHandler(nil)
     }
-    let setCircleSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setCircleSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CircleAnnotationMessenger.setCircleSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCircleSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

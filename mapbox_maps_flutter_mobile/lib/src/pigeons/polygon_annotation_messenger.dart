@@ -489,7 +489,7 @@ class _PolygonAnnotationMessenger {
   Future<void> setFillConstructBridgeGuardRail(
       String managerId, bool fillConstructBridgeGuardRail) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillConstructBridgeGuardRail$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillConstructBridgeGuardRail$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -515,7 +515,7 @@ class _PolygonAnnotationMessenger {
 
   Future<bool?> getFillConstructBridgeGuardRail(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -700,7 +700,7 @@ class _PolygonAnnotationMessenger {
   Future<void> setFillBridgeGuardRailColor(
       String managerId, int fillBridgeGuardRailColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillBridgeGuardRailColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillBridgeGuardRailColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -726,7 +726,7 @@ class _PolygonAnnotationMessenger {
 
   Future<int?> getFillBridgeGuardRailColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillBridgeGuardRailColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillBridgeGuardRailColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1121,7 +1121,7 @@ class _PolygonAnnotationMessenger {
   Future<void> setFillTunnelStructureColor(
       String managerId, int fillTunnelStructureColor) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTunnelStructureColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillTunnelStructureColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1147,7 +1147,7 @@ class _PolygonAnnotationMessenger {
 
   Future<int?> getFillTunnelStructureColor(String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTunnelStructureColor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillTunnelStructureColor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

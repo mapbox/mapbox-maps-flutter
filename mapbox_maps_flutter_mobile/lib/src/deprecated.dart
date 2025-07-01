@@ -16,7 +16,7 @@ abstract class OnCircleAnnotationClickListener {
     String messageChannelSuffix = '',
   }) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }
@@ -30,7 +30,7 @@ abstract class OnCircleAnnotationClickListener {
   static void _withCancelable(
       Cancelable cancelable, String messageChannelSuffix) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }
@@ -54,7 +54,7 @@ abstract class OnPointAnnotationClickListener {
     String messageChannelSuffix = '',
   }) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPointAnnotationClickListener.onPointAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }
@@ -92,7 +92,7 @@ abstract class OnPolygonAnnotationClickListener {
     String messageChannelSuffix = '',
   }) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolygonAnnotationClickListener.onPolygonAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }
@@ -106,7 +106,7 @@ abstract class OnPolygonAnnotationClickListener {
   static void _withCancelable(
       Cancelable cancelable, String messageChannelSuffix) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }
@@ -130,7 +130,7 @@ abstract class OnPolylineAnnotationClickListener {
     String messageChannelSuffix = '',
   }) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnPolylineAnnotationClickListener.onPolylineAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolylineAnnotationClickListener.onPolylineAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }
@@ -144,7 +144,7 @@ abstract class OnPolylineAnnotationClickListener {
   static void _withCancelable(
       Cancelable cancelable, String messageChannelSuffix) {
     var channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
       channelName += '.$messageChannelSuffix';
     }

@@ -497,7 +497,7 @@ class _CircleAnnotationMessenger {
   Future<void> setCircleElevationReference(String managerId,
       CircleElevationReference circleElevationReference) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CircleAnnotationMessenger.setCircleElevationReference$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -524,7 +524,7 @@ class _CircleAnnotationMessenger {
   Future<CircleElevationReference?> getCircleElevationReference(
       String managerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CircleAnnotationMessenger.getCircleElevationReference$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

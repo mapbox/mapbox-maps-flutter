@@ -107,7 +107,7 @@ void main() {
 
     // Mock tap events
     final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/tap",
+        "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/tap",
         pigeonMethodCodec);
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(eventChannel,
@@ -146,7 +146,7 @@ void main() {
 
     // Mock long press events
     final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/long_press",
+        "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/long_press",
         pigeonMethodCodec);
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(eventChannel,
@@ -186,7 +186,7 @@ void main() {
 
     // Mock drag events
     final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/drag",
+        "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/drag",
         pigeonMethodCodec);
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(eventChannel,

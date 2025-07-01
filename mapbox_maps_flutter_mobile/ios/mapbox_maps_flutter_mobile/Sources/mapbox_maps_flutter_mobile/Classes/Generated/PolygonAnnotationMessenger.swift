@@ -94,13 +94,13 @@ struct PolygonAnnotation {
   /// Determines whether bridge guard rails are added for elevated roads.
   /// Default value: "true".
   /// @experimental
-  var fillConstructBridgeGuardRail: Bool? = nil
+  var fillConstructBridgeGuardRail: Bool?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
   /// The color of bridge guard rail.
   /// Default value: "rgba(241, 236, 225, 255)".
   /// @experimental
-  var fillBridgeGuardRailColor: Int64? = nil
+  var fillBridgeGuardRailColor: Int64?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   var fillColor: Int64?
@@ -177,7 +177,7 @@ struct PolygonAnnotationOptions {
   /// Determines whether bridge guard rails are added for elevated roads.
   /// Default value: "true".
   /// @experimental
-  var fillConstructBridgeGuardRail: Bool? = nil
+  var fillConstructBridgeGuardRail: Bool?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
   /// The color of bridge guard rail.
@@ -464,7 +464,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillConstructBridgeGuardRailChannel.setMessageHandler(nil)
     }
-    let getFillConstructBridgeGuardRailChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillConstructBridgeGuardRailChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillConstructBridgeGuardRailChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -481,7 +481,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillConstructBridgeGuardRailChannel.setMessageHandler(nil)
     }
-    let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -604,7 +604,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillBridgeGuardRailColorChannel.setMessageHandler(nil)
     }
-    let getFillBridgeGuardRailColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillBridgeGuardRailColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillBridgeGuardRailColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillBridgeGuardRailColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillBridgeGuardRailColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -621,7 +621,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillBridgeGuardRailColorChannel.setMessageHandler(nil)
     }
-    let setFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -884,7 +884,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillTunnelStructureColorChannel.setMessageHandler(nil)
     }
-    let getFillTunnelStructureColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTunnelStructureColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillTunnelStructureColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillTunnelStructureColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillTunnelStructureColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -901,7 +901,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillTunnelStructureColorChannel.setMessageHandler(nil)
     }
-    let setFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
