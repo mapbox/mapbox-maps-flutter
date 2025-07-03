@@ -58,7 +58,8 @@ class _SimpleMapState extends State<SimpleMapExample> {
               }
               _nativeMap?.setCamera(native.CameraOptions(
                 center: Position(-117.918976, 33.812092),
-                zoom: 15.0,
+                zoom: 16.0,
+                pitch: 45.0,
               ));
             },
             child: const Text('Call FFI setCamera'),
