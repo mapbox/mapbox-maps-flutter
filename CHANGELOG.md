@@ -1,4 +1,4 @@
-### main
+### 2.10.0-beta.1
 
 * Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
 * Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
