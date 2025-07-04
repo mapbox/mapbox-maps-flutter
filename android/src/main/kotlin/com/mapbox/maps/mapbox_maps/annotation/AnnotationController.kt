@@ -295,7 +295,7 @@ class AnnotationController(
           }
         }
         AnnotationInteractionEventsStreamHandler.register(messenger, tapEvents, "$channelName/tap")
-        AnnotationInteractionEventsStreamHandler.register(messenger, tapEvents, "$channelName/drag")
+        AnnotationInteractionEventsStreamHandler.register(messenger, dragEvents, "$channelName/drag")
         AnnotationInteractionEventsStreamHandler.register(messenger, longPressEvents, "$channelName/long_press")
       }
     }
