@@ -1,3 +1,7 @@
+### main
+
+* Use Maps SDK Android dependency with NDK 27 support.
+
 ### 2.10.0-beta.1
 
 * Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
