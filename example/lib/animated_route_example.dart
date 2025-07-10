@@ -61,6 +61,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     setLocationComponent();
     refreshTrackLocation();
     refreshCarAnnotations();
+    mapboxMap.style.setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   @override
@@ -102,7 +103,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
         body: MapWidget(
           key: const ValueKey("mapWidget"),
           cameraOptions: CameraOptions(zoom: 3.0),
-          styleUri: MapboxStyles.LIGHT,
+          styleUri: MapboxStyles.STANDARD,
           textureView: true,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoadedCallback,
