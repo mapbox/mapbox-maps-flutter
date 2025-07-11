@@ -194,34 +194,70 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return GestureState(rawValue: enumResultAsInt)
+        return IconAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return IconTextFit(rawValue: enumResultAsInt)
+      }
+      return nil
     case 131:
-      return Polygon.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextAnchor(rawValue: enumResultAsInt)
+      }
+      return nil
     case 132:
-      return LineString.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextJustify(rawValue: enumResultAsInt)
+      }
+      return nil
     case 133:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextTransform(rawValue: enumResultAsInt)
+      }
+      return nil
     case 134:
-      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return LineJoin(rawValue: enumResultAsInt)
+      }
+      return nil
     case 135:
-      return PointAnnotation.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return GestureState(rawValue: enumResultAsInt)
+      }
+      return nil
     case 136:
-      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 137:
-      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+      return Polygon.fromList(self.readValue() as! [Any?])
     case 138:
-      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
+      return LineString.fromList(self.readValue() as! [Any?])
     case 139:
-      return PointAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 140:
-      return CircleAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
     case 141:
-      return PolygonAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+      return PointAnnotation.fromList(self.readValue() as! [Any?])
     case 142:
+      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+    case 143:
+      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+    case 144:
+      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
+    case 145:
+      return PointAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 146:
+      return CircleAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 147:
+      return PolygonAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 148:
       return PolylineAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -231,47 +267,65 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
 
 private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? GestureState {
+    if let value = value as? IconAnchor {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Point {
+    } else if let value = value as? IconTextFit {
       super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? Polygon {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextAnchor {
       super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? LineString {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextJustify {
       super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextTransform {
       super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? LineJoin {
       super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotation {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? GestureState {
       super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotation {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotation {
+    } else if let value = value as? Polygon {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineAnnotation {
+    } else if let value = value as? LineString {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotationInteractionContext {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotationInteractionContext {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotationInteractionContext {
+    } else if let value = value as? PointAnnotation {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineAnnotationInteractionContext {
+    } else if let value = value as? CircleAnnotation {
       super.writeByte(142)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotation {
+      super.writeByte(143)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotation {
+      super.writeByte(144)
+      super.writeValue(value.toList())
+    } else if let value = value as? PointAnnotationInteractionContext {
+      super.writeByte(145)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleAnnotationInteractionContext {
+      super.writeByte(146)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotationInteractionContext {
+      super.writeByte(147)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotationInteractionContext {
+      super.writeByte(148)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
