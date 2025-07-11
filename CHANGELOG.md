@@ -1,3 +1,10 @@
+### 2.9.1
+
+* Update MapboxMaps iOS SDK to v11.13.3, MapboxMaps Android SDK to v11.13.2.
+
+> [!IMPORTANT]
+> This release addresses the code sign issue that may occur when building on iOS.
+
 ### 2.9.0
 
 > [!IMPORTANT]
