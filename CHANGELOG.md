@@ -1,5 +1,12 @@
 ### 2.8.0 
 
+* Update MapboxMaps iOS SDK to v11.12.5, MapboxMaps Android SDK to v11.12.4.
+
+> [!IMPORTANT]
+> This release addresses the code sign issue that may occur when building on iOS.
+
+### 2.8.0 
+
 * Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
 * [Android] Fix color alpha value conversion.
 * Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
