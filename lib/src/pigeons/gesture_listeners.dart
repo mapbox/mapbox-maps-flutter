@@ -272,47 +272,65 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is GestureState) {
+    } else if (value is IconAnchor) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is IconTextFit) {
       buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is Polygon) {
+      writeValue(buffer, value.index);
+    } else if (value is TextAnchor) {
       buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is LineString) {
+      writeValue(buffer, value.index);
+    } else if (value is TextJustify) {
       buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+      writeValue(buffer, value.index);
+    } else if (value is TextTransform) {
       buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+      writeValue(buffer, value.index);
+    } else if (value is LineJoin) {
       buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    } else if (value is PointAnnotation) {
+      writeValue(buffer, value.index);
+    } else if (value is GestureState) {
       buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotation) {
+      writeValue(buffer, value.index);
+    } else if (value is Point) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotation) {
+    } else if (value is Polygon) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineAnnotation) {
+    } else if (value is LineString) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PointAnnotationInteractionContext) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotationInteractionContext) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotationInteractionContext) {
+    } else if (value is PointAnnotation) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineAnnotationInteractionContext) {
+    } else if (value is CircleAnnotation) {
       buffer.putUint8(142);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotation) {
+      buffer.putUint8(143);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotation) {
+      buffer.putUint8(144);
+      writeValue(buffer, value.encode());
+    } else if (value is PointAnnotationInteractionContext) {
+      buffer.putUint8(145);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotationInteractionContext) {
+      buffer.putUint8(146);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotationInteractionContext) {
+      buffer.putUint8(147);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotationInteractionContext) {
+      buffer.putUint8(148);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -324,32 +342,50 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : GestureState.values[value];
+        return value == null ? null : IconAnchor.values[value];
       case 130:
-        return Point.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : IconTextFit.values[value];
       case 131:
-        return Polygon.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TextAnchor.values[value];
       case 132:
-        return LineString.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TextJustify.values[value];
       case 133:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TextTransform.values[value];
       case 134:
-        return MapContentGestureContext.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : LineJoin.values[value];
       case 135:
-        return PointAnnotation.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : GestureState.values[value];
       case 136:
-        return CircleAnnotation.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 137:
-        return PolygonAnnotation.decode(readValue(buffer)!);
+        return Polygon.decode(readValue(buffer)!);
       case 138:
-        return PolylineAnnotation.decode(readValue(buffer)!);
+        return LineString.decode(readValue(buffer)!);
       case 139:
-        return PointAnnotationInteractionContext.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 140:
-        return CircleAnnotationInteractionContext.decode(readValue(buffer)!);
+        return MapContentGestureContext.decode(readValue(buffer)!);
       case 141:
-        return PolygonAnnotationInteractionContext.decode(readValue(buffer)!);
+        return PointAnnotation.decode(readValue(buffer)!);
       case 142:
+        return CircleAnnotation.decode(readValue(buffer)!);
+      case 143:
+        return PolygonAnnotation.decode(readValue(buffer)!);
+      case 144:
+        return PolylineAnnotation.decode(readValue(buffer)!);
+      case 145:
+        return PointAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 146:
+        return CircleAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 147:
+        return PolygonAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 148:
         return PolylineAnnotationInteractionContext.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
