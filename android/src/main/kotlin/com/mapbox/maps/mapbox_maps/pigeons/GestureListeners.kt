@@ -217,70 +217,100 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          GestureState.ofRaw(it.toInt())
+          IconAnchor.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          IconTextFit.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          TextAnchor.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          LineStringDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          TextJustify.ofRaw(it.toInt())
         }
       }
       133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          TextTransform.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          LineJoin.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointAnnotation.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          GestureState.ofRaw(it.toInt())
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CircleAnnotation.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonAnnotation.fromList(it)
+          PolygonDecoder.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolylineAnnotation.fromList(it)
+          LineStringDecoder.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointAnnotationInteractionContext.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CircleAnnotationInteractionContext.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonAnnotationInteractionContext.fromList(it)
+          PointAnnotation.fromList(it)
         }
       }
       142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleAnnotation.fromList(it)
+        }
+      }
+      143.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonAnnotation.fromList(it)
+        }
+      }
+      144.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolylineAnnotation.fromList(it)
+        }
+      }
+      145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointAnnotationInteractionContext.fromList(it)
+        }
+      }
+      146.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleAnnotationInteractionContext.fromList(it)
+        }
+      }
+      147.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonAnnotationInteractionContext.fromList(it)
+        }
+      }
+      148.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PolylineAnnotationInteractionContext.fromList(it)
         }
@@ -290,60 +320,84 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is GestureState -> {
+      is IconAnchor -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is Point -> {
+      is IconTextFit -> {
         stream.write(130)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is Polygon -> {
+      is TextAnchor -> {
         stream.write(131)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is LineString -> {
+      is TextJustify -> {
         stream.write(132)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is ScreenCoordinate -> {
+      is TextTransform -> {
         stream.write(133)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is MapContentGestureContext -> {
+      is LineJoin -> {
         stream.write(134)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is PointAnnotation -> {
+      is GestureState -> {
         stream.write(135)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is CircleAnnotation -> {
+      is Point -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is PolygonAnnotation -> {
+      is Polygon -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is PolylineAnnotation -> {
+      is LineString -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is PointAnnotationInteractionContext -> {
+      is ScreenCoordinate -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is CircleAnnotationInteractionContext -> {
+      is MapContentGestureContext -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is PolygonAnnotationInteractionContext -> {
+      is PointAnnotation -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is PolylineAnnotationInteractionContext -> {
+      is CircleAnnotation -> {
         stream.write(142)
+        writeValue(stream, value.toList())
+      }
+      is PolygonAnnotation -> {
+        stream.write(143)
+        writeValue(stream, value.toList())
+      }
+      is PolylineAnnotation -> {
+        stream.write(144)
+        writeValue(stream, value.toList())
+      }
+      is PointAnnotationInteractionContext -> {
+        stream.write(145)
+        writeValue(stream, value.toList())
+      }
+      is CircleAnnotationInteractionContext -> {
+        stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      is PolygonAnnotationInteractionContext -> {
+        stream.write(147)
+        writeValue(stream, value.toList())
+      }
+      is PolylineAnnotationInteractionContext -> {
+        stream.write(148)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
