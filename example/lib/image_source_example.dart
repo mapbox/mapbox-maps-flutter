@@ -20,10 +20,11 @@ class ImageSourceExample extends StatefulWidget implements Example {
 
 class ImageSourceExampleState extends State<ImageSourceExample> {
   MapboxMap? mapboxMap;
-  var isLight = true;
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+    mapboxMap.style.setStyleImportConfigProperty("basemap", "lightPreset", "night");
+    mapboxMap.style.setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
@@ -37,6 +38,9 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
     await mapboxMap?.style.addLayer(RasterLayer(
       id: "image_layer-id",
       sourceId: "image_source-id",
+      // `LightPreset`s are applied to all layers of the map.
+      // As `night` is applied we need to set `rasterEmissiveStrength` to color the image
+      rasterEmissiveStrength: 1.0,
     ));
     var imageSource =
         await mapboxMap?.style.getSource("image_source-id") as ImageSource;
@@ -50,7 +54,7 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
     return new Scaffold(
         body: MapWidget(
       key: ValueKey("mapWidget"),
-      styleUri: MapboxStyles.DARK,
+      styleUri: MapboxStyles.STANDARD,
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-80.1263, 25.7845)), zoom: 12.0),
       onMapCreated: _onMapCreated,

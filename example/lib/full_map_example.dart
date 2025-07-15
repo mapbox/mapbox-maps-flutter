@@ -20,7 +20,7 @@ class FullMapExampleState extends State<FullMapExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style;
+    mapboxMap.style.setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
@@ -99,9 +99,9 @@ class FullMapExampleState extends State<FullMapExample> {
                       () => isLight = !isLight,
                     );
                     if (isLight) {
-                      mapboxMap?.loadStyleURI(MapboxStyles.LIGHT);
+                      mapboxMap?.style.setStyleImportConfigProperty("basemap", "lightPreset", "day");
                     } else {
-                      mapboxMap?.loadStyleURI(MapboxStyles.DARK);
+                      mapboxMap?.style.setStyleImportConfigProperty("basemap", "lightPreset", "night");
                     }
                   }),
               SizedBox(height: 10),
@@ -117,7 +117,7 @@ class FullMapExampleState extends State<FullMapExample> {
                 43.70908256335716,
               )),
               zoom: 3.0),
-          styleUri: MapboxStyles.LIGHT,
+          styleUri: MapboxStyles.STANDARD,
           textureView: true,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoadedCallback,
