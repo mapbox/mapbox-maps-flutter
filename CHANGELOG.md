@@ -1,3 +1,10 @@
+### 2.6.3
+
+* Update Maps SDK iOS to 11.10.3
+
+> [!IMPORTANT]
+> This release addresses the code sign issue that may occur when building on iOS.
+
 ### 2.6.2
 
 * Update Maps SDK to 11.10.2 (iOS) and 11.10.3 (Android):
