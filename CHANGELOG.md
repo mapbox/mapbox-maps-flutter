@@ -1,6 +1,7 @@
 ### main
 
 * Fix crash when receiving annotation interactions.
+* Update Maps SDK to v11.14.0-rc.1
 
 ### 2.10.0-beta.1
 
