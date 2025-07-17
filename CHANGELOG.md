@@ -1,3 +1,7 @@
+### 2.5.3
+
+* Bump iOS Maps SDK to 11.9.3
+
 ### 2.5.2
 
 * Bump Maps SDK to 11.9.2
