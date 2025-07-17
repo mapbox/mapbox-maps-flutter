@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '14.0'
+  s.platform = :ios, '12.0'
 
   s.dependency 'MapboxMaps', '~> 11.9.3'
   s.dependency 'Turf', '4.0.0'
