@@ -46,6 +46,16 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // CMake configuration for native libraries
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++17"
+                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DMAPBOX_COMMON_BUILD_TYPE=SHARED"
+                targets "mapbox-maps-flutter-support"
+            }
+        }
     }
 
     buildTypes {
@@ -56,6 +66,25 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
+    }
+    
+    // CMake configuration
+    externalNativeBuild {
+        cmake {
+            path "../../../../mapbox-sdk/projects/gl-native/CMakeLists.txt"
+            version "3.22.1"
+            ndkVersion "26.3.11579264"
+        }
+    }
+    
+    // NDK configuration
+    ndkVersion "26.3.11579264"
+    
+    // Packaging configuration for native libraries
+    packagingOptions {
+        pickFirst "**/libc++_shared.so"
+        pickFirst "**/libmapbox-common.so"
+        pickFirst "**/libmapbox-maps-flutter-support.so"
     }
 }
 
