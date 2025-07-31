@@ -1,10 +1,11 @@
+<<<<<<< HEAD
 ### main
 
+### 2.10.0
+
+* Update Maps SDK to v11.14.0
+  * Fixed FillExtrusionLayer flickering when transitioning between flat and globe projection
 * Fix crash when receiving annotation interactions.
-* Update Maps SDK to v11.14.0-rc.1
-
-### 2.10.0-beta.1
-
 * Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
 * Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
   Example usage:
