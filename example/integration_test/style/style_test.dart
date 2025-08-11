@@ -765,6 +765,73 @@ void main() {
     expect(styleImports[1]?.type, "import");
     expect(styleImports.length, 2);
   });
+
+  testWidgets('Match expression with concat type mismatch', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    // Create a GeoJSON source with features that have numeric properties
+    var geoJsonData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "testProperty": 123,
+            "testProperty2": 456
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [20, 60]
+          }
+        }
+      ]
+    };
+
+    var source = {
+      "type": "geojson",
+      "data": geoJsonData
+    };
+
+    await style.addStyleSource('test-source', json.encode(source));
+
+    var matchExpression = [
+      "match",
+      ["concat", ["get", "testProperty"], ["get", "testProperty2"]],
+      "123456", "red",      
+      "5234534", "green",  
+      "yellow"              
+    ];
+
+    // Create the layer without the expression
+    var layer = {
+      "id": "test-layer",
+      "type": "circle",
+      "source": "test-source",
+      "paint": {
+        "circle-radius": 10,
+      }
+    };
+    await style.addStyleLayer(json.encode(layer), null);
+
+    // Then set the expression using setStyleLayerProperty
+    // This now works on both iOS and Android after the fix
+    await style.setStyleLayerProperty("test-layer", "circle-color", matchExpression);
+    
+    // Verify that the expression was set correctly
+    var retrievedProperty = await style.getStyleLayerProperty("test-layer", "circle-color");
+    
+    var retrievedExpression = retrievedProperty.value as List;
+    expect(retrievedExpression[0], "match");  
+    expect(retrievedExpression[1], matchExpression[1]);  
+    expect(retrievedExpression[2], "123456"); 
+    expect(retrievedExpression[3], ['rgba', 255.0, 0.0, 0.0, 1.0]);  
+    expect(retrievedExpression[4], "5234534"); 
+    expect(retrievedExpression[5], ['rgba', 0.0, 128.0, 0.0, 1.0]); 
+    expect(retrievedExpression[6], ['rgba', 255.0, 255.0, 0.0, 1.0]);  
+  });
 }
 
 extension ToJSON on TransitionOptions {
