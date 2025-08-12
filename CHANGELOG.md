@@ -1,5 +1,7 @@
 ### main
 
+* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format. 
+
 ### 2.10.0
 
 * Update Maps SDK to v11.14.0

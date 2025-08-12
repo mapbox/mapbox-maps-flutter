@@ -988,6 +988,11 @@ fun Any.toValue(): Value {
     val valueArray = this.map { it?.toValue() }
     Value(valueArray)
   } else if (this is List<*>) {
+    // Any List starting with a string is potentially a Mapbox expression.
+    // Convert it to JSON string.
+    if (this.isNotEmpty() && this[0] is String) {
+      return Gson().toJson(this).toValue()
+    }
     val valueArray = this.map { it?.toValue() }
     Value(valueArray)
   } else if (this is HashMap<*, *>) {
