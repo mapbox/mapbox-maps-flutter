@@ -8,7 +8,6 @@ import com.mapbox.maps.MapOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
-import com.mapbox.maps.flutter.MapRegistry
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.platform.PlatformView
@@ -50,8 +49,7 @@ class MapboxMapFactory(
       messenger,
       channelSuffix,
       pluginVersion,
-      eventTypes,
-      MapRegistry()
+      eventTypes
     )
   }
 

@@ -31,7 +31,6 @@ import com.mapbox.maps.mapbox_maps.pigeons._PerformanceStatisticsApi
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.viewport.viewport
-import com.mapbox.maps.flutter.MapRegistry
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
@@ -39,15 +38,14 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import java.io.ByteArrayOutputStream
 
-class MapboxMapController @SuppressLint("RestrictedApi") constructor(
+class MapboxMapController(
   context: Context,
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   messenger: BinaryMessenger,
   channelSuffix: Long,
   pluginVersion: String,
-  eventTypes: List<Long>,
-  private val mapRegistry: MapRegistry
+  eventTypes: List<Long>
 ) : PlatformView,
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
@@ -142,9 +140,6 @@ class MapboxMapController @SuppressLint("RestrictedApi") constructor(
     val mapboxMap = mapView.mapboxMap
     this.mapView = mapView
     this.mapboxMap = mapboxMap
-    mapRegistry.insert(
-      mapboxMap.getNativeMap(),
-      "123")
     eventHandler = MapboxEventHandler(mapboxMap.styleManager, messenger, eventTypes, this.channelSuffix)
     styleController = StyleController(context, mapboxMap)
     cameraController = CameraController(mapboxMap, context)
