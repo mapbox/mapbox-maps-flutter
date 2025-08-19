@@ -1,7 +1,7 @@
 ### 2.11.0-beta.1
 
 * Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format. 
-* Update Maps SDK to v11.15.0-beta.2
+* Update Maps SDK to v11.15.0-beta.3
 
 ### 2.10.0
 

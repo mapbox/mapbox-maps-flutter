@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "mapbox-maps-flutter", targets: ["mapbox_maps_flutter"])
     ],
     dependencies: [
-        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.15.0-beta.2"),
+        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.15.0-beta.3"),
     ],
     targets: [
         .target(
