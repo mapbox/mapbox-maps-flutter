@@ -24,8 +24,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.mapbox.maps.mapbox_maps_example"
-    compileSdk 34
-
+    compileSdk 36
+    ndkVersion = "27.0.12077973"
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -41,8 +41,8 @@ android {
 
     defaultConfig {
         applicationId "com.mapbox.maps.flutter.example"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdkVersion 24
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
