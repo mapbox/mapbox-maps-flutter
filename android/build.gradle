@@ -2,14 +2,14 @@ group 'com.mapbox.maps.mapbox_maps'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.8.22'
+    ext.kotlin_version = '1.9.20'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.10.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -31,11 +31,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 33
+    compileSdk 35
 
     namespace 'com.mapbox.maps.mapbox_maps'
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        // Conditionally include generated Flutter support classes from GL Native when building from source
+        if (project.hasProperty('useLocalDependencies') && 
+            project.property('useLocalDependencies').toString() == 'true') {
+            main.java.srcDirs += '../../mapbox-sdk/projects/gl-native/internal/platform/flutter/bindings/generated/java'
+        }
     }
     defaultConfig {
         minSdkVersion 21
@@ -61,6 +66,6 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 dependencies {
     implementation "com.mapbox.maps:android:11.12.0-beta.1"
 
-    implementation "androidx.annotation:annotation:1.5.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+    implementation "androidx.annotation:annotation:1.9.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
 }

@@ -39,6 +39,14 @@ android {
         jvmTarget = "1.8"
     }
 
+        
+    externalNativeBuild {
+        cmake {
+            version "3.30.3"
+            path "../../../../mapbox-sdk/projects/gl-native/CMakeLists.txt"
+        }
+    }
+    
     defaultConfig {
         applicationId "com.mapbox.maps.flutter.example"
         minSdkVersion 21
@@ -46,7 +54,21 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        ndkVersion = "26.3.11579264"
+        ndkVersion = "27.0.12077973"
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DANDROID_PLATFORM=android-21"
+                arguments "-DANDROID_TOOLCHAIN=clang"
+                arguments "-DANDROID_ARM_NEON=TRUE"
+                arguments "-DANDROID_ARM_MODE=arm"
+                arguments "-DANDROID_ABI=arm64-v8a"
+                arguments "-DCMAKE_BUILD_TYPE=Release"
+                arguments "-DLEAVE_ME_ALONE_I_KNOW_WHAT_I_AM_DOING=1"
+                abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
+            }
+        }
     }
 
     buildTypes {
@@ -56,6 +78,15 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+        debug {
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=Debug"
+                    arguments "-DLEAVE_ME_ALONE_I_KNOW_WHAT_I_AM_DOING=1"
+                    targets "mapbox-maps-flutter-support"
+                }
+            }
         }
     }
 }

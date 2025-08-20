@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
@@ -26,12 +28,14 @@ class _SimpleMapState extends State<SimpleMapExample> {
   native.Map? _nativeMap;
 
   _SimpleMapState() {
-    foundation.Context.init('/Users/romanlaitarenko/Developer/mapbox-maps-flutter-internal/build/Debug-iphonesimulator/MapboxMapsFlutter.framework/MapboxMapsFlutter');
+    if (Platform.isIOS) {
+      foundation.Context.init(
+          '../build/Debug-iphonesimulator/MapboxMapsFlutter.framework/MapboxMapsFlutter');
+    }
     _mapRegistry = MapRegistry();
   }
 
-  void _onStyleLoaded(StyleLoadedEventData event) {
-  }
+  void _onStyleLoaded(StyleLoadedEventData event) {}
 
   @override
   Widget build(BuildContext context) {

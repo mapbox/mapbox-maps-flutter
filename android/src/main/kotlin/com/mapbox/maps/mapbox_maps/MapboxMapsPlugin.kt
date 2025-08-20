@@ -22,6 +22,17 @@ import io.flutter.plugin.common.BinaryMessenger
 class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private var lifecycle: Lifecycle? = null
 
+  companion object {
+    init {
+      try {
+        System.loadLibrary("mapbox-maps-flutter-support")
+      } catch (e: UnsatisfiedLinkError) {
+        // Library might not be available in all configurations
+        android.util.Log.w("MapboxMapsPlugin", "Failed to load mapbox-maps-flutter-support: ${e.message}")
+      }
+    }
+  }
+
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     flutterPluginBinding
       .platformViewRegistry
