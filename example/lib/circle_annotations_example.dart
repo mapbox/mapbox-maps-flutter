@@ -21,6 +21,7 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
   MapboxMap? mapboxMap;
   CircleAnnotation? circleAnnotation;
   CircleAnnotationManager? circleAnnotationManager;
+  Cancelable? tapListener;
   int styleIndex = 1;
 
   _onMapCreated(MapboxMap mapboxMap) {
@@ -41,7 +42,7 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
         ));
       }
       circleAnnotationManager?.createMulti(options);
-      circleAnnotationManager?.tapEvents(onTap: (annotation) {
+      tapListener = circleAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
       });
@@ -124,15 +125,34 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
     );
   }
 
+  Widget _stopTapListener() {
+    return TextButton(
+      child: Text('stop tap listener'),
+      onPressed: () {
+        tapListener?.cancel();
+        tapListener = null;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+      onTapListener: (context) => print("on map tap"),
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
     listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
+      <Widget>[
+        _create(),
+        _update(),
+        _delete(),
+        _deleteAll(),
+        _stopTapListener()
+      ],
     );
 
     final colmn = Column(
