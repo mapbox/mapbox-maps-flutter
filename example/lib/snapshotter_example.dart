@@ -40,8 +40,10 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
           pixelRatio: MediaQuery.of(context).devicePixelRatio),
     );
     await _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
-    await _snapshotter?.style.setStyleImportConfigProperty("basemap", "theme", "faded");
-    await _snapshotter?.style.setStyleImportConfigProperty("basemap", "lightPreset", "night");
+    await _snapshotter?.style
+        .setStyleImportConfigProperty("basemap", "theme", "faded");
+    await _snapshotter?.style
+        .setStyleImportConfigProperty("basemap", "lightPreset", "night");
   }
 
   _onMapIdle(MapIdleEventData data) async {

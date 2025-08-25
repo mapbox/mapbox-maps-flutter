@@ -20,7 +20,8 @@ class FullMapExampleState extends State<FullMapExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style
+        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
@@ -99,9 +100,11 @@ class FullMapExampleState extends State<FullMapExample> {
                       () => isLight = !isLight,
                     );
                     if (isLight) {
-                      mapboxMap?.style.setStyleImportConfigProperty("basemap", "lightPreset", "day");
+                      mapboxMap?.style.setStyleImportConfigProperty(
+                          "basemap", "lightPreset", "day");
                     } else {
-                      mapboxMap?.style.setStyleImportConfigProperty("basemap", "lightPreset", "night");
+                      mapboxMap?.style.setStyleImportConfigProperty(
+                          "basemap", "lightPreset", "night");
                     }
                   }),
               SizedBox(height: 10),

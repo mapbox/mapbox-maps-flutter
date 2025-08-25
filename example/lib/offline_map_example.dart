@@ -84,7 +84,9 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
           // If you are using a raster tileset you may need to set a different pixelRatio.
           // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.
           TilesetDescriptorOptions(
-              styleURI: MapboxStyles.STANDARD_SATELLITE, minZoom: 0, maxZoom: 16)
+              styleURI: MapboxStyles.STANDARD_SATELLITE,
+              minZoom: 0,
+              maxZoom: 16)
         ],
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);

@@ -23,8 +23,10 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleImportConfigProperty("basemap", "lightPreset", "night");
-    mapboxMap.style.setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style
+        .setStyleImportConfigProperty("basemap", "lightPreset", "night");
+    mapboxMap.style
+        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {

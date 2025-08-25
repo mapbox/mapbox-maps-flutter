@@ -766,7 +766,8 @@ void main() {
     expect(styleImports.length, 2);
   });
 
-  testWidgets('Match expression with concat type mismatch', (WidgetTester tester) async {
+  testWidgets('Match expression with concat type mismatch',
+      (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -778,10 +779,7 @@ void main() {
       "features": [
         {
           "type": "Feature",
-          "properties": {
-            "testProperty": 123,
-            "testProperty2": 456
-          },
+          "properties": {"testProperty": 123, "testProperty2": 456},
           "geometry": {
             "type": "Point",
             "coordinates": [20, 60]
@@ -790,19 +788,22 @@ void main() {
       ]
     };
 
-    var source = {
-      "type": "geojson",
-      "data": geoJsonData
-    };
+    var source = {"type": "geojson", "data": geoJsonData};
 
     await style.addStyleSource('test-source', json.encode(source));
 
     var matchExpression = [
       "match",
-      ["concat", ["get", "testProperty"], ["get", "testProperty2"]],
-      "123456", "red",      
-      "5234534", "green",  
-      "yellow"              
+      [
+        "concat",
+        ["get", "testProperty"],
+        ["get", "testProperty2"]
+      ],
+      "123456",
+      "red",
+      "5234534",
+      "green",
+      "yellow"
     ];
 
     // Create the layer without the expression
@@ -818,19 +819,21 @@ void main() {
 
     // Then set the expression using setStyleLayerProperty
     // This now works on both iOS and Android after the fix
-    await style.setStyleLayerProperty("test-layer", "circle-color", matchExpression);
-    
+    await style.setStyleLayerProperty(
+        "test-layer", "circle-color", matchExpression);
+
     // Verify that the expression was set correctly
-    var retrievedProperty = await style.getStyleLayerProperty("test-layer", "circle-color");
-    
+    var retrievedProperty =
+        await style.getStyleLayerProperty("test-layer", "circle-color");
+
     var retrievedExpression = retrievedProperty.value as List;
-    expect(retrievedExpression[0], "match");  
-    expect(retrievedExpression[1], matchExpression[1]);  
-    expect(retrievedExpression[2], "123456"); 
-    expect(retrievedExpression[3], ['rgba', 255.0, 0.0, 0.0, 1.0]);  
-    expect(retrievedExpression[4], "5234534"); 
-    expect(retrievedExpression[5], ['rgba', 0.0, 128.0, 0.0, 1.0]); 
-    expect(retrievedExpression[6], ['rgba', 255.0, 255.0, 0.0, 1.0]);  
+    expect(retrievedExpression[0], "match");
+    expect(retrievedExpression[1], matchExpression[1]);
+    expect(retrievedExpression[2], "123456");
+    expect(retrievedExpression[3], ['rgba', 255.0, 0.0, 0.0, 1.0]);
+    expect(retrievedExpression[4], "5234534");
+    expect(retrievedExpression[5], ['rgba', 0.0, 128.0, 0.0, 1.0]);
+    expect(retrievedExpression[6], ['rgba', 255.0, 255.0, 0.0, 1.0]);
   });
 }
 

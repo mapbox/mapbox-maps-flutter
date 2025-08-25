@@ -14,22 +14,23 @@ extension PolygonAnnotationManager: AnnotationControllable {}
 class BaseAnnotationMessenger<C: AnnotationControllable> {
     private struct Storage {
         let controller: C
-        let onTap: (AnnotationInteractionContext) -> Void
-        let onDrag: (AnnotationInteractionContext) -> Void
-        let onLongPress: (AnnotationInteractionContext) -> Void
+        let onTap: (AnnotationInteractionContext) -> Bool
+        let onDrag: (AnnotationInteractionContext) -> Bool
+        let onLongPress: (AnnotationInteractionContext) -> Bool
     }
     private var storage: [String: Storage] = [:]
 
-    func tap(_ context: AnnotationInteractionContext, managerId: String) {
-        storage[managerId]?.onTap(context)
+    func tap(_ context: AnnotationInteractionContext, managerId: String) -> Bool {
+        storage[managerId]?.onTap(context) ?? false
     }
 
-    func drag(_ context: AnnotationInteractionContext, managerId: String) {
-        storage[managerId]?.onDrag(context)
+    @discardableResult
+    func drag(_ context: AnnotationInteractionContext, managerId: String) -> Bool {
+        storage[managerId]?.onDrag(context) ?? false
     }
 
-    func longPress(_ context: AnnotationInteractionContext, managerId: String) {
-        storage[managerId]?.onLongPress(context)
+    func longPress(_ context: AnnotationInteractionContext, managerId: String) -> Bool {
+        storage[managerId]?.onLongPress(context) ?? false
     }
 
     private subscript(id: String) -> C? {
@@ -38,9 +39,9 @@ class BaseAnnotationMessenger<C: AnnotationControllable> {
 
     func add(
         controller: C,
-        onTap: @escaping (AnnotationInteractionContext) -> Void,
-        onDrag: @escaping (AnnotationInteractionContext) -> Void,
-        onLongPress: @escaping (AnnotationInteractionContext) -> Void
+        onTap: @escaping (AnnotationInteractionContext) -> Bool,
+        onDrag: @escaping (AnnotationInteractionContext) -> Bool,
+        onLongPress: @escaping (AnnotationInteractionContext) -> Bool
     ) {
         storage[controller.id] = Storage(controller: controller, onTap: onTap, onDrag: onDrag, onLongPress: onLongPress)
     }

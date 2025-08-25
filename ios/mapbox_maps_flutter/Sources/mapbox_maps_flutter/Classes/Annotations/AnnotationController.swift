@@ -19,8 +19,11 @@ private class AnyAnnotationInteractionEventsStreamHandler: AnnotationInteraction
         sink = nil
     }
 
-    func send(event: AnnotationInteractionContext) {
-        sink?.success(event)
+    func send(event: AnnotationInteractionContext) -> Bool {
+        guard let sink else { return false }
+
+        sink.success(event)
+        return true
     }
 
     func send(error: FlutterError) {
@@ -31,9 +34,6 @@ private class AnyAnnotationInteractionEventsStreamHandler: AnnotationInteraction
         sink?.endOfStream()
     }
 }
-
-private class AnnotationTapEventsStreamHandler: AnyAnnotationInteractionEventsStreamHandler {}
-private class AnnotationDragEventsStreamHandler: AnyAnnotationInteractionEventsStreamHandler {}
 
 class AnnotationController {
     private let mapView: MapView
