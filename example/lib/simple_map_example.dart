@@ -31,6 +31,8 @@ class _SimpleMapState extends State<SimpleMapExample> {
     if (Platform.isIOS) {
       foundation.Context.init(
           '../build/Debug-iphonesimulator/MapboxMapsFlutter.framework/MapboxMapsFlutter');
+    } else if (Platform.isAndroid) {
+      foundation.Context.init('libmapbox-maps-flutter-support.so');
     }
     _mapRegistry = MapRegistry();
   }
