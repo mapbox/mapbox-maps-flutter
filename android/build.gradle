@@ -65,6 +65,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 
 dependencies {
     implementation "com.mapbox.maps:android:11.12.0-beta.1"
+    compileOnly "io.flutter:flutter_embedding_debug:1.0.0-dd93de6fb1776398bf586cbd477deade1391c7e4"
 
     implementation "androidx.annotation:annotation:1.9.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"

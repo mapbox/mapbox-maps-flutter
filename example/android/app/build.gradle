@@ -43,7 +43,7 @@ android {
     externalNativeBuild {
         cmake {
             version "3.30.3"
-            path "../../../../mapbox-sdk/projects/gl-native/CMakeLists.txt"
+            path "../../../../CMakeLists.txt"
         }
     }
     
