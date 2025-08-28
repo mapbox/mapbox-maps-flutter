@@ -61,7 +61,8 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     setLocationComponent();
     refreshTrackLocation();
     refreshCarAnnotations();
-    mapboxMap.style.setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style
+        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   @override

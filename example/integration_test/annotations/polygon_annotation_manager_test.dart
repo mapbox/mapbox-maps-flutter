@@ -94,165 +94,227 @@ void main() {
     expect(1.0, fillZOffset);
   });
 
-  testWidgets('annotation tap events', (tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
+  group('annotation events', () {
+    late MapboxMap mapboxMap;
+    late PolygonAnnotationManager manager;
+    late PolygonAnnotation createdAnnotation;
+    late EventChannel eventChannel;
 
-    final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
+    Future<void> setupMap(
+        WidgetTester tester, String eventChannelSuffix) async {
+      final mapFuture = app.main();
+      await Future.delayed(
+          Duration(milliseconds: 100)); // Ensure app.main() is started
+      await tester.pumpAndSettle();
+      mapboxMap = await mapFuture;
+      manager = await mapboxMap.annotations.createPolygonAnnotationManager();
 
-    final geometry = Polygon(coordinates: [
-      [
-        Position(0, 0),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
+      final geometry = Polygon(coordinates: [
+        [
+          Position(0, 0),
+          Position(1.754703, -19.716317),
+          Position(-15.747196, -21.085074),
+          Position(-3.363937, -10.733102)
+        ]
+      ]);
 
-    final createdAnnotation = await manager.create(PolygonAnnotationOptions(
-      geometry: geometry,
-    ));
+      createdAnnotation = await manager.create(PolygonAnnotationOptions(
+        geometry: geometry,
+        isDraggable: true,
+      ));
 
-    // Mock tap events
-    final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/tap",
-        pigeonMethodCodec);
-    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
-        .setMockStreamHandler(eventChannel,
-            MockStreamHandler.inline(onListen: (arguments, events) {
-      events.success(PolygonAnnotationInteractionContext(
+      eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/${eventChannelSuffix}",
+        pigeonMethodCodec,
+      );
+    }
+
+    testWidgets('annotation tap events can be listened and canceled',
+        (tester) async {
+      // Test tap event can be listened
+      await setupMap(tester, 'tap');
+
+      final tapCompleter = Completer();
+      late MockStreamHandlerEventSink eventSink;
+      var isCanceled = false;
+
+      IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(
+              eventChannel,
+              MockStreamHandler.inline(
+                onListen: (arguments, events) {
+                  eventSink = events;
+                },
+                onCancel: (arguments) {
+                  isCanceled = true;
+                },
+              ));
+
+      final token = manager.tapEvents(
+        onTap: (annotation) {
+          if (isCanceled) {
+            fail('This test should be canceled and not called.');
+          } else {
+            expect(annotation.id, equals(createdAnnotation.id));
+            tapCompleter.complete();
+          }
+        },
+      );
+
+      eventSink.success(PolygonAnnotationInteractionContext(
         annotation: createdAnnotation,
         gestureState: GestureState.ended,
       ));
-      events.endOfStream();
-    }));
 
-    final onTap = Completer();
-    manager.tapEvents(
-      onTap: (annotation) {
-        expect(annotation.id, equals(createdAnnotation.id));
-        onTap.complete();
-      },
-    );
+      await tapCompleter.future;
+      expect(tapCompleter.isCompleted, isTrue);
+      expect(isCanceled, isFalse);
 
-    await onTap.future;
-    expect(onTap.isCompleted, isTrue);
-  });
-
-  testWidgets('annotation long press events', (tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-
-    final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
-
-    final geometry = Polygon(coordinates: [
-      [
-        Position(0, 0),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
-
-    final createdAnnotation = await manager.create(PolygonAnnotationOptions(
-      geometry: geometry,
-    ));
-
-    // Mock long press events
-    final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/long_press",
-        pigeonMethodCodec);
-    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
-        .setMockStreamHandler(eventChannel,
-            MockStreamHandler.inline(onListen: (arguments, events) {
-      events.success(PolygonAnnotationInteractionContext(
+      token.cancel();
+      eventSink.success(PolygonAnnotationInteractionContext(
         annotation: createdAnnotation,
         gestureState: GestureState.ended,
       ));
-      events.endOfStream();
-    }));
+      expect(isCanceled, isTrue);
 
-    final onLongPress = Completer();
-    manager.longPressEvents(
-      onLongPress: (annotation) {
-        expect(annotation.id, equals(createdAnnotation.id));
-        onLongPress.complete();
-      },
-    );
+      eventSink.endOfStream();
+    });
 
-    await onLongPress.future;
-    expect(onLongPress.isCompleted, isTrue);
-  });
+    testWidgets('annotation long press events can be listened and canceled',
+        (tester) async {
+      await setupMap(tester, 'long_press');
 
-  testWidgets('annotation drag events', (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
+      final longPressCompleter = Completer();
+      late MockStreamHandlerEventSink eventSink;
+      var isCanceled = false;
 
-    final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
+      IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(
+              eventChannel,
+              MockStreamHandler.inline(
+                onListen: (arguments, events) {
+                  eventSink = events;
+                },
+                onCancel: (arguments) {
+                  isCanceled = true;
+                },
+              ));
 
-    final geometry = Polygon(coordinates: [
-      [
-        Position(0, 0),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
+      final token = manager.longPressEvents(
+        onLongPress: (annotation) {
+          if (isCanceled) {
+            fail('This test should be canceled and not called.');
+          } else {
+            expect(annotation.id, equals(createdAnnotation.id));
+            longPressCompleter.complete();
+          }
+        },
+      );
 
-    final createdAnnotation = await manager.create(PolygonAnnotationOptions(
-      geometry: geometry,
-      isDraggable: true,
-    ));
+      eventSink.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
 
-    // Mock drag events
-    final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/drag",
-        pigeonMethodCodec);
-    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
-        .setMockStreamHandler(eventChannel,
-            MockStreamHandler.inline(onListen: (arguments, events) {
-      events.success(PolygonAnnotationInteractionContext(
+      await longPressCompleter.future;
+      expect(longPressCompleter.isCompleted, isTrue);
+      expect(isCanceled, isFalse);
+
+      token.cancel();
+      eventSink.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      expect(isCanceled, isTrue);
+
+      eventSink.endOfStream();
+    });
+
+    testWidgets('annotation drag events can be listened and canceled',
+        (tester) async {
+      await setupMap(tester, 'drag');
+
+      final dragBegin = Completer();
+      final dragChanged = Completer();
+      final dragEnd = Completer();
+      late MockStreamHandlerEventSink eventSink;
+      var isCanceled = false;
+
+      IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(
+              eventChannel,
+              MockStreamHandler.inline(
+                onListen: (arguments, events) {
+                  eventSink = events;
+                },
+                onCancel: (arguments) {
+                  isCanceled = true;
+                },
+              ));
+
+      final token = manager.dragEvents(
+        onBegin: (annotation) {
+          if (isCanceled) {
+            fail('This test should be canceled and not called.');
+          } else {
+            expect(annotation.id, equals(createdAnnotation.id));
+            dragBegin.complete();
+          }
+        },
+        onChanged: (annotation) {
+          if (isCanceled) {
+            fail('This test should be canceled and not called.');
+          } else {
+            expect(annotation.id, equals(createdAnnotation.id));
+            dragChanged.complete();
+          }
+        },
+        onEnd: (annotation) {
+          if (isCanceled) {
+            fail('This test should be canceled and not called.');
+          } else {
+            expect(annotation.id, equals(createdAnnotation.id));
+            dragEnd.complete();
+          }
+        },
+      );
+
+      eventSink.success(PolygonAnnotationInteractionContext(
         annotation: createdAnnotation,
         gestureState: GestureState.started,
       ));
-      events.success(PolygonAnnotationInteractionContext(
+      eventSink.success(PolygonAnnotationInteractionContext(
         annotation: createdAnnotation,
         gestureState: GestureState.changed,
       ));
-      events.success(PolygonAnnotationInteractionContext(
+      eventSink.success(PolygonAnnotationInteractionContext(
         annotation: createdAnnotation,
         gestureState: GestureState.ended,
       ));
-      events.endOfStream();
-    }));
 
-    final onDragBegin = Completer();
-    final onDragChanged = Completer();
-    final onDragEnd = Completer();
+      await Future.wait([dragBegin.future, dragChanged.future, dragEnd.future]);
+      expect(
+          [dragBegin.isCompleted, dragChanged.isCompleted, dragEnd.isCompleted],
+          everyElement(isTrue));
+      expect(isCanceled, isFalse);
 
-    manager.dragEvents(
-      onBegin: (annotation) {
-        expect(annotation.id, equals(createdAnnotation.id));
-        onDragBegin.complete();
-      },
-      onChanged: (annotation) {
-        expect(annotation.id, equals(createdAnnotation.id));
-        onDragChanged.complete();
-      },
-      onEnd: (annotation) {
-        expect(annotation.id, equals(createdAnnotation.id));
-        onDragEnd.complete();
-      },
-    );
+      token.cancel();
+      eventSink.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.started,
+      ));
+      eventSink.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.changed,
+      ));
+      eventSink.success(PolygonAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      expect(isCanceled, isTrue);
 
-    await Future.wait(
-        [onDragBegin.future, onDragChanged.future, onDragEnd.future]);
+      eventSink.endOfStream();
+    });
   });
 }
 // End of generated file.

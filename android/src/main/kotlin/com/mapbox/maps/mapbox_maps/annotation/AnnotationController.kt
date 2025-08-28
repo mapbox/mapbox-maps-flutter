@@ -44,13 +44,11 @@ class AnnotationController(
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnCircleAnnotationClickListener { annotation ->
               sendTapEvent(id, annotation)
-              false
             }
           )
           this.addLongClickListener(
             OnCircleAnnotationLongClickListener { annotation ->
               sendLongPressEvent(id, annotation)
-              false
             }
           )
           this.addDragListener(object :
@@ -74,13 +72,11 @@ class AnnotationController(
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
               sendTapEvent(id, annotation)
-              false
             }
           )
           this.addLongClickListener(
             OnPointAnnotationLongClickListener { annotation ->
               sendLongPressEvent(id, annotation)
-              false
             }
           )
           this.addDragListener(object :
@@ -104,13 +100,11 @@ class AnnotationController(
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListener { annotation ->
               sendTapEvent(id, annotation)
-              false
             }
           )
           this.addLongClickListener(
             OnPolygonAnnotationLongClickListener { annotation ->
               sendLongPressEvent(id, annotation)
-              false
             }
           )
           this.addDragListener(object :
@@ -134,13 +128,11 @@ class AnnotationController(
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickListener { annotation ->
               sendTapEvent(id, annotation)
-              false
             }
           )
           this.addLongClickListener(
             OnPolylineAnnotationLongClickListener { annotation ->
               sendLongPressEvent(id, annotation)
-              false
             }
           )
           this.addDragListener(object :
@@ -221,36 +213,47 @@ class AnnotationController(
     streamSinkMap[managerId]?.dragEventsSink?.success(context)
   }
 
-  fun sendTapEvent(managerId: String, annotation: Annotation<*>) {
-    val context: AnnotationInteractionContext = when (annotation) {
-      is com.mapbox.maps.plugin.annotation.generated.PointAnnotation ->
-        PointAnnotationInteractionContext(annotation.toFLTPointAnnotation(), GestureState.ENDED)
-      is CircleAnnotation ->
-        CircleAnnotationInteractionContext(annotation.toFLTCircleAnnotation(), GestureState.ENDED)
-      is PolygonAnnotation ->
-        PolygonAnnotationInteractionContext(annotation.toFLTPolygonAnnotation(), GestureState.ENDED)
-      is PolylineAnnotation ->
-        PolylineAnnotationInteractionContext(annotation.toFLTPolylineAnnotation(), GestureState.ENDED)
+  fun sendTapEvent(managerId: String, annotation: Annotation<*>): Boolean {
 
-      else -> throw IllegalArgumentException("$annotation is unsupported")
+    val sink = streamSinkMap[managerId]?.tapEventsSink
+    return if (sink != null) {
+      val context: AnnotationInteractionContext = when (annotation) {
+        is com.mapbox.maps.plugin.annotation.generated.PointAnnotation ->
+          PointAnnotationInteractionContext(annotation.toFLTPointAnnotation(), GestureState.ENDED)
+        is CircleAnnotation ->
+          CircleAnnotationInteractionContext(annotation.toFLTCircleAnnotation(), GestureState.ENDED)
+        is PolygonAnnotation ->
+          PolygonAnnotationInteractionContext(annotation.toFLTPolygonAnnotation(), GestureState.ENDED)
+        is PolylineAnnotation ->
+          PolylineAnnotationInteractionContext(annotation.toFLTPolylineAnnotation(), GestureState.ENDED)
+        else -> throw IllegalArgumentException("$annotation is unsupported")
+      }
+      sink.success(context)
+      true
+    } else {
+      false
     }
-    streamSinkMap[managerId]?.tapEventsSink?.success(context)
   }
 
-  fun sendLongPressEvent(managerId: String, annotation: Annotation<*>) {
-    val context: AnnotationInteractionContext = when (annotation) {
-      is com.mapbox.maps.plugin.annotation.generated.PointAnnotation ->
-        PointAnnotationInteractionContext(annotation.toFLTPointAnnotation(), GestureState.ENDED)
-      is CircleAnnotation ->
-        CircleAnnotationInteractionContext(annotation.toFLTCircleAnnotation(), GestureState.ENDED)
-      is PolygonAnnotation ->
-        PolygonAnnotationInteractionContext(annotation.toFLTPolygonAnnotation(), GestureState.ENDED)
-      is PolylineAnnotation ->
-        PolylineAnnotationInteractionContext(annotation.toFLTPolylineAnnotation(), GestureState.ENDED)
-
-      else -> throw IllegalArgumentException("$annotation is unsupported")
+  fun sendLongPressEvent(managerId: String, annotation: Annotation<*>): Boolean {
+    val sink = streamSinkMap[managerId]?.longPressEventsSink
+    return if (sink != null) {
+      val context: AnnotationInteractionContext = when (annotation) {
+        is com.mapbox.maps.plugin.annotation.generated.PointAnnotation ->
+          PointAnnotationInteractionContext(annotation.toFLTPointAnnotation(), GestureState.ENDED)
+        is CircleAnnotation ->
+          CircleAnnotationInteractionContext(annotation.toFLTCircleAnnotation(), GestureState.ENDED)
+        is PolygonAnnotation ->
+          PolygonAnnotationInteractionContext(annotation.toFLTPolygonAnnotation(), GestureState.ENDED)
+        is PolylineAnnotation ->
+          PolylineAnnotationInteractionContext(annotation.toFLTPolylineAnnotation(), GestureState.ENDED)
+        else -> throw IllegalArgumentException("$annotation is unsupported")
+      }
+      sink.success(context)
+      true
+    } else {
+      false
     }
-    streamSinkMap[managerId]?.longPressEventsSink?.success(context)
   }
 
   override fun getManager(managerId: String): AnnotationManager<*, *, *, *, *, *, *> {
