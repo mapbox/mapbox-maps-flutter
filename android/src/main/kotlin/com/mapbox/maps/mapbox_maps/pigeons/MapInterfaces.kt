@@ -258,20 +258,6 @@ enum class ViewAnnotationAnchor(val raw: Int) {
   }
 }
 
-/** Selects the base of the model. Some modes might require precomputed elevation data in the tileset. */
-enum class ModelElevationReference(val raw: Int) {
-  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level. */
-  SEA(0),
-  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them. */
-  GROUND(1);
-
-  companion object {
-    fun ofRaw(raw: Int): ModelElevationReference? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** The type of interaction, either tap/click or longTap/longClick */
 enum class _InteractionType(val raw: Int) {
   /** A short tap or click */
@@ -1581,6 +1567,49 @@ data class LayerPosition(
 }
 
 /**
+ * Specifies the position at which an import will be added when using `Style.addImport`
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ImportPosition(
+  /** Import should be positioned above the specified import id. */
+  val above: String? = null,
+  /** Import should be positioned below the specified import id. */
+  val below: String? = null,
+  /** Import should be positioned at the specified index in the imports stack. */
+  val at: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ImportPosition {
+      val above = pigeonVar_list[0] as String?
+      val below = pigeonVar_list[1] as String?
+      val at = pigeonVar_list[2] as Long?
+      return ImportPosition(above, below, at)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      above,
+      below,
+      at,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ImportPosition) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return above == other.above &&
+      below == other.below &&
+      at == other.at
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * Represents query result that is returned in QueryRenderedFeaturesCallback.
  * @see `queryRenderedFeatures`
  *
@@ -2732,217 +2761,217 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ModelElevationReference.ofRaw(it.toInt())
+          _InteractionType.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _InteractionType.ofRaw(it.toInt())
+          GestureState.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          GestureState.ofRaw(it.toInt())
+          Type.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Type.ofRaw(it.toInt())
+          FillExtrusionBaseAlignment.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionBaseAlignment.ofRaw(it.toInt())
+          FillExtrusionHeightAlignment.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionHeightAlignment.ofRaw(it.toInt())
+          BackgroundPitchAlignment.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          BackgroundPitchAlignment.ofRaw(it.toInt())
+          StylePackErrorType.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePackErrorType.ofRaw(it.toInt())
+          ResponseErrorReason.ofRaw(it.toInt())
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ResponseErrorReason.ofRaw(it.toInt())
+          OfflineRegionDownloadState.ofRaw(it.toInt())
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          OfflineRegionDownloadState.ofRaw(it.toInt())
+          TileStoreUsageMode.ofRaw(it.toInt())
         }
       }
       147.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileStoreUsageMode.ofRaw(it.toInt())
+          StylePropertyValueKind.ofRaw(it.toInt())
         }
       }
       148.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePropertyValueKind.ofRaw(it.toInt())
+          StyleProjectionName.ofRaw(it.toInt())
         }
       }
       149.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StyleProjectionName.ofRaw(it.toInt())
+          Anchor.ofRaw(it.toInt())
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Anchor.ofRaw(it.toInt())
+          HttpMethod.ofRaw(it.toInt())
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpMethod.ofRaw(it.toInt())
+          HttpRequestErrorType.ofRaw(it.toInt())
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpRequestErrorType.ofRaw(it.toInt())
+          DownloadErrorCode.ofRaw(it.toInt())
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadErrorCode.ofRaw(it.toInt())
+          DownloadState.ofRaw(it.toInt())
         }
       }
       154.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadState.ofRaw(it.toInt())
+          TileRegionErrorType.ofRaw(it.toInt())
         }
       }
       155.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileRegionErrorType.ofRaw(it.toInt())
-        }
-      }
-      156.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
           _MapEvent.ofRaw(it.toInt())
         }
       }
-      157.toByte() -> {
+      156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PointDecoder.fromList(it)
         }
       }
-      158.toByte() -> {
+      157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeatureDecoder.fromList(it)
         }
       }
-      159.toByte() -> {
+      158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GlyphsRasterizationOptions.fromList(it)
         }
       }
-      160.toByte() -> {
+      159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TileCoverOptions.fromList(it)
         }
       }
-      161.toByte() -> {
+      160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MbxEdgeInsets.fromList(it)
         }
       }
-      162.toByte() -> {
+      161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraOptions.fromList(it)
         }
       }
-      163.toByte() -> {
+      162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraState.fromList(it)
         }
       }
-      164.toByte() -> {
+      163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraBoundsOptions.fromList(it)
         }
       }
-      165.toByte() -> {
+      164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraBounds.fromList(it)
         }
       }
-      166.toByte() -> {
+      165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapAnimationOptions.fromList(it)
         }
       }
-      167.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CoordinateBounds.fromList(it)
         }
       }
-      168.toByte() -> {
+      167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapDebugOptions.fromList(it)
         }
       }
-      169.toByte() -> {
+      168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TileCacheBudgetInMegabytes.fromList(it)
         }
       }
-      170.toByte() -> {
+      169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TileCacheBudgetInTiles.fromList(it)
         }
       }
-      171.toByte() -> {
+      170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapOptions.fromList(it)
         }
       }
-      172.toByte() -> {
+      171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ScreenCoordinate.fromList(it)
         }
       }
-      173.toByte() -> {
+      172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ScreenBox.fromList(it)
         }
       }
-      174.toByte() -> {
+      173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CoordinateBoundsZoom.fromList(it)
         }
       }
-      175.toByte() -> {
+      174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           Size.fromList(it)
         }
       }
-      176.toByte() -> {
+      175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RenderedQueryOptions.fromList(it)
         }
       }
-      177.toByte() -> {
+      176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SourceQueryOptions.fromList(it)
         }
       }
-      178.toByte() -> {
+      177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeatureExtensionValue.fromList(it)
         }
       }
-      179.toByte() -> {
+      178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LayerPosition.fromList(it)
+        }
+      }
+      179.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ImportPosition.fromList(it)
         }
       }
       180.toByte() -> {
@@ -3102,175 +3131,175 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is ModelElevationReference -> {
+      is _InteractionType -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is _InteractionType -> {
+      is GestureState -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is GestureState -> {
+      is Type -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is Type -> {
+      is FillExtrusionBaseAlignment -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionBaseAlignment -> {
+      is FillExtrusionHeightAlignment -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionHeightAlignment -> {
+      is BackgroundPitchAlignment -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is BackgroundPitchAlignment -> {
+      is StylePackErrorType -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is StylePackErrorType -> {
+      is ResponseErrorReason -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is ResponseErrorReason -> {
+      is OfflineRegionDownloadState -> {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is OfflineRegionDownloadState -> {
+      is TileStoreUsageMode -> {
         stream.write(146)
         writeValue(stream, value.raw)
       }
-      is TileStoreUsageMode -> {
+      is StylePropertyValueKind -> {
         stream.write(147)
         writeValue(stream, value.raw)
       }
-      is StylePropertyValueKind -> {
+      is StyleProjectionName -> {
         stream.write(148)
         writeValue(stream, value.raw)
       }
-      is StyleProjectionName -> {
+      is Anchor -> {
         stream.write(149)
         writeValue(stream, value.raw)
       }
-      is Anchor -> {
+      is HttpMethod -> {
         stream.write(150)
         writeValue(stream, value.raw)
       }
-      is HttpMethod -> {
+      is HttpRequestErrorType -> {
         stream.write(151)
         writeValue(stream, value.raw)
       }
-      is HttpRequestErrorType -> {
+      is DownloadErrorCode -> {
         stream.write(152)
         writeValue(stream, value.raw)
       }
-      is DownloadErrorCode -> {
+      is DownloadState -> {
         stream.write(153)
         writeValue(stream, value.raw)
       }
-      is DownloadState -> {
+      is TileRegionErrorType -> {
         stream.write(154)
         writeValue(stream, value.raw)
       }
-      is TileRegionErrorType -> {
+      is _MapEvent -> {
         stream.write(155)
         writeValue(stream, value.raw)
       }
-      is _MapEvent -> {
-        stream.write(156)
-        writeValue(stream, value.raw)
-      }
       is Point -> {
-        stream.write(157)
+        stream.write(156)
         writeValue(stream, value.toList())
       }
       is Feature -> {
-        stream.write(158)
+        stream.write(157)
         writeValue(stream, value.toList())
       }
       is GlyphsRasterizationOptions -> {
-        stream.write(159)
+        stream.write(158)
         writeValue(stream, value.toList())
       }
       is TileCoverOptions -> {
-        stream.write(160)
+        stream.write(159)
         writeValue(stream, value.toList())
       }
       is MbxEdgeInsets -> {
-        stream.write(161)
+        stream.write(160)
         writeValue(stream, value.toList())
       }
       is CameraOptions -> {
-        stream.write(162)
+        stream.write(161)
         writeValue(stream, value.toList())
       }
       is CameraState -> {
-        stream.write(163)
+        stream.write(162)
         writeValue(stream, value.toList())
       }
       is CameraBoundsOptions -> {
-        stream.write(164)
+        stream.write(163)
         writeValue(stream, value.toList())
       }
       is CameraBounds -> {
-        stream.write(165)
+        stream.write(164)
         writeValue(stream, value.toList())
       }
       is MapAnimationOptions -> {
-        stream.write(166)
+        stream.write(165)
         writeValue(stream, value.toList())
       }
       is CoordinateBounds -> {
-        stream.write(167)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       is MapDebugOptions -> {
-        stream.write(168)
+        stream.write(167)
         writeValue(stream, value.toList())
       }
       is TileCacheBudgetInMegabytes -> {
-        stream.write(169)
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       is TileCacheBudgetInTiles -> {
-        stream.write(170)
+        stream.write(169)
         writeValue(stream, value.toList())
       }
       is MapOptions -> {
-        stream.write(171)
+        stream.write(170)
         writeValue(stream, value.toList())
       }
       is ScreenCoordinate -> {
-        stream.write(172)
+        stream.write(171)
         writeValue(stream, value.toList())
       }
       is ScreenBox -> {
-        stream.write(173)
+        stream.write(172)
         writeValue(stream, value.toList())
       }
       is CoordinateBoundsZoom -> {
-        stream.write(174)
+        stream.write(173)
         writeValue(stream, value.toList())
       }
       is Size -> {
-        stream.write(175)
+        stream.write(174)
         writeValue(stream, value.toList())
       }
       is RenderedQueryOptions -> {
-        stream.write(176)
+        stream.write(175)
         writeValue(stream, value.toList())
       }
       is SourceQueryOptions -> {
-        stream.write(177)
+        stream.write(176)
         writeValue(stream, value.toList())
       }
       is FeatureExtensionValue -> {
-        stream.write(178)
+        stream.write(177)
         writeValue(stream, value.toList())
       }
       is LayerPosition -> {
+        stream.write(178)
+        writeValue(stream, value.toList())
+      }
+      is ImportPosition -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
@@ -4169,7 +4198,7 @@ interface _MapInterface {
    * @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
    * @param options The `render query options` for querying rendered features.
    * @param completion The `query features completion` called when the query completes.
-   * @return A `cancelable` object that could be used to cancel the pending query.
+   * @return A list of `QueriedRenderedFeature` objects representing the query results.
    */
   fun queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
   /**
@@ -5783,6 +5812,51 @@ interface StyleManager {
    * @return The `transition options` of the current style in use.
    */
   fun getStyleTransition(callback: (Result<TransitionOptions>) -> Unit)
+  /**
+   * Adds new import to current style, loaded from a JSON string.
+   *
+   * @param importId Identifier of import to update.
+   * @param json The JSON string to be loaded directly as the import.
+   * @param config A map containing the configuration options of the import.
+   * @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+   */
+  fun addStyleImportFromJSON(importId: String, json: String, config: Map<String, Any>?, importPosition: ImportPosition?)
+  /**
+   * Adds new import to current style, loaded from an URI.
+   *
+   * @param importId Identifier of import to update.
+   * @param uri URI of the import.
+   * @param config A map containing the configuration options of the import.
+   * @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+   */
+  fun addStyleImportFromURI(importId: String, uri: String, config: Map<String, Any>?, importPosition: ImportPosition?)
+  /**
+   * Updates an existing import in the style.
+   * The function replaces the content of the import, with the content loaded from the provided data value.
+   * The configuration values of the import are merged with the configuration provided in the update.
+   *
+   * @param importId Identifier of import to update.
+   * @param json The JSON string to be loaded directly as the import.
+   * @param config A map containing the configuration options of the import.
+   */
+  fun updateStyleImportWithJSON(importId: String, json: String, config: Map<String, Any>?)
+  /**
+   * Updates an existing import in the style.
+   * The function replaces the content of the import, with the content loaded from the provided URI.
+   * The configuration values of the import are merged with the configuration provided in the update.
+   *
+   * @param importId Identifier of import to update.
+   * @param uri URI of the import.
+   * @param config A map containing the configuration options of the import.
+   */
+  fun updateStyleImportWithURI(importId: String, uri: String, config: Map<String, Any>?)
+  /**
+   * Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
+   *
+   *  @param importId Identifier of import to move.
+   *  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+   */
+  fun moveStyleImport(importId: String, importPosition: ImportPosition?)
   /** Returns the list containing information about existing style import objects. */
   fun getStyleImports(): List<StyleObjectInfo?>
   /**
@@ -6406,6 +6480,107 @@ interface StyleManager {
                 reply.reply(wrapResult(data))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val importIdArg = args[0] as String
+            val jsonArg = args[1] as String
+            val configArg = args[2] as Map<String, Any>?
+            val importPositionArg = args[3] as ImportPosition?
+            val wrapped: List<Any?> = try {
+              api.addStyleImportFromJSON(importIdArg, jsonArg, configArg, importPositionArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val importIdArg = args[0] as String
+            val uriArg = args[1] as String
+            val configArg = args[2] as Map<String, Any>?
+            val importPositionArg = args[3] as ImportPosition?
+            val wrapped: List<Any?> = try {
+              api.addStyleImportFromURI(importIdArg, uriArg, configArg, importPositionArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val importIdArg = args[0] as String
+            val jsonArg = args[1] as String
+            val configArg = args[2] as Map<String, Any>?
+            val wrapped: List<Any?> = try {
+              api.updateStyleImportWithJSON(importIdArg, jsonArg, configArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val importIdArg = args[0] as String
+            val uriArg = args[1] as String
+            val configArg = args[2] as Map<String, Any>?
+            val wrapped: List<Any?> = try {
+              api.updateStyleImportWithURI(importIdArg, uriArg, configArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val importIdArg = args[0] as String
+            val importPositionArg = args[1] as ImportPosition?
+            val wrapped: List<Any?> = try {
+              api.moveStyleImport(importIdArg, importPositionArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -7408,50 +7583,6 @@ interface StyleManager {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.getFeaturesets())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-/**
- * Allows to cancel the associated asynchronous operation
- *
- * The the associated asynchronous operation is not automatically canceled if this
- * object goes out of scope.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface Cancelable {
-  /**
-   * Cancels the associated asynchronous operation
-   *
-   * If the associated asynchronous operation has already finished, this call is ignored.
-   */
-  fun cancel()
-
-  companion object {
-    /** The codec used by Cancelable. */
-    val codec: MessageCodec<Any?> by lazy {
-      MapInterfacesPigeonCodec()
-    }
-    /** Sets up an instance of `Cancelable` to handle messages through the `binaryMessenger`. */
-    @JvmOverloads
-    fun setUp(binaryMessenger: BinaryMessenger, api: Cancelable?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.Cancelable.cancel$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              api.cancel()
-              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }

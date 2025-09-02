@@ -16,10 +16,77 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
+  @Deprecated('Use [tapEvents] instead.')
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
-    OnPolygonAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPolygonAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPolygonAnnotationClick), _channelSuffix);
+  }
+
+  /// Registers tap event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+  Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
+        .cast<PolygonAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers long press event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
+  Cancelable longPressEvents(
+      {required Function(PolygonAnnotation) onLongPress}) {
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/long_press")
+        .cast<PolygonAnnotationInteractionContext>()
+        .listen((data) => onLongPress(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers drag event callbacks for the annotations managed by this manager.
+  ///
+  /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
+  /// - [onChanged]: Triggered continuously as the annotation is being dragged.
+  /// - [onEnd]: Triggered when the drag gesture ends.
+  ///
+  /// This method returns a [Cancelable] object that can be used to cancel
+  /// the drag event listener when it's no longer needed.
+  /// Example usage:
+  /// ```dart
+  /// manager.dragEvents(
+  ///   onBegin: (annotation) {
+  ///     print("Drag started for: ${annotation.id}");
+  ///   },
+  ///   onChanged: (annotation) {
+  ///     print("Dragging at: ${annotation.geometry}");
+  ///   },
+  ///   onEnd: (annotation) {
+  ///     print("Drag ended at: ${annotation.geometry}");
+  ///   },
+  /// );
+  /// ```
+  Cancelable dragEvents({
+    Function(PolygonAnnotation)? onBegin,
+    Function(PolygonAnnotation)? onChanged,
+    Function(PolygonAnnotation)? onEnd,
+  }) {
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/drag")
+        .cast<PolygonAnnotationInteractionContext>()
+        .listen((data) {
+      switch (data.gestureState) {
+        case GestureState.started when onBegin != null:
+          onBegin(data.annotation);
+        case GestureState.changed when onChanged != null:
+          onChanged(data.annotation);
+        case GestureState.ended when onEnd != null:
+          onEnd(data.annotation);
+        default:
+          break;
+      }
+    }).asCancelable();
   }
 
   /// Create a new annotation with the option.
@@ -41,6 +108,18 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
+
+  /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
+  @experimental
+  Future<void> setFillConstructBridgeGuardRail(
+          bool fillConstructBridgeGuardRail) =>
+      _annotationMessenger.setFillConstructBridgeGuardRail(
+          id, fillConstructBridgeGuardRail);
+
+  /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
+  @experimental
+  Future<bool?> getFillConstructBridgeGuardRail() =>
+      _annotationMessenger.getFillConstructBridgeGuardRail(id);
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
@@ -67,6 +146,17 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Whether or not the fill should be antialiased. Default value: true.
   Future<bool?> getFillAntialias() => _annotationMessenger.getFillAntialias(id);
+
+  /// The color of bridge guard rail. Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  Future<void> setFillBridgeGuardRailColor(int fillBridgeGuardRailColor) =>
+      _annotationMessenger.setFillBridgeGuardRailColor(
+          id, fillBridgeGuardRailColor);
+
+  /// The color of bridge guard rail. Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  Future<int?> getFillBridgeGuardRailColor() =>
+      _annotationMessenger.getFillBridgeGuardRailColor(id);
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. Default value: "#000000".
   Future<void> setFillColor(int fillColor) =>
@@ -121,6 +211,17 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
   Future<FillTranslateAnchor?> getFillTranslateAnchor() =>
       _annotationMessenger.getFillTranslateAnchor(id);
+
+  /// The color of tunnel structures (tunnel entrance and tunnel walls). Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  Future<void> setFillTunnelStructureColor(int fillTunnelStructureColor) =>
+      _annotationMessenger.setFillTunnelStructureColor(
+          id, fillTunnelStructureColor);
+
+  /// The color of tunnel structures (tunnel entrance and tunnel walls). Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  Future<int?> getFillTunnelStructureColor() =>
+      _annotationMessenger.getFillTunnelStructureColor(id);
 
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
   @experimental

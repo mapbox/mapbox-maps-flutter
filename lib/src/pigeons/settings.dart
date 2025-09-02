@@ -44,6 +44,16 @@ enum ModelScaleMode {
   VIEWPORT,
 }
 
+/// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "ground".
+enum ModelElevationReference {
+  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
+  SEA,
+
+  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
+  GROUND,
+}
+
 /// Gesture configuration allows to control the user touch interaction.
 class GesturesSettings {
   GesturesSettings({
@@ -304,6 +314,7 @@ class LocationPuck3D {
     this.modelScaleMode,
     this.modelEmissiveStrength,
     this.modelEmissiveStrengthExpression,
+    this.modelElevationReference,
   });
 
   /// An URL for the model file in gltf format.
@@ -352,6 +363,10 @@ class LocationPuck3D {
   /// The emissive strength expression of the model, which will overwrite the default model emissive strength.
   String? modelEmissiveStrengthExpression;
 
+  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+  /// Default value: "ground".
+  ModelElevationReference? modelElevationReference;
+
   List<Object?> _toList() {
     return <Object?>[
       modelUri,
@@ -366,6 +381,7 @@ class LocationPuck3D {
       modelScaleMode,
       modelEmissiveStrength,
       modelEmissiveStrengthExpression,
+      modelElevationReference,
     ];
   }
 
@@ -388,6 +404,7 @@ class LocationPuck3D {
       modelScaleMode: result[9] as ModelScaleMode?,
       modelEmissiveStrength: result[10] as double?,
       modelEmissiveStrengthExpression: result[11] as String?,
+      modelElevationReference: result[12] as ModelElevationReference?,
     );
   }
 
@@ -412,7 +429,8 @@ class LocationPuck3D {
         modelScaleMode == other.modelScaleMode &&
         modelEmissiveStrength == other.modelEmissiveStrength &&
         modelEmissiveStrengthExpression ==
-            other.modelEmissiveStrengthExpression;
+            other.modelEmissiveStrengthExpression &&
+        modelElevationReference == other.modelElevationReference;
   }
 
   @override
@@ -1129,35 +1147,38 @@ class Settings_PigeonCodec extends StandardMessageCodec {
     } else if (value is ModelScaleMode) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ModelElevationReference) {
       buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is GesturesSettings) {
+      writeValue(buffer, value.index);
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is LocationPuck2D) {
+    } else if (value is GesturesSettings) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is LocationPuck3D) {
+    } else if (value is LocationPuck2D) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is LocationPuck) {
+    } else if (value is LocationPuck3D) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is LocationComponentSettings) {
+    } else if (value is LocationPuck) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is ScaleBarSettings) {
+    } else if (value is LocationComponentSettings) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is CompassSettings) {
+    } else if (value is ScaleBarSettings) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is AttributionSettings) {
+    } else if (value is CompassSettings) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is LogoSettings) {
+    } else if (value is AttributionSettings) {
       buffer.putUint8(142);
+      writeValue(buffer, value.encode());
+    } else if (value is LogoSettings) {
+      buffer.putUint8(143);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1180,24 +1201,27 @@ class Settings_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ModelScaleMode.values[value];
       case 133:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : ModelElevationReference.values[value];
       case 134:
-        return GesturesSettings.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 135:
-        return LocationPuck2D.decode(readValue(buffer)!);
+        return GesturesSettings.decode(readValue(buffer)!);
       case 136:
-        return LocationPuck3D.decode(readValue(buffer)!);
+        return LocationPuck2D.decode(readValue(buffer)!);
       case 137:
-        return LocationPuck.decode(readValue(buffer)!);
+        return LocationPuck3D.decode(readValue(buffer)!);
       case 138:
-        return LocationComponentSettings.decode(readValue(buffer)!);
+        return LocationPuck.decode(readValue(buffer)!);
       case 139:
-        return ScaleBarSettings.decode(readValue(buffer)!);
+        return LocationComponentSettings.decode(readValue(buffer)!);
       case 140:
-        return CompassSettings.decode(readValue(buffer)!);
+        return ScaleBarSettings.decode(readValue(buffer)!);
       case 141:
-        return AttributionSettings.decode(readValue(buffer)!);
+        return CompassSettings.decode(readValue(buffer)!);
       case 142:
+        return AttributionSettings.decode(readValue(buffer)!);
+      case 143:
         return LogoSettings.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

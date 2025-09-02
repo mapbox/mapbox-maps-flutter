@@ -115,38 +115,33 @@ class HillshadeLayer extends Layer {
     var paint = {};
     if (hillshadeAccentColorExpression != null) {
       paint["hillshade-accent-color"] = hillshadeAccentColorExpression;
-    }
-    if (hillshadeAccentColor != null) {
+    } else if (hillshadeAccentColor != null) {
       paint["hillshade-accent-color"] = hillshadeAccentColor?.toRGBA();
     }
 
     if (hillshadeEmissiveStrengthExpression != null) {
       paint["hillshade-emissive-strength"] =
           hillshadeEmissiveStrengthExpression;
-    }
-    if (hillshadeEmissiveStrength != null) {
+    } else if (hillshadeEmissiveStrength != null) {
       paint["hillshade-emissive-strength"] = hillshadeEmissiveStrength;
     }
 
     if (hillshadeExaggerationExpression != null) {
       paint["hillshade-exaggeration"] = hillshadeExaggerationExpression;
-    }
-    if (hillshadeExaggeration != null) {
+    } else if (hillshadeExaggeration != null) {
       paint["hillshade-exaggeration"] = hillshadeExaggeration;
     }
 
     if (hillshadeHighlightColorExpression != null) {
       paint["hillshade-highlight-color"] = hillshadeHighlightColorExpression;
-    }
-    if (hillshadeHighlightColor != null) {
+    } else if (hillshadeHighlightColor != null) {
       paint["hillshade-highlight-color"] = hillshadeHighlightColor?.toRGBA();
     }
 
     if (hillshadeIlluminationAnchorExpression != null) {
       paint["hillshade-illumination-anchor"] =
           hillshadeIlluminationAnchorExpression;
-    }
-    if (hillshadeIlluminationAnchor != null) {
+    } else if (hillshadeIlluminationAnchor != null) {
       paint["hillshade-illumination-anchor"] =
           hillshadeIlluminationAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
@@ -154,16 +149,14 @@ class HillshadeLayer extends Layer {
     if (hillshadeIlluminationDirectionExpression != null) {
       paint["hillshade-illumination-direction"] =
           hillshadeIlluminationDirectionExpression;
-    }
-    if (hillshadeIlluminationDirection != null) {
+    } else if (hillshadeIlluminationDirection != null) {
       paint["hillshade-illumination-direction"] =
           hillshadeIlluminationDirection;
     }
 
     if (hillshadeShadowColorExpression != null) {
       paint["hillshade-shadow-color"] = hillshadeShadowColorExpression;
-    }
-    if (hillshadeShadowColor != null) {
+    } else if (hillshadeShadowColor != null) {
       paint["hillshade-shadow-color"] = hillshadeShadowColor?.toRGBA();
     }
 

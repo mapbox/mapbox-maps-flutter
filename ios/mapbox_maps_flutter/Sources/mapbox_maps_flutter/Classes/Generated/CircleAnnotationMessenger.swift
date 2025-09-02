@@ -56,10 +56,6 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
-private func createConnectionError(withChannelName channelName: String) -> CircleAnnotationMessengerError {
-  return CircleAnnotationMessengerError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -67,6 +63,15 @@ private func isNullish(_ value: Any?) -> Bool {
 private func nilOrValue<T>(_ value: Any?) -> T? {
   if value is NSNull { return nil }
   return value as! T?
+}
+
+/// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "none".
+enum CircleElevationReference: Int {
+  /// Elevated rendering is disabled.
+  case nONE = 0
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
+  case hDROADMARKUP = 1
 }
 
 /// Orientation of circle when map is pitched.
@@ -103,28 +108,31 @@ struct CircleAnnotation {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Point
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var circleSortKey: Double?
+  var circleSortKey: Double? = nil
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
   /// Default value: 0.
-  var circleBlur: Double?
+  var circleBlur: Double? = nil
   /// The fill color of the circle.
   /// Default value: "#000000".
-  var circleColor: Int64?
+  var circleColor: Int64? = nil
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var circleOpacity: Double?
+  var circleOpacity: Double? = nil
   /// Circle radius.
   /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
-  var circleRadius: Double?
+  var circleRadius: Double? = nil
   /// The stroke color of the circle.
   /// Default value: "#000000".
-  var circleStrokeColor: Int64?
+  var circleStrokeColor: Int64? = nil
   /// The opacity of the circle's stroke.
   /// Default value: 1. Value range: [0, 1]
-  var circleStrokeOpacity: Double?
+  var circleStrokeOpacity: Double? = nil
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
-  var circleStrokeWidth: Double?
+  var circleStrokeWidth: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CircleAnnotation? {
@@ -138,6 +146,7 @@ struct CircleAnnotation {
     let circleStrokeColor: Int64? = nilOrValue(pigeonVar_list[7])
     let circleStrokeOpacity: Double? = nilOrValue(pigeonVar_list[8])
     let circleStrokeWidth: Double? = nilOrValue(pigeonVar_list[9])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[10])
 
     return CircleAnnotation(
       id: id,
@@ -149,7 +158,8 @@ struct CircleAnnotation {
       circleRadius: circleRadius,
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
-      circleStrokeWidth: circleStrokeWidth
+      circleStrokeWidth: circleStrokeWidth,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -164,6 +174,7 @@ struct CircleAnnotation {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ]
   }
 }
@@ -173,28 +184,31 @@ struct CircleAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Point
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var circleSortKey: Double?
+  var circleSortKey: Double? = nil
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
   /// Default value: 0.
-  var circleBlur: Double?
+  var circleBlur: Double? = nil
   /// The fill color of the circle.
   /// Default value: "#000000".
-  var circleColor: Int64?
+  var circleColor: Int64? = nil
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var circleOpacity: Double?
+  var circleOpacity: Double? = nil
   /// Circle radius.
   /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
-  var circleRadius: Double?
+  var circleRadius: Double? = nil
   /// The stroke color of the circle.
   /// Default value: "#000000".
-  var circleStrokeColor: Int64?
+  var circleStrokeColor: Int64? = nil
   /// The opacity of the circle's stroke.
   /// Default value: 1. Value range: [0, 1]
-  var circleStrokeOpacity: Double?
+  var circleStrokeOpacity: Double? = nil
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
-  var circleStrokeWidth: Double?
+  var circleStrokeWidth: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CircleAnnotationOptions? {
@@ -207,6 +221,7 @@ struct CircleAnnotationOptions {
     let circleStrokeColor: Int64? = nilOrValue(pigeonVar_list[6])
     let circleStrokeOpacity: Double? = nilOrValue(pigeonVar_list[7])
     let circleStrokeWidth: Double? = nilOrValue(pigeonVar_list[8])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[9])
 
     return CircleAnnotationOptions(
       geometry: geometry,
@@ -217,7 +232,8 @@ struct CircleAnnotationOptions {
       circleRadius: circleRadius,
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
-      circleStrokeWidth: circleStrokeWidth
+      circleStrokeWidth: circleStrokeWidth,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -231,6 +247,7 @@ struct CircleAnnotationOptions {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ]
   }
 }
@@ -241,26 +258,32 @@ private class CircleAnnotationMessengerPigeonCodecReader: FlutterStandardReader 
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CirclePitchAlignment(rawValue: enumResultAsInt)
+        return CircleElevationReference(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CirclePitchScale(rawValue: enumResultAsInt)
+        return CirclePitchAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 131:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CircleTranslateAnchor(rawValue: enumResultAsInt)
+        return CirclePitchScale(rawValue: enumResultAsInt)
       }
       return nil
     case 132:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return CircleTranslateAnchor(rawValue: enumResultAsInt)
+      }
+      return nil
     case 133:
-      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 134:
+      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+    case 135:
       return CircleAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -270,23 +293,26 @@ private class CircleAnnotationMessengerPigeonCodecReader: FlutterStandardReader 
 
 private class CircleAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? CirclePitchAlignment {
+    if let value = value as? CircleElevationReference {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? CirclePitchScale {
+    } else if let value = value as? CirclePitchAlignment {
       super.writeByte(130)
       super.writeValue(value.rawValue)
-    } else if let value = value as? CircleTranslateAnchor {
+    } else if let value = value as? CirclePitchScale {
       super.writeByte(131)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Point {
+    } else if let value = value as? CircleTranslateAnchor {
       super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotation {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotationOptions {
+    } else if let value = value as? CircleAnnotation {
       super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleAnnotationOptions {
+      super.writeByte(135)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -308,39 +334,6 @@ class CircleAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unchec
   static let shared = CircleAnnotationMessengerPigeonCodec(readerWriter: CircleAnnotationMessengerPigeonCodecReaderWriter())
 }
 
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol OnCircleAnnotationClickListenerProtocol {
-  func onCircleAnnotationClick(annotation annotationArg: CircleAnnotation, completion: @escaping (Result<Void, CircleAnnotationMessengerError>) -> Void)
-}
-class OnCircleAnnotationClickListener: OnCircleAnnotationClickListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: CircleAnnotationMessengerPigeonCodec {
-    return CircleAnnotationMessengerPigeonCodec.shared
-  }
-  func onCircleAnnotationClick(annotation annotationArg: CircleAnnotation, completion: @escaping (Result<Void, CircleAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([annotationArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(CircleAnnotationMessengerError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _CircleAnnotationMessenger {
   func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void)
@@ -348,6 +341,8 @@ protocol _CircleAnnotationMessenger {
   func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func setCircleElevationReference(managerId: String, circleElevationReference: CircleElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
+  func getCircleElevationReference(managerId: String, completion: @escaping (Result<CircleElevationReference?, Error>) -> Void)
   func setCircleSortKey(managerId: String, circleSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getCircleSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setCircleBlur(managerId: String, circleBlur: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -470,6 +465,41 @@ class _CircleAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
+    }
+    let setCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setCircleElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let circleElevationReferenceArg = args[1] as! CircleElevationReference
+        api.setCircleElevationReference(managerId: managerIdArg, circleElevationReference: circleElevationReferenceArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setCircleElevationReferenceChannel.setMessageHandler(nil)
+    }
+    let getCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getCircleElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getCircleElevationReference(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getCircleElevationReferenceChannel.setMessageHandler(nil)
     }
     let setCircleSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

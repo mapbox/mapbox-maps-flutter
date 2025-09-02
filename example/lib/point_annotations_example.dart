@@ -17,13 +17,6 @@ class PointAnnotationExample extends StatefulWidget implements Example {
   State<StatefulWidget> createState() => PointAnnotationExampleState();
 }
 
-class AnnotationClickListener extends OnPointAnnotationClickListener {
-  @override
-  void onPointAnnotationClick(PointAnnotation annotation) {
-    print("onAnnotationClick, id: ${annotation.id}");
-  }
-}
-
 class PointAnnotationExampleState extends State<PointAnnotationExample> {
   PointAnnotationExampleState();
 
@@ -54,8 +47,14 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
             geometry: createRandomPoint(), iconImage: "car-15"));
       }
       pointAnnotationManager?.createMulti(carOptions);
-      pointAnnotationManager
-          ?.addOnPointAnnotationClickListener(AnnotationClickListener());
+      pointAnnotationManager?.tapEvents(onTap: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationClick, id: ${annotation.id}");
+      });
+      pointAnnotationManager?.longPressEvents(onLongPress: (annotation) {
+        // ignore: avoid_print
+        print("onAnnotationLongPress, id: ${annotation.id}");
+      });
     });
   }
 

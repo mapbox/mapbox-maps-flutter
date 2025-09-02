@@ -34,10 +34,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
-}
-
 /**
  * The display of line endings.
  * Default value: "butt".
@@ -200,7 +196,9 @@ data class PolylineAnnotation(
    * Stroke thickness.
    * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
    */
-  val lineWidth: Double? = null
+  val lineWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotation {
@@ -218,7 +216,8 @@ data class PolylineAnnotation(
       val lineOpacity = pigeonVar_list[11] as Double?
       val linePattern = pigeonVar_list[12] as String?
       val lineWidth = pigeonVar_list[13] as Double?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val isDraggable = pigeonVar_list[14] as Boolean?
+      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -237,6 +236,7 @@ data class PolylineAnnotation(
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -259,7 +259,8 @@ data class PolylineAnnotation(
       lineOffset == other.lineOffset &&
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
-      lineWidth == other.lineWidth
+      lineWidth == other.lineWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -330,7 +331,9 @@ data class PolylineAnnotationOptions(
    * Stroke thickness.
    * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
    */
-  val lineWidth: Double? = null
+  val lineWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotationOptions {
@@ -347,7 +350,8 @@ data class PolylineAnnotationOptions(
       val lineOpacity = pigeonVar_list[10] as Double?
       val linePattern = pigeonVar_list[11] as String?
       val lineWidth = pigeonVar_list[12] as Double?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val isDraggable = pigeonVar_list[13] as Boolean?
+      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -365,6 +369,7 @@ data class PolylineAnnotationOptions(
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -386,7 +391,8 @@ data class PolylineAnnotationOptions(
       lineOffset == other.lineOffset &&
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
-      lineWidth == other.lineWidth
+      lineWidth == other.lineWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -476,31 +482,6 @@ private open class PolylineAnnotationMessengerPigeonCodec : StandardMessageCodec
   }
 }
 
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class OnPolylineAnnotationClickListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by OnPolylineAnnotationClickListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      PolylineAnnotationMessengerPigeonCodec()
-    }
-  }
-  fun onPolylineAnnotationClick(annotationArg: PolylineAnnotation, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.OnPolylineAnnotationClickListener.onPolylineAnnotationClick$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(annotationArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-}
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PolylineAnnotationMessenger {
   fun create(managerId: String, annotationOption: PolylineAnnotationOptions, callback: (Result<PolylineAnnotation>) -> Unit)

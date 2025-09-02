@@ -10,7 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
-import struct Turf.Point
+import Turf
 
 /// Error class for passing custom error details to Dart side.
 final class GestureListenersError: Error {
@@ -64,6 +64,7 @@ struct MapContentGestureContext {
   /// The state of the gesture.
   var gestureState: GestureState
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapContentGestureContext? {
     let touchPosition = pigeonVar_list[0] as! ScreenCoordinate
@@ -85,21 +86,179 @@ struct MapContentGestureContext {
   }
 }
 
+/// Generated class from Pigeon that represents data sent in messages.
+/// This protocol should not be extended by any user class outside of the generated file.
+protocol AnnotationInteractionContext {
+
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct PointAnnotationInteractionContext: AnnotationInteractionContext {
+  var annotation: PointAnnotation
+  var gestureState: GestureState
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> PointAnnotationInteractionContext? {
+    let annotation = pigeonVar_list[0] as! PointAnnotation
+    let gestureState = pigeonVar_list[1] as! GestureState
+
+    return PointAnnotationInteractionContext(
+      annotation: annotation,
+      gestureState: gestureState
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      annotation,
+      gestureState,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CircleAnnotationInteractionContext: AnnotationInteractionContext {
+  var annotation: CircleAnnotation
+  var gestureState: GestureState
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CircleAnnotationInteractionContext? {
+    let annotation = pigeonVar_list[0] as! CircleAnnotation
+    let gestureState = pigeonVar_list[1] as! GestureState
+
+    return CircleAnnotationInteractionContext(
+      annotation: annotation,
+      gestureState: gestureState
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      annotation,
+      gestureState,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct PolygonAnnotationInteractionContext: AnnotationInteractionContext {
+  var annotation: PolygonAnnotation
+  var gestureState: GestureState
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotationInteractionContext? {
+    let annotation = pigeonVar_list[0] as! PolygonAnnotation
+    let gestureState = pigeonVar_list[1] as! GestureState
+
+    return PolygonAnnotationInteractionContext(
+      annotation: annotation,
+      gestureState: gestureState
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      annotation,
+      gestureState,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct PolylineAnnotationInteractionContext: AnnotationInteractionContext {
+  var annotation: PolylineAnnotation
+  var gestureState: GestureState
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotationInteractionContext? {
+    let annotation = pigeonVar_list[0] as! PolylineAnnotation
+    let gestureState = pigeonVar_list[1] as! GestureState
+
+    return PolylineAnnotationInteractionContext(
+      annotation: annotation,
+      gestureState: gestureState
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      annotation,
+      gestureState,
+    ]
+  }
+}
+
 private class GestureListenersPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return GestureState(rawValue: enumResultAsInt)
+        return IconAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return IconTextFit(rawValue: enumResultAsInt)
+      }
+      return nil
     case 131:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextAnchor(rawValue: enumResultAsInt)
+      }
+      return nil
     case 132:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextJustify(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 133:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextTransform(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 134:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return LineJoin(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 135:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return GestureState(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 136:
+      return Point.fromList(self.readValue() as! [Any?])
+    case 137:
+      return Polygon.fromList(self.readValue() as! [Any?])
+    case 138:
+      return LineString.fromList(self.readValue() as! [Any?])
+    case 139:
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+    case 140:
       return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+    case 141:
+      return PointAnnotation.fromList(self.readValue() as! [Any?])
+    case 142:
+      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+    case 143:
+      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+    case 144:
+      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
+    case 145:
+      return PointAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 146:
+      return CircleAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 147:
+      return PolygonAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 148:
+      return PolylineAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -108,17 +267,65 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
 
 private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? GestureState {
+    if let value = value as? IconAnchor {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Point {
+    } else if let value = value as? IconTextFit {
       super.writeByte(130)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextAnchor {
+      super.writeByte(131)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextJustify {
+      super.writeByte(132)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextTransform {
+      super.writeByte(133)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? LineJoin {
+      super.writeByte(134)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? GestureState {
+      super.writeByte(135)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
+      super.writeByte(136)
+      super.writeValue(value.toList())
+    } else if let value = value as? Polygon {
+      super.writeByte(137)
+      super.writeValue(value.toList())
+    } else if let value = value as? LineString {
+      super.writeByte(138)
       super.writeValue(value.toList())
     } else if let value = value as? ScreenCoordinate {
-      super.writeByte(131)
+      super.writeByte(139)
       super.writeValue(value.toList())
     } else if let value = value as? MapContentGestureContext {
-      super.writeByte(132)
+      super.writeByte(140)
+      super.writeValue(value.toList())
+    } else if let value = value as? PointAnnotation {
+      super.writeByte(141)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleAnnotation {
+      super.writeByte(142)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotation {
+      super.writeByte(143)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotation {
+      super.writeByte(144)
+      super.writeValue(value.toList())
+    } else if let value = value as? PointAnnotationInteractionContext {
+      super.writeByte(145)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleAnnotationInteractionContext {
+      super.writeByte(146)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotationInteractionContext {
+      super.writeByte(147)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotationInteractionContext {
+      super.writeByte(148)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -139,6 +346,8 @@ private class GestureListenersPigeonCodecReaderWriter: FlutterStandardReaderWrit
 class GestureListenersPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
   static let shared = GestureListenersPigeonCodec(readerWriter: GestureListenersPigeonCodecReaderWriter())
 }
+
+var gestureListenersPigeonMethodCodec = FlutterStandardMethodCodec(readerWriter: GestureListenersPigeonCodecReaderWriter());
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol GestureListenerProtocol {
@@ -230,3 +439,67 @@ class GestureListener: GestureListenerProtocol {
     }
   }
 }
+
+private class PigeonStreamHandler<ReturnType>: NSObject, FlutterStreamHandler {
+  private let wrapper: PigeonEventChannelWrapper<ReturnType>
+  private var pigeonSink: PigeonEventSink<ReturnType>? = nil
+
+  init(wrapper: PigeonEventChannelWrapper<ReturnType>) {
+    self.wrapper = wrapper
+  }
+
+  func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink)
+    -> FlutterError?
+  {
+    pigeonSink = PigeonEventSink<ReturnType>(events)
+    wrapper.onListen(withArguments: arguments, sink: pigeonSink!)
+    return nil
+  }
+
+  func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    pigeonSink = nil
+    wrapper.onCancel(withArguments: arguments)
+    return nil
+  }
+}
+
+class PigeonEventChannelWrapper<ReturnType> {
+  func onListen(withArguments arguments: Any?, sink: PigeonEventSink<ReturnType>) {}
+  func onCancel(withArguments arguments: Any?) {}
+}
+
+class PigeonEventSink<ReturnType> {
+  private let sink: FlutterEventSink
+
+  init(_ sink: @escaping FlutterEventSink) {
+    self.sink = sink
+  }
+
+  func success(_ value: ReturnType) {
+    sink(value)
+  }
+
+  func error(code: String, message: String?, details: Any?) {
+    sink(FlutterError(code: code, message: message, details: details))
+  }
+
+  func endOfStream() {
+    sink(FlutterEndOfEventStream)
+  }
+
+}
+
+class AnnotationInteractionEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInteractionContext> {
+  static func register(with messenger: FlutterBinaryMessenger,
+                      instanceName: String = "",
+                      streamHandler: AnnotationInteractionEventsStreamHandler) {
+    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents"
+    if !instanceName.isEmpty {
+      channelName += ".\(instanceName)"
+    }
+    let internalStreamHandler = PigeonStreamHandler<AnnotationInteractionContext>(wrapper: streamHandler)
+    let channel = FlutterEventChannel(name: channelName, binaryMessenger: messenger, codec: gestureListenersPigeonMethodCodec)
+    channel.setStreamHandler(internalStreamHandler)
+  }
+}
+      

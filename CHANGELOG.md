@@ -1,7 +1,84 @@
-### 2.8.0-beta.1
+### 2.11.0-beta.1
 
+* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format. 
+* Update Maps SDK to v11.15.0-beta.3
+
+### 2.10.0
+
+* Update Maps SDK to v11.14.0
+  * Fixed FillExtrusionLayer flickering when transitioning between flat and globe projection
+* Fix crash when receiving annotation interactions.
+* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
+* Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
+  Example usage:
+  ```dart
+  manager.tapEvents(
+    onTap: (annotation) {
+      print("Tapped annotation: ${annotation.id}");
+    },
+  );
+  manager.longPressEvents(
+    onLongPress: (annotation) {
+      print("Long press annotation: ${annotation.id}");
+    },
+  );
+  ```
+
+> [!NOTE]
+> As part of this change, `AnnotationOnClickListener` is now deprecated.
+> Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+
+### 2.9.0
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
+> * `PointAnnotation.iconImageCrossFade` has been deprecated and setting a value to it will not have any impact. Use `PointAnnotationManager.iconImageCrossFade` instead.
+> * The STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
+
+* In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
+  * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
+* Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
+* Introduce `dragEvents` API to the Annotation Managers to handle drag event callbacks for annotations:
+  * `onBegin`: Called when a drag gesture starts on an annotation.
+  * `onChanged`: Called continuously as the annotation is dragged.
+  * `onEnd`: Called once the drag gesture completes.
+
+  Example usage:
+  ```dart
+  manager.dragEvents(
+    onBegin: (annotation) {
+      print("Drag started for: ${annotation.id}");
+    },
+    onChanged: (annotation) {
+      print("Dragging at: ${annotation.geometry}");
+    },
+    onEnd: (annotation) {
+      print("Drag ended at: ${annotation.geometry}");
+    },
+  );
+* Promote interaction APIs to stable. The following APIs are now stable:
+  * `MapboxMap.addInteraction`
+  * `MapboxMap.removeInteraction`
+  * `MapboxMap.setFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.setFeatureStateForFeaturesetFeature`
+  * `MapboxMap.getFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.getFeatureStateForFeaturesetFeature`
+  * `MapboxMap.removeFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.removeFeatureStateForFeaturesetFeature`
+  * `MapboxMap.resetFeatureStatesForFeatureset`
+  * `MapboxMap.queryRenderedFeaturesForFeatureset`
+* Move experimental `modelElevationReference` property to `LocationPuck3D`. 
+* Fixed an issue where style expressions did not override constant values when both were present.
+* [ios] Fix crash when force unwrapping UIImage for point annotations.
+* Update MapboxMaps to v11.13.0
+
+### 2.8.0 
+
+* Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
+* [Android] Fix color alpha value conversion.
 * Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
-* Update Maps SDK to 11.12.0-beta.1
+* Update Maps SDK to 11.12.0
 
 ### 2.7.0
 

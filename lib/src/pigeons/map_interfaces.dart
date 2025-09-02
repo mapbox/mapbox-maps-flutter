@@ -184,15 +184,6 @@ enum ViewAnnotationAnchor {
   CENTER,
 }
 
-/// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
-enum ModelElevationReference {
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
-  SEA,
-
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
-  GROUND,
-}
-
 /// The type of interaction, either tap/click or longTap/longClick
 enum _InteractionType {
   /// A short tap or click
@@ -1680,6 +1671,61 @@ class LayerPosition {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Specifies the position at which an import will be added when using `Style.addImport`
+class ImportPosition {
+  ImportPosition({
+    this.above,
+    this.below,
+    this.at,
+  });
+
+  /// Import should be positioned above the specified import id.
+  String? above;
+
+  /// Import should be positioned below the specified import id.
+  String? below;
+
+  /// Import should be positioned at the specified index in the imports stack.
+  int? at;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      above,
+      below,
+      at,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ImportPosition decode(Object result) {
+    result as List<Object?>;
+    return ImportPosition(
+      above: result[0] as String?,
+      below: result[1] as String?,
+      at: result[2] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ImportPosition || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return above == other.above && below == other.below && at == other.at;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// Represents query result that is returned in QueryRenderedFeaturesCallback.
 /// @see `queryRenderedFeatures`
 class QueriedRenderedFeature {
@@ -3136,133 +3182,133 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is ModelElevationReference) {
+    } else if (value is _InteractionType) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is _InteractionType) {
+    } else if (value is GestureState) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is GestureState) {
+    } else if (value is Type) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is Type) {
+    } else if (value is FillExtrusionBaseAlignment) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is FillExtrusionBaseAlignment) {
+    } else if (value is FillExtrusionHeightAlignment) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is FillExtrusionHeightAlignment) {
+    } else if (value is BackgroundPitchAlignment) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is BackgroundPitchAlignment) {
+    } else if (value is StylePackErrorType) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is StylePackErrorType) {
+    } else if (value is ResponseErrorReason) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is ResponseErrorReason) {
+    } else if (value is OfflineRegionDownloadState) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is OfflineRegionDownloadState) {
+    } else if (value is TileStoreUsageMode) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is TileStoreUsageMode) {
+    } else if (value is StylePropertyValueKind) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is StylePropertyValueKind) {
+    } else if (value is StyleProjectionName) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
-    } else if (value is StyleProjectionName) {
+    } else if (value is Anchor) {
       buffer.putUint8(149);
       writeValue(buffer, value.index);
-    } else if (value is Anchor) {
+    } else if (value is HttpMethod) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    } else if (value is HttpMethod) {
+    } else if (value is HttpRequestErrorType) {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
-    } else if (value is HttpRequestErrorType) {
+    } else if (value is DownloadErrorCode) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    } else if (value is DownloadErrorCode) {
+    } else if (value is DownloadState) {
       buffer.putUint8(153);
       writeValue(buffer, value.index);
-    } else if (value is DownloadState) {
+    } else if (value is TileRegionErrorType) {
       buffer.putUint8(154);
       writeValue(buffer, value.index);
-    } else if (value is TileRegionErrorType) {
+    } else if (value is _MapEvent) {
       buffer.putUint8(155);
       writeValue(buffer, value.index);
-    } else if (value is _MapEvent) {
-      buffer.putUint8(156);
-      writeValue(buffer, value.index);
     } else if (value is Point) {
-      buffer.putUint8(157);
+      buffer.putUint8(156);
       writeValue(buffer, value.encode());
     } else if (value is Feature) {
-      buffer.putUint8(158);
+      buffer.putUint8(157);
       writeValue(buffer, value.encode());
     } else if (value is GlyphsRasterizationOptions) {
-      buffer.putUint8(159);
+      buffer.putUint8(158);
       writeValue(buffer, value.encode());
     } else if (value is TileCoverOptions) {
-      buffer.putUint8(160);
+      buffer.putUint8(159);
       writeValue(buffer, value.encode());
     } else if (value is MbxEdgeInsets) {
-      buffer.putUint8(161);
+      buffer.putUint8(160);
       writeValue(buffer, value.encode());
     } else if (value is CameraOptions) {
-      buffer.putUint8(162);
+      buffer.putUint8(161);
       writeValue(buffer, value.encode());
     } else if (value is CameraState) {
-      buffer.putUint8(163);
+      buffer.putUint8(162);
       writeValue(buffer, value.encode());
     } else if (value is CameraBoundsOptions) {
-      buffer.putUint8(164);
+      buffer.putUint8(163);
       writeValue(buffer, value.encode());
     } else if (value is CameraBounds) {
-      buffer.putUint8(165);
+      buffer.putUint8(164);
       writeValue(buffer, value.encode());
     } else if (value is MapAnimationOptions) {
-      buffer.putUint8(166);
+      buffer.putUint8(165);
       writeValue(buffer, value.encode());
     } else if (value is CoordinateBounds) {
-      buffer.putUint8(167);
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else if (value is MapDebugOptions) {
-      buffer.putUint8(168);
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else if (value is TileCacheBudgetInMegabytes) {
-      buffer.putUint8(169);
+      buffer.putUint8(168);
       writeValue(buffer, value.encode());
     } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(170);
+      buffer.putUint8(169);
       writeValue(buffer, value.encode());
     } else if (value is MapOptions) {
-      buffer.putUint8(171);
+      buffer.putUint8(170);
       writeValue(buffer, value.encode());
     } else if (value is ScreenCoordinate) {
-      buffer.putUint8(172);
+      buffer.putUint8(171);
       writeValue(buffer, value.encode());
     } else if (value is ScreenBox) {
-      buffer.putUint8(173);
+      buffer.putUint8(172);
       writeValue(buffer, value.encode());
     } else if (value is CoordinateBoundsZoom) {
-      buffer.putUint8(174);
+      buffer.putUint8(173);
       writeValue(buffer, value.encode());
     } else if (value is Size) {
-      buffer.putUint8(175);
+      buffer.putUint8(174);
       writeValue(buffer, value.encode());
     } else if (value is RenderedQueryOptions) {
-      buffer.putUint8(176);
+      buffer.putUint8(175);
       writeValue(buffer, value.encode());
     } else if (value is SourceQueryOptions) {
-      buffer.putUint8(177);
+      buffer.putUint8(176);
       writeValue(buffer, value.encode());
     } else if (value is FeatureExtensionValue) {
-      buffer.putUint8(178);
+      buffer.putUint8(177);
       writeValue(buffer, value.encode());
     } else if (value is LayerPosition) {
+      buffer.putUint8(178);
+      writeValue(buffer, value.encode());
+    } else if (value is ImportPosition) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
     } else if (value is QueriedRenderedFeature) {
@@ -3371,112 +3417,111 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : ViewAnnotationAnchor.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ModelElevationReference.values[value];
+        return value == null ? null : _InteractionType.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _InteractionType.values[value];
+        return value == null ? null : GestureState.values[value];
       case 139:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : GestureState.values[value];
+        return value == null ? null : Type.values[value];
       case 140:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Type.values[value];
-      case 141:
-        final int? value = readValue(buffer) as int?;
         return value == null ? null : FillExtrusionBaseAlignment.values[value];
-      case 142:
+      case 141:
         final int? value = readValue(buffer) as int?;
         return value == null
             ? null
             : FillExtrusionHeightAlignment.values[value];
-      case 143:
+      case 142:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : BackgroundPitchAlignment.values[value];
-      case 144:
+      case 143:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : StylePackErrorType.values[value];
-      case 145:
+      case 144:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ResponseErrorReason.values[value];
-      case 146:
+      case 145:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : OfflineRegionDownloadState.values[value];
-      case 147:
+      case 146:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TileStoreUsageMode.values[value];
-      case 148:
+      case 147:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : StylePropertyValueKind.values[value];
-      case 149:
+      case 148:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : StyleProjectionName.values[value];
-      case 150:
+      case 149:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : Anchor.values[value];
-      case 151:
+      case 150:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : HttpMethod.values[value];
-      case 152:
+      case 151:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : HttpRequestErrorType.values[value];
-      case 153:
+      case 152:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : DownloadErrorCode.values[value];
-      case 154:
+      case 153:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : DownloadState.values[value];
-      case 155:
+      case 154:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TileRegionErrorType.values[value];
-      case 156:
+      case 155:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _MapEvent.values[value];
-      case 157:
+      case 156:
         return Point.decode(readValue(buffer)!);
-      case 158:
+      case 157:
         return Feature.decode(readValue(buffer)!);
-      case 159:
+      case 158:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 160:
+      case 159:
         return TileCoverOptions.decode(readValue(buffer)!);
-      case 161:
+      case 160:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 162:
+      case 161:
         return CameraOptions.decode(readValue(buffer)!);
-      case 163:
+      case 162:
         return CameraState.decode(readValue(buffer)!);
-      case 164:
+      case 163:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 165:
+      case 164:
         return CameraBounds.decode(readValue(buffer)!);
-      case 166:
+      case 165:
         return MapAnimationOptions.decode(readValue(buffer)!);
-      case 167:
+      case 166:
         return CoordinateBounds.decode(readValue(buffer)!);
-      case 168:
+      case 167:
         return MapDebugOptions.decode(readValue(buffer)!);
-      case 169:
+      case 168:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 170:
+      case 169:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 171:
+      case 170:
         return MapOptions.decode(readValue(buffer)!);
-      case 172:
+      case 171:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 173:
+      case 172:
         return ScreenBox.decode(readValue(buffer)!);
-      case 174:
+      case 173:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 175:
+      case 174:
         return Size.decode(readValue(buffer)!);
-      case 176:
+      case 175:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 177:
+      case 176:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 178:
+      case 177:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 179:
+      case 178:
         return LayerPosition.decode(readValue(buffer)!);
+      case 179:
+        return ImportPosition.decode(readValue(buffer)!);
       case 180:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 181:
@@ -5126,7 +5171,7 @@ class _MapInterface {
   /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
   /// @param options The `render query options` for querying rendered features.
   /// @param completion The `query features completion` called when the query completes.
-  /// @return A `cancelable` object that could be used to cancel the pending query.
+  /// @return A list of `QueriedRenderedFeature` objects representing the query results.
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
       _RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
     final String pigeonVar_channelName =
@@ -6907,6 +6952,185 @@ class StyleManager {
       );
     } else {
       return (pigeonVar_replyList[0] as TransitionOptions?)!;
+    }
+  }
+
+  /// Adds new import to current style, loaded from a JSON string.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param json The JSON string to be loaded directly as the import.
+  /// @param config A map containing the configuration options of the import.
+  /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  Future<void> addStyleImportFromJSON(
+    String importId,
+    String json, {
+    Map<String, Object>? config,
+    ImportPosition? importPosition,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
+        .send(<Object?>[importId, json, config, importPosition]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Adds new import to current style, loaded from an URI.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param uri URI of the import.
+  /// @param config A map containing the configuration options of the import.
+  /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  Future<void> addStyleImportFromURI(
+    String importId,
+    String uri, {
+    Map<String, Object>? config,
+    ImportPosition? importPosition,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
+        .send(<Object?>[importId, uri, config, importPosition]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Updates an existing import in the style.
+  /// The function replaces the content of the import, with the content loaded from the provided data value.
+  /// The configuration values of the import are merged with the configuration provided in the update.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param json The JSON string to be loaded directly as the import.
+  /// @param config A map containing the configuration options of the import.
+  Future<void> updateStyleImportWithJSON(
+    String importId,
+    String json, {
+    Map<String, Object>? config,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[importId, json, config]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Updates an existing import in the style.
+  /// The function replaces the content of the import, with the content loaded from the provided URI.
+  /// The configuration values of the import are merged with the configuration provided in the update.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param uri URI of the import.
+  /// @param config A map containing the configuration options of the import.
+  Future<void> updateStyleImportWithURI(
+    String importId,
+    String uri, {
+    Map<String, Object>? config,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[importId, uri, config]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
+  ///
+  ///  @param importId Identifier of import to move.
+  ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  Future<void> moveStyleImport(
+      String importId, ImportPosition? importPosition) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[importId, importPosition]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 
@@ -8738,55 +8962,6 @@ class StyleManager {
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
           .cast<FeaturesetDescriptor>();
-    }
-  }
-}
-
-/// Allows to cancel the associated asynchronous operation
-///
-/// The the associated asynchronous operation is not automatically canceled if this
-/// object goes out of scope.
-class Cancelable {
-  /// Constructor for [Cancelable].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  Cancelable(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? pigeonVar_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      MapInterfaces_PigeonCodec();
-
-  final String pigeonVar_messageChannelSuffix;
-
-  /// Cancels the associated asynchronous operation
-  ///
-  /// If the associated asynchronous operation has already finished, this call is ignored.
-  Future<void> cancel() async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Cancelable.cancel$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
     }
   }
 }

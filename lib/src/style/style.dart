@@ -388,7 +388,7 @@ extension StyleColorInt on int {
   /// Convert the color from int format to a string with format "rgba(red, green, blue, alpha)".
   String toRGBA() {
     final color = Color(this);
-    return "rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha})";
+    return "rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha / 255})";
   }
 }
 

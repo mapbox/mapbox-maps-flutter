@@ -16,10 +16,77 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
+  @Deprecated('Use [tapEvents] instead.')
   void addOnPolylineAnnotationClickListener(
       OnPolylineAnnotationClickListener listener) {
-    OnPolylineAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
+    OnPolylineAnnotationClickListener._withCancelable(
+        tapEvents(onTap: listener.onPolylineAnnotationClick), _channelSuffix);
+  }
+
+  /// Registers tap event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+  Cancelable tapEvents({required Function(PolylineAnnotation) onTap}) {
+    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
+        .cast<PolylineAnnotationInteractionContext>()
+        .listen((data) => onTap(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers long press event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
+  Cancelable longPressEvents(
+      {required Function(PolylineAnnotation) onLongPress}) {
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/long_press")
+        .cast<PolylineAnnotationInteractionContext>()
+        .listen((data) => onLongPress(data.annotation))
+        .asCancelable();
+  }
+
+  /// Registers drag event callbacks for the annotations managed by this manager.
+  ///
+  /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
+  /// - [onChanged]: Triggered continuously as the annotation is being dragged.
+  /// - [onEnd]: Triggered when the drag gesture ends.
+  ///
+  /// This method returns a [Cancelable] object that can be used to cancel
+  /// the drag event listener when it's no longer needed.
+  /// Example usage:
+  /// ```dart
+  /// manager.dragEvents(
+  ///   onBegin: (annotation) {
+  ///     print("Drag started for: ${annotation.id}");
+  ///   },
+  ///   onChanged: (annotation) {
+  ///     print("Dragging at: ${annotation.geometry}");
+  ///   },
+  ///   onEnd: (annotation) {
+  ///     print("Drag ended at: ${annotation.geometry}");
+  ///   },
+  /// );
+  /// ```
+  Cancelable dragEvents({
+    Function(PolylineAnnotation)? onBegin,
+    Function(PolylineAnnotation)? onChanged,
+    Function(PolylineAnnotation)? onEnd,
+  }) {
+    return _annotationInteractionEvents(
+            instanceName: "$_channelSuffix/$id/drag")
+        .cast<PolylineAnnotationInteractionContext>()
+        .listen((data) {
+      switch (data.gestureState) {
+        case GestureState.started when onBegin != null:
+          onBegin(data.annotation);
+        case GestureState.changed when onChanged != null:
+          onChanged(data.annotation);
+        case GestureState.ended when onEnd != null:
+          onEnd(data.annotation);
+        default:
+          break;
+      }
+    }).asCancelable();
   }
 
   /// Create a new annotation with the option.

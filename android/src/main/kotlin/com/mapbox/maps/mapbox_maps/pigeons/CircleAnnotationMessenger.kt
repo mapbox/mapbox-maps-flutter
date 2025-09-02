@@ -34,8 +34,21 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+/**
+ * Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+ * Default value: "none".
+ */
+enum class CircleElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HD_ROAD_MARKUP(1);
+
+  companion object {
+    fun ofRaw(raw: Int): CircleElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
 }
 
 /**
@@ -131,7 +144,9 @@ data class CircleAnnotation(
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
    * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
    */
-  val circleStrokeWidth: Double? = null
+  val circleStrokeWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CircleAnnotation {
@@ -145,7 +160,8 @@ data class CircleAnnotation(
       val circleStrokeColor = pigeonVar_list[7] as Long?
       val circleStrokeOpacity = pigeonVar_list[8] as Double?
       val circleStrokeWidth = pigeonVar_list[9] as Double?
-      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
+      val isDraggable = pigeonVar_list[10] as Boolean?
+      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -160,6 +176,7 @@ data class CircleAnnotation(
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -178,7 +195,8 @@ data class CircleAnnotation(
       circleRadius == other.circleRadius &&
       circleStrokeColor == other.circleStrokeColor &&
       circleStrokeOpacity == other.circleStrokeOpacity &&
-      circleStrokeWidth == other.circleStrokeWidth
+      circleStrokeWidth == other.circleStrokeWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -224,7 +242,9 @@ data class CircleAnnotationOptions(
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
    * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
    */
-  val circleStrokeWidth: Double? = null
+  val circleStrokeWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CircleAnnotationOptions {
@@ -237,7 +257,8 @@ data class CircleAnnotationOptions(
       val circleStrokeColor = pigeonVar_list[6] as Long?
       val circleStrokeOpacity = pigeonVar_list[7] as Double?
       val circleStrokeWidth = pigeonVar_list[8] as Double?
-      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
+      val isDraggable = pigeonVar_list[9] as Boolean?
+      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -251,6 +272,7 @@ data class CircleAnnotationOptions(
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -268,7 +290,8 @@ data class CircleAnnotationOptions(
       circleRadius == other.circleRadius &&
       circleStrokeColor == other.circleStrokeColor &&
       circleStrokeOpacity == other.circleStrokeOpacity &&
-      circleStrokeWidth == other.circleStrokeWidth
+      circleStrokeWidth == other.circleStrokeWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -278,30 +301,35 @@ private open class CircleAnnotationMessengerPigeonCodec : StandardMessageCodec()
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CirclePitchAlignment.ofRaw(it.toInt())
+          CircleElevationReference.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CirclePitchScale.ofRaw(it.toInt())
+          CirclePitchAlignment.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CircleTranslateAnchor.ofRaw(it.toInt())
+          CirclePitchScale.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          CircleTranslateAnchor.ofRaw(it.toInt())
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CircleAnnotation.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleAnnotation.fromList(it)
+        }
+      }
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CircleAnnotationOptions.fromList(it)
         }
@@ -311,28 +339,32 @@ private open class CircleAnnotationMessengerPigeonCodec : StandardMessageCodec()
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is CirclePitchAlignment -> {
+      is CircleElevationReference -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is CirclePitchScale -> {
+      is CirclePitchAlignment -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is CircleTranslateAnchor -> {
+      is CirclePitchScale -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is Point -> {
+      is CircleTranslateAnchor -> {
         stream.write(132)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is CircleAnnotation -> {
+      is Point -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is CircleAnnotationOptions -> {
+      is CircleAnnotation -> {
         stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is CircleAnnotationOptions -> {
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -340,31 +372,6 @@ private open class CircleAnnotationMessengerPigeonCodec : StandardMessageCodec()
   }
 }
 
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class OnCircleAnnotationClickListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by OnCircleAnnotationClickListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      CircleAnnotationMessengerPigeonCodec()
-    }
-  }
-  fun onCircleAnnotationClick(annotationArg: CircleAnnotation, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(annotationArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-}
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _CircleAnnotationMessenger {
   fun create(managerId: String, annotationOption: CircleAnnotationOptions, callback: (Result<CircleAnnotation>) -> Unit)
@@ -372,6 +379,8 @@ interface _CircleAnnotationMessenger {
   fun update(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setCircleElevationReference(managerId: String, circleElevationReference: CircleElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getCircleElevationReference(managerId: String, callback: (Result<CircleElevationReference?>) -> Unit)
   fun setCircleSortKey(managerId: String, circleSortKey: Double, callback: (Result<Unit>) -> Unit)
   fun getCircleSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setCircleBlur(managerId: String, circleBlur: Double, callback: (Result<Unit>) -> Unit)
@@ -502,6 +511,46 @@ interface _CircleAnnotationMessenger {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleElevationReferenceArg = args[1] as CircleElevationReference
+            api.setCircleElevationReference(managerIdArg, circleElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleElevationReference(managerIdArg) { result: Result<CircleElevationReference?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }

@@ -55,6 +55,8 @@ class FillExtrusionLayer extends Layer {
     List<Object>? this.fillExtrusionOpacityExpression,
     String? this.fillExtrusionPattern,
     List<Object>? this.fillExtrusionPatternExpression,
+    double? this.fillExtrusionPatternCrossFade,
+    List<Object>? this.fillExtrusionPatternCrossFadeExpression,
     bool? this.fillExtrusionRoundedRoof,
     List<Object>? this.fillExtrusionRoundedRoofExpression,
     List<double?>? this.fillExtrusionTranslate,
@@ -273,6 +275,14 @@ class FillExtrusionLayer extends Layer {
   /// Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   List<Object>? fillExtrusionPatternExpression;
 
+  /// Controls the transition progress between the image variants of fill-extrusion-pattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Default value: 0. Value range: [0, 1]
+  double? fillExtrusionPatternCrossFade;
+
+  /// Controls the transition progress between the image variants of fill-extrusion-pattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Default value: 0. Value range: [0, 1]
+  List<Object>? fillExtrusionPatternCrossFadeExpression;
+
   /// Indicates whether top edges should be rounded when fill-extrusion-edge-radius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.
   /// Default value: true.
   @experimental
@@ -339,8 +349,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionAmbientOcclusionGroundAttenuationExpression != null) {
       paint["fill-extrusion-ambient-occlusion-ground-attenuation"] =
           fillExtrusionAmbientOcclusionGroundAttenuationExpression;
-    }
-    if (fillExtrusionAmbientOcclusionGroundAttenuation != null) {
+    } else if (fillExtrusionAmbientOcclusionGroundAttenuation != null) {
       paint["fill-extrusion-ambient-occlusion-ground-attenuation"] =
           fillExtrusionAmbientOcclusionGroundAttenuation;
     }
@@ -348,8 +357,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionAmbientOcclusionGroundRadiusExpression != null) {
       paint["fill-extrusion-ambient-occlusion-ground-radius"] =
           fillExtrusionAmbientOcclusionGroundRadiusExpression;
-    }
-    if (fillExtrusionAmbientOcclusionGroundRadius != null) {
+    } else if (fillExtrusionAmbientOcclusionGroundRadius != null) {
       paint["fill-extrusion-ambient-occlusion-ground-radius"] =
           fillExtrusionAmbientOcclusionGroundRadius;
     }
@@ -357,8 +365,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionAmbientOcclusionIntensityExpression != null) {
       paint["fill-extrusion-ambient-occlusion-intensity"] =
           fillExtrusionAmbientOcclusionIntensityExpression;
-    }
-    if (fillExtrusionAmbientOcclusionIntensity != null) {
+    } else if (fillExtrusionAmbientOcclusionIntensity != null) {
       paint["fill-extrusion-ambient-occlusion-intensity"] =
           fillExtrusionAmbientOcclusionIntensity;
     }
@@ -366,8 +373,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionAmbientOcclusionRadiusExpression != null) {
       paint["fill-extrusion-ambient-occlusion-radius"] =
           fillExtrusionAmbientOcclusionRadiusExpression;
-    }
-    if (fillExtrusionAmbientOcclusionRadius != null) {
+    } else if (fillExtrusionAmbientOcclusionRadius != null) {
       paint["fill-extrusion-ambient-occlusion-radius"] =
           fillExtrusionAmbientOcclusionRadius;
     }
@@ -375,56 +381,49 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionAmbientOcclusionWallRadiusExpression != null) {
       paint["fill-extrusion-ambient-occlusion-wall-radius"] =
           fillExtrusionAmbientOcclusionWallRadiusExpression;
-    }
-    if (fillExtrusionAmbientOcclusionWallRadius != null) {
+    } else if (fillExtrusionAmbientOcclusionWallRadius != null) {
       paint["fill-extrusion-ambient-occlusion-wall-radius"] =
           fillExtrusionAmbientOcclusionWallRadius;
     }
 
     if (fillExtrusionBaseExpression != null) {
       paint["fill-extrusion-base"] = fillExtrusionBaseExpression;
-    }
-    if (fillExtrusionBase != null) {
+    } else if (fillExtrusionBase != null) {
       paint["fill-extrusion-base"] = fillExtrusionBase;
     }
 
     if (fillExtrusionBaseAlignmentExpression != null) {
       paint["fill-extrusion-base-alignment"] =
           fillExtrusionBaseAlignmentExpression;
-    }
-    if (fillExtrusionBaseAlignment != null) {
+    } else if (fillExtrusionBaseAlignment != null) {
       paint["fill-extrusion-base-alignment"] =
           fillExtrusionBaseAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (fillExtrusionColorExpression != null) {
       paint["fill-extrusion-color"] = fillExtrusionColorExpression;
-    }
-    if (fillExtrusionColor != null) {
+    } else if (fillExtrusionColor != null) {
       paint["fill-extrusion-color"] = fillExtrusionColor?.toRGBA();
     }
 
     if (fillExtrusionCutoffFadeRangeExpression != null) {
       paint["fill-extrusion-cutoff-fade-range"] =
           fillExtrusionCutoffFadeRangeExpression;
-    }
-    if (fillExtrusionCutoffFadeRange != null) {
+    } else if (fillExtrusionCutoffFadeRange != null) {
       paint["fill-extrusion-cutoff-fade-range"] = fillExtrusionCutoffFadeRange;
     }
 
     if (fillExtrusionEmissiveStrengthExpression != null) {
       paint["fill-extrusion-emissive-strength"] =
           fillExtrusionEmissiveStrengthExpression;
-    }
-    if (fillExtrusionEmissiveStrength != null) {
+    } else if (fillExtrusionEmissiveStrength != null) {
       paint["fill-extrusion-emissive-strength"] = fillExtrusionEmissiveStrength;
     }
 
     if (fillExtrusionFloodLightColorExpression != null) {
       paint["fill-extrusion-flood-light-color"] =
           fillExtrusionFloodLightColorExpression;
-    }
-    if (fillExtrusionFloodLightColor != null) {
+    } else if (fillExtrusionFloodLightColor != null) {
       paint["fill-extrusion-flood-light-color"] =
           fillExtrusionFloodLightColor?.toRGBA();
     }
@@ -432,8 +431,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionFloodLightGroundAttenuationExpression != null) {
       paint["fill-extrusion-flood-light-ground-attenuation"] =
           fillExtrusionFloodLightGroundAttenuationExpression;
-    }
-    if (fillExtrusionFloodLightGroundAttenuation != null) {
+    } else if (fillExtrusionFloodLightGroundAttenuation != null) {
       paint["fill-extrusion-flood-light-ground-attenuation"] =
           fillExtrusionFloodLightGroundAttenuation;
     }
@@ -441,8 +439,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionFloodLightGroundRadiusExpression != null) {
       paint["fill-extrusion-flood-light-ground-radius"] =
           fillExtrusionFloodLightGroundRadiusExpression;
-    }
-    if (fillExtrusionFloodLightGroundRadius != null) {
+    } else if (fillExtrusionFloodLightGroundRadius != null) {
       paint["fill-extrusion-flood-light-ground-radius"] =
           fillExtrusionFloodLightGroundRadius;
     }
@@ -450,8 +447,7 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionFloodLightIntensityExpression != null) {
       paint["fill-extrusion-flood-light-intensity"] =
           fillExtrusionFloodLightIntensityExpression;
-    }
-    if (fillExtrusionFloodLightIntensity != null) {
+    } else if (fillExtrusionFloodLightIntensity != null) {
       paint["fill-extrusion-flood-light-intensity"] =
           fillExtrusionFloodLightIntensity;
     }
@@ -459,68 +455,67 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionFloodLightWallRadiusExpression != null) {
       paint["fill-extrusion-flood-light-wall-radius"] =
           fillExtrusionFloodLightWallRadiusExpression;
-    }
-    if (fillExtrusionFloodLightWallRadius != null) {
+    } else if (fillExtrusionFloodLightWallRadius != null) {
       paint["fill-extrusion-flood-light-wall-radius"] =
           fillExtrusionFloodLightWallRadius;
     }
 
     if (fillExtrusionHeightExpression != null) {
       paint["fill-extrusion-height"] = fillExtrusionHeightExpression;
-    }
-    if (fillExtrusionHeight != null) {
+    } else if (fillExtrusionHeight != null) {
       paint["fill-extrusion-height"] = fillExtrusionHeight;
     }
 
     if (fillExtrusionHeightAlignmentExpression != null) {
       paint["fill-extrusion-height-alignment"] =
           fillExtrusionHeightAlignmentExpression;
-    }
-    if (fillExtrusionHeightAlignment != null) {
+    } else if (fillExtrusionHeightAlignment != null) {
       paint["fill-extrusion-height-alignment"] =
           fillExtrusionHeightAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (fillExtrusionLineWidthExpression != null) {
       paint["fill-extrusion-line-width"] = fillExtrusionLineWidthExpression;
-    }
-    if (fillExtrusionLineWidth != null) {
+    } else if (fillExtrusionLineWidth != null) {
       paint["fill-extrusion-line-width"] = fillExtrusionLineWidth;
     }
 
     if (fillExtrusionOpacityExpression != null) {
       paint["fill-extrusion-opacity"] = fillExtrusionOpacityExpression;
-    }
-    if (fillExtrusionOpacity != null) {
+    } else if (fillExtrusionOpacity != null) {
       paint["fill-extrusion-opacity"] = fillExtrusionOpacity;
     }
 
     if (fillExtrusionPatternExpression != null) {
       paint["fill-extrusion-pattern"] = fillExtrusionPatternExpression;
-    }
-    if (fillExtrusionPattern != null) {
+    } else if (fillExtrusionPattern != null) {
       paint["fill-extrusion-pattern"] = fillExtrusionPattern;
+    }
+
+    if (fillExtrusionPatternCrossFadeExpression != null) {
+      paint["fill-extrusion-pattern-cross-fade"] =
+          fillExtrusionPatternCrossFadeExpression;
+    } else if (fillExtrusionPatternCrossFade != null) {
+      paint["fill-extrusion-pattern-cross-fade"] =
+          fillExtrusionPatternCrossFade;
     }
 
     if (fillExtrusionRoundedRoofExpression != null) {
       paint["fill-extrusion-rounded-roof"] = fillExtrusionRoundedRoofExpression;
-    }
-    if (fillExtrusionRoundedRoof != null) {
+    } else if (fillExtrusionRoundedRoof != null) {
       paint["fill-extrusion-rounded-roof"] = fillExtrusionRoundedRoof;
     }
 
     if (fillExtrusionTranslateExpression != null) {
       paint["fill-extrusion-translate"] = fillExtrusionTranslateExpression;
-    }
-    if (fillExtrusionTranslate != null) {
+    } else if (fillExtrusionTranslate != null) {
       paint["fill-extrusion-translate"] = fillExtrusionTranslate;
     }
 
     if (fillExtrusionTranslateAnchorExpression != null) {
       paint["fill-extrusion-translate-anchor"] =
           fillExtrusionTranslateAnchorExpression;
-    }
-    if (fillExtrusionTranslateAnchor != null) {
+    } else if (fillExtrusionTranslateAnchor != null) {
       paint["fill-extrusion-translate-anchor"] =
           fillExtrusionTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
@@ -528,16 +523,14 @@ class FillExtrusionLayer extends Layer {
     if (fillExtrusionVerticalGradientExpression != null) {
       paint["fill-extrusion-vertical-gradient"] =
           fillExtrusionVerticalGradientExpression;
-    }
-    if (fillExtrusionVerticalGradient != null) {
+    } else if (fillExtrusionVerticalGradient != null) {
       paint["fill-extrusion-vertical-gradient"] = fillExtrusionVerticalGradient;
     }
 
     if (fillExtrusionVerticalScaleExpression != null) {
       paint["fill-extrusion-vertical-scale"] =
           fillExtrusionVerticalScaleExpression;
-    }
-    if (fillExtrusionVerticalScale != null) {
+    } else if (fillExtrusionVerticalScale != null) {
       paint["fill-extrusion-vertical-scale"] = fillExtrusionVerticalScale;
     }
 
@@ -684,6 +677,10 @@ class FillExtrusionLayer extends Layer {
           _optionalCast(map["paint"]["fill-extrusion-pattern"]),
       fillExtrusionPatternExpression:
           _optionalCastList(map["paint"]["fill-extrusion-pattern"]),
+      fillExtrusionPatternCrossFade:
+          _optionalCast(map["paint"]["fill-extrusion-pattern-cross-fade"]),
+      fillExtrusionPatternCrossFadeExpression:
+          _optionalCastList(map["paint"]["fill-extrusion-pattern-cross-fade"]),
       fillExtrusionRoundedRoof:
           _optionalCast(map["paint"]["fill-extrusion-rounded-roof"]),
       fillExtrusionRoundedRoofExpression:

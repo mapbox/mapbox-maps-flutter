@@ -31,12 +31,16 @@ class PolygonAnnotation {
   PolygonAnnotation({
     required this.id,
     required this.geometry,
+    this.fillConstructBridgeGuardRail,
     this.fillSortKey,
+    this.fillBridgeGuardRailColor,
     this.fillColor,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillTunnelStructureColor,
     this.fillZOffset,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -45,8 +49,18 @@ class PolygonAnnotation {
   /// The geometry that determines the location/shape of this annotation
   Polygon geometry;
 
+  /// Determines whether bridge guard rails are added for elevated roads.
+  /// Default value: "true".
+  /// @experimental
+  bool? fillConstructBridgeGuardRail;
+
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
+
+  /// The color of bridge guard rail.
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  int? fillBridgeGuardRailColor;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
@@ -62,21 +76,33 @@ class PolygonAnnotation {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// The color of tunnel structures (tunnel entrance and tunnel walls).
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  int? fillTunnelStructureColor;
+
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
   double? fillZOffset;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
       geometry,
+      fillConstructBridgeGuardRail,
       fillSortKey,
+      fillBridgeGuardRailColor,
       fillColor,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTunnelStructureColor,
       fillZOffset,
+      isDraggable,
     ];
   }
 
@@ -89,12 +115,16 @@ class PolygonAnnotation {
     return PolygonAnnotation(
       id: result[0]! as String,
       geometry: result[1]! as Polygon,
-      fillSortKey: result[2] as double?,
-      fillColor: result[3] as int?,
-      fillOpacity: result[4] as double?,
-      fillOutlineColor: result[5] as int?,
-      fillPattern: result[6] as String?,
-      fillZOffset: result[7] as double?,
+      fillConstructBridgeGuardRail: result[2] as bool?,
+      fillSortKey: result[3] as double?,
+      fillBridgeGuardRailColor: result[4] as int?,
+      fillColor: result[5] as int?,
+      fillOpacity: result[6] as double?,
+      fillOutlineColor: result[7] as int?,
+      fillPattern: result[8] as String?,
+      fillTunnelStructureColor: result[9] as int?,
+      fillZOffset: result[10] as double?,
+      isDraggable: result[11] as bool?,
     );
   }
 
@@ -109,12 +139,16 @@ class PolygonAnnotation {
     }
     return id == other.id &&
         geometry == other.geometry &&
+        fillConstructBridgeGuardRail == other.fillConstructBridgeGuardRail &&
         fillSortKey == other.fillSortKey &&
+        fillBridgeGuardRailColor == other.fillBridgeGuardRailColor &&
         fillColor == other.fillColor &&
         fillOpacity == other.fillOpacity &&
         fillOutlineColor == other.fillOutlineColor &&
         fillPattern == other.fillPattern &&
-        fillZOffset == other.fillZOffset;
+        fillTunnelStructureColor == other.fillTunnelStructureColor &&
+        fillZOffset == other.fillZOffset &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -125,19 +159,33 @@ class PolygonAnnotation {
 class PolygonAnnotationOptions {
   PolygonAnnotationOptions({
     required this.geometry,
+    this.fillConstructBridgeGuardRail,
     this.fillSortKey,
+    this.fillBridgeGuardRailColor,
     this.fillColor,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillTunnelStructureColor,
     this.fillZOffset,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
   Polygon geometry;
 
+  /// Determines whether bridge guard rails are added for elevated roads.
+  /// Default value: "true".
+  /// @experimental
+  bool? fillConstructBridgeGuardRail;
+
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
+
+  /// The color of bridge guard rail.
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  int? fillBridgeGuardRailColor;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
@@ -153,20 +201,32 @@ class PolygonAnnotationOptions {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// The color of tunnel structures (tunnel entrance and tunnel walls).
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  int? fillTunnelStructureColor;
+
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
   double? fillZOffset;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
+      fillConstructBridgeGuardRail,
       fillSortKey,
+      fillBridgeGuardRailColor,
       fillColor,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTunnelStructureColor,
       fillZOffset,
+      isDraggable,
     ];
   }
 
@@ -178,12 +238,16 @@ class PolygonAnnotationOptions {
     result as List<Object?>;
     return PolygonAnnotationOptions(
       geometry: result[0]! as Polygon,
-      fillSortKey: result[1] as double?,
-      fillColor: result[2] as int?,
-      fillOpacity: result[3] as double?,
-      fillOutlineColor: result[4] as int?,
-      fillPattern: result[5] as String?,
-      fillZOffset: result[6] as double?,
+      fillConstructBridgeGuardRail: result[1] as bool?,
+      fillSortKey: result[2] as double?,
+      fillBridgeGuardRailColor: result[3] as int?,
+      fillColor: result[4] as int?,
+      fillOpacity: result[5] as double?,
+      fillOutlineColor: result[6] as int?,
+      fillPattern: result[7] as String?,
+      fillTunnelStructureColor: result[8] as int?,
+      fillZOffset: result[9] as double?,
+      isDraggable: result[10] as bool?,
     );
   }
 
@@ -198,12 +262,16 @@ class PolygonAnnotationOptions {
       return true;
     }
     return geometry == other.geometry &&
+        fillConstructBridgeGuardRail == other.fillConstructBridgeGuardRail &&
         fillSortKey == other.fillSortKey &&
+        fillBridgeGuardRailColor == other.fillBridgeGuardRailColor &&
         fillColor == other.fillColor &&
         fillOpacity == other.fillOpacity &&
         fillOutlineColor == other.fillOutlineColor &&
         fillPattern == other.fillPattern &&
-        fillZOffset == other.fillZOffset;
+        fillTunnelStructureColor == other.fillTunnelStructureColor &&
+        fillZOffset == other.fillZOffset &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -255,52 +323,6 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return PolygonAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-abstract class OnPolygonAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      PolygonAnnotationMessenger_PigeonCodec();
-
-  void onPolygonAnnotationClick(PolygonAnnotation annotation);
-
-  static void setUp(
-    OnPolygonAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final PolygonAnnotation? arg_annotation =
-              (args[0] as PolygonAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick was null, expected non-null PolygonAnnotation.');
-          try {
-            api.onPolygonAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
     }
   }
 }
@@ -464,6 +486,59 @@ class _PolygonAnnotationMessenger {
     }
   }
 
+  Future<void> setFillConstructBridgeGuardRail(
+      String managerId, bool fillConstructBridgeGuardRail) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillConstructBridgeGuardRail$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
+        .send(<Object?>[managerId, fillConstructBridgeGuardRail]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool?> getFillConstructBridgeGuardRail(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?);
+    }
+  }
+
   Future<void> setFillElevationReference(
       String managerId, FillElevationReference fillElevationReference) async {
     final String pigeonVar_channelName =
@@ -619,6 +694,59 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as bool?);
+    }
+  }
+
+  Future<void> setFillBridgeGuardRailColor(
+      String managerId, int fillBridgeGuardRailColor) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillBridgeGuardRailColor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, fillBridgeGuardRailColor]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getFillBridgeGuardRailColor(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillBridgeGuardRailColor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as int?);
     }
   }
 
@@ -987,6 +1115,59 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as FillTranslateAnchor?);
+    }
+  }
+
+  Future<void> setFillTunnelStructureColor(
+      String managerId, int fillTunnelStructureColor) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTunnelStructureColor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, fillTunnelStructureColor]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getFillTunnelStructureColor(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTunnelStructureColor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as int?);
     }
   }
 

@@ -56,10 +56,6 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
-private func createConnectionError(withChannelName channelName: String) -> PolygonAnnotationMessengerError {
-  return PolygonAnnotationMessengerError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -95,55 +91,82 @@ struct PolygonAnnotation {
   var id: String
   /// The geometry that determines the location/shape of this annotation
   var geometry: Polygon
+  /// Determines whether bridge guard rails are added for elevated roads.
+  /// Default value: "true".
+  /// @experimental
+  var fillConstructBridgeGuardRail: Bool? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
+  /// The color of bridge guard rail.
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  var fillBridgeGuardRailColor: Int64? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
+  /// The color of tunnel structures (tunnel entrance and tunnel walls).
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  var fillTunnelStructureColor: Int64? = nil
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var fillZOffset: Double?
+  var fillZOffset: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotation? {
     let id = pigeonVar_list[0] as! String
     let geometry = pigeonVar_list[1] as! Polygon
-    let fillSortKey: Double? = nilOrValue(pigeonVar_list[2])
-    let fillColor: Int64? = nilOrValue(pigeonVar_list[3])
-    let fillOpacity: Double? = nilOrValue(pigeonVar_list[4])
-    let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[5])
-    let fillPattern: String? = nilOrValue(pigeonVar_list[6])
-    let fillZOffset: Double? = nilOrValue(pigeonVar_list[7])
+    let fillConstructBridgeGuardRail: Bool? = nilOrValue(pigeonVar_list[2])
+    let fillSortKey: Double? = nilOrValue(pigeonVar_list[3])
+    let fillBridgeGuardRailColor: Int64? = nilOrValue(pigeonVar_list[4])
+    let fillColor: Int64? = nilOrValue(pigeonVar_list[5])
+    let fillOpacity: Double? = nilOrValue(pigeonVar_list[6])
+    let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[7])
+    let fillPattern: String? = nilOrValue(pigeonVar_list[8])
+    let fillTunnelStructureColor: Int64? = nilOrValue(pigeonVar_list[9])
+    let fillZOffset: Double? = nilOrValue(pigeonVar_list[10])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[11])
 
     return PolygonAnnotation(
       id: id,
       geometry: geometry,
+      fillConstructBridgeGuardRail: fillConstructBridgeGuardRail,
       fillSortKey: fillSortKey,
+      fillBridgeGuardRailColor: fillBridgeGuardRailColor,
       fillColor: fillColor,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
       fillPattern: fillPattern,
-      fillZOffset: fillZOffset
+      fillTunnelStructureColor: fillTunnelStructureColor,
+      fillZOffset: fillZOffset,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
     return [
       id,
       geometry,
+      fillConstructBridgeGuardRail,
       fillSortKey,
+      fillBridgeGuardRailColor,
       fillColor,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTunnelStructureColor,
       fillZOffset,
+      isDraggable,
     ]
   }
 }
@@ -152,52 +175,79 @@ struct PolygonAnnotation {
 struct PolygonAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Polygon
+  /// Determines whether bridge guard rails are added for elevated roads.
+  /// Default value: "true".
+  /// @experimental
+  var fillConstructBridgeGuardRail: Bool? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
+  /// The color of bridge guard rail.
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  var fillBridgeGuardRailColor: Int64? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
+  /// The color of tunnel structures (tunnel entrance and tunnel walls).
+  /// Default value: "rgba(241, 236, 225, 255)".
+  /// @experimental
+  var fillTunnelStructureColor: Int64? = nil
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var fillZOffset: Double?
+  var fillZOffset: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotationOptions? {
     let geometry = pigeonVar_list[0] as! Polygon
-    let fillSortKey: Double? = nilOrValue(pigeonVar_list[1])
-    let fillColor: Int64? = nilOrValue(pigeonVar_list[2])
-    let fillOpacity: Double? = nilOrValue(pigeonVar_list[3])
-    let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[4])
-    let fillPattern: String? = nilOrValue(pigeonVar_list[5])
-    let fillZOffset: Double? = nilOrValue(pigeonVar_list[6])
+    let fillConstructBridgeGuardRail: Bool? = nilOrValue(pigeonVar_list[1])
+    let fillSortKey: Double? = nilOrValue(pigeonVar_list[2])
+    let fillBridgeGuardRailColor: Int64? = nilOrValue(pigeonVar_list[3])
+    let fillColor: Int64? = nilOrValue(pigeonVar_list[4])
+    let fillOpacity: Double? = nilOrValue(pigeonVar_list[5])
+    let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let fillPattern: String? = nilOrValue(pigeonVar_list[7])
+    let fillTunnelStructureColor: Int64? = nilOrValue(pigeonVar_list[8])
+    let fillZOffset: Double? = nilOrValue(pigeonVar_list[9])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[10])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
+      fillConstructBridgeGuardRail: fillConstructBridgeGuardRail,
       fillSortKey: fillSortKey,
+      fillBridgeGuardRailColor: fillBridgeGuardRailColor,
       fillColor: fillColor,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
       fillPattern: fillPattern,
-      fillZOffset: fillZOffset
+      fillTunnelStructureColor: fillTunnelStructureColor,
+      fillZOffset: fillZOffset,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
     return [
       geometry,
+      fillConstructBridgeGuardRail,
       fillSortKey,
+      fillBridgeGuardRailColor,
       fillColor,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTunnelStructureColor,
       fillZOffset,
+      isDraggable,
     ]
   }
 }
@@ -266,39 +316,6 @@ class PolygonAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unche
   static let shared = PolygonAnnotationMessengerPigeonCodec(readerWriter: PolygonAnnotationMessengerPigeonCodecReaderWriter())
 }
 
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol OnPolygonAnnotationClickListenerProtocol {
-  func onPolygonAnnotationClick(annotation annotationArg: PolygonAnnotation, completion: @escaping (Result<Void, PolygonAnnotationMessengerError>) -> Void)
-}
-class OnPolygonAnnotationClickListener: OnPolygonAnnotationClickListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: PolygonAnnotationMessengerPigeonCodec {
-    return PolygonAnnotationMessengerPigeonCodec.shared
-  }
-  func onPolygonAnnotationClick(annotation annotationArg: PolygonAnnotation, completion: @escaping (Result<Void, PolygonAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([annotationArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PolygonAnnotationMessengerError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _PolygonAnnotationMessenger {
   func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void)
@@ -306,12 +323,16 @@ protocol _PolygonAnnotationMessenger {
   func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func setFillConstructBridgeGuardRail(managerId: String, fillConstructBridgeGuardRail: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillConstructBridgeGuardRail(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillElevationReference(managerId: String, completion: @escaping (Result<FillElevationReference?, Error>) -> Void)
   func setFillSortKey(managerId: String, fillSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setFillAntialias(managerId: String, fillAntialias: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillAntialias(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setFillBridgeGuardRailColor(managerId: String, fillBridgeGuardRailColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillBridgeGuardRailColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setFillColor(managerId: String, fillColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setFillEmissiveStrength(managerId: String, fillEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -326,6 +347,8 @@ protocol _PolygonAnnotationMessenger {
   func getFillTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillTranslateAnchor(managerId: String, completion: @escaping (Result<FillTranslateAnchor?, Error>) -> Void)
+  func setFillTunnelStructureColor(managerId: String, fillTunnelStructureColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillTunnelStructureColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setFillZOffset(managerId: String, fillZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
 }
@@ -424,6 +447,41 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
+    }
+    let setFillConstructBridgeGuardRailChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillConstructBridgeGuardRail\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillConstructBridgeGuardRailChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillConstructBridgeGuardRailArg = args[1] as! Bool
+        api.setFillConstructBridgeGuardRail(managerId: managerIdArg, fillConstructBridgeGuardRail: fillConstructBridgeGuardRailArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillConstructBridgeGuardRailChannel.setMessageHandler(nil)
+    }
+    let getFillConstructBridgeGuardRailChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillConstructBridgeGuardRailChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillConstructBridgeGuardRail(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillConstructBridgeGuardRailChannel.setMessageHandler(nil)
     }
     let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -529,6 +587,41 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       getFillAntialiasChannel.setMessageHandler(nil)
+    }
+    let setFillBridgeGuardRailColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillBridgeGuardRailColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillBridgeGuardRailColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillBridgeGuardRailColorArg = args[1] as! Int64
+        api.setFillBridgeGuardRailColor(managerId: managerIdArg, fillBridgeGuardRailColor: fillBridgeGuardRailColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillBridgeGuardRailColorChannel.setMessageHandler(nil)
+    }
+    let getFillBridgeGuardRailColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillBridgeGuardRailColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillBridgeGuardRailColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillBridgeGuardRailColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillBridgeGuardRailColorChannel.setMessageHandler(nil)
     }
     let setFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -774,6 +867,41 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       getFillTranslateAnchorChannel.setMessageHandler(nil)
+    }
+    let setFillTunnelStructureColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTunnelStructureColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillTunnelStructureColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillTunnelStructureColorArg = args[1] as! Int64
+        api.setFillTunnelStructureColor(managerId: managerIdArg, fillTunnelStructureColor: fillTunnelStructureColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillTunnelStructureColorChannel.setMessageHandler(nil)
+    }
+    let getFillTunnelStructureColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTunnelStructureColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillTunnelStructureColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillTunnelStructureColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillTunnelStructureColorChannel.setMessageHandler(nil)
     }
     let setFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

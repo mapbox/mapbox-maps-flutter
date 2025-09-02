@@ -301,6 +301,7 @@ class PointAnnotation {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -407,8 +408,9 @@ class PointAnnotation {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   double? iconHaloWidth;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
@@ -452,6 +454,9 @@ class PointAnnotation {
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -492,6 +497,7 @@ class PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ];
   }
 
@@ -540,6 +546,7 @@ class PointAnnotation {
       textHaloWidth: result[35] as double?,
       textOcclusionOpacity: result[36] as double?,
       textOpacity: result[37] as double?,
+      isDraggable: result[38] as bool?,
     );
   }
 
@@ -589,7 +596,8 @@ class PointAnnotation {
         textHaloColor == other.textHaloColor &&
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
-        textOpacity == other.textOpacity;
+        textOpacity == other.textOpacity &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -636,6 +644,7 @@ class PointAnnotationOptions {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -739,8 +748,9 @@ class PointAnnotationOptions {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   double? iconHaloWidth;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
@@ -784,6 +794,9 @@ class PointAnnotationOptions {
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -823,6 +836,7 @@ class PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ];
   }
 
@@ -870,6 +884,7 @@ class PointAnnotationOptions {
       textHaloWidth: result[34] as double?,
       textOcclusionOpacity: result[35] as double?,
       textOpacity: result[36] as double?,
+      isDraggable: result[37] as bool?,
     );
   }
 
@@ -918,7 +933,8 @@ class PointAnnotationOptions {
         textHaloColor == other.textHaloColor &&
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
-        textOpacity == other.textOpacity;
+        textOpacity == other.textOpacity &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -1054,51 +1070,6 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return PointAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-abstract class OnPointAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      PointAnnotationMessenger_PigeonCodec();
-
-  void onPointAnnotationClick(PointAnnotation annotation);
-
-  static void setUp(
-    OnPointAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final PointAnnotation? arg_annotation = (args[0] as PointAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick was null, expected non-null PointAnnotation.');
-          try {
-            api.onPointAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
     }
   }
 }

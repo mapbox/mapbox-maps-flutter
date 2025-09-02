@@ -67,16 +67,32 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
           ['*', 2.0, 1.3],
           20.0,
           ['*', 10, 1.2]
-        ], 
+        ],
         lineColorExpression: [
           'case',
-          ['==', 'low', ['get', 'congestion']],
+          [
+            '==',
+            'low',
+            ['get', 'congestion']
+          ],
           '#39c66d',
-          ['==', 'moderate', ['get', 'congestion']],
+          [
+            '==',
+            'moderate',
+            ['get', 'congestion']
+          ],
           '#ff8c1a',
-          ['==', 'heavy', ['get', 'congestion']],
+          [
+            '==',
+            'heavy',
+            ['get', 'congestion']
+          ],
           '#ff0015',
-          ['==', 'severe', ['get', 'congestion']],
+          [
+            '==',
+            'severe',
+            ['get', 'congestion']
+          ],
           '#981b25',
           '#000000'
         ],

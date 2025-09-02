@@ -122,8 +122,14 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     annotation.geometry?.let {
       originalAnnotation.geometry = it
     }
+    annotation.fillConstructBridgeGuardRail?.let {
+      originalAnnotation.fillConstructBridgeGuardRail = it
+    }
     annotation.fillSortKey?.let {
       originalAnnotation.fillSortKey = it
+    }
+    annotation.fillBridgeGuardRailColor?.let {
+      originalAnnotation.fillBridgeGuardRailColorInt = it.toInt()
     }
     annotation.fillColor?.let {
       originalAnnotation.fillColorInt = it.toInt()
@@ -137,10 +143,36 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     annotation.fillPattern?.let {
       originalAnnotation.fillPattern = it
     }
+    annotation.fillTunnelStructureColor?.let {
+      originalAnnotation.fillTunnelStructureColorInt = it.toInt()
+    }
     annotation.fillZOffset?.let {
       originalAnnotation.fillZOffset = it
     }
     return originalAnnotation
+  }
+
+  override fun setFillConstructBridgeGuardRail(
+    managerId: String,
+    fillConstructBridgeGuardRail: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillConstructBridgeGuardRail = fillConstructBridgeGuardRail
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillConstructBridgeGuardRail(
+    managerId: String,
+    callback: (Result<Boolean?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillConstructBridgeGuardRail
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
   }
 
   override fun setFillElevationReference(
@@ -207,6 +239,29 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     val value = manager.fillAntialias
     if (value != null) {
       callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillBridgeGuardRailColor(
+    managerId: String,
+    fillBridgeGuardRailColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillBridgeGuardRailColorInt = fillBridgeGuardRailColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillBridgeGuardRailColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillBridgeGuardRailColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -373,6 +428,29 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     }
   }
 
+  override fun setFillTunnelStructureColor(
+    managerId: String,
+    fillTunnelStructureColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillTunnelStructureColorInt = fillTunnelStructureColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillTunnelStructureColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillTunnelStructureColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setFillZOffset(
     managerId: String,
     fillZOffset: Double,
@@ -401,13 +479,18 @@ fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAn
   return PolygonAnnotation(
     id = id,
     geometry = geometry,
+    fillConstructBridgeGuardRail = fillConstructBridgeGuardRail,
     fillSortKey = fillSortKey,
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    fillBridgeGuardRailColor = fillBridgeGuardRailColorInt?.toUInt()?.toLong(),
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillColor = fillColorInt?.toUInt()?.toLong(),
     fillOpacity = fillOpacity,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillOutlineColor = fillOutlineColorInt?.toUInt()?.toLong(),
     fillPattern = fillPattern,
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    fillTunnelStructureColor = fillTunnelStructureColorInt?.toUInt()?.toLong(),
     fillZOffset = fillZOffset,
   )
 }
@@ -417,8 +500,17 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   this.geometry?.let {
     options.withGeometry(it)
   }
+  this.isDraggable?.let {
+    options.withDraggable(it)
+  }
+  this.fillConstructBridgeGuardRail?.let {
+    options.withFillConstructBridgeGuardRail(it)
+  }
   this.fillSortKey?.let {
     options.withFillSortKey(it)
+  }
+  this.fillBridgeGuardRailColor?.let {
+    options.withFillBridgeGuardRailColor(it.toInt())
   }
   this.fillColor?.let {
     options.withFillColor(it.toInt())
@@ -431,6 +523,9 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   }
   this.fillPattern?.let {
     options.withFillPattern(it)
+  }
+  this.fillTunnelStructureColor?.let {
+    options.withFillTunnelStructureColor(it.toInt())
   }
   this.fillZOffset?.let {
     options.withFillZOffset(it)

@@ -55,7 +55,7 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
     // Note this will not remove the downloaded style pack, instead, it will
     // just mark the resources as not a part of the existing style pack. The
     // resources still exists in the disk cache.
-    await _offlineManager?.removeStylePack(MapboxStyles.SATELLITE_STREETS);
+    await _offlineManager?.removeStylePack(MapboxStyles.STANDARD_SATELLITE);
   }
 
   _downloadStylePack() async {
@@ -65,7 +65,7 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
         metadata: {"tag": "test"},
         acceptExpired: false);
     _offlineManager?.loadStylePack(
-        MapboxStyles.SATELLITE_STREETS, stylePackLoadOptions, (progress) {
+        MapboxStyles.STANDARD_SATELLITE, stylePackLoadOptions, (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
       if (!_stylePackProgress.isClosed) {
@@ -84,7 +84,9 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
           // If you are using a raster tileset you may need to set a different pixelRatio.
           // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.
           TilesetDescriptorOptions(
-              styleURI: MapboxStyles.SATELLITE_STREETS, minZoom: 0, maxZoom: 16)
+              styleURI: MapboxStyles.STANDARD_SATELLITE,
+              minZoom: 0,
+              maxZoom: 16)
         ],
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);
@@ -129,7 +131,7 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
                 if (snapshot.hasData) {
                   return MapWidget(
                     key: ValueKey("mapWidget"),
-                    styleUri: MapboxStyles.SATELLITE_STREETS,
+                    styleUri: MapboxStyles.STANDARD_SATELLITE,
                     cameraOptions:
                         CameraOptions(center: City.helsinki, zoom: 12.0),
                   );

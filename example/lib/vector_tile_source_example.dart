@@ -20,21 +20,23 @@ class VectorTileSourceExampleState extends State<VectorTileSourceExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+    mapboxMap.style
+        .setStyleImportConfigProperty("basemap", "lightPreset", "day");
+    mapboxMap.style
+        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) async {
     await mapboxMap?.style.addSource(VectorSource(
         id: "terrain-data", url: "mapbox://mapbox.mapbox-terrain-v2"));
-    await mapboxMap?.style.addLayerAt(
-        LineLayer(
-            id: "terrain-data",
-            sourceId: "terrain-data",
-            sourceLayer: "contour",
-            lineJoin: LineJoin.ROUND,
-            lineCap: LineCap.ROUND,
-            lineColor: Colors.red.value,
-            lineWidth: 1.9),
-        LayerPosition(above: "country-label"));
+    await mapboxMap?.style.addLayer(LineLayer(
+        id: "terrain-data",
+        sourceId: "terrain-data",
+        sourceLayer: "contour",
+        lineJoin: LineJoin.ROUND,
+        lineCap: LineCap.ROUND,
+        lineColor: Colors.red.value,
+        lineWidth: 1.9));
   }
 
   @override
@@ -42,7 +44,7 @@ class VectorTileSourceExampleState extends State<VectorTileSourceExample> {
     return new Scaffold(
         body: MapWidget(
             key: ValueKey("mapWidget"),
-            styleUri: MapboxStyles.LIGHT,
+            styleUri: MapboxStyles.STANDARD,
             cameraOptions: CameraOptions(
                 center: Point(coordinates: Position(-122.447303, 37.753574)),
                 zoom: 13.0),

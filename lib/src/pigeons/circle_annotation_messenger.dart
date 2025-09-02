@@ -4,6 +4,16 @@
 
 part of mapbox_maps_flutter;
 
+/// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "none".
+enum CircleElevationReference {
+  /// Elevated rendering is disabled.
+  NONE,
+
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
+  HD_ROAD_MARKUP,
+}
+
 /// Orientation of circle when map is pitched.
 /// Default value: "viewport".
 enum CirclePitchAlignment {
@@ -46,6 +56,7 @@ class CircleAnnotation {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -85,6 +96,9 @@ class CircleAnnotation {
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -97,6 +111,7 @@ class CircleAnnotation {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ];
   }
 
@@ -117,6 +132,7 @@ class CircleAnnotation {
       circleStrokeColor: result[7] as int?,
       circleStrokeOpacity: result[8] as double?,
       circleStrokeWidth: result[9] as double?,
+      isDraggable: result[10] as bool?,
     );
   }
 
@@ -138,7 +154,8 @@ class CircleAnnotation {
         circleRadius == other.circleRadius &&
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
-        circleStrokeWidth == other.circleStrokeWidth;
+        circleStrokeWidth == other.circleStrokeWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -157,6 +174,7 @@ class CircleAnnotationOptions {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -193,6 +211,9 @@ class CircleAnnotationOptions {
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -204,6 +225,7 @@ class CircleAnnotationOptions {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ];
   }
 
@@ -223,6 +245,7 @@ class CircleAnnotationOptions {
       circleStrokeColor: result[6] as int?,
       circleStrokeOpacity: result[7] as double?,
       circleStrokeWidth: result[8] as double?,
+      isDraggable: result[9] as bool?,
     );
   }
 
@@ -243,7 +266,8 @@ class CircleAnnotationOptions {
         circleRadius == other.circleRadius &&
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
-        circleStrokeWidth == other.circleStrokeWidth;
+        circleStrokeWidth == other.circleStrokeWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -258,23 +282,26 @@ class CircleAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is CirclePitchAlignment) {
+    } else if (value is CircleElevationReference) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is CirclePitchScale) {
+    } else if (value is CirclePitchAlignment) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is CircleTranslateAnchor) {
+    } else if (value is CirclePitchScale) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is CircleTranslateAnchor) {
       buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotation) {
+      writeValue(buffer, value.index);
+    } else if (value is Point) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotationOptions) {
+    } else if (value is CircleAnnotation) {
       buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotationOptions) {
+      buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -286,67 +313,24 @@ class CircleAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CirclePitchAlignment.values[value];
+        return value == null ? null : CircleElevationReference.values[value];
       case 130:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CirclePitchScale.values[value];
+        return value == null ? null : CirclePitchAlignment.values[value];
       case 131:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CircleTranslateAnchor.values[value];
+        return value == null ? null : CirclePitchScale.values[value];
       case 132:
-        return Point.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : CircleTranslateAnchor.values[value];
       case 133:
-        return CircleAnnotation.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 134:
+        return CircleAnnotation.decode(readValue(buffer)!);
+      case 135:
         return CircleAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-abstract class OnCircleAnnotationClickListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      CircleAnnotationMessenger_PigeonCodec();
-
-  void onCircleAnnotationClick(CircleAnnotation annotation);
-
-  static void setUp(
-    OnCircleAnnotationClickListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final CircleAnnotation? arg_annotation =
-              (args[0] as CircleAnnotation?);
-          assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick was null, expected non-null CircleAnnotation.');
-          try {
-            api.onCircleAnnotationClick(arg_annotation!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
     }
   }
 }
@@ -507,6 +491,60 @@ class _CircleAnnotationMessenger {
       );
     } else {
       return;
+    }
+  }
+
+  Future<void> setCircleElevationReference(String managerId,
+      CircleElevationReference circleElevationReference) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, circleElevationReference]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<CircleElevationReference?> getCircleElevationReference(
+      String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as CircleElevationReference?);
     }
   }
 

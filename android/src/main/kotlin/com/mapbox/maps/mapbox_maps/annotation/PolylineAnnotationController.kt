@@ -816,6 +816,9 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   this.geometry?.let {
     options.withGeometry(it)
   }
+  this.isDraggable?.let {
+    options.withDraggable(it)
+  }
   this.lineJoin?.let {
     options.withLineJoin(it.toLineJoin())
   }

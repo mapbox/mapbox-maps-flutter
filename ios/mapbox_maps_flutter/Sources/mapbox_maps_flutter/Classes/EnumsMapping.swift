@@ -464,6 +464,25 @@ extension MapboxMaps.TextTranslateAnchor {
         }
     }
 }
+extension MapboxMaps.CircleElevationReference {
+
+    init?(_ fltValue: CircleElevationReference?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .nONE: self = .none
+        case .hDROADMARKUP: self = .hdRoadMarkup
+        }
+    }
+
+    func toFLTCircleElevationReference() -> CircleElevationReference? {
+        switch self {
+        case .none: return .nONE
+        case .hdRoadMarkup: return .hDROADMARKUP
+        default: return nil
+        }
+    }
+}
 extension MapboxMaps.CirclePitchAlignment {
 
     init?(_ fltValue: CirclePitchAlignment?) {

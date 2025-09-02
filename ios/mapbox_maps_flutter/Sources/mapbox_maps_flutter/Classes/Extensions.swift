@@ -348,6 +348,20 @@ extension LayerPosition {
     }
 }
 
+extension ImportPosition {
+    func toImportPosition() -> MapboxMaps.ImportPosition {
+        var position = MapboxMaps.ImportPosition.default
+        if self.above != nil {
+            position = MapboxMaps.ImportPosition.above(self.above!)
+        } else if self.below != nil {
+            position = MapboxMaps.ImportPosition.below(self.below!)
+        } else if self.at != nil {
+            position = MapboxMaps.ImportPosition.at(Int(at!))
+        }
+        return position
+    }
+}
+
 extension TransitionOptions {
     func toTransitionOptions() -> MapboxMaps.TransitionOptions {
         return MapboxMaps.TransitionOptions(
@@ -629,11 +643,11 @@ extension CGPoint {
 }
 
 extension MapboxMaps.InteractionContext {
-    func toFLTMapContentGestureContext() -> MapContentGestureContext {
+    func toFLTMapContentGestureContext(gestureState: GestureState = .ended) -> MapContentGestureContext {
         MapContentGestureContext(
             touchPosition: point.toFLTScreenCoordinate(),
             point: Point(coordinate),
-            gestureState: .ended
+            gestureState: gestureState
         )
     }
 }
