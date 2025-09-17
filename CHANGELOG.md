@@ -1,12 +1,8 @@
-### 2.11.0-rc.1
+### 2.11.0
 
-* Update Maps SDK to v11.15.0-rc.1
+* Update Maps SDK to v11.15.0
 * Fix map events not being called if annotations are presented
-
-### 2.11.0-beta.1
-
 * Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format. 
-* Update Maps SDK to v11.15.0-beta.3
 
 ### 2.10.0
 
