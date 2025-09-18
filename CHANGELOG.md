@@ -1,3 +1,7 @@
+### main
+
+* Use Maps SDK Android dependency with NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
+
 ### 2.11.0
 
 * Update Maps SDK to v11.15.0
