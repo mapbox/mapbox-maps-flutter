@@ -64,7 +64,7 @@ while read -r name version; do
 done <<< "$package_info"
 
 ios_sdk_version=$(grep -A 1 'mapbox-maps-ios' ios/mapbox_maps_flutter/Package.swift | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
-android_sdk_version=$(grep 'com.mapbox.maps:android' android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
+android_sdk_version=$(grep 'com.mapbox.maps:android-ndk27' android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android-ndk27:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
 ios_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/v$ios_sdk_version/LICENSE.md")
 android_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-android/v$android_sdk_version/LICENSE.md")
 
