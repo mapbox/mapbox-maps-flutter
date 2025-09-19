@@ -1,3 +1,20 @@
+### 2.10.1
+
+* Update Maps SDK to v11.14.6
+  * Fix missing map loaded event in case vector tile is not found
+  * [iOS] Make background location tracking consistent with server configuration
+  * [iOS] Improve View Annotations impact on frame time.
+  * [iOS] Optimize LineBucket triangle allocation with reusable vector.
+  * [iOS] Re-enable symbol placement time limit by filtering only fast zoom animations.
+  * [iOS] Limit the time spent in updating symbols when the view is animating.
+  * [iOS] Fix 3d models dealing crash during map destruction.
+  * [iOS] Fix location indicator rendering issues in some states.
+  * [iOS] Fix dynamic view annotations disappearance in some states.
+  * [Android] Fix a bug where Dynamic View Annotations disappeared in corner cases
+  * [Android] Fix a bug where location indicator layer disappeared in certain configurations
+  * [Android] Fix potential crash caused by a race condition
+  * [Android] Fix frames skipped when calling mapView.setMaximumFps(..) multiple times.
+
 ### 2.10.0
 
 * Update Maps SDK to v11.14.0
