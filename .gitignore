@@ -94,6 +94,8 @@ unlinked_spec.ds
 **/ios/Runner/GeneratedPluginRegistrant.*
 .fastlane/README.md
 .fastlane/report.xml
+example/ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
+example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift
