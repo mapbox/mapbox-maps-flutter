@@ -493,6 +493,12 @@ interface _PolylineAnnotationMessenger {
   fun getLineCap(managerId: String, callback: (Result<LineCap?>) -> Unit)
   fun setLineCrossSlope(managerId: String, lineCrossSlope: Double, callback: (Result<Unit>) -> Unit)
   fun getLineCrossSlope(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineCutoutFadeWidth(managerId: String, lineCutoutFadeWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineCutoutFadeWidth(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineCutoutOpacity(managerId: String, lineCutoutOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineCutoutOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineCutoutWidth(managerId: String, lineCutoutWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineCutoutWidth(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, callback: (Result<Unit>) -> Unit)
   fun getLineElevationReference(managerId: String, callback: (Result<LineElevationReference?>) -> Unit)
   fun setLineJoin(managerId: String, lineJoin: LineJoin, callback: (Result<Unit>) -> Unit)
@@ -721,6 +727,126 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineCrossSlope(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutFadeWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineCutoutFadeWidthArg = args[1] as Double
+            api.setLineCutoutFadeWidth(managerIdArg, lineCutoutFadeWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutFadeWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineCutoutFadeWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineCutoutOpacityArg = args[1] as Double
+            api.setLineCutoutOpacity(managerIdArg, lineCutoutOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineCutoutOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineCutoutWidthArg = args[1] as Double
+            api.setLineCutoutWidth(managerIdArg, lineCutoutWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineCutoutWidth(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

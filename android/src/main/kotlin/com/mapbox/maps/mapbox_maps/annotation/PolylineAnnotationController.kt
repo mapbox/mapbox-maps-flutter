@@ -214,6 +214,75 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     }
   }
 
+  override fun setLineCutoutFadeWidth(
+    managerId: String,
+    lineCutoutFadeWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineCutoutFadeWidth = lineCutoutFadeWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineCutoutFadeWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineCutoutFadeWidth
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineCutoutOpacity(
+    managerId: String,
+    lineCutoutOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineCutoutOpacity = lineCutoutOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineCutoutOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineCutoutOpacity
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineCutoutWidth(
+    managerId: String,
+    lineCutoutWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineCutoutWidth = lineCutoutWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineCutoutWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineCutoutWidth
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setLineElevationReference(
     managerId: String,
     lineElevationReference: LineElevationReference,

@@ -45,6 +45,18 @@ void main() {
     var lineCrossSlope = await manager.getLineCrossSlope();
     expect(1.0, lineCrossSlope);
 
+    await manager.setLineCutoutFadeWidth(1.0);
+    var lineCutoutFadeWidth = await manager.getLineCutoutFadeWidth();
+    expect(1.0, lineCutoutFadeWidth);
+
+    await manager.setLineCutoutOpacity(1.0);
+    var lineCutoutOpacity = await manager.getLineCutoutOpacity();
+    expect(1.0, lineCutoutOpacity);
+
+    await manager.setLineCutoutWidth(1.0);
+    var lineCutoutWidth = await manager.getLineCutoutWidth();
+    expect(1.0, lineCutoutWidth);
+
     await manager.setLineElevationReference(LineElevationReference.NONE);
     var lineElevationReference = await manager.getLineElevationReference();
     expect(LineElevationReference.NONE, lineElevationReference);
@@ -133,13 +145,13 @@ void main() {
     var lineTrimColor = await manager.getLineTrimColor();
     expect(Colors.red.value, lineTrimColor);
 
-    await manager.setLineTrimFadeRange([0.0, 1.0]);
+    await manager.setLineTrimFadeRange([0.5, 0.5]);
     var lineTrimFadeRange = await manager.getLineTrimFadeRange();
-    expect([0.0, 1.0], lineTrimFadeRange);
+    expect([0.5, 0.5], lineTrimFadeRange);
 
-    await manager.setLineTrimOffset([0.0, 1.0]);
+    await manager.setLineTrimOffset([0.5, 0.5]);
     var lineTrimOffset = await manager.getLineTrimOffset();
-    expect([0.0, 1.0], lineTrimOffset);
+    expect([0.5, 0.5], lineTrimOffset);
 
     await manager.setLineWidth(1.0);
     var lineWidth = await manager.getLineWidth();

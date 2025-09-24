@@ -83,9 +83,9 @@ void main() {
     var iconSize = await manager.getIconSize();
     expect(1.0, iconSize);
 
-    await manager.setIconSizeScaleRange([0.0, 1.0]);
+    await manager.setIconSizeScaleRange([5.0, 5.0]);
     var iconSizeScaleRange = await manager.getIconSizeScaleRange();
-    expect([0.0, 1.0], iconSizeScaleRange);
+    expect([5.0, 5.0], iconSizeScaleRange);
 
     await manager.setIconTextFit(IconTextFit.NONE);
     var iconTextFit = await manager.getIconTextFit();
@@ -199,9 +199,9 @@ void main() {
     var textSize = await manager.getTextSize();
     expect(1.0, textSize);
 
-    await manager.setTextSizeScaleRange([0.0, 1.0]);
+    await manager.setTextSizeScaleRange([5.0, 5.0]);
     var textSizeScaleRange = await manager.getTextSizeScaleRange();
-    expect([0.0, 1.0], textSizeScaleRange);
+    expect([5.0, 5.0], textSizeScaleRange);
 
     await manager.setTextTransform(TextTransform.NONE);
     var textTransform = await manager.getTextTransform();
