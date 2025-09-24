@@ -17,6 +17,12 @@ class LineLayer extends Layer {
     List<Object>? this.lineCapExpression,
     double? this.lineCrossSlope,
     List<Object>? this.lineCrossSlopeExpression,
+    double? this.lineCutoutFadeWidth,
+    List<Object>? this.lineCutoutFadeWidthExpression,
+    double? this.lineCutoutOpacity,
+    List<Object>? this.lineCutoutOpacityExpression,
+    double? this.lineCutoutWidth,
+    List<Object>? this.lineCutoutWidthExpression,
     LineElevationReference? this.lineElevationReference,
     List<Object>? this.lineElevationReferenceExpression,
     LineJoin? this.lineJoin,
@@ -108,6 +114,36 @@ class LineLayer extends Layer {
   ///  - `line-join: round` is not supported with this property
   @experimental
   List<Object>? lineCrossSlopeExpression;
+
+  /// The width of the cutout fade effect
+  /// Default value: 0.4. Value range: [0, 1]
+  @experimental
+  double? lineCutoutFadeWidth;
+
+  /// The width of the cutout fade effect
+  /// Default value: 0.4. Value range: [0, 1]
+  @experimental
+  List<Object>? lineCutoutFadeWidthExpression;
+
+  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
+  /// Default value: 0.3. Value range: [0, 1]
+  @experimental
+  double? lineCutoutOpacity;
+
+  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
+  /// Default value: 0.3. Value range: [0, 1]
+  @experimental
+  List<Object>? lineCutoutOpacityExpression;
+
+  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
+  /// Default value: 0. Value range: [0, 50]
+  @experimental
+  double? lineCutoutWidth;
+
+  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
+  /// Default value: 0. Value range: [0, 50]
+  @experimental
+  List<Object>? lineCutoutWidthExpression;
 
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
@@ -368,6 +404,27 @@ class LineLayer extends Layer {
     if (lineCrossSlope != null) {
       layout["line-cross-slope"] = lineCrossSlope;
     }
+    if (lineCutoutFadeWidthExpression != null) {
+      layout["line-cutout-fade-width"] = lineCutoutFadeWidthExpression;
+    }
+
+    if (lineCutoutFadeWidth != null) {
+      layout["line-cutout-fade-width"] = lineCutoutFadeWidth;
+    }
+    if (lineCutoutOpacityExpression != null) {
+      layout["line-cutout-opacity"] = lineCutoutOpacityExpression;
+    }
+
+    if (lineCutoutOpacity != null) {
+      layout["line-cutout-opacity"] = lineCutoutOpacity;
+    }
+    if (lineCutoutWidthExpression != null) {
+      layout["line-cutout-width"] = lineCutoutWidthExpression;
+    }
+
+    if (lineCutoutWidth != null) {
+      layout["line-cutout-width"] = lineCutoutWidth;
+    }
     if (lineElevationReferenceExpression != null) {
       layout["line-elevation-reference"] = lineElevationReferenceExpression;
     }
@@ -600,6 +657,16 @@ class LineLayer extends Layer {
       lineCrossSlope: _optionalCast(map["layout"]["line-cross-slope"]),
       lineCrossSlopeExpression:
           _optionalCastList(map["layout"]["line-cross-slope"]),
+      lineCutoutFadeWidth:
+          _optionalCast(map["layout"]["line-cutout-fade-width"]),
+      lineCutoutFadeWidthExpression:
+          _optionalCastList(map["layout"]["line-cutout-fade-width"]),
+      lineCutoutOpacity: _optionalCast(map["layout"]["line-cutout-opacity"]),
+      lineCutoutOpacityExpression:
+          _optionalCastList(map["layout"]["line-cutout-opacity"]),
+      lineCutoutWidth: _optionalCast(map["layout"]["line-cutout-width"]),
+      lineCutoutWidthExpression:
+          _optionalCastList(map["layout"]["line-cutout-width"]),
       lineElevationReference: map["layout"]["line-elevation-reference"] == null
           ? null
           : LineElevationReference.values.firstWhere((e) => e.name

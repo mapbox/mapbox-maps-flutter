@@ -96,32 +96,32 @@ class ModelLayer extends Layer {
   @experimental
   List<Object>? modelCastShadowsExpression;
 
-  /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0.
+  /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: "#ffffff".
   @experimental
   int? modelColor;
 
-  /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0.
+  /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: "#ffffff".
   @experimental
   List<Object>? modelColorExpression;
 
-  /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix.
+  /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 1]
   @experimental
   double? modelColorMixIntensity;
 
-  /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix.
+  /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 1]
   @experimental
   List<Object>? modelColorMixIntensityExpression;
 
-  /// This parameter defines the range for the fade-out effect before an automatic content cutoff  on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+  /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   /// Default value: 0. Value range: [0, 1]
   @experimental
   double? modelCutoffFadeRange;
 
-  /// This parameter defines the range for the fade-out effect before an automatic content cutoff  on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+  /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   /// Default value: 0. Value range: [0, 1]
   @experimental
   List<Object>? modelCutoffFadeRangeExpression;
@@ -136,12 +136,12 @@ class ModelLayer extends Layer {
   @experimental
   List<Object>? modelElevationReferenceExpression;
 
-  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
+  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
   @experimental
   double? modelEmissiveStrength;
 
-  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
+  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
   @experimental
   List<Object>? modelEmissiveStrengthExpression;
@@ -156,12 +156,12 @@ class ModelLayer extends Layer {
   @experimental
   List<Object>? modelHeightBasedEmissiveStrengthMultiplierExpression;
 
-  /// The opacity of the model layer.
+  /// The opacity of the model layer. Except for zoom, expressions that are data-driven are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: 1. Value range: [0, 1]
   @experimental
   double? modelOpacity;
 
-  /// The opacity of the model layer.
+  /// The opacity of the model layer. Except for zoom, expressions that are data-driven are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: 1. Value range: [0, 1]
   @experimental
   List<Object>? modelOpacityExpression;
@@ -196,12 +196,12 @@ class ModelLayer extends Layer {
   @experimental
   List<Object>? modelRoughnessExpression;
 
-  /// The scale of the model.
+  /// The scale of the model. Expressions that are zoom-dependent are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: [1,1,1].
   @experimental
   List<double?>? modelScale;
 
-  /// The scale of the model.
+  /// The scale of the model. Expressions that are zoom-dependent are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: [1,1,1].
   @experimental
   List<Object>? modelScaleExpression;

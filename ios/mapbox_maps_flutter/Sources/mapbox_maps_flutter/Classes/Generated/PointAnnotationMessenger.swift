@@ -352,7 +352,7 @@ struct PointAnnotation {
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   var iconHaloWidth: Double? = nil
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
   /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   var iconImageCrossFade: Double? = nil
@@ -597,7 +597,7 @@ struct PointAnnotationOptions {
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   var iconHaloWidth: Double? = nil
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
   /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   var iconImageCrossFade: Double? = nil

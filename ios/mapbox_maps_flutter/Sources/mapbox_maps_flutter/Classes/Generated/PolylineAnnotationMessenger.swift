@@ -435,6 +435,12 @@ protocol _PolylineAnnotationMessenger {
   func getLineCap(managerId: String, completion: @escaping (Result<LineCap?, Error>) -> Void)
   func setLineCrossSlope(managerId: String, lineCrossSlope: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineCrossSlope(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineCutoutFadeWidth(managerId: String, lineCutoutFadeWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineCutoutFadeWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineCutoutOpacity(managerId: String, lineCutoutOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineCutoutOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineCutoutWidth(managerId: String, lineCutoutWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineCutoutWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineElevationReference(managerId: String, completion: @escaping (Result<LineElevationReference?, Error>) -> Void)
   func setLineJoin(managerId: String, lineJoin: LineJoin, completion: @escaping (Result<Void, Error>) -> Void)
@@ -651,6 +657,111 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineCrossSlopeChannel.setMessageHandler(nil)
+    }
+    let setLineCutoutFadeWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutFadeWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineCutoutFadeWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineCutoutFadeWidthArg = args[1] as! Double
+        api.setLineCutoutFadeWidth(managerId: managerIdArg, lineCutoutFadeWidth: lineCutoutFadeWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineCutoutFadeWidthChannel.setMessageHandler(nil)
+    }
+    let getLineCutoutFadeWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutFadeWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineCutoutFadeWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineCutoutFadeWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineCutoutFadeWidthChannel.setMessageHandler(nil)
+    }
+    let setLineCutoutOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineCutoutOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineCutoutOpacityArg = args[1] as! Double
+        api.setLineCutoutOpacity(managerId: managerIdArg, lineCutoutOpacity: lineCutoutOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineCutoutOpacityChannel.setMessageHandler(nil)
+    }
+    let getLineCutoutOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineCutoutOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineCutoutOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineCutoutOpacityChannel.setMessageHandler(nil)
+    }
+    let setLineCutoutWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineCutoutWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineCutoutWidthArg = args[1] as! Double
+        api.setLineCutoutWidth(managerId: managerIdArg, lineCutoutWidth: lineCutoutWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineCutoutWidthChannel.setMessageHandler(nil)
+    }
+    let getLineCutoutWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineCutoutWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineCutoutWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineCutoutWidthChannel.setMessageHandler(nil)
     }
     let setLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

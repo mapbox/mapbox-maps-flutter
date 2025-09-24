@@ -1,6 +1,7 @@
-### main
+### 2.12.0-beta.1
 
 * Use Maps SDK Android dependency with NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
+* Expose `LineLayer.lineCutoutOpacity`, `LineLayer.lineCutoutWidth` and `LineLayer.lineCutoutFadeWidth` to make route lines visible through obstructing 3D buildings and other aboveground features.
 
 ### 2.11.0
 

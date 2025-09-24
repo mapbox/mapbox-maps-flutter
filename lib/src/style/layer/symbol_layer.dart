@@ -257,13 +257,13 @@ class SymbolLayer extends Layer {
   /// Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
   List<Object>? iconSizeExpression;
 
-  /// Defines the minimum and maximum scaling factors for icon related properties like `icon-size`, `icon-halo-width`, `icon-halo-blur`
-  /// Default value: [0.8,2]. Value range: [0.1, 10]
+  /// Limits the possible scaling range for `icon-size`, `icon-halo-width`, `icon-halo-blur` properties to be within [min-scale, max-scale]
+  /// Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
   List<double?>? iconSizeScaleRange;
 
-  /// Defines the minimum and maximum scaling factors for icon related properties like `icon-size`, `icon-halo-width`, `icon-halo-blur`
-  /// Default value: [0.8,2]. Value range: [0.1, 10]
+  /// Limits the possible scaling range for `icon-size`, `icon-halo-width`, `icon-halo-blur` properties to be within [min-scale, max-scale]
+  /// Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
   List<Object>? iconSizeScaleRangeExpression;
 
@@ -489,13 +489,13 @@ class SymbolLayer extends Layer {
   /// Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
   List<Object>? textSizeExpression;
 
-  /// Defines the minimum and maximum scaling factors for text related properties like `text-size`, `text-max-width`, `text-halo-width`, `font-size`
-  /// Default value: [0.8,2]. Value range: [0.1, 10]
+  /// Limits the possible scaling range for `text-size`, `text-halo-width`, `text-halo-blur` properties to be within [min-scale, max-scale]
+  /// Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
   List<double?>? textSizeScaleRange;
 
-  /// Defines the minimum and maximum scaling factors for text related properties like `text-size`, `text-max-width`, `text-halo-width`, `font-size`
-  /// Default value: [0.8,2]. Value range: [0.1, 10]
+  /// Limits the possible scaling range for `text-size`, `text-halo-width`, `text-halo-blur` properties to be within [min-scale, max-scale]
+  /// Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
   List<Object>? textSizeScaleRangeExpression;
 
