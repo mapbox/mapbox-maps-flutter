@@ -21,10 +21,10 @@ void main() {
       slot: LayerSlot.BOTTOM,
       skyAtmosphereColor: Colors.red.value,
       skyAtmosphereHaloColor: Colors.red.value,
-      skyAtmosphereSun: [0.0, 1.0],
+      skyAtmosphereSun: [180.0, 90.0],
       skyAtmosphereSunIntensity: 1.0,
       skyGradient: Colors.red.value,
-      skyGradientCenter: [0.0, 1.0],
+      skyGradientCenter: [180.0, 90.0],
       skyGradientRadius: 1.0,
       skyOpacity: 1.0,
       skyType: SkyType.GRADIENT,
@@ -36,10 +36,10 @@ void main() {
     expect(layer.visibility, Visibility.NONE);
     expect(layer.skyAtmosphereColor, Colors.red.value);
     expect(layer.skyAtmosphereHaloColor, Colors.red.value);
-    expect(layer.skyAtmosphereSun, [0.0, 1.0]);
+    expect(layer.skyAtmosphereSun, [180.0, 90.0]);
     expect(layer.skyAtmosphereSunIntensity, 1.0);
     expect(layer.skyGradient, Colors.red.value);
-    expect(layer.skyGradientCenter, [0.0, 1.0]);
+    expect(layer.skyGradientCenter, [180.0, 90.0]);
     expect(layer.skyGradientRadius, 1.0);
     expect(layer.skyOpacity, 1.0);
     expect(layer.skyType, SkyType.GRADIENT);
@@ -65,13 +65,13 @@ void main() {
       skyAtmosphereHaloColorExpression: ['rgba', 255, 0, 0, 1],
       skyAtmosphereSunExpression: [
         'literal',
-        [0.0, 1.0]
+        [180.0, 90.0]
       ],
       skyAtmosphereSunIntensityExpression: ['number', 1.0],
       skyGradientExpression: ['rgba', 255, 0, 0, 1],
       skyGradientCenterExpression: [
         'literal',
-        [0.0, 1.0]
+        [180.0, 90.0]
       ],
       skyGradientRadiusExpression: ['number', 1.0],
       skyOpacityExpression: ['number', 1.0],
@@ -89,10 +89,10 @@ void main() {
     ]);
     expect(layer.skyAtmosphereColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.skyAtmosphereHaloColorExpression, ['rgba', 255, 0, 0, 1]);
-    expect(layer.skyAtmosphereSun, [0.0, 1.0]);
+    expect(layer.skyAtmosphereSun, [180.0, 90.0]);
     expect(layer.skyAtmosphereSunIntensity, 1.0);
     expect(layer.skyGradientExpression, ['rgba', 255, 0, 0, 1]);
-    expect(layer.skyGradientCenter, [0.0, 1.0]);
+    expect(layer.skyGradientCenter, [180.0, 90.0]);
     expect(layer.skyGradientRadius, 1.0);
     expect(layer.skyOpacity, 1.0);
     expect(layer.skyType, SkyType.GRADIENT);

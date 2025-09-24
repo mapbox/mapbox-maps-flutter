@@ -37,7 +37,7 @@ void main() {
       iconRotate: 1.0,
       iconRotationAlignment: IconRotationAlignment.MAP,
       iconSize: 1.0,
-      iconSizeScaleRange: [0.0, 1.0],
+      iconSizeScaleRange: [5.0, 5.0],
       iconTextFit: IconTextFit.NONE,
       iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
       symbolAvoidEdges: true,
@@ -66,7 +66,7 @@ void main() {
       textRotate: 1.0,
       textRotationAlignment: TextRotationAlignment.MAP,
       textSize: 1.0,
-      textSizeScaleRange: [0.0, 1.0],
+      textSizeScaleRange: [5.0, 5.0],
       textTransform: TextTransform.NONE,
       textVariableAnchor: ["center", "left"],
       textWritingMode: ["horizontal", "vertical"],
@@ -110,7 +110,7 @@ void main() {
     expect(layer.iconRotate, 1.0);
     expect(layer.iconRotationAlignment, IconRotationAlignment.MAP);
     expect(layer.iconSize, 1.0);
-    expect(layer.iconSizeScaleRange, [0.0, 1.0]);
+    expect(layer.iconSizeScaleRange, [5.0, 5.0]);
     expect(layer.iconTextFit, IconTextFit.NONE);
     expect(layer.iconTextFitPadding, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.symbolAvoidEdges, true);
@@ -139,7 +139,7 @@ void main() {
     expect(layer.textRotate, 1.0);
     expect(layer.textRotationAlignment, TextRotationAlignment.MAP);
     expect(layer.textSize, 1.0);
-    expect(layer.textSizeScaleRange, [0.0, 1.0]);
+    expect(layer.textSizeScaleRange, [5.0, 5.0]);
     expect(layer.textTransform, TextTransform.NONE);
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
@@ -204,7 +204,7 @@ void main() {
       iconSizeExpression: ['number', 1.0],
       iconSizeScaleRangeExpression: [
         'literal',
-        [0.0, 1.0]
+        [5.0, 5.0]
       ],
       iconTextFitExpression: ['string', 'none'],
       iconTextFitPaddingExpression: [
@@ -245,7 +245,7 @@ void main() {
       textSizeExpression: ['number', 1.0],
       textSizeScaleRangeExpression: [
         'literal',
-        [0.0, 1.0]
+        [5.0, 5.0]
       ],
       textTransformExpression: ['string', 'none'],
       textVariableAnchorExpression: [
@@ -307,7 +307,7 @@ void main() {
     expect(layer.iconRotate, 1.0);
     expect(layer.iconRotationAlignment, IconRotationAlignment.MAP);
     expect(layer.iconSize, 1.0);
-    expect(layer.iconSizeScaleRange, [0.0, 1.0]);
+    expect(layer.iconSizeScaleRange, [5.0, 5.0]);
     expect(layer.iconTextFit, IconTextFit.NONE);
     expect(layer.iconTextFitPadding, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.symbolAvoidEdges, true);
@@ -336,7 +336,7 @@ void main() {
     expect(layer.textRotate, 1.0);
     expect(layer.textRotationAlignment, TextRotationAlignment.MAP);
     expect(layer.textSize, 1.0);
-    expect(layer.textSizeScaleRange, [0.0, 1.0]);
+    expect(layer.textSizeScaleRange, [5.0, 5.0]);
     expect(layer.textTransform, TextTransform.NONE);
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);

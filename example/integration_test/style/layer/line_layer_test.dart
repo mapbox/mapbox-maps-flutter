@@ -54,8 +54,8 @@ void main() {
       lineTranslate: [0.0, 1.0],
       lineTranslateAnchor: LineTranslateAnchor.MAP,
       lineTrimColor: Colors.red.value,
-      lineTrimFadeRange: [0.0, 1.0],
-      lineTrimOffset: [0.0, 1.0],
+      lineTrimFadeRange: [0.5, 0.5],
+      lineTrimOffset: [0.5, 0.5],
       lineWidth: 1.0,
     ));
     var layer = await mapboxMap.style.getLayer('layer') as LineLayer;
@@ -92,8 +92,8 @@ void main() {
     expect(layer.lineTranslate, [0.0, 1.0]);
     expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
     expect(layer.lineTrimColor, Colors.red.value);
-    expect(layer.lineTrimFadeRange, [0.0, 1.0]);
-    expect(layer.lineTrimOffset, [0.0, 1.0]);
+    expect(layer.lineTrimFadeRange, [0.5, 0.5]);
+    expect(layer.lineTrimOffset, [0.5, 0.5]);
     expect(layer.lineWidth, 1.0);
   });
 
@@ -155,11 +155,11 @@ void main() {
       lineTrimColorExpression: ['rgba', 255, 0, 0, 1],
       lineTrimFadeRangeExpression: [
         'literal',
-        [0.0, 1.0]
+        [0.5, 0.5]
       ],
       lineTrimOffsetExpression: [
         'literal',
-        [0.0, 1.0]
+        [0.5, 0.5]
       ],
       lineWidthExpression: ['number', 1.0],
     ));
@@ -202,8 +202,8 @@ void main() {
     expect(layer.lineTranslate, [0.0, 1.0]);
     expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
     expect(layer.lineTrimColorExpression, ['rgba', 255, 0, 0, 1]);
-    expect(layer.lineTrimFadeRange, [0.0, 1.0]);
-    expect(layer.lineTrimOffset, [0.0, 1.0]);
+    expect(layer.lineTrimFadeRange, [0.5, 0.5]);
+    expect(layer.lineTrimOffset, [0.5, 0.5]);
     expect(layer.lineWidth, 1.0);
   });
 }
