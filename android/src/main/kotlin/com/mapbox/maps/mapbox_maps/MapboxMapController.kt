@@ -1,7 +1,11 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -38,6 +42,52 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import java.io.ByteArrayOutputStream
 
+class FlutterMapView : MapView {
+  constructor(context: Context, mapInitOptions: MapInitOptions) : super(context, mapInitOptions)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+
+  // Track expected pointer count to detect wrong events
+  private var expectedPointerCount = 0
+
+  // Here we have workaround for issue introduced in Flutter SDK 3.19,
+  // when map widget is nested inside a gesture detector with e.g. long press callbacks,
+  // then platform view receives following motion event sequence for a zoom(pinch) gesture:
+  // DOWN -> MOVE(3-5 events) -> POINTER_DOWN -> MOVE(duplicates of previous move events) -> MOVE(new move events) -> POINTER_UP -> UP
+  // While the correct sequence is:
+  // DOWN -> POINTER_DOWN -> MOVE -> POINTER_UP -> UP
+  @SuppressLint("ClickableViewAccessibility")
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    val actionMasked = event.actionMasked
+    val actionString = MotionEvent.actionToString(event.action)
+    val pointerCount = event.pointerCount
+
+    // For MOVE events, check if pointer count matches expected
+    // This filters out both the early MOVE events AND their duplicates
+    if (actionMasked == MotionEvent.ACTION_MOVE && expectedPointerCount > 0 && pointerCount != expectedPointerCount) {
+      Log.d("NativeView", "✗ Filtered: $actionString, Expected: $expectedPointerCount, Got: $pointerCount, Time: ${event.eventTime}")
+      return false // Skip wrong count
+    }
+
+    // Update expected pointer count based on action
+    when (actionMasked) {
+      MotionEvent.ACTION_DOWN -> {
+        expectedPointerCount = 1
+      }
+      MotionEvent.ACTION_POINTER_DOWN -> {
+        expectedPointerCount = pointerCount
+      }
+      MotionEvent.ACTION_POINTER_UP -> {
+        expectedPointerCount = pointerCount - 1
+      }
+      MotionEvent.ACTION_UP -> {
+        expectedPointerCount = 0
+      }
+    }
+
+    return super.onTouchEvent(event)
+  }
+}
+
 class MapboxMapController(
   context: Context,
   mapInitOptions: MapInitOptions,
@@ -50,7 +100,7 @@ class MapboxMapController(
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
 
-  private var mapView: MapView? = null
+  private var mapView: FlutterMapView? = null
   private var mapboxMap: MapboxMap? = null
 
   private val methodChannel: MethodChannel
@@ -136,7 +186,7 @@ class MapboxMapController(
     this.messenger = messenger
     this.channelSuffix = channelSuffix.toString()
 
-    val mapView = MapView(context, mapInitOptions)
+    val mapView = FlutterMapView(context, mapInitOptions)
     val mapboxMap = mapView.mapboxMap
     this.mapView = mapView
     this.mapboxMap = mapboxMap
