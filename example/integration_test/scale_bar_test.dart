@@ -29,7 +29,7 @@ void main() {
       textBarMargin: 1,
       textBorderWidth: 2,
       textSize: 10,
-      isMetricUnits: true,
+      distanceUnits: DistanceUnits.NAUTICAL,
       refreshInterval: 10,
       showTextBorder: true,
       ratio: 1.5,
@@ -38,7 +38,7 @@ void main() {
     await scaleBar.updateSettings(settings);
     var updatedSettings = await scaleBar.getSettings();
     expect(updatedSettings.position, OrnamentPosition.BOTTOM_RIGHT);
-    expect(updatedSettings.isMetricUnits, true);
+    expect(updatedSettings.distanceUnits, DistanceUnits.NAUTICAL);
     if (Platform.isIOS) {
       expect(updatedSettings.marginRight, 3);
       expect(updatedSettings.marginBottom, 4);

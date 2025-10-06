@@ -25,14 +25,25 @@ final class ScaleBarController: ScaleBarSettingsInterface {
         if let visible = settings.enabled {
             scaleBar.visibility = visible ? .adaptive : .hidden
         }
-
+        if let units = settings.distanceUnits {
+            scaleBar.units = switch units {
+            case .mETRIC: .metric
+            case .iMPERIAL: .imperial
+            case .nAUTICAL: .nautical
+            }
+        }
         ornaments.options.scaleBar = scaleBar
     }
 
     func getSettings() throws -> ScaleBarSettings {
         let options = ornaments.options.scaleBar
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-
+        let units: DistanceUnits? = switch ornaments.options.scaleBar.units {
+        case .metric: .mETRIC
+        case .imperial: .iMPERIAL
+        case .nautical: .nAUTICAL
+        default: nil
+        }
         return ScaleBarSettings(
             enabled: ornaments.options.scaleBar.visibility != OrnamentVisibility.hidden,
             position: position,
@@ -49,6 +60,7 @@ final class ScaleBarController: ScaleBarSettingsInterface {
             textBorderWidth: nil,
             textSize: nil,
             isMetricUnits: ornaments.options.scaleBar.useMetricUnits,
+            distanceUnits: units,
             refreshInterval: nil,
             showTextBorder: nil,
             ratio: nil,

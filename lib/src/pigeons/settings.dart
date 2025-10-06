@@ -54,6 +54,19 @@ enum ModelElevationReference {
   GROUND,
 }
 
+/// Supported distance unit types.
+/// Default value: "metric".
+enum DistanceUnits {
+  /// Metric units using meters and kilometers. The scale bar will automatically choose between meters and kilometers based on the distance being displayed for optimal readability.
+  METRIC,
+
+  /// Imperial units using feet for short distances and miles for longer distances.  The scale bar will display distances in feet for small distances and automatically switch to miles for longer distances.
+  IMPERIAL,
+
+  /// Nautical units using fathoms for short distances and nautical miles for longer distances. The scale bar will display distances in fathoms for small distances and automatically switch to nautical miles for longer distances. Commonly used for marine and aviation navigation.
+  NAUTICAL,
+}
+
 /// Gesture configuration allows to control the user touch interaction.
 class GesturesSettings {
   GesturesSettings({
@@ -641,6 +654,7 @@ class ScaleBarSettings {
     this.textBorderWidth,
     this.textSize,
     this.isMetricUnits,
+    this.distanceUnits,
     this.refreshInterval,
     this.showTextBorder,
     this.ratio,
@@ -707,6 +721,10 @@ class ScaleBarSettings {
   /// Default value: true.
   bool? isMetricUnits;
 
+  /// Supported distance unit types.
+  /// Default value: "metric".
+  DistanceUnits? distanceUnits;
+
   /// Configures minimum refresh interval, in millisecond, default is 15.
   /// Default value: 15.
   int? refreshInterval;
@@ -740,6 +758,7 @@ class ScaleBarSettings {
       textBorderWidth,
       textSize,
       isMetricUnits,
+      distanceUnits,
       refreshInterval,
       showTextBorder,
       ratio,
@@ -769,10 +788,11 @@ class ScaleBarSettings {
       textBorderWidth: result[12] as double?,
       textSize: result[13] as double?,
       isMetricUnits: result[14] as bool?,
-      refreshInterval: result[15] as int?,
-      showTextBorder: result[16] as bool?,
-      ratio: result[17] as double?,
-      useContinuousRendering: result[18] as bool?,
+      distanceUnits: result[15] as DistanceUnits?,
+      refreshInterval: result[16] as int?,
+      showTextBorder: result[17] as bool?,
+      ratio: result[18] as double?,
+      useContinuousRendering: result[19] as bool?,
     );
   }
 
@@ -800,6 +820,7 @@ class ScaleBarSettings {
         textBorderWidth == other.textBorderWidth &&
         textSize == other.textSize &&
         isMetricUnits == other.isMetricUnits &&
+        distanceUnits == other.distanceUnits &&
         refreshInterval == other.refreshInterval &&
         showTextBorder == other.showTextBorder &&
         ratio == other.ratio &&
@@ -1150,35 +1171,38 @@ class Settings_PigeonCodec extends StandardMessageCodec {
     } else if (value is ModelElevationReference) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    } else if (value is ScreenCoordinate) {
+    } else if (value is DistanceUnits) {
       buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    } else if (value is GesturesSettings) {
+      writeValue(buffer, value.index);
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is LocationPuck2D) {
+    } else if (value is GesturesSettings) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is LocationPuck3D) {
+    } else if (value is LocationPuck2D) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is LocationPuck) {
+    } else if (value is LocationPuck3D) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is LocationComponentSettings) {
+    } else if (value is LocationPuck) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is ScaleBarSettings) {
+    } else if (value is LocationComponentSettings) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is CompassSettings) {
+    } else if (value is ScaleBarSettings) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is AttributionSettings) {
+    } else if (value is CompassSettings) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is LogoSettings) {
+    } else if (value is AttributionSettings) {
       buffer.putUint8(143);
+      writeValue(buffer, value.encode());
+    } else if (value is LogoSettings) {
+      buffer.putUint8(144);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1204,24 +1228,27 @@ class Settings_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ModelElevationReference.values[value];
       case 134:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : DistanceUnits.values[value];
       case 135:
-        return GesturesSettings.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 136:
-        return LocationPuck2D.decode(readValue(buffer)!);
+        return GesturesSettings.decode(readValue(buffer)!);
       case 137:
-        return LocationPuck3D.decode(readValue(buffer)!);
+        return LocationPuck2D.decode(readValue(buffer)!);
       case 138:
-        return LocationPuck.decode(readValue(buffer)!);
+        return LocationPuck3D.decode(readValue(buffer)!);
       case 139:
-        return LocationComponentSettings.decode(readValue(buffer)!);
+        return LocationPuck.decode(readValue(buffer)!);
       case 140:
-        return ScaleBarSettings.decode(readValue(buffer)!);
+        return LocationComponentSettings.decode(readValue(buffer)!);
       case 141:
-        return CompassSettings.decode(readValue(buffer)!);
+        return ScaleBarSettings.decode(readValue(buffer)!);
       case 142:
-        return AttributionSettings.decode(readValue(buffer)!);
+        return CompassSettings.decode(readValue(buffer)!);
       case 143:
+        return AttributionSettings.decode(readValue(buffer)!);
+      case 144:
         return LogoSettings.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
