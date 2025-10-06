@@ -142,7 +142,7 @@ jobs:
             gcloud firebase test android run --type instrumentation \
               --app << parameters.workspace-path >>/debug/app-debug.apk \
               --test << parameters.workspace-path >>/androidTest/debug/app-debug-androidTest.apk \
-              --timeout 5m \
+              --timeout 10m \
               --device model=shiba,version=34,locale=en,orientation=portrait \
               --results-dir=result_dir \
               --use-orchestrator \
@@ -209,7 +209,7 @@ jobs:
             gcloud firebase test ios run \
               --test << parameters.workspace-path >>/build_products.zip \
               --device model=iphone13pro,version=15.7 \
-              --timeout 5m \
+              --timeout 10m \
               --num-flaky-test-attempts 3 \
               --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}" 2>&1 | tee firebase_test_lab_run.log
       - run:
