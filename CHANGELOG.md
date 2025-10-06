@@ -1,3 +1,7 @@
+### main
+
+* Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+
 ### 2.12.0-beta.1
 
 * Use Maps SDK Android dependency with NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
