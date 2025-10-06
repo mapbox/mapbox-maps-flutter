@@ -24,6 +24,9 @@ fun ScaleBarSettingsInterface.applyFromFLT(settings: ScaleBarSettings, context: 
     settings.textBorderWidth?.let { this.textBorderWidth = it.toDevicePixels(context) }
     settings.textSize?.let { this.textSize = it.toFloat() }
     settings.isMetricUnits?.let { this.isMetricUnits = it }
+    settings.distanceUnits?.let {
+      this.distanceUnits = com.mapbox.maps.plugin.DistanceUnits.values()[it.ordinal]
+    }
     settings.refreshInterval?.let { this.refreshInterval = it }
     settings.showTextBorder?.let { this.showTextBorder = it }
     settings.ratio?.let { this.ratio = it.toFloat() }
@@ -47,6 +50,7 @@ fun ScaleBarSettingsInterface.toFLT(context: Context) = ScaleBarSettings(
   textBorderWidth = textBorderWidth.toLogicalPixels(context),
   textSize = textSize.toDouble(),
   isMetricUnits = isMetricUnits,
+  distanceUnits = DistanceUnits.values()[distanceUnits.ordinal],
   refreshInterval = refreshInterval,
   showTextBorder = showTextBorder,
   ratio = ratio.toDouble(),
