@@ -4,13 +4,13 @@ version: 2.12.0-beta.1
 homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
-  sdk: ">=3.4.4 <4.0.0"
-  flutter: ">=3.22.3"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_plugin_android_lifecycle: ^2.0.5
+  flutter_plugin_android_lifecycle: ^2.0.29
   turf: ^0.0.8
   typed_data: ^1.3.0
   meta: ^1.9.1
