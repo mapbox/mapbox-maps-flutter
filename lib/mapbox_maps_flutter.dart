@@ -9,8 +9,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:mapbox_maps_flutter/src/interops/mapbox_options_interops.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' as turf;
+import 'package:jni/jni.dart';
 
 export 'package:turf/helpers.dart';
 

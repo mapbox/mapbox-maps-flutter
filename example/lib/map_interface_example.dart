@@ -213,7 +213,7 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('getResourceOptions'),
       onPressed: () async {
         String baseUrl = await MapboxMapsOptions.getBaseUrl();
-        String accessToken = await MapboxOptions.getAccessToken();
+        String accessToken = MapboxOptions.accessToken;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("baseURL: ${baseUrl}, accessToken: ${accessToken}"),
           backgroundColor: Theme.of(context).primaryColor,
