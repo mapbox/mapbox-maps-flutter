@@ -269,7 +269,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.12.0-beta.1"
+    version: "2.12.0-rc.1"
   matcher:
     dependency: transitive
     description:
