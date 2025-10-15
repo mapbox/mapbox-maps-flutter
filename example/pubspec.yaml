@@ -19,9 +19,12 @@ dependencies:
     path: ../
 
   cupertino_icons: ^1.0.2
-  permission_handler: ^10.0.0
+  permission_handler: ^11.0.0
   font_awesome_flutter: ^10.1.0
   http: ^0.13.5
+  
+  # Override for AGP 8.0+ compatibility in example app only
+  flutter_plugin_android_lifecycle: ^2.0.19
 
 dev_dependencies:
   flutter_test:

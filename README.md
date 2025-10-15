@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter Plugin
 
-The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v10.17.0). It is currently in beta, but can be used in production. The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS. 
+The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v10.9.1 (Android) & v10.19.4 (iOS)). It is currently in beta, but can be used in production. The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS. 
 
 Web and desktop are not supported. 
 
@@ -45,7 +45,7 @@ Contributions welcome!
 
 The Maps Flutter Plugin is compatible with applications:
 
-- Deployed on iOS 11 or higher
+- Deployed on iOS 12 or higher
 - Built using the Android SDK 21 or higher
 - Built using the Dart SDK 2.17.1 or higher
 
@@ -112,7 +112,7 @@ To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^0.6.0
+  mapbox_maps_flutter: ^0.7.0
 ```
 
 ### Configure permissions
