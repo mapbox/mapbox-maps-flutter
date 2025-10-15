@@ -1,5 +1,10 @@
+### 2.12.0-rc.2
+
+* Update Maps SDK to v11.16.0-rc.2
+
 ### 2.12.0-rc.1
 
+* Update Maps SDK to v11.16.0-rc.1
 * Fix multi-touch gestures not working in map widget when being nested in `GestureDetector`.
 
 ### 2.12.0-beta.1
