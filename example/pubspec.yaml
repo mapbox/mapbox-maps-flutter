@@ -1,5 +1,6 @@
 name: mapbox_maps_example
 description: Demonstrates how to use the mapbox_maps_flutter plugin.
+version: 0.7.0+1
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

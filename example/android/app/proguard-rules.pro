@@ -30,3 +30,7 @@
 -keep class io.flutter.plugins.** { *; }
 -keep class io.flutter.plugin.** { *; }
 -keep class io.flutter.embedding.** { *; }
+
+# Keep Google Play Core classes (for Flutter deferred components)
+-dontwarn com.google.android.play.core.**
+-keep class com.google.android.play.core.** { *; }
