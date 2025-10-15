@@ -40,7 +40,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.13.6
+          version: 3.27.0
           app-dir: example
       - run:
           name: ktlint
@@ -106,7 +106,7 @@ jobs:
             gem uninstall activesupport --version '>= 7.0.8' --ignore-dependencies
             gem install activesupport --version '7.0.8'
       - flutter/install_sdk_and_pub:
-          version: 3.13.6
+          version: 3.27.0
           app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
