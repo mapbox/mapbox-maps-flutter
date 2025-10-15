@@ -35,7 +35,7 @@ jobs:
         type: string
         default: example/build/app/outputs/apk
     docker:
-      - image: cimg/android:2022.09
+      - image: cimg/android:2024.01
     resource_class: xlarge
     steps:
       - checkout
