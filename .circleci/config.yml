@@ -151,7 +151,7 @@ jobs:
           command: |
             gcloud firebase test ios run \
               --test << parameters.workspace-path >>/build_products.zip \
-              --device model=iphone8,version=15.7 \
+              --device model=iphone13pro,version=15.7 \
               --timeout 5m \
               --num-flaky-test-attempts 3
 
