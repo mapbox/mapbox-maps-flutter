@@ -36,6 +36,7 @@ import 'projection_example.dart';
 import 'style_example.dart';
 import 'gestures_example.dart';
 import 'debug_options_example.dart';
+import 'map_recorder_example.dart';
 
 final List<Example> _allPages = <Example>[
   SimpleMapExample(),
@@ -56,6 +57,7 @@ final List<Example> _allPages = <Example>[
   MapInterfaceExample(),
   StyleClustersExample(),
   AnimationExample(),
+  MapRecorderExample(),
   PointAnnotationExample(),
   CircleAnnotationExample(),
   PolylineAnnotationExample(),
