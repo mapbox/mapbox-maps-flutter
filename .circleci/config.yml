@@ -173,7 +173,7 @@ executors:
   macos-xcode-latest:
     resource_class: macos.m1.medium.gen1
     macos:
-      xcode: 15.0.0
+      xcode: 16.1.0
   firebase-test-runner:
     resource_class: small
     docker:
