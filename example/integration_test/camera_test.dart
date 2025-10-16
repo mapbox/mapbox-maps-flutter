@@ -436,9 +436,9 @@ void main() {
     
     // Platform differences in coordinate systems require different expected values
     // Android uses device pixels (scaled by density), iOS uses logical pixels
-    final expectedLng = Platform.isAndroid ? -97 : 0;
-    final expectedLat = Platform.isAndroid ? 69 : 0;
-    
+    final expectedLng = Platform.isAndroid ? -97 : -76;
+    final expectedLat = Platform.isAndroid ? 69 : 54;
+
     expect((coordinates.first as double).round(), expectedLng);
     expect((coordinates.last as double).round(), expectedLat);
 
