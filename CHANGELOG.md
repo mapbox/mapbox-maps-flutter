@@ -9,7 +9,7 @@
 
 ### iOS
 * Update iOS Maps SDK version to v10.19.4
-* Change minimum iOS version to 12.0
+* Change minimum iOS version to v12.0
 
 ## 0.6.0
 
