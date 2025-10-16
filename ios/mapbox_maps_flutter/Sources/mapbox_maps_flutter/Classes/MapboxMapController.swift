@@ -102,6 +102,13 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             messageChannelSuffix: binaryMessenger.suffix
         )
 
+        let mapRecorderController = MapRecorderController(mapboxMap: mapView.mapboxMap)
+        _MapRecorderMessengerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger,
+            api: mapRecorderController,
+            messageChannelSuffix: binaryMessenger.suffix
+        )
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
