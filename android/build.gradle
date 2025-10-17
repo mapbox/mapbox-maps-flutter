@@ -40,6 +40,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace "com.mapbox.maps.mapbox_maps"
     compileSdkVersion 31
 
     sourceSets {
@@ -53,6 +54,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint.gradle").exists()) {
@@ -64,7 +69,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation ("com.mapbox.maps:android:10.17.0") {
+    implementation ("com.mapbox.maps:android:10.19.1") {
         exclude group: 'com.mapbox.plugin', module: 'maps-lifecycle'
     }
 

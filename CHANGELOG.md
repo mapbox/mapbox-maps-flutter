@@ -1,3 +1,16 @@
+## 0.7.0
+
+> [!NOTE] 
+> This release adds support for Android 16KB page size requirements and iOS compatibility improvements. 
+
+### Android
+* Update Android Maps SDK version to v10.19.1
+* Add support for 16KB page size requirements for Google Play Store compliance
+
+### iOS
+* Update iOS Maps SDK version to v10.19.4
+* Change minimum iOS version to v12.0
+
 ## 0.6.0
 
 > [!NOTE] 

@@ -35,12 +35,12 @@ jobs:
         type: string
         default: example/build/app/outputs/apk
     docker:
-      - image: cimg/android:2022.09
+      - image: cimg/android:2024.01
     resource_class: xlarge
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.13.6
+          version: 3.27.0
           app-dir: example
       - run:
           name: ktlint
@@ -106,7 +106,7 @@ jobs:
             gem uninstall activesupport --version '>= 7.0.8' --ignore-dependencies
             gem install activesupport --version '7.0.8'
       - flutter/install_sdk_and_pub:
-          version: 3.13.6
+          version: 3.27.0
           app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
@@ -128,6 +128,7 @@ jobs:
 
             popd # to repo root
 
+            bundle install
             bundle exec fastlane build_examples_tests
       - persist_to_workspace:
           root: << parameters.workspace-path >>
@@ -150,7 +151,7 @@ jobs:
           command: |
             gcloud firebase test ios run \
               --test << parameters.workspace-path >>/build_products.zip \
-              --device model=iphone8,version=15.7 \
+              --device model=iphone13pro,version=15.7 \
               --timeout 5m \
               --num-flaky-test-attempts 3
 
@@ -172,7 +173,7 @@ executors:
   macos-xcode-latest:
     resource_class: macos.m1.medium.gen1
     macos:
-      xcode: 15.0.0
+      xcode: 16.2.0
   firebase-test-runner:
     resource_class: small
     docker:
