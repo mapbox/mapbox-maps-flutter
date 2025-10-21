@@ -1,7 +1,7 @@
 ### 2.12.0
 
 > [!NOTE] 
-> This release adds support for Android 16KB page size requirements and iOS compatibility improvements. 
+> This release adds support for Android 16KB page size requirements. 
 
 * Update Maps SDK to v11.16.0
   * Maps SDK Android dependency now includes NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
