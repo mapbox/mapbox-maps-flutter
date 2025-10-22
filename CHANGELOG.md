@@ -2,18 +2,14 @@
 
 * Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
 
-### 2.12.0-rc.2
+### 2.12.0
 
-* Update Maps SDK to v11.16.0-rc.2
+> [!NOTE] 
+> This release adds support for Android 16KB page size requirements. 
 
-### 2.12.0-rc.1
-
-* Update Maps SDK to v11.16.0-rc.1
+* Update Maps SDK to v11.16.0
+  * Maps SDK Android dependency now includes NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
 * Fix multi-touch gestures not working in map widget when being nested in `GestureDetector`.
-
-### 2.12.0-beta.1
-
-* Use Maps SDK Android dependency with NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
 * Expose `LineLayer.lineCutoutOpacity`, `LineLayer.lineCutoutWidth` and `LineLayer.lineCutoutFadeWidth` to make route lines visible through obstructing 3D buildings and other aboveground features.
 
 ### 2.11.0
