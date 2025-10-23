@@ -33,6 +33,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._PerformanceStatisticsApi
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
+import com.mapbox.maps.mapbox_maps.pigeons._MapRecorderMessenger
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.viewport.viewport
 import io.flutter.embedding.android.FlutterActivity
@@ -122,6 +123,7 @@ class MapboxMapController(
   private val compassController: CompassController
   private val viewportController: ViewportController
   private val performanceStatisticsController: PerformanceStatisticsController
+  private val mapRecorderController: MapRecorderController
 
   private val eventHandler: MapboxEventHandler
 
@@ -206,6 +208,7 @@ class MapboxMapController(
     compassController = CompassController(mapView)
     viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
     performanceStatisticsController = PerformanceStatisticsController(mapboxMap, this.messenger, this.channelSuffix)
+    mapRecorderController = MapRecorderController(mapboxMap)
     changeUserAgent(pluginVersion)
 
     StyleManager.setUp(messenger, styleController, this.channelSuffix)
@@ -222,6 +225,7 @@ class MapboxMapController(
     CompassSettingsInterface.setUp(messenger, compassController, this.channelSuffix)
     _ViewportMessenger.setUp(messenger, viewportController, this.channelSuffix)
     _PerformanceStatisticsApi.setUp(messenger, performanceStatisticsController, this.channelSuffix)
+    _MapRecorderMessenger.setUp(messenger, mapRecorderController, this.channelSuffix)
 
     methodChannel = MethodChannel(messenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
