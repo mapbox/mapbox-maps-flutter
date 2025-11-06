@@ -143,7 +143,7 @@ jobs:
               --app << parameters.workspace-path >>/debug/app-debug.apk \
               --test << parameters.workspace-path >>/androidTest/debug/app-debug-androidTest.apk \
               --timeout 10m \
-              --device model=blazer,version=36,locale=en,orientation=portrait \
+              --device model=shiba,version=34,locale=en,orientation=portrait \
               --results-dir=result_dir \
               --use-orchestrator \
               --num-flaky-test-attempts 3 \
