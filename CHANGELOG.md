@@ -5,6 +5,7 @@
 
 * Update Maps SDK to v11.17.0-beta.1
 * Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+* Fix memory leaks on Android.
 
 ### 2.12.0
 
