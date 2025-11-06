@@ -231,8 +231,16 @@ class MapboxMapController(
     return mapView
   }
 
+  private var onFlutterViewAttachedCalled = false
   override fun onFlutterViewAttached(flutterView: View) {
     super.onFlutterViewAttached(flutterView)
+
+    if (onFlutterViewAttachedCalled) {
+      return
+    }
+
+    onFlutterViewAttachedCalled = true
+
     val context = flutterView.context
     val shouldDestroyOnDestroy = when (context is FlutterActivity) {
       true -> context.shouldDestroyEngineWithHost()
@@ -245,6 +253,9 @@ class MapboxMapController(
 
   override fun onFlutterViewDetached() {
     super.onFlutterViewDetached()
+
+    onFlutterViewAttachedCalled = false
+
     lifecycleHelper?.dispose()
     lifecycleHelper = null
     mapView?.setViewTreeLifecycleOwner(null)
@@ -254,6 +265,8 @@ class MapboxMapController(
     if (mapView == null) {
       return
     }
+
+    eventHandler.dispose()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
     mapView?.setViewTreeLifecycleOwner(null)

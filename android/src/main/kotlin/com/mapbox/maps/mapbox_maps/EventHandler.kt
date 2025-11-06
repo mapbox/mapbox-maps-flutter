@@ -56,6 +56,11 @@ class MapboxEventHandler(
       .forEach { subscribeToEvent(it) }
   }
 
+  fun dispose() {
+    cancellables.forEach { it.cancel() }
+    cancellables.clear()
+  }
+
   override fun onMethodCall(methodCall: MethodCall, result: MethodChannel.Result) {
     if (methodCall.method == "subscribeToEvents" && methodCall.arguments is List<*>) {
       cancellables.forEach { it.cancel() }
