@@ -1,6 +1,11 @@
-### main
+### 2.17.0-beta.1
 
+  > [!NOTE]
+  > Version numbering has been updated to align with Mapbox's cross-platform SDK versioning scheme. This release skips from 2.12.0 to 2.17.0-beta.1 to synchronize with other Mapbox SDKs (version x.17.0-beta.1), ensuring consistent version numbers across all platforms.
+
+* Update Maps SDK to v11.17.0-beta.1
 * Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+* Fix memory leaks on Android.
 
 ### 2.12.0
 

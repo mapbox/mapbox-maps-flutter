@@ -234,15 +234,15 @@ void main() {
     await app.events.onMapIdle.future;
 
     await mapboxMap.setFeatureState(
-        'source', 'custom', 'point', json.encode({'choose': true}));
+        'source', null, 'point', json.encode({'choose': true}));
     var featureState =
-        await mapboxMap.getFeatureState('source', 'custom', 'point');
+        await mapboxMap.getFeatureState('source', null, 'point');
     var stateMap = json.decode(featureState);
     expect(stateMap.length, 1);
     expect(stateMap['choose'], true);
 
-    await mapboxMap.removeFeatureState('source', 'custom', 'point', 'choose');
-    featureState = await mapboxMap.getFeatureState('source', 'custom', 'point');
+    await mapboxMap.removeFeatureState('source', null, 'point', 'choose');
+    featureState = await mapboxMap.getFeatureState('source', null, 'point');
     stateMap = json.decode(featureState);
     expect(stateMap.length, 0);
   });
