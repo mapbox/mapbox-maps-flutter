@@ -132,6 +132,8 @@ struct CircleAnnotation {
   var circleStrokeWidth: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -147,6 +149,7 @@ struct CircleAnnotation {
     let circleStrokeOpacity: Double? = nilOrValue(pigeonVar_list[8])
     let circleStrokeWidth: Double? = nilOrValue(pigeonVar_list[9])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[10])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[11])
 
     return CircleAnnotation(
       id: id,
@@ -159,7 +162,8 @@ struct CircleAnnotation {
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
       circleStrokeWidth: circleStrokeWidth,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -175,6 +179,7 @@ struct CircleAnnotation {
       circleStrokeOpacity,
       circleStrokeWidth,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -208,6 +213,8 @@ struct CircleAnnotationOptions {
   var circleStrokeWidth: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -222,6 +229,7 @@ struct CircleAnnotationOptions {
     let circleStrokeOpacity: Double? = nilOrValue(pigeonVar_list[7])
     let circleStrokeWidth: Double? = nilOrValue(pigeonVar_list[8])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[9])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[10])
 
     return CircleAnnotationOptions(
       geometry: geometry,
@@ -233,7 +241,8 @@ struct CircleAnnotationOptions {
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
       circleStrokeWidth: circleStrokeWidth,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -248,6 +257,7 @@ struct CircleAnnotationOptions {
       circleStrokeOpacity,
       circleStrokeWidth,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -336,6 +346,7 @@ class CircleAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unchec
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _CircleAnnotationMessenger {
+  func getAnnotations(managerId: String, completion: @escaping (Result<[CircleAnnotation], Error>) -> Void)
   func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [CircleAnnotationOptions], completion: @escaping (Result<[CircleAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -377,6 +388,23 @@ class _CircleAnnotationMessengerSetup {
   /// Sets up an instance of `_CircleAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _CircleAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getAnnotationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getAnnotations\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getAnnotationsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getAnnotations(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getAnnotationsChannel.setMessageHandler(nil)
+    }
     let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in

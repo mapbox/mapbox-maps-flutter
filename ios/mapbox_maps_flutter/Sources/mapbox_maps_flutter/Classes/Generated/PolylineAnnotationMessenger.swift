@@ -170,6 +170,8 @@ struct PolylineAnnotation {
   var lineWidth: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -189,6 +191,7 @@ struct PolylineAnnotation {
     let linePattern: String? = nilOrValue(pigeonVar_list[12])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[13])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[14])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[15])
 
     return PolylineAnnotation(
       id: id,
@@ -205,7 +208,8 @@ struct PolylineAnnotation {
       lineOpacity: lineOpacity,
       linePattern: linePattern,
       lineWidth: lineWidth,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -225,6 +229,7 @@ struct PolylineAnnotation {
       linePattern,
       lineWidth,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -277,6 +282,8 @@ struct PolylineAnnotationOptions {
   var lineWidth: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -295,6 +302,7 @@ struct PolylineAnnotationOptions {
     let linePattern: String? = nilOrValue(pigeonVar_list[11])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[12])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[13])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[14])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
@@ -310,7 +318,8 @@ struct PolylineAnnotationOptions {
       lineOpacity: lineOpacity,
       linePattern: linePattern,
       lineWidth: lineWidth,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -329,6 +338,7 @@ struct PolylineAnnotationOptions {
       linePattern,
       lineWidth,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -426,6 +436,7 @@ class PolylineAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unch
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _PolylineAnnotationMessenger {
+  func getAnnotations(managerId: String, completion: @escaping (Result<[PolylineAnnotation], Error>) -> Void)
   func create(managerId: String, annotationOption: PolylineAnnotationOptions, completion: @escaping (Result<PolylineAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [PolylineAnnotationOptions], completion: @escaping (Result<[PolylineAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: PolylineAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -499,6 +510,23 @@ class _PolylineAnnotationMessengerSetup {
   /// Sets up an instance of `_PolylineAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PolylineAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getAnnotationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getAnnotations\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getAnnotationsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getAnnotations(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getAnnotationsChannel.setMessageHandler(nil)
+    }
     let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in

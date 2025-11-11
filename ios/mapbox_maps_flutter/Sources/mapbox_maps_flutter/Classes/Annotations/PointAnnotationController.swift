@@ -8,6 +8,10 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
     private static let errorCode = "0"
     private typealias AnnotationManager = PointAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[PointAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTPointAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: PointAnnotationOptions, completion: @escaping (Result<PointAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -23,39 +27,7 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toPointAnnotation()
-                annotation.tapHandler = { [weak self] (context) in
-                    guard let self else { return false }
-                    let context = PointAnnotationInteractionContext(
-                        annotation: annotation.toFLTPointAnnotation(),
-                        gestureState: .ended)
-                    return self.tap(context, managerId: managerId)
-                }
-                annotation.longPressHandler = { [weak self] (context) in
-                    guard let self else { return false }
-                    let context = PointAnnotationInteractionContext(
-                        annotation: annotation.toFLTPointAnnotation(),
-                        gestureState: .ended)
-                    return self.longPress(context, managerId: managerId)
-                }
-                annotation.dragBeginHandler = { [weak self] (annotation, context) in
-                    guard let self else { return false }
-                    let context = PointAnnotationInteractionContext(
-                        annotation: annotation.toFLTPointAnnotation(),
-                        gestureState: .started)
-                    return self.drag(context, managerId: managerId)
-                }
-                annotation.dragChangeHandler = { [weak self] (annotation, context) in
-                    let context = PointAnnotationInteractionContext(
-                        annotation: annotation.toFLTPointAnnotation(),
-                        gestureState: .changed)
-                    self?.drag(context, managerId: managerId)
-                }
-				annotation.dragEndHandler = { [weak self] (annotation, context) in
-              	    let context = PointAnnotationInteractionContext(
-                	    annotation: annotation.toFLTPointAnnotation(),
-                        gestureState: .ended)
-                    self?.drag(context, managerId: managerId)
-                }
+                annotation.configureHandlers(controller: self, managerId: managerId)
                 return annotation
             })
             try append(annotations, managerId: managerId)
@@ -67,7 +39,8 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
 
     func update(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let updatedAnnotation = annotation.toPointAnnotation()
+            var updatedAnnotation = annotation.toPointAnnotation()
+            updatedAnnotation.configureHandlers(controller: self, managerId: managerId)
             try update(annotation: updatedAnnotation, managerId: managerId)
             completion(.success(()))
         } catch {
@@ -1355,6 +1328,9 @@ extension PointAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -1474,6 +1450,9 @@ extension PointAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -1519,8 +1498,45 @@ extension MapboxMaps.PointAnnotation {
             textHaloWidth: textHaloWidth,
             textOcclusionOpacity: textOcclusionOpacity,
             textOpacity: textOpacity,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
+    }
+}
+
+extension MapboxMaps.PointAnnotation {
+    mutating func configureHandlers(controller: PointAnnotationController, managerId: String) {
+        var configured = self
+        tapHandler = { [weak controller] _ in
+            let context = PointAnnotationInteractionContext(
+                annotation: configured.toFLTPointAnnotation(),
+                gestureState: .ended)
+            return controller?.tap(context, managerId: managerId) ?? false
+        }
+        longPressHandler = { [weak controller] _ in
+            let context = PointAnnotationInteractionContext(
+                annotation: configured.toFLTPointAnnotation(),
+                gestureState: .ended)
+            return controller?.longPress(context, managerId: managerId) ?? false
+        }
+        dragBeginHandler = { [weak controller] (annotation, _) in
+            let context = PointAnnotationInteractionContext(
+                annotation: annotation.toFLTPointAnnotation(),
+                gestureState: .started)
+            return controller?.drag(context, managerId: managerId) ?? false
+        }
+        dragChangeHandler = { [weak controller] (annotation, _) in
+            let context = PointAnnotationInteractionContext(
+                annotation: annotation.toFLTPointAnnotation(),
+                gestureState: .changed)
+            controller?.drag(context, managerId: managerId)
+        }
+        dragEndHandler = { [weak controller] (annotation, _) in
+              let context = PointAnnotationInteractionContext(
+                annotation: annotation.toFLTPointAnnotation(),
+                gestureState: .ended)
+            controller?.drag(context, managerId: managerId)
+        }
     }
 }
 // End of generated file.

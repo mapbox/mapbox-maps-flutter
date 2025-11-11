@@ -8,6 +8,10 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
     private static let errorCode = "0"
     private typealias AnnotationManager = PolygonAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[PolygonAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTPolygonAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -23,39 +27,7 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toPolygonAnnotation()
-                annotation.tapHandler = { [weak self] (context) in
-                    guard let self else { return false }
-                    let context = PolygonAnnotationInteractionContext(
-                        annotation: annotation.toFLTPolygonAnnotation(),
-                        gestureState: .ended)
-                    return self.tap(context, managerId: managerId)
-                }
-                annotation.longPressHandler = { [weak self] (context) in
-                    guard let self else { return false }
-                    let context = PolygonAnnotationInteractionContext(
-                        annotation: annotation.toFLTPolygonAnnotation(),
-                        gestureState: .ended)
-                    return self.longPress(context, managerId: managerId)
-                }
-                annotation.dragBeginHandler = { [weak self] (annotation, context) in
-                    guard let self else { return false }
-                    let context = PolygonAnnotationInteractionContext(
-                        annotation: annotation.toFLTPolygonAnnotation(),
-                        gestureState: .started)
-                    return self.drag(context, managerId: managerId)
-                }
-                annotation.dragChangeHandler = { [weak self] (annotation, context) in
-                    let context = PolygonAnnotationInteractionContext(
-                        annotation: annotation.toFLTPolygonAnnotation(),
-                        gestureState: .changed)
-                    self?.drag(context, managerId: managerId)
-                }
-				annotation.dragEndHandler = { [weak self] (annotation, context) in
-              	    let context = PolygonAnnotationInteractionContext(
-                	    annotation: annotation.toFLTPolygonAnnotation(),
-                        gestureState: .ended)
-                    self?.drag(context, managerId: managerId)
-                }
+                annotation.configureHandlers(controller: self, managerId: managerId)
                 return annotation
             })
             try append(annotations, managerId: managerId)
@@ -67,7 +39,8 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
 
     func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let updatedAnnotation = annotation.toPolygonAnnotation()
+            var updatedAnnotation = annotation.toPolygonAnnotation()
+            updatedAnnotation.configureHandlers(controller: self, managerId: managerId)
             try update(annotation: updatedAnnotation, managerId: managerId)
             completion(.success(()))
         } catch {
@@ -374,6 +347,9 @@ extension PolygonAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -412,6 +388,9 @@ extension PolygonAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -430,8 +409,45 @@ extension MapboxMaps.PolygonAnnotation {
             fillPattern: fillPattern,
             fillTunnelStructureColor: fillTunnelStructureColor?.intValue,
             fillZOffset: fillZOffset,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
+    }
+}
+
+extension MapboxMaps.PolygonAnnotation {
+    mutating func configureHandlers(controller: PolygonAnnotationController, managerId: String) {
+        var configured = self
+        tapHandler = { [weak controller] _ in
+            let context = PolygonAnnotationInteractionContext(
+                annotation: configured.toFLTPolygonAnnotation(),
+                gestureState: .ended)
+            return controller?.tap(context, managerId: managerId) ?? false
+        }
+        longPressHandler = { [weak controller] _ in
+            let context = PolygonAnnotationInteractionContext(
+                annotation: configured.toFLTPolygonAnnotation(),
+                gestureState: .ended)
+            return controller?.longPress(context, managerId: managerId) ?? false
+        }
+        dragBeginHandler = { [weak controller] (annotation, _) in
+            let context = PolygonAnnotationInteractionContext(
+                annotation: annotation.toFLTPolygonAnnotation(),
+                gestureState: .started)
+            return controller?.drag(context, managerId: managerId) ?? false
+        }
+        dragChangeHandler = { [weak controller] (annotation, _) in
+            let context = PolygonAnnotationInteractionContext(
+                annotation: annotation.toFLTPolygonAnnotation(),
+                gestureState: .changed)
+            controller?.drag(context, managerId: managerId)
+        }
+        dragEndHandler = { [weak controller] (annotation, _) in
+              let context = PolygonAnnotationInteractionContext(
+                annotation: annotation.toFLTPolygonAnnotation(),
+                gestureState: .ended)
+            controller?.drag(context, managerId: managerId)
+        }
     }
 }
 // End of generated file.

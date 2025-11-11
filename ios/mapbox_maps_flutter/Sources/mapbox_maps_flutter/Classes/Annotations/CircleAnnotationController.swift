@@ -8,6 +8,10 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
     private static let errorCode = "0"
     private typealias AnnotationManager = CircleAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[CircleAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTCircleAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -23,39 +27,7 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
         do {
             let annotations = annotationOptions.map({ options in
                 var annotation = options.toCircleAnnotation()
-                annotation.tapHandler = { [weak self] (context) in
-                    guard let self else { return false }
-                    let context = CircleAnnotationInteractionContext(
-                        annotation: annotation.toFLTCircleAnnotation(),
-                        gestureState: .ended)
-                    return self.tap(context, managerId: managerId)
-                }
-                annotation.longPressHandler = { [weak self] (context) in
-                    guard let self else { return false }
-                    let context = CircleAnnotationInteractionContext(
-                        annotation: annotation.toFLTCircleAnnotation(),
-                        gestureState: .ended)
-                    return self.longPress(context, managerId: managerId)
-                }
-                annotation.dragBeginHandler = { [weak self] (annotation, context) in
-                    guard let self else { return false }
-                    let context = CircleAnnotationInteractionContext(
-                        annotation: annotation.toFLTCircleAnnotation(),
-                        gestureState: .started)
-                    return self.drag(context, managerId: managerId)
-                }
-                annotation.dragChangeHandler = { [weak self] (annotation, context) in
-                    let context = CircleAnnotationInteractionContext(
-                        annotation: annotation.toFLTCircleAnnotation(),
-                        gestureState: .changed)
-                    self?.drag(context, managerId: managerId)
-                }
-				annotation.dragEndHandler = { [weak self] (annotation, context) in
-              	    let context = CircleAnnotationInteractionContext(
-                	    annotation: annotation.toFLTCircleAnnotation(),
-                        gestureState: .ended)
-                    self?.drag(context, managerId: managerId)
-                }
+                annotation.configureHandlers(controller: self, managerId: managerId)
                 return annotation
             })
             try append(annotations, managerId: managerId)
@@ -67,7 +39,8 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
 
     func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let updatedAnnotation = annotation.toCircleAnnotation()
+            var updatedAnnotation = annotation.toCircleAnnotation()
+            updatedAnnotation.configureHandlers(controller: self, managerId: managerId)
             try update(annotation: updatedAnnotation, managerId: managerId)
             completion(.success(()))
         } catch {
@@ -371,6 +344,9 @@ extension CircleAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -406,6 +382,9 @@ extension CircleAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -423,8 +402,45 @@ extension MapboxMaps.CircleAnnotation {
             circleStrokeColor: circleStrokeColor?.intValue,
             circleStrokeOpacity: circleStrokeOpacity,
             circleStrokeWidth: circleStrokeWidth,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
+    }
+}
+
+extension MapboxMaps.CircleAnnotation {
+    mutating func configureHandlers(controller: CircleAnnotationController, managerId: String) {
+        var configured = self
+        tapHandler = { [weak controller] _ in
+            let context = CircleAnnotationInteractionContext(
+                annotation: configured.toFLTCircleAnnotation(),
+                gestureState: .ended)
+            return controller?.tap(context, managerId: managerId) ?? false
+        }
+        longPressHandler = { [weak controller] _ in
+            let context = CircleAnnotationInteractionContext(
+                annotation: configured.toFLTCircleAnnotation(),
+                gestureState: .ended)
+            return controller?.longPress(context, managerId: managerId) ?? false
+        }
+        dragBeginHandler = { [weak controller] (annotation, _) in
+            let context = CircleAnnotationInteractionContext(
+                annotation: annotation.toFLTCircleAnnotation(),
+                gestureState: .started)
+            return controller?.drag(context, managerId: managerId) ?? false
+        }
+        dragChangeHandler = { [weak controller] (annotation, _) in
+            let context = CircleAnnotationInteractionContext(
+                annotation: annotation.toFLTCircleAnnotation(),
+                gestureState: .changed)
+            controller?.drag(context, managerId: managerId)
+        }
+        dragEndHandler = { [weak controller] (annotation, _) in
+              let context = CircleAnnotationInteractionContext(
+                annotation: annotation.toFLTCircleAnnotation(),
+                gestureState: .ended)
+            controller?.drag(context, managerId: managerId)
+        }
     }
 }
 // End of generated file.

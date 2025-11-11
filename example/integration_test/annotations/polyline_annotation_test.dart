@@ -31,6 +31,7 @@ void main() {
       lineOpacity: 1.0,
       linePattern: "abc",
       lineWidth: 1.0,
+      customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(polylineAnnotationOptions);
     var lineString = annotation.geometry;
@@ -52,6 +53,7 @@ void main() {
     expect(1.0, annotation.lineOpacity);
     expect("abc", annotation.linePattern);
     expect(1.0, annotation.lineWidth);
+    expect({'foo': 'bar'}, annotation.customData);
   });
 
   testWidgets('update and delete PolylineAnnotation',
@@ -80,6 +82,9 @@ void main() {
     for (var i = 0; i < 10; i++) {
       await manager.create(polylineAnnotationOptions);
     }
+
+    final annotations = await manager.getAnnotations();
+    expect(annotations.length, equals(10));
 
     await manager.deleteAll();
   });

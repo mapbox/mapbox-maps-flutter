@@ -33,6 +33,31 @@ private fun wrapError(exception: Throwable): List<Any?> {
     )
   }
 }
+private fun deepEqualsPolygonAnnotationMessenger(a: Any?, b: Any?): Boolean {
+  if (a is ByteArray && b is ByteArray) {
+    return a.contentEquals(b)
+  }
+  if (a is IntArray && b is IntArray) {
+    return a.contentEquals(b)
+  }
+  if (a is LongArray && b is LongArray) {
+    return a.contentEquals(b)
+  }
+  if (a is DoubleArray && b is DoubleArray) {
+    return a.contentEquals(b)
+  }
+  if (a is Array<*> && b is Array<*>) {
+    return a.size == b.size &&
+      a.indices.all { deepEqualsPolygonAnnotationMessenger(a[it], b[it]) }
+  }
+  if (a is Map<*, *> && b is Map<*, *>) {
+    return a.size == b.size && a.keys.all {
+      (b as Map<Any?, Any?>).containsKey(it) &&
+        deepEqualsPolygonAnnotationMessenger(a[it], b[it])
+    }
+  }
+  return a == b
+}
 
 /**
  * Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
@@ -117,7 +142,9 @@ data class PolygonAnnotation(
    */
   val fillZOffset: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
-  val isDraggable: Boolean? = null
+  val isDraggable: Boolean? = null,
+  /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
+  val customData: Map<String, Any>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotation {
@@ -133,7 +160,8 @@ data class PolygonAnnotation(
       val fillTunnelStructureColor = pigeonVar_list[9] as Long?
       val fillZOffset = pigeonVar_list[10] as Double?
       val isDraggable = pigeonVar_list[11] as Boolean?
-      return PolygonAnnotation(id, geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable)
+      val customData = pigeonVar_list[12] as Map<String, Any>?
+      return PolygonAnnotation(id, geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -150,6 +178,7 @@ data class PolygonAnnotation(
       fillTunnelStructureColor,
       fillZOffset,
       isDraggable,
+      customData,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -170,7 +199,8 @@ data class PolygonAnnotation(
       fillPattern == other.fillPattern &&
       fillTunnelStructureColor == other.fillTunnelStructureColor &&
       fillZOffset == other.fillZOffset &&
-      isDraggable == other.isDraggable
+      isDraggable == other.isDraggable &&
+      deepEqualsPolygonAnnotationMessenger(customData, other.customData)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -221,7 +251,9 @@ data class PolygonAnnotationOptions(
    */
   val fillZOffset: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
-  val isDraggable: Boolean? = null
+  val isDraggable: Boolean? = null,
+  /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
+  val customData: Map<String, Any>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotationOptions {
@@ -236,7 +268,8 @@ data class PolygonAnnotationOptions(
       val fillTunnelStructureColor = pigeonVar_list[8] as Long?
       val fillZOffset = pigeonVar_list[9] as Double?
       val isDraggable = pigeonVar_list[10] as Boolean?
-      return PolygonAnnotationOptions(geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable)
+      val customData = pigeonVar_list[11] as Map<String, Any>?
+      return PolygonAnnotationOptions(geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -252,6 +285,7 @@ data class PolygonAnnotationOptions(
       fillTunnelStructureColor,
       fillZOffset,
       isDraggable,
+      customData,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -271,7 +305,8 @@ data class PolygonAnnotationOptions(
       fillPattern == other.fillPattern &&
       fillTunnelStructureColor == other.fillTunnelStructureColor &&
       fillZOffset == other.fillZOffset &&
-      isDraggable == other.isDraggable
+      isDraggable == other.isDraggable &&
+      deepEqualsPolygonAnnotationMessenger(customData, other.customData)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -336,6 +371,7 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PolygonAnnotationMessenger {
+  fun getAnnotations(managerId: String, callback: (Result<List<PolygonAnnotation>>) -> Unit)
   fun create(managerId: String, annotationOption: PolygonAnnotationOptions, callback: (Result<PolygonAnnotation>) -> Unit)
   fun createMulti(managerId: String, annotationOptions: List<PolygonAnnotationOptions>, callback: (Result<List<PolygonAnnotation>>) -> Unit)
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
@@ -379,6 +415,26 @@ interface _PolygonAnnotationMessenger {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: _PolygonAnnotationMessenger?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getAnnotations$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getAnnotations(managerIdArg) { result: Result<List<PolygonAnnotation>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.create$separatedMessageChannelSuffix", codec)
         if (api != null) {

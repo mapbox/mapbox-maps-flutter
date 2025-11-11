@@ -121,6 +121,8 @@ struct PolygonAnnotation {
   var fillZOffset: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -137,6 +139,7 @@ struct PolygonAnnotation {
     let fillTunnelStructureColor: Int64? = nilOrValue(pigeonVar_list[9])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[10])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[11])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[12])
 
     return PolygonAnnotation(
       id: id,
@@ -150,7 +153,8 @@ struct PolygonAnnotation {
       fillPattern: fillPattern,
       fillTunnelStructureColor: fillTunnelStructureColor,
       fillZOffset: fillZOffset,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -167,6 +171,7 @@ struct PolygonAnnotation {
       fillTunnelStructureColor,
       fillZOffset,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -205,6 +210,8 @@ struct PolygonAnnotationOptions {
   var fillZOffset: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -220,6 +227,7 @@ struct PolygonAnnotationOptions {
     let fillTunnelStructureColor: Int64? = nilOrValue(pigeonVar_list[8])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[9])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[10])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[11])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
@@ -232,7 +240,8 @@ struct PolygonAnnotationOptions {
       fillPattern: fillPattern,
       fillTunnelStructureColor: fillTunnelStructureColor,
       fillZOffset: fillZOffset,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -248,6 +257,7 @@ struct PolygonAnnotationOptions {
       fillTunnelStructureColor,
       fillZOffset,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -318,6 +328,7 @@ class PolygonAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @unche
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _PolygonAnnotationMessenger {
+  func getAnnotations(managerId: String, completion: @escaping (Result<[PolygonAnnotation], Error>) -> Void)
   func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [PolygonAnnotationOptions], completion: @escaping (Result<[PolygonAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -359,6 +370,23 @@ class _PolygonAnnotationMessengerSetup {
   /// Sets up an instance of `_PolygonAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PolygonAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getAnnotationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getAnnotations\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getAnnotationsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getAnnotations(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getAnnotationsChannel.setMessageHandler(nil)
+    }
     let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
