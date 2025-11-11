@@ -1,6 +1,6 @@
 ### 2.17.0-rc.1
 
-* [iOS] Fix annotation interaction handlers(tap, drag etc.) not working after annotation update.
+* [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
 
 ### 2.17.0-beta.1
 
