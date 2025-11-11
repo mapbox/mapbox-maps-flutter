@@ -1,6 +1,7 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
+import com.google.gson.Gson
 import com.mapbox.maps.extension.style.utils.ColorUtils
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
@@ -18,6 +19,14 @@ import toLineWidthUnit
 class PolylineAnnotationController(private val delegate: ControllerDelegate) : _PolylineAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
+
+  override fun getAnnotations(
+    managerId: String,
+    callback: (Result<List<PolylineAnnotation>>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    callback(Result.success(manager.annotations.map { it.toFLTPolylineAnnotation() }))
+  }
 
   override fun create(
     managerId: String,
@@ -877,6 +886,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
     lineOpacity = lineOpacity,
     linePattern = linePattern,
     lineWidth = lineWidth,
+    customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
 
@@ -923,6 +933,9 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   }
   this.lineWidth?.let {
     options.withLineWidth(it)
+  }
+  this.customData?.let {
+    options.withData(Gson().toJsonTree(it))
   }
   return options
 }

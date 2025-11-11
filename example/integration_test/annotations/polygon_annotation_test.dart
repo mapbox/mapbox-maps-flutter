@@ -34,6 +34,7 @@ void main() {
       fillPattern: "abc",
       fillTunnelStructureColor: Colors.red.value,
       fillZOffset: 1.0,
+      customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(polygonAnnotationOptions);
     var polygon = annotation.geometry;
@@ -53,6 +54,7 @@ void main() {
     expect("abc", annotation.fillPattern);
     expect(Colors.red.value, annotation.fillTunnelStructureColor);
     expect(1.0, annotation.fillZOffset);
+    expect({'foo': 'bar'}, annotation.customData);
   });
 
   testWidgets('update and delete PolygonAnnotation',
@@ -88,6 +90,9 @@ void main() {
     for (var i = 0; i < 10; i++) {
       await manager.create(polygonAnnotationOptions);
     }
+
+    final annotations = await manager.getAnnotations();
+    expect(annotations.length, equals(10));
 
     await manager.deleteAll();
   });

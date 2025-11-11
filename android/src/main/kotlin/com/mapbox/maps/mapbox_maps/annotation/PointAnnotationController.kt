@@ -3,6 +3,7 @@ package com.mapbox.maps.mapbox_maps.annotation
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.google.gson.Gson
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import toFLTIconAnchor
@@ -38,6 +39,14 @@ import java.io.ByteArrayOutputStream
 class PointAnnotationController(private val delegate: ControllerDelegate) : _PointAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PointAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
+
+  override fun getAnnotations(
+    managerId: String,
+    callback: (Result<List<PointAnnotation>>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    callback(Result.success(manager.annotations.map { it.toFLTPointAnnotation() }))
+  }
 
   override fun create(
     managerId: String,
@@ -1781,6 +1790,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnota
     textHaloWidth = textHaloWidth,
     textOcclusionOpacity = textOcclusionOpacity,
     textOpacity = textOpacity,
+    customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
 
@@ -1899,6 +1909,9 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   }
   this.textOpacity?.let {
     options.withTextOpacity(it)
+  }
+  this.customData?.let {
+    options.withData(Gson().toJsonTree(it))
   }
   return options
 }
