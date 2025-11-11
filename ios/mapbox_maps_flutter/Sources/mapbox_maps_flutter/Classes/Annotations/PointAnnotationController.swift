@@ -8,6 +8,10 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
     private static let errorCode = "0"
     private typealias AnnotationManager = PointAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[PointAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTPointAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: PointAnnotationOptions, completion: @escaping (Result<PointAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -1324,6 +1328,9 @@ extension PointAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -1443,6 +1450,9 @@ extension PointAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -1488,7 +1498,8 @@ extension MapboxMaps.PointAnnotation {
             textHaloWidth: textHaloWidth,
             textOcclusionOpacity: textOcclusionOpacity,
             textOpacity: textOpacity,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
     }
 }

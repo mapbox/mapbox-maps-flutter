@@ -57,6 +57,7 @@ class CircleAnnotation {
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
     this.isDraggable,
+    this.customData,
   });
 
   /// The id for annotation
@@ -99,6 +100,9 @@ class CircleAnnotation {
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  Map<String, Object>? customData;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -112,6 +116,7 @@ class CircleAnnotation {
       circleStrokeOpacity,
       circleStrokeWidth,
       isDraggable,
+      customData,
     ];
   }
 
@@ -133,6 +138,8 @@ class CircleAnnotation {
       circleStrokeOpacity: result[8] as double?,
       circleStrokeWidth: result[9] as double?,
       isDraggable: result[10] as bool?,
+      customData:
+          (result[11] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -155,7 +162,8 @@ class CircleAnnotation {
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
         circleStrokeWidth == other.circleStrokeWidth &&
-        isDraggable == other.isDraggable;
+        isDraggable == other.isDraggable &&
+        _deepEquals(customData, other.customData);
   }
 
   @override
@@ -175,6 +183,7 @@ class CircleAnnotationOptions {
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
     this.isDraggable,
+    this.customData,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -214,6 +223,9 @@ class CircleAnnotationOptions {
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  Map<String, Object>? customData;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -226,6 +238,7 @@ class CircleAnnotationOptions {
       circleStrokeOpacity,
       circleStrokeWidth,
       isDraggable,
+      customData,
     ];
   }
 
@@ -246,6 +259,8 @@ class CircleAnnotationOptions {
       circleStrokeOpacity: result[7] as double?,
       circleStrokeWidth: result[8] as double?,
       isDraggable: result[9] as bool?,
+      customData:
+          (result[10] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -267,7 +282,8 @@ class CircleAnnotationOptions {
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
         circleStrokeWidth == other.circleStrokeWidth &&
-        isDraggable == other.isDraggable;
+        isDraggable == other.isDraggable &&
+        _deepEquals(customData, other.customData);
   }
 
   @override
@@ -350,6 +366,38 @@ class _CircleAnnotationMessenger {
       CircleAnnotationMessenger_PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
+
+  Future<List<CircleAnnotation>> getAnnotations(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getAnnotations$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<CircleAnnotation>();
+    }
+  }
 
   Future<CircleAnnotation> create(
       String managerId, CircleAnnotationOptions annotationOption) async {

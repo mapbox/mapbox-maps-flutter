@@ -8,6 +8,10 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
     private static let errorCode = "0"
     private typealias AnnotationManager = CircleAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[CircleAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTCircleAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -340,6 +344,9 @@ extension CircleAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -375,6 +382,9 @@ extension CircleAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -392,7 +402,8 @@ extension MapboxMaps.CircleAnnotation {
             circleStrokeColor: circleStrokeColor?.intValue,
             circleStrokeOpacity: circleStrokeOpacity,
             circleStrokeWidth: circleStrokeWidth,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
     }
 }

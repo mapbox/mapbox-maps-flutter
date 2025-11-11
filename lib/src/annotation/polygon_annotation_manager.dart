@@ -89,6 +89,10 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
     }).asCancelable();
   }
 
+  /// Get all annotations of manager.
+  Future<List<PolygonAnnotation>> getAnnotations() =>
+      _annotationMessenger.getAnnotations(id);
+
   /// Create a new annotation with the option.
   Future<PolygonAnnotation> create(PolygonAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

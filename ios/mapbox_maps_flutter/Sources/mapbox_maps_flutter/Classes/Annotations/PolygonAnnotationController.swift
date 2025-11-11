@@ -8,6 +8,10 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
     private static let errorCode = "0"
     private typealias AnnotationManager = PolygonAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[PolygonAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTPolygonAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -343,6 +347,9 @@ extension PolygonAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -381,6 +388,9 @@ extension PolygonAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -399,7 +409,8 @@ extension MapboxMaps.PolygonAnnotation {
             fillPattern: fillPattern,
             fillTunnelStructureColor: fillTunnelStructureColor?.intValue,
             fillZOffset: fillZOffset,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
     }
 }
