@@ -88,6 +88,10 @@ class PointAnnotationManager extends BaseAnnotationManager {
     }).asCancelable();
   }
 
+  /// Get all annotations of manager.
+  Future<List<PointAnnotation>> getAnnotations() =>
+      _annotationMessenger.getAnnotations(id);
+
   /// Create a new annotation with the option.
   Future<PointAnnotation> create(PointAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

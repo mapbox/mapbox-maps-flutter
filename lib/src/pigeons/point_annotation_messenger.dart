@@ -302,6 +302,7 @@ class PointAnnotation {
     this.textOcclusionOpacity,
     this.textOpacity,
     this.isDraggable,
+    this.customData,
   });
 
   /// The id for annotation
@@ -457,6 +458,9 @@ class PointAnnotation {
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  Map<String, Object>? customData;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -498,6 +502,7 @@ class PointAnnotation {
       textOcclusionOpacity,
       textOpacity,
       isDraggable,
+      customData,
     ];
   }
 
@@ -547,6 +552,8 @@ class PointAnnotation {
       textOcclusionOpacity: result[36] as double?,
       textOpacity: result[37] as double?,
       isDraggable: result[38] as bool?,
+      customData:
+          (result[39] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -597,7 +604,8 @@ class PointAnnotation {
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
         textOpacity == other.textOpacity &&
-        isDraggable == other.isDraggable;
+        isDraggable == other.isDraggable &&
+        _deepEquals(customData, other.customData);
   }
 
   @override
@@ -645,6 +653,7 @@ class PointAnnotationOptions {
     this.textOcclusionOpacity,
     this.textOpacity,
     this.isDraggable,
+    this.customData,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -797,6 +806,9 @@ class PointAnnotationOptions {
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  Map<String, Object>? customData;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -837,6 +849,7 @@ class PointAnnotationOptions {
       textOcclusionOpacity,
       textOpacity,
       isDraggable,
+      customData,
     ];
   }
 
@@ -885,6 +898,8 @@ class PointAnnotationOptions {
       textOcclusionOpacity: result[35] as double?,
       textOpacity: result[36] as double?,
       isDraggable: result[37] as bool?,
+      customData:
+          (result[38] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -934,7 +949,8 @@ class PointAnnotationOptions {
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
         textOpacity == other.textOpacity &&
-        isDraggable == other.isDraggable;
+        isDraggable == other.isDraggable &&
+        _deepEquals(customData, other.customData);
   }
 
   @override
@@ -1089,6 +1105,38 @@ class _PointAnnotationMessenger {
       PointAnnotationMessenger_PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
+
+  Future<List<PointAnnotation>> getAnnotations(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<PointAnnotation>();
+    }
+  }
 
   Future<PointAnnotation> create(
       String managerId, PointAnnotationOptions annotationOption) async {

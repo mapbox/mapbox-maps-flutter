@@ -25,6 +25,7 @@ void main() {
       circleStrokeColor: Colors.red.value,
       circleStrokeOpacity: 1.0,
       circleStrokeWidth: 1.0,
+      customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(circleAnnotationOptions);
     var point = annotation.geometry;
@@ -38,6 +39,7 @@ void main() {
     expect(Colors.red.value, annotation.circleStrokeColor);
     expect(1.0, annotation.circleStrokeOpacity);
     expect(1.0, annotation.circleStrokeWidth);
+    expect({'foo': 'bar'}, annotation.customData);
   });
 
   testWidgets('update and delete CircleAnnotation',
@@ -63,6 +65,9 @@ void main() {
     for (var i = 0; i < 10; i++) {
       await manager.create(circleAnnotationOptions);
     }
+
+    final annotations = await manager.getAnnotations();
+    expect(annotations.length, equals(10));
 
     await manager.deleteAll();
   });

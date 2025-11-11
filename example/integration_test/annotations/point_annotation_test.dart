@@ -56,6 +56,7 @@ void main() {
       textHaloWidth: 1.0,
       textOcclusionOpacity: 1.0,
       textOpacity: 1.0,
+      customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(pointAnnotationOptions);
     var point = annotation.geometry;
@@ -96,6 +97,7 @@ void main() {
     expect(1.0, annotation.textHaloWidth);
     expect(1.0, annotation.textOcclusionOpacity);
     expect(1.0, annotation.textOpacity);
+    expect({'foo': 'bar'}, annotation.customData);
   });
 
   testWidgets('update and delete PointAnnotation', (WidgetTester tester) async {
@@ -120,6 +122,9 @@ void main() {
     for (var i = 0; i < 10; i++) {
       await manager.create(pointAnnotationOptions);
     }
+
+    final annotations = await manager.getAnnotations();
+    expect(annotations.length, equals(10));
 
     await manager.deleteAll();
   });

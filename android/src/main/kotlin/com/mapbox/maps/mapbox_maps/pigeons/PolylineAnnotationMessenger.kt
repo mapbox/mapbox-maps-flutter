@@ -33,6 +33,31 @@ private fun wrapError(exception: Throwable): List<Any?> {
     )
   }
 }
+private fun deepEqualsPolylineAnnotationMessenger(a: Any?, b: Any?): Boolean {
+  if (a is ByteArray && b is ByteArray) {
+    return a.contentEquals(b)
+  }
+  if (a is IntArray && b is IntArray) {
+    return a.contentEquals(b)
+  }
+  if (a is LongArray && b is LongArray) {
+    return a.contentEquals(b)
+  }
+  if (a is DoubleArray && b is DoubleArray) {
+    return a.contentEquals(b)
+  }
+  if (a is Array<*> && b is Array<*>) {
+    return a.size == b.size &&
+      a.indices.all { deepEqualsPolylineAnnotationMessenger(a[it], b[it]) }
+  }
+  if (a is Map<*, *> && b is Map<*, *>) {
+    return a.size == b.size && a.keys.all {
+      (b as Map<Any?, Any?>).containsKey(it) &&
+        deepEqualsPolylineAnnotationMessenger(a[it], b[it])
+    }
+  }
+  return a == b
+}
 
 /**
  * The display of line endings.
@@ -198,7 +223,9 @@ data class PolylineAnnotation(
    */
   val lineWidth: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
-  val isDraggable: Boolean? = null
+  val isDraggable: Boolean? = null,
+  /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
+  val customData: Map<String, Any>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotation {
@@ -217,7 +244,8 @@ data class PolylineAnnotation(
       val linePattern = pigeonVar_list[12] as String?
       val lineWidth = pigeonVar_list[13] as Double?
       val isDraggable = pigeonVar_list[14] as Boolean?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
+      val customData = pigeonVar_list[15] as Map<String, Any>?
+      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -237,6 +265,7 @@ data class PolylineAnnotation(
       linePattern,
       lineWidth,
       isDraggable,
+      customData,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -260,7 +289,8 @@ data class PolylineAnnotation(
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
       lineWidth == other.lineWidth &&
-      isDraggable == other.isDraggable
+      isDraggable == other.isDraggable &&
+      deepEqualsPolylineAnnotationMessenger(customData, other.customData)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -333,7 +363,9 @@ data class PolylineAnnotationOptions(
    */
   val lineWidth: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
-  val isDraggable: Boolean? = null
+  val isDraggable: Boolean? = null,
+  /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
+  val customData: Map<String, Any>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotationOptions {
@@ -351,7 +383,8 @@ data class PolylineAnnotationOptions(
       val linePattern = pigeonVar_list[11] as String?
       val lineWidth = pigeonVar_list[12] as Double?
       val isDraggable = pigeonVar_list[13] as Boolean?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
+      val customData = pigeonVar_list[14] as Map<String, Any>?
+      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -370,6 +403,7 @@ data class PolylineAnnotationOptions(
       linePattern,
       lineWidth,
       isDraggable,
+      customData,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -392,7 +426,8 @@ data class PolylineAnnotationOptions(
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
       lineWidth == other.lineWidth &&
-      isDraggable == other.isDraggable
+      isDraggable == other.isDraggable &&
+      deepEqualsPolylineAnnotationMessenger(customData, other.customData)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -484,6 +519,7 @@ private open class PolylineAnnotationMessengerPigeonCodec : StandardMessageCodec
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PolylineAnnotationMessenger {
+  fun getAnnotations(managerId: String, callback: (Result<List<PolylineAnnotation>>) -> Unit)
   fun create(managerId: String, annotationOption: PolylineAnnotationOptions, callback: (Result<PolylineAnnotation>) -> Unit)
   fun createMulti(managerId: String, annotationOptions: List<PolylineAnnotationOptions>, callback: (Result<List<PolylineAnnotation>>) -> Unit)
   fun update(managerId: String, annotation: PolylineAnnotation, callback: (Result<Unit>) -> Unit)
@@ -559,6 +595,26 @@ interface _PolylineAnnotationMessenger {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: _PolylineAnnotationMessenger?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getAnnotations$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getAnnotations(managerIdArg) { result: Result<List<PolylineAnnotation>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.create$separatedMessageChannelSuffix", codec)
         if (api != null) {

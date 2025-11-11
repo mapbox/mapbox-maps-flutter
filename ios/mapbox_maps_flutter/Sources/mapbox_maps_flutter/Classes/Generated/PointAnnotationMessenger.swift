@@ -389,6 +389,8 @@ struct PointAnnotation {
   var textOpacity: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -432,6 +434,7 @@ struct PointAnnotation {
     let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[36])
     let textOpacity: Double? = nilOrValue(pigeonVar_list[37])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[38])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[39])
 
     return PointAnnotation(
       id: id,
@@ -472,7 +475,8 @@ struct PointAnnotation {
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
       textOpacity: textOpacity,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -516,6 +520,7 @@ struct PointAnnotation {
       textOcclusionOpacity,
       textOpacity,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -634,6 +639,8 @@ struct PointAnnotationOptions {
   var textOpacity: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
+  /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
+  var customData: [String: Any]? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -676,6 +683,7 @@ struct PointAnnotationOptions {
     let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[35])
     let textOpacity: Double? = nilOrValue(pigeonVar_list[36])
     let isDraggable: Bool? = nilOrValue(pigeonVar_list[37])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[38])
 
     return PointAnnotationOptions(
       geometry: geometry,
@@ -715,7 +723,8 @@ struct PointAnnotationOptions {
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
       textOpacity: textOpacity,
-      isDraggable: isDraggable
+      isDraggable: isDraggable,
+      customData: customData
     )
   }
   func toList() -> [Any?] {
@@ -758,6 +767,7 @@ struct PointAnnotationOptions {
       textOcclusionOpacity,
       textOpacity,
       isDraggable,
+      customData,
     ]
   }
 }
@@ -954,6 +964,7 @@ class PointAnnotationMessengerPigeonCodec: FlutterStandardMessageCodec, @uncheck
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _PointAnnotationMessenger {
+  func getAnnotations(managerId: String, completion: @escaping (Result<[PointAnnotation], Error>) -> Void)
   func create(managerId: String, annotationOption: PointAnnotationOptions, completion: @escaping (Result<PointAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [PointAnnotationOptions], completion: @escaping (Result<[PointAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1095,6 +1106,23 @@ class _PointAnnotationMessengerSetup {
   /// Sets up an instance of `_PointAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PointAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getAnnotationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getAnnotationsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getAnnotations(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getAnnotationsChannel.setMessageHandler(nil)
+    }
     let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
