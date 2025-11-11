@@ -33,6 +33,10 @@ class BaseAnnotationMessenger<C: AnnotationControllable> {
         storage[managerId]?.onLongPress(context) ?? false
     }
 
+    func allAnnotations(_ managerId: String) -> [C.Child] {
+        storage[managerId]?.controller.annotations ?? []
+    }
+
     private subscript(id: String) -> C? {
         return storage[id]?.controller
     }

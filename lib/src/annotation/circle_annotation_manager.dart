@@ -89,6 +89,10 @@ class CircleAnnotationManager extends BaseAnnotationManager {
     }).asCancelable();
   }
 
+  /// Get all annotations of manager.
+  Future<List<CircleAnnotation>> getAnnotations() =>
+      _annotationMessenger.getAnnotations(id);
+
   /// Create a new annotation with the option.
   Future<CircleAnnotation> create(CircleAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

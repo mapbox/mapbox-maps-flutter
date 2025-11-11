@@ -110,3 +110,40 @@ extension LocationCoordinate2D {
         [longitude, latitude]
     }
 }
+
+extension JSONValue {
+    static func fromAny(_ any: Any) -> Self? {
+        switch any {
+        case let string as String:
+            return .string(string)
+        case let number as Double:
+            return .number(number)
+        case let number as Float:
+            return .number(Double(number))
+        case let number as Int:
+            return .number(Double(number))
+        case let boolean as Bool:
+            return .boolean(boolean)
+        case let array as [Any]:
+            return .array(array.compactMap { fromAny($0) })
+        case let obj as [String: Any]:
+            return .object(obj.compactMapValues { fromAny($0) })
+        default: return nil
+        }
+    }
+
+    var toAny: Any {
+        switch self {
+        case .string(let string):
+            return string
+        case .number(let number):
+            return number
+        case .boolean(let boolean):
+            return boolean
+        case .array(let array):
+            return array.compactMap { $0?.toAny }
+        case .object(let object):
+            return object.compactMapValues { $0?.toAny }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
+import com.google.gson.Gson
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
 import toCircleElevationReference
@@ -15,6 +16,14 @@ import toFLTCircleTranslateAnchor
 class CircleAnnotationController(private val delegate: ControllerDelegate) : _CircleAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.CircleAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
+
+  override fun getAnnotations(
+    managerId: String,
+    callback: (Result<List<CircleAnnotation>>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    callback(Result.success(manager.annotations.map { it.toFLTCircleAnnotation() }))
+  }
 
   override fun create(
     managerId: String,
@@ -490,6 +499,7 @@ fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnno
     circleStrokeColor = circleStrokeColorInt?.toUInt()?.toLong(),
     circleStrokeOpacity = circleStrokeOpacity,
     circleStrokeWidth = circleStrokeWidth,
+    customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
 
@@ -524,6 +534,9 @@ fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.
   }
   this.circleStrokeWidth?.let {
     options.withCircleStrokeWidth(it)
+  }
+  this.customData?.let {
+    options.withData(Gson().toJsonTree(it))
   }
   return options
 }

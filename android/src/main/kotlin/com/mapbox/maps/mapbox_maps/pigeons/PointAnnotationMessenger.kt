@@ -574,7 +574,9 @@ data class PointAnnotation(
    */
   val textOpacity: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
-  val isDraggable: Boolean? = null
+  val isDraggable: Boolean? = null,
+  /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
+  val customData: Map<String, Any>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointAnnotation {
@@ -617,7 +619,8 @@ data class PointAnnotation(
       val textOcclusionOpacity = pigeonVar_list[36] as Double?
       val textOpacity = pigeonVar_list[37] as Double?
       val isDraggable = pigeonVar_list[38] as Boolean?
-      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable)
+      val customData = pigeonVar_list[39] as Map<String, Any>?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -661,6 +664,7 @@ data class PointAnnotation(
       textOcclusionOpacity,
       textOpacity,
       isDraggable,
+      customData,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -708,7 +712,8 @@ data class PointAnnotation(
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
       textOpacity == other.textOpacity &&
-      isDraggable == other.isDraggable
+      isDraggable == other.isDraggable &&
+      deepEqualsPointAnnotationMessenger(customData, other.customData)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -895,7 +900,9 @@ data class PointAnnotationOptions(
    */
   val textOpacity: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
-  val isDraggable: Boolean? = null
+  val isDraggable: Boolean? = null,
+  /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
+  val customData: Map<String, Any>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointAnnotationOptions {
@@ -937,7 +944,8 @@ data class PointAnnotationOptions(
       val textOcclusionOpacity = pigeonVar_list[35] as Double?
       val textOpacity = pigeonVar_list[36] as Double?
       val isDraggable = pigeonVar_list[37] as Boolean?
-      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable)
+      val customData = pigeonVar_list[38] as Map<String, Any>?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -980,6 +988,7 @@ data class PointAnnotationOptions(
       textOcclusionOpacity,
       textOpacity,
       isDraggable,
+      customData,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -1026,7 +1035,8 @@ data class PointAnnotationOptions(
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
       textOpacity == other.textOpacity &&
-      isDraggable == other.isDraggable
+      isDraggable == other.isDraggable &&
+      deepEqualsPointAnnotationMessenger(customData, other.customData)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1217,6 +1227,7 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PointAnnotationMessenger {
+  fun getAnnotations(managerId: String, callback: (Result<List<PointAnnotation>>) -> Unit)
   fun create(managerId: String, annotationOption: PointAnnotationOptions, callback: (Result<PointAnnotation>) -> Unit)
   fun createMulti(managerId: String, annotationOptions: List<PointAnnotationOptions>, callback: (Result<List<PointAnnotation>>) -> Unit)
   fun update(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
@@ -1360,6 +1371,26 @@ interface _PointAnnotationMessenger {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: _PointAnnotationMessenger?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getAnnotations(managerIdArg) { result: Result<List<PointAnnotation>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.create$separatedMessageChannelSuffix", codec)
         if (api != null) {

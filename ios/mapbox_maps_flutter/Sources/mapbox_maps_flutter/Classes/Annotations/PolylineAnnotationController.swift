@@ -8,6 +8,10 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
     private static let errorCode = "0"
     private typealias AnnotationManager = PolylineAnnotationManager
 
+    func getAnnotations(managerId: String, completion: @escaping (Result<[PolylineAnnotation], any Error>) -> Void) {
+        completion(.success(allAnnotations(managerId).map { $0.toFLTPolylineAnnotation() }))
+    }
+
     func create(managerId: String, annotationOption: PolylineAnnotationOptions, completion: @escaping (Result<PolylineAnnotation, Error>) -> Void) {
         try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
             completion(result.flatMap {
@@ -671,6 +675,9 @@ extension PolylineAnnotationOptions {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -718,6 +725,9 @@ extension PolylineAnnotation {
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
+        if let customData {
+            annotation.customData = customData.compactMapValues { JSONValue.fromAny($0) }
+        }
         return annotation
     }
 }
@@ -739,7 +749,8 @@ extension MapboxMaps.PolylineAnnotation {
             lineOpacity: lineOpacity,
             linePattern: linePattern,
             lineWidth: lineWidth,
-            isDraggable: isDraggable
+            isDraggable: isDraggable,
+            customData: customData.compactMapValues { $0?.toAny }
         )
     }
 }

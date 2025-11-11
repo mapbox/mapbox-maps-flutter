@@ -235,8 +235,7 @@ void main() {
 
     await mapboxMap.setFeatureState(
         'source', null, 'point', json.encode({'choose': true}));
-    var featureState =
-        await mapboxMap.getFeatureState('source', null, 'point');
+    var featureState = await mapboxMap.getFeatureState('source', null, 'point');
     var stateMap = json.decode(featureState);
     expect(stateMap.length, 1);
     expect(stateMap['choose'], true);

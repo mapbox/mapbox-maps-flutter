@@ -89,6 +89,10 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
     }).asCancelable();
   }
 
+  /// Get all annotations of manager.
+  Future<List<PolylineAnnotation>> getAnnotations() =>
+      _annotationMessenger.getAnnotations(id);
+
   /// Create a new annotation with the option.
   Future<PolylineAnnotation> create(PolylineAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

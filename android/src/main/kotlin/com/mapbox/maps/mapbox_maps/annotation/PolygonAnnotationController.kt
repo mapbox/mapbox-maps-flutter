@@ -1,6 +1,7 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
+import com.google.gson.Gson
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import toFLTFillElevationReference
@@ -11,6 +12,14 @@ import toFillTranslateAnchor
 class PolygonAnnotationController(private val delegate: ControllerDelegate) : _PolygonAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
+
+  override fun getAnnotations(
+    managerId: String,
+    callback: (Result<List<PolygonAnnotation>>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    callback(Result.success(manager.annotations.map { it.toFLTPolygonAnnotation() }))
+  }
 
   override fun create(
     managerId: String,
@@ -492,6 +501,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAn
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillTunnelStructureColor = fillTunnelStructureColorInt?.toUInt()?.toLong(),
     fillZOffset = fillZOffset,
+    customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
 
@@ -529,6 +539,9 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   }
   this.fillZOffset?.let {
     options.withFillZOffset(it)
+  }
+  this.customData?.let {
+    options.withData(Gson().toJsonTree(it))
   }
   return options
 }
