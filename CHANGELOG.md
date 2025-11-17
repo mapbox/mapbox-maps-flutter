@@ -3,6 +3,7 @@
 * [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
 * Add the ability to get all annotations from an annotation manager.
 * Add `customData` field to annotations to be able to pass user data.
+* Add nautical miles scale bar distance unit.
 
 ### 2.17.0-beta.1
 
