@@ -109,6 +109,17 @@ enum ModelElevationReference: Int {
   case gROUND = 1
 }
 
+/// Supported distance unit types.
+/// Default value: "metric".
+enum DistanceUnits: Int {
+  /// Metric units using meters and kilometers. The scale bar will automatically choose between meters and kilometers based on the distance being displayed for optimal readability.
+  case mETRIC = 0
+  /// Imperial units using feet for short distances and miles for longer distances.  The scale bar will display distances in feet for small distances and automatically switch to miles for longer distances.
+  case iMPERIAL = 1
+  /// Nautical units using fathoms for short distances and nautical miles for longer distances. The scale bar will display distances in fathoms for small distances and automatically switch to nautical miles for longer distances. Commonly used for marine and aviation navigation.
+  case nAUTICAL = 2
+}
+
 /// Gesture configuration allows to control the user touch interaction.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -529,6 +540,9 @@ struct ScaleBarSettings {
   /// Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units.
   /// Default value: true.
   var isMetricUnits: Bool? = nil
+  /// Supported distance unit types.
+  /// Default value: "metric".
+  var distanceUnits: DistanceUnits? = nil
   /// Configures minimum refresh interval, in millisecond, default is 15.
   /// Default value: 15.
   var refreshInterval: Int64? = nil
@@ -560,10 +574,11 @@ struct ScaleBarSettings {
     let textBorderWidth: Double? = nilOrValue(pigeonVar_list[12])
     let textSize: Double? = nilOrValue(pigeonVar_list[13])
     let isMetricUnits: Bool? = nilOrValue(pigeonVar_list[14])
-    let refreshInterval: Int64? = nilOrValue(pigeonVar_list[15])
-    let showTextBorder: Bool? = nilOrValue(pigeonVar_list[16])
-    let ratio: Double? = nilOrValue(pigeonVar_list[17])
-    let useContinuousRendering: Bool? = nilOrValue(pigeonVar_list[18])
+    let distanceUnits: DistanceUnits? = nilOrValue(pigeonVar_list[15])
+    let refreshInterval: Int64? = nilOrValue(pigeonVar_list[16])
+    let showTextBorder: Bool? = nilOrValue(pigeonVar_list[17])
+    let ratio: Double? = nilOrValue(pigeonVar_list[18])
+    let useContinuousRendering: Bool? = nilOrValue(pigeonVar_list[19])
 
     return ScaleBarSettings(
       enabled: enabled,
@@ -581,6 +596,7 @@ struct ScaleBarSettings {
       textBorderWidth: textBorderWidth,
       textSize: textSize,
       isMetricUnits: isMetricUnits,
+      distanceUnits: distanceUnits,
       refreshInterval: refreshInterval,
       showTextBorder: showTextBorder,
       ratio: ratio,
@@ -604,6 +620,7 @@ struct ScaleBarSettings {
       textBorderWidth,
       textSize,
       isMetricUnits,
+      distanceUnits,
       refreshInterval,
       showTextBorder,
       ratio,
@@ -857,24 +874,30 @@ private class SettingsPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 134:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return DistanceUnits(rawValue: enumResultAsInt)
+      }
+      return nil
     case 135:
-      return GesturesSettings.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 136:
-      return LocationPuck2D.fromList(self.readValue() as! [Any?])
+      return GesturesSettings.fromList(self.readValue() as! [Any?])
     case 137:
-      return LocationPuck3D.fromList(self.readValue() as! [Any?])
+      return LocationPuck2D.fromList(self.readValue() as! [Any?])
     case 138:
-      return LocationPuck.fromList(self.readValue() as! [Any?])
+      return LocationPuck3D.fromList(self.readValue() as! [Any?])
     case 139:
-      return LocationComponentSettings.fromList(self.readValue() as! [Any?])
+      return LocationPuck.fromList(self.readValue() as! [Any?])
     case 140:
-      return ScaleBarSettings.fromList(self.readValue() as! [Any?])
+      return LocationComponentSettings.fromList(self.readValue() as! [Any?])
     case 141:
-      return CompassSettings.fromList(self.readValue() as! [Any?])
+      return ScaleBarSettings.fromList(self.readValue() as! [Any?])
     case 142:
-      return AttributionSettings.fromList(self.readValue() as! [Any?])
+      return CompassSettings.fromList(self.readValue() as! [Any?])
     case 143:
+      return AttributionSettings.fromList(self.readValue() as! [Any?])
+    case 144:
       return LogoSettings.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -899,35 +922,38 @@ private class SettingsPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ModelElevationReference {
       super.writeByte(133)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? DistanceUnits {
       super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? GesturesSettings {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? LocationPuck2D {
+    } else if let value = value as? GesturesSettings {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? LocationPuck3D {
+    } else if let value = value as? LocationPuck2D {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? LocationPuck {
+    } else if let value = value as? LocationPuck3D {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? LocationComponentSettings {
+    } else if let value = value as? LocationPuck {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? ScaleBarSettings {
+    } else if let value = value as? LocationComponentSettings {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? CompassSettings {
+    } else if let value = value as? ScaleBarSettings {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? AttributionSettings {
+    } else if let value = value as? CompassSettings {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? LogoSettings {
+    } else if let value = value as? AttributionSettings {
       super.writeByte(143)
+      super.writeValue(value.toList())
+    } else if let value = value as? LogoSettings {
+      super.writeByte(144)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

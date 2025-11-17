@@ -141,6 +141,25 @@ enum class ModelElevationReference(val raw: Int) {
 }
 
 /**
+ * Supported distance unit types.
+ * Default value: "metric".
+ */
+enum class DistanceUnits(val raw: Int) {
+  /** Metric units using meters and kilometers. The scale bar will automatically choose between meters and kilometers based on the distance being displayed for optimal readability. */
+  METRIC(0),
+  /** Imperial units using feet for short distances and miles for longer distances.  The scale bar will display distances in feet for small distances and automatically switch to miles for longer distances. */
+  IMPERIAL(1),
+  /** Nautical units using fathoms for short distances and nautical miles for longer distances. The scale bar will display distances in fathoms for small distances and automatically switch to nautical miles for longer distances. Commonly used for marine and aviation navigation. */
+  NAUTICAL(2);
+
+  companion object {
+    fun ofRaw(raw: Int): DistanceUnits? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Gesture configuration allows to control the user touch interaction.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -713,6 +732,11 @@ data class ScaleBarSettings(
    */
   val isMetricUnits: Boolean? = null,
   /**
+   * Supported distance unit types.
+   * Default value: "metric".
+   */
+  val distanceUnits: DistanceUnits? = null,
+  /**
    * Configures minimum refresh interval, in millisecond, default is 15.
    * Default value: 15.
    */
@@ -750,11 +774,12 @@ data class ScaleBarSettings(
       val textBorderWidth = pigeonVar_list[12] as Double?
       val textSize = pigeonVar_list[13] as Double?
       val isMetricUnits = pigeonVar_list[14] as Boolean?
-      val refreshInterval = pigeonVar_list[15] as Long?
-      val showTextBorder = pigeonVar_list[16] as Boolean?
-      val ratio = pigeonVar_list[17] as Double?
-      val useContinuousRendering = pigeonVar_list[18] as Boolean?
-      return ScaleBarSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom, textColor, primaryColor, secondaryColor, borderWidth, height, textBarMargin, textBorderWidth, textSize, isMetricUnits, refreshInterval, showTextBorder, ratio, useContinuousRendering)
+      val distanceUnits = pigeonVar_list[15] as DistanceUnits?
+      val refreshInterval = pigeonVar_list[16] as Long?
+      val showTextBorder = pigeonVar_list[17] as Boolean?
+      val ratio = pigeonVar_list[18] as Double?
+      val useContinuousRendering = pigeonVar_list[19] as Boolean?
+      return ScaleBarSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom, textColor, primaryColor, secondaryColor, borderWidth, height, textBarMargin, textBorderWidth, textSize, isMetricUnits, distanceUnits, refreshInterval, showTextBorder, ratio, useContinuousRendering)
     }
   }
   fun toList(): List<Any?> {
@@ -774,6 +799,7 @@ data class ScaleBarSettings(
       textBorderWidth,
       textSize,
       isMetricUnits,
+      distanceUnits,
       refreshInterval,
       showTextBorder,
       ratio,
@@ -802,6 +828,7 @@ data class ScaleBarSettings(
       textBorderWidth == other.textBorderWidth &&
       textSize == other.textSize &&
       isMetricUnits == other.isMetricUnits &&
+      distanceUnits == other.distanceUnits &&
       refreshInterval == other.refreshInterval &&
       showTextBorder == other.showTextBorder &&
       ratio == other.ratio &&
@@ -1130,51 +1157,56 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
         }
       }
       134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          DistanceUnits.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GesturesSettings.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationPuck2D.fromList(it)
+          GesturesSettings.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationPuck3D.fromList(it)
+          LocationPuck2D.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationPuck.fromList(it)
+          LocationPuck3D.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationComponentSettings.fromList(it)
+          LocationPuck.fromList(it)
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScaleBarSettings.fromList(it)
+          LocationComponentSettings.fromList(it)
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CompassSettings.fromList(it)
+          ScaleBarSettings.fromList(it)
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AttributionSettings.fromList(it)
+          CompassSettings.fromList(it)
         }
       }
       143.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          AttributionSettings.fromList(it)
+        }
+      }
+      144.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LogoSettings.fromList(it)
         }
@@ -1204,44 +1236,48 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is ScreenCoordinate -> {
+      is DistanceUnits -> {
         stream.write(134)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is GesturesSettings -> {
+      is ScreenCoordinate -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is LocationPuck2D -> {
+      is GesturesSettings -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is LocationPuck3D -> {
+      is LocationPuck2D -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is LocationPuck -> {
+      is LocationPuck3D -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is LocationComponentSettings -> {
+      is LocationPuck -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is ScaleBarSettings -> {
+      is LocationComponentSettings -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is CompassSettings -> {
+      is ScaleBarSettings -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is AttributionSettings -> {
+      is CompassSettings -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is LogoSettings -> {
+      is AttributionSettings -> {
         stream.write(143)
+        writeValue(stream, value.toList())
+      }
+      is LogoSettings -> {
+        stream.write(144)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

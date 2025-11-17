@@ -1,3 +1,7 @@
+### main
+
+* Add nautical miles scale bar distance unit.
+
 ### 2.17.0-rc.1
 
 * [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
