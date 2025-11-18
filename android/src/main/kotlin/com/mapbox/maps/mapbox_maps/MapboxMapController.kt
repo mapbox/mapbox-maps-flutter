@@ -31,9 +31,9 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.mapbox_maps.pigeons._MapRecorderMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._PerformanceStatisticsApi
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
-import com.mapbox.maps.mapbox_maps.pigeons._MapRecorderMessenger
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.viewport.viewport
 import io.flutter.embedding.android.FlutterActivity
@@ -292,6 +292,8 @@ class MapboxMapController(
     AttributionSettingsInterface.setUp(messenger, null, channelSuffix)
     _ViewportMessenger.setUp(messenger, null, channelSuffix)
     _PerformanceStatisticsApi.setUp(messenger, null, channelSuffix)
+    _MapRecorderMessenger.setUp(messenger, null, channelSuffix)
+    mapRecorderController.dispose()
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

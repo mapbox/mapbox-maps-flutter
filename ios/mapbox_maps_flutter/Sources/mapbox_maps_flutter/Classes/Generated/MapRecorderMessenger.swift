@@ -16,13 +16,6 @@ private func wrapResult(_ result: Any?) -> [Any?] {
 }
 
 private func wrapError(_ error: Any) -> [Any?] {
-  if let pigeonError = error as? PigeonError {
-    return [
-      pigeonError.code,
-      pigeonError.message,
-      pigeonError.details,
-    ]
-  }
   if let flutterError = error as? FlutterError {
     return [
       flutterError.code,

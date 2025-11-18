@@ -1,5 +1,7 @@
 ### main
 
+* Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
+
 ### 2.17.0-rc.1
 
 * [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
