@@ -4,7 +4,6 @@
 
 part of mapbox_maps_flutter;
 
-
 /// Options for recording the map when using MapRecorder.
 ///
 /// These recordings can be used to debug issues which require multiple steps to reproduce.
@@ -36,7 +35,8 @@ class MapRecorderOptions {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MapRecorderOptions decode(Object result) {
     result as List<Object?>;
@@ -56,16 +56,14 @@ class MapRecorderOptions {
     if (identical(this, other)) {
       return true;
     }
-    return 
-      timeWindow == other.timeWindow
-      && loggingEnabled == other.loggingEnabled
-      && compressed == other.compressed;
+    return timeWindow == other.timeWindow &&
+        loggingEnabled == other.loggingEnabled &&
+        compressed == other.compressed;
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Options for playback when using MapRecorder.
@@ -96,7 +94,8 @@ class MapPlayerOptions {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MapPlayerOptions decode(Object result) {
     result as List<Object?>;
@@ -116,18 +115,15 @@ class MapPlayerOptions {
     if (identical(this, other)) {
       return true;
     }
-    return 
-      playbackCount == other.playbackCount
-      && playbackSpeedMultiplier == other.playbackSpeedMultiplier
-      && avoidPlaybackPauses == other.avoidPlaybackPauses;
+    return playbackCount == other.playbackCount &&
+        playbackSpeedMultiplier == other.playbackSpeedMultiplier &&
+        avoidPlaybackPauses == other.avoidPlaybackPauses;
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
-
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -136,10 +132,10 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is MapRecorderOptions) {
+    } else if (value is MapRecorderOptions) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    }    else if (value is MapPlayerOptions) {
+    } else if (value is MapPlayerOptions) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
@@ -150,9 +146,9 @@ class _PigeonCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 129: 
+      case 129:
         return MapRecorderOptions.decode(readValue(buffer)!);
-      case 130: 
+      case 130:
         return MapPlayerOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -172,9 +168,11 @@ class _MapRecorderMessenger {
   /// Constructor for [_MapRecorderMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _MapRecorderMessenger({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+  _MapRecorderMessenger(
+      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+        pigeonVar_messageChannelSuffix =
+            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -185,13 +183,16 @@ class _MapRecorderMessenger {
   ///
   /// @param options MapRecorderOptions to control recording.
   Future<void> startRecording(MapRecorderOptions options) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.startRecording$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.startRecording$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[options]);
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -212,8 +213,10 @@ class _MapRecorderMessenger {
   ///
   /// @return the Uint8List containing the recorded sequence in raw format.
   Future<Uint8List> stopRecording() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.stopRecording$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.stopRecording$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
@@ -243,14 +246,18 @@ class _MapRecorderMessenger {
   ///
   /// @param recordedSequence Sequence recorded with stopRecording method.
   /// @param options Options to customize the behaviour of the playback.
-  Future<void> replay(Uint8List recordedSequence, MapPlayerOptions options) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.replay$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+  Future<void> replay(
+      Uint8List recordedSequence, MapPlayerOptions options) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.replay$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[recordedSequence, options]);
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[recordedSequence, options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -268,8 +275,10 @@ class _MapRecorderMessenger {
 
   /// Temporarily pauses or resumes playback if already paused.
   Future<void> togglePauseReplay() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePauseReplay$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePauseReplay$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
@@ -292,8 +301,10 @@ class _MapRecorderMessenger {
 
   /// Returns the string description of the current state of playback.
   Future<String> getPlaybackState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getPlaybackState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getPlaybackState$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
