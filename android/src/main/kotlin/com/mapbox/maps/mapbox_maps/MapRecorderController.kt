@@ -1,6 +1,5 @@
 package com.mapbox.maps.mapbox_maps
 
-import com.mapbox.bindgen.DataRef
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.MapboxMapRecorder
@@ -36,7 +35,7 @@ class MapRecorderController(
   override fun startRecording(options: MapRecorderOptions) {
     val nativeOptions = com.mapbox.maps.MapRecorderOptions.Builder()
       .apply {
-        options.timeWindow?.let { timeWindow(it.toLong()) }
+        options.timeWindow?.let { timeWindow(it) }
         loggingEnabled(options.loggingEnabled)
         compressed(options.compressed)
       }
@@ -50,7 +49,6 @@ class MapRecorderController(
       val data = getRecorder().stopRecording()
       val bytes = ByteArray(data.remaining())
       data.get(bytes)
-      data.rewind()
       callback(Result.success(bytes))
     } catch (e: Exception) {
       callback(Result.failure(e))
@@ -84,5 +82,9 @@ class MapRecorderController(
 
   override fun getPlaybackState(): String {
     return getRecorder().getPlaybackState()
+  }
+
+  fun dispose() {
+    recorder = null
   }
 }

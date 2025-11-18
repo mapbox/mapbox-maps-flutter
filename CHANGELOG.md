@@ -1,6 +1,7 @@
 ### main
 
 * Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+* Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
 
 ### 2.12.0-rc.1
 
