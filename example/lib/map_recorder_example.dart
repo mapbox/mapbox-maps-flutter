@@ -99,7 +99,8 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Recording stopped. ${sequence.length} bytes recorded.'),
+            content:
+                Text('Recording stopped. ${sequence.length} bytes recorded.'),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -174,7 +175,8 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Playback ${state == RecorderState.replayingPaused ? "paused" : "resumed"}'),
+            content: Text(
+                'Playback ${state == RecorderState.replayingPaused ? "paused" : "resumed"}'),
             duration: const Duration(seconds: 1),
           ),
         );

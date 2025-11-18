@@ -7,9 +7,7 @@ package com.mapbox.maps.mapbox_maps.pigeons
 import android.util.Log
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MessageCodec
-import io.flutter.plugin.common.StandardMethodCodec
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
@@ -42,7 +40,7 @@ private fun wrapError(exception: Throwable): List<Any?> {
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class MapRecorderOptions (
+data class MapRecorderOptions(
   /**
    * The maximum duration (in milliseconds) from the current time until API calls are kept.
    * If not specified, all API calls will be kept during the recording,
@@ -53,8 +51,7 @@ data class MapRecorderOptions (
   val loggingEnabled: Boolean,
   /** If set to true, the recorded output will be compressed with gzip. */
   val compressed: Boolean
-)
- {
+) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapRecorderOptions {
       val timeWindow = pigeonVar_list[0] as Long?
@@ -77,9 +74,9 @@ data class MapRecorderOptions (
     if (this === other) {
       return true
     }
-    return timeWindow == other.timeWindow
-    && loggingEnabled == other.loggingEnabled
-    && compressed == other.compressed
+    return timeWindow == other.timeWindow &&
+      loggingEnabled == other.loggingEnabled &&
+      compressed == other.compressed
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -90,7 +87,7 @@ data class MapRecorderOptions (
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class MapPlayerOptions (
+data class MapPlayerOptions(
   /** The number of times the sequence is played. If negative, the playback loops indefinitely. */
   val playbackCount: Long,
   /** Multiplies the speed of playback for faster or slower replays. (1 means no change.) */
@@ -101,8 +98,7 @@ data class MapPlayerOptions (
    * This can help to maintain a consistent load during performance testing.
    */
   val avoidPlaybackPauses: Boolean
-)
- {
+) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapPlayerOptions {
       val playbackCount = pigeonVar_list[0] as Long
@@ -125,9 +121,9 @@ data class MapPlayerOptions (
     if (this === other) {
       return true
     }
-    return playbackCount == other.playbackCount
-    && playbackSpeedMultiplier == other.playbackSpeedMultiplier
-    && avoidPlaybackPauses == other.avoidPlaybackPauses
+    return playbackCount == other.playbackCount &&
+      playbackSpeedMultiplier == other.playbackSpeedMultiplier &&
+      avoidPlaybackPauses == other.avoidPlaybackPauses
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -148,7 +144,7 @@ private open class MapRecorderMessengerPigeonCodec : StandardMessageCodec() {
       else -> super.readValueOfType(type, buffer)
     }
   }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
       is MapRecorderOptions -> {
         stream.write(129)
@@ -162,7 +158,6 @@ private open class MapRecorderMessengerPigeonCodec : StandardMessageCodec() {
     }
   }
 }
-
 
 /**
  * Interface for MapRecorder functionality.
@@ -233,7 +228,7 @@ interface _MapRecorderMessenger {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.stopRecording$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            api.stopRecording{ result: Result<ByteArray> ->
+            api.stopRecording { result: Result<ByteArray> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
