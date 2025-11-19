@@ -125,8 +125,8 @@ class MapPlayerOptions {
   int get hashCode => Object.hashAll(_toList());
 }
 
-class _PigeonCodec extends StandardMessageCodec {
-  const _PigeonCodec();
+class MapRecorderMessenger_PigeonCodec extends StandardMessageCodec {
+  const MapRecorderMessenger_PigeonCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is int) {
@@ -175,7 +175,8 @@ class _MapRecorderMessenger {
             messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
-  static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      MapRecorderMessenger_PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
 

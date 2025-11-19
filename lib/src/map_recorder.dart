@@ -14,7 +14,7 @@ part of mapbox_maps_flutter;
 /// ```dart
 /// // Start recording
 /// await mapboxMap.recorder.startRecording(
-///   timeWindow: 60000, // 60 seconds
+///   timeWindow: Duration(seconds: 60),
 ///   loggingEnabled: true,
 ///   compressed: true,
 /// );
@@ -40,20 +40,20 @@ class MapRecorder {
 
   /// Begins the recording session.
   ///
-  /// [timeWindow] - The maximum duration (in milliseconds) from the current time until API calls are kept.
+  /// [timeWindow] - The maximum duration from the current time until API calls are kept.
   /// If not specified, all API calls will be kept during the recording, which can lead to significant memory consumption for long sessions.
   ///
   /// [loggingEnabled] - If set to true, the recorded API calls will be printed in the logs. Default value: false.
   ///
   /// [compressed] - If set to true, the recorded output will be compressed with gzip. Default value: false.
   Future<void> startRecording({
-    int? timeWindow,
+    Duration? timeWindow,
     bool loggingEnabled = false,
     bool compressed = false,
   }) {
     return _messenger.startRecording(
       MapRecorderOptions(
-        timeWindow: timeWindow,
+        timeWindow: timeWindow?.inMilliseconds,
         loggingEnabled: loggingEnabled,
         compressed: compressed,
       ),
@@ -99,7 +99,12 @@ class MapRecorder {
     return _messenger.togglePauseReplay();
   }
 
-  /// Returns the string description of the current state of playback (e.g., "IDLE", "PLAYING", "PAUSED").
+  /// Returns the current playback state.
+  ///
+  /// Possible values:
+  /// - `"stopped"`: Not currently playing (idle state)
+  /// - `"playing"`: Currently playing a recording
+  /// - `"paused"`: Playback is paused
   Future<String> getState() {
     return _messenger.getPlaybackState();
   }

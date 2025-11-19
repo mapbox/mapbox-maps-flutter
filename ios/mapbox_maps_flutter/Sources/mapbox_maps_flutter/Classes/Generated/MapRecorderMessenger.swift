@@ -11,11 +11,36 @@ import Foundation
   #error("Unsupported platform.")
 #endif
 
+/// Error class for passing custom error details to Dart side.
+final class MapRecorderMessengerError: Error {
+  let code: String
+  let message: String?
+  let details: Sendable?
+
+  init(code: String, message: String?, details: Sendable?) {
+    self.code = code
+    self.message = message
+    self.details = details
+  }
+
+  var localizedDescription: String {
+    return
+      "MapRecorderMessengerError(code: \(code), message: \(message ?? "<nil>"), details: \(details ?? "<nil>")"
+  }
+}
+
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
 }
 
 private func wrapError(_ error: Any) -> [Any?] {
+  if let pigeonError = error as? MapRecorderMessengerError {
+    return [
+      pigeonError.code,
+      pigeonError.message,
+      pigeonError.details,
+    ]
+  }
   if let flutterError = error as? FlutterError {
     return [
       flutterError.code,
@@ -152,7 +177,6 @@ private class MapRecorderMessengerPigeonCodecReaderWriter: FlutterStandardReader
 class MapRecorderMessengerPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
   static let shared = MapRecorderMessengerPigeonCodec(readerWriter: MapRecorderMessengerPigeonCodecReaderWriter())
 }
-
 
 /// Interface for MapRecorder functionality.
 ///

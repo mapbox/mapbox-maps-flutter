@@ -49,7 +49,7 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
 
     try {
       await mapboxMap!.recorder.startRecording(
-        timeWindow: 60000, // Keep last 60 seconds
+        timeWindow: Duration(seconds: 60), // Keep last 60 seconds
         loggingEnabled: true,
         compressed: true,
       );
@@ -168,7 +168,7 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
 
       if (mounted) {
         setState(() {
-          state = playbackState.contains('paused')
+          state = playbackState == 'paused'
               ? RecorderState.replayingPaused
               : RecorderState.replaying;
         });
