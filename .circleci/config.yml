@@ -237,7 +237,6 @@ jobs:
       - checkout
       - flutter/install_sdk_and_pub:
           version: 3.27.0
-          app-dir: .
       - run:
           name: Check license
           command: bash scripts/license.sh --mode validate
