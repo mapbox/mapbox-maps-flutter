@@ -17,12 +17,6 @@ class LineLayer extends Layer {
     List<Object>? this.lineCapExpression,
     double? this.lineCrossSlope,
     List<Object>? this.lineCrossSlopeExpression,
-    double? this.lineCutoutFadeWidth,
-    List<Object>? this.lineCutoutFadeWidthExpression,
-    double? this.lineCutoutOpacity,
-    List<Object>? this.lineCutoutOpacityExpression,
-    double? this.lineCutoutWidth,
-    List<Object>? this.lineCutoutWidthExpression,
     LineElevationReference? this.lineElevationReference,
     List<Object>? this.lineElevationReferenceExpression,
     LineJoin? this.lineJoin,
@@ -45,6 +39,12 @@ class LineLayer extends Layer {
     List<Object>? this.lineBorderWidthExpression,
     int? this.lineColor,
     List<Object>? this.lineColorExpression,
+    double? this.lineCutoutFadeWidth,
+    List<Object>? this.lineCutoutFadeWidthExpression,
+    double? this.lineCutoutOpacity,
+    List<Object>? this.lineCutoutOpacityExpression,
+    double? this.lineCutoutWidth,
+    List<Object>? this.lineCutoutWidthExpression,
     List<double?>? this.lineDasharray,
     List<Object>? this.lineDasharrayExpression,
     double? this.lineDepthOcclusionFactor,
@@ -114,36 +114,6 @@ class LineLayer extends Layer {
   ///  - `line-join: round` is not supported with this property
   @experimental
   List<Object>? lineCrossSlopeExpression;
-
-  /// The width of the cutout fade effect
-  /// Default value: 0.4. Value range: [0, 1]
-  @experimental
-  double? lineCutoutFadeWidth;
-
-  /// The width of the cutout fade effect
-  /// Default value: 0.4. Value range: [0, 1]
-  @experimental
-  List<Object>? lineCutoutFadeWidthExpression;
-
-  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
-  /// Default value: 0.3. Value range: [0, 1]
-  @experimental
-  double? lineCutoutOpacity;
-
-  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
-  /// Default value: 0.3. Value range: [0, 1]
-  @experimental
-  List<Object>? lineCutoutOpacityExpression;
-
-  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
-  /// Default value: 0. Value range: [0, 50]
-  @experimental
-  double? lineCutoutWidth;
-
-  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
-  /// Default value: 0. Value range: [0, 50]
-  @experimental
-  List<Object>? lineCutoutWidthExpression;
 
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
@@ -251,6 +221,36 @@ class LineLayer extends Layer {
   /// Default value: "#000000".
   List<Object>? lineColorExpression;
 
+  /// The width of the cutout fade effect as a proportion of the cutout width.
+  /// Default value: 0.4. Value range: [0, 1]
+  @experimental
+  double? lineCutoutFadeWidth;
+
+  /// The width of the cutout fade effect as a proportion of the cutout width.
+  /// Default value: 0.4. Value range: [0, 1]
+  @experimental
+  List<Object>? lineCutoutFadeWidthExpression;
+
+  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
+  /// Default value: 0. Value range: [0, 1]
+  @experimental
+  double? lineCutoutOpacity;
+
+  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
+  /// Default value: 0. Value range: [0, 1]
+  @experimental
+  List<Object>? lineCutoutOpacityExpression;
+
+  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
+  /// Default value: 0. Value range: [0, 50]
+  @experimental
+  double? lineCutoutWidth;
+
+  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
+  /// Default value: 0. Value range: [0, 50]
+  @experimental
+  List<Object>? lineCutoutWidthExpression;
+
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   /// Minimum value: 0. The unit of lineDasharray is in line widths.
   List<double?>? lineDasharray;
@@ -259,11 +259,11 @@ class LineLayer extends Layer {
   /// Minimum value: 0. The unit of lineDasharray is in line widths.
   List<Object>? lineDasharrayExpression;
 
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded.
   /// Default value: 1. Value range: [0, 1]
   double? lineDepthOcclusionFactor;
 
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded.
   /// Default value: 1. Value range: [0, 1]
   List<Object>? lineDepthOcclusionFactorExpression;
 
@@ -404,27 +404,6 @@ class LineLayer extends Layer {
     if (lineCrossSlope != null) {
       layout["line-cross-slope"] = lineCrossSlope;
     }
-    if (lineCutoutFadeWidthExpression != null) {
-      layout["line-cutout-fade-width"] = lineCutoutFadeWidthExpression;
-    }
-
-    if (lineCutoutFadeWidth != null) {
-      layout["line-cutout-fade-width"] = lineCutoutFadeWidth;
-    }
-    if (lineCutoutOpacityExpression != null) {
-      layout["line-cutout-opacity"] = lineCutoutOpacityExpression;
-    }
-
-    if (lineCutoutOpacity != null) {
-      layout["line-cutout-opacity"] = lineCutoutOpacity;
-    }
-    if (lineCutoutWidthExpression != null) {
-      layout["line-cutout-width"] = lineCutoutWidthExpression;
-    }
-
-    if (lineCutoutWidth != null) {
-      layout["line-cutout-width"] = lineCutoutWidth;
-    }
     if (lineElevationReferenceExpression != null) {
       layout["line-elevation-reference"] = lineElevationReferenceExpression;
     }
@@ -499,6 +478,24 @@ class LineLayer extends Layer {
       paint["line-color"] = lineColorExpression;
     } else if (lineColor != null) {
       paint["line-color"] = lineColor?.toRGBA();
+    }
+
+    if (lineCutoutFadeWidthExpression != null) {
+      paint["line-cutout-fade-width"] = lineCutoutFadeWidthExpression;
+    } else if (lineCutoutFadeWidth != null) {
+      paint["line-cutout-fade-width"] = lineCutoutFadeWidth;
+    }
+
+    if (lineCutoutOpacityExpression != null) {
+      paint["line-cutout-opacity"] = lineCutoutOpacityExpression;
+    } else if (lineCutoutOpacity != null) {
+      paint["line-cutout-opacity"] = lineCutoutOpacity;
+    }
+
+    if (lineCutoutWidthExpression != null) {
+      paint["line-cutout-width"] = lineCutoutWidthExpression;
+    } else if (lineCutoutWidth != null) {
+      paint["line-cutout-width"] = lineCutoutWidth;
     }
 
     if (lineDasharrayExpression != null) {
@@ -657,16 +654,6 @@ class LineLayer extends Layer {
       lineCrossSlope: _optionalCast(map["layout"]["line-cross-slope"]),
       lineCrossSlopeExpression:
           _optionalCastList(map["layout"]["line-cross-slope"]),
-      lineCutoutFadeWidth:
-          _optionalCast(map["layout"]["line-cutout-fade-width"]),
-      lineCutoutFadeWidthExpression:
-          _optionalCastList(map["layout"]["line-cutout-fade-width"]),
-      lineCutoutOpacity: _optionalCast(map["layout"]["line-cutout-opacity"]),
-      lineCutoutOpacityExpression:
-          _optionalCastList(map["layout"]["line-cutout-opacity"]),
-      lineCutoutWidth: _optionalCast(map["layout"]["line-cutout-width"]),
-      lineCutoutWidthExpression:
-          _optionalCastList(map["layout"]["line-cutout-width"]),
       lineElevationReference: map["layout"]["line-elevation-reference"] == null
           ? null
           : LineElevationReference.values.firstWhere((e) => e.name
@@ -711,6 +698,16 @@ class LineLayer extends Layer {
           _optionalCastList(map["paint"]["line-border-width"]),
       lineColor: (map["paint"]["line-color"] as List?)?.toRGBAInt(),
       lineColorExpression: _optionalCastList(map["paint"]["line-color"]),
+      lineCutoutFadeWidth:
+          _optionalCast(map["paint"]["line-cutout-fade-width"]),
+      lineCutoutFadeWidthExpression:
+          _optionalCastList(map["paint"]["line-cutout-fade-width"]),
+      lineCutoutOpacity: _optionalCast(map["paint"]["line-cutout-opacity"]),
+      lineCutoutOpacityExpression:
+          _optionalCastList(map["paint"]["line-cutout-opacity"]),
+      lineCutoutWidth: _optionalCast(map["paint"]["line-cutout-width"]),
+      lineCutoutWidthExpression:
+          _optionalCastList(map["paint"]["line-cutout-width"]),
       lineDasharray: (map["paint"]["line-dasharray"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
