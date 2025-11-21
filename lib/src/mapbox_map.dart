@@ -177,9 +177,44 @@ class MapboxMap extends ChangeNotifier {
       _PerformanceStatisticsApi(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late final _MapRecorderMessenger _mapRecorderMessenger =
+      _MapRecorderMessenger(
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to create and set annotations.
   late final AnnotationManager annotations;
+
+  /// The interface to record and replay map sessions.
+  ///
+  /// MapRecorder provides functions to record and replay API calls of a MapboxMap instance.
+  /// These recordings can be used to debug issues which require multiple steps to reproduce.
+  /// Additionally, playbacks can be used for performance testing custom scenarios.
+  ///
+  /// **Warning**: This API is experimental and may change in future releases.
+  ///
+  /// **Example**:
+  /// ```dart
+  /// // Start recording
+  /// await mapboxMap.recorder.startRecording(
+  ///   timeWindow: 60000,
+  ///   loggingEnabled: true,
+  /// );
+  ///
+  /// // ... perform map interactions ...
+  ///
+  /// // Stop and get recorded sequence
+  /// final sequence = await mapboxMap.recorder.stopRecording();
+  ///
+  /// // Replay at 2x speed
+  /// await mapboxMap.recorder.replay(
+  ///   sequence,
+  ///   playbackCount: 1,
+  ///   playbackSpeedMultiplier: 2.0,
+  /// );
+  /// ```
+  @experimental
+  late final MapRecorder recorder = MapRecorder._(_mapRecorderMessenger);
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
