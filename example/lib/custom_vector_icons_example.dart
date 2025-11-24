@@ -3,32 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
 
-/// Example demonstrating custom colorized vector icons using parameterized SVG icons.
-/// This example shows how to dynamically color vector icons based on feature properties
-/// using the image expression with color parameters.
+/// Example demonstrating custom vector icons with dynamic styling and interaction.
+/// This example shows how to:
+/// - Dynamically colorize vector icons based on feature properties using the image expression
+/// - Interactively change icon size by tapping on icons
 ///
-/// For this example to work, the SVGs must live inside the map style, like in the custom style
-/// used here. The SVG file was uploaded to Mapbox Studio with the name `flag`,
-/// making it available for customization at runtime.
+/// Vector icons are parameterized SVG images that can be styled at runtime. In this example,
+/// three flag icons are colored red, yellow, and purple using the 'flagColor' property.
+/// Tap any flag to toggle its size between 1x and 2x.
+///
+/// For this example to work, the SVGs must live inside the map style. The SVG file was uploaded
+/// to Mapbox Studio with the name `flag`, making it available for customization at runtime.
 /// You can add vector icons to your own style in Mapbox Studio.
-class CustomColorizedVectorIconsExample extends StatefulWidget
+class CustomVectorIconsExample extends StatefulWidget
     implements Example {
   @override
   final Widget leading = const Icon(Icons.flag);
   @override
-  final String title = 'Custom Colorized Vector Icons';
+  final String title = 'Custom Vector Icons';
   @override
   final String subtitle =
-      'Dynamically color vector icons using parameterized SVGs';
+      'Colorize and interact with vector icons using parameterized SVGs';
 
   @override
   State<StatefulWidget> createState() =>
-      _CustomColorizedVectorIconsExampleState();
+      _CustomVectorIconsExampleState();
 }
 
-class _CustomColorizedVectorIconsExampleState
-    extends State<CustomColorizedVectorIconsExample> {
+class _CustomVectorIconsExampleState
+    extends State<CustomVectorIconsExample> {
   MapboxMap? mapboxMap;
+  String? selectedFlagId;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +51,32 @@ class _CustomColorizedVectorIconsExampleState
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+
+    // Add tap interaction for the symbol layer
+    var tapInteraction = TapInteraction(
+        FeaturesetDescriptor(layerId: "points"), (feature, point) {
+      final id = feature.id?.id;
+      if (id == null) return;
+
+      setState(() {
+        // Toggle selection: if tapping the same feature, deselect; otherwise select new one
+        selectedFlagId = (selectedFlagId == id) ? null : id;
+      });
+
+      // Update icon size expression based on selection
+      mapboxMap.style.setStyleLayerProperty(
+        'points',
+        'icon-size',
+        [
+          'case',
+          ['==', ['id'], selectedFlagId ?? ''],
+          2.0,
+          1.0
+        ],
+      );
+    });
+    mapboxMap.addInteraction(tapInteraction,
+        interactionID: "tap_interaction_flags");
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
@@ -55,17 +86,18 @@ class _CustomColorizedVectorIconsExampleState
   /// Creates GeoJSON features with flag locations and colors.
   List<Map<String, dynamic>> _createFlagFeatures() {
     return [
-      _createFlagFeature(24.68727, 60.185755, 'red'),
-      _createFlagFeature(24.68827, 60.186255, 'yellow'),
-      _createFlagFeature(24.68927, 60.186055, '#800080'),
+      _createFlagFeature('flag-red', 24.68727, 60.185755, 'red'),
+      _createFlagFeature('flag-yellow', 24.68827, 60.186255, 'yellow'),
+      _createFlagFeature('flag-purple', 24.68927, 60.186055, '#800080'),
     ];
   }
 
   /// Creates a feature with a flag at the specified location and color.
   Map<String, dynamic> _createFlagFeature(
-      double longitude, double latitude, String color) {
+      String id, double longitude, double latitude, String color) {
     return {
       'type': 'Feature',
+      'id': id, // Feature ID used for selection and icon size expression
       'geometry': {
         'type': 'Point',
         'coordinates': [longitude, latitude],
