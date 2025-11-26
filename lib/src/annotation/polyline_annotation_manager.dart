@@ -130,36 +130,6 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<double?> getLineCrossSlope() =>
       _annotationMessenger.getLineCrossSlope(id);
 
-  /// The width of the cutout fade effect Default value: 0.4. Value range: [0, 1]
-  @experimental
-  Future<void> setLineCutoutFadeWidth(double lineCutoutFadeWidth) =>
-      _annotationMessenger.setLineCutoutFadeWidth(id, lineCutoutFadeWidth);
-
-  /// The width of the cutout fade effect Default value: 0.4. Value range: [0, 1]
-  @experimental
-  Future<double?> getLineCutoutFadeWidth() =>
-      _annotationMessenger.getLineCutoutFadeWidth(id);
-
-  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used. Default value: 0.3. Value range: [0, 1]
-  @experimental
-  Future<void> setLineCutoutOpacity(double lineCutoutOpacity) =>
-      _annotationMessenger.setLineCutoutOpacity(id, lineCutoutOpacity);
-
-  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used. Default value: 0.3. Value range: [0, 1]
-  @experimental
-  Future<double?> getLineCutoutOpacity() =>
-      _annotationMessenger.getLineCutoutOpacity(id);
-
-  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers. Default value: 0. Value range: [0, 50]
-  @experimental
-  Future<void> setLineCutoutWidth(double lineCutoutWidth) =>
-      _annotationMessenger.setLineCutoutWidth(id, lineCutoutWidth);
-
-  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers. Default value: 0. Value range: [0, 50]
-  @experimental
-  Future<double?> getLineCutoutWidth() =>
-      _annotationMessenger.getLineCutoutWidth(id);
-
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
   Future<void> setLineElevationReference(
@@ -251,6 +221,26 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// The color with which the line will be drawn. Default value: "#000000".
   Future<int?> getLineColor() => _annotationMessenger.getLineColor(id);
 
+  /// The width of the cutout fade effect as a proportion of the cutout width. Default value: 0.4. Value range: [0, 1]
+  @experimental
+  Future<void> setLineCutoutFadeWidth(double lineCutoutFadeWidth) =>
+      _annotationMessenger.setLineCutoutFadeWidth(id, lineCutoutFadeWidth);
+
+  /// The width of the cutout fade effect as a proportion of the cutout width. Default value: 0.4. Value range: [0, 1]
+  @experimental
+  Future<double?> getLineCutoutFadeWidth() =>
+      _annotationMessenger.getLineCutoutFadeWidth(id);
+
+  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used. Default value: 1. Value range: [0, 1]
+  @experimental
+  Future<void> setLineCutoutOpacity(double lineCutoutOpacity) =>
+      _annotationMessenger.setLineCutoutOpacity(id, lineCutoutOpacity);
+
+  /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used. Default value: 1. Value range: [0, 1]
+  @experimental
+  Future<double?> getLineCutoutOpacity() =>
+      _annotationMessenger.getLineCutoutOpacity(id);
+
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0. The unit of lineDasharray is in line widths.
   Future<void> setLineDasharray(List<double?> lineDasharray) =>
       _annotationMessenger.setLineDasharray(id, lineDasharray);
@@ -259,12 +249,12 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<List<double?>?> getLineDasharray() =>
       _annotationMessenger.getLineDasharray(id);
 
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded. Default value: 1. Value range: [0, 1]
+  /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<void> setLineDepthOcclusionFactor(double lineDepthOcclusionFactor) =>
       _annotationMessenger.setLineDepthOcclusionFactor(
           id, lineDepthOcclusionFactor);
 
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded. Default value: 1. Value range: [0, 1]
+  /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<double?> getLineDepthOcclusionFactor() =>
       _annotationMessenger.getLineDepthOcclusionFactor(id);
 

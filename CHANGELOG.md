@@ -1,6 +1,10 @@
 ### main
 
 * Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
+* Promote `ModelLayer` to stable.
+* Add `SymbolLayer.iconColorBrightnessMax`, `SymbolLayer.iconColorBrightnessMin`, `SymbolLayer.iconColorContrast`, `SymbolLayer.occlusionOpacityMode`, `FillExtrusionLayer.fillExtrusionCastShadows`, `RasterArraySource.volatile`, and `PolylineAnnotation.lineEmissiveStrength` properties.
+* Update default value for experimental `LineLayer.lineCutoutOpacity` from 0 to 1.0.
+* Remove experimental `LineLayer.lineCutoutWidth`.
 
 ### 2.17.0-rc.1
 

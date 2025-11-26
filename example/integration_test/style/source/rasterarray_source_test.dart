@@ -21,6 +21,7 @@ void main() {
       maxzoom: 1.0,
       tileSize: 1.0,
       attribution: "abc",
+      volatile: true,
       tileCacheBudget:
           TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
     ));
@@ -44,6 +45,9 @@ void main() {
 
     var attribution = await source.attribution;
     expect(attribution, "abc");
+
+    var volatile = await source.volatile;
+    expect(volatile, true);
 
     var tileCacheBudget = await source.tileCacheBudget;
     expect(tileCacheBudget?.size,

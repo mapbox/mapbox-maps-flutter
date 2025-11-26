@@ -121,6 +121,13 @@ fun IconTranslateAnchor.toIconTranslateAnchor(): com.mapbox.maps.extension.style
     else -> throw(RuntimeException("Unsupported IconTranslateAnchor: $this"))
   }
 }
+fun OcclusionOpacityMode.toOcclusionOpacityMode(): com.mapbox.maps.extension.style.layers.properties.generated.OcclusionOpacityMode {
+  return when (this) {
+    OcclusionOpacityMode.ANCHOR -> com.mapbox.maps.extension.style.layers.properties.generated.OcclusionOpacityMode.ANCHOR
+    OcclusionOpacityMode.PIXEL -> com.mapbox.maps.extension.style.layers.properties.generated.OcclusionOpacityMode.PIXEL
+    else -> throw(RuntimeException("Unsupported OcclusionOpacityMode: $this"))
+  }
+}
 fun TextTranslateAnchor.toTextTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor {
   return when (this) {
     TextTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.MAP
@@ -246,6 +253,13 @@ fun com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnc
     com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.MAP -> IconTranslateAnchor.MAP
     com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.VIEWPORT -> IconTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported IconTranslateAnchor: $this"))
+  }
+}
+fun com.mapbox.maps.extension.style.layers.properties.generated.OcclusionOpacityMode.toFLTOcclusionOpacityMode(): OcclusionOpacityMode {
+  return when (this) {
+    com.mapbox.maps.extension.style.layers.properties.generated.OcclusionOpacityMode.ANCHOR -> OcclusionOpacityMode.ANCHOR
+    com.mapbox.maps.extension.style.layers.properties.generated.OcclusionOpacityMode.PIXEL -> OcclusionOpacityMode.PIXEL
+    else -> throw(RuntimeException("Unsupported OcclusionOpacityMode: $this"))
   }
 }
 fun com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.toFLTTextTranslateAnchor(): TextTranslateAnchor {

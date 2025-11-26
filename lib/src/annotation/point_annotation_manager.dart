@@ -458,6 +458,32 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "#000000".
   Future<int?> getIconColor() => _annotationMessenger.getIconColor(id);
 
+  /// Increase or reduce the brightness of the symbols. The value is the maximum brightness. Default value: 1. Value range: [0, 1]
+  Future<void> setIconColorBrightnessMax(double iconColorBrightnessMax) =>
+      _annotationMessenger.setIconColorBrightnessMax(
+          id, iconColorBrightnessMax);
+
+  /// Increase or reduce the brightness of the symbols. The value is the maximum brightness. Default value: 1. Value range: [0, 1]
+  Future<double?> getIconColorBrightnessMax() =>
+      _annotationMessenger.getIconColorBrightnessMax(id);
+
+  /// Increase or reduce the brightness of the symbols. The value is the minimum brightness. Default value: 0. Value range: [0, 1]
+  Future<void> setIconColorBrightnessMin(double iconColorBrightnessMin) =>
+      _annotationMessenger.setIconColorBrightnessMin(
+          id, iconColorBrightnessMin);
+
+  /// Increase or reduce the brightness of the symbols. The value is the minimum brightness. Default value: 0. Value range: [0, 1]
+  Future<double?> getIconColorBrightnessMin() =>
+      _annotationMessenger.getIconColorBrightnessMin(id);
+
+  /// Increase or reduce the contrast of the symbol icon. Default value: 0. Value range: [-1, 1]
+  Future<void> setIconColorContrast(double iconColorContrast) =>
+      _annotationMessenger.setIconColorContrast(id, iconColorContrast);
+
+  /// Increase or reduce the contrast of the symbol icon. Default value: 0. Value range: [-1, 1]
+  Future<double?> getIconColorContrast() =>
+      _annotationMessenger.getIconColorContrast(id);
+
   /// Increase or reduce the saturation of the symbol icon. Default value: 0. Value range: [-1, 1]
   Future<void> setIconColorSaturation(double iconColorSaturation) =>
       _annotationMessenger.setIconColorSaturation(id, iconColorSaturation);
@@ -535,6 +561,15 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
   Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
       _annotationMessenger.getIconTranslateAnchor(id);
+
+  /// Specify how opacity in case of being occluded should be applied Default value: "anchor".
+  Future<void> setOcclusionOpacityMode(
+          OcclusionOpacityMode occlusionOpacityMode) =>
+      _annotationMessenger.setOcclusionOpacityMode(id, occlusionOpacityMode);
+
+  /// Specify how opacity in case of being occluded should be applied Default value: "anchor".
+  Future<OcclusionOpacityMode?> getOcclusionOpacityMode() =>
+      _annotationMessenger.getOcclusionOpacityMode(id);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
   @experimental

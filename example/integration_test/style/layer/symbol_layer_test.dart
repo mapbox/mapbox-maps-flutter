@@ -71,6 +71,9 @@ void main() {
       textVariableAnchor: ["center", "left"],
       textWritingMode: ["horizontal", "vertical"],
       iconColor: Colors.red.value,
+      iconColorBrightnessMax: 1.0,
+      iconColorBrightnessMin: 1.0,
+      iconColorContrast: 1.0,
       iconColorSaturation: 1.0,
       iconEmissiveStrength: 1.0,
       iconHaloBlur: 1.0,
@@ -81,6 +84,7 @@ void main() {
       iconOpacity: 1.0,
       iconTranslate: [0.0, 1.0],
       iconTranslateAnchor: IconTranslateAnchor.MAP,
+      occlusionOpacityMode: OcclusionOpacityMode.ANCHOR,
       symbolZOffset: 1.0,
       textColor: Colors.red.value,
       textEmissiveStrength: 1.0,
@@ -144,6 +148,9 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColor, Colors.red.value);
+    expect(layer.iconColorBrightnessMax, 1.0);
+    expect(layer.iconColorBrightnessMin, 1.0);
+    expect(layer.iconColorContrast, 1.0);
     expect(layer.iconColorSaturation, 1.0);
     expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
@@ -154,6 +161,7 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
+    expect(layer.occlusionOpacityMode, OcclusionOpacityMode.ANCHOR);
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColor, Colors.red.value);
     expect(layer.textEmissiveStrength, 1.0);
@@ -257,6 +265,9 @@ void main() {
         ["horizontal", "vertical"]
       ],
       iconColorExpression: ['rgba', 255, 0, 0, 1],
+      iconColorBrightnessMaxExpression: ['number', 1.0],
+      iconColorBrightnessMinExpression: ['number', 1.0],
+      iconColorContrastExpression: ['number', 1.0],
       iconColorSaturationExpression: ['number', 1.0],
       iconEmissiveStrengthExpression: ['number', 1.0],
       iconHaloBlurExpression: ['number', 1.0],
@@ -270,6 +281,7 @@ void main() {
         [0.0, 1.0]
       ],
       iconTranslateAnchorExpression: ['string', 'map'],
+      occlusionOpacityModeExpression: ['string', 'anchor'],
       symbolZOffsetExpression: ['number', 1.0],
       textColorExpression: ['rgba', 255, 0, 0, 1],
       textEmissiveStrengthExpression: ['number', 1.0],
@@ -341,6 +353,9 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.iconColorBrightnessMax, 1.0);
+    expect(layer.iconColorBrightnessMin, 1.0);
+    expect(layer.iconColorContrast, 1.0);
     expect(layer.iconColorSaturation, 1.0);
     expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
@@ -351,6 +366,7 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
+    expect(layer.occlusionOpacityMode, OcclusionOpacityMode.ANCHOR);
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.textEmissiveStrength, 1.0);

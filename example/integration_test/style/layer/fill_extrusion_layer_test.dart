@@ -29,6 +29,7 @@ void main() {
       fillExtrusionAmbientOcclusionWallRadius: 1.0,
       fillExtrusionBase: 1.0,
       fillExtrusionBaseAlignment: FillExtrusionBaseAlignment.TERRAIN,
+      fillExtrusionCastShadows: true,
       fillExtrusionColor: Colors.red.value,
       fillExtrusionCutoffFadeRange: 1.0,
       fillExtrusionEmissiveStrength: 1.0,
@@ -63,6 +64,7 @@ void main() {
     expect(layer.fillExtrusionBase, 1.0);
     expect(
         layer.fillExtrusionBaseAlignment, FillExtrusionBaseAlignment.TERRAIN);
+    expect(layer.fillExtrusionCastShadows, true);
     expect(layer.fillExtrusionColor, Colors.red.value);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
     expect(layer.fillExtrusionEmissiveStrength, 1.0);
@@ -112,6 +114,7 @@ void main() {
       fillExtrusionAmbientOcclusionWallRadiusExpression: ['number', 1.0],
       fillExtrusionBaseExpression: ['number', 1.0],
       fillExtrusionBaseAlignmentExpression: ['string', 'terrain'],
+      fillExtrusionCastShadowsExpression: ['==', true, true],
       fillExtrusionColorExpression: ['rgba', 255, 0, 0, 1],
       fillExtrusionCutoffFadeRangeExpression: ['number', 1.0],
       fillExtrusionEmissiveStrengthExpression: ['number', 1.0],
@@ -154,6 +157,7 @@ void main() {
     expect(layer.fillExtrusionBase, 1.0);
     expect(
         layer.fillExtrusionBaseAlignment, FillExtrusionBaseAlignment.TERRAIN);
+    expect(layer.fillExtrusionCastShadows, true);
     expect(layer.fillExtrusionColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
     expect(layer.fillExtrusionEmissiveStrength, 1.0);

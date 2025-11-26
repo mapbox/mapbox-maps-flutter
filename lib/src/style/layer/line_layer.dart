@@ -43,8 +43,6 @@ class LineLayer extends Layer {
     List<Object>? this.lineCutoutFadeWidthExpression,
     double? this.lineCutoutOpacity,
     List<Object>? this.lineCutoutOpacityExpression,
-    double? this.lineCutoutWidth,
-    List<Object>? this.lineCutoutWidthExpression,
     List<double?>? this.lineDasharray,
     List<Object>? this.lineDasharrayExpression,
     double? this.lineDepthOcclusionFactor,
@@ -232,24 +230,14 @@ class LineLayer extends Layer {
   List<Object>? lineCutoutFadeWidthExpression;
 
   /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
-  /// Default value: 0. Value range: [0, 1]
+  /// Default value: 1. Value range: [0, 1]
   @experimental
   double? lineCutoutOpacity;
 
   /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
-  /// Default value: 0. Value range: [0, 1]
+  /// Default value: 1. Value range: [0, 1]
   @experimental
   List<Object>? lineCutoutOpacityExpression;
-
-  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
-  /// Default value: 0. Value range: [0, 50]
-  @experimental
-  double? lineCutoutWidth;
-
-  /// The width of the line cutout in meters. If set to 0, the cutout is disabled. The cutout does not apply to location-indicator type layers.
-  /// Default value: 0. Value range: [0, 50]
-  @experimental
-  List<Object>? lineCutoutWidthExpression;
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   /// Minimum value: 0. The unit of lineDasharray is in line widths.
@@ -492,12 +480,6 @@ class LineLayer extends Layer {
       paint["line-cutout-opacity"] = lineCutoutOpacity;
     }
 
-    if (lineCutoutWidthExpression != null) {
-      paint["line-cutout-width"] = lineCutoutWidthExpression;
-    } else if (lineCutoutWidth != null) {
-      paint["line-cutout-width"] = lineCutoutWidth;
-    }
-
     if (lineDasharrayExpression != null) {
       paint["line-dasharray"] = lineDasharrayExpression;
     } else if (lineDasharray != null) {
@@ -705,9 +687,6 @@ class LineLayer extends Layer {
       lineCutoutOpacity: _optionalCast(map["paint"]["line-cutout-opacity"]),
       lineCutoutOpacityExpression:
           _optionalCastList(map["paint"]["line-cutout-opacity"]),
-      lineCutoutWidth: _optionalCast(map["paint"]["line-cutout-width"]),
-      lineCutoutWidthExpression:
-          _optionalCastList(map["paint"]["line-cutout-width"]),
       lineDasharray: (map["paint"]["line-dasharray"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),

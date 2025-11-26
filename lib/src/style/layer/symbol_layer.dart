@@ -105,6 +105,12 @@ class SymbolLayer extends Layer {
     List<Object>? this.textWritingModeExpression,
     int? this.iconColor,
     List<Object>? this.iconColorExpression,
+    double? this.iconColorBrightnessMax,
+    List<Object>? this.iconColorBrightnessMaxExpression,
+    double? this.iconColorBrightnessMin,
+    List<Object>? this.iconColorBrightnessMinExpression,
+    double? this.iconColorContrast,
+    List<Object>? this.iconColorContrastExpression,
     double? this.iconColorSaturation,
     List<Object>? this.iconColorSaturationExpression,
     double? this.iconEmissiveStrength,
@@ -125,6 +131,8 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconTranslateExpression,
     IconTranslateAnchor? this.iconTranslateAnchor,
     List<Object>? this.iconTranslateAnchorExpression,
+    OcclusionOpacityMode? this.occlusionOpacityMode,
+    List<Object>? this.occlusionOpacityModeExpression,
     double? this.symbolZOffset,
     List<Object>? this.symbolZOffsetExpression,
     int? this.textColor,
@@ -527,6 +535,30 @@ class SymbolLayer extends Layer {
   /// Default value: "#000000".
   List<Object>? iconColorExpression;
 
+  /// Increase or reduce the brightness of the symbols. The value is the maximum brightness.
+  /// Default value: 1. Value range: [0, 1]
+  double? iconColorBrightnessMax;
+
+  /// Increase or reduce the brightness of the symbols. The value is the maximum brightness.
+  /// Default value: 1. Value range: [0, 1]
+  List<Object>? iconColorBrightnessMaxExpression;
+
+  /// Increase or reduce the brightness of the symbols. The value is the minimum brightness.
+  /// Default value: 0. Value range: [0, 1]
+  double? iconColorBrightnessMin;
+
+  /// Increase or reduce the brightness of the symbols. The value is the minimum brightness.
+  /// Default value: 0. Value range: [0, 1]
+  List<Object>? iconColorBrightnessMinExpression;
+
+  /// Increase or reduce the contrast of the symbol icon.
+  /// Default value: 0. Value range: [-1, 1]
+  double? iconColorContrast;
+
+  /// Increase or reduce the contrast of the symbol icon.
+  /// Default value: 0. Value range: [-1, 1]
+  List<Object>? iconColorContrastExpression;
+
   /// Increase or reduce the saturation of the symbol icon.
   /// Default value: 0. Value range: [-1, 1]
   double? iconColorSaturation;
@@ -606,6 +638,14 @@ class SymbolLayer extends Layer {
   /// Controls the frame of reference for `icon-translate`.
   /// Default value: "map".
   List<Object>? iconTranslateAnchorExpression;
+
+  /// Specify how opacity in case of being occluded should be applied
+  /// Default value: "anchor".
+  OcclusionOpacityMode? occlusionOpacityMode;
+
+  /// Specify how opacity in case of being occluded should be applied
+  /// Default value: "anchor".
+  List<Object>? occlusionOpacityModeExpression;
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
@@ -1034,6 +1074,24 @@ class SymbolLayer extends Layer {
       paint["icon-color"] = iconColor?.toRGBA();
     }
 
+    if (iconColorBrightnessMaxExpression != null) {
+      paint["icon-color-brightness-max"] = iconColorBrightnessMaxExpression;
+    } else if (iconColorBrightnessMax != null) {
+      paint["icon-color-brightness-max"] = iconColorBrightnessMax;
+    }
+
+    if (iconColorBrightnessMinExpression != null) {
+      paint["icon-color-brightness-min"] = iconColorBrightnessMinExpression;
+    } else if (iconColorBrightnessMin != null) {
+      paint["icon-color-brightness-min"] = iconColorBrightnessMin;
+    }
+
+    if (iconColorContrastExpression != null) {
+      paint["icon-color-contrast"] = iconColorContrastExpression;
+    } else if (iconColorContrast != null) {
+      paint["icon-color-contrast"] = iconColorContrast;
+    }
+
     if (iconColorSaturationExpression != null) {
       paint["icon-color-saturation"] = iconColorSaturationExpression;
     } else if (iconColorSaturation != null) {
@@ -1093,6 +1151,13 @@ class SymbolLayer extends Layer {
     } else if (iconTranslateAnchor != null) {
       paint["icon-translate-anchor"] =
           iconTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+    }
+
+    if (occlusionOpacityModeExpression != null) {
+      paint["occlusion-opacity-mode"] = occlusionOpacityModeExpression;
+    } else if (occlusionOpacityMode != null) {
+      paint["occlusion-opacity-mode"] =
+          occlusionOpacityMode?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (symbolZOffsetExpression != null) {
@@ -1404,6 +1469,17 @@ class SymbolLayer extends Layer {
           _optionalCastList(map["layout"]["text-writing-mode"]),
       iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
       iconColorExpression: _optionalCastList(map["paint"]["icon-color"]),
+      iconColorBrightnessMax:
+          _optionalCast(map["paint"]["icon-color-brightness-max"]),
+      iconColorBrightnessMaxExpression:
+          _optionalCastList(map["paint"]["icon-color-brightness-max"]),
+      iconColorBrightnessMin:
+          _optionalCast(map["paint"]["icon-color-brightness-min"]),
+      iconColorBrightnessMinExpression:
+          _optionalCastList(map["paint"]["icon-color-brightness-min"]),
+      iconColorContrast: _optionalCast(map["paint"]["icon-color-contrast"]),
+      iconColorContrastExpression:
+          _optionalCastList(map["paint"]["icon-color-contrast"]),
       iconColorSaturation: _optionalCast(map["paint"]["icon-color-saturation"]),
       iconColorSaturationExpression:
           _optionalCastList(map["paint"]["icon-color-saturation"]),
@@ -1441,6 +1517,14 @@ class SymbolLayer extends Layer {
               .contains(map["paint"]["icon-translate-anchor"])),
       iconTranslateAnchorExpression:
           _optionalCastList(map["paint"]["icon-translate-anchor"]),
+      occlusionOpacityMode: map["paint"]["occlusion-opacity-mode"] == null
+          ? null
+          : OcclusionOpacityMode.values.firstWhere((e) => e.name
+              .toLowerCase()
+              .replaceAll("_", "-")
+              .contains(map["paint"]["occlusion-opacity-mode"])),
+      occlusionOpacityModeExpression:
+          _optionalCastList(map["paint"]["occlusion-opacity-mode"]),
       symbolZOffset: _optionalCast(map["paint"]["symbol-z-offset"]),
       symbolZOffsetExpression:
           _optionalCastList(map["paint"]["symbol-z-offset"]),

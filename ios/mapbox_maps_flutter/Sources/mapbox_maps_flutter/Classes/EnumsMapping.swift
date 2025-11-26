@@ -445,6 +445,25 @@ extension MapboxMaps.IconTranslateAnchor {
         }
     }
 }
+extension MapboxMaps.OcclusionOpacityMode {
+
+    init?(_ fltValue: OcclusionOpacityMode?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .aNCHOR: self = .anchor
+        case .pIXEL: self = .pixel
+        }
+    }
+
+    func toFLTOcclusionOpacityMode() -> OcclusionOpacityMode? {
+        switch self {
+        case .anchor: return .aNCHOR
+        case .pixel: return .pIXEL
+        default: return nil
+        }
+    }
+}
 extension MapboxMaps.TextTranslateAnchor {
 
     init?(_ fltValue: TextTranslateAnchor?) {

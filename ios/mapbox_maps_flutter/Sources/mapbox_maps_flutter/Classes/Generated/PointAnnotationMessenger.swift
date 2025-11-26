@@ -264,6 +264,15 @@ enum IconTranslateAnchor: Int {
   case vIEWPORT = 1
 }
 
+/// Specify how opacity in case of being occluded should be applied
+/// Default value: "anchor".
+enum OcclusionOpacityMode: Int {
+  /// Whole symbol is treated as occluded if it's anchor point is occluded
+  case aNCHOR = 0
+  /// Occlusion is applied on a per-pixel basis
+  case pIXEL = 1
+}
+
 /// Controls the frame of reference for `text-translate`.
 /// Default value: "map".
 enum TextTranslateAnchor: Int {
@@ -868,14 +877,20 @@ private class PointAnnotationMessengerPigeonCodecReader: FlutterStandardReader {
     case 144:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextTranslateAnchor(rawValue: enumResultAsInt)
+        return OcclusionOpacityMode(rawValue: enumResultAsInt)
       }
       return nil
     case 145:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TextTranslateAnchor(rawValue: enumResultAsInt)
+      }
+      return nil
     case 146:
-      return PointAnnotation.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 147:
+      return PointAnnotation.fromList(self.readValue() as! [Any?])
+    case 148:
       return PointAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -930,17 +945,20 @@ private class PointAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? IconTranslateAnchor {
       super.writeByte(143)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextTranslateAnchor {
+    } else if let value = value as? OcclusionOpacityMode {
       super.writeByte(144)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Point {
+    } else if let value = value as? TextTranslateAnchor {
       super.writeByte(145)
-      super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotation {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
       super.writeByte(146)
       super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotationOptions {
+    } else if let value = value as? PointAnnotation {
       super.writeByte(147)
+      super.writeValue(value.toList())
+    } else if let value = value as? PointAnnotationOptions {
+      super.writeByte(148)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1058,6 +1076,12 @@ protocol _PointAnnotationMessenger {
   func getTextTransform(managerId: String, completion: @escaping (Result<TextTransform?, Error>) -> Void)
   func setIconColor(managerId: String, iconColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setIconColorBrightnessMax(managerId: String, iconColorBrightnessMax: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconColorBrightnessMax(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconColorBrightnessMin(managerId: String, iconColorBrightnessMin: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconColorBrightnessMin(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconColorContrast(managerId: String, iconColorContrast: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconColorContrast(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconColorSaturation(managerId: String, iconColorSaturation: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconColorSaturation(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconEmissiveStrength(managerId: String, iconEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1078,6 +1102,8 @@ protocol _PointAnnotationMessenger {
   func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslateAnchor(managerId: String, completion: @escaping (Result<IconTranslateAnchor?, Error>) -> Void)
+  func setOcclusionOpacityMode(managerId: String, occlusionOpacityMode: OcclusionOpacityMode, completion: @escaping (Result<Void, Error>) -> Void)
+  func getOcclusionOpacityMode(managerId: String, completion: @escaping (Result<OcclusionOpacityMode?, Error>) -> Void)
   func setSymbolZOffset(managerId: String, symbolZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextColor(managerId: String, textColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
@@ -2752,6 +2778,111 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconColorChannel.setMessageHandler(nil)
     }
+    let setIconColorBrightnessMaxChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorBrightnessMax\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconColorBrightnessMaxChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconColorBrightnessMaxArg = args[1] as! Double
+        api.setIconColorBrightnessMax(managerId: managerIdArg, iconColorBrightnessMax: iconColorBrightnessMaxArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconColorBrightnessMaxChannel.setMessageHandler(nil)
+    }
+    let getIconColorBrightnessMaxChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorBrightnessMax\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconColorBrightnessMaxChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconColorBrightnessMax(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconColorBrightnessMaxChannel.setMessageHandler(nil)
+    }
+    let setIconColorBrightnessMinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorBrightnessMin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconColorBrightnessMinChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconColorBrightnessMinArg = args[1] as! Double
+        api.setIconColorBrightnessMin(managerId: managerIdArg, iconColorBrightnessMin: iconColorBrightnessMinArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconColorBrightnessMinChannel.setMessageHandler(nil)
+    }
+    let getIconColorBrightnessMinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorBrightnessMin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconColorBrightnessMinChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconColorBrightnessMin(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconColorBrightnessMinChannel.setMessageHandler(nil)
+    }
+    let setIconColorContrastChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorContrast\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconColorContrastChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconColorContrastArg = args[1] as! Double
+        api.setIconColorContrast(managerId: managerIdArg, iconColorContrast: iconColorContrastArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconColorContrastChannel.setMessageHandler(nil)
+    }
+    let getIconColorContrastChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorContrast\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconColorContrastChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconColorContrast(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconColorContrastChannel.setMessageHandler(nil)
+    }
     let setIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconColorSaturationChannel.setMessageHandler { message, reply in
@@ -3101,6 +3232,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconTranslateAnchorChannel.setMessageHandler(nil)
+    }
+    let setOcclusionOpacityModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setOcclusionOpacityMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setOcclusionOpacityModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let occlusionOpacityModeArg = args[1] as! OcclusionOpacityMode
+        api.setOcclusionOpacityMode(managerId: managerIdArg, occlusionOpacityMode: occlusionOpacityModeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setOcclusionOpacityModeChannel.setMessageHandler(nil)
+    }
+    let getOcclusionOpacityModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getOcclusionOpacityMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getOcclusionOpacityModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getOcclusionOpacityMode(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getOcclusionOpacityModeChannel.setMessageHandler(nil)
     }
     let setSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
