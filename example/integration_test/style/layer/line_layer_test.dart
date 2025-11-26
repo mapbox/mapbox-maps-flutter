@@ -41,7 +41,6 @@ void main() {
       lineColor: Colors.red.value,
       lineCutoutFadeWidth: 1.0,
       lineCutoutOpacity: 1.0,
-      lineCutoutWidth: 1.0,
       lineDasharray: [1.0, 2.0],
       lineDepthOcclusionFactor: 1.0,
       lineEmissiveStrength: 1.0,
@@ -79,7 +78,6 @@ void main() {
     expect(layer.lineColor, Colors.red.value);
     expect(layer.lineCutoutFadeWidth, 1.0);
     expect(layer.lineCutoutOpacity, 1.0);
-    expect(layer.lineCutoutWidth, 1.0);
     expect(layer.lineDasharray, [1.0, 2.0]);
     expect(layer.lineDepthOcclusionFactor, 1.0);
     expect(layer.lineEmissiveStrength, 1.0);
@@ -134,7 +132,6 @@ void main() {
       lineColorExpression: ['rgba', 255, 0, 0, 1],
       lineCutoutFadeWidthExpression: ['number', 1.0],
       lineCutoutOpacityExpression: ['number', 1.0],
-      lineCutoutWidthExpression: ['number', 1.0],
       lineDasharrayExpression: [
         'literal',
         [1.0, 2.0]
@@ -189,7 +186,6 @@ void main() {
     expect(layer.lineColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.lineCutoutFadeWidth, 1.0);
     expect(layer.lineCutoutOpacity, 1.0);
-    expect(layer.lineCutoutWidth, 1.0);
     expect(layer.lineDasharray, [1.0, 2.0]);
     expect(layer.lineDepthOcclusionFactor, 1.0);
     expect(layer.lineEmissiveStrength, 1.0);

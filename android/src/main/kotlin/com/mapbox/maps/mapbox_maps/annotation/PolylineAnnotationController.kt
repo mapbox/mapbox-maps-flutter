@@ -159,6 +159,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.lineColor?.let {
       originalAnnotation.lineColorInt = it.toInt()
     }
+    annotation.lineEmissiveStrength?.let {
+      originalAnnotation.lineEmissiveStrength = it
+    }
     annotation.lineGapWidth?.let {
       originalAnnotation.lineGapWidth = it
     }
@@ -216,75 +219,6 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     val value = manager.lineCrossSlope
-    if (value != null) {
-      callback(Result.success(value))
-    } else {
-      callback(Result.success(null))
-    }
-  }
-
-  override fun setLineCutoutFadeWidth(
-    managerId: String,
-    lineCutoutFadeWidth: Double,
-    callback: (Result<Unit>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineCutoutFadeWidth = lineCutoutFadeWidth
-    callback(Result.success(Unit))
-  }
-
-  override fun getLineCutoutFadeWidth(
-    managerId: String,
-    callback: (Result<Double?>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    val value = manager.lineCutoutFadeWidth
-    if (value != null) {
-      callback(Result.success(value))
-    } else {
-      callback(Result.success(null))
-    }
-  }
-
-  override fun setLineCutoutOpacity(
-    managerId: String,
-    lineCutoutOpacity: Double,
-    callback: (Result<Unit>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineCutoutOpacity = lineCutoutOpacity
-    callback(Result.success(Unit))
-  }
-
-  override fun getLineCutoutOpacity(
-    managerId: String,
-    callback: (Result<Double?>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    val value = manager.lineCutoutOpacity
-    if (value != null) {
-      callback(Result.success(value))
-    } else {
-      callback(Result.success(null))
-    }
-  }
-
-  override fun setLineCutoutWidth(
-    managerId: String,
-    lineCutoutWidth: Double,
-    callback: (Result<Unit>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineCutoutWidth = lineCutoutWidth
-    callback(Result.success(Unit))
-  }
-
-  override fun getLineCutoutWidth(
-    managerId: String,
-    callback: (Result<Double?>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    val value = manager.lineCutoutWidth
     if (value != null) {
       callback(Result.success(value))
     } else {
@@ -540,6 +474,52 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     val value = manager.lineColorInt
     if (value != null) {
       callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineCutoutFadeWidth(
+    managerId: String,
+    lineCutoutFadeWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineCutoutFadeWidth = lineCutoutFadeWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineCutoutFadeWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineCutoutFadeWidth
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineCutoutOpacity(
+    managerId: String,
+    lineCutoutOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineCutoutOpacity = lineCutoutOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineCutoutOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineCutoutOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -881,6 +861,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
     lineBorderWidth = lineBorderWidth,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     lineColor = lineColorInt?.toUInt()?.toLong(),
+    lineEmissiveStrength = lineEmissiveStrength,
     lineGapWidth = lineGapWidth,
     lineOffset = lineOffset,
     lineOpacity = lineOpacity,
@@ -918,6 +899,9 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   }
   this.lineColor?.let {
     options.withLineColor(it.toInt())
+  }
+  this.lineEmissiveStrength?.let {
+    options.withLineEmissiveStrength(it)
   }
   this.lineGapWidth?.let {
     options.withLineGapWidth(it)

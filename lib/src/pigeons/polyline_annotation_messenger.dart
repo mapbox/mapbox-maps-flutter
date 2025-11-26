@@ -80,6 +80,7 @@ class PolylineAnnotation {
     this.lineBorderColor,
     this.lineBorderWidth,
     this.lineColor,
+    this.lineEmissiveStrength,
     this.lineGapWidth,
     this.lineOffset,
     this.lineOpacity,
@@ -130,6 +131,10 @@ class PolylineAnnotation {
   /// Default value: "#000000".
   int? lineColor;
 
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0. The unit of lineEmissiveStrength is in intensity.
+  double? lineEmissiveStrength;
+
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
   double? lineGapWidth;
@@ -166,6 +171,7 @@ class PolylineAnnotation {
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineEmissiveStrength,
       lineGapWidth,
       lineOffset,
       lineOpacity,
@@ -192,14 +198,15 @@ class PolylineAnnotation {
       lineBorderColor: result[6] as int?,
       lineBorderWidth: result[7] as double?,
       lineColor: result[8] as int?,
-      lineGapWidth: result[9] as double?,
-      lineOffset: result[10] as double?,
-      lineOpacity: result[11] as double?,
-      linePattern: result[12] as String?,
-      lineWidth: result[13] as double?,
-      isDraggable: result[14] as bool?,
+      lineEmissiveStrength: result[9] as double?,
+      lineGapWidth: result[10] as double?,
+      lineOffset: result[11] as double?,
+      lineOpacity: result[12] as double?,
+      linePattern: result[13] as String?,
+      lineWidth: result[14] as double?,
+      isDraggable: result[15] as bool?,
       customData:
-          (result[15] as Map<Object?, Object?>?)?.cast<String, Object>(),
+          (result[16] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -221,6 +228,7 @@ class PolylineAnnotation {
         lineBorderColor == other.lineBorderColor &&
         lineBorderWidth == other.lineBorderWidth &&
         lineColor == other.lineColor &&
+        lineEmissiveStrength == other.lineEmissiveStrength &&
         lineGapWidth == other.lineGapWidth &&
         lineOffset == other.lineOffset &&
         lineOpacity == other.lineOpacity &&
@@ -245,6 +253,7 @@ class PolylineAnnotationOptions {
     this.lineBorderColor,
     this.lineBorderWidth,
     this.lineColor,
+    this.lineEmissiveStrength,
     this.lineGapWidth,
     this.lineOffset,
     this.lineOpacity,
@@ -292,6 +301,10 @@ class PolylineAnnotationOptions {
   /// Default value: "#000000".
   int? lineColor;
 
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0. The unit of lineEmissiveStrength is in intensity.
+  double? lineEmissiveStrength;
+
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
   double? lineGapWidth;
@@ -327,6 +340,7 @@ class PolylineAnnotationOptions {
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineEmissiveStrength,
       lineGapWidth,
       lineOffset,
       lineOpacity,
@@ -352,14 +366,15 @@ class PolylineAnnotationOptions {
       lineBorderColor: result[5] as int?,
       lineBorderWidth: result[6] as double?,
       lineColor: result[7] as int?,
-      lineGapWidth: result[8] as double?,
-      lineOffset: result[9] as double?,
-      lineOpacity: result[10] as double?,
-      linePattern: result[11] as String?,
-      lineWidth: result[12] as double?,
-      isDraggable: result[13] as bool?,
+      lineEmissiveStrength: result[8] as double?,
+      lineGapWidth: result[9] as double?,
+      lineOffset: result[10] as double?,
+      lineOpacity: result[11] as double?,
+      linePattern: result[12] as String?,
+      lineWidth: result[13] as double?,
+      isDraggable: result[14] as bool?,
       customData:
-          (result[14] as Map<Object?, Object?>?)?.cast<String, Object>(),
+          (result[15] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -381,6 +396,7 @@ class PolylineAnnotationOptions {
         lineBorderColor == other.lineBorderColor &&
         lineBorderWidth == other.lineBorderWidth &&
         lineColor == other.lineColor &&
+        lineEmissiveStrength == other.lineEmissiveStrength &&
         lineGapWidth == other.lineGapWidth &&
         lineOffset == other.lineOffset &&
         lineOpacity == other.lineOpacity &&
@@ -734,165 +750,6 @@ class _PolylineAnnotationMessenger {
   Future<double?> getLineCrossSlope(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setLineCutoutFadeWidth(
-      String managerId, double lineCutoutFadeWidth) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutFadeWidth$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, lineCutoutFadeWidth]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<double?> getLineCutoutFadeWidth(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutFadeWidth$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setLineCutoutOpacity(
-      String managerId, double lineCutoutOpacity) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutOpacity$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, lineCutoutOpacity]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<double?> getLineCutoutOpacity(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutOpacity$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setLineCutoutWidth(
-      String managerId, double lineCutoutWidth) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutWidth$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, lineCutoutWidth]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<double?> getLineCutoutWidth(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutWidth$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1491,6 +1348,112 @@ class _PolylineAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setLineCutoutFadeWidth(
+      String managerId, double lineCutoutFadeWidth) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutFadeWidth$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, lineCutoutFadeWidth]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineCutoutFadeWidth(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutFadeWidth$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineCutoutOpacity(
+      String managerId, double lineCutoutOpacity) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCutoutOpacity$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, lineCutoutOpacity]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineCutoutOpacity(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCutoutOpacity$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?);
     }
   }
 

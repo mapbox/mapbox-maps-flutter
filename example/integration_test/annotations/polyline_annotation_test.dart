@@ -26,6 +26,7 @@ void main() {
       lineBorderColor: Colors.red.value,
       lineBorderWidth: 1.0,
       lineColor: Colors.red.value,
+      lineEmissiveStrength: 1.0,
       lineGapWidth: 1.0,
       lineOffset: 1.0,
       lineOpacity: 1.0,
@@ -48,6 +49,7 @@ void main() {
     expect(Colors.red.value, annotation.lineBorderColor);
     expect(1.0, annotation.lineBorderWidth);
     expect(Colors.red.value, annotation.lineColor);
+    expect(1.0, annotation.lineEmissiveStrength);
     expect(1.0, annotation.lineGapWidth);
     expect(1.0, annotation.lineOffset);
     expect(1.0, annotation.lineOpacity);
