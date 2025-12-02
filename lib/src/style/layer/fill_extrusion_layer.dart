@@ -29,6 +29,8 @@ class FillExtrusionLayer extends Layer {
     List<Object>? this.fillExtrusionBaseExpression,
     FillExtrusionBaseAlignment? this.fillExtrusionBaseAlignment,
     List<Object>? this.fillExtrusionBaseAlignmentExpression,
+    bool? this.fillExtrusionCastShadows,
+    List<Object>? this.fillExtrusionCastShadowsExpression,
     int? this.fillExtrusionColor,
     List<Object>? this.fillExtrusionColorExpression,
     double? this.fillExtrusionCutoffFadeRange,
@@ -158,6 +160,14 @@ class FillExtrusionLayer extends Layer {
   /// Default value: "terrain".
   @experimental
   List<Object>? fillExtrusionBaseAlignmentExpression;
+
+  /// Enable/Disable shadow casting for this layer
+  /// Default value: true.
+  bool? fillExtrusionCastShadows;
+
+  /// Enable/Disable shadow casting for this layer
+  /// Default value: true.
+  List<Object>? fillExtrusionCastShadowsExpression;
 
   /// The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.
   /// Default value: "#000000".
@@ -400,6 +410,12 @@ class FillExtrusionLayer extends Layer {
           fillExtrusionBaseAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
+    if (fillExtrusionCastShadowsExpression != null) {
+      paint["fill-extrusion-cast-shadows"] = fillExtrusionCastShadowsExpression;
+    } else if (fillExtrusionCastShadows != null) {
+      paint["fill-extrusion-cast-shadows"] = fillExtrusionCastShadows;
+    }
+
     if (fillExtrusionColorExpression != null) {
       paint["fill-extrusion-color"] = fillExtrusionColorExpression;
     } else if (fillExtrusionColor != null) {
@@ -620,6 +636,10 @@ class FillExtrusionLayer extends Layer {
                   .contains(map["paint"]["fill-extrusion-base-alignment"])),
       fillExtrusionBaseAlignmentExpression:
           _optionalCastList(map["paint"]["fill-extrusion-base-alignment"]),
+      fillExtrusionCastShadows:
+          _optionalCast(map["paint"]["fill-extrusion-cast-shadows"]),
+      fillExtrusionCastShadowsExpression:
+          _optionalCastList(map["paint"]["fill-extrusion-cast-shadows"]),
       fillExtrusionColor:
           (map["paint"]["fill-extrusion-color"] as List?)?.toRGBAInt(),
       fillExtrusionColorExpression:

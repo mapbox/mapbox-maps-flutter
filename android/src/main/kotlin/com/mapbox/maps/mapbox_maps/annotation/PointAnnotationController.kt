@@ -11,6 +11,7 @@ import toFLTIconPitchAlignment
 import toFLTIconRotationAlignment
 import toFLTIconTextFit
 import toFLTIconTranslateAnchor
+import toFLTOcclusionOpacityMode
 import toFLTSymbolElevationReference
 import toFLTSymbolPlacement
 import toFLTSymbolZOrder
@@ -25,6 +26,7 @@ import toIconPitchAlignment
 import toIconRotationAlignment
 import toIconTextFit
 import toIconTranslateAnchor
+import toOcclusionOpacityMode
 import toSymbolElevationReference
 import toSymbolPlacement
 import toSymbolZOrder
@@ -1281,6 +1283,75 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     }
   }
 
+  override fun setIconColorBrightnessMax(
+    managerId: String,
+    iconColorBrightnessMax: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconColorBrightnessMax = iconColorBrightnessMax
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconColorBrightnessMax(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.iconColorBrightnessMax
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setIconColorBrightnessMin(
+    managerId: String,
+    iconColorBrightnessMin: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconColorBrightnessMin = iconColorBrightnessMin
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconColorBrightnessMin(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.iconColorBrightnessMin
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setIconColorContrast(
+    managerId: String,
+    iconColorContrast: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconColorContrast = iconColorContrast
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconColorContrast(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.iconColorContrast
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setIconColorSaturation(
     managerId: String,
     iconColorSaturation: Double,
@@ -1506,6 +1577,29 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     val value = manager.iconTranslateAnchor
     if (value != null) {
       callback(Result.success(value.toFLTIconTranslateAnchor()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setOcclusionOpacityMode(
+    managerId: String,
+    occlusionOpacityMode: OcclusionOpacityMode,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.occlusionOpacityMode = occlusionOpacityMode.toOcclusionOpacityMode()
+    callback(Result.success(Unit))
+  }
+
+  override fun getOcclusionOpacityMode(
+    managerId: String,
+    callback: (Result<OcclusionOpacityMode?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.occlusionOpacityMode
+    if (value != null) {
+      callback(Result.success(value.toFLTOcclusionOpacityMode()))
     } else {
       callback(Result.success(null))
     }

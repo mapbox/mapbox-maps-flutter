@@ -375,6 +375,23 @@ enum class IconTranslateAnchor(val raw: Int) {
 }
 
 /**
+ * Specify how opacity in case of being occluded should be applied
+ * Default value: "anchor".
+ */
+enum class OcclusionOpacityMode(val raw: Int) {
+  /** Whole symbol is treated as occluded if it's anchor point is occluded */
+  ANCHOR(0),
+  /** Occlusion is applied on a per-pixel basis */
+  PIXEL(1);
+
+  companion object {
+    fun ofRaw(raw: Int): OcclusionOpacityMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Controls the frame of reference for `text-translate`.
  * Default value: "map".
  */
@@ -1121,20 +1138,25 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
       }
       144.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextTranslateAnchor.ofRaw(it.toInt())
+          OcclusionOpacityMode.ofRaw(it.toInt())
         }
       }
       145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          TextTranslateAnchor.ofRaw(it.toInt())
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointAnnotation.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       147.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointAnnotation.fromList(it)
+        }
+      }
+      148.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PointAnnotationOptions.fromList(it)
         }
@@ -1204,20 +1226,24 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is TextTranslateAnchor -> {
+      is OcclusionOpacityMode -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is Point -> {
+      is TextTranslateAnchor -> {
         stream.write(145)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is PointAnnotation -> {
+      is Point -> {
         stream.write(146)
         writeValue(stream, value.toList())
       }
-      is PointAnnotationOptions -> {
+      is PointAnnotation -> {
         stream.write(147)
+        writeValue(stream, value.toList())
+      }
+      is PointAnnotationOptions -> {
+        stream.write(148)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1321,6 +1347,12 @@ interface _PointAnnotationMessenger {
   fun getTextTransform(managerId: String, callback: (Result<TextTransform?>) -> Unit)
   fun setIconColor(managerId: String, iconColor: Long, callback: (Result<Unit>) -> Unit)
   fun getIconColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setIconColorBrightnessMax(managerId: String, iconColorBrightnessMax: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconColorBrightnessMax(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconColorBrightnessMin(managerId: String, iconColorBrightnessMin: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconColorBrightnessMin(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconColorContrast(managerId: String, iconColorContrast: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconColorContrast(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconColorSaturation(managerId: String, iconColorSaturation: Double, callback: (Result<Unit>) -> Unit)
   fun getIconColorSaturation(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconEmissiveStrength(managerId: String, iconEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
@@ -1341,6 +1373,8 @@ interface _PointAnnotationMessenger {
   fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getIconTranslateAnchor(managerId: String, callback: (Result<IconTranslateAnchor?>) -> Unit)
+  fun setOcclusionOpacityMode(managerId: String, occlusionOpacityMode: OcclusionOpacityMode, callback: (Result<Unit>) -> Unit)
+  fun getOcclusionOpacityMode(managerId: String, callback: (Result<OcclusionOpacityMode?>) -> Unit)
   fun setSymbolZOffset(managerId: String, symbolZOffset: Double, callback: (Result<Unit>) -> Unit)
   fun getSymbolZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextColor(managerId: String, textColor: Long, callback: (Result<Unit>) -> Unit)
@@ -3253,6 +3287,126 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorBrightnessMax$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconColorBrightnessMaxArg = args[1] as Double
+            api.setIconColorBrightnessMax(managerIdArg, iconColorBrightnessMaxArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorBrightnessMax$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconColorBrightnessMax(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorBrightnessMin$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconColorBrightnessMinArg = args[1] as Double
+            api.setIconColorBrightnessMin(managerIdArg, iconColorBrightnessMinArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorBrightnessMin$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconColorBrightnessMin(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorContrast$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconColorContrastArg = args[1] as Double
+            api.setIconColorContrast(managerIdArg, iconColorContrastArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorContrast$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconColorContrast(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3639,6 +3793,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconTranslateAnchor(managerIdArg) { result: Result<IconTranslateAnchor?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setOcclusionOpacityMode$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val occlusionOpacityModeArg = args[1] as OcclusionOpacityMode
+            api.setOcclusionOpacityMode(managerIdArg, occlusionOpacityModeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getOcclusionOpacityMode$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getOcclusionOpacityMode(managerIdArg) { result: Result<OcclusionOpacityMode?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

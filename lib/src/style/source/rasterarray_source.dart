@@ -14,6 +14,7 @@ class RasterArraySource extends Source {
     double? maxzoom,
     double? tileSize,
     String? attribution,
+    bool? volatile,
     TileCacheBudget? tileCacheBudget,
   }) : super(id: id) {
     _url = url;
@@ -23,6 +24,7 @@ class RasterArraySource extends Source {
     _maxzoom = maxzoom;
     _tileSize = tileSize;
     _attribution = attribution;
+    _volatile = volatile;
     _tileCacheBudget = tileCacheBudget;
   }
 
@@ -140,6 +142,20 @@ class RasterArraySource extends Source {
     });
   }
 
+  bool? _volatile;
+
+  /// A setting to determine whether a source's tiles are cached locally.
+  /// Default value: false.
+  Future<bool?> get volatile async {
+    return _style?.getStyleSourceProperty(id, "volatile").then((value) {
+      if (value.value != null) {
+        return value.value as bool;
+      } else {
+        return null;
+      }
+    });
+  }
+
   TileCacheBudget? _tileCacheBudget;
 
   /// This property defines a source-specific resource budget, either in tile units or in megabytes. Whenever the tile cache goes over the defined limit, the least recently used tile will be evicted from the in-memory cache. Note that the current implementation does not take into account resources allocated by the visible tiles.
@@ -189,6 +205,9 @@ class RasterArraySource extends Source {
       }
       if (_rasterLayers != null) {
         properties["rasterLayers"] = _rasterLayers;
+      }
+      if (_volatile != null) {
+        properties["volatile"] = _volatile;
       }
     }
 
