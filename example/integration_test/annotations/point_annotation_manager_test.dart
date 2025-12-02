@@ -211,6 +211,18 @@ void main() {
     var iconColor = await manager.getIconColor();
     expect(Colors.red.value, iconColor);
 
+    await manager.setIconColorBrightnessMax(1.0);
+    var iconColorBrightnessMax = await manager.getIconColorBrightnessMax();
+    expect(1.0, iconColorBrightnessMax);
+
+    await manager.setIconColorBrightnessMin(1.0);
+    var iconColorBrightnessMin = await manager.getIconColorBrightnessMin();
+    expect(1.0, iconColorBrightnessMin);
+
+    await manager.setIconColorContrast(1.0);
+    var iconColorContrast = await manager.getIconColorContrast();
+    expect(1.0, iconColorContrast);
+
     await manager.setIconColorSaturation(1.0);
     var iconColorSaturation = await manager.getIconColorSaturation();
     expect(1.0, iconColorSaturation);
@@ -250,6 +262,10 @@ void main() {
     await manager.setIconTranslateAnchor(IconTranslateAnchor.MAP);
     var iconTranslateAnchor = await manager.getIconTranslateAnchor();
     expect(IconTranslateAnchor.MAP, iconTranslateAnchor);
+
+    await manager.setOcclusionOpacityMode(OcclusionOpacityMode.ANCHOR);
+    var occlusionOpacityMode = await manager.getOcclusionOpacityMode();
+    expect(OcclusionOpacityMode.ANCHOR, occlusionOpacityMode);
 
     await manager.setSymbolZOffset(1.0);
     var symbolZOffset = await manager.getSymbolZOffset();

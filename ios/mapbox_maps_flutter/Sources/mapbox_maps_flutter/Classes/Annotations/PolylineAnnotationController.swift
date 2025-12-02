@@ -96,60 +96,6 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
         }
     }
 
-    func getLineCutoutFadeWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
-        do {
-            completion(.success(try get(\.lineCutoutFadeWidth, managerId: managerId)))
-        } catch {
-            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func setLineCutoutFadeWidth(managerId: String, lineCutoutFadeWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            let newValue = lineCutoutFadeWidth
-            try set(\.lineCutoutFadeWidth, newValue: newValue, managerId: managerId)
-            completion(.success(()))
-        } catch {
-            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func getLineCutoutOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
-        do {
-            completion(.success(try get(\.lineCutoutOpacity, managerId: managerId)))
-        } catch {
-            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func setLineCutoutOpacity(managerId: String, lineCutoutOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            let newValue = lineCutoutOpacity
-            try set(\.lineCutoutOpacity, newValue: newValue, managerId: managerId)
-            completion(.success(()))
-        } catch {
-            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func getLineCutoutWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
-        do {
-            completion(.success(try get(\.lineCutoutWidth, managerId: managerId)))
-        } catch {
-            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func setLineCutoutWidth(managerId: String, lineCutoutWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            let newValue = lineCutoutWidth
-            try set(\.lineCutoutWidth, newValue: newValue, managerId: managerId)
-            completion(.success(()))
-        } catch {
-            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
     func getLineElevationReference(managerId: String, completion: @escaping (Result<LineElevationReference?, Error>) -> Void) {
         do {
             completion(.success(try get(\.lineElevationReference, managerId: managerId)?.toFLTLineElevationReference()))
@@ -342,6 +288,42 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
         do {
             let newValue = StyleColor(rgb: lineColor)
             try set(\.lineColor, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineCutoutFadeWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.lineCutoutFadeWidth, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineCutoutFadeWidth(managerId: String, lineCutoutFadeWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = lineCutoutFadeWidth
+            try set(\.lineCutoutFadeWidth, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineCutoutOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.lineCutoutOpacity, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineCutoutOpacity(managerId: String, lineCutoutOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = lineCutoutOpacity
+            try set(\.lineCutoutOpacity, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -626,6 +608,9 @@ extension PolylineAnnotationOptions {
         if let lineColor {
             annotation.lineColor = StyleColor(rgb: lineColor)
         }
+        if let lineEmissiveStrength {
+            annotation.lineEmissiveStrength = lineEmissiveStrength
+        }
         if let lineGapWidth {
             annotation.lineGapWidth = lineGapWidth
         }
@@ -676,6 +661,9 @@ extension PolylineAnnotation {
         if let lineColor {
             annotation.lineColor = StyleColor(rgb: lineColor)
         }
+        if let lineEmissiveStrength {
+            annotation.lineEmissiveStrength = lineEmissiveStrength
+        }
         if let lineGapWidth {
             annotation.lineGapWidth = lineGapWidth
         }
@@ -713,6 +701,7 @@ extension MapboxMaps.PolylineAnnotation {
             lineBorderColor: lineBorderColor?.intValue,
             lineBorderWidth: lineBorderWidth,
             lineColor: lineColor?.intValue,
+            lineEmissiveStrength: lineEmissiveStrength,
             lineGapWidth: lineGapWidth,
             lineOffset: lineOffset,
             lineOpacity: lineOpacity,

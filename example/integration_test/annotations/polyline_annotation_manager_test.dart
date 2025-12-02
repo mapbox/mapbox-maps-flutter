@@ -45,18 +45,6 @@ void main() {
     var lineCrossSlope = await manager.getLineCrossSlope();
     expect(1.0, lineCrossSlope);
 
-    await manager.setLineCutoutFadeWidth(1.0);
-    var lineCutoutFadeWidth = await manager.getLineCutoutFadeWidth();
-    expect(1.0, lineCutoutFadeWidth);
-
-    await manager.setLineCutoutOpacity(1.0);
-    var lineCutoutOpacity = await manager.getLineCutoutOpacity();
-    expect(1.0, lineCutoutOpacity);
-
-    await manager.setLineCutoutWidth(1.0);
-    var lineCutoutWidth = await manager.getLineCutoutWidth();
-    expect(1.0, lineCutoutWidth);
-
     await manager.setLineElevationReference(LineElevationReference.NONE);
     var lineElevationReference = await manager.getLineElevationReference();
     expect(LineElevationReference.NONE, lineElevationReference);
@@ -100,6 +88,14 @@ void main() {
     await manager.setLineColor(Colors.red.value);
     var lineColor = await manager.getLineColor();
     expect(Colors.red.value, lineColor);
+
+    await manager.setLineCutoutFadeWidth(1.0);
+    var lineCutoutFadeWidth = await manager.getLineCutoutFadeWidth();
+    expect(1.0, lineCutoutFadeWidth);
+
+    await manager.setLineCutoutOpacity(1.0);
+    var lineCutoutOpacity = await manager.getLineCutoutOpacity();
+    expect(1.0, lineCutoutOpacity);
 
     await manager.setLineDasharray([1.0, 2.0]);
     var lineDasharray = await manager.getLineDasharray();

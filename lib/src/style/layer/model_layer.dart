@@ -1,8 +1,7 @@
 // This file is generated.
 part of mapbox_maps_flutter;
 
-/// A layer to render 3D Models.
-@experimental
+/// A 3D model
 class ModelLayer extends Layer {
   ModelLayer({
     required String id,
@@ -68,172 +67,138 @@ class ModelLayer extends Layer {
 
   /// Model to render. It can be either a string referencing an element to the models root property or an internal or external URL
   /// Default value: "".
-  @experimental
   String? modelId;
 
   /// Model to render. It can be either a string referencing an element to the models root property or an internal or external URL
   /// Default value: "".
-  @experimental
   List<Object>? modelIdExpression;
 
   /// Intensity of the ambient occlusion if present in the 3D model.
   /// Default value: 1. Value range: [0, 1]
-  @experimental
   double? modelAmbientOcclusionIntensity;
 
   /// Intensity of the ambient occlusion if present in the 3D model.
   /// Default value: 1. Value range: [0, 1]
-  @experimental
   List<Object>? modelAmbientOcclusionIntensityExpression;
 
   /// Enable/Disable shadow casting for this layer
   /// Default value: true.
-  @experimental
   bool? modelCastShadows;
 
   /// Enable/Disable shadow casting for this layer
   /// Default value: true.
-  @experimental
   List<Object>? modelCastShadowsExpression;
 
   /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: "#ffffff".
-  @experimental
   int? modelColor;
 
   /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: "#ffffff".
-  @experimental
   List<Object>? modelColorExpression;
 
   /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 1]
-  @experimental
   double? modelColorMixIntensity;
 
   /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 1]
-  @experimental
   List<Object>? modelColorMixIntensityExpression;
 
   /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   /// Default value: 0. Value range: [0, 1]
-  @experimental
   double? modelCutoffFadeRange;
 
   /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   /// Default value: 0. Value range: [0, 1]
-  @experimental
   List<Object>? modelCutoffFadeRangeExpression;
 
   /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "ground".
-  @experimental
   ModelElevationReference? modelElevationReference;
 
   /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "ground".
-  @experimental
   List<Object>? modelElevationReferenceExpression;
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
-  @experimental
   double? modelEmissiveStrength;
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
-  @experimental
   List<Object>? modelEmissiveStrengthExpression;
 
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
-  @experimental
   List<double?>? modelHeightBasedEmissiveStrengthMultiplier;
 
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
-  @experimental
   List<Object>? modelHeightBasedEmissiveStrengthMultiplierExpression;
 
   /// The opacity of the model layer. Except for zoom, expressions that are data-driven are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: 1. Value range: [0, 1]
-  @experimental
   double? modelOpacity;
 
   /// The opacity of the model layer. Except for zoom, expressions that are data-driven are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: 1. Value range: [0, 1]
-  @experimental
   List<Object>? modelOpacityExpression;
 
   /// Enable/Disable shadow receiving for this layer
   /// Default value: true.
-  @experimental
   bool? modelReceiveShadows;
 
   /// Enable/Disable shadow receiving for this layer
   /// Default value: true.
-  @experimental
   List<Object>? modelReceiveShadowsExpression;
 
   /// The rotation of the model in euler angles [lon, lat, z].
   /// Default value: [0,0,0]. The unit of modelRotation is in degrees.
-  @experimental
   List<double?>? modelRotation;
 
   /// The rotation of the model in euler angles [lon, lat, z].
   /// Default value: [0,0,0]. The unit of modelRotation is in degrees.
-  @experimental
   List<Object>? modelRotationExpression;
 
   /// Material roughness. Material is fully smooth for value 0, and fully rough for value 1. Affects only layers using batched-model source.
   /// Default value: 1. Value range: [0, 1]
-  @experimental
   double? modelRoughness;
 
   /// Material roughness. Material is fully smooth for value 0, and fully rough for value 1. Affects only layers using batched-model source.
   /// Default value: 1. Value range: [0, 1]
-  @experimental
   List<Object>? modelRoughnessExpression;
 
   /// The scale of the model. Expressions that are zoom-dependent are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: [1,1,1].
-  @experimental
   List<double?>? modelScale;
 
   /// The scale of the model. Expressions that are zoom-dependent are not supported if using GeoJSON or vector tile as the model layer source.
   /// Default value: [1,1,1].
-  @experimental
   List<Object>? modelScaleExpression;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
   /// Default value: "map".
-  @experimental
   ModelScaleMode? modelScaleMode;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
   /// Default value: "map".
-  @experimental
   List<Object>? modelScaleModeExpression;
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
   /// Default value: [0,0,0].
-  @experimental
   List<double?>? modelTranslation;
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
   /// Default value: [0,0,0].
-  @experimental
   List<Object>? modelTranslationExpression;
 
   /// Defines rendering behavior of model in respect to other 3D scene objects.
   /// Default value: "common-3d".
-  @experimental
   ModelType? modelType;
 
   /// Defines rendering behavior of model in respect to other 3D scene objects.
   /// Default value: "common-3d".
-  @experimental
   List<Object>? modelTypeExpression;
 
   @override
