@@ -852,6 +852,60 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
         }
     }
 
+    func getIconColorBrightnessMax(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.iconColorBrightnessMax, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconColorBrightnessMax(managerId: String, iconColorBrightnessMax: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = iconColorBrightnessMax
+            try set(\.iconColorBrightnessMax, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getIconColorBrightnessMin(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.iconColorBrightnessMin, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconColorBrightnessMin(managerId: String, iconColorBrightnessMin: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = iconColorBrightnessMin
+            try set(\.iconColorBrightnessMin, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getIconColorContrast(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.iconColorContrast, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconColorContrast(managerId: String, iconColorContrast: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = iconColorContrast
+            try set(\.iconColorContrast, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getIconColorSaturation(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             completion(.success(try get(\.iconColorSaturation, managerId: managerId)))
@@ -1026,6 +1080,24 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
         do {
             let newValue = MapboxMaps.IconTranslateAnchor(iconTranslateAnchor)
             try set(\.iconTranslateAnchor, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getOcclusionOpacityMode(managerId: String, completion: @escaping (Result<OcclusionOpacityMode?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.occlusionOpacityMode, managerId: managerId)?.toFLTOcclusionOpacityMode()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setOcclusionOpacityMode(managerId: String, occlusionOpacityMode: OcclusionOpacityMode, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = MapboxMaps.OcclusionOpacityMode(occlusionOpacityMode)
+            try set(\.occlusionOpacityMode, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))

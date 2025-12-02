@@ -219,7 +219,7 @@ class GeoJsonSource extends Source {
 
   bool? _autoMaxZoom;
 
-  /// When set to true, the maxZoom property is ignored and is instead calculated automatically based on the largest bounding box from the geoJSON features. This resolves rendering artifacts for features that use wide blur (e.g. fill extrusion ground flood light or circle layer) and would bring performance improvement on lower zoom levels, especially for geoJSON sources that update data frequently. However, it can lead to flickering and precision loss on zoom levels above 19.
+  /// When set to true, the maxZoom property is ignored and is instead calculated automatically based on the largest bounding box from the geojson features. This resolves rendering artifacts for features that use wide blur (e.g. fill extrusion ground flood light or circle layer) and would bring performance improvement on lower zoom levels, especially for geoJSON sources that update data frequently. However, it can lead to flickering and precision loss on zoom levels above 19. This option is not supported in combination with clustering.
   /// Default value: false.
   Future<bool?> get autoMaxZoom async {
     return _style?.getStyleSourceProperty(id, "autoMaxZoom").then((value) {
