@@ -1,3 +1,7 @@
+### main
+
+* Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
+
 > [!NOTE]
 > Version numbering has been updated to align with Mapbox's cross-platform SDK versioning scheme. This release skips from 2.12.0 to 2.17.0 to synchronize with other Mapbox SDKs (version x.17.0), ensuring consistent version numbers across all platforms.
 
