@@ -3,16 +3,14 @@
 
 ### 2.17.0
 
-* Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
 * Promote `ModelLayer` to stable.
 * Add `SymbolLayer.iconColorBrightnessMax`, `SymbolLayer.iconColorBrightnessMin`, `SymbolLayer.iconColorContrast`, `SymbolLayer.occlusionOpacityMode`, `FillExtrusionLayer.fillExtrusionCastShadows`, `RasterArraySource.volatile`, and `PolylineAnnotation.lineEmissiveStrength` properties.
 * Update default value for experimental `LineLayer.lineCutoutOpacity` from 0 to 1.0.
-* Remove experimental `LineLayer.lineCutoutWidth`.
 * [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
 * Add the ability to get all annotations from an annotation manager.
 * Add `customData` field to annotations to be able to pass user data.
 * Add nautical miles scale bar distance unit.
-* Update property type for experimental `LineLayer.lineCutoutOpacity`, `LineLayer.lineCutoutWidth`, and `LineLayer.lineCutoutFadeWidth` from layout to paint.
+* Update property type for experimental `LineLayer.lineCutoutOpacity`, and `LineLayer.lineCutoutFadeWidth` from layout to paint.
 * Fix memory leaks on Android.
 * Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
 * Update Maps SDK to v11.17.0
