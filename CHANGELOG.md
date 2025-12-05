@@ -1,27 +1,19 @@
-### main
+> [!NOTE]
+> Version numbering has been updated to align with Mapbox's cross-platform SDK versioning scheme. This release skips from 2.12.0 to 2.17.0 to synchronize with other Mapbox SDKs (version x.17.0), ensuring consistent version numbers across all platforms.
 
-* Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
+### 2.17.0
+
 * Promote `ModelLayer` to stable.
 * Add `SymbolLayer.iconColorBrightnessMax`, `SymbolLayer.iconColorBrightnessMin`, `SymbolLayer.iconColorContrast`, `SymbolLayer.occlusionOpacityMode`, `FillExtrusionLayer.fillExtrusionCastShadows`, `RasterArraySource.volatile`, and `PolylineAnnotation.lineEmissiveStrength` properties.
 * Update default value for experimental `LineLayer.lineCutoutOpacity` from 0 to 1.0.
-* Remove experimental `LineLayer.lineCutoutWidth`.
-
-### 2.17.0-rc.1
-
 * [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
 * Add the ability to get all annotations from an annotation manager.
 * Add `customData` field to annotations to be able to pass user data.
 * Add nautical miles scale bar distance unit.
-* Update property type for experimental `LineLayer.lineCutoutOpacity`, `LineLayer.lineCutoutWidth`, and `LineLayer.lineCutoutFadeWidth` from layout to paint.
-
-### 2.17.0-beta.1
-
-  > [!NOTE]
-  > Version numbering has been updated to align with Mapbox's cross-platform SDK versioning scheme. This release skips from 2.12.0 to 2.17.0-beta.1 to synchronize with other Mapbox SDKs (version x.17.0-beta.1), ensuring consistent version numbers across all platforms.
-
-* Update Maps SDK to v11.17.0-beta.1
-* Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+* Update property type for experimental `LineLayer.lineCutoutOpacity`, and `LineLayer.lineCutoutFadeWidth` from layout to paint.
 * Fix memory leaks on Android.
+* Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+* Update Maps SDK to v11.17.0
 
 ### 2.12.0
 
