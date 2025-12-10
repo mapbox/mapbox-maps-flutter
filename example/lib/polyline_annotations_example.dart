@@ -20,6 +20,7 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
   MapboxMap? mapboxMap;
   PolylineAnnotation? polylineAnnotation;
   PolylineAnnotationManager? polylineAnnotationManager;
+  List<PolylineAnnotation> annotations = [];
   int styleIndex = 1;
 
   _onMapCreated(MapboxMap mapboxMap) {
@@ -30,15 +31,20 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
       polylineAnnotationManager = value;
       createOneAnnotation();
       final positions = <List<Position>>[];
-      for (int i = 0; i < 99; i++) {
+      for (int i = 0; i < 500; i++) {
         positions.add(createRandomPositionList());
       }
 
-      polylineAnnotationManager?.createMulti(positions
-          .map((e) => PolylineAnnotationOptions(
-              geometry: LineString(coordinates: e),
-              lineColor: createRandomColor()))
-          .toList());
+      polylineAnnotationManager
+          ?.createMulti(positions
+              .map((e) => PolylineAnnotationOptions(
+                  geometry: LineString(coordinates: e),
+                  lineColor: createRandomColor()))
+              .toList())
+          .then((createdAnnotations) {
+        annotations =
+            createdAnnotations.whereType<PolylineAnnotation>().toList();
+      });
       polylineAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
@@ -115,11 +121,25 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
     );
   }
 
+  Widget _deleteMulti() {
+    return TextButton(
+        child: Text('delete 100 polyline annotations'),
+        onPressed: () async {
+          if (annotations.isNotEmpty) {
+            final toDelete = annotations.take(100).toList();
+            await polylineAnnotationManager?.deleteMulti(toDelete);
+            annotations.removeRange(
+                0, toDelete.length.clamp(0, annotations.length));
+          }
+        });
+  }
+
   Widget _deleteAll() {
     return TextButton(
       child: Text('delete all polyline annotations'),
       onPressed: () {
         polylineAnnotationManager?.deleteAll();
+        annotations.clear();
       },
     );
   }
@@ -132,7 +152,7 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
     final List<Widget> listViewChildren = <Widget>[];
 
     listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
+      <Widget>[_create(), _update(), _delete(), _deleteMulti(), _deleteAll()],
     );
 
     final colmn = Column(
