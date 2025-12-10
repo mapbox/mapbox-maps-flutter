@@ -1259,6 +1259,7 @@ interface _PointAnnotationMessenger {
   fun update(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun deleteMulti(managerId: String, annotations: List<PointAnnotation>, callback: (Result<Unit>) -> Unit)
   fun setIconAllowOverlap(managerId: String, iconAllowOverlap: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconAllowOverlap(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setIconAnchor(managerId: String, iconAnchor: IconAnchor, callback: (Result<Unit>) -> Unit)
@@ -1514,6 +1515,26 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.deleteAll(managerIdArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.deleteMulti$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val annotationsArg = args[1] as List<PointAnnotation>
+            api.deleteMulti(managerIdArg, annotationsArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

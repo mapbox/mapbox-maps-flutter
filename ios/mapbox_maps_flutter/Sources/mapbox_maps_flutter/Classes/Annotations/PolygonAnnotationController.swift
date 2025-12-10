@@ -53,6 +53,11 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
         completion(.success(()))
     }
 
+    func deleteMulti(managerId: String, annotations: [PolygonAnnotation], completion: @escaping (Result<Void, Error>) -> Void) {
+        delete(annotations: annotations.map { $0.id }, managerId: managerId)
+        completion(.success(()))
+    }
+
     func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         deleteAllAnnotations(from: managerId)
         completion(.success(()))

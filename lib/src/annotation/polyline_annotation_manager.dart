@@ -113,6 +113,10 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
 
+  /// Delete multiple annotations added by this manager.
+  Future<void> deleteMulti(List<PolylineAnnotation> annotations) =>
+      _annotationMessenger.deleteMulti(id, annotations);
+
   /// The display of line endings. Default value: "butt".
   Future<void> setLineCap(LineCap lineCap) =>
       _annotationMessenger.setLineCap(id, lineCap);

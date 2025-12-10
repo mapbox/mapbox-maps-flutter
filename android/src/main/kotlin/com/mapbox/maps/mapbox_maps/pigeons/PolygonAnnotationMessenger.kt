@@ -377,6 +377,7 @@ interface _PolygonAnnotationMessenger {
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun deleteMulti(managerId: String, annotations: List<PolygonAnnotation>, callback: (Result<Unit>) -> Unit)
   fun setFillConstructBridgeGuardRail(managerId: String, fillConstructBridgeGuardRail: Boolean, callback: (Result<Unit>) -> Unit)
   fun getFillConstructBridgeGuardRail(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, callback: (Result<Unit>) -> Unit)
@@ -524,6 +525,26 @@ interface _PolygonAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.deleteAll(managerIdArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.deleteMulti$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val annotationsArg = args[1] as List<PolygonAnnotation>
+            api.deleteMulti(managerIdArg, annotationsArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

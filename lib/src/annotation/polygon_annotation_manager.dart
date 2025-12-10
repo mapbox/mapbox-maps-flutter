@@ -113,6 +113,10 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
 
+  /// Delete multiple annotations added by this manager.
+  Future<void> deleteMulti(List<PolygonAnnotation> annotations) =>
+      _annotationMessenger.deleteMulti(id, annotations);
+
   /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
   @experimental
   Future<void> setFillConstructBridgeGuardRail(

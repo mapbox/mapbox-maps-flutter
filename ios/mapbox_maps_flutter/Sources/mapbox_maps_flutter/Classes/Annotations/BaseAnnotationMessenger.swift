@@ -69,6 +69,11 @@ class BaseAnnotationMessenger<C: AnnotationControllable> {
         self[managerId]?.annotations.removeAll(where: { $0.id == id })
     }
 
+    func delete(annotations ids: [String], managerId: String) {
+        let idsToDelete = Set(ids)
+        self[managerId]?.annotations.removeAll(where: { idsToDelete.contains($0.id) })
+    }
+
     func deleteAllAnnotations(from managerId: String) {
         self[managerId]?.annotations = []
     }
