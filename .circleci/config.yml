@@ -264,9 +264,9 @@ workflows:
 
 executors:
   macos-xcode-latest:
-    resource_class: macos.m1.medium.gen1
+    resource_class: m4pro.medium
     macos:
-      xcode: 16.2.0
+      xcode: 16.4.0
   firebase-test-runner:
     resource_class: small
     docker:
