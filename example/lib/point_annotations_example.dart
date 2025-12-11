@@ -43,9 +43,9 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
       pointAnnotationManager?.createMulti(options);
 
       var carOptions = <PointAnnotationOptions>[];
-      for (var i = 0; i < 500; i++) {
+      for (var i = 0; i < 20; i++) {
         carOptions.add(PointAnnotationOptions(
-            geometry: createRandomPoint(), iconImage: "car-15"));
+            geometry: createRandomPoint(), image: list));
       }
       pointAnnotationManager
           ?.createMulti(carOptions)
@@ -131,10 +131,10 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
 
   Widget _deleteMulti() {
     return TextButton(
-        child: Text('delete 100 point annotations'),
+        child: Text('delete 10 point annotations'),
         onPressed: () async {
           if (annotations.isNotEmpty) {
-            final toDelete = annotations.take(100).toList();
+            final toDelete = annotations.take(10).toList();
             await pointAnnotationManager?.deleteMulti(toDelete);
             annotations.removeRange(
                 0, toDelete.length.clamp(0, annotations.length));

@@ -31,7 +31,7 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
       polylineAnnotationManager = value;
       createOneAnnotation();
       final positions = <List<Position>>[];
-      for (int i = 0; i < 500; i++) {
+      for (int i = 0; i < 99; i++) {
         positions.add(createRandomPositionList());
       }
 
@@ -123,10 +123,10 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
 
   Widget _deleteMulti() {
     return TextButton(
-        child: Text('delete 100 polyline annotations'),
+        child: Text('delete 50 polyline annotations'),
         onPressed: () async {
           if (annotations.isNotEmpty) {
-            final toDelete = annotations.take(100).toList();
+            final toDelete = annotations.take(50).toList();
             await polylineAnnotationManager?.deleteMulti(toDelete);
             annotations.removeRange(
                 0, toDelete.length.clamp(0, annotations.length));
