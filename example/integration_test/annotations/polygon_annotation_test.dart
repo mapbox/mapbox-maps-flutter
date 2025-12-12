@@ -96,5 +96,54 @@ void main() {
 
     await manager.deleteAll();
   });
+
+  testWidgets('deleteMulti PolygonAnnotation', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+    var geometry = Polygon(coordinates: [
+      [
+        Position(-3.363937, -10.733102),
+        Position(1.754703, -19.716317),
+        Position(-15.747196, -21.085074),
+        Position(-3.363937, -10.733102)
+      ]
+    ]);
+
+    var polygonAnnotationOptions = PolygonAnnotationOptions(
+      geometry: geometry,
+    );
+
+    // Create 10 annotations
+    var createdAnnotations = <PolygonAnnotation>[];
+    for (var i = 0; i < 10; i++) {
+      final annotation = await manager.create(polygonAnnotationOptions);
+      createdAnnotations.add(annotation);
+    }
+
+    var allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(10));
+
+    // Delete first 5 annotations
+    final toDelete = createdAnnotations.take(5).toList();
+    await manager.deleteMulti(toDelete);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(5));
+
+    // Delete remaining annotations plus some already deleted (partial deletion)
+    await manager.deleteMulti(createdAnnotations);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+
+    // Delete empty list should succeed
+    await manager.deleteMulti([]);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+  });
 }
 // End of generated file.

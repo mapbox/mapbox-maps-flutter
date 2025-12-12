@@ -44,8 +44,8 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
 
       var carOptions = <PointAnnotationOptions>[];
       for (var i = 0; i < 20; i++) {
-        carOptions.add(PointAnnotationOptions(
-            geometry: createRandomPoint(), image: list));
+        carOptions.add(
+            PointAnnotationOptions(geometry: createRandomPoint(), image: list));
       }
       pointAnnotationManager
           ?.createMulti(carOptions)
