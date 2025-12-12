@@ -113,6 +113,10 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
 
+  /// Delete multiple annotations added by this manager.
+  Future<void> deleteMulti(List<CircleAnnotation> annotations) =>
+      _annotationMessenger.deleteMulti(id, annotations);
+
   /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
   Future<void> setCircleElevationReference(

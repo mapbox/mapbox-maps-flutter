@@ -21,6 +21,7 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
   MapboxMap? mapboxMap;
   CircleAnnotation? circleAnnotation;
   CircleAnnotationManager? circleAnnotationManager;
+  List<CircleAnnotation> annotations = [];
   Cancelable? tapListener;
   int styleIndex = 1;
 
@@ -41,7 +42,9 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
           isDraggable: true,
         ));
       }
-      circleAnnotationManager?.createMulti(options);
+      circleAnnotationManager?.createMulti(options).then((createdAnnotations) {
+        annotations = createdAnnotations.whereType<CircleAnnotation>().toList();
+      });
       tapListener = circleAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
@@ -115,12 +118,26 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
         });
   }
 
+  Widget _deleteMulti() {
+    return TextButton(
+        child: Text('delete 100 circle annotations'),
+        onPressed: () async {
+          if (annotations.isNotEmpty) {
+            final toDelete = annotations.take(100).toList();
+            await circleAnnotationManager?.deleteMulti(toDelete);
+            annotations.removeRange(
+                0, toDelete.length.clamp(0, annotations.length));
+          }
+        });
+  }
+
   Widget _deleteAll() {
     return TextButton(
       child: Text('delete all circle annotations'),
       onPressed: () {
         circleAnnotationManager?.deleteAll();
         circleAnnotation = null;
+        annotations.clear();
       },
     );
   }
@@ -150,6 +167,7 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
         _create(),
         _update(),
         _delete(),
+        _deleteMulti(),
         _deleteAll(),
         _stopTapListener()
       ],

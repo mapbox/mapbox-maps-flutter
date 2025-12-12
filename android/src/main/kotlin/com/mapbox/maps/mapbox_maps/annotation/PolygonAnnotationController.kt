@@ -126,6 +126,38 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     }
   }
 
+  override fun deleteMulti(
+    managerId: String,
+    annotations: List<PolygonAnnotation>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+
+      // Filter to only annotations that exist in the map
+      val nativeAnnotations = annotations.mapNotNull { annotation ->
+        annotationMap[annotation.id]
+      }
+
+      // Delete from native manager (only existing annotations)
+      if (nativeAnnotations.isNotEmpty()) {
+        manager.delete(nativeAnnotations)
+      }
+
+      // Clean up tracking maps (only for annotations that existed)
+      annotations.forEach { annotation ->
+        if (annotationMap.containsKey(annotation.id)) {
+          annotationMap.remove(annotation.id)
+          managerCreateAnnotationMap[managerId]?.remove(annotation.id)
+        }
+      }
+
+      callback(Result.success(Unit))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
   private fun updateAnnotation(annotation: PolygonAnnotation): com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {

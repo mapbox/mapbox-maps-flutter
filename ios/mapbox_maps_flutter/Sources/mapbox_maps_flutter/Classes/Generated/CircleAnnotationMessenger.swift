@@ -352,6 +352,7 @@ protocol _CircleAnnotationMessenger {
   func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func deleteMulti(managerId: String, annotations: [CircleAnnotation], completion: @escaping (Result<Void, Error>) -> Void)
   func setCircleElevationReference(managerId: String, circleElevationReference: CircleElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
   func getCircleElevationReference(managerId: String, completion: @escaping (Result<CircleElevationReference?, Error>) -> Void)
   func setCircleSortKey(managerId: String, circleSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -493,6 +494,24 @@ class _CircleAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
+    }
+    let deleteMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.deleteMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      deleteMultiChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let annotationsArg = args[1] as! [CircleAnnotation]
+        api.deleteMulti(managerId: managerIdArg, annotations: annotationsArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      deleteMultiChannel.setMessageHandler(nil)
     }
     let setCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

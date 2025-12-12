@@ -23,6 +23,7 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
   MapboxMap? mapboxMap;
   PointAnnotation? pointAnnotation;
   PointAnnotationManager? pointAnnotationManager;
+  List<PointAnnotation> annotations = [];
   int styleIndex = 1;
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -43,10 +44,14 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
 
       var carOptions = <PointAnnotationOptions>[];
       for (var i = 0; i < 20; i++) {
-        carOptions.add(PointAnnotationOptions(
-            geometry: createRandomPoint(), iconImage: "car-15"));
+        carOptions.add(
+            PointAnnotationOptions(geometry: createRandomPoint(), image: list));
       }
-      pointAnnotationManager?.createMulti(carOptions);
+      pointAnnotationManager
+          ?.createMulti(carOptions)
+          .then((createdAnnotations) {
+        annotations = createdAnnotations.whereType<PointAnnotation>().toList();
+      });
       pointAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
@@ -124,11 +129,25 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
     );
   }
 
+  Widget _deleteMulti() {
+    return TextButton(
+        child: Text('delete 10 point annotations'),
+        onPressed: () async {
+          if (annotations.isNotEmpty) {
+            final toDelete = annotations.take(10).toList();
+            await pointAnnotationManager?.deleteMulti(toDelete);
+            annotations.removeRange(
+                0, toDelete.length.clamp(0, annotations.length));
+          }
+        });
+  }
+
   Widget _deleteAll() {
     return TextButton(
       child: Text('delete all point annotations'),
       onPressed: () {
         pointAnnotationManager?.deleteAll();
+        annotations.clear();
       },
     );
   }
@@ -141,7 +160,7 @@ class PointAnnotationExampleState extends State<PointAnnotationExample> {
     final List<Widget> listViewChildren = <Widget>[];
 
     listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
+      <Widget>[_create(), _update(), _delete(), _deleteMulti(), _deleteAll()],
     );
 
     final colmn = Column(

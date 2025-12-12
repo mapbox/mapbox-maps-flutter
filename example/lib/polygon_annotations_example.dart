@@ -22,6 +22,7 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
   MapboxMap? mapboxMap;
   PolygonAnnotation? polygonAnnotation;
   PolygonAnnotationManager? polygonAnnotationManager;
+  List<PolygonAnnotation> annotations = [];
   int styleIndex = 1;
 
   _onMapCreated(MapboxMap mapboxMap) {
@@ -39,7 +40,10 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
             geometry: Polygon(coordinates: createRandomPositionsList()),
             fillColor: createRandomColor()));
       }
-      polygonAnnotationManager?.createMulti(options);
+      polygonAnnotationManager?.createMulti(options).then((createdAnnotations) {
+        annotations =
+            createdAnnotations.whereType<PolygonAnnotation>().toList();
+      });
       polygonAnnotationManager?.tapEvents(onTap: (annotation) {
         // ignore: avoid_print
         print("onAnnotationClick, id: ${annotation.id}");
@@ -122,6 +126,7 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
       onPressed: () {
         polygonAnnotationManager?.deleteAll();
         polygonAnnotation = null;
+        annotations.clear();
       },
     );
   }

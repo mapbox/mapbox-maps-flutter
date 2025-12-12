@@ -454,6 +454,7 @@ protocol _PolylineAnnotationMessenger {
   func update(managerId: String, annotation: PolylineAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: PolylineAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func deleteMulti(managerId: String, annotations: [PolylineAnnotation], completion: @escaping (Result<Void, Error>) -> Void)
   func setLineCap(managerId: String, lineCap: LineCap, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineCap(managerId: String, completion: @escaping (Result<LineCap?, Error>) -> Void)
   func setLineCrossSlope(managerId: String, lineCrossSlope: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -625,6 +626,24 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
+    }
+    let deleteMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.deleteMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      deleteMultiChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let annotationsArg = args[1] as! [PolylineAnnotation]
+        api.deleteMulti(managerId: managerIdArg, annotations: annotationsArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      deleteMultiChannel.setMessageHandler(nil)
     }
     let setLineCapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

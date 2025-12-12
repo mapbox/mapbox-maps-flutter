@@ -541,6 +541,7 @@ interface _PolylineAnnotationMessenger {
   fun update(managerId: String, annotation: PolylineAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PolylineAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun deleteMulti(managerId: String, annotations: List<PolylineAnnotation>, callback: (Result<Unit>) -> Unit)
   fun setLineCap(managerId: String, lineCap: LineCap, callback: (Result<Unit>) -> Unit)
   fun getLineCap(managerId: String, callback: (Result<LineCap?>) -> Unit)
   fun setLineCrossSlope(managerId: String, lineCrossSlope: Double, callback: (Result<Unit>) -> Unit)
@@ -718,6 +719,26 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.deleteAll(managerIdArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.deleteMulti$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val annotationsArg = args[1] as List<PolylineAnnotation>
+            api.deleteMulti(managerIdArg, annotationsArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

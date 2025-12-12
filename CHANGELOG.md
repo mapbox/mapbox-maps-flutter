@@ -1,5 +1,6 @@
 ### main
 
+* Add `deleteMulti()` method to all annotation managers to enable batch deletion of annotations.
 * Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
 
 > [!NOTE]

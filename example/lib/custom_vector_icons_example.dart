@@ -15,8 +15,7 @@ import 'example.dart';
 /// For this example to work, the SVGs must live inside the map style. The SVG file was uploaded
 /// to Mapbox Studio with the name `flag`, making it available for customization at runtime.
 /// You can add vector icons to your own style in Mapbox Studio.
-class CustomVectorIconsExample extends StatefulWidget
-    implements Example {
+class CustomVectorIconsExample extends StatefulWidget implements Example {
   @override
   final Widget leading = const Icon(Icons.flag);
   @override
@@ -26,12 +25,10 @@ class CustomVectorIconsExample extends StatefulWidget
       'Colorize and interact with vector icons using parameterized SVGs';
 
   @override
-  State<StatefulWidget> createState() =>
-      _CustomVectorIconsExampleState();
+  State<StatefulWidget> createState() => _CustomVectorIconsExampleState();
 }
 
-class _CustomVectorIconsExampleState
-    extends State<CustomVectorIconsExample> {
+class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
   MapboxMap? mapboxMap;
   String? selectedFlagId;
 
@@ -53,8 +50,8 @@ class _CustomVectorIconsExampleState
     this.mapboxMap = mapboxMap;
 
     // Add tap interaction for the symbol layer
-    var tapInteraction = TapInteraction(
-        FeaturesetDescriptor(layerId: "points"), (feature, point) {
+    var tapInteraction = TapInteraction(FeaturesetDescriptor(layerId: "points"),
+        (feature, point) {
       final id = feature.id?.id;
       if (id == null) return;
 
@@ -69,7 +66,11 @@ class _CustomVectorIconsExampleState
         'icon-size',
         [
           'case',
-          ['==', ['id'], selectedFlagId ?? ''],
+          [
+            '==',
+            ['id'],
+            selectedFlagId ?? ''
+          ],
           2.0,
           1.0
         ],

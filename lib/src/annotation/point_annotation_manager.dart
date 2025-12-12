@@ -112,6 +112,10 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
 
+  /// Delete multiple annotations added by this manager.
+  Future<void> deleteMulti(List<PointAnnotation> annotations) =>
+      _annotationMessenger.deleteMulti(id, annotations);
+
   /// If true, the icon will be visible even if it collides with other previously drawn symbols. Default value: false.
   Future<void> setIconAllowOverlap(bool iconAllowOverlap) =>
       _annotationMessenger.setIconAllowOverlap(id, iconAllowOverlap);

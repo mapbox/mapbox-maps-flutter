@@ -90,5 +90,48 @@ void main() {
 
     await manager.deleteAll();
   });
+
+  testWidgets('deleteMulti PolylineAnnotation', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolylineAnnotationManager();
+    var geometry =
+        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
+
+    var polylineAnnotationOptions = PolylineAnnotationOptions(
+      geometry: geometry,
+    );
+
+    // Create 10 annotations
+    var createdAnnotations = <PolylineAnnotation>[];
+    for (var i = 0; i < 10; i++) {
+      final annotation = await manager.create(polylineAnnotationOptions);
+      createdAnnotations.add(annotation);
+    }
+
+    var allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(10));
+
+    // Delete first 5 annotations
+    final toDelete = createdAnnotations.take(5).toList();
+    await manager.deleteMulti(toDelete);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(5));
+
+    // Delete remaining annotations plus some already deleted (partial deletion)
+    await manager.deleteMulti(createdAnnotations);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+
+    // Delete empty list should succeed
+    await manager.deleteMulti([]);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+  });
 }
 // End of generated file.
