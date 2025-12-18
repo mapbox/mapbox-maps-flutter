@@ -1,12 +1,15 @@
 ### main
 
+### 2.18.0-beta.1
+
 * Add `deleteMulti()` method to all annotation managers to enable batch deletion of annotations.
 * Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
+* Update Maps SDK to v11.18.0-beta.1
+
+### 2.17.0
 
 > [!NOTE]
 > Version numbering has been updated to align with Mapbox's cross-platform SDK versioning scheme. This release skips from 2.12.0 to 2.17.0 to synchronize with other Mapbox SDKs (version x.17.0), ensuring consistent version numbers across all platforms.
-
-### 2.17.0
 
 * Promote `ModelLayer` to stable.
 * Add `SymbolLayer.iconColorBrightnessMax`, `SymbolLayer.iconColorBrightnessMin`, `SymbolLayer.iconColorContrast`, `SymbolLayer.occlusionOpacityMode`, `FillExtrusionLayer.fillExtrusionCastShadows`, `RasterArraySource.volatile`, and `PolylineAnnotation.lineEmissiveStrength` properties.

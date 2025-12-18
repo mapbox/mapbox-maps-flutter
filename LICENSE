@@ -1,6 +1,6 @@
 ## License
 
-Mapbox Maps for Flutter version 2.17.0
+Mapbox Maps for Flutter version 2.18.0-beta.1
 Mapbox Maps Flutter SDK
 
 Copyright &copy; 2022 - 2025 Mapbox, Inc. All rights reserved.
@@ -103,7 +103,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ### flutter_plugin_android_lifecycle, https://github.com/flutter/packages/tree/main/packages/flutter_plugin_android_lifecycle
 
 ```
-Copyright 2013 The Flutter Authors. All rights reserved.
+Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -134,7 +134,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## License
 
-Mapbox Maps for iOS version 11.17.0
+Mapbox Maps for iOS version 11.18.0-beta.1
 Mapbox Maps iOS SDK
 
 Copyright &copy; 2021 - 2025 Mapbox, Inc. All rights reserved.
@@ -165,7 +165,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ---
 
-### MapboxCoreMaps,11.17.0,Mapbox ToS,Mapbox,https://www.mapbox.com/
+### MapboxCoreMaps,11.18.0-beta.1,Mapbox ToS,Mapbox,https://www.mapbox.com/
 
 ```
 Mapbox Core Maps version 11.0
@@ -579,7 +579,7 @@ without including the above copyright and permission notices.
 
 ---
 
-### Boost C++ Libraries,1.84.0,BSL-1.0,Boost authors,https://www.boost.org
+### Boost C++ Libraries,1.89.0,BSL-1.0,Boost authors,https://www.boost.org
 
 ```
 Boost Software License - Version 1.0 - August 17th, 2003
@@ -656,6 +656,19 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
+
+```
+
+---
+
+### dreieck,1.0.0,PROPRIETARY,Mapbox,https://github.com/mapbox/dreieck
+
+```
+Mapbox Dreieck
+
+All rights reserved.
+
+Copyright (c) 2025 Mapbox
 
 ```
 
@@ -1946,7 +1959,7 @@ DEALINGS IN THE SOFTWARE.
 
 ### License
 
-Mapbox Maps for Android version 11.17.0
+Mapbox Maps for Android version 11.18.0-beta.1
 Mapbox Maps Android SDK
 
 Copyright &copy; 2021 - 2025 Mapbox, Inc. All rights reserved.
@@ -2434,7 +2447,7 @@ License: [The Apache Software License, Version 2.0](http://www.apache.org/licens
 
 ===========================================================================
 
-### MapboxCoreMaps,11.17.0,Mapbox ToS,Mapbox,https://www.mapbox.com/
+### MapboxCoreMaps,11.18.0-beta.1,Mapbox ToS,Mapbox,https://www.mapbox.com/
 
 ```
 Mapbox Core Maps version 11.0
@@ -2907,7 +2920,7 @@ without including the above copyright and permission notices.
 
 ---
 
-### Boost C++ Libraries,1.84.0,BSL-1.0,Boost authors,https://www.boost.org
+### Boost C++ Libraries,1.89.0,BSL-1.0,Boost authors,https://www.boost.org
 
 ```
 Boost Software License - Version 1.0 - August 17th, 2003
@@ -2984,6 +2997,19 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
+
+```
+
+---
+
+### dreieck,1.0.0,PROPRIETARY,Mapbox,https://github.com/mapbox/dreieck
+
+```
+Mapbox Dreieck
+
+All rights reserved.
+
+Copyright (c) 2025 Mapbox
 
 ```
 
