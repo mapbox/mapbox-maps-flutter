@@ -95,6 +95,10 @@ if [ "$mode" == "validate" ]; then
         exit 0
     else
         echo "⚠️ License is not up-to-date. ⚠️"
+        echo "$license" > /tmp/expected_license.txt
+        cat LICENSE > /tmp/current_license.txt
+        echo "Diff (expected vs current):"
+        diff /tmp/expected_license.txt /tmp/current_license.txt || true
         exit 1
     fi
 elif [ "$mode" == "generate" ]; then
