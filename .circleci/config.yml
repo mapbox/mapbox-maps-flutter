@@ -103,7 +103,7 @@ jobs:
       - checkout
       - flutter/install_sdk_and_pub:
           version: 3.32.7
-          app-dir: example
+          app_dir: example
       - run:
           name: ktlint
           working_directory: example/android
@@ -165,7 +165,7 @@ jobs:
       - macos/install-rosetta
       - flutter/install_sdk_and_pub:
           version: 3.32.7
-          app-dir: example
+          app_dir: example
       - run:
           name: swiftlint
           working_directory: ios/mapbox_maps_flutter
