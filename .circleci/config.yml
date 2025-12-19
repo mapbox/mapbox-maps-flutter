@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  flutter: circleci/flutter@2
+  flutter: circleci/flutter@3.0.0
   macos: circleci/macos@2
   gcp-cli: circleci/gcp-cli@3
   slack: circleci/slack@5
@@ -102,7 +102,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.27.0
+          version: 3.32.7
           app-dir: example
       - run:
           name: ktlint
@@ -164,7 +164,7 @@ jobs:
       - add-mapbox-submodules-key
       - macos/install-rosetta
       - flutter/install_sdk_and_pub:
-          version: 3.27.0
+          version: 3.32.7
           app-dir: example
       - run:
           name: swiftlint
@@ -236,7 +236,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.27.0
+          version: 3.32.7
       - run:
           name: Check license
           command: bash scripts/license.sh --mode validate
