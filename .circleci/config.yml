@@ -101,13 +101,8 @@ jobs:
     resource_class: 2xlarge
     steps:
       - checkout
-      - run:
-          name: Install Ninja
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y ninja-build
       - flutter/install_sdk_and_pub:
-          version: 3.32.7
+          version: 3.27.0
           app-dir: example
       - run:
           name: ktlint
@@ -169,7 +164,7 @@ jobs:
       - add-mapbox-submodules-key
       - macos/install-rosetta
       - flutter/install_sdk_and_pub:
-          version: 3.32.7
+          version: 3.27.0
           app-dir: example
       - run:
           name: swiftlint
@@ -241,7 +236,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.32.7
+          version: 3.27.0
       - run:
           name: Check license
           command: bash scripts/license.sh --mode validate
