@@ -149,6 +149,7 @@ jobs:
               --num-flaky-test-attempts 3 \
               --no-record-video \
               --no-performance-metrics \
+              --environment-variables clearPackageData=true \
               --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}"
       - slack-notify-failure-if-any
 
