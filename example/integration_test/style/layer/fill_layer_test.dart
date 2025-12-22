@@ -67,6 +67,9 @@ void main() {
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
     expect(layer.fillTunnelStructureColor, Colors.red.value);
     expect(layer.fillZOffset, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add FillLayer');
   });
 
   testWidgets('Add FillLayer with expressions', (WidgetTester tester) async {
@@ -140,6 +143,9 @@ void main() {
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
     expect(layer.fillTunnelStructureColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillZOffset, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add FillLayer with expressions');
   });
 }
 // End of generated file.

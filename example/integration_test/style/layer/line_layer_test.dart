@@ -93,6 +93,9 @@ void main() {
     expect(layer.lineTrimFadeRange, [0.5, 0.5]);
     expect(layer.lineTrimOffset, [0.5, 0.5]);
     expect(layer.lineWidth, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add LineLayer');
   });
 
   testWidgets('Add LineLayer with expressions', (WidgetTester tester) async {
@@ -201,6 +204,9 @@ void main() {
     expect(layer.lineTrimFadeRange, [0.5, 0.5]);
     expect(layer.lineTrimOffset, [0.5, 0.5]);
     expect(layer.lineWidth, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add LineLayer with expressions');
   });
 }
 // End of generated file.

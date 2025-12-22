@@ -60,6 +60,9 @@ void main() {
     expect(layer.shadowImageSize, 1.0);
     expect(layer.topImage, "abc");
     expect(layer.topImageSize, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add LocationIndicatorLayer');
   });
 
   testWidgets('Add LocationIndicatorLayer with expressions',
@@ -131,6 +134,9 @@ void main() {
     expect(layer.shadowImageSize, 1.0);
     expect(layer.topImageExpression, ['image', "abc"]);
     expect(layer.topImageSize, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add LocationIndicatorLayer with expressions');
   });
 }
 // End of generated file.

@@ -63,6 +63,9 @@ void main() {
     expect(layer.modelScaleMode, ModelScaleMode.MAP);
     expect(layer.modelTranslation, [0.0, 1.0, 2.0]);
     expect(layer.modelType, ModelType.COMMON_3D);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add ModelLayer');
   });
 
   testWidgets('Add ModelLayer with expressions', (WidgetTester tester) async {
@@ -142,6 +145,9 @@ void main() {
     expect(layer.modelScaleMode, ModelScaleMode.MAP);
     expect(layer.modelTranslation, [0.0, 1.0, 2.0]);
     expect(layer.modelType, ModelType.COMMON_3D);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add ModelLayer with expressions');
   });
 }
 // End of generated file.

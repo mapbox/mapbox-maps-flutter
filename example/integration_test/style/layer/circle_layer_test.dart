@@ -60,6 +60,9 @@ void main() {
     expect(layer.circleStrokeWidth, 1.0);
     expect(layer.circleTranslate, [0.0, 1.0]);
     expect(layer.circleTranslateAnchor, CircleTranslateAnchor.MAP);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add CircleLayer');
   });
 
   testWidgets('Add CircleLayer with expressions', (WidgetTester tester) async {
@@ -126,6 +129,9 @@ void main() {
     expect(layer.circleStrokeWidth, 1.0);
     expect(layer.circleTranslate, [0.0, 1.0]);
     expect(layer.circleTranslateAnchor, CircleTranslateAnchor.MAP);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add CircleLayer with expressions');
   });
 }
 // End of generated file.

@@ -75,6 +75,9 @@ void main() {
 
     var tileNetworkRequestsDelay = await source.tileNetworkRequestsDelay;
     expect(tileNetworkRequestsDelay, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add VectorSource');
   });
 }
 // End of generated file.

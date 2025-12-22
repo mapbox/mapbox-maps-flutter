@@ -52,5 +52,8 @@ void main() {
       // FIXME failing test
       // expect(updatedSettings.image, iconData);
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Compass settings');
   });
 }

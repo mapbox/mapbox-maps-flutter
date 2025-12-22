@@ -27,6 +27,9 @@ void main() {
     final layers = await mapboxMap.style.getStyleLayers();
     expect(layers.first?.id, id);
     expect(layers.last?.id, dummyLayer.id);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('PointAnnotationManager custom id and position');
   });
 
   testWidgets('create PointAnnotation_manager ', (WidgetTester tester) async {
@@ -306,6 +309,9 @@ void main() {
     await manager.setTextTranslateAnchor(TextTranslateAnchor.MAP);
     var textTranslateAnchor = await manager.getTextTranslateAnchor();
     expect(TextTranslateAnchor.MAP, textTranslateAnchor);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create PointAnnotation_manager ');
   });
 
   group('annotation events', () {

@@ -54,6 +54,9 @@ void main() {
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
     expect(tileCacheBudget?.type,
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add RasterArraySource');
   });
 }
 // End of generated file.

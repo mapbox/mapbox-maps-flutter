@@ -62,6 +62,9 @@ void main() {
     expect(layer.rasterOpacity, 1.0);
     expect(layer.rasterResampling, RasterResampling.LINEAR);
     expect(layer.rasterSaturation, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add RasterLayer');
   });
 
   testWidgets('Add RasterLayer with expressions', (WidgetTester tester) async {
@@ -134,6 +137,9 @@ void main() {
     expect(layer.rasterOpacity, 1.0);
     expect(layer.rasterResampling, RasterResampling.LINEAR);
     expect(layer.rasterSaturation, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add RasterLayer with expressions');
   });
 }
 // End of generated file.

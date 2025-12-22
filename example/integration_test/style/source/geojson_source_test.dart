@@ -106,6 +106,9 @@ void main() {
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
     expect(tileCacheBudget?.type,
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add GeoJsonSource');
   });
 }
 // End of generated file.

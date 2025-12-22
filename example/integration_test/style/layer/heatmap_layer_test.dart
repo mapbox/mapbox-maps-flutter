@@ -42,6 +42,9 @@ void main() {
     expect(layer.heatmapOpacity, 1.0);
     expect(layer.heatmapRadius, 1.0);
     expect(layer.heatmapWeight, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add HeatmapLayer');
   });
 
   testWidgets('Add HeatmapLayer with expressions', (WidgetTester tester) async {
@@ -88,6 +91,9 @@ void main() {
     expect(layer.heatmapOpacity, 1.0);
     expect(layer.heatmapRadius, 1.0);
     expect(layer.heatmapWeight, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add HeatmapLayer with expressions');
   });
 }
 // End of generated file.

@@ -30,6 +30,9 @@ void main() {
     expect(layer.visibility, Visibility.NONE);
     expect(layer.clipLayerScope, ["a", "b", "c"]);
     expect(layer.clipLayerTypes, ["model", "symbol"]);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add ClipLayer');
   });
 
   testWidgets('Add ClipLayer with expressions', (WidgetTester tester) async {
@@ -71,6 +74,9 @@ void main() {
     ]);
     expect(layer.clipLayerScope, ["a", "b", "c"]);
     expect(layer.clipLayerTypes, ["model", "symbol"]);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add ClipLayer with expressions');
   });
 }
 // End of generated file.

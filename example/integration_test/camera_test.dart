@@ -45,6 +45,9 @@ void main() {
     expect(camera.padding!.left, 2);
     expect(camera.padding!.bottom, 3);
     expect(camera.padding!.right, 4);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('cameraForCoordinatesPadding');
   });
 
   testWidgets('cameraForCoordinateBounds', (WidgetTester tester) async {

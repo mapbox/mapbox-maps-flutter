@@ -41,6 +41,9 @@ void main() {
     expect(layer.rasterParticleMaxSpeed, 1.0);
     expect(layer.rasterParticleResetRateFactor, 1.0);
     expect(layer.rasterParticleSpeedFactor, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add RasterParticleLayer');
   });
 
   testWidgets('Add RasterParticleLayer with expressions',
@@ -87,6 +90,9 @@ void main() {
     expect(layer.rasterParticleMaxSpeed, 1.0);
     expect(layer.rasterParticleResetRateFactor, 1.0);
     expect(layer.rasterParticleSpeedFactor, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add RasterParticleLayer with expressions');
   });
 }
 // End of generated file.

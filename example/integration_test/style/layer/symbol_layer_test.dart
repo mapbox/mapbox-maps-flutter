@@ -172,6 +172,9 @@ void main() {
     expect(layer.textOpacity, 1.0);
     expect(layer.textTranslate, [0.0, 1.0]);
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add SymbolLayer');
   });
 
   testWidgets('Add SymbolLayer with expressions', (WidgetTester tester) async {
@@ -377,6 +380,9 @@ void main() {
     expect(layer.textOpacity, 1.0);
     expect(layer.textTranslate, [0.0, 1.0]);
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add SymbolLayer with expressions');
   });
 }
 // End of generated file.

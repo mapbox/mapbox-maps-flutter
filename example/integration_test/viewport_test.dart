@@ -28,6 +28,9 @@ void main() {
     expect(
         camera.bearing, moreOrLessEquals(cameraViewport.bearing!.toDouble()));
     expect(camera.pitch, moreOrLessEquals(cameraViewport.pitch!.toDouble()));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('CameraViewportState test');
   });
 
   testWidgets('StyleDefaultViewportState test', (WidgetTester tester) async {
@@ -76,6 +79,9 @@ void main() {
         moreOrLessEquals(styleDefaultCamera.bearing!.toDouble()));
     expect(cameraAfterViewport.pitch,
         moreOrLessEquals(styleDefaultCamera.pitch!.toDouble()));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleDefaultViewportState test');
   });
 
   testWidgets('OverviewViewportState test', (WidgetTester tester) async {
@@ -107,6 +113,9 @@ void main() {
     expect(
         camera.bearing, moreOrLessEquals(overviewViewport.bearing!.toDouble()));
     expect(camera.pitch, moreOrLessEquals(overviewViewport.pitch!.toDouble()));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('OverviewViewportState test');
   });
 
   testWidgets('IdleViewportState test', (WidgetTester tester) async {
@@ -116,6 +125,9 @@ void main() {
     await mapFuture;
 
     // no-op viewport state, camera should not change
+
+    // Print memory usage after test
+    await app.printMemoryUsage('IdleViewportState test');
   });
 
   testWidgets('FollowPuckViewportState test', (WidgetTester tester) async {
@@ -129,5 +141,8 @@ void main() {
     final _ = await mapFuture;
 
     // TODO: test that the camera is updated when custom location provider is supported
+
+    // Print memory usage after test
+    await app.printMemoryUsage('FollowPuckViewportState test');
   });
 }

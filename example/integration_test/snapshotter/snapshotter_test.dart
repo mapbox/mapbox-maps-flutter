@@ -33,6 +33,9 @@ void main() {
     expect(snapshotData, isNotNull);
 
     await snapshotter.dispose();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Basic snapshot');
   });
 
   testWidgets('Snapshotter style loaded', (WidgetTester tester) async {
@@ -59,6 +62,9 @@ void main() {
     expect(styleDataLoaded.future, completes);
 
     await snapshotter.dispose();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Snapshotter style loaded');
   });
 
   testWidgets('Snapshotter runtime configuration', (WidgetTester tester) async {
@@ -112,6 +118,9 @@ void main() {
     expect(tileCover, isNotNull);
 
     await snapshotter.dispose();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Snapshotter runtime configuration');
   });
 
   testWidgets('Snapshotter cancel and clear', (WidgetTester tester) async {
@@ -138,5 +147,8 @@ void main() {
 
     await snapshotter.clearData();
     await snapshotter.dispose();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Snapshotter cancel and clear');
   });
 }

@@ -40,6 +40,9 @@ void main() {
     expect(1.0, annotation.circleStrokeOpacity);
     expect(1.0, annotation.circleStrokeWidth);
     expect({'foo': 'bar'}, annotation.customData);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create CircleAnnotation');
   });
 
   testWidgets('update and delete CircleAnnotation',
@@ -70,6 +73,9 @@ void main() {
     expect(annotations.length, equals(10));
 
     await manager.deleteAll();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('update and delete CircleAnnotation');
   });
 
   testWidgets('deleteMulti CircleAnnotation', (WidgetTester tester) async {
@@ -111,6 +117,9 @@ void main() {
 
     allAnnotations = await manager.getAnnotations();
     expect(allAnnotations.length, equals(0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('deleteMulti CircleAnnotation');
   });
 }
 // End of generated file.

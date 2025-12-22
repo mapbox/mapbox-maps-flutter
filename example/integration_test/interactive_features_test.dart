@@ -59,6 +59,9 @@ void main() {
     expect(viewportQuery[1].properties["name"], "nest1");
     expect(viewportQuery[2].properties["name"], "nest3");
     expect(viewportQuery[2].properties["class"], "poi");
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_featureset_QRF');
   });
 
   testWidgets('test_featurestate_methods', (WidgetTester tester) async {
@@ -112,6 +115,9 @@ void main() {
     var returnedFeatureState4 =
         await mapboxMap.getFeatureStateForFeaturesetFeature(feature);
     expect(returnedFeatureState4, {});
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_featurestate_methods');
   });
 
   testWidgets('test_featurestate_descriptor_methods',
@@ -156,6 +162,9 @@ void main() {
         await mapboxMap.getFeatureStateForFeaturesetDescriptor(
             featuresetDescriptor, featuresetID);
     expect(returnedFeatureState2, {});
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_featurestate_descriptor_methods');
   });
 
   testWidgets('test_state_is_queried', (WidgetTester tester) async {
@@ -200,6 +209,9 @@ void main() {
     expect(point.coordinates.lat, closeTo(0.01, 0.05));
     expect(point.coordinates.lng, closeTo(0.01, 0.05));
     expect(poi.properties, expectedProperties);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_state_is_queried');
   });
 
   testWidgets('test_getFeaturesets', (WidgetTester tester) async {
@@ -221,6 +233,9 @@ void main() {
 
     expect(returnedFeaturesets.length, 1);
     expect(returnedFeaturesets.first.importId, "nested");
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_getFeaturesets');
   });
 
   testWidgets('test_addLongTapInteractionToMap', (WidgetTester tester) async {
@@ -241,6 +256,9 @@ void main() {
     });
     mapboxMap.addInteraction(tapInteraction);
     mapboxMap.dispatch("longClick", ScreenCoordinate(x: 2, y: 2));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addLongTapInteractionToMap');
   });
 
   testWidgets('test_addTapInteractionToLayer', (WidgetTester tester) async {
@@ -282,6 +300,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(0, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(0, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addTapInteractionToLayer');
   });
 
   testWidgets('test_addTapInteractionToFeatureset',
@@ -329,6 +350,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(0.01, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addTapInteractionToFeatureset');
   });
 
   testWidgets('test_addTapInteractionToMap', (WidgetTester tester) async {
@@ -362,6 +386,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(-0.01, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(-0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addTapInteractionToMap');
   });
 
   testWidgets('test_addTapInteractionToFeaturesetWithRadius',
@@ -404,6 +431,9 @@ void main() {
     // Test the expected feature and context
     await Future.delayed(Duration(seconds: 1));
     expect(count, 2);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addTapInteractionToFeaturesetWithRadius');
   });
 
   testWidgets('test_addTapInteractionToFeaturesetWithFilter',
@@ -451,6 +481,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(0.01, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addTapInteractionToFeaturesetWithFilter');
   });
 
   testWidgets('test_addLongTapInteractionToLayer', (WidgetTester tester) async {
@@ -492,6 +525,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(0, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(0, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addLongTapInteractionToLayer');
   });
 
   testWidgets('test_addLongTapInteractionToFeatureset',
@@ -539,6 +575,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(0.01, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addLongTapInteractionToFeatureset');
   });
 
   testWidgets('test_addLongTapInteractionToMap', (WidgetTester tester) async {
@@ -572,6 +611,9 @@ void main() {
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(-0.01, 1e-4));
     expect(expectedContext?.point.coordinates.lng, closeTo(-0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_addLongTapInteractionToMap');
   });
 
   testWidgets('test_removeTapInteraction', (WidgetTester tester) async {
@@ -610,5 +652,8 @@ void main() {
     // Test the expected count
     await Future.delayed(Duration(seconds: 1));
     expect(count, 1);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('test_removeTapInteraction');
   });
 }

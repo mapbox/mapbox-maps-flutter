@@ -79,6 +79,9 @@ void main() {
         settings.locationPuck?.locationPuck2D?.scaleExpression);
     expect(updatedSettings.locationPuck?.locationPuck2D?.opacity,
         settings.locationPuck?.locationPuck2D?.opacity);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Location is updated puck 2d');
   });
 
   testWidgets('Location is updated puck 3d', (WidgetTester tester) async {
@@ -142,5 +145,8 @@ void main() {
     expect(
         updatedSettings.locationPuck?.locationPuck3D?.modelElevationReference,
         settings.locationPuck?.locationPuck3D?.modelElevationReference);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Location is updated puck 3d');
   });
 }

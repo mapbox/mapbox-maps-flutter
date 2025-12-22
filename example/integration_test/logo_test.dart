@@ -33,5 +33,8 @@ void main() {
       expect(getSettings.marginRight, 3);
       expect(getSettings.marginBottom, 4);
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Logo settings');
   });
 }

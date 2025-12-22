@@ -25,6 +25,9 @@ void main() {
             bearing: 0,
             pitch: 3),
         MapAnimationOptions(duration: 2000, startDelay: 0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('easeTo');
   });
 
   testWidgets('flyTo', (WidgetTester tester) async {
@@ -44,6 +47,9 @@ void main() {
             bearing: 0,
             pitch: 3),
         MapAnimationOptions(duration: 2000, startDelay: 0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('flyTo');
   });
 
   if (Platform.isAndroid) {
@@ -53,6 +59,9 @@ void main() {
       final mapboxMap = await mapFuture;
       mapboxMap.moveBy(ScreenCoordinate(x: 500.0, y: 500.0),
           MapAnimationOptions(duration: 2000, startDelay: 0));
+
+      // Print memory usage after test
+      await app.printMemoryUsage('moveBy');
     });
 
     testWidgets('rotateBy', (WidgetTester tester) async {
@@ -63,6 +72,9 @@ void main() {
           ScreenCoordinate(x: 0, y: 0),
           ScreenCoordinate(x: 500.0, y: 500.0),
           MapAnimationOptions(duration: 2000, startDelay: 0));
+
+      // Print memory usage after test
+      await app.printMemoryUsage('rotateBy');
     });
     testWidgets('scaleBy', (WidgetTester tester) async {
       final mapFuture = app.main();
@@ -70,6 +82,9 @@ void main() {
       final mapboxMap = await mapFuture;
       mapboxMap.scaleBy(15.0, ScreenCoordinate(x: 10.0, y: 10.0),
           MapAnimationOptions(duration: 2000, startDelay: 0));
+
+      // Print memory usage after test
+      await app.printMemoryUsage('scaleBy');
     });
     testWidgets('pitchBy', (WidgetTester tester) async {
       final mapFuture = app.main();
@@ -77,6 +92,9 @@ void main() {
       final mapboxMap = await mapFuture;
       mapboxMap.pitchBy(
           70.0, MapAnimationOptions(duration: 2000, startDelay: 0));
+
+      // Print memory usage after test
+      await app.printMemoryUsage('pitchBy');
     });
   }
   testWidgets('cancelCameraAnimation', (WidgetTester tester) async {
@@ -98,5 +116,8 @@ void main() {
             pitch: 3),
         MapAnimationOptions(duration: 2000, startDelay: 0));
     mapboxMap.cancelCameraAnimation();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('cancelCameraAnimation');
   });
 }

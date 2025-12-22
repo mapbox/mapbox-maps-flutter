@@ -43,6 +43,9 @@ void main() {
     expect(layer.skyGradientRadius, 1.0);
     expect(layer.skyOpacity, 1.0);
     expect(layer.skyType, SkyType.GRADIENT);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add SkyLayer');
   });
 
   testWidgets('Add SkyLayer with expressions', (WidgetTester tester) async {
@@ -96,6 +99,9 @@ void main() {
     expect(layer.skyGradientRadius, 1.0);
     expect(layer.skyOpacity, 1.0);
     expect(layer.skyType, SkyType.GRADIENT);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add SkyLayer with expressions');
   });
 }
 // End of generated file.

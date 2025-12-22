@@ -26,6 +26,9 @@ void main() {
     app.events.resetOnMapLoaded();
     await app.events.onMapLoaded.future;
     await expectLater(style.getStyleURI(), completion(MapboxStyles.DARK));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Style uri');
   });
 
   testWidgets('Style json', (WidgetTester tester) async {
@@ -37,6 +40,9 @@ void main() {
     style.setStyleJSON(styleJson);
     await app.events.onMapLoaded.future;
     await expectLater(style.getStyleJSON(), completion(styleJson));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Style json');
   });
 
   testWidgets('Style is loaded', (WidgetTester tester) async {
@@ -46,6 +52,9 @@ void main() {
     var style = mapboxMap.style;
     var styleLoaded = await style.isStyleLoaded();
     expect(styleLoaded, true);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Style is loaded');
   });
 
   testWidgets('Style Transition', (WidgetTester tester) async {
@@ -60,6 +69,9 @@ void main() {
     expect(styleTransition.duration, 200);
     expect(styleTransition.delay, 100);
     expect(styleTransition.enablePlacementTransitions, false);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Style Transition');
   });
 
   testWidgets('Add and remove layer and source', (WidgetTester tester) async {
@@ -90,6 +102,9 @@ void main() {
     // Add persistent layer
     style.addPersistentStyleLayer(layer, null);
     await expectLater(style.isStyleLayerPersistent('custom'), completion(true));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add and remove layer and source');
   });
 
   testWidgets('Move layer', (WidgetTester tester) async {
@@ -122,6 +137,9 @@ void main() {
 
     layers = await style.getStyleLayers();
     expect(layers.first!.id, 'land');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Move layer');
   });
 
   testWidgets('StyleLayerProperty', (WidgetTester tester) async {
@@ -151,6 +169,9 @@ void main() {
     expect(radius.value, 1.0);
     color = await style.getStyleLayerProperty('custom', 'circle-color');
     expect(color.value, listCloseTo(Color(0xFFFF0000).toRGBAList(), 0.00001));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleLayerProperty');
   });
 
   testWidgets('StyleLayerProperties', (WidgetTester tester) async {
@@ -173,6 +194,9 @@ void main() {
     expect(formattedProperties['paint']['circle-radius'], 10);
     expect(formattedProperties['paint']['circle-color'],
         ['rgba', 255, 255, 255, 1]);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleLayerProperties');
   });
 
   testWidgets('StyleSourceProperty', (WidgetTester tester) async {
@@ -195,6 +219,9 @@ void main() {
         '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
     await expectLater(
         styleSourceProperty.kind, StylePropertyValueKind.CONSTANT);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleSourceProperty');
   });
 
   testWidgets('StyleSourceProperties', (WidgetTester tester) async {
@@ -220,6 +247,9 @@ void main() {
     expect(styleSourceProperties['type'], 'geojson');
     expect(styleSourceProperties['attribution'],
         '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleSourceProperties');
   });
 
   testWidgets('addAndRemoveGeoJSONSourceFeatures', (WidgetTester tester) async {
@@ -273,6 +303,9 @@ void main() {
     returnedSourceFeatures = await mapboxMap.querySourceFeatures(
         'line', SourceQueryOptions(filter: ''));
     expect(returnedSourceFeatures.length, 0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('addAndRemoveGeoJSONSourceFeatures');
   });
 
   testWidgets('updateGeoJSONSourceFeatures', (WidgetTester tester) async {
@@ -314,6 +347,9 @@ void main() {
         "addedFeature");
     expect(returnedSourceFeatures.first?.queriedFeature.feature['properties'],
         {"test": "newData"});
+
+    // Print memory usage after test
+    await app.printMemoryUsage('updateGeoJSONSourceFeatures');
   });
 
   testWidgets('getStyleDefaultCamera', (WidgetTester tester) async {
@@ -331,6 +367,9 @@ void main() {
     final point = camera.center;
     expect(point?.coordinates.lng, -92.25);
     expect(point?.coordinates.lat, 37.75);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('getStyleDefaultCamera');
   });
 
   testWidgets('StyleLightProperty', (WidgetTester tester) async {
@@ -354,6 +393,9 @@ void main() {
 
     var color = await style.getStyleLightProperty('ambient-light-id', 'color');
     expect(color.value, Colors.white.toRGBAList());
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleLightProperty');
   });
 
   testWidgets('Flat Light', (WidgetTester tester) async {
@@ -395,6 +437,9 @@ void main() {
                 "flat-light-id", "position-transition"))
             .value,
         flatLight.positionTransition?.toJSON());
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Flat Light');
   });
 
   testWidgets('3D Lights', (WidgetTester tester) async {
@@ -484,6 +529,9 @@ void main() {
                 "ambient-light-id", "intensity-transition"))
             .value,
         ambientLight.intensityTransition?.toJSON());
+
+    // Print memory usage after test
+    await app.printMemoryUsage('3D Lights');
   });
 
   testWidgets('StyleTerrain', (WidgetTester tester) async {
@@ -503,6 +551,9 @@ void main() {
     await style.setStyleTerrainProperty('exaggeration', 3);
     exaggeration = await style.getStyleTerrainProperty('exaggeration');
     expect(exaggeration.value, 3);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleTerrain');
   });
 
   testWidgets('invalidateStyleCustomGeometrySourceTile',
@@ -515,6 +566,9 @@ void main() {
     style.addStyleSource('source', source);
     await style.invalidateStyleCustomGeometrySourceTile(
         'source', CanonicalTileID(z: 0, x: 1, y: 2));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('invalidateStyleCustomGeometrySourceTile');
   });
 
   testWidgets('invalidateStyleCustomGeometrySourceRegion',
@@ -539,6 +593,9 @@ void main() {
               4.0,
             )),
             infiniteBounds: true));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('invalidateStyleCustomGeometrySourceRegion');
   });
 
   testWidgets('handleImage', (WidgetTester tester) async {
@@ -564,6 +621,9 @@ void main() {
 
     getImage = await style.getStyleImage('icon');
     expect(getImage, isNull);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('handleImage');
   });
 
   testWidgets('MapProjection', (WidgetTester tester) async {
@@ -578,6 +638,9 @@ void main() {
     );
     var projection = await mapboxMap.style.getProjection();
     expect(projection?.name, StyleProjectionName.mercator);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('MapProjection');
   });
 
   testWidgets('StyleImportJSON', (WidgetTester tester) async {
@@ -614,6 +677,9 @@ void main() {
       expect(value["config2"]?.value, configs["config2"]);
       expect(value["config3"]?.value, configs["config3"]);
     });
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleImportJSON');
   });
 
   testWidgets('StyleImportsURI', (WidgetTester tester) async {
@@ -649,6 +715,9 @@ void main() {
       expect(value["config2"]?.value, configs["config2"]);
       expect(value["config3"]?.value, configs["config3"]);
     });
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleImportsURI');
   });
 
   testWidgets('StyleUpdateJSON', (WidgetTester tester) async {
@@ -691,6 +760,9 @@ void main() {
       expect(value["config5"]?.value, configs2["config5"]);
       expect(value["config6"]?.value, configs2["config6"]);
     });
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleUpdateJSON');
   });
 
   testWidgets('StyleUpdateJSON', (WidgetTester tester) async {
@@ -733,6 +805,9 @@ void main() {
       expect(value["config5"]?.value, configs2["config5"]);
       expect(value["config6"]?.value, configs2["config6"]);
     });
+
+    // Print memory usage after test
+    await app.printMemoryUsage('StyleUpdateJSON');
   });
 
   testWidgets('MoveStyleImport', (WidgetTester tester) async {
@@ -764,6 +839,9 @@ void main() {
     expect(styleImports[1]?.id, "basemap");
     expect(styleImports[1]?.type, "import");
     expect(styleImports.length, 2);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('MoveStyleImport');
   });
 
   testWidgets('Match expression with concat type mismatch',
@@ -834,6 +912,9 @@ void main() {
     expect(retrievedExpression[4], "5234534");
     expect(retrievedExpression[5], ['rgba', 0.0, 128.0, 0.0, 1.0]);
     expect(retrievedExpression[6], ['rgba', 255.0, 255.0, 0.0, 1.0]);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Match expression with concat type mismatch');
   });
 }
 

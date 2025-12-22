@@ -61,5 +61,8 @@ void main() {
       expect(updatedSettings.ratio, 1.5);
       expect(updatedSettings.useContinuousRendering, true);
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('ScaleBar settings');
   });
 }

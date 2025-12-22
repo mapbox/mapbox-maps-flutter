@@ -40,5 +40,8 @@ void main() {
       expect(updatedSettings.marginBottom, 4);
       expect(updatedSettings.clickable, true);
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Attribution settings');
   });
 }

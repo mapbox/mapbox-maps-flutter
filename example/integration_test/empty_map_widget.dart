@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -115,4 +116,36 @@ void runEmpty() {
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
   runApp(MaterialApp());
+}
+
+/// Prints current memory statistics (Android only)
+Future<void> printMemoryUsage(String testName) async {
+  if (!Platform.isAndroid) {
+    return;
+  }
+
+  try {
+    final api = MemoryStatisticsApi();
+    final stats = await api.getMemoryStatistics();
+
+    final usedMB = (stats.usedMemoryBytes / (1024 * 1024)).toStringAsFixed(2);
+    final totalMB = (stats.totalMemoryBytes / (1024 * 1024)).toStringAsFixed(2);
+    final freeMB = (stats.freeMemoryBytes / (1024 * 1024)).toStringAsFixed(2);
+    final maxMB = (stats.maxMemoryBytes / (1024 * 1024)).toStringAsFixed(2);
+    final nativeHeapMB =
+        (stats.nativeHeapBytes / (1024 * 1024)).toStringAsFixed(2);
+    final nativeAllocMB =
+        (stats.nativeHeapAllocatedBytes / (1024 * 1024)).toStringAsFixed(2);
+
+    print('=== Memory Stats: $testName ===');
+    print('Java Heap Used:  $usedMB MB');
+    print('Java Heap Total: $totalMB MB');
+    print('Java Heap Free:  $freeMB MB');
+    print('Java Heap Max:   $maxMB MB');
+    print('Native Heap PSS: $nativeHeapMB MB  ⚠️ THIS IS THE LEAK!');
+    print('Native Allocated: $nativeAllocMB MB');
+    print('=====================================');
+  } catch (e) {
+    print('Error getting memory statistics: $e');
+  }
 }

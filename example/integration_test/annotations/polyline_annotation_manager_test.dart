@@ -27,6 +27,10 @@ void main() {
     final layers = await mapboxMap.style.getStyleLayers();
     expect(layers.first?.id, id);
     expect(layers.last?.id, dummyLayer.id);
+
+    // Print memory usage after test
+    await app
+        .printMemoryUsage('PolylineAnnotationManager custom id and position');
   });
 
   testWidgets('create PolylineAnnotation_manager ',
@@ -152,6 +156,9 @@ void main() {
     await manager.setLineWidth(1.0);
     var lineWidth = await manager.getLineWidth();
     expect(1.0, lineWidth);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create PolylineAnnotation_manager ');
   });
 
   group('annotation events', () {

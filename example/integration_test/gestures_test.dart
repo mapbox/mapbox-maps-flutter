@@ -64,6 +64,9 @@ void main() {
           settings.scrollDecelerationEnabled);
       expect(updatedSettings.zoomAnimationAmount, settings.zoomAnimationAmount);
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Gestures settings');
   });
 
   testWidgets('RecognizeTapEvent', (WidgetTester tester) async {
@@ -83,6 +86,9 @@ void main() {
     expect(tapContext.touchPosition.y, closeTo(point.y, 1e-4));
     expect(tapContext.point.coordinates.lat, closeTo(0.01, 1e-4));
     expect(tapContext.point.coordinates.lng, closeTo(0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('RecognizeTapEvent');
   });
 
   testWidgets('RecognizeLongTapEvent', (WidgetTester tester) async {
@@ -102,5 +108,8 @@ void main() {
     expect(tapContext.touchPosition.y, closeTo(point.y, 1e-4));
     expect(tapContext.point.coordinates.lat, closeTo(-0.01, 1e-4));
     expect(tapContext.point.coordinates.lng, closeTo(-0.01, 1e-4));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('RecognizeLongTapEvent');
   });
 }

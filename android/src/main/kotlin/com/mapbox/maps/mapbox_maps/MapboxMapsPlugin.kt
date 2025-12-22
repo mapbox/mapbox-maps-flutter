@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.offline.OfflineMapInstanceManager
 import com.mapbox.maps.mapbox_maps.offline.OfflineSwitch
+import com.mapbox.maps.mapbox_maps.pigeons.MemoryStatisticsApi
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
 import com.mapbox.maps.mapbox_maps.pigeons._OfflineMapInstanceManager
@@ -45,6 +46,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
     val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
     val offlineMapInstanceManager = OfflineMapInstanceManager(context, binaryMessenger)
     val offlineSwitch = OfflineSwitch()
+    val memoryStatisticsController = MemoryStatisticsController()
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
     _MapboxMapsOptions.setUp(binaryMessenger, optionsController)
@@ -53,6 +55,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
     _OfflineMapInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
     _TileStoreInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
     _OfflineSwitch.setUp(binaryMessenger, offlineSwitch)
+    MemoryStatisticsApi.setUp(binaryMessenger, memoryStatisticsController)
     LoggingController.setup(binaryMessenger)
   }
 

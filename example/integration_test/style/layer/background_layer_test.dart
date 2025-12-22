@@ -35,6 +35,9 @@ void main() {
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPattern, "abc");
     expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add BackgroundLayer');
   });
 
   testWidgets('Add BackgroundLayer with expressions',
@@ -75,6 +78,9 @@ void main() {
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPatternExpression, ['image', "abc"]);
     expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add BackgroundLayer with expressions');
   });
 }
 // End of generated file.

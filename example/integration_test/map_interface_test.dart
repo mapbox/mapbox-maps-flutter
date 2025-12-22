@@ -18,6 +18,9 @@ void main() {
 
     await mapboxMap.setStyleGlyphURL(styleGlyphURL);
     expect(await mapboxMap.styleGlyphURL(), styleGlyphURL);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('styleGlyphURL');
   });
 
   testWidgets('loadStyleURI', (WidgetTester tester) async {
@@ -27,6 +30,9 @@ void main() {
     await mapboxMap.loadStyleURI(MapboxStyles.DARK);
     var style = await mapboxMap.style.getStyleURI();
     expect(MapboxStyles.DARK, style);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('loadStyleURI');
   });
 
   testWidgets('loadStyleJson', (WidgetTester tester) async {
@@ -41,6 +47,9 @@ void main() {
 
     var getStyleJson = await mapboxMap.style.getStyleJSON();
     expect(styleJson, getStyleJson);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('loadStyleJson');
   });
 
   testWidgets('loadRasterArray', (WidgetTester tester) async {
@@ -98,6 +107,9 @@ void main() {
     } else {
       fail("Expected source to be RasterArraySource");
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('loadRasterArray');
   });
 
   testWidgets('clearData', (WidgetTester tester) async {
@@ -105,6 +117,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     mapboxMap.clearData();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('clearData');
   });
 
   testWidgets('setTileCacheBudget', (WidgetTester tester) async {
@@ -113,6 +128,9 @@ void main() {
     final mapboxMap = await mapFuture;
     mapboxMap.setTileCacheBudget(TileCacheBudgetInMegabytes(size: 100), null);
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('setTileCacheBudget');
   });
 
   testWidgets('getSize', (WidgetTester tester) async {
@@ -133,6 +151,9 @@ void main() {
       expect(size.height,
           closeTo(tester.binding.renderViews.first.size.height, 1));
     }
+
+    // Print memory usage after test
+    await app.printMemoryUsage('getSize');
   });
 
   testWidgets('reduceMemoryUse', (WidgetTester tester) async {
@@ -141,6 +162,9 @@ void main() {
     final mapboxMap = await mapFuture;
 
     await mapboxMap.reduceMemoryUse();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('reduceMemoryUse');
   });
 
   testWidgets('triggerRepaint', (WidgetTester tester) async {
@@ -148,6 +172,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     await mapboxMap.triggerRepaint();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('triggerRepaint');
   });
 
   testWidgets('PrefetchZoomDelta', (WidgetTester tester) async {
@@ -157,6 +184,9 @@ void main() {
     await mapboxMap.setPrefetchZoomDelta(10);
     var prefetchZoomDelta = await mapboxMap.getPrefetchZoomDelta();
     expect(prefetchZoomDelta, 10);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('PrefetchZoomDelta');
   });
 
   testWidgets('MapOptions', (WidgetTester tester) async {
@@ -183,6 +213,9 @@ void main() {
     expect(options.orientation, NorthOrientation.DOWNWARDS);
     expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
     expect(options.viewportMode, ViewportMode.FLIPPED_Y);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('MapOptions');
   });
 
   testWidgets('isGestureInProgress', (WidgetTester tester) async {
@@ -194,6 +227,9 @@ void main() {
 
     await mapboxMap.setGestureInProgress(true);
     expect(await mapboxMap.isGestureInProgress(), true);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('isGestureInProgress');
   });
 
   testWidgets('isUserAnimationInProgress', (WidgetTester tester) async {
@@ -205,6 +241,9 @@ void main() {
 
     await mapboxMap.setUserAnimationInProgress(true);
     expect(await mapboxMap.isUserAnimationInProgress(), true);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('isUserAnimationInProgress');
   });
 
   testWidgets('debugOptions', (WidgetTester tester) async {
@@ -215,6 +254,9 @@ void main() {
     var debugOptions = await mapboxMap.getDebugOptions();
     expect(debugOptions.length, 1);
     expect(debugOptions.first, MapWidgetDebugOptions.tileBorders);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('debugOptions');
   });
 
   testWidgets('featureState', (WidgetTester tester) async {
@@ -244,6 +286,9 @@ void main() {
     featureState = await mapboxMap.getFeatureState('source', null, 'point');
     stateMap = json.decode(featureState);
     expect(stateMap.length, 0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('featureState');
   });
 
   testWidgets('MapboxMapsOptions default values', (WidgetTester tester) async {
@@ -256,6 +301,9 @@ void main() {
     expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
     expect(await MapboxMapsOptions.getTileStoreUsageMode(),
         TileStoreUsageMode.READ_ONLY);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('MapboxMapsOptions default values');
   });
 
   testWidgets('MapboxMapsOptions read and update', (WidgetTester tester) async {
@@ -303,6 +351,9 @@ void main() {
     MapboxMapsOptions.setTileStoreUsageMode(originalTileStoreUsageMode);
     MapboxMapsOptions.setLanguage(null);
     MapboxMapsOptions.setWorldview(null);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('MapboxMapsOptions read and update');
   });
 
   testWidgets('queryRenderedFeatures', (WidgetTester tester) async {
@@ -354,6 +405,9 @@ void main() {
         ]),
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, 0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('queryRenderedFeatures');
   });
 
   testWidgets('querySourceFeatures', (WidgetTester tester) async {
@@ -387,6 +441,9 @@ void main() {
     expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('querySourceFeatures');
   });
 
   testWidgets('queryFeatureExtensions', (WidgetTester tester) async {
@@ -438,6 +495,9 @@ void main() {
     var clusterExpansionZoom =
         await mapboxMap.getGeoJsonClusterExpansionZoom('earthquakes', feature);
     expect(clusterExpansionZoom.value, '1');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('queryFeatureExtensions');
   });
 
   testWidgets('snapshot', (WidgetTester tester) async {
@@ -448,5 +508,8 @@ void main() {
     await app.events.onMapIdle.future;
     final snapshot = await mapboxMap.snapshot();
     expect(snapshot, isNotNull);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('snapshot');
   });
 }

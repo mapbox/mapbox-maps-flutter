@@ -41,6 +41,9 @@ void main() {
     expect(sequence, isNotNull);
     expect(sequence, isA<Uint8List>());
     expect(sequence.length, greaterThan(0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('startRecording');
   });
 
   testWidgets('getState', (WidgetTester tester) async {
@@ -52,6 +55,9 @@ void main() {
     // Get initial state (should be "stopped")
     final state = await mapboxMap.recorder.getState();
     expect(state, 'stopped');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('getState');
   });
 
   testWidgets('replay', (WidgetTester tester) async {
@@ -95,6 +101,9 @@ void main() {
     // Verify state after replay completes
     final stateAfterReplay = await mapboxMap.recorder.getState();
     expect(stateAfterReplay, 'stopped');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('replay');
   });
 
   testWidgets('togglePauseReplay', (WidgetTester tester) async {
@@ -167,6 +176,9 @@ void main() {
     // Verify state returns to "stopped"
     final finalState = await mapboxMap.recorder.getState();
     expect(finalState, 'stopped');
+
+    // Print memory usage after test
+    await app.printMemoryUsage('togglePauseReplay');
   });
 
   testWidgets('recordingWithOptions', (WidgetTester tester) async {
@@ -206,5 +218,8 @@ void main() {
     );
 
     // Test passed if no exception was thrown
+
+    // Print memory usage after test
+    await app.printMemoryUsage('recordingWithOptions');
   });
 }

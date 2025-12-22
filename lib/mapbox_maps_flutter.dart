@@ -37,6 +37,7 @@ part 'src/pigeons/map_recorder_messenger.dart';
 part 'src/snapshotter/snapshotter_messenger.dart';
 part 'src/pigeons/log_backend.dart';
 part 'src/pigeons/performace_statistics.dart';
+part 'src/pigeons/memory_statistics.dart';
 part 'src/style/layer/background_layer.dart';
 part 'src/style/layer/circle_layer.dart';
 part 'src/style/layer/fill_extrusion_layer.dart';

@@ -55,6 +55,9 @@ void main() {
     expect(Colors.red.value, annotation.fillTunnelStructureColor);
     expect(1.0, annotation.fillZOffset);
     expect({'foo': 'bar'}, annotation.customData);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create PolygonAnnotation');
   });
 
   testWidgets('update and delete PolygonAnnotation',
@@ -95,6 +98,9 @@ void main() {
     expect(annotations.length, equals(10));
 
     await manager.deleteAll();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('update and delete PolygonAnnotation');
   });
 
   testWidgets('deleteMulti PolygonAnnotation', (WidgetTester tester) async {
@@ -144,6 +150,9 @@ void main() {
 
     allAnnotations = await manager.getAnnotations();
     expect(allAnnotations.length, equals(0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('deleteMulti PolygonAnnotation');
   });
 }
 // End of generated file.

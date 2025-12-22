@@ -36,6 +36,9 @@ void main() {
 
     var prefetchZoomDelta = await source.prefetchZoomDelta;
     expect(prefetchZoomDelta, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add ImageSource');
   });
 }
 // End of generated file.

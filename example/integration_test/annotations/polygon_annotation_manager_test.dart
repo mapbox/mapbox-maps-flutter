@@ -27,6 +27,10 @@ void main() {
     final layers = await mapboxMap.style.getStyleLayers();
     expect(layers.first?.id, id);
     expect(layers.last?.id, dummyLayer.id);
+
+    // Print memory usage after test
+    await app
+        .printMemoryUsage('PolygonAnnotationManager custom id and position');
   });
 
   testWidgets('create PolygonAnnotation_manager ', (WidgetTester tester) async {
@@ -92,6 +96,9 @@ void main() {
     await manager.setFillZOffset(1.0);
     var fillZOffset = await manager.getFillZOffset();
     expect(1.0, fillZOffset);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create PolygonAnnotation_manager ');
   });
 
   group('annotation events', () {

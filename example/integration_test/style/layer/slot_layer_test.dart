@@ -24,6 +24,9 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add SlotLayer');
   });
 
   testWidgets('Add SlotLayer with expressions', (WidgetTester tester) async {
@@ -53,6 +56,9 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add SlotLayer with expressions');
   });
 }
 // End of generated file.

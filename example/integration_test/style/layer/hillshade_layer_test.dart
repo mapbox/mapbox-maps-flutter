@@ -44,6 +44,9 @@ void main() {
     expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);
     expect(layer.hillshadeIlluminationDirection, 1.0);
     expect(layer.hillshadeShadowColor, Colors.red.value);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add HillshadeLayer');
   });
 
   testWidgets('Add HillshadeLayer with expressions',
@@ -93,6 +96,9 @@ void main() {
     expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);
     expect(layer.hillshadeIlluminationDirection, 1.0);
     expect(layer.hillshadeShadowColorExpression, ['rgba', 255, 0, 0, 1]);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add HillshadeLayer with expressions');
   });
 }
 // End of generated file.

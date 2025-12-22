@@ -85,6 +85,9 @@ void main() {
         layer.fillExtrusionTranslateAnchor, FillExtrusionTranslateAnchor.MAP);
     expect(layer.fillExtrusionVerticalGradient, true);
     expect(layer.fillExtrusionVerticalScale, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add FillExtrusionLayer');
   });
 
   testWidgets('Add FillExtrusionLayer with expressions',
@@ -179,6 +182,9 @@ void main() {
         layer.fillExtrusionTranslateAnchor, FillExtrusionTranslateAnchor.MAP);
     expect(layer.fillExtrusionVerticalGradient, true);
     expect(layer.fillExtrusionVerticalScale, 1.0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('Add FillExtrusionLayer with expressions');
   });
 }
 // End of generated file.

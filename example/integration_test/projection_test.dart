@@ -14,6 +14,9 @@ void main() {
     var meters =
         await mapboxMap.projection.getMetersPerPixelAtLatitude(1.0, 16.0);
     expect(meters.round(), 1);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('getMetersPerPixelAtLatitude');
   });
 
   testWidgets('projectedMetersForCoordinate', (WidgetTester tester) async {
@@ -29,6 +32,9 @@ void main() {
     )));
     expect(projectedMeters.easting.floor(), 111195);
     expect(projectedMeters.northing.floor(), 8390350);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('projectedMetersForCoordinate');
   });
 
   testWidgets('coordinateForProjectedMeters', (WidgetTester tester) async {
@@ -40,6 +46,9 @@ void main() {
         ProjectedMeters(northing: 100000.0, easting: 100000.0));
     expect((point.coordinates.lng as double).floor(), 0);
     expect((point.coordinates.lat as double).floor(), 0);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('coordinateForProjectedMeters');
   });
 
   testWidgets('unproject', (WidgetTester tester) async {
@@ -51,6 +60,9 @@ void main() {
         .unproject(MercatorCoordinate(x: 1.0, y: 1.0), 16);
     expect((point.coordinates.lng as double).floor(), -180);
     expect((point.coordinates.lat as double).floor(), 85);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('unproject');
   });
 
   testWidgets('project', (WidgetTester tester) async {
@@ -67,5 +79,8 @@ void main() {
         16);
     expect(mercatorCoordinate.x.floor(), 4118);
     expect(mercatorCoordinate.y.floor(), 2378);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('project');
   });
 }

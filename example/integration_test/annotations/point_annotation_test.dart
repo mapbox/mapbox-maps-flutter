@@ -98,6 +98,9 @@ void main() {
     expect(1.0, annotation.textOcclusionOpacity);
     expect(1.0, annotation.textOpacity);
     expect({'foo': 'bar'}, annotation.customData);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create PointAnnotation');
   });
 
   testWidgets('update and delete PointAnnotation', (WidgetTester tester) async {
@@ -127,6 +130,9 @@ void main() {
     expect(annotations.length, equals(10));
 
     await manager.deleteAll();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('update and delete PointAnnotation');
   });
 
   testWidgets('deleteMulti PointAnnotation', (WidgetTester tester) async {
@@ -168,6 +174,9 @@ void main() {
 
     allAnnotations = await manager.getAnnotations();
     expect(allAnnotations.length, equals(0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('deleteMulti PointAnnotation');
   });
 }
 // End of generated file.

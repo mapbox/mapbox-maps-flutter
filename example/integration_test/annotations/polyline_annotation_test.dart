@@ -56,6 +56,9 @@ void main() {
     expect("abc", annotation.linePattern);
     expect(1.0, annotation.lineWidth);
     expect({'foo': 'bar'}, annotation.customData);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create PolylineAnnotation');
   });
 
   testWidgets('update and delete PolylineAnnotation',
@@ -89,6 +92,9 @@ void main() {
     expect(annotations.length, equals(10));
 
     await manager.deleteAll();
+
+    // Print memory usage after test
+    await app.printMemoryUsage('update and delete PolylineAnnotation');
   });
 
   testWidgets('deleteMulti PolylineAnnotation', (WidgetTester tester) async {
@@ -132,6 +138,9 @@ void main() {
 
     allAnnotations = await manager.getAnnotations();
     expect(allAnnotations.length, equals(0));
+
+    // Print memory usage after test
+    await app.printMemoryUsage('deleteMulti PolylineAnnotation');
   });
 }
 // End of generated file.

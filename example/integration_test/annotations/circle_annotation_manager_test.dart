@@ -27,6 +27,10 @@ void main() {
     final layers = await mapboxMap.style.getStyleLayers();
     expect(layers.first?.id, id);
     expect(layers.last?.id, dummyLayer.id);
+
+    // Print memory usage after test
+    await app
+        .printMemoryUsage('CircleAnnotationManager custom id and position');
   });
 
   testWidgets('create CircleAnnotation_manager ', (WidgetTester tester) async {
@@ -90,6 +94,9 @@ void main() {
     await manager.setCircleTranslateAnchor(CircleTranslateAnchor.MAP);
     var circleTranslateAnchor = await manager.getCircleTranslateAnchor();
     expect(CircleTranslateAnchor.MAP, circleTranslateAnchor);
+
+    // Print memory usage after test
+    await app.printMemoryUsage('create CircleAnnotation_manager ');
   });
 
   group('annotation events', () {
