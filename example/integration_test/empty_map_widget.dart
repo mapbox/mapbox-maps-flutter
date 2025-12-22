@@ -49,7 +49,7 @@ Future<MapboxMap> main(
       height: height,
       child: MapWidget(
         key: ValueKey("mapWidget"),
-        androidHostingMode: AndroidPlatformViewHostingMode.VD,
+        androidHostingMode: AndroidPlatformViewHostingMode.HC,
         cameraOptions: camera,
         viewport: viewport,
         onMapCreated: (MapboxMap mapboxMap) {
