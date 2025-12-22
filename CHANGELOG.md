@@ -2,6 +2,9 @@
 
 ### 2.18.0-beta.1
 
+> [!NOTE]
+> **Known Issue**: This beta release has a memory usage issue on Android that may cause increased memory consumption during map usage sessions. This will be resolved in the upcoming release.
+
 * Add `deleteMulti()` method to all annotation managers to enable batch deletion of annotations.
 * Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
 * Update Maps SDK to v11.18.0-beta.1
