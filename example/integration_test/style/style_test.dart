@@ -719,8 +719,10 @@ void main() {
     await style.updateStyleImportWithURI('style-import', styleImportURI,
         config: configs2);
 
-    var styleImports = await style.getStyleImports();
+    // map is fully rendered again with all the changes applied
+    await app.events.onMapIdle.future;
 
+    var styleImports = await style.getStyleImports();
     expect(styleImports.length, 2);
 
     await mapboxMap.style
