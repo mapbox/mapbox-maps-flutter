@@ -693,7 +693,7 @@ void main() {
     });
   });
 
-  testWidgets('StyleUpdateJSON', (WidgetTester tester) async {
+  testWidgets('StyleUpdateURI', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
