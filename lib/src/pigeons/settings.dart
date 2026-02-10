@@ -1149,6 +1149,90 @@ class LogoSettings {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Settings for the indoor floor selector.
+class IndoorSelectorSettings {
+  IndoorSelectorSettings({
+    this.enabled,
+    this.position,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+  });
+
+  /// Whether the indoor selector is visible on the map.
+  /// Default value: true.
+  bool? enabled;
+
+  /// Defines where the indoor selector is positioned on the map.
+  /// Default value: "top-right".
+  OrnamentPosition? position;
+
+  /// Defines the margin to the left that the indoor selector honors.
+  /// Default value: 8.
+  double? marginLeft;
+
+  /// Defines the margin to the top that the indoor selector honors.
+  /// Default value: 60.
+  double? marginTop;
+
+  /// Defines the margin to the right that the indoor selector honors.
+  /// Default value: 8.
+  double? marginRight;
+
+  /// Defines the margin to the bottom that the indoor selector honors.
+  /// Default value: 8.
+  double? marginBottom;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static IndoorSelectorSettings decode(Object result) {
+    result as List<Object?>;
+    return IndoorSelectorSettings(
+      enabled: result[0] as bool?,
+      position: result[1] as OrnamentPosition?,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! IndoorSelectorSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        position == other.position &&
+        marginLeft == other.marginLeft &&
+        marginTop == other.marginTop &&
+        marginRight == other.marginRight &&
+        marginBottom == other.marginBottom;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class Settings_PigeonCodec extends StandardMessageCodec {
   const Settings_PigeonCodec();
   @override
@@ -1204,6 +1288,9 @@ class Settings_PigeonCodec extends StandardMessageCodec {
     } else if (value is LogoSettings) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
+    } else if (value is IndoorSelectorSettings) {
+      buffer.putUint8(145);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -1250,6 +1337,8 @@ class Settings_PigeonCodec extends StandardMessageCodec {
         return AttributionSettings.decode(readValue(buffer)!);
       case 144:
         return LogoSettings.decode(readValue(buffer)!);
+      case 145:
+        return IndoorSelectorSettings.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -1677,6 +1766,80 @@ class LogoSettingsInterface {
   Future<void> updateSettings(LogoSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[settings]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+}
+
+/// Settings for the indoor floor selector.
+class IndoorSelectorSettingsInterface {
+  /// Constructor for [IndoorSelectorSettingsInterface].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  IndoorSelectorSettingsInterface(
+      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+      : pigeonVar_binaryMessenger = binaryMessenger,
+        pigeonVar_messageChannelSuffix =
+            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  final BinaryMessenger? pigeonVar_binaryMessenger;
+
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      Settings_PigeonCodec();
+
+  final String pigeonVar_messageChannelSuffix;
+
+  Future<IndoorSelectorSettings> getSettings() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as IndoorSelectorSettings?)!;
+    }
+  }
+
+  Future<void> updateSettings(IndoorSelectorSettings settings) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

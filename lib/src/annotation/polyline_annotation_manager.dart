@@ -134,15 +134,22 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<double?> getLineCrossSlope() =>
       _annotationMessenger.getLineCrossSlope(id);
 
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration. Default value: 0. Value range: [0, 1]
+  Future<void> setLineElevationGroundScale(double lineElevationGroundScale) =>
+      _annotationMessenger.setLineElevationGroundScale(
+          id, lineElevationGroundScale);
+
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration. Default value: 0. Value range: [0, 1]
+  Future<double?> getLineElevationGroundScale() =>
+      _annotationMessenger.getLineElevationGroundScale(id);
+
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
-  @experimental
   Future<void> setLineElevationReference(
           LineElevationReference lineElevationReference) =>
       _annotationMessenger.setLineElevationReference(
           id, lineElevationReference);
 
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
-  @experimental
   Future<LineElevationReference?> getLineElevationReference() =>
       _annotationMessenger.getLineElevationReference(id);
 
@@ -186,13 +193,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<LineWidthUnit?> getLineWidthUnit() =>
       _annotationMessenger.getLineWidthUnit(id);
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:  - Not supported for globe projection at the moment  - Elevated line discontinuity is possible on tile borders with terrain enabled  - Rendering artifacts can happen near line joins and line caps depending on the line styling  - Rendering artifacts relating to `line-opacity` and `line-blur`  - Elevated line visibility is determined by layer order  - Z-fighting issues can happen with intersecting elevated lines  - Elevated lines don't cast shadows Default value: 0.
-  @experimental
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment. Default value: 0.
   Future<void> setLineZOffset(double lineZOffset) =>
       _annotationMessenger.setLineZOffset(id, lineZOffset);
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:  - Not supported for globe projection at the moment  - Elevated line discontinuity is possible on tile borders with terrain enabled  - Rendering artifacts can happen near line joins and line caps depending on the line styling  - Rendering artifacts relating to `line-opacity` and `line-blur`  - Elevated line visibility is determined by layer order  - Z-fighting issues can happen with intersecting elevated lines  - Elevated lines don't cast shadows Default value: 0.
-  @experimental
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment. Default value: 0.
   Future<double?> getLineZOffset() => _annotationMessenger.getLineZOffset(id);
 
   /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.

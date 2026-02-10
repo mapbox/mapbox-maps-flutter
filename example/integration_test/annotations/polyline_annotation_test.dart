@@ -19,6 +19,7 @@ void main() {
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry,
+      lineElevationGroundScale: 1.0,
       lineJoin: LineJoin.BEVEL,
       lineSortKey: 1.0,
       lineZOffset: 1.0,
@@ -42,6 +43,7 @@ void main() {
     expect(2.0, points.first.lat);
     expect(10.0, points.last.lng);
     expect(20.0, points.last.lat);
+    expect(1.0, annotation.lineElevationGroundScale);
     expect(LineJoin.BEVEL, annotation.lineJoin);
     expect(1.0, annotation.lineSortKey);
     expect(1.0, annotation.lineZOffset);

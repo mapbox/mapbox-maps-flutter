@@ -1,5 +1,5 @@
 // This file is generated.
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 
 extension MapboxMaps.DirectionalLight {
     init(_ fltValue: DirectionalLight) {
@@ -20,6 +20,9 @@ extension MapboxMaps.DirectionalLight {
             self.intensity = .constant(intensity)
         }
         self.intensityTransition = fltValue.intensityTransition?.toStyleTransition()
+        if let shadowDrawBeforeLayer = fltValue.shadowDrawBeforeLayer {
+            self.shadowDrawBeforeLayer = .constant(shadowDrawBeforeLayer)
+        }
         if let shadowIntensity = fltValue.shadowIntensity {
             self.shadowIntensity = .constant(shadowIntensity)
         }

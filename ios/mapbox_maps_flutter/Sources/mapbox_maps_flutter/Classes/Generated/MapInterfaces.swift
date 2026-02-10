@@ -1739,6 +1739,8 @@ struct DirectionalLight {
   var shadowIntensity: Double? = nil
   /// Transition property for `shadowIntensity`
   var shadowIntensityTransition: TransitionOptions? = nil
+  /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
+  var shadowDrawBeforeLayer: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1753,6 +1755,7 @@ struct DirectionalLight {
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
     let shadowIntensity: Double? = nilOrValue(pigeonVar_list[8])
     let shadowIntensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[9])
+    let shadowDrawBeforeLayer: String? = nilOrValue(pigeonVar_list[10])
 
     return DirectionalLight(
       id: id,
@@ -1764,7 +1767,8 @@ struct DirectionalLight {
       intensity: intensity,
       intensityTransition: intensityTransition,
       shadowIntensity: shadowIntensity,
-      shadowIntensityTransition: shadowIntensityTransition
+      shadowIntensityTransition: shadowIntensityTransition,
+      shadowDrawBeforeLayer: shadowDrawBeforeLayer
     )
   }
   func toList() -> [Any?] {
@@ -1779,6 +1783,7 @@ struct DirectionalLight {
       intensityTransition,
       shadowIntensity,
       shadowIntensityTransition,
+      shadowDrawBeforeLayer,
     ]
   }
 }
@@ -4965,14 +4970,14 @@ protocol StyleManager {
   /// @return The `transition options` of the current style in use.
   func getStyleTransition(completion: @escaping (Result<TransitionOptions, Error>) -> Void)
   /// Adds new import to current style, loaded from a JSON string.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param json The JSON string to be loaded directly as the import.
   /// @param config A map containing the configuration options of the import.
   /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
   func addStyleImportFromJSON(importId: String, json: String, config: [String: Any]?, importPosition: ImportPosition?) throws
   /// Adds new import to current style, loaded from an URI.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param uri URI of the import.
   /// @param config A map containing the configuration options of the import.
@@ -4981,7 +4986,7 @@ protocol StyleManager {
   /// Updates an existing import in the style.
   /// The function replaces the content of the import, with the content loaded from the provided data value.
   /// The configuration values of the import are merged with the configuration provided in the update.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param json The JSON string to be loaded directly as the import.
   /// @param config A map containing the configuration options of the import.
@@ -4989,13 +4994,13 @@ protocol StyleManager {
   /// Updates an existing import in the style.
   /// The function replaces the content of the import, with the content loaded from the provided URI.
   /// The configuration values of the import are merged with the configuration provided in the update.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param uri URI of the import.
   /// @param config A map containing the configuration options of the import.
   func updateStyleImportWithURI(importId: String, uri: String, config: [String: Any]?) throws
   /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
-  /// 
+  ///
   ///  @param importId Identifier of import to move.
   ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
   func moveStyleImport(importId: String, importPosition: ImportPosition?) throws
@@ -5543,7 +5548,7 @@ class StyleManagerSetup {
       getStyleTransitionChannel.setMessageHandler(nil)
     }
     /// Adds new import to current style, loaded from a JSON string.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param json The JSON string to be loaded directly as the import.
     /// @param config A map containing the configuration options of the import.
@@ -5567,7 +5572,7 @@ class StyleManagerSetup {
       addStyleImportFromJSONChannel.setMessageHandler(nil)
     }
     /// Adds new import to current style, loaded from an URI.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param uri URI of the import.
     /// @param config A map containing the configuration options of the import.
@@ -5593,7 +5598,7 @@ class StyleManagerSetup {
     /// Updates an existing import in the style.
     /// The function replaces the content of the import, with the content loaded from the provided data value.
     /// The configuration values of the import are merged with the configuration provided in the update.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param json The JSON string to be loaded directly as the import.
     /// @param config A map containing the configuration options of the import.
@@ -5617,7 +5622,7 @@ class StyleManagerSetup {
     /// Updates an existing import in the style.
     /// The function replaces the content of the import, with the content loaded from the provided URI.
     /// The configuration values of the import are merged with the configuration provided in the update.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param uri URI of the import.
     /// @param config A map containing the configuration options of the import.
@@ -5639,7 +5644,7 @@ class StyleManagerSetup {
       updateStyleImportWithURIChannel.setMessageHandler(nil)
     }
     /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
-    /// 
+    ///
     ///  @param importId Identifier of import to move.
     ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
     let moveStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

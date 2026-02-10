@@ -82,6 +82,9 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         let scaleBarController = ScaleBarController(withMapView: mapView)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: scaleBarController, messageChannelSuffix: binaryMessenger.suffix)
 
+        let indoorSelectorController = IndoorSelectorController(withMapView: mapView)
+        IndoorSelectorSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: indoorSelectorController, messageChannelSuffix: binaryMessenger.suffix)
+
         annotationController = AnnotationController(withMapView: mapView, messenger: binaryMessenger)
         annotationController!.setup()
 
@@ -188,6 +191,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         AttributionSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        IndoorSelectorSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown()
         _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _PerformanceStatisticsApiSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)

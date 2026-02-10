@@ -2644,6 +2644,7 @@ class DirectionalLight {
     this.intensityTransition,
     this.shadowIntensity,
     this.shadowIntensityTransition,
+    this.shadowDrawBeforeLayer,
   });
 
   /// Unique light name
@@ -2676,6 +2677,9 @@ class DirectionalLight {
   /// Transition property for `shadowIntensity`
   TransitionOptions? shadowIntensityTransition;
 
+  /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
+  String? shadowDrawBeforeLayer;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2688,6 +2692,7 @@ class DirectionalLight {
       intensityTransition,
       shadowIntensity,
       shadowIntensityTransition,
+      shadowDrawBeforeLayer,
     ];
   }
 
@@ -2708,6 +2713,7 @@ class DirectionalLight {
       intensityTransition: result[7] as TransitionOptions?,
       shadowIntensity: result[8] as double?,
       shadowIntensityTransition: result[9] as TransitionOptions?,
+      shadowDrawBeforeLayer: result[10] as String?,
     );
   }
 
@@ -2729,7 +2735,8 @@ class DirectionalLight {
         intensity == other.intensity &&
         intensityTransition == other.intensityTransition &&
         shadowIntensity == other.shadowIntensity &&
-        shadowIntensityTransition == other.shadowIntensityTransition;
+        shadowIntensityTransition == other.shadowIntensityTransition &&
+        shadowDrawBeforeLayer == other.shadowDrawBeforeLayer;
   }
 
   @override
