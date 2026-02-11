@@ -13,8 +13,7 @@ let package = Package(
     ],
     dependencies: [
 //        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.19.0-beta.1")
-//        .package(name: "mapbox-maps-ios", path: "../../../../../../maps-ios/mapbox-maps-ios")
-        .package(path: "../../../../../../../../../../maps-ios/mapbox-maps-ios")
+        .package(path: "../../../../../maps-ios/mapbox-maps-ios")
     ],
     targets: [
         .target(
