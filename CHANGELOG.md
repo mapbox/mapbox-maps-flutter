@@ -1,5 +1,10 @@
 ### main
 
+* Add experimental `shadowDrawBeforeLayer` property to directional light to allow specifying the position in the layer stack for drawing shadows on the ground.
+* Introduce new `LineLayer.lineElevationGroundScale` property to scale elevated lines with terrain exaggeration.
+* Promote elevated lines properties to stable: `LineLayer.lineZOffset` and `LineLayer.lineElevationReference`.
+* Add experimental `ModelLayer.modelAllowDensityReduction` property to disable density reduction in model layers.
+
 ### 2.19.0-beta.1
 
 * Update Maps SDK to v11.19.0-beta.1

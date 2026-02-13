@@ -1128,6 +1128,82 @@ data class LogoSettings(
 
   override fun hashCode(): Int = toList().hashCode()
 }
+
+/**
+ * Settings for the indoor floor selector.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IndoorSelectorSettings(
+  /**
+   * Whether the indoor selector is visible on the map.
+   * Default value: true.
+   */
+  val enabled: Boolean? = null,
+  /**
+   * Defines where the indoor selector is positioned on the map.
+   * Default value: "top-right".
+   */
+  val position: OrnamentPosition? = null,
+  /**
+   * Defines the margin to the left that the indoor selector honors.
+   * Default value: 8.
+   */
+  val marginLeft: Double? = null,
+  /**
+   * Defines the margin to the top that the indoor selector honors.
+   * Default value: 60.
+   */
+  val marginTop: Double? = null,
+  /**
+   * Defines the margin to the right that the indoor selector honors.
+   * Default value: 8.
+   */
+  val marginRight: Double? = null,
+  /**
+   * Defines the margin to the bottom that the indoor selector honors.
+   * Default value: 8.
+   */
+  val marginBottom: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IndoorSelectorSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val position = pigeonVar_list[1] as OrnamentPosition?
+      val marginLeft = pigeonVar_list[2] as Double?
+      val marginTop = pigeonVar_list[3] as Double?
+      val marginRight = pigeonVar_list[4] as Double?
+      val marginBottom = pigeonVar_list[5] as Double?
+      return IndoorSelectorSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is IndoorSelectorSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      position == other.position &&
+      marginLeft == other.marginLeft &&
+      marginTop == other.marginTop &&
+      marginRight == other.marginRight &&
+      marginBottom == other.marginBottom
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class SettingsPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -1211,6 +1287,11 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
           LogoSettings.fromList(it)
         }
       }
+      145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          IndoorSelectorSettings.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -1278,6 +1359,10 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
       }
       is LogoSettings -> {
         stream.write(144)
+        writeValue(stream, value.toList())
+      }
+      is IndoorSelectorSettings -> {
+        stream.write(145)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1595,6 +1680,60 @@ interface LogoSettingsInterface {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val settingsArg = args[0] as LogoSettings
+            val wrapped: List<Any?> = try {
+              api.updateSettings(settingsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/**
+ * Settings for the indoor floor selector.
+ *
+ * Generated interface from Pigeon that represents a handler of messages from Flutter.
+ */
+interface IndoorSelectorSettingsInterface {
+  fun getSettings(): IndoorSelectorSettings
+  fun updateSettings(settings: IndoorSelectorSettings)
+
+  companion object {
+    /** The codec used by IndoorSelectorSettingsInterface. */
+    val codec: MessageCodec<Any?> by lazy {
+      SettingsPigeonCodec()
+    }
+    /** Sets up an instance of `IndoorSelectorSettingsInterface` to handle messages through the `binaryMessenger`. */
+    @JvmOverloads
+    fun setUp(binaryMessenger: BinaryMessenger, api: IndoorSelectorSettingsInterface?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.getSettings$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getSettings())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.updateSettings$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val settingsArg = args[0] as IndoorSelectorSettings
             val wrapped: List<Any?> = try {
               api.updateSettings(settingsArg)
               listOf(null)

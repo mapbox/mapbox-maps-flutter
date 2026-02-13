@@ -13,6 +13,8 @@ class ModelLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+    bool? this.modelAllowDensityReduction,
+    List<Object>? this.modelAllowDensityReductionExpression,
     String? this.modelId,
     List<Object>? this.modelIdExpression,
     double? this.modelAmbientOcclusionIntensity,
@@ -65,6 +67,16 @@ class ModelLayer extends Layer {
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
 
+  /// If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.
+  /// Default value: true.
+  @experimental
+  bool? modelAllowDensityReduction;
+
+  /// If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.
+  /// Default value: true.
+  @experimental
+  List<Object>? modelAllowDensityReductionExpression;
+
   /// Model to render. It can be either a string referencing an element to the models root property or an internal or external URL
   /// Default value: "".
   String? modelId;
@@ -113,11 +125,11 @@ class ModelLayer extends Layer {
   /// Default value: 0. Value range: [0, 1]
   List<Object>? modelCutoffFadeRangeExpression;
 
-  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hd-road-markup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.
   /// Default value: "ground".
   ModelElevationReference? modelElevationReference;
 
-  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hd-road-markup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.
   /// Default value: "ground".
   List<Object>? modelElevationReferenceExpression;
 
@@ -212,6 +224,14 @@ class ModelLayer extends Layer {
           visibility!.name.toLowerCase().replaceAll("_", "-");
     }
 
+    if (modelAllowDensityReductionExpression != null) {
+      layout["model-allow-density-reduction"] =
+          modelAllowDensityReductionExpression;
+    }
+
+    if (modelAllowDensityReduction != null) {
+      layout["model-allow-density-reduction"] = modelAllowDensityReduction;
+    }
     if (modelIdExpression != null) {
       layout["model-id"] = modelIdExpression;
     }
@@ -372,6 +392,10 @@ class ModelLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
+      modelAllowDensityReduction:
+          _optionalCast(map["layout"]["model-allow-density-reduction"]),
+      modelAllowDensityReductionExpression:
+          _optionalCastList(map["layout"]["model-allow-density-reduction"]),
       modelId: _optionalCast(map["layout"]["model-id"]),
       modelIdExpression: _optionalCastList(map["layout"]["model-id"]),
       modelAmbientOcclusionIntensity:

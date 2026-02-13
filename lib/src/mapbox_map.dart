@@ -247,7 +247,15 @@ class MapboxMap extends ChangeNotifier {
       AttributionSettingsInterface(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-  late final MapboxHttpService httpService = MapboxHttpService(
+
+  /// The interface to access the indoor selector settings.
+  @experimental
+  late final IndoorSelectorSettingsInterface indoorSelector =
+      IndoorSelectorSettingsInterface(
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+
+      late final MapboxHttpService httpService = MapboxHttpService(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _mapboxMapsPlatform.channelSuffix);
   OnMapTapListener? onMapTapListener;

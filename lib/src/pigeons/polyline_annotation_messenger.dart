@@ -73,6 +73,7 @@ class PolylineAnnotation {
   PolylineAnnotation({
     required this.id,
     required this.geometry,
+    this.lineElevationGroundScale,
     this.lineJoin,
     this.lineSortKey,
     this.lineZOffset,
@@ -96,6 +97,10 @@ class PolylineAnnotation {
   /// The geometry that determines the location/shape of this annotation
   LineString geometry;
 
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+  /// Default value: 0. Value range: [0, 1]
+  double? lineElevationGroundScale;
+
   /// The display of lines when joining.
   /// Default value: "miter".
   LineJoin? lineJoin;
@@ -103,16 +108,8 @@ class PolylineAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
   /// Default value: 0.
-  /// @experimental
   double? lineZOffset;
 
   /// Blur applied to the line, in pixels.
@@ -164,6 +161,7 @@ class PolylineAnnotation {
     return <Object?>[
       id,
       geometry,
+      lineElevationGroundScale,
       lineJoin,
       lineSortKey,
       lineZOffset,
@@ -191,22 +189,23 @@ class PolylineAnnotation {
     return PolylineAnnotation(
       id: result[0]! as String,
       geometry: result[1]! as LineString,
-      lineJoin: result[2] as LineJoin?,
-      lineSortKey: result[3] as double?,
-      lineZOffset: result[4] as double?,
-      lineBlur: result[5] as double?,
-      lineBorderColor: result[6] as int?,
-      lineBorderWidth: result[7] as double?,
-      lineColor: result[8] as int?,
-      lineEmissiveStrength: result[9] as double?,
-      lineGapWidth: result[10] as double?,
-      lineOffset: result[11] as double?,
-      lineOpacity: result[12] as double?,
-      linePattern: result[13] as String?,
-      lineWidth: result[14] as double?,
-      isDraggable: result[15] as bool?,
+      lineElevationGroundScale: result[2] as double?,
+      lineJoin: result[3] as LineJoin?,
+      lineSortKey: result[4] as double?,
+      lineZOffset: result[5] as double?,
+      lineBlur: result[6] as double?,
+      lineBorderColor: result[7] as int?,
+      lineBorderWidth: result[8] as double?,
+      lineColor: result[9] as int?,
+      lineEmissiveStrength: result[10] as double?,
+      lineGapWidth: result[11] as double?,
+      lineOffset: result[12] as double?,
+      lineOpacity: result[13] as double?,
+      linePattern: result[14] as String?,
+      lineWidth: result[15] as double?,
+      isDraggable: result[16] as bool?,
       customData:
-          (result[16] as Map<Object?, Object?>?)?.cast<String, Object>(),
+          (result[17] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -221,6 +220,7 @@ class PolylineAnnotation {
     }
     return id == other.id &&
         geometry == other.geometry &&
+        lineElevationGroundScale == other.lineElevationGroundScale &&
         lineJoin == other.lineJoin &&
         lineSortKey == other.lineSortKey &&
         lineZOffset == other.lineZOffset &&
@@ -246,6 +246,7 @@ class PolylineAnnotation {
 class PolylineAnnotationOptions {
   PolylineAnnotationOptions({
     required this.geometry,
+    this.lineElevationGroundScale,
     this.lineJoin,
     this.lineSortKey,
     this.lineZOffset,
@@ -266,6 +267,10 @@ class PolylineAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   LineString geometry;
 
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+  /// Default value: 0. Value range: [0, 1]
+  double? lineElevationGroundScale;
+
   /// The display of lines when joining.
   /// Default value: "miter".
   LineJoin? lineJoin;
@@ -273,16 +278,8 @@ class PolylineAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
   /// Default value: 0.
-  /// @experimental
   double? lineZOffset;
 
   /// Blur applied to the line, in pixels.
@@ -333,6 +330,7 @@ class PolylineAnnotationOptions {
   List<Object?> _toList() {
     return <Object?>[
       geometry,
+      lineElevationGroundScale,
       lineJoin,
       lineSortKey,
       lineZOffset,
@@ -359,22 +357,23 @@ class PolylineAnnotationOptions {
     result as List<Object?>;
     return PolylineAnnotationOptions(
       geometry: result[0]! as LineString,
-      lineJoin: result[1] as LineJoin?,
-      lineSortKey: result[2] as double?,
-      lineZOffset: result[3] as double?,
-      lineBlur: result[4] as double?,
-      lineBorderColor: result[5] as int?,
-      lineBorderWidth: result[6] as double?,
-      lineColor: result[7] as int?,
-      lineEmissiveStrength: result[8] as double?,
-      lineGapWidth: result[9] as double?,
-      lineOffset: result[10] as double?,
-      lineOpacity: result[11] as double?,
-      linePattern: result[12] as String?,
-      lineWidth: result[13] as double?,
-      isDraggable: result[14] as bool?,
+      lineElevationGroundScale: result[1] as double?,
+      lineJoin: result[2] as LineJoin?,
+      lineSortKey: result[3] as double?,
+      lineZOffset: result[4] as double?,
+      lineBlur: result[5] as double?,
+      lineBorderColor: result[6] as int?,
+      lineBorderWidth: result[7] as double?,
+      lineColor: result[8] as int?,
+      lineEmissiveStrength: result[9] as double?,
+      lineGapWidth: result[10] as double?,
+      lineOffset: result[11] as double?,
+      lineOpacity: result[12] as double?,
+      linePattern: result[13] as String?,
+      lineWidth: result[14] as double?,
+      isDraggable: result[15] as bool?,
       customData:
-          (result[15] as Map<Object?, Object?>?)?.cast<String, Object>(),
+          (result[16] as Map<Object?, Object?>?)?.cast<String, Object>(),
     );
   }
 
@@ -389,6 +388,7 @@ class PolylineAnnotationOptions {
       return true;
     }
     return geometry == other.geometry &&
+        lineElevationGroundScale == other.lineElevationGroundScale &&
         lineJoin == other.lineJoin &&
         lineSortKey == other.lineSortKey &&
         lineZOffset == other.lineZOffset &&
@@ -777,6 +777,59 @@ class _PolylineAnnotationMessenger {
   Future<double?> getLineCrossSlope(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineElevationGroundScale(
+      String managerId, double lineElevationGroundScale) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationGroundScale$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, lineElevationGroundScale]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineElevationGroundScale(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationGroundScale$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

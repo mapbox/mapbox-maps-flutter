@@ -101,6 +101,24 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
         }
     }
 
+    func getLineElevationGroundScale(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.lineElevationGroundScale, managerId: managerId)))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineElevationGroundScale(managerId: String, lineElevationGroundScale: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = lineElevationGroundScale
+            try set(\.lineElevationGroundScale, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getLineElevationReference(managerId: String, completion: @escaping (Result<LineElevationReference?, Error>) -> Void) {
         do {
             completion(.success(try get(\.lineElevationReference, managerId: managerId)?.toFLTLineElevationReference()))
@@ -592,6 +610,9 @@ extension PolylineAnnotationOptions {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(lineString: geometry)
+        if let lineElevationGroundScale {
+            annotation.lineElevationGroundScale = lineElevationGroundScale
+        }
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
         }
@@ -645,6 +666,9 @@ extension PolylineAnnotation {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(id: self.id, lineString: geometry)
+        if let lineElevationGroundScale {
+            annotation.lineElevationGroundScale = lineElevationGroundScale
+        }
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
         }
@@ -699,6 +723,7 @@ extension MapboxMaps.PolylineAnnotation {
         PolylineAnnotation(
             id: id,
             geometry: lineString,
+            lineElevationGroundScale: lineElevationGroundScale,
             lineJoin: lineJoin?.toFLTLineJoin(),
             lineSortKey: lineSortKey,
             lineZOffset: lineZOffset,

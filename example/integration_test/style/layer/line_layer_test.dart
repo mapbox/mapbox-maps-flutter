@@ -28,6 +28,7 @@ void main() {
       slot: LayerSlot.BOTTOM,
       lineCap: LineCap.BUTT,
       lineCrossSlope: 1.0,
+      lineElevationGroundScale: 1.0,
       lineElevationReference: LineElevationReference.NONE,
       lineJoin: LineJoin.BEVEL,
       lineMiterLimit: 1.0,
@@ -65,6 +66,7 @@ void main() {
     expect(layer.visibility, Visibility.NONE);
     expect(layer.lineCap, LineCap.BUTT);
     expect(layer.lineCrossSlope, 1.0);
+    expect(layer.lineElevationGroundScale, 1.0);
     expect(layer.lineElevationReference, LineElevationReference.NONE);
     expect(layer.lineJoin, LineJoin.BEVEL);
     expect(layer.lineMiterLimit, 1.0);
@@ -119,6 +121,7 @@ void main() {
       slot: LayerSlot.BOTTOM,
       lineCapExpression: ['string', 'butt'],
       lineCrossSlopeExpression: ['number', 1.0],
+      lineElevationGroundScaleExpression: ['number', 1.0],
       lineElevationReferenceExpression: ['string', 'none'],
       lineJoinExpression: ['string', 'bevel'],
       lineMiterLimitExpression: ['number', 1.0],
@@ -173,6 +176,7 @@ void main() {
     ]);
     expect(layer.lineCap, LineCap.BUTT);
     expect(layer.lineCrossSlope, 1.0);
+    expect(layer.lineElevationGroundScale, 1.0);
     expect(layer.lineElevationReference, LineElevationReference.NONE);
     expect(layer.lineJoin, LineJoin.BEVEL);
     expect(layer.lineMiterLimit, 1.0);

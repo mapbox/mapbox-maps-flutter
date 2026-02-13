@@ -161,6 +161,11 @@ data class PolylineAnnotation(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: LineString,
   /**
+   * Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val lineElevationGroundScale: Double? = null,
+  /**
    * The display of lines when joining.
    * Default value: "miter".
    */
@@ -168,16 +173,8 @@ data class PolylineAnnotation(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /**
-   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-   *  - Not supported for globe projection at the moment
-   *  - Elevated line discontinuity is possible on tile borders with terrain enabled
-   *  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-   *  - Rendering artifacts relating to `line-opacity` and `line-blur`
-   *  - Elevated line visibility is determined by layer order
-   *  - Z-fighting issues can happen with intersecting elevated lines
-   *  - Elevated lines don't cast shadows
+   * Vertical offset from ground, in meters. Not supported for globe projection at the moment.
    * Default value: 0.
-   * @experimental
    */
   val lineZOffset: Double? = null,
   /**
@@ -236,28 +233,30 @@ data class PolylineAnnotation(
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotation {
       val id = pigeonVar_list[0] as String
       val geometry = pigeonVar_list[1] as LineString
-      val lineJoin = pigeonVar_list[2] as LineJoin?
-      val lineSortKey = pigeonVar_list[3] as Double?
-      val lineZOffset = pigeonVar_list[4] as Double?
-      val lineBlur = pigeonVar_list[5] as Double?
-      val lineBorderColor = pigeonVar_list[6] as Long?
-      val lineBorderWidth = pigeonVar_list[7] as Double?
-      val lineColor = pigeonVar_list[8] as Long?
-      val lineEmissiveStrength = pigeonVar_list[9] as Double?
-      val lineGapWidth = pigeonVar_list[10] as Double?
-      val lineOffset = pigeonVar_list[11] as Double?
-      val lineOpacity = pigeonVar_list[12] as Double?
-      val linePattern = pigeonVar_list[13] as String?
-      val lineWidth = pigeonVar_list[14] as Double?
-      val isDraggable = pigeonVar_list[15] as Boolean?
-      val customData = pigeonVar_list[16] as Map<String, Any>?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
+      val lineElevationGroundScale = pigeonVar_list[2] as Double?
+      val lineJoin = pigeonVar_list[3] as LineJoin?
+      val lineSortKey = pigeonVar_list[4] as Double?
+      val lineZOffset = pigeonVar_list[5] as Double?
+      val lineBlur = pigeonVar_list[6] as Double?
+      val lineBorderColor = pigeonVar_list[7] as Long?
+      val lineBorderWidth = pigeonVar_list[8] as Double?
+      val lineColor = pigeonVar_list[9] as Long?
+      val lineEmissiveStrength = pigeonVar_list[10] as Double?
+      val lineGapWidth = pigeonVar_list[11] as Double?
+      val lineOffset = pigeonVar_list[12] as Double?
+      val lineOpacity = pigeonVar_list[13] as Double?
+      val linePattern = pigeonVar_list[14] as String?
+      val lineWidth = pigeonVar_list[15] as Double?
+      val isDraggable = pigeonVar_list[16] as Boolean?
+      val customData = pigeonVar_list[17] as Map<String, Any>?
+      return PolylineAnnotation(id, geometry, lineElevationGroundScale, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       id,
       geometry,
+      lineElevationGroundScale,
       lineJoin,
       lineSortKey,
       lineZOffset,
@@ -284,6 +283,7 @@ data class PolylineAnnotation(
     }
     return id == other.id &&
       geometry == other.geometry &&
+      lineElevationGroundScale == other.lineElevationGroundScale &&
       lineJoin == other.lineJoin &&
       lineSortKey == other.lineSortKey &&
       lineZOffset == other.lineZOffset &&
@@ -309,6 +309,11 @@ data class PolylineAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: LineString,
   /**
+   * Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val lineElevationGroundScale: Double? = null,
+  /**
    * The display of lines when joining.
    * Default value: "miter".
    */
@@ -316,16 +321,8 @@ data class PolylineAnnotationOptions(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /**
-   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-   *  - Not supported for globe projection at the moment
-   *  - Elevated line discontinuity is possible on tile borders with terrain enabled
-   *  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-   *  - Rendering artifacts relating to `line-opacity` and `line-blur`
-   *  - Elevated line visibility is determined by layer order
-   *  - Z-fighting issues can happen with intersecting elevated lines
-   *  - Elevated lines don't cast shadows
+   * Vertical offset from ground, in meters. Not supported for globe projection at the moment.
    * Default value: 0.
-   * @experimental
    */
   val lineZOffset: Double? = null,
   /**
@@ -383,27 +380,29 @@ data class PolylineAnnotationOptions(
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotationOptions {
       val geometry = pigeonVar_list[0] as LineString
-      val lineJoin = pigeonVar_list[1] as LineJoin?
-      val lineSortKey = pigeonVar_list[2] as Double?
-      val lineZOffset = pigeonVar_list[3] as Double?
-      val lineBlur = pigeonVar_list[4] as Double?
-      val lineBorderColor = pigeonVar_list[5] as Long?
-      val lineBorderWidth = pigeonVar_list[6] as Double?
-      val lineColor = pigeonVar_list[7] as Long?
-      val lineEmissiveStrength = pigeonVar_list[8] as Double?
-      val lineGapWidth = pigeonVar_list[9] as Double?
-      val lineOffset = pigeonVar_list[10] as Double?
-      val lineOpacity = pigeonVar_list[11] as Double?
-      val linePattern = pigeonVar_list[12] as String?
-      val lineWidth = pigeonVar_list[13] as Double?
-      val isDraggable = pigeonVar_list[14] as Boolean?
-      val customData = pigeonVar_list[15] as Map<String, Any>?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
+      val lineElevationGroundScale = pigeonVar_list[1] as Double?
+      val lineJoin = pigeonVar_list[2] as LineJoin?
+      val lineSortKey = pigeonVar_list[3] as Double?
+      val lineZOffset = pigeonVar_list[4] as Double?
+      val lineBlur = pigeonVar_list[5] as Double?
+      val lineBorderColor = pigeonVar_list[6] as Long?
+      val lineBorderWidth = pigeonVar_list[7] as Double?
+      val lineColor = pigeonVar_list[8] as Long?
+      val lineEmissiveStrength = pigeonVar_list[9] as Double?
+      val lineGapWidth = pigeonVar_list[10] as Double?
+      val lineOffset = pigeonVar_list[11] as Double?
+      val lineOpacity = pigeonVar_list[12] as Double?
+      val linePattern = pigeonVar_list[13] as String?
+      val lineWidth = pigeonVar_list[14] as Double?
+      val isDraggable = pigeonVar_list[15] as Boolean?
+      val customData = pigeonVar_list[16] as Map<String, Any>?
+      return PolylineAnnotationOptions(geometry, lineElevationGroundScale, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       geometry,
+      lineElevationGroundScale,
       lineJoin,
       lineSortKey,
       lineZOffset,
@@ -429,6 +428,7 @@ data class PolylineAnnotationOptions(
       return true
     }
     return geometry == other.geometry &&
+      lineElevationGroundScale == other.lineElevationGroundScale &&
       lineJoin == other.lineJoin &&
       lineSortKey == other.lineSortKey &&
       lineZOffset == other.lineZOffset &&
@@ -546,6 +546,8 @@ interface _PolylineAnnotationMessenger {
   fun getLineCap(managerId: String, callback: (Result<LineCap?>) -> Unit)
   fun setLineCrossSlope(managerId: String, lineCrossSlope: Double, callback: (Result<Unit>) -> Unit)
   fun getLineCrossSlope(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineElevationGroundScale(managerId: String, lineElevationGroundScale: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineElevationGroundScale(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, callback: (Result<Unit>) -> Unit)
   fun getLineElevationReference(managerId: String, callback: (Result<LineElevationReference?>) -> Unit)
   fun setLineJoin(managerId: String, lineJoin: LineJoin, callback: (Result<Unit>) -> Unit)
@@ -818,6 +820,46 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineCrossSlope(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationGroundScale$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineElevationGroundScaleArg = args[1] as Double
+            api.setLineElevationGroundScale(managerIdArg, lineElevationGroundScaleArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationGroundScale$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineElevationGroundScale(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

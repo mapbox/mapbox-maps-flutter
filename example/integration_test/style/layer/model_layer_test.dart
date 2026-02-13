@@ -21,6 +21,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      modelAllowDensityReduction: true,
       modelId: "abc",
       modelAmbientOcclusionIntensity: 1.0,
       modelCastShadows: true,
@@ -45,6 +46,7 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.modelAllowDensityReduction, true);
     expect(layer.modelId, "abc");
     expect(layer.modelAmbientOcclusionIntensity, 1.0);
     expect(layer.modelCastShadows, true);
@@ -83,6 +85,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      modelAllowDensityReductionExpression: ['==', true, true],
       modelIdExpression: ['string', "abc"],
       modelAmbientOcclusionIntensityExpression: ['number', 1.0],
       modelCastShadowsExpression: ['==', true, true],
@@ -124,6 +127,7 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+    expect(layer.modelAllowDensityReduction, true);
     expect(layer.modelId, "abc");
     expect(layer.modelAmbientOcclusionIntensity, 1.0);
     expect(layer.modelCastShadows, true);

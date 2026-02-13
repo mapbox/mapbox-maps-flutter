@@ -45,6 +45,10 @@ void main() {
     var lineCrossSlope = await manager.getLineCrossSlope();
     expect(1.0, lineCrossSlope);
 
+    await manager.setLineElevationGroundScale(1.0);
+    var lineElevationGroundScale = await manager.getLineElevationGroundScale();
+    expect(1.0, lineElevationGroundScale);
+
     await manager.setLineElevationReference(LineElevationReference.NONE);
     var lineElevationReference = await manager.getLineElevationReference();
     expect(LineElevationReference.NONE, lineElevationReference);

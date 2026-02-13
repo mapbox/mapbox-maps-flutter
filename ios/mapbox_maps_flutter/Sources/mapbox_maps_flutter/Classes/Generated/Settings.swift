@@ -840,6 +840,60 @@ struct LogoSettings {
   }
 }
 
+/// Settings for the indoor floor selector.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct IndoorSelectorSettings {
+  /// Whether the indoor selector is visible on the map.
+  /// Default value: true.
+  var enabled: Bool? = nil
+  /// Defines where the indoor selector is positioned on the map.
+  /// Default value: "top-right".
+  var position: OrnamentPosition? = nil
+  /// Defines the margin to the left that the indoor selector honors.
+  /// Default value: 8.
+  var marginLeft: Double? = nil
+  /// Defines the margin to the top that the indoor selector honors.
+  /// Default value: 60.
+  var marginTop: Double? = nil
+  /// Defines the margin to the right that the indoor selector honors.
+  /// Default value: 8.
+  var marginRight: Double? = nil
+  /// Defines the margin to the bottom that the indoor selector honors.
+  /// Default value: 8.
+  var marginBottom: Double? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> IndoorSelectorSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let position: OrnamentPosition? = nilOrValue(pigeonVar_list[1])
+    let marginLeft: Double? = nilOrValue(pigeonVar_list[2])
+    let marginTop: Double? = nilOrValue(pigeonVar_list[3])
+    let marginRight: Double? = nilOrValue(pigeonVar_list[4])
+    let marginBottom: Double? = nilOrValue(pigeonVar_list[5])
+
+    return IndoorSelectorSettings(
+      enabled: enabled,
+      position: position,
+      marginLeft: marginLeft,
+      marginTop: marginTop,
+      marginRight: marginRight,
+      marginBottom: marginBottom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ]
+  }
+}
+
 private class SettingsPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -899,6 +953,8 @@ private class SettingsPigeonCodecReader: FlutterStandardReader {
       return AttributionSettings.fromList(self.readValue() as! [Any?])
     case 144:
       return LogoSettings.fromList(self.readValue() as! [Any?])
+    case 145:
+      return IndoorSelectorSettings.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -954,6 +1010,9 @@ private class SettingsPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? LogoSettings {
       super.writeByte(144)
+      super.writeValue(value.toList())
+    } else if let value = value as? IndoorSelectorSettings {
+      super.writeByte(145)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1228,6 +1287,50 @@ class LogoSettingsInterfaceSetup {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let settingsArg = args[0] as! LogoSettings
+        do {
+          try api.updateSettings(settings: settingsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      updateSettingsChannel.setMessageHandler(nil)
+    }
+  }
+}
+/// Settings for the indoor floor selector.
+///
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol IndoorSelectorSettingsInterface {
+  func getSettings() throws -> IndoorSelectorSettings
+  func updateSettings(settings: IndoorSelectorSettings) throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class IndoorSelectorSettingsInterfaceSetup {
+  static var codec: FlutterStandardMessageCodec { SettingsPigeonCodec.shared }
+  /// Sets up an instance of `IndoorSelectorSettingsInterface` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: IndoorSelectorSettingsInterface?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getSettingsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getSettings()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getSettingsChannel.setMessageHandler(nil)
+    }
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      updateSettingsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let settingsArg = args[0] as! IndoorSelectorSettings
         do {
           try api.updateSettings(settings: settingsArg)
           reply(wrapResult(nil))

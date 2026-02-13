@@ -24,7 +24,7 @@ plugins {
 
 include ":app"
 
-if (file("../../../scripts/utils.gradle").exists()) {
-    apply from: "../../../scripts/utils.gradle"
+if (file("../../../../scripts/utils.gradle").exists()) {
+    apply from: "../../../../scripts/utils.gradle"
     setupExtendedDebugEnvironment()
 }

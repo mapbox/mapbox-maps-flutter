@@ -23,6 +23,7 @@ import com.mapbox.maps.mapbox_maps.http.CustomHttpServiceInterceptor
 import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.IndoorSelectorSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.LogoSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.Projection
 import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
@@ -121,6 +122,7 @@ class MapboxMapController(
   private val attributionController: AttributionController
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
+  private val indoorSelectorController: IndoorSelectorController
   private val viewportController: ViewportController
   private val performanceStatisticsController: PerformanceStatisticsController
   private val mapRecorderController: MapRecorderController
@@ -206,6 +208,7 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
+    indoorSelectorController = IndoorSelectorController(mapView)
     viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
     performanceStatisticsController = PerformanceStatisticsController(mapboxMap, this.messenger, this.channelSuffix)
     mapRecorderController = MapRecorderController(mapboxMap)
@@ -223,6 +226,7 @@ class MapboxMapController(
     AttributionSettingsInterface.setUp(messenger, attributionController, this.channelSuffix)
     ScaleBarSettingsInterface.setUp(messenger, scaleBarController, this.channelSuffix)
     CompassSettingsInterface.setUp(messenger, compassController, this.channelSuffix)
+    IndoorSelectorSettingsInterface.setUp(messenger, indoorSelectorController, this.channelSuffix)
     _ViewportMessenger.setUp(messenger, viewportController, this.channelSuffix)
     _PerformanceStatisticsApi.setUp(messenger, performanceStatisticsController, this.channelSuffix)
     _MapRecorderMessenger.setUp(messenger, mapRecorderController, this.channelSuffix)
@@ -288,6 +292,7 @@ class MapboxMapController(
     LogoSettingsInterface.setUp(messenger, null, channelSuffix)
     GesturesSettingsInterface.setUp(messenger, null, channelSuffix)
     CompassSettingsInterface.setUp(messenger, null, channelSuffix)
+    IndoorSelectorSettingsInterface.setUp(messenger, null, channelSuffix)
     ScaleBarSettingsInterface.setUp(messenger, null, channelSuffix)
     AttributionSettingsInterface.setUp(messenger, null, channelSuffix)
     _ViewportMessenger.setUp(messenger, null, channelSuffix)

@@ -34,13 +34,23 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Extract the archive URLs for direct dependencies, excluding the package named 'flutter'
-package_info=$(echo "$deps" | jq -r '.packages[] | select(.kind == "direct" and .name != "flutter") | "\(.name) \(.version)"')
-sdk_version=$(echo "$deps" | jq -r '.packages[] | select(.kind == "root") | .version')
+# Get version and direct dependencies from mapbox_maps_flutter package specifically
+mapbox_root=$(echo "$deps" | jq '.packages[] | select(.kind == "root" and .name == "mapbox_maps_flutter")')
+sdk_version=$(echo "$mapbox_root" | jq -r '.version')
+direct_deps=$(echo "$mapbox_root" | jq -r '.directDependencies[]')
+
+# Filter packages to only include direct dependencies of mapbox_maps_flutter (excluding flutter SDK)
+# Convert direct_deps list to jq array filter
+deps_filter=$(echo "$direct_deps" | jq -R -s -c 'split("\n") | map(select(length > 0 and . != "flutter"))')
+package_info=$(echo "$deps" | jq -r --argjson deps "$deps_filter" '.packages[] | select(.name as $name | $deps | index($name)) | "\(.name) \(.version)"')
 
 deps_licenses=""
 # Loop through each name/version pair
 while read -r name version; do
+  # Skip empty entries (can happen in workspace configurations)
+  if [ -z "$name" ] || [ -z "$version" ]; then
+    continue
+  fi
 
   package_metadata=$(curl -s "https://pub.dev/api/packages/$name/versions/$version")
   archive_url=$(echo "$package_metadata" | jq -r '.archive_url')
@@ -63,10 +73,30 @@ while read -r name version; do
   # Add your logic here to handle each package
 done <<< "$package_info"
 
-ios_sdk_version=$(grep -A 1 'mapbox-maps-ios' ios/mapbox_maps_flutter/Package.swift | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
-android_sdk_version=$(grep 'com.mapbox.maps:android-ndk27' android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android-ndk27:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
-ios_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/v$ios_sdk_version/LICENSE.md")
-android_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-android/v$android_sdk_version/LICENSE.md")
+# Extract iOS SDK version - try exact version first, then branch
+ios_package_line=$(grep -A 1 'mapbox-maps-ios' ios/mapbox_maps_flutter/Package.swift)
+if echo "$ios_package_line" | grep -q 'exact'; then
+  ios_sdk_version=$(echo "$ios_package_line" | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?)".*/\1/')
+  ios_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/v$ios_sdk_version/LICENSE.md"
+elif echo "$ios_package_line" | grep -q 'branch'; then
+  ios_sdk_version=$(echo "$ios_package_line" | grep 'branch' | sed -E 's/.*branch: "([^"]+)".*/\1/')
+  ios_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/$ios_sdk_version/LICENSE.md"
+else
+  echo "Error: Unable to determine iOS SDK version from Package.swift"
+  exit 1
+fi
+
+android_sdk_version=$(grep 'com.mapbox.maps:android-ndk27' android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android-ndk27:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?)".*/\1/')
+
+# Check if Android version is a snapshot - if so, use main branch instead of version tag
+if echo "$android_sdk_version" | grep -q "SNAPSHOT"; then
+  android_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-android/main/LICENSE.md"
+else
+  android_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-android/v$android_sdk_version/LICENSE.md"
+fi
+
+ios_license_content=$(curl -s "$ios_license_url")
+android_license_content=$(curl -s "$android_license_url")
 
 current_year=$(date +%Y)
 

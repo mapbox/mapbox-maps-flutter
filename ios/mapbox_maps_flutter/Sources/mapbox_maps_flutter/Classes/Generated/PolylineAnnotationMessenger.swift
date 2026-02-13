@@ -126,21 +126,16 @@ struct PolylineAnnotation {
   var id: String
   /// The geometry that determines the location/shape of this annotation
   var geometry: LineString
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+  /// Default value: 0. Value range: [0, 1]
+  var lineElevationGroundScale: Double? = nil
   /// The display of lines when joining.
   /// Default value: "miter".
   var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double? = nil
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
   /// Default value: 0.
-  /// @experimental
   var lineZOffset: Double? = nil
   /// Blur applied to the line, in pixels.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
@@ -181,25 +176,27 @@ struct PolylineAnnotation {
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotation? {
     let id = pigeonVar_list[0] as! String
     let geometry = pigeonVar_list[1] as! LineString
-    let lineJoin: LineJoin? = nilOrValue(pigeonVar_list[2])
-    let lineSortKey: Double? = nilOrValue(pigeonVar_list[3])
-    let lineZOffset: Double? = nilOrValue(pigeonVar_list[4])
-    let lineBlur: Double? = nilOrValue(pigeonVar_list[5])
-    let lineBorderColor: Int64? = nilOrValue(pigeonVar_list[6])
-    let lineBorderWidth: Double? = nilOrValue(pigeonVar_list[7])
-    let lineColor: Int64? = nilOrValue(pigeonVar_list[8])
-    let lineEmissiveStrength: Double? = nilOrValue(pigeonVar_list[9])
-    let lineGapWidth: Double? = nilOrValue(pigeonVar_list[10])
-    let lineOffset: Double? = nilOrValue(pigeonVar_list[11])
-    let lineOpacity: Double? = nilOrValue(pigeonVar_list[12])
-    let linePattern: String? = nilOrValue(pigeonVar_list[13])
-    let lineWidth: Double? = nilOrValue(pigeonVar_list[14])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[15])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[16])
+    let lineElevationGroundScale: Double? = nilOrValue(pigeonVar_list[2])
+    let lineJoin: LineJoin? = nilOrValue(pigeonVar_list[3])
+    let lineSortKey: Double? = nilOrValue(pigeonVar_list[4])
+    let lineZOffset: Double? = nilOrValue(pigeonVar_list[5])
+    let lineBlur: Double? = nilOrValue(pigeonVar_list[6])
+    let lineBorderColor: Int64? = nilOrValue(pigeonVar_list[7])
+    let lineBorderWidth: Double? = nilOrValue(pigeonVar_list[8])
+    let lineColor: Int64? = nilOrValue(pigeonVar_list[9])
+    let lineEmissiveStrength: Double? = nilOrValue(pigeonVar_list[10])
+    let lineGapWidth: Double? = nilOrValue(pigeonVar_list[11])
+    let lineOffset: Double? = nilOrValue(pigeonVar_list[12])
+    let lineOpacity: Double? = nilOrValue(pigeonVar_list[13])
+    let linePattern: String? = nilOrValue(pigeonVar_list[14])
+    let lineWidth: Double? = nilOrValue(pigeonVar_list[15])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[16])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[17])
 
     return PolylineAnnotation(
       id: id,
       geometry: geometry,
+      lineElevationGroundScale: lineElevationGroundScale,
       lineJoin: lineJoin,
       lineSortKey: lineSortKey,
       lineZOffset: lineZOffset,
@@ -221,6 +218,7 @@ struct PolylineAnnotation {
     return [
       id,
       geometry,
+      lineElevationGroundScale,
       lineJoin,
       lineSortKey,
       lineZOffset,
@@ -244,21 +242,16 @@ struct PolylineAnnotation {
 struct PolylineAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: LineString
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+  /// Default value: 0. Value range: [0, 1]
+  var lineElevationGroundScale: Double? = nil
   /// The display of lines when joining.
   /// Default value: "miter".
   var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double? = nil
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
   /// Default value: 0.
-  /// @experimental
   var lineZOffset: Double? = nil
   /// Blur applied to the line, in pixels.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
@@ -298,24 +291,26 @@ struct PolylineAnnotationOptions {
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotationOptions? {
     let geometry = pigeonVar_list[0] as! LineString
-    let lineJoin: LineJoin? = nilOrValue(pigeonVar_list[1])
-    let lineSortKey: Double? = nilOrValue(pigeonVar_list[2])
-    let lineZOffset: Double? = nilOrValue(pigeonVar_list[3])
-    let lineBlur: Double? = nilOrValue(pigeonVar_list[4])
-    let lineBorderColor: Int64? = nilOrValue(pigeonVar_list[5])
-    let lineBorderWidth: Double? = nilOrValue(pigeonVar_list[6])
-    let lineColor: Int64? = nilOrValue(pigeonVar_list[7])
-    let lineEmissiveStrength: Double? = nilOrValue(pigeonVar_list[8])
-    let lineGapWidth: Double? = nilOrValue(pigeonVar_list[9])
-    let lineOffset: Double? = nilOrValue(pigeonVar_list[10])
-    let lineOpacity: Double? = nilOrValue(pigeonVar_list[11])
-    let linePattern: String? = nilOrValue(pigeonVar_list[12])
-    let lineWidth: Double? = nilOrValue(pigeonVar_list[13])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[14])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[15])
+    let lineElevationGroundScale: Double? = nilOrValue(pigeonVar_list[1])
+    let lineJoin: LineJoin? = nilOrValue(pigeonVar_list[2])
+    let lineSortKey: Double? = nilOrValue(pigeonVar_list[3])
+    let lineZOffset: Double? = nilOrValue(pigeonVar_list[4])
+    let lineBlur: Double? = nilOrValue(pigeonVar_list[5])
+    let lineBorderColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let lineBorderWidth: Double? = nilOrValue(pigeonVar_list[7])
+    let lineColor: Int64? = nilOrValue(pigeonVar_list[8])
+    let lineEmissiveStrength: Double? = nilOrValue(pigeonVar_list[9])
+    let lineGapWidth: Double? = nilOrValue(pigeonVar_list[10])
+    let lineOffset: Double? = nilOrValue(pigeonVar_list[11])
+    let lineOpacity: Double? = nilOrValue(pigeonVar_list[12])
+    let linePattern: String? = nilOrValue(pigeonVar_list[13])
+    let lineWidth: Double? = nilOrValue(pigeonVar_list[14])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[15])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[16])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
+      lineElevationGroundScale: lineElevationGroundScale,
       lineJoin: lineJoin,
       lineSortKey: lineSortKey,
       lineZOffset: lineZOffset,
@@ -336,6 +331,7 @@ struct PolylineAnnotationOptions {
   func toList() -> [Any?] {
     return [
       geometry,
+      lineElevationGroundScale,
       lineJoin,
       lineSortKey,
       lineZOffset,
@@ -459,6 +455,8 @@ protocol _PolylineAnnotationMessenger {
   func getLineCap(managerId: String, completion: @escaping (Result<LineCap?, Error>) -> Void)
   func setLineCrossSlope(managerId: String, lineCrossSlope: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineCrossSlope(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineElevationGroundScale(managerId: String, lineElevationGroundScale: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineElevationGroundScale(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineElevationReference(managerId: String, completion: @escaping (Result<LineElevationReference?, Error>) -> Void)
   func setLineJoin(managerId: String, lineJoin: LineJoin, completion: @escaping (Result<Void, Error>) -> Void)
@@ -714,6 +712,41 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineCrossSlopeChannel.setMessageHandler(nil)
+    }
+    let setLineElevationGroundScaleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationGroundScale\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineElevationGroundScaleChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineElevationGroundScaleArg = args[1] as! Double
+        api.setLineElevationGroundScale(managerId: managerIdArg, lineElevationGroundScale: lineElevationGroundScaleArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineElevationGroundScaleChannel.setMessageHandler(nil)
+    }
+    let getLineElevationGroundScaleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationGroundScale\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineElevationGroundScaleChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineElevationGroundScale(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineElevationGroundScaleChannel.setMessageHandler(nil)
     }
     let setLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

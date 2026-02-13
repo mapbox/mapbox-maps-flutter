@@ -2344,7 +2344,9 @@ data class DirectionalLight(
   /** Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1. */
   val shadowIntensity: Double? = null,
   /** Transition property for `shadowIntensity` */
-  val shadowIntensityTransition: TransitionOptions? = null
+  val shadowIntensityTransition: TransitionOptions? = null,
+  /** Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain. */
+  val shadowDrawBeforeLayer: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): DirectionalLight {
@@ -2358,7 +2360,8 @@ data class DirectionalLight(
       val intensityTransition = pigeonVar_list[7] as TransitionOptions?
       val shadowIntensity = pigeonVar_list[8] as Double?
       val shadowIntensityTransition = pigeonVar_list[9] as TransitionOptions?
-      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition)
+      val shadowDrawBeforeLayer = pigeonVar_list[10] as String?
+      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition, shadowDrawBeforeLayer)
     }
   }
   fun toList(): List<Any?> {
@@ -2373,6 +2376,7 @@ data class DirectionalLight(
       intensityTransition,
       shadowIntensity,
       shadowIntensityTransition,
+      shadowDrawBeforeLayer,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2391,7 +2395,8 @@ data class DirectionalLight(
       intensity == other.intensity &&
       intensityTransition == other.intensityTransition &&
       shadowIntensity == other.shadowIntensity &&
-      shadowIntensityTransition == other.shadowIntensityTransition
+      shadowIntensityTransition == other.shadowIntensityTransition &&
+      shadowDrawBeforeLayer == other.shadowDrawBeforeLayer
   }
 
   override fun hashCode(): Int = toList().hashCode()

@@ -111,12 +111,12 @@ class RasterLayer extends Layer {
   /// Default value: 0. Value range: [-1, 1]
   List<Object>? rasterContrastExpression;
 
-  /// Specifies an uniform elevation from the ground, in meters.
+  /// Defines an uniform elevation from the base specified in raster-elevation-reference, in meters.
   /// Default value: 0. Minimum value: 0.
   @experimental
   double? rasterElevation;
 
-  /// Specifies an uniform elevation from the ground, in meters.
+  /// Defines an uniform elevation from the base specified in raster-elevation-reference, in meters.
   /// Default value: 0. Minimum value: 0.
   @experimental
   List<Object>? rasterElevationExpression;

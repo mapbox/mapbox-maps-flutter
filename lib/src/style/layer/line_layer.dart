@@ -17,6 +17,8 @@ class LineLayer extends Layer {
     List<Object>? this.lineCapExpression,
     double? this.lineCrossSlope,
     List<Object>? this.lineCrossSlopeExpression,
+    double? this.lineElevationGroundScale,
+    List<Object>? this.lineElevationGroundScaleExpression,
     LineElevationReference? this.lineElevationReference,
     List<Object>? this.lineElevationReferenceExpression,
     LineJoin? this.lineJoin,
@@ -113,14 +115,20 @@ class LineLayer extends Layer {
   @experimental
   List<Object>? lineCrossSlopeExpression;
 
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+  /// Default value: 0. Value range: [0, 1]
+  double? lineElevationGroundScale;
+
+  /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+  /// Default value: 0. Value range: [0, 1]
+  List<Object>? lineElevationGroundScaleExpression;
+
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
-  @experimental
   LineElevationReference? lineElevationReference;
 
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
-  @experimental
   List<Object>? lineElevationReferenceExpression;
 
   /// The display of lines when joining.
@@ -163,28 +171,12 @@ class LineLayer extends Layer {
   @experimental
   List<Object>? lineWidthUnitExpression;
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
   /// Default value: 0.
-  @experimental
   double? lineZOffset;
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
+  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
   /// Default value: 0.
-  @experimental
   List<Object>? lineZOffsetExpression;
 
   /// Blur applied to the line, in pixels.
@@ -391,6 +383,14 @@ class LineLayer extends Layer {
 
     if (lineCrossSlope != null) {
       layout["line-cross-slope"] = lineCrossSlope;
+    }
+    if (lineElevationGroundScaleExpression != null) {
+      layout["line-elevation-ground-scale"] =
+          lineElevationGroundScaleExpression;
+    }
+
+    if (lineElevationGroundScale != null) {
+      layout["line-elevation-ground-scale"] = lineElevationGroundScale;
     }
     if (lineElevationReferenceExpression != null) {
       layout["line-elevation-reference"] = lineElevationReferenceExpression;
@@ -636,6 +636,10 @@ class LineLayer extends Layer {
       lineCrossSlope: _optionalCast(map["layout"]["line-cross-slope"]),
       lineCrossSlopeExpression:
           _optionalCastList(map["layout"]["line-cross-slope"]),
+      lineElevationGroundScale:
+          _optionalCast(map["layout"]["line-elevation-ground-scale"]),
+      lineElevationGroundScaleExpression:
+          _optionalCastList(map["layout"]["line-elevation-ground-scale"]),
       lineElevationReference: map["layout"]["line-elevation-reference"] == null
           ? null
           : LineElevationReference.values.firstWhere((e) => e.name

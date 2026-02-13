@@ -170,6 +170,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.geometry?.let {
       originalAnnotation.geometry = it
     }
+    annotation.lineElevationGroundScale?.let {
+      originalAnnotation.lineElevationGroundScale = it
+    }
     annotation.lineJoin?.let {
       originalAnnotation.lineJoin = it.toLineJoin()
     }
@@ -251,6 +254,29 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     val value = manager.lineCrossSlope
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineElevationGroundScale(
+    managerId: String,
+    lineElevationGroundScale: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineElevationGroundScale = lineElevationGroundScale
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineElevationGroundScale(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineElevationGroundScale
     if (value != null) {
       callback(Result.success(value))
     } else {
@@ -884,6 +910,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
   return PolylineAnnotation(
     id = id,
     geometry = geometry,
+    lineElevationGroundScale = lineElevationGroundScale,
     lineJoin = lineJoin?.toFLTLineJoin(),
     lineSortKey = lineSortKey,
     lineZOffset = lineZOffset,
@@ -910,6 +937,9 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   }
   this.isDraggable?.let {
     options.withDraggable(it)
+  }
+  this.lineElevationGroundScale?.let {
+    options.withLineElevationGroundScale(it)
   }
   this.lineJoin?.let {
     options.withLineJoin(it.toLineJoin())
