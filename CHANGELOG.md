@@ -5,6 +5,10 @@
 * Promote elevated lines properties to stable: `LineLayer.lineZOffset` and `LineLayer.lineElevationReference`.
 * Add experimental `ModelLayer.modelAllowDensityReduction` property to disable density reduction in model layers.
 
+### 2.19.0-rc.1
+
+* Update Maps SDK to v11.19.0-rc.1
+
 ### 2.19.0-beta.1
 
 * Update Maps SDK to v11.19.0-beta.1
