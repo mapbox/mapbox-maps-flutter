@@ -360,6 +360,19 @@ class MapboxMapController(
           result.error("HEADER_ERROR", e.message, null)
         }
       }
+      "map#setHttpInterceptorEnabled" -> {
+        try {
+          val enabled = call.argument<Boolean>("enabled") ?: false
+          val interceptRequests = call.argument<Boolean>("interceptRequests") ?: false
+          val interceptResponses = call.argument<Boolean>("interceptResponses") ?: false
+          val interceptor = CustomHttpServiceInterceptor.getInstance()
+          interceptor.setFlutterChannel(methodChannel)
+          interceptor.setInterceptorEnabled(enabled, interceptRequests, interceptResponses)
+          result.success(null)
+        } catch (e: Exception) {
+          result.error("INTERCEPTOR_ERROR", e.message, null)
+        }
+      }
       else -> {
         result.notImplemented()
       }
