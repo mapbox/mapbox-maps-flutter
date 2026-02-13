@@ -10,6 +10,11 @@ class _MapboxMapsPlatform {
   final BinaryMessenger binaryMessenger;
   final int channelSuffix;
 
+  // HTTP interceptor callbacks
+  HttpRequestInterceptor? _requestInterceptor;
+  HttpResponseInterceptor? _responseInterceptor;
+  bool _isInterceptorEnabled = false;
+
   _MapboxMapsPlatform(
       {required this.binaryMessenger, required this.channelSuffix}) {
     _channel.setMethodCallHandler(_handleMethodCall);
@@ -21,8 +26,34 @@ class _MapboxMapsPlatform {
             channelSuffix: channelSuffix);
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
-    print(
-        "Handle method call ${call.method}, arguments: ${call.arguments} not supported");
+    switch (call.method) {
+      case 'http#onRequest':
+        if (_requestInterceptor != null) {
+          final requestMap = call.arguments as Map<dynamic, dynamic>;
+          final request = HttpInterceptorRequest.fromMap(requestMap);
+          final modifiedRequest = await _requestInterceptor!(request);
+          if (modifiedRequest != null) {
+            return modifiedRequest.toMap();
+          }
+        }
+        return null;
+      case 'http#onResponse':
+        if (_responseInterceptor != null) {
+          try {
+            final responseMap = call.arguments as Map<dynamic, dynamic>;
+            final response = HttpInterceptorResponse.fromMap(responseMap);
+            await _responseInterceptor!(response);
+          } catch (e) {
+            print('Error handling http#onResponse: $e');
+            print('Arguments: ${call.arguments}');
+          }
+        }
+        return null;
+      default:
+        print(
+            "Handle method call ${call.method}, arguments: ${call.arguments} not supported");
+        return null;
+    }
   }
 
   Widget buildView(
@@ -205,6 +236,44 @@ class _MapboxMapsPlatform {
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
+  }
+
+  /// Sets custom headers for all Mapbox HTTP requests.
+  ///
+  /// These headers are applied statically to all requests.
+  Future<void> setCustomHeaders(Map<String, String> headers) async {
+    await _channel.invokeMethod('map#setCustomHeaders', {'headers': headers});
+  }
+
+  /// Sets a callback to intercept HTTP requests before they are sent.
+  Future<void> setHttpRequestInterceptor(
+      HttpRequestInterceptor? interceptor) async {
+    _requestInterceptor = interceptor;
+    await _updateInterceptorState();
+  }
+
+  /// Sets a callback to intercept HTTP responses after they are received.
+  Future<void> setHttpResponseInterceptor(
+      HttpResponseInterceptor? interceptor) async {
+    _responseInterceptor = interceptor;
+    await _updateInterceptorState();
+  }
+
+  /// Updates the native interceptor state based on whether any interceptors are set.
+  Future<void> _updateInterceptorState() async {
+    final shouldEnable =
+        _requestInterceptor != null || _responseInterceptor != null;
+    final interceptRequests = _requestInterceptor != null;
+    final interceptResponses = _responseInterceptor != null;
+
+    // Always update native side when interceptor configuration changes
+    // (not just when enabled/disabled state changes)
+    await _channel.invokeMethod('map#setHttpInterceptorEnabled', {
+      'enabled': shouldEnable,
+      'interceptRequests': interceptRequests,
+      'interceptResponses': interceptResponses,
+    });
+    _isInterceptorEnabled = shouldEnable;
   }
 }
 

@@ -255,9 +255,10 @@ class MapboxMap extends ChangeNotifier {
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
-      late final MapboxHttpService httpService = MapboxHttpService(
+  late final MapboxHttpService httpService = MapboxHttpService(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _mapboxMapsPlatform.channelSuffix);
+
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
@@ -880,10 +881,56 @@ class MapboxMap extends ChangeNotifier {
   /// Throws a [PlatformException] if the native implementation is not available
   /// or if the operation fails
   Future<void> setCustomHeaders(Map<String, String> headers) =>
-      MapboxHttpService(
-              binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-              channelSuffix: _mapboxMapsPlatform.channelSuffix)
-          .setCustomHeaders(headers);
+      _mapboxMapsPlatform.setCustomHeaders(headers);
+
+  /// Sets a callback to intercept HTTP requests before they are sent.
+  ///
+  /// The [interceptor] callback is called for each HTTP request made by Mapbox.
+  /// You can modify the request by returning a new [HttpInterceptorRequest],
+  /// or return null to use the original request unchanged.
+  ///
+  /// This is useful for adding custom headers to specific requests based on
+  /// the URL or other request properties.
+  ///
+  /// Example:
+  /// ```dart
+  /// mapboxMap.setHttpRequestInterceptor((request) async {
+  ///   // Add authorization header only for your custom tile server
+  ///   if (request.url.contains('my-tile-server.com')) {
+  ///     return request.copyWith(
+  ///       headers: {...request.headers, 'Authorization': 'Bearer token'},
+  ///     );
+  ///   }
+  ///   return null; // Use original request for other domains
+  /// });
+  /// ```
+  ///
+  /// To remove the interceptor, call this method with null.
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available.
+  Future<void> setHttpRequestInterceptor(HttpRequestInterceptor? interceptor) =>
+      _mapboxMapsPlatform.setHttpRequestInterceptor(interceptor);
+
+  /// Sets a callback to intercept HTTP responses after they are received.
+  ///
+  /// The [interceptor] callback is called for each HTTP response received by Mapbox.
+  /// This is useful for logging, monitoring, or debugging HTTP traffic.
+  ///
+  /// Note: The response cannot be modified; this is for observation only.
+  ///
+  /// Example:
+  /// ```dart
+  /// mapboxMap.setHttpResponseInterceptor((response) async {
+  ///   print('Received response from ${response.url}: ${response.statusCode}');
+  /// });
+  /// ```
+  ///
+  /// To remove the interceptor, call this method with null.
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available.
+  Future<void> setHttpResponseInterceptor(
+          HttpResponseInterceptor? interceptor) =>
+      _mapboxMapsPlatform.setHttpResponseInterceptor(interceptor);
 }
 
 class _GestureListener extends GestureListener {

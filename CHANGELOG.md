@@ -4,6 +4,37 @@
 * Introduce new `LineLayer.lineElevationGroundScale` property to scale elevated lines with terrain exaggeration.
 * Promote elevated lines properties to stable: `LineLayer.lineZOffset` and `LineLayer.lineElevationReference`.
 * Add experimental `ModelLayer.modelAllowDensityReduction` property to disable density reduction in model layers.
+* Add HTTP request/response interceptor API for dynamic header injection and request monitoring.
+  * `MapboxMapsOptions.setHttpRequestInterceptor()` - Intercept and modify HTTP requests before they are sent. Supports modifying URL, headers, and body.
+  * `MapboxMapsOptions.setHttpResponseInterceptor()` - Inspect HTTP responses after they are received.
+  * `MapboxMapsOptions.setCustomHeaders()` - Set static headers that are applied to all requests.
+  * `HttpInterceptorRequest` - Represents an intercepted request with `url`, `method`, `headers`, and `body` properties. Use `copyWith()` to create modified requests.
+  * `HttpInterceptorResponse` - Represents an intercepted response with `url`, `statusCode`, `headers`, `data`, and `requestHeaders` properties. The `requestHeaders` field contains the original request headers, useful for correlating requests with responses using custom headers like `X-Request-Id`.
+
+  **Important**: These are static methods on `MapboxMapsOptions`, not instance methods on `MapboxMap`. This ensures ALL HTTP requests are intercepted, including the initial style and tile requests made during map initialization. Set up interceptors before creating any `MapWidget`.
+
+  Example usage:
+  ```dart
+  // In initState() or before creating MapWidget:
+
+  // Set static headers (applied to all requests)
+  MapboxMapsOptions.setCustomHeaders({'X-App-Version': '1.0.0'});
+
+  // Add dynamic custom headers to requests
+  MapboxMapsOptions.setHttpRequestInterceptor((request) async {
+    if (request.url.contains('api.mapbox.com')) {
+      return request.copyWith(
+        headers: {...request.headers, 'Authorization': 'Bearer token'},
+      );
+    }
+    return null; // Use original request
+  });
+
+  // Monitor responses
+  MapboxMapsOptions.setHttpResponseInterceptor((response) async {
+    print('Response: ${response.statusCode} for ${response.url}');
+  });
+  ```
 
 ### 2.19.0-rc.1
 
