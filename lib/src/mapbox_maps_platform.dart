@@ -23,6 +23,7 @@ class _MapboxMapsPlatform {
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     print(
         "Handle method call ${call.method}, arguments: ${call.arguments} not supported");
+    return null;
   }
 
   Widget buildView(

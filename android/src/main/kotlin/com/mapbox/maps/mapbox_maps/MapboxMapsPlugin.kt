@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import androidx.lifecycle.Lifecycle
+import com.mapbox.maps.mapbox_maps.http.CustomHttpServiceInterceptor
 import com.mapbox.maps.mapbox_maps.offline.OfflineMapInstanceManager
 import com.mapbox.maps.mapbox_maps.offline.OfflineSwitch
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
@@ -17,10 +18,12 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.MethodChannel
 
 /** MapboxMapsPlugin */
 class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private var lifecycle: Lifecycle? = null
+  private var httpInterceptorChannel: MethodChannel? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     flutterPluginBinding
@@ -54,6 +57,48 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
     _TileStoreInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
     _OfflineSwitch.setUp(binaryMessenger, offlineSwitch)
     LoggingController.setup(binaryMessenger)
+
+    // Setup static HTTP interceptor channel - available before any map is created
+    setupHttpInterceptorChannel(binaryMessenger)
+  }
+
+  private fun setupHttpInterceptorChannel(binaryMessenger: BinaryMessenger) {
+    httpInterceptorChannel = MethodChannel(binaryMessenger, "com.mapbox.maps.flutter/http_interceptor")
+    val interceptor = CustomHttpServiceInterceptor.getInstance()
+    interceptor.setFlutterChannel(httpInterceptorChannel)
+
+    httpInterceptorChannel?.setMethodCallHandler { call, result ->
+      when (call.method) {
+        "setCustomHeaders" -> {
+          try {
+            val headers = call.argument<Map<String, String>>("headers")
+            headers?.let {
+              interceptor.setCustomHeaders(headers)
+              result.success(null)
+            } ?: run {
+              result.error("INVALID_ARGUMENTS", "Headers cannot be null", null)
+            }
+          } catch (e: Exception) {
+            result.error("HEADER_ERROR", e.message, null)
+          }
+        }
+        "setHttpInterceptorEnabled" -> {
+          try {
+            val enabled = call.argument<Boolean>("enabled") ?: false
+            val interceptRequests = call.argument<Boolean>("interceptRequests") ?: false
+            val interceptResponses = call.argument<Boolean>("interceptResponses") ?: false
+            val includeResponseBody = call.argument<Boolean>("includeResponseBody") ?: false
+            interceptor.setInterceptorEnabled(enabled, interceptRequests, interceptResponses, includeResponseBody)
+            result.success(null)
+          } catch (e: Exception) {
+            result.error("INTERCEPTOR_ERROR", e.message, null)
+          }
+        }
+        else -> {
+          result.notImplemented()
+        }
+      }
+    }
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
