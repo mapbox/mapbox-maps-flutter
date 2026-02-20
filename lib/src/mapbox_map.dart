@@ -702,6 +702,30 @@ class MapboxMap extends ChangeNotifier {
   /// affect persistent map data like offline style packages.
   Future<void> clearData() => _mapInterface.clearData();
 
+  /// Sets custom HTTP headers that will be sent with all map-related HTTP requests.
+  ///
+  /// This is a convenience method that delegates to [MapboxMapsOptions.setCustomHeaders].
+  /// Headers set here will apply to all Mapbox HTTP requests globally, not just this map instance.
+  ///
+  /// Common use cases include:
+  /// - Authentication tokens for private tile servers
+  /// - API keys for third-party services
+  /// - Custom tracking or analytics headers
+  ///
+  /// Example:
+  /// ```dart
+  /// await mapboxMap.setCustomHeaders({
+  ///   'Authorization': 'Bearer your_token',
+  ///   'X-Custom-Header': 'value',
+  /// });
+  /// ```
+  ///
+  /// Note: For setting headers before the map is created, use
+  /// [MapboxMapsOptions.setCustomHeaders] directly in your app's initialization.
+  Future<void> setCustomHeaders(Map<String, String> headers) {
+    return MapboxMapsOptions.setCustomHeaders(headers);
+  }
+
   /// The memory budget hint to be used by the map. The budget can be given in
   /// tile units or in megabytes. A Map will do the best effort to keep memory
   /// allocations for a non essential resources within the budget.
