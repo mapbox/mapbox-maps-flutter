@@ -347,32 +347,6 @@ class MapboxMapController(
       "mapView#submitViewSizeHint" -> {
         result.success(null) // no-op on this platform
       }
-      "map#setCustomHeaders" -> {
-        try {
-          val headers = call.argument<Map<String, String>>("headers")
-          headers?.let {
-            CustomHttpServiceInterceptor.getInstance().setCustomHeaders(headers)
-            result.success(null)
-          } ?: run {
-            result.error("INVALID_ARGUMENTS", "Headers cannot be null", null)
-          }
-        } catch (e: Exception) {
-          result.error("HEADER_ERROR", e.message, null)
-        }
-      }
-      "map#setHttpInterceptorEnabled" -> {
-        try {
-          val enabled = call.argument<Boolean>("enabled") ?: false
-          val interceptRequests = call.argument<Boolean>("interceptRequests") ?: false
-          val interceptResponses = call.argument<Boolean>("interceptResponses") ?: false
-          val interceptor = CustomHttpServiceInterceptor.getInstance()
-          interceptor.setFlutterChannel(methodChannel)
-          interceptor.setInterceptorEnabled(enabled, interceptRequests, interceptResponses)
-          result.success(null)
-        } catch (e: Exception) {
-          result.error("INTERCEPTOR_ERROR", e.message, null)
-        }
-      }
       else -> {
         result.notImplemented()
       }

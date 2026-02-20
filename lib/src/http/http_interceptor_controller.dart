@@ -20,6 +20,7 @@ class _HttpInterceptorController {
 
   HttpRequestInterceptor? _requestInterceptor;
   HttpResponseInterceptor? _responseInterceptor;
+  bool _includeResponseBody = false;
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method) {
@@ -80,11 +81,19 @@ class _HttpInterceptorController {
   ///
   /// Note: The response cannot be modified; this is for observation only.
   ///
+  /// If [includeResponseBody] is true, the response body will be included in
+  /// the [HttpInterceptorResponse]. This defaults to false to avoid performance
+  /// issues with large tile bodies (200-500KB). Only enable this if you need
+  /// to inspect the response body content.
+  ///
   /// This should be called before creating any [MapWidget] to ensure all
   /// responses (including those from map initialization requests) are captured.
   Future<void> setHttpResponseInterceptor(
-      HttpResponseInterceptor? interceptor) async {
+    HttpResponseInterceptor? interceptor, {
+    bool includeResponseBody = false,
+  }) async {
     _responseInterceptor = interceptor;
+    _includeResponseBody = includeResponseBody;
     await _updateInterceptorState();
   }
 
@@ -98,6 +107,7 @@ class _HttpInterceptorController {
       'enabled': shouldEnable,
       'interceptRequests': interceptRequests,
       'interceptResponses': interceptResponses,
+      'includeResponseBody': _includeResponseBody,
     });
   }
 }

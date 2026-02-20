@@ -208,6 +208,11 @@ final class MapboxMapsOptions {
   /// from the original request, which is useful for correlating requests with
   /// responses using custom headers like `X-Request-Id`.
   ///
+  /// If [includeResponseBody] is true, the response body will be included in
+  /// the [HttpInterceptorResponse.body] field. This defaults to false to avoid
+  /// performance issues with large tile bodies (200-500KB per tile). Only
+  /// enable this if you need to inspect the actual response body content.
+  ///
   /// Example:
   /// ```dart
   /// // In your main() or initState, before creating MapWidget:
@@ -220,7 +225,12 @@ final class MapboxMapsOptions {
   ///
   /// Throws a [PlatformException] if the native implementation is not available.
   static Future<void> setHttpResponseInterceptor(
-      HttpResponseInterceptor? interceptor) {
-    return _httpInterceptorController.setHttpResponseInterceptor(interceptor);
+    HttpResponseInterceptor? interceptor, {
+    bool includeResponseBody = false,
+  }) {
+    return _httpInterceptorController.setHttpResponseInterceptor(
+      interceptor,
+      includeResponseBody: includeResponseBody,
+    );
   }
 }

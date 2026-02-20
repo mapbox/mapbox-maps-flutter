@@ -78,10 +78,12 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
                         ))
                     return
                 }
+                let includeResponseBody = arguments["includeResponseBody"] as? Bool ?? false
                 interceptor.setInterceptorEnabled(
                     enabled: enabled,
                     interceptRequests: interceptRequests,
-                    interceptResponses: interceptResponses
+                    interceptResponses: interceptResponses,
+                    includeResponseBody: includeResponseBody
                 )
                 result(nil)
 
