@@ -1,4 +1,6 @@
-### main
+### 2.19.0
+
+* Update Maps SDK to v11.19.0
 
 ### 2.19.0-rc.1
 
