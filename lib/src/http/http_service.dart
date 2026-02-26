@@ -35,15 +35,17 @@ class HttpInterceptorRequest {
   });
 
   /// Creates a copy of this request with the given fields replaced.
+  ///
+  /// Note: [method] is not included as the HTTP method cannot be changed
+  /// by an interceptor.
   HttpInterceptorRequest copyWith({
     String? url,
-    String? method,
     Map<String, String>? headers,
     Uint8List? body,
   }) {
     return HttpInterceptorRequest(
       url: url ?? this.url,
-      method: method ?? this.method,
+      method: this.method,
       headers: headers ?? Map.from(this.headers),
       body: body ?? this.body,
     );
@@ -189,27 +191,12 @@ class MapboxHttpService {
         const StandardMethodCodec(), binaryMessenger);
   }
 
-  /// Sets custom headers for all Mapbox HTTP requests
+  /// Sets custom headers for all Mapbox HTTP requests.
   ///
-  /// [headers] is a map of header names to header values
-  ///
-  /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails
-  Future<void> setCustomHeaders(Map<String, String> headers) async {
-    try {
-      await _channel.invokeMethod('map#setCustomHeaders', {'headers': headers});
-    } on MissingPluginException catch (e) {
-      throw PlatformException(
-        code: 'MISSING_IMPLEMENTATION',
-        message: 'Native implementation for setCustomHeaders is not available',
-        details: e.toString(),
-      );
-    } catch (e) {
-      throw PlatformException(
-        code: 'SET_HEADERS_FAILED',
-        message: 'Failed to set custom headers',
-        details: e.toString(),
-      );
-    }
+  /// Deprecated: Use [MapboxMapsOptions.setCustomHeaders] instead, which
+  /// applies headers globally before any map is created.
+  @Deprecated('Use MapboxMapsOptions.setCustomHeaders instead.')
+  Future<void> setCustomHeaders(Map<String, String> headers) {
+    return MapboxMapsOptions.setCustomHeaders(headers);
   }
 }

@@ -102,6 +102,9 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    httpInterceptorChannel?.setMethodCallHandler(null)
+    httpInterceptorChannel = null
+    CustomHttpServiceInterceptor.getInstance().setFlutterChannel(null)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {

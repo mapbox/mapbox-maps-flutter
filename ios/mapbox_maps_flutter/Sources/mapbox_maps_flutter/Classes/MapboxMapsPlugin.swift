@@ -61,7 +61,8 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
                         ))
                     return
                 }
-                interceptor.setCustomHeaders(headers)
+                interceptor.customHeaders = headers
+                HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
                 result(nil)
 
             case "setHttpInterceptorEnabled":

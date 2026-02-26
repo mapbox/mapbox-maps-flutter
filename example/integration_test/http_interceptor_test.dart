@@ -8,6 +8,10 @@ import 'empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  setUp(() async {
+    await MapboxMapsOptions.clearData();
+  });
+
   tearDown(() async {
     // Clean up interceptors after each test
     MapboxMapsOptions.setHttpRequestInterceptor(null);

@@ -41,8 +41,11 @@ class _HttpInterceptorController {
             final response = HttpInterceptorResponse.fromMap(responseMap);
             await _responseInterceptor!(response);
           } catch (e) {
-            print('Error handling http#onResponse: $e');
-            print('Arguments: ${call.arguments}');
+            developer.log(
+              'Error handling http#onResponse: $e\nArguments: ${call.arguments}',
+              name: 'mapbox-maps-flutter',
+              level: 1000, // error
+            );
           }
         }
         return null;

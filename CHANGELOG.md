@@ -13,6 +13,8 @@
 
   **Important**: These are static methods on `MapboxMapsOptions`, not instance methods on `MapboxMap`. This ensures ALL HTTP requests are intercepted, including the initial style and tile requests made during map initialization. Set up interceptors before creating any `MapWidget`.
 
+  **Migration**: If you were previously calling `setCustomHeaders` on a `MapboxMap` instance, switch to `MapboxMapsOptions.setCustomHeaders(headers)` called before `MapWidget` is created. The instance method is now deprecated and delegates to the static API.
+
   Example usage:
   ```dart
   // In initState() or before creating MapWidget:
