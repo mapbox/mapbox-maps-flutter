@@ -311,6 +311,7 @@ class _FollowPuckViewportStateOptions {
     this.bearingValue,
     this.bearing,
     this.pitch,
+    this.padding,
   });
 
   double? zoom;
@@ -321,12 +322,15 @@ class _FollowPuckViewportStateOptions {
 
   double? pitch;
 
+  MbxEdgeInsets? padding;
+
   List<Object?> _toList() {
     return <Object?>[
       zoom,
       bearingValue,
       bearing,
       pitch,
+      padding,
     ];
   }
 
@@ -341,6 +345,7 @@ class _FollowPuckViewportStateOptions {
       bearingValue: result[1] as double?,
       bearing: result[2] as _FollowPuckViewportStateBearing?,
       pitch: result[3] as double?,
+      padding: result[4] as MbxEdgeInsets?,
     );
   }
 
@@ -357,7 +362,8 @@ class _FollowPuckViewportStateOptions {
     return zoom == other.zoom &&
         bearingValue == other.bearingValue &&
         bearing == other.bearing &&
-        pitch == other.pitch;
+        pitch == other.pitch &&
+        padding == other.padding;
   }
 
   @override

@@ -37,9 +37,11 @@ extension _FollowPuckViewportStateOptions {
             bearing = nil
         }
         return .init(
+            padding: padding?.toUIEdgeInsets(),
             zoom: zoom?.CGFloat,
             bearing: bearing,
-            pitch: pitch?.CGFloat)
+            pitch: pitch?.CGFloat
+        )
     }
 }
 

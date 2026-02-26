@@ -4,6 +4,16 @@
 * Introduce new `LineLayer.lineElevationGroundScale` property to scale elevated lines with terrain exaggeration.
 * Promote elevated lines properties to stable: `LineLayer.lineZOffset` and `LineLayer.lineElevationReference`.
 * Add experimental `ModelLayer.modelAllowDensityReduction` property to disable density reduction in model layers.
+* Add `FollowPuckViewportState.padding` to control camera padding when following the user's location puck, allowing the puck to be offset from the viewport center (e.g. for navigation UIs where the puck should appear near the bottom of the screen).
+
+### 2.19.1
+
+* [Android] Fix Gradle build failure when `SDK_REGISTRY_TOKEN` is not set in the environment or `gradle.properties`.
+* [Android] Fix `customData` not being applied when updating Circle, Point, Polygon, and Polyline annotations.
+
+### 2.19.0
+
+* Update Maps SDK to v11.19.0
 
 ### 2.19.0-rc.1
 

@@ -265,7 +265,8 @@ data class _FollowPuckViewportStateOptions(
   val zoom: Double? = null,
   val bearingValue: Double? = null,
   val bearing: _FollowPuckViewportStateBearing? = null,
-  val pitch: Double? = null
+  val pitch: Double? = null,
+  val padding: MbxEdgeInsets? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): _FollowPuckViewportStateOptions {
@@ -273,7 +274,8 @@ data class _FollowPuckViewportStateOptions(
       val bearingValue = pigeonVar_list[1] as Double?
       val bearing = pigeonVar_list[2] as _FollowPuckViewportStateBearing?
       val pitch = pigeonVar_list[3] as Double?
-      return _FollowPuckViewportStateOptions(zoom, bearingValue, bearing, pitch)
+      val padding = pigeonVar_list[4] as MbxEdgeInsets?
+      return _FollowPuckViewportStateOptions(zoom, bearingValue, bearing, pitch, padding)
     }
   }
   fun toList(): List<Any?> {
@@ -282,6 +284,7 @@ data class _FollowPuckViewportStateOptions(
       bearingValue,
       bearing,
       pitch,
+      padding,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -294,7 +297,8 @@ data class _FollowPuckViewportStateOptions(
     return zoom == other.zoom &&
       bearingValue == other.bearingValue &&
       bearing == other.bearing &&
-      pitch == other.pitch
+      pitch == other.pitch &&
+      padding == other.padding
   }
 
   override fun hashCode(): Int = toList().hashCode()

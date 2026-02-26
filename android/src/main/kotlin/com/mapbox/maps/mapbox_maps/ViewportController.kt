@@ -160,7 +160,7 @@ fun ViewportPlugin.viewportStateFromFLTState(
   return when (stateStorage.type) {
     _ViewportStateType.IDLE -> idle().let { null }
     _ViewportStateType.FOLLOW_PUCK ->
-      makeFollowPuckViewportState((stateStorage.options as _FollowPuckViewportStateOptions).toOptions())
+      makeFollowPuckViewportState((stateStorage.options as _FollowPuckViewportStateOptions).toOptions(context))
 
     _ViewportStateType.OVERVIEW ->
       makeOverviewViewportState(
@@ -179,7 +179,7 @@ fun ViewportPlugin.viewportStateFromFLTState(
   }
 }
 
-fun _FollowPuckViewportStateOptions.toOptions(): FollowPuckViewportStateOptions {
+fun _FollowPuckViewportStateOptions.toOptions(context: Context): FollowPuckViewportStateOptions {
   val bearing: FollowPuckViewportStateBearing? = when (this.bearing) {
     _FollowPuckViewportStateBearing.HEADING -> FollowPuckViewportStateBearing.SyncWithLocationPuck
     _FollowPuckViewportStateBearing.COURSE -> FollowPuckViewportStateBearing.SyncWithLocationPuck
@@ -201,6 +201,7 @@ fun _FollowPuckViewportStateOptions.toOptions(): FollowPuckViewportStateOptions 
     .zoom(zoom)
     .bearing(bearing)
     .pitch(pitch)
+    .padding(padding?.toEdgeInsets(context))
     .build()
 }
 

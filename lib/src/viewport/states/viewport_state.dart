@@ -134,6 +134,7 @@ extension on FollowPuckViewportState {
         bearing: internalBearing?.$1,
         bearingValue: internalBearing?.$2,
         pitch: pitch,
+        padding: padding,
       ),
     );
   }

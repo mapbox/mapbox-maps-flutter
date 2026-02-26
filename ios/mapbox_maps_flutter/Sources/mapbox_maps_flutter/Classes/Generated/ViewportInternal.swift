@@ -239,6 +239,7 @@ struct _FollowPuckViewportStateOptions {
   var bearingValue: Double? = nil
   var bearing: _FollowPuckViewportStateBearing? = nil
   var pitch: Double? = nil
+  var padding: MbxEdgeInsets? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -247,12 +248,14 @@ struct _FollowPuckViewportStateOptions {
     let bearingValue: Double? = nilOrValue(pigeonVar_list[1])
     let bearing: _FollowPuckViewportStateBearing? = nilOrValue(pigeonVar_list[2])
     let pitch: Double? = nilOrValue(pigeonVar_list[3])
+    let padding: MbxEdgeInsets? = nilOrValue(pigeonVar_list[4])
 
     return _FollowPuckViewportStateOptions(
       zoom: zoom,
       bearingValue: bearingValue,
       bearing: bearing,
-      pitch: pitch
+      pitch: pitch,
+      padding: padding
     )
   }
   func toList() -> [Any?] {
@@ -261,6 +264,7 @@ struct _FollowPuckViewportStateOptions {
       bearingValue,
       bearing,
       pitch,
+      padding,
     ]
   }
 }
