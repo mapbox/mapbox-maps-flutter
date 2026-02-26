@@ -129,4 +129,108 @@ final class MapboxMapsOptions {
   static Future<void> clearData() {
     return _options.clearData();
   }
+
+  // HTTP Interceptor static controller
+  static final _HttpInterceptorController _httpInterceptorController =
+      _HttpInterceptorController();
+
+  /// Sets custom HTTP headers that will be applied to all Mapbox HTTP requests.
+  ///
+  /// These headers are applied statically to all requests, including requests
+  /// made during map initialization. This should be called before creating
+  /// any [MapWidget] to ensure headers are applied to all requests.
+  ///
+  /// Example:
+  /// ```dart
+  /// // In your main() or initState, before creating MapWidget:
+  /// MapboxMapsOptions.setCustomHeaders({
+  ///   'Authorization': 'Bearer your_secret_token',
+  /// });
+  /// ```
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available.
+  static Future<void> setCustomHeaders(Map<String, String> headers) {
+    return _httpInterceptorController.setCustomHeaders(headers);
+  }
+
+  /// Sets a callback to intercept HTTP requests before they are sent.
+  ///
+  /// The [interceptor] callback is called for each HTTP request made by Mapbox.
+  /// You can modify the request by returning a new [HttpInterceptorRequest],
+  /// or return null to use the original request unchanged.
+  ///
+  /// **Important:** This should be called before creating any [MapWidget] to
+  /// ensure all requests (including those made during map initialization for
+  /// styles, tiles, glyphs, etc.) are intercepted.
+  ///
+  /// The following request properties can be modified:
+  /// - [HttpInterceptorRequest.url] - Redirect to a different URL
+  /// - [HttpInterceptorRequest.headers] - Add/modify/remove headers
+  /// - [HttpInterceptorRequest.body] - Modify request body
+  ///
+  /// Note: [HttpInterceptorRequest.method] is included for inspection but
+  /// cannot be modified by the native interceptor.
+  ///
+  /// Example:
+  /// ```dart
+  /// // In your main() or initState, before creating MapWidget:
+  /// MapboxMapsOptions.setHttpRequestInterceptor((request) async {
+  ///   // Add authorization header only for your custom tile server
+  ///   if (request.url.contains('my-tile-server.com')) {
+  ///     return request.copyWith(
+  ///       headers: {...request.headers, 'Authorization': 'Bearer token'},
+  ///     );
+  ///   }
+  ///   return null; // Use original request for other domains
+  /// });
+  /// ```
+  ///
+  /// To remove the interceptor, call this method with null.
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available.
+  static Future<void> setHttpRequestInterceptor(
+      HttpRequestInterceptor? interceptor) {
+    return _httpInterceptorController.setHttpRequestInterceptor(interceptor);
+  }
+
+  /// Sets a callback to intercept HTTP responses after they are received.
+  ///
+  /// The [interceptor] callback is called for each HTTP response received by Mapbox.
+  /// This is useful for logging, monitoring, or debugging HTTP traffic.
+  ///
+  /// **Important:** This should be called before creating any [MapWidget] to
+  /// ensure all responses (including those from map initialization requests)
+  /// are captured.
+  ///
+  /// Note: The response cannot be modified; this is for observation only.
+  ///
+  /// The [HttpInterceptorResponse.requestHeaders] field contains the headers
+  /// from the original request, which is useful for correlating requests with
+  /// responses using custom headers like `X-Request-Id`.
+  ///
+  /// If [includeResponseBody] is true, the response body will be included in
+  /// the [HttpInterceptorResponse.body] field. This defaults to false to avoid
+  /// performance issues with large tile bodies (200-500KB per tile). Only
+  /// enable this if you need to inspect the actual response body content.
+  ///
+  /// Example:
+  /// ```dart
+  /// // In your main() or initState, before creating MapWidget:
+  /// MapboxMapsOptions.setHttpResponseInterceptor((response) async {
+  ///   print('Received response from ${response.url}: ${response.statusCode}');
+  /// });
+  /// ```
+  ///
+  /// To remove the interceptor, call this method with null.
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available.
+  static Future<void> setHttpResponseInterceptor(
+    HttpResponseInterceptor? interceptor, {
+    bool includeResponseBody = false,
+  }) {
+    return _httpInterceptorController.setHttpResponseInterceptor(
+      interceptor,
+      includeResponseBody: includeResponseBody,
+    );
+  }
 }

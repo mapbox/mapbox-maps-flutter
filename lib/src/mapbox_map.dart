@@ -255,9 +255,10 @@ class MapboxMap extends ChangeNotifier {
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
-      late final MapboxHttpService httpService = MapboxHttpService(
+  late final MapboxHttpService httpService = MapboxHttpService(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _mapboxMapsPlatform.channelSuffix);
+
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
@@ -863,27 +864,29 @@ class MapboxMap extends ChangeNotifier {
   Future<void> setSnapshotLegacyMode(bool enable) =>
       _mapInterface.setSnapshotLegacyMode(enable);
 
-  /// Set custom headers for all Mapbox HTTP requests
+  /// Sets custom HTTP headers that will be sent with all map-related HTTP requests.
   ///
-  /// [headers] is a map of header names to header values
+  /// This is a convenience method that delegates to [MapboxMapsOptions.setCustomHeaders].
+  /// Headers set here will apply to all Mapbox HTTP requests globally, not just this map instance.
   ///
-  /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails
+  /// Common use cases include:
+  /// - Authentication tokens for private tile servers
+  /// - API keys for third-party services
+  /// - Custom tracking or analytics headers
   ///
   /// Example:
   /// ```dart
-  /// MapboxMap.setCustomHeaders({
-  ///   "Authorization": "Bearer your_secret_token",
+  /// await mapboxMap.setCustomHeaders({
+  ///   'Authorization': 'Bearer your_token',
+  ///   'X-Custom-Header': 'value',
   /// });
   /// ```
   ///
-  /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails
-  Future<void> setCustomHeaders(Map<String, String> headers) =>
-      MapboxHttpService(
-              binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-              channelSuffix: _mapboxMapsPlatform.channelSuffix)
-          .setCustomHeaders(headers);
+  /// Note: For setting headers before the map is created, use
+  /// [MapboxMapsOptions.setCustomHeaders] directly in your app's initialization.
+  Future<void> setCustomHeaders(Map<String, String> headers) {
+    return MapboxMapsOptions.setCustomHeaders(headers);
+  }
 }
 
 class _GestureListener extends GestureListener {

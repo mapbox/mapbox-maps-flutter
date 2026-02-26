@@ -29,9 +29,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         pluginVersion: String,
         eventTypes: [Int]
     ) {
-        binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
+        binaryMessenger = SuffixBinaryMessenger(
+            messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
-            .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
+            .set(
+                key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment",
+                value: "FlutterPlugin/\(pluginVersion)")
 
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
@@ -48,44 +51,70 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         )
 
         let styleController = StyleController(styleManager: mapboxMap)
-        StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: styleController, messageChannelSuffix: binaryMessenger.suffix)
+        StyleManagerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: styleController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let cameraController = CameraController(withMapboxMap: mapboxMap)
-        _CameraManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: cameraController, messageChannelSuffix: binaryMessenger.suffix)
+        _CameraManagerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: cameraController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
-        let mapInterfaceController = MapInterfaceController(withMapboxMap: mapboxMap, mapView: mapView)
-        _MapInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: mapInterfaceController, messageChannelSuffix: binaryMessenger.suffix)
+        let mapInterfaceController = MapInterfaceController(
+            withMapboxMap: mapboxMap, mapView: mapView)
+        _MapInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: mapInterfaceController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let mapProjectionController = MapProjectionController()
-        ProjectionSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: mapProjectionController, messageChannelSuffix: binaryMessenger.suffix)
+        ProjectionSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: mapProjectionController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let animationController = AnimationController(withMapView: mapView)
-        _AnimationManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: animationController, messageChannelSuffix: binaryMessenger.suffix)
+        _AnimationManagerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: animationController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let locationController = LocationController(withMapView: mapView)
-        _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: locationController, messageChannelSuffix: binaryMessenger.suffix)
+        _LocationComponentSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: locationController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         gesturesController = GesturesController(withMapView: mapView)
-        GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: gesturesController, messageChannelSuffix: binaryMessenger.suffix)
+        GesturesSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: gesturesController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         interactionsController = InteractionsController(withMapView: mapView)
 
         let logoController = LogoController(withMapView: mapView)
-        LogoSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: logoController, messageChannelSuffix: binaryMessenger.suffix)
+        LogoSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: logoController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let attributionController = AttributionController(withMapView: mapView)
-        AttributionSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: attributionController, messageChannelSuffix: binaryMessenger.suffix)
+        AttributionSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: attributionController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let compassController = CompassController(withMapView: mapView)
-        CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: compassController, messageChannelSuffix: binaryMessenger.suffix)
+        CompassSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: compassController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let scaleBarController = ScaleBarController(withMapView: mapView)
-        ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: scaleBarController, messageChannelSuffix: binaryMessenger.suffix)
+        ScaleBarSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: scaleBarController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let indoorSelectorController = IndoorSelectorController(withMapView: mapView)
-        IndoorSelectorSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: indoorSelectorController, messageChannelSuffix: binaryMessenger.suffix)
+        IndoorSelectorSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: indoorSelectorController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
-        annotationController = AnnotationController(withMapView: mapView, messenger: binaryMessenger)
+        annotationController = AnnotationController(
+            withMapView: mapView, messenger: binaryMessenger)
         annotationController!.setup()
 
         let viewportController = ViewportController(
@@ -93,7 +122,9 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             cameraManager: mapView.camera,
             mapboxMap: mapboxMap
         )
-        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: viewportController, messageChannelSuffix: binaryMessenger.suffix)
+        _ViewportMessengerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: viewportController,
+            messageChannelSuffix: binaryMessenger.suffix)
 
         let performanceStatisticsController = PerformanceStatisticsController(
             mapboxMap: mapView.mapboxMap,
@@ -114,7 +145,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
         super.init()
 
-        channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
+        channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1)
+        }
     }
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -130,7 +162,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             gesturesController!.removeListeners()
             result(nil)
         case "interactions#add_interaction":
-            interactionsController!.addInteraction(messenger: binaryMessenger, methodCall: methodCall)
+            interactionsController!.addInteraction(
+                messenger: binaryMessenger, methodCall: methodCall)
             result(nil)
         case "interactions#remove_interaction":
             interactionsController!.removeInteraction(methodCall: methodCall)
@@ -143,11 +176,14 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
                 let snapshot = try mapView.snapshot()
                 result(snapshot.pngData())
             } catch {
-                result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
+                result(
+                    FlutterError(code: "2342345", message: error.localizedDescription, details: nil)
+                )
             }
         case "mapView#submitViewSizeHint":
             if let arguments = methodCall.arguments as? [String: Double],
-               let width = arguments["width"], let height = arguments["height"] {
+                let width = arguments["width"], let height = arguments["height"]
+            {
                 let size = CGSize(width: width, height: height)
                 guard size != .zero else { return }
 
@@ -156,22 +192,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
                 mapView.superview?.frame = CGRect(origin: .zero, size: size)
             }
             result(nil)
-        case "map#setCustomHeaders":
-            guard let arguments = methodCall.arguments as? [String: Any],
-              let headers = arguments["headers"] as? [String: String]
-        else {
-            result(FlutterError(
-                code: "setCustomHeaders",
-                message: "could not decode arguments",
-                details: nil
-            ))
-            return
-        }
-        let customInterceptor = CustomHttpServiceInterceptor()
-        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(customInterceptor)
-            customInterceptor.customHeaders = headers
-        result(nil)
-
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -180,20 +200,48 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private func releaseMethodChannels() {
         channel.setMethodCallHandler(nil)
 
-        StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        _CameraManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        _MapInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        ProjectionSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        _AnimationManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        LogoSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        AttributionSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        IndoorSelectorSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        StyleManagerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        _CameraManagerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        _MapInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        ProjectionSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        _AnimationManagerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        _LocationComponentSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        GesturesSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        LogoSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        AttributionSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        CompassSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        ScaleBarSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        IndoorSelectorSettingsInterfaceSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown()
-        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        _PerformanceStatisticsApiSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _ViewportMessengerSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
+        _PerformanceStatisticsApiSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger, api: nil,
+            messageChannelSuffix: binaryMessenger.suffix)
     }
 }
