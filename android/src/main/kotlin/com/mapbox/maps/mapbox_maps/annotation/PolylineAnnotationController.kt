@@ -209,6 +209,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.lineWidth?.let {
       originalAnnotation.lineWidth = it
     }
+    annotation.customData?.let {
+      originalAnnotation.setData(Gson().toJsonTree(it))
+    }
     return originalAnnotation
   }
 

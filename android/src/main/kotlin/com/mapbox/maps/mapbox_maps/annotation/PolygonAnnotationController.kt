@@ -190,6 +190,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     annotation.fillZOffset?.let {
       originalAnnotation.fillZOffset = it
     }
+    annotation.customData?.let {
+      originalAnnotation.setData(Gson().toJsonTree(it))
+    }
     return originalAnnotation
   }
 
