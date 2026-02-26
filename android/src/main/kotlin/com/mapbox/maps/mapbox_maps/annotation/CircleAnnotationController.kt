@@ -191,6 +191,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     annotation.circleStrokeWidth?.let {
       originalAnnotation.circleStrokeWidth = it
     }
+    annotation.customData?.let {
+      originalAnnotation.setData(Gson().toJsonTree(it))
+    }
     return originalAnnotation
   }
 

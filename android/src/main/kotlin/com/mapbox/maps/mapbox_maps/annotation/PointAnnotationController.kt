@@ -300,6 +300,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.textOpacity?.let {
       originalAnnotation.textOpacity = it
     }
+    annotation.customData?.let {
+      originalAnnotation.setData(Gson().toJsonTree(it))
+    }
     return originalAnnotation
   }
 
