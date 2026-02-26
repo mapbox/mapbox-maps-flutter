@@ -1,3 +1,8 @@
+### 2.19.1
+
+* [Android] Fix Gradle build failure when `SDK_REGISTRY_TOKEN` is not set in the environment or `gradle.properties`.
+* [Android] Fix `customData` not being applied when updating Circle, Point, Polygon, and Polyline annotations.
+
 ### 2.19.0
 
 * Update Maps SDK to v11.19.0
