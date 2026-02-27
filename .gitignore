@@ -96,6 +96,7 @@ unlinked_spec.ds
 .fastlane/report.xml
 example/ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
 example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+ios/mapbox_maps_flutter/Package.resolved
 
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift
