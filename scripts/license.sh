@@ -73,30 +73,26 @@ while read -r name version; do
   # Add your logic here to handle each package
 done <<< "$package_info"
 
-# Extract iOS SDK version - try exact version first, then branch
-ios_package_line=$(grep -A 1 'mapbox-maps-ios' ios/mapbox_maps_flutter/Package.swift)
-if echo "$ios_package_line" | grep -q 'exact'; then
-  ios_sdk_version=$(echo "$ios_package_line" | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?)".*/\1/')
-  ios_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/v$ios_sdk_version/LICENSE.md"
-elif echo "$ios_package_line" | grep -q 'branch'; then
-  ios_sdk_version=$(echo "$ios_package_line" | grep 'branch' | sed -E 's/.*branch: "([^"]+)".*/\1/')
-  ios_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/$ios_sdk_version/LICENSE.md"
-else
-  echo "Error: Unable to determine iOS SDK version from Package.swift"
+# Resolve the script's directory to find the monorepo projects root
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+projects_dir="$(cd "$script_dir/../../../.." && pwd)"
+
+# Read iOS and Android SDK licenses from local monorepo paths
+ios_license_path="$projects_dir/maps-ios/mapbox-maps-ios/LICENSE.md"
+android_license_path="$projects_dir/maps-android/mapbox-maps-android/LICENSE.md"
+
+if [ ! -f "$ios_license_path" ]; then
+  echo "Error: iOS LICENSE.md not found at $ios_license_path"
   exit 1
 fi
 
-android_sdk_version=$(grep 'com.mapbox.maps:android-ndk27' android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android-ndk27:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?)".*/\1/')
-
-# Check if Android version is a snapshot - if so, use main branch instead of version tag
-if echo "$android_sdk_version" | grep -q "SNAPSHOT"; then
-  android_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-android/main/LICENSE.md"
-else
-  android_license_url="https://raw.githubusercontent.com/mapbox/mapbox-maps-android/v$android_sdk_version/LICENSE.md"
+if [ ! -f "$android_license_path" ]; then
+  echo "Error: Android LICENSE.md not found at $android_license_path"
+  exit 1
 fi
 
-ios_license_content=$(curl -s "$ios_license_url")
-android_license_content=$(curl -s "$android_license_url")
+ios_license_content=$(cat "$ios_license_path")
+android_license_content=$(cat "$android_license_path")
 
 current_year=$(date +%Y)
 
