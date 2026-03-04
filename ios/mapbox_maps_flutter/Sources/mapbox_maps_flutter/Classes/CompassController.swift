@@ -6,35 +6,36 @@ final class CompassController: CompassSettingsInterface {
 
     func updateSettings(settings: CompassSettings) throws {
         var compass = ornaments.options.compass
-        if let position = settings.position {
-            compass.position = toNativeOrnamentPosition(position)
+        switch settings.position {
+        case .bOTTOMLEFT:
+            compass.position = .bottomLeading
+            compass.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginBottom ?? 0)
+        case .bOTTOMRIGHT:
+            compass.position = .bottomTrailing
+            compass.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginBottom ?? 0)
+        case .tOPLEFT:
+            compass.position = .topLeading
+            compass.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginTop ?? 0)
+        case .tOPRIGHT, .none:
+            compass.position = .topTrailing
+            compass.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
-        compass.margins = margins.apply(
-            marginLeft: settings.marginLeft,
-            marginTop: settings.marginTop,
-            marginRight: settings.marginRight,
-            marginBottom: settings.marginBottom,
-            for: compass.position)
 
         if let data = settings.image?.data {
             compass.image = UIImage(data: data, scale: UIScreen.main.scale)
         }
 
-        // Apply `enabled` and `fadeWhenFacingNorth` independently so either can be
-        // changed on its own — matching the Android implementation (CompassMappings.kt).
-        // Previously visibility was only updated when `enabled` was non-nil, so
-        // `fadeWhenFacingNorth: false` was silently ignored on iOS and the compass
-        // kept fading at north.
-        if settings.enabled != nil || settings.fadeWhenFacingNorth != nil {
-            let current = compass.visibility
-            let enabled = settings.enabled ?? (current != .hidden)
-            let fadeWhenFacingNorth = settings.fadeWhenFacingNorth ?? (current == .adaptive)
+        if let visible = settings.enabled {
+            let fadeWhenFacingNorth = settings.fadeWhenFacingNorth ?? true
 
-            switch (enabled, fadeWhenFacingNorth) {
-            case (true, true):  compass.visibility = .adaptive
-            case (true, false): compass.visibility = .visible
-            case (false, _):    compass.visibility = .hidden
+            let visibility: OrnamentVisibility
+            switch (visible, fadeWhenFacingNorth) {
+            case (true, true): visibility = .adaptive
+            case (true, false): visibility = .visible
+            case (false, _): visibility = .hidden
             }
+
+            compass.visibility = visibility
         }
 
         ornaments.options.compass = compass
@@ -63,12 +64,12 @@ final class CompassController: CompassSettingsInterface {
         }
 
         return CompassSettings(
-            enabled: visibility,
+            enabled: true,
             position: position,
-            marginLeft: margins.left,
-            marginTop: margins.top,
-            marginRight: margins.right,
-            marginBottom: margins.bottom,
+            marginLeft: options.margins.x,
+            marginTop: options.margins.y,
+            marginRight: options.margins.x,
+            marginBottom: options.margins.y,
             opacity: 1,
             rotation: 0,
             visibility: visibility,
@@ -78,12 +79,23 @@ final class CompassController: CompassSettingsInterface {
         )
     }
 
+    func getFLT_SETTINGSOrnamentPosition(position: MapboxMaps.OrnamentPosition) -> OrnamentPosition {
+        switch position {
+        case .bottomLeading:
+            return .bOTTOMLEFT
+        case  .bottomTrailing:
+            return .bOTTOMRIGHT
+        case .topLeading:
+            return .tOPLEFT
+        default:
+            return.tOPRIGHT
+        }
+    }
+
     private var ornaments: OrnamentsManager
     private var cancelable: Cancelable?
-    private var margins: OrnamentMargins
 
     init(withMapView mapView: MapView) {
         self.ornaments = mapView.ornaments
-        self.margins = OrnamentMargins(seedingFrom: mapView.ornaments.options.compass.margins)
     }
 }

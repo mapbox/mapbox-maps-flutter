@@ -4,18 +4,21 @@ import Foundation
 final class LogoController: LogoSettingsInterface {
     func updateSettings(settings: LogoSettings) throws {
         var logo = ornaments.options.logo
-        if let position = settings.position {
-            logo.position = toNativeOrnamentPosition(position)
+        switch settings.position {
+        case .bOTTOMLEFT, .none:
+            logo.position = .bottomLeading
+            logo.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginBottom ?? 0)
+        case .bOTTOMRIGHT:
+            logo.position = .bottomTrailing
+            logo.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginBottom ?? 0)
+        case .tOPLEFT:
+            logo.position = .topLeading
+            logo.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginTop ?? 0)
+        case .tOPRIGHT:
+            logo.position = .topTrailing
+            logo.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
-        logo.margins = margins.apply(
-            marginLeft: settings.marginLeft,
-            marginTop: settings.marginTop,
-            marginRight: settings.marginRight,
-            marginBottom: settings.marginBottom,
-            for: logo.position)
-        if let enabled = settings.enabled {
-            logo.visibility = enabled ? .visible : .hidden
-        }
+        logo.visibility = (settings.enabled ?? true) ? .visible : .hidden
         ornaments.options.logo = logo
     }
 
@@ -25,19 +28,30 @@ final class LogoController: LogoSettingsInterface {
         return LogoSettings(
             enabled: options.visibility != .hidden,
             position: position,
-            marginLeft: margins.left,
-            marginTop: margins.top,
-            marginRight: margins.right,
-            marginBottom: margins.bottom
+            marginLeft: options.margins.x,
+            marginTop: options.margins.y,
+            marginRight: options.margins.x,
+            marginBottom: options.margins.y
         )
+    }
+
+    func getFLT_SETTINGSOrnamentPosition(position: MapboxMaps.OrnamentPosition) -> OrnamentPosition {
+        switch position {
+        case .bottomLeading:
+            return .bOTTOMLEFT
+        case  .bottomTrailing:
+            return .bOTTOMRIGHT
+        case .topLeading:
+            return .tOPLEFT
+        default:
+            return.tOPRIGHT
+        }
     }
 
     private var ornaments: OrnamentsManager
     private var cancelable: Cancelable?
-    private var margins: OrnamentMargins
 
     init(withMapView mapView: MapView) {
         self.ornaments = mapView.ornaments
-        self.margins = OrnamentMargins(seedingFrom: mapView.ornaments.options.logo.margins)
     }
 }

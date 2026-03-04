@@ -1,32 +1,8 @@
-### main
-
-* Add `ModelSource` API, exposing the 3D model source (a collection of 3D models, each with its own position, orientation, and node/material overrides).
-* Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
-* [iOS] Fix `updateSettings` on `CompassSettings`, `AttributionSettings`, `LogoSettings`, `IndoorSelectorSettings`, `ScaleBarSettings`, `GesturesSettings`, and `LocationComponentSettings` resetting omitted fields (position, margins, `enabled`, `scrollMode`, puck configuration) to defaults instead of preserving them, matching Android's partial-update behaviour.
-* [Android] Fix `LocationComponentSettings.updateSettings` dropping the previously configured 2D or 3D puck's settings when switching between puck types.
-
-### 2.27.0-rc.1
-
-* [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
-* [Android] Migrate to built-in Kotlin.
-* Add `MapboxMap.httpService.setCustomHeadersForHost` to attach custom HTTP headers to a single host only, and `MapboxMap.httpService.clearCustomHeaders` to remove all configured headers. Host-scoped headers are matched against the request's exact URL host (case-insensitive, no subdomain or substring matching).
-* Deprecate `MapboxMap.setCustomHeaders`: headers set this way are attached to every host the map fetches from — including third-party hosts referenced by styles, sources, sprites, glyphs and tiles — which can leak credentials. Use `setCustomHeadersForHost` instead.
-
-### 2.26.0
-
-* [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
-* [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
-
-### 2.25.0
-
-* Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
-* Add `MapboxMap.httpService.setMaxRequestsPerHost` to cap the number of concurrent HTTP requests per host issued by the underlying HTTP service. Useful for reducing the chance of hitting per-token rate limits during offline tile region downloads.
-
-### 2.24.0
+### 2.24.0-rc.1
 
 * Add `TileStore.setOptionForKey` to allow setting custom tile store options by arbitrary string key, in addition to the existing predefined options (`diskQuota`, `mapboxApiUrl`, `tileUrlTemplate`).
 
-### 2.23.0
+### 2.23.0-rc.1
 
 * Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
 * Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
@@ -96,8 +72,8 @@
 
 ### 2.12.0
 
-> [!NOTE]
-> This release adds support for Android 16KB page size requirements.
+> [!NOTE] 
+> This release adds support for Android 16KB page size requirements. 
 
 * Update Maps SDK to v11.16.0
   * Maps SDK Android dependency now includes NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
@@ -108,14 +84,14 @@
 
 * Update Maps SDK to v11.15.0
 * Fix map events not being called if annotations are presented
-* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format.
+* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format. 
 
 ### 2.10.0
 
 * Update Maps SDK to v11.14.0
   * Fixed FillExtrusionLayer flickering when transitioning between flat and globe projection
 * Fix crash when receiving annotation interactions.
-* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`.
+* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
 * Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
   Example usage:
   ```dart
@@ -175,12 +151,12 @@
   * `MapboxMap.removeFeatureStateForFeaturesetFeature`
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
-* Move experimental `modelElevationReference` property to `LocationPuck3D`.
+* Move experimental `modelElevationReference` property to `LocationPuck3D`. 
 * Fixed an issue where style expressions did not override constant values when both were present.
 * [ios] Fix crash when force unwrapping UIImage for point annotations.
 * Update MapboxMaps to v11.13.0
 
-### 2.8.0
+### 2.8.0 
 
 * Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
 * [Android] Fix color alpha value conversion.
@@ -643,7 +619,7 @@ Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldv
 * Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
 * [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
 * [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
-* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md) guide from the Flutter team.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/wiki/Android-Platform-Views) guide from the Flutter team.
 * [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
 * Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
 * Add `MapWidget.onResourceRequestListener` that can be used to subscribe to resource requests made by the map.
@@ -663,7 +639,7 @@ Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldv
 * Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
 * [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
 * [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
-* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md) guide from the Flutter team.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/wiki/Android-Platform-Views) guide from the Flutter team.
 * [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
 * Bump platform Maps SDK dependencies to 11.2.0-beta.1.
 

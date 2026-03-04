@@ -1,11 +1,10 @@
 import Flutter
+import MapboxMaps
 import MapboxCommon
 import MapboxCommon_Private
-import MapboxMaps
 
 final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
-    private static let mapCounter = FeatureTelemetryCounter.create(
-        forName: "maps-mobile/flutter/map")
+    private static let mapCounter = FeatureTelemetryCounter.create(forName: "maps-mobile/flutter/map")
 
     /// Set a MapView to be used by the next MapboxMapController instance
     /// created by this factory, instead of creating a new one internally.
@@ -48,13 +47,11 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 registrar: registrar,
                 pluginVersion: "",
                 eventTypes: [],
-                externalMapView: externalMapView,
-                isOpaque: true
+                externalMapView: externalMapView
             )
         }
 
         let styleURI = (args["styleUri"] as? String).map(StyleURI.init(rawValue:))
-        let isOpaque = args["isOpaque"] as? Bool
         let mapOptions = args["mapOptions"] as? MapOptions
         let cameraOptions = args["cameraOptions"] as? CameraOptions
 
@@ -72,8 +69,7 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             registrar: registrar,
             pluginVersion: args["mapboxPluginVersion"] as? String ?? "",
             eventTypes: args["eventTypes"] as? [Int] ?? [],
-            externalMapView: externalMapView,
-            isOpaque: isOpaque ?? true
+            externalMapView: externalMapView
         )
     }
 }

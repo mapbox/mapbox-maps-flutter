@@ -14,7 +14,7 @@ import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.generated.LocationComponentSettingsInterface
 import java.io.ByteArrayOutputStream
 
-fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean, cachedPuck2D: com.mapbox.maps.plugin.LocationPuck2D?, cachedPuck3D: com.mapbox.maps.plugin.LocationPuck3D?, context: Context) {
+fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean, context: Context) {
   updateSettings {
     settings.enabled?.let { this.enabled = it }
     settings.pulsingEnabled?.let { this.pulsingEnabled = it }
@@ -34,13 +34,9 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
       val puck2D = it.locationPuck2D
       val puck3D = it.locationPuck3D
       this.locationPuck = if (puck3D != null) {
-        // A 3D puck requires a modelUri to be constructed. On a partial update
-        // that omits it, reuse the active (or last-configured) 3D puck instead
-        // of requiring every call to resend it.
-        val existingPuck3D = this.locationPuck as? com.mapbox.maps.plugin.LocationPuck3D ?: cachedPuck3D
-        val resolvedModelUri = puck3D.modelUri ?: existingPuck3D?.modelUri
-          ?: throw IllegalArgumentException("modelUri must be provided the first time a 3D puck is configured.")
-        (existingPuck3D ?: com.mapbox.maps.plugin.LocationPuck3D(resolvedModelUri)).apply {
+        com.mapbox.maps.plugin.LocationPuck3D(
+          puck3D.modelUri!!
+        ).apply {
           puck3D.modelUri?.let { this.modelUri = it }
           puck3D.position?.let { this.position = it.mapNotNull { it?.toFloat() } }
           puck3D.modelOpacity?.let { this.modelOpacity = it.toFloat() }
@@ -56,16 +52,7 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
           puck3D.modelElevationReference?.let { this.modelElevationReference = it.toModelElevationReference() }
         }
       } else {
-        (
-          if (useDefaultPuck2DIfNeeded) {
-            createDefault2DPuck(withBearing = settings.puckBearingEnabled == true)
-          } else {
-            // Falls back to the last-configured 2D puck if a 3D puck is active.
-            this.locationPuck as? com.mapbox.maps.plugin.LocationPuck2D
-              ?: cachedPuck2D
-              ?: com.mapbox.maps.plugin.LocationPuck2D()
-          }
-          )
+        (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = settings.puckBearingEnabled == true) else com.mapbox.maps.plugin.LocationPuck2D())
           .apply {
             puck2D?.topImage?.let { this.topImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
             puck2D?.bearingImage?.let { this.bearingImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }

@@ -3,55 +3,18 @@ import UIKit
 import Flutter
 
 final class LocationController: _LocationComponentSettingsInterface {
-    // Native `puckType` conflates appearance with visibility (hiding == nil), so
-    // we track the real config here and only project it onto `puckType` while
-    // enabled, keeping `enabled` an independent setting as it is on Android.
-    private var isEnabled = false
-    private var puckType: PuckType?
-
-    // Native `puckType` drops the other type's config when switched, including
-    // pulsing/accuracy ring embedded in Puck2DConfiguration. Android keeps those
-    // independent, so we cache the last 2D config to carry them forward.
-    private var puck2DConfiguration: Puck2DConfiguration?
-
-    // Same idea for the 3D puck.
-    private var puck3DConfiguration: Puck3DConfiguration?
-
     func updateSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Bool) throws {
         do {
-            if let enabled = settings.enabled {
-                isEnabled = enabled
-            }
-
-            var options = mapView.location.options
-            options.puckType = puckType
-            options = try options.fromFLT_SETTINGSLocationComponentSettings(
+            mapView.location.options = try mapView.location.options.fromFLT_SETTINGSLocationComponentSettings(
                 settings: settings,
-                useDefaultPuck2DIfNeeded: useDefaultPuck2DIfNeeded,
-                puck2DConfiguration: puck2DConfiguration,
-                puck3DConfiguration: puck3DConfiguration)
-            puckType = options.puckType
-            if case .puck2D(let configuration) = options.puckType {
-                puck2DConfiguration = configuration
-            }
-            if case .puck3D(let configuration) = options.puckType {
-                puck3DConfiguration = configuration
-            }
-            options.puckType = isEnabled ? puckType : nil
-            mapView.location.options = options
+                useDefaultPuck2DIfNeeded: useDefaultPuck2DIfNeeded)
         } catch let settingsError {
-            // `details` must stay codec-serializable; a raw Swift error crashes
-            // the platform channel's reply encoder.
-            throw FlutterError(code: "0", message: settingsError.localizedDescription, details: nil)
+            throw FlutterError(code: "0", message: settingsError.localizedDescription, details: settingsError)
         }
     }
 
     func getSettings() throws -> LocationComponentSettings {
-        var options = mapView.location.options
-        options.puckType = puckType
-        var result = options.toFLT_SETTINGSLocationComponentSettings()
-        result.enabled = isEnabled
-        return result
+        return mapView.location.options.toFLT_SETTINGSLocationComponentSettings()
     }
 
     private let mapView: MapView
@@ -65,11 +28,9 @@ extension LocationOptions {
 
     func fromFLT_SETTINGSLocationComponentSettings(
         settings: LocationComponentSettings,
-        useDefaultPuck2DIfNeeded: Bool,
-        puck2DConfiguration: Puck2DConfiguration?,
-        puck3DConfiguration: Puck3DConfiguration?
+        useDefaultPuck2DIfNeeded: Bool
     ) throws -> LocationOptions {
-        var options = self
+        var options = LocationOptions()
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled
         }
@@ -78,41 +39,16 @@ extension LocationOptions {
             options.puckBearing = puckBearing
         }
 
-        if let puck3D = settings.locationPuck?.locationPuck3D {
-            // A 3D puck requires a model URI to be constructed. On a partial
-            // update that omits it, reuse the currently active 3D puck (if
-            // any) instead of requiring every call to resend it.
-            let existingConfiguration: Puck3DConfiguration? = {
-                if case .puck3D(let existing) = options.puckType {
-                    return existing
-                }
-                return nil
-            }()
-
-            var configuration: Puck3DConfiguration
-            if let existingConfiguration {
-                configuration = existingConfiguration
-            } else if let carryForward = puck3DConfiguration {
-                // No live 3D puck (e.g. 2D showing) - restore the last known one.
-                configuration = carryForward
-            } else {
-                guard let modelUri = puck3D.modelUri, let url = URL(string: modelUri) else {
-                    throw NSError(
-                        domain: "LocationController",
-                        code: 0,
-                        userInfo: [
-                            NSLocalizedDescriptionKey: "modelUri must be provided the first time a 3D puck is configured."
-                        ])
-                }
-                configuration = Puck3DConfiguration(model: Model(uri: url, position: puck3D.position?.compacted()))
-            }
-
-            if let modelUri = puck3D.modelUri, let url = URL(string: modelUri) {
-                configuration.model.uri = url
-            }
-            if let position = puck3D.position {
-                configuration.model.position = position.compacted()
-            }
+        if settings.enabled == false {
+            options.puckType = nil
+        } else if let puck3D = settings.locationPuck?.locationPuck3D {
+            let model = Model(
+                uri: puck3D.modelUri.flatMap(URL.init(string:)),
+                position: puck3D.position?.compacted()
+            )
+            var configuration = Puck3DConfiguration(
+                model: model
+            )
             if let opacity = puck3D.modelOpacity {
                 configuration.modelOpacity = .constant(opacity)
             }
@@ -120,7 +56,7 @@ extension LocationOptions {
                 configuration.modelScale = .constant(scale.compactMap { $0 })
             }
             if let scaleExpressionData = puck3D.modelScaleExpression?.data(using: .utf8) {
-                let decodedExpression = try JSONDecoder().decode(Expression.self, from: scaleExpressionData)
+                let decodedExpression = try! JSONDecoder().decode(Expression.self, from: scaleExpressionData)
                 configuration.modelScale = .expression(decodedExpression)
             }
             if let elevationReference = puck3D.modelElevationReference.flatMap(MapboxMaps.ModelElevationReference.init) {
@@ -129,111 +65,59 @@ extension LocationOptions {
             if let rotation = puck3D.modelRotation {
                 configuration.modelRotation = .constant(rotation.compactMap { $0 })
             }
+            if let slot = settings.slot {
+                configuration.slot = Slot(rawValue: slot)
+            }
             options.puckType = .puck3D(configuration)
-        } else {
-            let liveExistingConfiguration: Puck2DConfiguration? = {
-                if case .puck2D(let existing) = options.puckType {
-                    return existing
-                }
-                return nil
-            }()
-            let puck2D = settings.locationPuck?.locationPuck2D
+        } else if let puck2D = settings.locationPuck?.locationPuck2D {
+            var configuration = useDefaultPuck2DIfNeeded
+            ? Puck2DConfiguration.makeDefault(showBearing: options.puckBearingEnabled)
+            : Puck2DConfiguration()
 
-            // Touch the 2D puck only when configuring one, adjusting the active
-            // one, or nothing is configured yet; otherwise a live 3D puck is
-            // left alone since 2D-only settings don't apply to it.
-            if puck2D != nil || liveExistingConfiguration != nil || options.puckType == nil {
-                var configuration: Puck2DConfiguration
-                // Set when `configuration` is built fresh rather than reusing the
-                // live 2D puck, so pulsing/accuracy ring must be carried forward.
-                var needsCarryForward = false
-
-                if puck2D != nil && useDefaultPuck2DIfNeeded {
-                    // An explicit DefaultLocationPuck2D means "reset to the
-                    // built-in look", so rebuild rather than layer on top.
-                    configuration = Puck2DConfiguration.makeDefault(showBearing: options.puckBearingEnabled)
-                    needsCarryForward = true
-                } else if let liveExistingConfiguration {
-                    configuration = liveExistingConfiguration
-                } else {
-                    // No 2D puck active (a 3D puck is showing, or nothing set yet) -
-                    // restore the last known one if any.
-                    configuration = useDefaultPuck2DIfNeeded
-                    ? Puck2DConfiguration.makeDefault(showBearing: options.puckBearingEnabled)
-                    : (puck2DConfiguration ?? Puck2DConfiguration())
-                    needsCarryForward = true
-                }
-
-                if needsCarryForward, let carryForward = puck2DConfiguration {
-                    // Pulsing and accuracy ring are independent of the icon's
-                    // appearance, so they survive a reset or a detour through 3D.
-                    configuration.pulsing = carryForward.pulsing
-                    configuration.showsAccuracyRing = carryForward.showsAccuracyRing
-                    configuration.accuracyRingColor = carryForward.accuracyRingColor
-                    configuration.accuracyRingBorderColor = carryForward.accuracyRingBorderColor
-                }
-
-                if let topImage = puck2D?.topImage {
-                    configuration.topImage = UIImage(data: topImage.data, scale: UIScreen.main.scale)
-                }
-                if let bearingImage = puck2D?.bearingImage {
-                    configuration.bearingImage = UIImage(data: bearingImage.data, scale: UIScreen.main.scale)
-                }
-                if let shadowImage = puck2D?.shadowImage {
-                    configuration.shadowImage = UIImage(data: shadowImage.data, scale: UIScreen.main.scale)
-                }
-
-                if let scaleData = puck2D?.scaleExpression?.data(using: .utf8) {
-                    configuration.scale = try JSONDecoder().decode(Value<Double>.self, from: scaleData)
-                }
-                if let color = settings.accuracyRingColor {
-                    configuration.accuracyRingColor = uiColorFromHex(rgbValue: color)
-                }
-                if let color = settings.accuracyRingBorderColor {
-                    configuration.accuracyRingBorderColor = uiColorFromHex(rgbValue: color)
-                }
-                if let showAccuracyRing = settings.showAccuracyRing {
-                    configuration.showsAccuracyRing = showAccuracyRing
-                }
-                let pulsingEnabled = settings.pulsingEnabled ?? (configuration.pulsing != nil)
-                if pulsingEnabled {
-                    var pulsing = configuration.pulsing ?? Puck2DConfiguration.Pulsing()
-
-                    if let radius = settings.pulsingMaxRadius {
-                        // -1 indicates "accuracy" mode(from Android)
-                        pulsing.radius = radius == -1 ? .accuracy : .constant(Double(radius))
-                    }
-                    if let color = settings.pulsingColor {
-                        pulsing.color = uiColorFromHex(rgbValue: color)
-                    }
-                    configuration.pulsing = pulsing
-                } else {
-                    configuration.pulsing = nil
-                }
-
-                if let opacity = puck2D?.opacity {
-                    configuration.opacity = opacity
-                }
-
-                options.puckType = .puck2D(configuration)
+            if let topImage = puck2D.topImage {
+                configuration.topImage = UIImage(data: topImage.data, scale: UIScreen.main.scale)
             }
-        }
-
-        // slot applies to whichever puck type is active, regardless of
-        // whether this call also (re)configures the puck itself.
-        if let slot = settings.slot {
-            switch options.puckType {
-            case .puck2D(var configuration):
-                configuration.slot = Slot(rawValue: slot)
-                options.puckType = .puck2D(configuration)
-            case .puck3D(var configuration):
-                configuration.slot = Slot(rawValue: slot)
-                options.puckType = .puck3D(configuration)
-            case .none:
-                break
+            if let bearingImage = puck2D.bearingImage {
+                configuration.bearingImage = UIImage(data: bearingImage.data, scale: UIScreen.main.scale)
             }
-        }
+            if let shadowImage = puck2D.shadowImage {
+                configuration.shadowImage = UIImage(data: shadowImage.data, scale: UIScreen.main.scale)
+            }
 
+            if let scaleData = puck2D.scaleExpression?.data(using: .utf8) {
+                configuration.scale = try JSONDecoder().decode(Value<Double>.self, from: scaleData)
+            }
+            if let color = settings.accuracyRingColor {
+                configuration.accuracyRingColor = uiColorFromHex(rgbValue: color)
+            }
+            if let color = settings.accuracyRingBorderColor {
+                configuration.accuracyRingBorderColor = uiColorFromHex(rgbValue: color)
+            }
+            if let showAccuracyRing = settings.showAccuracyRing {
+                configuration.showsAccuracyRing = showAccuracyRing
+            }
+            if settings.pulsingEnabled ?? false {
+                var pulsing = Puck2DConfiguration.Pulsing()
+
+                if let radius = settings.pulsingMaxRadius {
+                    // -1 indicates "accuracy" mode(from Android)
+                    pulsing.radius = radius == -1 ? .accuracy : .constant(Double(radius))
+                }
+                if let color = settings.pulsingColor {
+                    pulsing.color = uiColorFromHex(rgbValue: color)
+                }
+                configuration.pulsing = pulsing
+            }
+
+            if let opacity = puck2D.opacity {
+                configuration.opacity = opacity
+            }
+            if let slot = settings.slot {
+                configuration.slot = Slot(rawValue: slot)
+            }
+
+            options.puckType = .puck2D(configuration)
+        }
         return options
     }
 

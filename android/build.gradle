@@ -35,16 +35,10 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
-
-// Kotlin is built into AGP 9+. For older AGP (Flutter < 3.44) the
-// 'kotlin-android' plugin must still be applied explicitly.
-def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0] as int
-if (agpMajor < 9) {
-    apply plugin: 'kotlin-android'
-}
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdk flutter.compileSdkVersion
+    compileSdk 35
 
     namespace 'com.mapbox.maps.mapbox_maps'
     sourceSets {
@@ -58,11 +52,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-}
 
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -74,7 +66,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 }
 
 dependencies {
-    implementation "com.mapbox.maps:android-ndk27:11.28.0-SNAPSHOT-07-22--02-03.git-6fe0102"
+    implementation "com.mapbox.maps:android-ndk27:11.25.0-SNAPSHOT-05-12--02-05.git-6dae5a9"
 
     implementation "androidx.annotation:annotation:1.5.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"

@@ -109,12 +109,12 @@ final class FollowPuckViewportState extends ViewportState {
   /// - [zoom]: The zoom level of the map. Defaults to `16.35`.
   /// - [bearing]: The bearing behavior of the map. Defaults to [FollowPuckViewportStateBearingHeading].
   /// - [pitch]: The pitch of the camera toward the horizon, in degrees. Defaults to `45`.
-  const FollowPuckViewportState(
-      {this.zoom = 16.35,
-      this.bearing = const FollowPuckViewportStateBearingHeading(),
-      this.pitch = 45,
-      this.padding})
-      : super();
+  const FollowPuckViewportState({
+    this.zoom = 16.35,
+    this.bearing = const FollowPuckViewportStateBearingHeading(),
+    this.pitch = 45,
+    this.padding
+  }) : super();
 }
 
 extension on FollowPuckViewportStateBearing {

@@ -1,5 +1,4 @@
 import Flutter
-import MapboxCommon
 @_spi(Experimental) import MapboxMaps
 import UIKit
 
@@ -29,21 +28,13 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         registrar: FlutterPluginRegistrar,
         pluginVersion: String,
         eventTypes: [Int],
-        externalMapView: MapView? = nil,
-        isOpaque: Bool = true
+        externalMapView: MapView? = nil
     ) {
         binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
-        // An injected MapView is owned/configured by the external caller, so init-only
-        // parameters below are skipped and only apply when we construct it ourselves.
-        if let externalMapView {
-            mapView = externalMapView
-        } else {
-            mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
-            mapView.isOpaque = isOpaque
-        }
+        mapView = externalMapView ?? MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
 
         channel = FlutterMethodChannel(
@@ -177,45 +168,10 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
             ))
             return
         }
-        let interceptor = CustomHttpServiceInterceptor.shared
-        interceptor.customHeaders = headers
-        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
+        let customInterceptor = CustomHttpServiceInterceptor()
+        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(customInterceptor)
+            customInterceptor.customHeaders = headers
         result(nil)
-
-        case "map#setCustomHeadersForHost":
-            guard let arguments = methodCall.arguments as? [String: Any],
-                  let host = arguments["host"] as? String, !host.isEmpty,
-                  let headers = arguments["headers"] as? [String: String]
-            else {
-                result(FlutterError(
-                    code: "setCustomHeadersForHost",
-                    message: "could not decode arguments",
-                    details: nil
-                ))
-                return
-            }
-            let interceptor = CustomHttpServiceInterceptor.shared
-            interceptor.setHeaders(headers, forHost: host)
-            HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
-            result(nil)
-
-        case "map#clearCustomHeaders":
-            CustomHttpServiceInterceptor.shared.clearAll()
-            result(nil)
-
-        case "map#setMaxRequestsPerHost":
-            guard let arguments = methodCall.arguments as? [String: Any],
-                  let max = arguments["max"] as? Int
-            else {
-                result(FlutterError(
-                    code: "setMaxRequestsPerHost",
-                    message: "could not decode arguments",
-                    details: nil
-                ))
-                return
-            }
-            HttpServiceFactory.setMaxRequestsPerHostForMax(UInt8(clamping: max))
-            result(nil)
 
         default:
             result(FlutterMethodNotImplemented)

@@ -5,15 +5,20 @@ final class ScaleBarController: ScaleBarSettingsInterface {
 
     func updateSettings(settings: ScaleBarSettings) throws {
         var scaleBar = ornaments.options.scaleBar
-        if let position = settings.position {
-            scaleBar.position = toNativeOrnamentPosition(position)
+        switch settings.position {
+        case .bOTTOMLEFT:
+            scaleBar.position = .bottomLeading
+            scaleBar.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginBottom ?? 0)
+        case .bOTTOMRIGHT:
+            scaleBar.position = .bottomTrailing
+            scaleBar.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginBottom ?? 0)
+        case .tOPLEFT, .none:
+            scaleBar.position = .topLeading
+            scaleBar.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginTop ?? 0)
+        case .tOPRIGHT:
+            scaleBar.position = .topTrailing
+            scaleBar.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
-        scaleBar.margins = margins.apply(
-            marginLeft: settings.marginLeft,
-            marginTop: settings.marginTop,
-            marginRight: settings.marginRight,
-            marginBottom: settings.marginBottom,
-            for: scaleBar.position)
         if let isMetric = settings.isMetricUnits {
             scaleBar.useMetricUnits = isMetric
         }
@@ -42,10 +47,10 @@ final class ScaleBarController: ScaleBarSettingsInterface {
         return ScaleBarSettings(
             enabled: ornaments.options.scaleBar.visibility != OrnamentVisibility.hidden,
             position: position,
-            marginLeft: margins.left,
-            marginTop: margins.top,
-            marginRight: margins.right,
-            marginBottom: margins.bottom,
+            marginLeft: options.margins.x,
+            marginTop: options.margins.y,
+            marginRight: options.margins.x,
+            marginBottom: options.margins.y,
             textColor: nil,
             primaryColor: nil,
             secondaryColor: nil,
@@ -62,12 +67,23 @@ final class ScaleBarController: ScaleBarSettingsInterface {
             useContinuousRendering: nil)
     }
 
+    func getFLT_SETTINGSOrnamentPosition(position: MapboxMaps.OrnamentPosition) -> OrnamentPosition {
+        switch position {
+        case .bottomLeading:
+            return .bOTTOMLEFT
+        case  .bottomTrailing:
+            return .bOTTOMRIGHT
+        case .topLeading:
+            return .tOPLEFT
+        default:
+            return.tOPRIGHT
+        }
+    }
+
     private var ornaments: OrnamentsManager
     private var cancelable: Cancelable?
-    private var margins: OrnamentMargins
 
     init(withMapView mapView: MapView) {
         self.ornaments = mapView.ornaments
-        self.margins = OrnamentMargins(seedingFrom: mapView.ornaments.options.scaleBar.margins)
     }
 }

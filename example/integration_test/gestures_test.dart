@@ -51,10 +51,6 @@ void main() {
     expect(updatedSettings.focalPoint?.x, settings.focalPoint?.x);
     expect(updatedSettings.focalPoint?.y, settings.focalPoint?.y);
     expect(updatedSettings.pinchPanEnabled, settings.pinchPanEnabled);
-    expect(
-      updatedSettings.scrollDecelerationEnabled,
-      settings.scrollDecelerationEnabled,
-    );
     if (Platform.isAndroid) {
       expect(updatedSettings.increaseRotateThresholdWhenPinchingToZoom,
           settings.increaseRotateThresholdWhenPinchingToZoom);
@@ -64,57 +60,10 @@ void main() {
           settings.pinchToZoomDecelerationEnabled);
       expect(updatedSettings.rotateDecelerationEnabled,
           settings.rotateDecelerationEnabled);
+      expect(updatedSettings.scrollDecelerationEnabled,
+          settings.scrollDecelerationEnabled);
       expect(updatedSettings.zoomAnimationAmount, settings.zoomAnimationAmount);
     }
-  });
-
-  testWidgets('scrollMode is preserved by an update that omits it',
-      (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    final gestures = mapboxMap.gestures;
-
-    await gestures.updateSettings(GesturesSettings(
-      rotateEnabled: false,
-      scrollDecelerationEnabled: false,
-    ));
-    final baseline = await gestures.getSettings();
-    expect(baseline.rotateEnabled, false);
-    expect(baseline.scrollDecelerationEnabled, false);
-
-    await gestures
-        .updateSettings(GesturesSettings(scrollDecelerationEnabled: true));
-    final updated = await gestures.getSettings();
-
-    expect(updated.scrollDecelerationEnabled, true);
-    expect(
-      updated.rotateEnabled,
-      baseline.rotateEnabled,
-      reason:
-          'A partial update only sets scrollDecelerationEnabled and must not reset rotateEnabled back to its default value.',
-    );
-  });
-
-  testWidgets(
-      'scrollMode is preserved by a partial update that changes an unrelated field',
-      (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    final gestures = mapboxMap.gestures;
-
-    final baseline = GesturesSettings(
-      scrollMode: ScrollMode.HORIZONTAL,
-      rotateEnabled: false,
-    );
-    await gestures.updateSettings(baseline);
-
-    final partialUpdate = GesturesSettings(rotateEnabled: true);
-    await gestures.updateSettings(partialUpdate);
-    final updatedSettings = await gestures.getSettings();
-    expect(updatedSettings.rotateEnabled, partialUpdate.rotateEnabled);
-    expect(updatedSettings.scrollMode, baseline.scrollMode);
   });
 
   testWidgets('RecognizeTapEvent', (WidgetTester tester) async {

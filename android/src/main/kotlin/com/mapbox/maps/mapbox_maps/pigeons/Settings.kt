@@ -108,7 +108,7 @@ enum class PuckBearing(val raw: Int) {
 
 /**
  * Defines scaling mode. Only applies to location-indicator type layers.
- * Default value: "viewport".
+ * Default value: "map".
  */
 enum class ModelScaleMode(val raw: Int) {
   /** Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover. */
@@ -418,7 +418,7 @@ data class LocationPuck3D(
   val modelReceiveShadows: Boolean? = null,
   /**
    * Defines scaling mode. Only applies to location-indicator type layers.
-   * Default value: "viewport".
+   * Default value: "map".
    */
   val modelScaleMode: ModelScaleMode? = null,
   /**
@@ -1376,16 +1376,7 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface GesturesSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): GesturesSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: GesturesSettings)
 
   companion object {
@@ -1439,16 +1430,7 @@ interface GesturesSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface _LocationComponentSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): LocationComponentSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean)
 
   companion object {
@@ -1503,16 +1485,7 @@ interface _LocationComponentSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface ScaleBarSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): ScaleBarSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: ScaleBarSettings)
 
   companion object {
@@ -1566,16 +1539,7 @@ interface ScaleBarSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface CompassSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): CompassSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: CompassSettings)
 
   companion object {
@@ -1629,16 +1593,7 @@ interface CompassSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface AttributionSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): AttributionSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: AttributionSettings)
 
   companion object {
@@ -1692,16 +1647,7 @@ interface AttributionSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface LogoSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): LogoSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: LogoSettings)
 
   companion object {
@@ -1755,16 +1701,7 @@ interface LogoSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface IndoorSelectorSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): IndoorSelectorSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: IndoorSelectorSettings)
 
   companion object {

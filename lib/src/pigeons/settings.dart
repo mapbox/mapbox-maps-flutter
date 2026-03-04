@@ -35,7 +35,7 @@ enum PuckBearing {
 }
 
 /// Defines scaling mode. Only applies to location-indicator type layers.
-/// Default value: "viewport".
+/// Default value: "map".
 enum ModelScaleMode {
   /// Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover.
   MAP,
@@ -366,7 +366,7 @@ class LocationPuck3D {
   bool? modelReceiveShadows;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
-  /// Default value: "viewport".
+  /// Default value: "map".
   ModelScaleMode? modelScaleMode;
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
@@ -1362,8 +1362,6 @@ class GesturesSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<GesturesSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1394,9 +1392,6 @@ class GesturesSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(GesturesSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -1441,8 +1436,6 @@ class _LocationComponentSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<LocationComponentSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1473,9 +1466,6 @@ class _LocationComponentSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(
       LocationComponentSettings settings, bool useDefaultPuck2DIfNeeded) async {
     final String pigeonVar_channelName =
@@ -1521,8 +1511,6 @@ class ScaleBarSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<ScaleBarSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1553,9 +1541,6 @@ class ScaleBarSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(ScaleBarSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -1600,8 +1585,6 @@ class CompassSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<CompassSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1632,9 +1615,6 @@ class CompassSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(CompassSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -1679,8 +1659,6 @@ class AttributionSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<AttributionSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1711,9 +1689,6 @@ class AttributionSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(AttributionSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -1758,8 +1733,6 @@ class LogoSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<LogoSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1790,9 +1763,6 @@ class LogoSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(LogoSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -1837,8 +1807,6 @@ class IndoorSelectorSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Returns the currently applied settings, populated with default
-  /// values for any fields not explicitly modified via [updateSettings].
   Future<IndoorSelectorSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -1869,9 +1837,6 @@ class IndoorSelectorSettingsInterface {
     }
   }
 
-  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-  ///
-  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(IndoorSelectorSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';

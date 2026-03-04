@@ -267,12 +267,10 @@ class MapboxMap extends ChangeNotifier {
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
-  late final MapboxHttpService httpService = MapboxHttpService(
+      late final MapboxHttpService httpService = MapboxHttpService(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _mapboxMapsPlatform.channelSuffix);
-  @Deprecated('Use [MapboxMap.addInteraction] instead')
   OnMapTapListener? onMapTapListener;
-  @Deprecated('Use [MapboxMap.addInteraction] instead')
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
   OnMapZoomListener? onMapZoomListener;
@@ -842,13 +840,11 @@ class MapboxMap extends ChangeNotifier {
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
   }
 
-  @Deprecated('Use [MapboxMap.addInteraction] instead')
   void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
     this.onMapTapListener = onMapTapListener;
     _setupGestures();
   }
 
-  @Deprecated('Use [MapboxMap.addInteraction] instead')
   void setOnMapLongTapListener(OnMapLongTapListener? onMapLongTapListener) {
     this.onMapLongTapListener = onMapLongTapListener;
     _setupGestures();
@@ -879,28 +875,27 @@ class MapboxMap extends ChangeNotifier {
   Future<void> setSnapshotLegacyMode(bool enable) =>
       _mapInterface.setSnapshotLegacyMode(enable);
 
-  /// Sets custom HTTP headers that are attached to every request the map makes,
-  /// regardless of host.
+  /// Set custom headers for all Mapbox HTTP requests
   ///
-  /// **Warning:** these headers are attached to every outgoing request,
-  /// including requests to third-party hosts referenced by the loaded style,
-  /// sources, sprites, glyphs and tiles. Placing a credential here can leak it
-  /// to hosts you do not control.
-  ///
-  /// Use `httpService.setCustomHeadersForHost` to attach headers to a specific
-  /// host only.
-  ///
-  /// [headers] is a map of header names to header values.
+  /// [headers] is a map of header names to header values
   ///
   /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails.
-  @Deprecated(
-      'Headers set this way are attached to every host the map fetches from, '
-      'including third-party hosts, which can leak credentials. Use '
-      'httpService.setCustomHeadersForHost to scope headers to a specific host.')
+  /// or if the operation fails
+  ///
+  /// Example:
+  /// ```dart
+  /// MapboxMap.setCustomHeaders({
+  ///   "Authorization": "Bearer your_secret_token",
+  /// });
+  /// ```
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available
+  /// or if the operation fails
   Future<void> setCustomHeaders(Map<String, String> headers) =>
-      // ignore: deprecated_member_use_from_same_package
-      httpService.setCustomHeaders(headers);
+      MapboxHttpService(
+              binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+              channelSuffix: _mapboxMapsPlatform.channelSuffix)
+          .setCustomHeaders(headers);
 }
 
 class _GestureListener extends GestureListener {

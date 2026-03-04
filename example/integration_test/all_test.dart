@@ -34,7 +34,6 @@ import 'style/layer/raster_particle_layer_test.dart'
     as raster_particle_layer_test;
 import 'style/layer/clip_layer_test.dart' as clip_layer_test;
 import 'style/source/geojson_source_test.dart' as geojson_source_test;
-import 'style/source/model_source_test.dart' as model_source_test;
 import 'style/source/image_source_test.dart' as image_source_test;
 import 'style/source/raster_source_test.dart' as raster_source_test;
 import 'style/source/rasterdem_source_test.dart' as rasterdem_source_test;
@@ -45,15 +44,12 @@ import 'location_test.dart' as location_test;
 import 'logo_test.dart' as logo_test;
 import 'attribution_test.dart' as attribution_test;
 import 'compass_test.dart' as compass_test;
-import 'indoor_selector_test.dart' as indoor_selector_test;
 import 'scale_bar_test.dart' as scale_bar_test;
-import 'http_service_test.dart' as http_service_test;
 import 'offline_test.dart' as offline_test;
 import 'snapshotter/snapshotter_test.dart' as snapshotter_test;
 import 'viewport_test.dart' as viewport_test;
 import 'interactive_features_test.dart' as interactive_features_test;
 import 'map_recorder_test.dart' as map_recorder_test;
-import 'is_opaque_test.dart' as is_opaque_test;
 
 void main() {
   // annotation tests
@@ -74,12 +70,10 @@ void main() {
   logo_test.main();
   attribution_test.main();
   compass_test.main();
-  indoor_selector_test.main();
   scale_bar_test.main();
 
   // offline_test
   offline_test.main();
-  http_service_test.main();
 
   // style tests
   style_test.main();
@@ -109,14 +103,12 @@ void main() {
   rasterarray_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
-  model_source_test.main();
 
   // snapshotter tests
   snapshotter_test.main();
 
   viewport_test.main();
   map_recorder_test.main();
-  is_opaque_test.main();
 
   // location test has to be at the bottom as on iOS it triggers location permission dialog
   // to be shown which makes tests that rely on QRF/QSF fail

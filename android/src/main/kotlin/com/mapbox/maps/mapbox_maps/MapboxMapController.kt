@@ -369,41 +369,6 @@ class MapboxMapController(
           result.error("HEADER_ERROR", e.message, null)
         }
       }
-      "map#setCustomHeadersForHost" -> {
-        try {
-          val host = call.argument<String>("host")
-          val headers = call.argument<Map<String, String>>("headers")
-          if (host.isNullOrEmpty() || headers == null) {
-            result.error("INVALID_ARGUMENTS", "host and headers cannot be null", null)
-          } else {
-            CustomHttpServiceInterceptor.getInstance().setCustomHeaders(host, headers)
-            result.success(null)
-          }
-        } catch (e: Exception) {
-          result.error("HEADER_ERROR", e.message, null)
-        }
-      }
-      "map#clearCustomHeaders" -> {
-        try {
-          CustomHttpServiceInterceptor.getInstance().clearCustomHeaders()
-          result.success(null)
-        } catch (e: Exception) {
-          result.error("HEADER_ERROR", e.message, null)
-        }
-      }
-      "map#setMaxRequestsPerHost" -> {
-        try {
-          val max = call.argument<Int>("max")
-          if (max == null) {
-            result.error("INVALID_ARGUMENTS", "max cannot be null", null)
-          } else {
-            com.mapbox.common.HttpServiceFactory.setMaxRequestsPerHost(max.toByte())
-            result.success(null)
-          }
-        } catch (e: Exception) {
-          result.error("MAX_REQUESTS_PER_HOST_ERROR", e.message, null)
-        }
-      }
       else -> {
         result.notImplemented()
       }

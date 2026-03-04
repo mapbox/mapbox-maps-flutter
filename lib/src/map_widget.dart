@@ -4,29 +4,29 @@ final _SuffixesRegistry _suffixesRegistry = _SuffixesRegistry._instance();
 
 /// A mode for platform MapView to be hosted in Flutter on Android platform.
 ///
-/// As per https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md
+/// As per https://github.com/flutter/flutter/wiki/Android-Platform-Views#selecting-a-mode
 @experimental
 enum AndroidPlatformViewHostingMode {
   /// Texture Layer Hybrid Composition with fallback to Virtual Display,
   /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
   ///
-  /// https://github.com/flutter/flutter/blob/master/docs/platforms/android/Texture-Layer-Hybrid-Composition.md
+  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
   TLHC_VD,
 
   /// Use Texture Layer Hybrid Composition hosting mode with fallback to Hybrid Composition,
   /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
   ///
-  /// https://github.com/flutter/flutter/blob/master/docs/platforms/android/Texture-Layer-Hybrid-Composition.md
+  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
   TLHC_HC,
 
   /// Always use Hybrid Composition hosting mode.
   ///
-  /// https://github.com/flutter/flutter/blob/master/docs/platforms/Hybrid-Composition.md
+  /// https://github.com/flutter/flutter/wiki/Hybrid-Composition
   HC,
 
   /// Always use Virtual Display hosting mode.
   ///
-  /// https://github.com/flutter/flutter/blob/master/docs/platforms/android/Virtual-Display.md
+  /// https://github.com/flutter/flutter/wiki/Virtual-Display
   VD,
 }
 
@@ -68,18 +68,14 @@ class MapWidget extends StatefulWidget {
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
-    @Deprecated('Use [MapboxMap.addInteraction] instead') this.onTapListener,
+    @Deprecated('Use [MapboxMap.addInteraction] instead')
+    this.onTapListener,
     @Deprecated('Use [MapboxMap.addInteraction] instead')
     this.onLongTapListener,
     this.onScrollListener,
     this.onZoomListener,
     this.viewport,
-    this.isOpaque = true,
-  }) : assert(
-          isOpaque != false || textureView != false,
-          'isOpaque: false requires textureView: true on Android. '
-          'SurfaceView cannot render a transparent background.',
-        );
+  });
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
@@ -185,14 +181,6 @@ class MapWidget extends StatefulWidget {
   /// ```
   final ViewportState? viewport;
 
-  /// Whether the map is rendered as opaque. Only has an effect on iOS —
-  /// on Android, a transparent background requires [MapWidget.textureView]
-  /// to be `true` (the default).
-  ///
-  /// Defaults to `true`. Set to `false` (together with a transparent style)
-  /// to render a transparent map background.
-  final bool? isOpaque;
-
   @Deprecated('Use [MapboxMap.addInteraction] instead')
   final OnMapTapListener? onTapListener;
   @Deprecated('Use [MapboxMap.addInteraction] instead')
@@ -227,7 +215,6 @@ class _MapWidgetState extends State<MapWidget> {
       'channelSuffix': _mapboxMapsPlatform.channelSuffix,
       'mapboxPluginVersion': mapboxPluginVersion,
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
-      'isOpaque': widget.isOpaque,
     };
     _events.subscribedEventTypes = _events.eventTypes;
 
