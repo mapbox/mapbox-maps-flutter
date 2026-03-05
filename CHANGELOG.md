@@ -1,4 +1,4 @@
-### main
+### 2.20.0-rc.1
 
 * Add experimental `shadowDrawBeforeLayer` property to directional light to allow specifying the position in the layer stack for drawing shadows on the ground.
 * Introduce new `LineLayer.lineElevationGroundScale` property to scale elevated lines with terrain exaggeration.
