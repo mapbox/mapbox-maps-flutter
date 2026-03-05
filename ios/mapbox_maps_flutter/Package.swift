@@ -3,6 +3,12 @@
 
 import PackageDescription
 
+let mapboxMapsVersion: Version = "11.21.0-rc.1-SNAPSHOT-03-05--04-54.git-a72f5d4"
+
+let mapboxMapsPackage = mapboxMapsVersion.description.contains("SNAPSHOT")
+    ? "mapbox-maps-ios-binary"
+    : "mapbox-maps-ios"
+
 let package = Package(
     name: "mapbox_maps_flutter",
     platforms: [
@@ -12,13 +18,13 @@ let package = Package(
         .library(name: "mapbox-maps-flutter", targets: ["mapbox_maps_flutter"])
     ],
     dependencies: [
-        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.20.0-rc.1")
+        .package(url: "https://github.com/mapbox/\(mapboxMapsPackage).git", exact: mapboxMapsVersion)
     ],
     targets: [
         .target(
             name: "mapbox_maps_flutter",
             dependencies: [
-                .product(name: "MapboxMaps", package: "mapbox-maps-ios")
+                .product(name: "MapboxMaps", package: mapboxMapsPackage)
             ],
             resources: []
         )

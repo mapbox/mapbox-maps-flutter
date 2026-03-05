@@ -96,6 +96,7 @@ unlinked_spec.ds
 .fastlane/report.xml
 example/ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
 example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+ios/mapbox_maps_flutter/Package.resolved
 
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift
@@ -118,3 +119,5 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !**/Podfile.lock
 !**/example/pubspec.lock
+!example/android/gradlew
+!example/android/gradle/wrapper/gradle-wrapper.jar
