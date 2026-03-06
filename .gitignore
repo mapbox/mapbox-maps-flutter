@@ -34,6 +34,8 @@ migrate_working_dir/
 # iOS related
 **/ios/Flutter/flutter_assets/
 **/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/ephemeral/
+**/ios/**/Package.resolved
 
 # Android related
 **/android/.gradle/
@@ -62,3 +64,8 @@ migrate_working_dir/
 # Generated files
 **/.generated/
 **/generated_plugin_registrant.dart
+**/pubspec_overrides.yaml
+
+# Example apps should track their lock files for reproducible builds.
+!**/example/pubspec.lock
+!**/example/pubspec_overrides.yaml
