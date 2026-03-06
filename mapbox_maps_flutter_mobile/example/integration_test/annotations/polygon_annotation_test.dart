@@ -1,0 +1,149 @@
+// This file is generated.
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import '../empty_map_widget.dart' as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('create PolygonAnnotation', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+    var geometry = Polygon(coordinates: [
+      [
+        Position(-3.363937, -10.733102),
+        Position(1.754703, -19.716317),
+        Position(-15.747196, -21.085074),
+        Position(-3.363937, -10.733102)
+      ]
+    ]);
+
+    var polygonAnnotationOptions = PolygonAnnotationOptions(
+      geometry: geometry,
+      fillConstructBridgeGuardRail: true,
+      fillSortKey: 1.0,
+      fillBridgeGuardRailColor: Colors.red.value,
+      fillColor: Colors.red.value,
+      fillOpacity: 1.0,
+      fillOutlineColor: Colors.red.value,
+      fillPattern: "abc",
+      fillTunnelStructureColor: Colors.red.value,
+      fillZOffset: 1.0,
+      customData: {'foo': 'bar'},
+    );
+    final annotation = await manager.create(polygonAnnotationOptions);
+    var polygon = annotation.geometry;
+    expect(1, polygon.coordinates.length);
+    var points = polygon.coordinates.first;
+    expect(4, points.length);
+    expect(-3.363937, points.first.lng);
+    expect(-10.733102, points.first.lat);
+    expect(-3.363937, points.last.lng);
+    expect(-10.733102, points.last.lat);
+    expect(true, annotation.fillConstructBridgeGuardRail);
+    expect(1.0, annotation.fillSortKey);
+    expect(Colors.red.value, annotation.fillBridgeGuardRailColor);
+    expect(Colors.red.value, annotation.fillColor);
+    expect(1.0, annotation.fillOpacity);
+    expect(Colors.red.value, annotation.fillOutlineColor);
+    expect("abc", annotation.fillPattern);
+    expect(Colors.red.value, annotation.fillTunnelStructureColor);
+    expect(1.0, annotation.fillZOffset);
+    expect({'foo': 'bar'}, annotation.customData);
+  });
+
+  testWidgets('update and delete PolygonAnnotation',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+    var geometry = Polygon(coordinates: [
+      [
+        Position(-3.363937, -10.733102),
+        Position(1.754703, -19.716317),
+        Position(-15.747196, -21.085074),
+        Position(-3.363937, -10.733102)
+      ]
+    ]);
+
+    var polygonAnnotationOptions = PolygonAnnotationOptions(
+      geometry: geometry,
+    );
+    final annotation = await manager.create(polygonAnnotationOptions);
+    var polygon = annotation.geometry;
+    var newPolygon = Polygon(
+        coordinates: polygon.coordinates
+            .map((e) =>
+                e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList())
+            .toList());
+    annotation.geometry = newPolygon;
+    await manager.update(annotation);
+    await manager.delete(annotation);
+
+    for (var i = 0; i < 10; i++) {
+      await manager.create(polygonAnnotationOptions);
+    }
+
+    final annotations = await manager.getAnnotations();
+    expect(annotations.length, equals(10));
+
+    await manager.deleteAll();
+  });
+
+  testWidgets('deleteMulti PolygonAnnotation', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+    var geometry = Polygon(coordinates: [
+      [
+        Position(-3.363937, -10.733102),
+        Position(1.754703, -19.716317),
+        Position(-15.747196, -21.085074),
+        Position(-3.363937, -10.733102)
+      ]
+    ]);
+
+    var polygonAnnotationOptions = PolygonAnnotationOptions(
+      geometry: geometry,
+    );
+
+    // Create 10 annotations
+    var createdAnnotations = <PolygonAnnotation>[];
+    for (var i = 0; i < 10; i++) {
+      final annotation = await manager.create(polygonAnnotationOptions);
+      createdAnnotations.add(annotation);
+    }
+
+    var allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(10));
+
+    // Delete first 5 annotations
+    final toDelete = createdAnnotations.take(5).toList();
+    await manager.deleteMulti(toDelete);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(5));
+
+    // Delete remaining annotations plus some already deleted (partial deletion)
+    await manager.deleteMulti(createdAnnotations);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+
+    // Delete empty list should succeed
+    await manager.deleteMulti([]);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+  });
+}
+// End of generated file.

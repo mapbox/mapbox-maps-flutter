@@ -1,0 +1,26 @@
+# Allowed breaking changes
+#
+# Add any unique part of the breaking change line from dart-apitool output.
+# The part in quotes is usually enough (e.g., Method "setLineCutoutWidth" removed)
+#
+# Example:
+# ├─┬ Class PolylineAnnotationManager
+# │ ├── Method "setLineCutoutWidth" removed (CE10)
+# │ └── Method "getLineCutoutWidth" removed (CE10)
+# └─┬ Class LineLayer
+#   ├── Field "lineCutoutWidth" removed (CF01)
+#   ├── Field "lineCutoutWidthExpression" removed (CF01)
+#   └─┬ Constructor new
+#     ├── Parameter "lineCutoutWidth" removed (CE01)
+#     └── Parameter "lineCutoutWidthExpression" removed (CE01)
+
+# lineCutoutWidth removal - experimental property removed from native SDK
+├─┬ Class PolylineAnnotationManager
+│ ├── Method "setLineCutoutWidth" removed (CE10)
+│ └── Method "getLineCutoutWidth" removed (CE10)
+└─┬ Class LineLayer
+  ├── Field "lineCutoutWidth" removed (CF01)
+  ├── Field "lineCutoutWidthExpression" removed (CF01)
+  └─┬ Constructor new
+    ├── Parameter "lineCutoutWidth" removed (CE01)
+    └── Parameter "lineCutoutWidthExpression" removed (CE01)

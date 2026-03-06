@@ -1,0 +1,583 @@
+// This file is generated.
+package com.mapbox.maps.mapbox_maps.annotation
+
+import com.google.gson.Gson
+import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
+import toFLTFillElevationReference
+import toFLTFillTranslateAnchor
+import toFillElevationReference
+import toFillTranslateAnchor
+
+class PolygonAnnotationController(private val delegate: ControllerDelegate) : _PolygonAnnotationMessenger {
+  private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation>()
+  private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
+
+  override fun getAnnotations(
+    managerId: String,
+    callback: (Result<List<PolygonAnnotation>>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    callback(Result.success(manager.annotations.map { it.toFLTPolygonAnnotation() }))
+  }
+
+  override fun create(
+    managerId: String,
+    annotationOption: PolygonAnnotationOptions,
+    callback: (Result<PolygonAnnotation>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+      val annotation = manager.create(annotationOption.toPolygonAnnotationOptions())
+      annotationMap[annotation.id] = annotation
+      if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
+        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id)
+      } else {
+        managerCreateAnnotationMap[managerId]!!.add(annotation.id)
+      }
+      callback(Result.success(annotation.toFLTPolygonAnnotation()))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
+  override fun createMulti(
+    managerId: String,
+    annotationOptions: List<PolygonAnnotationOptions>,
+    callback: (Result<List<PolygonAnnotation>>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+      val annotations = manager.create(annotationOptions.map { it.toPolygonAnnotationOptions() })
+      annotations.forEach {
+        annotationMap[it.id] = it
+      }
+      if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
+        managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
+      } else {
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id }
+            .toList()
+        )
+      }
+      callback(Result.success(annotations.map { it.toFLTPolygonAnnotation() }.toMutableList()))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
+  override fun update(
+    managerId: String,
+    annotation: PolygonAnnotation,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+
+      if (!annotationMap.containsKey(annotation.id)) {
+        callback(Result.failure(Throwable("Annotation has not been added on the map: $annotation.")))
+        return
+      }
+      val originalAnnotation = updateAnnotation(annotation)
+
+      manager.update(originalAnnotation)
+      annotationMap[annotation.id] = originalAnnotation
+      callback(Result.success(Unit))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
+  override fun delete(
+    managerId: String,
+    annotation: PolygonAnnotation,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+
+      if (!annotationMap.containsKey(annotation.id)) {
+        callback(Result.failure(Throwable("Annotation has not been added on the map: $annotation.")))
+        return
+      }
+
+      manager.delete(
+        annotationMap[annotation.id]!!
+      )
+      annotationMap.remove(annotation.id)
+      managerCreateAnnotationMap[managerId]?.remove(annotation.id)
+      callback(Result.success(Unit))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
+  override fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+      managerCreateAnnotationMap[managerId]?.apply {
+        forEach { annotationMap.remove(it) }
+        clear()
+      }
+      manager.deleteAll()
+      callback(Result.success(Unit))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
+  override fun deleteMulti(
+    managerId: String,
+    annotations: List<PolygonAnnotation>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+
+      // Filter to only annotations that exist in the map
+      val nativeAnnotations = annotations.mapNotNull { annotation ->
+        annotationMap[annotation.id]
+      }
+
+      // Delete from native manager (only existing annotations)
+      if (nativeAnnotations.isNotEmpty()) {
+        manager.delete(nativeAnnotations)
+      }
+
+      // Clean up tracking maps (only for annotations that existed)
+      annotations.forEach { annotation ->
+        if (annotationMap.containsKey(annotation.id)) {
+          annotationMap.remove(annotation.id)
+          managerCreateAnnotationMap[managerId]?.remove(annotation.id)
+        }
+      }
+
+      callback(Result.success(Unit))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
+  private fun updateAnnotation(annotation: PolygonAnnotation): com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation {
+    val originalAnnotation = annotationMap[annotation.id]!!
+    annotation.geometry?.let {
+      originalAnnotation.geometry = it
+    }
+    annotation.fillConstructBridgeGuardRail?.let {
+      originalAnnotation.fillConstructBridgeGuardRail = it
+    }
+    annotation.fillSortKey?.let {
+      originalAnnotation.fillSortKey = it
+    }
+    annotation.fillBridgeGuardRailColor?.let {
+      originalAnnotation.fillBridgeGuardRailColorInt = it.toInt()
+    }
+    annotation.fillColor?.let {
+      originalAnnotation.fillColorInt = it.toInt()
+    }
+    annotation.fillOpacity?.let {
+      originalAnnotation.fillOpacity = it
+    }
+    annotation.fillOutlineColor?.let {
+      originalAnnotation.fillOutlineColorInt = it.toInt()
+    }
+    annotation.fillPattern?.let {
+      originalAnnotation.fillPattern = it
+    }
+    annotation.fillTunnelStructureColor?.let {
+      originalAnnotation.fillTunnelStructureColorInt = it.toInt()
+    }
+    annotation.fillZOffset?.let {
+      originalAnnotation.fillZOffset = it
+    }
+    annotation.customData?.let {
+      originalAnnotation.setData(Gson().toJsonTree(it))
+    }
+    return originalAnnotation
+  }
+
+  override fun setFillConstructBridgeGuardRail(
+    managerId: String,
+    fillConstructBridgeGuardRail: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillConstructBridgeGuardRail = fillConstructBridgeGuardRail
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillConstructBridgeGuardRail(
+    managerId: String,
+    callback: (Result<Boolean?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillConstructBridgeGuardRail
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillElevationReference(
+    managerId: String,
+    fillElevationReference: FillElevationReference,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillElevationReference = fillElevationReference.toFillElevationReference()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillElevationReference(
+    managerId: String,
+    callback: (Result<FillElevationReference?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillElevationReference
+    if (value != null) {
+      callback(Result.success(value.toFLTFillElevationReference()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillSortKey(
+    managerId: String,
+    fillSortKey: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillSortKey = fillSortKey
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillSortKey(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillSortKey
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillAntialias(
+    managerId: String,
+    fillAntialias: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillAntialias = fillAntialias
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillAntialias(
+    managerId: String,
+    callback: (Result<Boolean?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillAntialias
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillBridgeGuardRailColor(
+    managerId: String,
+    fillBridgeGuardRailColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillBridgeGuardRailColorInt = fillBridgeGuardRailColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillBridgeGuardRailColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillBridgeGuardRailColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillColor(
+    managerId: String,
+    fillColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillColorInt = fillColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillEmissiveStrength(
+    managerId: String,
+    fillEmissiveStrength: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillEmissiveStrength = fillEmissiveStrength
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillEmissiveStrength(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillOpacity(
+    managerId: String,
+    fillOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillOpacity = fillOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillOpacity
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillOutlineColor(
+    managerId: String,
+    fillOutlineColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillOutlineColorInt = fillOutlineColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillOutlineColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillOutlineColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillPattern(
+    managerId: String,
+    fillPattern: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillPattern = fillPattern
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillPattern(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillPattern
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillTranslate(
+    managerId: String,
+    fillTranslate: List<Double?>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillTranslate = fillTranslate.mapNotNull { it }
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillTranslate(
+    managerId: String,
+    callback: (Result<List<Double?>?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillTranslate
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillTranslateAnchor(
+    managerId: String,
+    fillTranslateAnchor: FillTranslateAnchor,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillTranslateAnchor = fillTranslateAnchor.toFillTranslateAnchor()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillTranslateAnchor(
+    managerId: String,
+    callback: (Result<FillTranslateAnchor?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTFillTranslateAnchor()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillTunnelStructureColor(
+    managerId: String,
+    fillTunnelStructureColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillTunnelStructureColorInt = fillTunnelStructureColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillTunnelStructureColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillTunnelStructureColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillZOffset(
+    managerId: String,
+    fillZOffset: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillZOffset = fillZOffset
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillZOffset(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillZOffset
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+}
+
+fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAnnotation(): PolygonAnnotation {
+  return PolygonAnnotation(
+    id = id,
+    geometry = geometry,
+    fillConstructBridgeGuardRail = fillConstructBridgeGuardRail,
+    fillSortKey = fillSortKey,
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    fillBridgeGuardRailColor = fillBridgeGuardRailColorInt?.toUInt()?.toLong(),
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    fillColor = fillColorInt?.toUInt()?.toLong(),
+    fillOpacity = fillOpacity,
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    fillOutlineColor = fillOutlineColorInt?.toUInt()?.toLong(),
+    fillPattern = fillPattern,
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    fillTunnelStructureColor = fillTunnelStructureColorInt?.toUInt()?.toLong(),
+    fillZOffset = fillZOffset,
+    customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
+  )
+}
+
+fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions {
+  val options = com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions()
+  this.geometry?.let {
+    options.withGeometry(it)
+  }
+  this.isDraggable?.let {
+    options.withDraggable(it)
+  }
+  this.fillConstructBridgeGuardRail?.let {
+    options.withFillConstructBridgeGuardRail(it)
+  }
+  this.fillSortKey?.let {
+    options.withFillSortKey(it)
+  }
+  this.fillBridgeGuardRailColor?.let {
+    options.withFillBridgeGuardRailColor(it.toInt())
+  }
+  this.fillColor?.let {
+    options.withFillColor(it.toInt())
+  }
+  this.fillOpacity?.let {
+    options.withFillOpacity(it)
+  }
+  this.fillOutlineColor?.let {
+    options.withFillOutlineColor(it.toInt())
+  }
+  this.fillPattern?.let {
+    options.withFillPattern(it)
+  }
+  this.fillTunnelStructureColor?.let {
+    options.withFillTunnelStructureColor(it.toInt())
+  }
+  this.fillZOffset?.let {
+    options.withFillZOffset(it)
+  }
+  this.customData?.let {
+    options.withData(Gson().toJsonTree(it))
+  }
+  return options
+}
+// End of generated file.

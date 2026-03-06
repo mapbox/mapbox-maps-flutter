@@ -1,0 +1,9 @@
+{
+  "id": "points",
+  "type": "symbol",
+  "source": "source",
+  "layout": {
+    "icon-image": "icon",
+    "icon-size": 1
+  }
+}
