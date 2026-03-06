@@ -22,11 +22,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-dependency_overrides:
-  mapbox_maps_flutter_platform_interface:
-    path: ../../mapbox_maps_flutter_platform_interface
-  mapbox_maps_flutter_mobile:
-    path: ../../mapbox_maps_flutter_mobile
-  mapbox_maps_flutter_web:
-    path: ../../mapbox_maps_flutter_web
