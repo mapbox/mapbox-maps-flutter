@@ -44,9 +44,6 @@ migrate_working_dir/
 **/android/app/outputs/
 **/android/app/release/
 
-# Web related
-**/web/
-
 # Windows related
 **/windows/flutter/
 **/windows/CMakeFiles/
