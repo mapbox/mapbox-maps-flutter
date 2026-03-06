@@ -4,8 +4,8 @@ version: 2.24.0-SNAPSHOT-05-12--02-05.git-6dae5a9
 homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.27.0"
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.1"
 
 resolution: workspace
 
