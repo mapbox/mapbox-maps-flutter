@@ -78,7 +78,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
-dependency_overrides:
-  mapbox_maps_flutter_platform_interface:
-    path: ../../mapbox_maps_flutter_platform_interface
