@@ -1,10 +1,11 @@
-### 2.20.0-rc.1
+### 2.20.0
 
 * Add experimental `shadowDrawBeforeLayer` property to directional light to allow specifying the position in the layer stack for drawing shadows on the ground.
 * Introduce new `LineLayer.lineElevationGroundScale` property to scale elevated lines with terrain exaggeration.
 * Promote elevated lines properties to stable: `LineLayer.lineZOffset` and `LineLayer.lineElevationReference`.
 * Add experimental `ModelLayer.modelAllowDensityReduction` property to disable density reduction in model layers.
 * Add `FollowPuckViewportState.padding` to control camera padding when following the user's location puck, allowing the puck to be offset from the viewport center (e.g. for navigation UIs where the puck should appear near the bottom of the screen).
+* Update Maps SDK to v11.20.0
 
 ### 2.19.1
 
