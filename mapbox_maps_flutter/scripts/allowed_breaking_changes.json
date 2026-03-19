@@ -1,0 +1,89 @@
+[
+  {
+    "changeDescription": "MapboxOptions: Method \"getAccessToken\" removed"
+  },
+  {
+    "changeDescription": "iOS platform removed",
+    "reason": "Mobile implementation is now consolidated in the endorsed package, mapbox_maps_flutter_mobile."
+  },
+  {
+    "changeDescription": "Android platform removed",
+    "reason": "Mobile implementation is now consolidated in the endorsed package, mapbox_maps_flutter_mobile."
+  },
+  {
+    "changeDescription": "Function \"wrapResponse\" removed",
+    "reason": "Pigeon utils are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Field \"pigeonMethodCodec\" removed",
+    "reason": "Pigeon utils are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"MapInterfaces_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"Settings_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"GestureListeners_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"MapRecorderMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"SnapshotterMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"LogBackend_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PerformaceStatistics_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"OfflineMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"ViewportInternal_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"Point\" removed",
+    "reason": "turf subclasses are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"Polygon\" removed",
+    "reason": "turf subclasses are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"LineString\" removed",
+    "reason": "turf subclasses are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Function \"convertToValidMap\" removed",
+    "reason": "turf utils are now defined in mapbox_maps_flutter_mobile"
+  }
+]
