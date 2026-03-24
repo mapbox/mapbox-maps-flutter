@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let mapboxMapsVersion: Version = "11.22.0"
+let mapboxMapsVersion: Version = "11.22.0-SNAPSHOT-03-24--04-59.git-b8d4dff"
 
 let mapboxMapsPackage = mapboxMapsVersion.description.contains("SNAPSHOT")
     ? "mapbox-maps-ios-binary"
