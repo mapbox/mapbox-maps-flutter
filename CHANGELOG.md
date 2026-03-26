@@ -1,5 +1,9 @@
 ### main
 
+### 2.18.1
+
+* Update Maps SDK to v11.18.3
+
 ### 2.18.0
 
 * Add `deleteMulti()` method to all annotation managers to enable batch deletion of annotations.
