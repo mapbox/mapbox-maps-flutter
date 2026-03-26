@@ -42,6 +42,10 @@ class MapboxMapFactory(
       styleUri = styleUri
     )
     mapCounter.increment()
+
+    val externalMapView = pendingMapView
+    pendingMapView = null
+
     return MapboxMapController(
       context,
       mapInitOptions,
@@ -49,12 +53,21 @@ class MapboxMapFactory(
       messenger,
       channelSuffix,
       pluginVersion,
-      eventTypes
+      eventTypes,
+      externalMapView = externalMapView
     )
   }
 
   companion object {
     @SuppressLint("RestrictedApi")
     private val mapCounter = FeatureTelemetryCounter.create("maps-mobile/flutter/map")
+
+    /**
+     * Set a MapView to be used by the next MapboxMapController instance
+     * created by this factory, instead of creating a new one internally.
+     * The value is consumed (set to null) after the next create() call.
+     */
+    @JvmStatic
+    var pendingMapView: com.mapbox.maps.MapView? = null
   }
 }

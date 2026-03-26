@@ -148,6 +148,18 @@ class MapboxMap extends ChangeNotifier {
     _setupGestures();
   }
 
+  /// Creates a [MapboxMap] instance connected to a native MapboxMapController
+  /// that has already been registered with the given [channelSuffix].
+  ///
+  /// This is used by plugins that create a native MapboxMapController
+  /// programmatically (e.g., navigation plugins that wrap their own MapView)
+  /// and need to expose the standard [MapboxMap] API to Dart.
+  static MapboxMap fromNativeController(int channelSuffix) {
+    return MapboxMap._(
+      mapboxMapsPlatform: _MapboxMapsPlatform.instance(channelSuffix),
+    );
+  }
+
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded Style]object.

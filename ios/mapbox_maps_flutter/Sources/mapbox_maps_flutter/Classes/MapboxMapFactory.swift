@@ -6,6 +6,12 @@ import MapboxCommon_Private
 final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     private static let mapCounter = FeatureTelemetryCounter.create(forName: "maps-mobile/flutter/map")
 
+    /// Set a MapView to be used by the next MapboxMapController instance
+    /// created by this factory, instead of creating a new one internally.
+    /// The value is consumed (set to nil) after the next create() call.
+    @MainActor
+    static var pendingMapView: MapView?
+
     var registrar: FlutterPluginRegistrar
 
     deinit {
@@ -27,6 +33,12 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         arguments args: Any?
     ) -> FlutterPlatformView {
 
+        let externalMapView = MainActor.assumeIsolated { () -> MapView? in
+            let view = Self.pendingMapView
+            Self.pendingMapView = nil
+            return view
+        }
+
         guard let args = args as? [String: Any] else {
             return MapboxMapController(
                 withFrame: frame,
@@ -34,7 +46,8 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 channelSuffix: 0,
                 registrar: registrar,
                 pluginVersion: "",
-                eventTypes: []
+                eventTypes: [],
+                externalMapView: externalMapView
             )
         }
 
@@ -55,7 +68,8 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             channelSuffix: args["channelSuffix"] as? Int ?? 0,
             registrar: registrar,
             pluginVersion: args["mapboxPluginVersion"] as? String ?? "",
-            eventTypes: args["eventTypes"] as? [Int] ?? []
+            eventTypes: args["eventTypes"] as? [Int] ?? [],
+            externalMapView: externalMapView
         )
     }
 }

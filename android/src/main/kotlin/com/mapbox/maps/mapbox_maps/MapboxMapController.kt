@@ -97,13 +97,15 @@ class MapboxMapController(
   messenger: BinaryMessenger,
   channelSuffix: Long,
   pluginVersion: String,
-  eventTypes: List<Long>
+  eventTypes: List<Long>,
+  externalMapView: MapView? = null
 ) : PlatformView,
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
 
-  private var mapView: FlutterMapView? = null
+  private var mapView: MapView? = null
   private var mapboxMap: MapboxMap? = null
+  private val ownsMapView: Boolean
 
   private val methodChannel: MethodChannel
   private val messenger: BinaryMessenger
@@ -190,7 +192,8 @@ class MapboxMapController(
     this.messenger = messenger
     this.channelSuffix = channelSuffix.toString()
 
-    val mapView = FlutterMapView(context, mapInitOptions)
+    val mapView = externalMapView ?: FlutterMapView(context, mapInitOptions)
+    ownsMapView = externalMapView == null
     val mapboxMap = mapView.mapboxMap
     this.mapView = mapView
     this.mapboxMap = mapboxMap
@@ -249,14 +252,16 @@ class MapboxMapController(
 
     onFlutterViewAttachedCalled = true
 
-    val context = flutterView.context
-    val shouldDestroyOnDestroy = when (context is FlutterActivity) {
-      true -> context.shouldDestroyEngineWithHost()
-      false -> true
-    }
-    lifecycleHelper = LifecycleHelper(lifecycleProvider.getLifecycle()!!, shouldDestroyOnDestroy)
+    if (ownsMapView) {
+      val context = flutterView.context
+      val shouldDestroyOnDestroy = when (context is FlutterActivity) {
+        true -> context.shouldDestroyEngineWithHost()
+        false -> true
+      }
+      lifecycleHelper = LifecycleHelper(lifecycleProvider.getLifecycle()!!, shouldDestroyOnDestroy)
 
-    mapView?.setViewTreeLifecycleOwner(lifecycleHelper)
+      mapView?.setViewTreeLifecycleOwner(lifecycleHelper)
+    }
   }
 
   override fun onFlutterViewDetached() {
@@ -264,9 +269,11 @@ class MapboxMapController(
 
     onFlutterViewAttachedCalled = false
 
-    lifecycleHelper?.dispose()
-    lifecycleHelper = null
-    mapView?.setViewTreeLifecycleOwner(null)
+    if (ownsMapView) {
+      lifecycleHelper?.dispose()
+      lifecycleHelper = null
+      mapView?.setViewTreeLifecycleOwner(null)
+    }
   }
 
   override fun dispose() {
@@ -277,7 +284,9 @@ class MapboxMapController(
     eventHandler.dispose()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
-    mapView?.setViewTreeLifecycleOwner(null)
+    if (ownsMapView) {
+      mapView?.setViewTreeLifecycleOwner(null)
+    }
     mapView = null
     mapboxMap = null
     methodChannel.setMethodCallHandler(null)

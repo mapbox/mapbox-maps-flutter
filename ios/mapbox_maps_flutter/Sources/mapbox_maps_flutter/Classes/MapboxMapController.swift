@@ -7,7 +7,7 @@ struct SuffixBinaryMessenger {
     let suffix: String
 }
 
-final class MapboxMapController: NSObject, FlutterPlatformView {
+public final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
     private let channel: FlutterMethodChannel
@@ -17,23 +17,24 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
 
-    func view() -> UIView {
+    public func view() -> UIView {
         return mapView
     }
 
-    init(
+    public init(
         withFrame frame: CGRect,
         mapInitOptions: MapInitOptions,
         channelSuffix: Int,
         registrar: FlutterPluginRegistrar,
         pluginVersion: String,
-        eventTypes: [Int]
+        eventTypes: [Int],
+        externalMapView: MapView? = nil
     ) {
         binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
-        mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
+        mapView = externalMapView ?? MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
 
         channel = FlutterMethodChannel(
