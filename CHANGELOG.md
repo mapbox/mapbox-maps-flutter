@@ -1,3 +1,7 @@
+### 2.19.2
+
+* Update Maps SDK to v11.19.2
+
 ### 2.19.1
 
 * [Android] Fix Gradle build failure when `SDK_REGISTRY_TOKEN` is not set in the environment or `gradle.properties`.
