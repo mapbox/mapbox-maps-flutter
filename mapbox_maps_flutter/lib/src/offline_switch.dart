@@ -8,6 +8,10 @@ class OfflineSwitch {
   @internal
   OfflineSwitch(this._impl);
 
+  static final OfflineSwitch shared = OfflineSwitch(
+    MapboxMapsFlutterPlatform.instance.offlineSwitch,
+  );
+
   /// Returns whether the Mapbox network stack is connected.
   Future<bool> get isMapboxStackConnected => _impl.isMapboxStackConnected;
 

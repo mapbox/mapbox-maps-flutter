@@ -10,13 +10,13 @@ final class MapboxOptions {
   /// For more information about public access tokens, see
   /// [Mapbox Access Tokens](https://docs.mapbox.com/help/getting-started/access-tokens/#public-tokens).
   static Future<String> get accessToken async {
-    return MapboxMapsFlutterPlatform.instance.getAccessToken();
+    return MapboxMapsFlutterPlatform.instance.mapboxOptions.getAccessToken();
   }
 
   /// The public access token that is used to access resources provided by Mapbox services.
   /// For more information about public access tokens, see
   /// [Mapbox Access Tokens](https://docs.mapbox.com/help/getting-started/access-tokens/#public-tokens).
   static void setAccessToken(String token) {
-    MapboxMapsFlutterPlatform.instance.setAccessToken(token);
+    MapboxMapsFlutterPlatform.instance.mapboxOptions.setAccessToken(token);
   }
 }
