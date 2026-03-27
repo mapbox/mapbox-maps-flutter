@@ -7,22 +7,26 @@ final _SnapshotterInstanceManager _snapshotterInstanceManager =
 ///
 /// Use a [Snapshotter] when you need to capture a static snapshot of a map without using the actual [MapWidget].
 /// You can configure the final result via [MapSnapshotOptions] upon construction time and then start the snapshot.
-final class Snapshotter {
+final class Snapshotter implements SnapshotterPlatformInterface {
   /// A `style` object that can be manipulated to set different styles for a snapshot.
   late StyleManager style;
 
   /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.
+  @override
   final OnStyleLoadedListener? onStyleLoadedListener;
 
   /// Invoked whenever the map load errors out.
+  @override
   final OnMapLoadErrorListener? onMapLoadErrorListener;
 
   /// Invoked when the requested style data has been loaded.
+  @override
   final OnStyleDataLoadedListener? onStyleDataLoadedListener;
 
   /// Invoked whenever a style has a missing image. This event is emitted when the Map renders visible tiles and
   /// one of the required images is missing in the sprite sheet. Subscriber has to provide the missing image
   /// by calling StyleManager#addStyleImage method.
+  @override
   final OnStyleImageMissingListener? onStyleImageMissingListener;
 
   late _SnapshotterMessenger _snapshotterMessenger;
@@ -93,6 +97,7 @@ final class Snapshotter {
 
   /// Disposes the snapshotter instance.
   /// The instance should not be used after calling this method.
+  @override
   Future<void> dispose() async {
     _finalizer.detach(this);
     await _snapshotterInstanceManager.tearDownSnapshotterForSuffix(
@@ -102,45 +107,56 @@ final class Snapshotter {
   }
 
   /// The current state of the snapshotter camera.
+  @override
   Future<CameraState> getCameraState() =>
       _snapshotterMessenger.getCameraState();
 
   /// Set the current state of the snapshotter camera.
+  @override
   Future<void> setCamera(CameraOptions cameraOptions) =>
       _snapshotterMessenger.setCamera(cameraOptions);
 
   /// The size of the snapshot image.
+  @override
   Future<Size?> getSize() async => _snapshotterMessenger.getSize();
 
   /// Set the size of the snapshot image.
+  @override
   Future<void> setSize(Size size) => _snapshotterMessenger.setSize(size);
 
   /// Request a new snapshot. If there is a pending snapshot request, it is cancelled automatically.
   /// Throws an error if the snapshot is cancelled.
+  @override
   Future<Uint8List?> start() async => _snapshotterMessenger.start();
 
   /// Cancel the current snapshot operation, if any. The callback passed to the start method
   /// is called with error parameter set.
+  @override
   Future<void> cancel() async => _snapshotterMessenger.cancel();
 
   /// Returns the coordinate bounds corresponding to a given `CameraOptions`
+  @override
   Future<CoordinateBounds> coordinateBounds(CameraOptions camera) =>
       _snapshotterMessenger.coordinateBounds(camera);
 
   /// Calculates a `CameraOptions` to fit a list of coordinates.
+  @override
   Future<CameraOptions> camera({
-    required List<Point> coordinates,
+    required List<turf.Point> coordinates,
     MbxEdgeInsets? padding,
     double? bearing,
     double? pitch,
   }) => _snapshotterMessenger.camera(
-    coordinates: coordinates,
+    coordinates: coordinates
+        .map((e) => Point(coordinates: e.coordinates, bbox: e.bbox))
+        .toList(),
     padding: padding,
     bearing: bearing,
     pitch: pitch,
   );
 
   /// Returns array of tile identifiers that cover current map camera.
+  @override
   Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>
       _snapshotterMessenger.tileCover(options);
 
@@ -152,5 +168,6 @@ final class Snapshotter {
   ///
   /// Note: Calling this API will affect all maps that use the same data path
   ///       and does not affect persistent map data like offline style packages.
+  @override
   Future<void> clearData() async => _snapshotterMessenger.clearData();
 }
