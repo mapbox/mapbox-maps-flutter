@@ -1,6 +1,9 @@
 part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
-base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
+base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
+    implements
+        MapboxMapsOptionsPlatformInterface,
+        MapboxOptionsPlatformInterface {
   @override
   Widget buildView({PlatformMapCreatedCallback? onMapCreated}) {
     // TODO(MAPSFLT-XXX): Forward onMapCreated once MapboxMap implements MapboxMapInterface.
@@ -54,9 +57,18 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
 
   @override
   Future<void> clearData() => MapboxMapsOptions.clearData();
-
+      
   /// Registers the platform implementation.
   static void registerWith() {
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterMobile();
   }
+  
+  @override
+  MapboxMapsOptionsPlatformInterface get mapboxMapsOptions => this;
+
+  @override
+  MapboxOptionsPlatformInterface get mapboxOptions => this;
+
+  @override
+  OfflineSwitchPlatformInterface get offlineSwitch => OfflineSwitch.shared;
 }

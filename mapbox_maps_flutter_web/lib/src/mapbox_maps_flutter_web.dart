@@ -9,7 +9,10 @@ import 'package:web/web.dart';
 
 const mapboxGlCss = 'https://api.mapbox.com/mapbox-gl-js/v3.11.1/mapbox-gl.css';
 
-base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
+base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
+    implements
+        MapboxOptionsPlatformInterface,
+        MapboxMapsOptionsPlatformInterface {
   /// Registers the platform implementation.
   static void registerWith(Registrar registrar) {
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterWeb();
@@ -18,7 +21,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
   late HTMLDivElement _mapElement;
 
   @override
-  Widget buildView({MapCreatedCallback? onMapCreated}) {
+  Widget buildView({PlatformMapCreatedCallback? onMapCreated}) {
     final viewType = 'mapbox-maps-flutter-web/$hashCode';
 
     // Attach the mapDiv to the DOM
@@ -104,4 +107,14 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
 
   @override
   Future<void> clearData() => throw UnimplementedError('clearData() is not implemented on web.');
+  
+  @override
+  MapboxMapsOptionsPlatformInterface get mapboxMapsOptions => this;
+  
+  @override
+  MapboxOptionsPlatformInterface get mapboxOptions => this;
+
+  @override
+  OfflineSwitchPlatformInterface get offlineSwitch =>
+      throw UnsupportedError('offlineSwitch is not supported on web.');
 }
