@@ -11,7 +11,7 @@ import 'indoor_selector_settings.dart';
 import 'location_settings.dart';
 import 'logo_settings.dart';
 import 'scale_bar_settings.dart';
-import 'style.dart';
+import 'style_manager.dart';
 
 /// User-facing controller for a Mapbox map instance.
 ///
@@ -26,7 +26,7 @@ class MapboxMap implements MapboxMapInterface {
   // ===== Sub-interfaces =====
 
   /// Provides access to the map's style APIs.
-  late final Style style = Style(_impl.style);
+  late final StyleManager style = StyleManager(_impl.style);
 
   /// Provides access to gesture configuration.
   late final GesturesSettingsManager gestures = GesturesSettingsManager(

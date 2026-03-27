@@ -5487,7 +5487,7 @@ class Settings {
 }
 
 /// Interface for managing style of the `map`.
-class StyleManager {
+class StyleManager implements StylePlatformInterface {
   /// Constructor for [StyleManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -5508,6 +5508,7 @@ class StyleManager {
   /// Get the URI of the current style in use.
   ///
   /// @return A string containing a style URI.
+  @override
   Future<String> getStyleURI() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleURI$pigeonVar_messageChannelSuffix';
@@ -5544,6 +5545,7 @@ class StyleManager {
   /// `MapLoaded` or `MapLoadingError` events. In case of successful style load, `StyleLoaded` event will be also emitted.
   ///
   /// @param uri URI where the style should be loaded from.
+  @override
   Future<void> setStyleURI(String uri) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleURI$pigeonVar_messageChannelSuffix';
@@ -5574,6 +5576,7 @@ class StyleManager {
   /// Get the JSON serialization string of the current style in use.
   ///
   /// @return A JSON string containing a serialized style.
+  @override
   Future<String> getStyleJSON() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleJSON$pigeonVar_messageChannelSuffix';
@@ -5607,6 +5610,7 @@ class StyleManager {
   /// Load the style from a provided JSON string.
   ///
   /// @param json A JSON string containing a serialized style.
+  @override
   Future<void> setStyleJSON(String json) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleJSON$pigeonVar_messageChannelSuffix';
@@ -5644,6 +5648,7 @@ class StyleManager {
   /// The style default camera is re-evaluated when a new style is loaded.
   ///
   /// @return The default `camera options` of the current style in use.
+  @override
   Future<CameraOptions> getStyleDefaultCamera() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleDefaultCamera$pigeonVar_messageChannelSuffix';
@@ -5682,6 +5687,7 @@ class StyleManager {
   /// The style transition is re-evaluated when a new style is loaded.
   ///
   /// @return The `transition options` of the current style in use.
+  @override
   Future<TransitionOptions> getStyleTransition() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTransition$pigeonVar_messageChannelSuffix';
@@ -5718,6 +5724,7 @@ class StyleManager {
   /// @param json The JSON string to be loaded directly as the import.
   /// @param config A map containing the configuration options of the import.
   /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  @override
   Future<void> addStyleImportFromJSON(
     String importId,
     String json, {
@@ -5756,6 +5763,7 @@ class StyleManager {
   /// @param uri URI of the import.
   /// @param config A map containing the configuration options of the import.
   /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  @override
   Future<void> addStyleImportFromURI(
     String importId,
     String uri, {
@@ -5795,6 +5803,7 @@ class StyleManager {
   /// @param importId Identifier of import to update.
   /// @param json The JSON string to be loaded directly as the import.
   /// @param config A map containing the configuration options of the import.
+  @override
   Future<void> updateStyleImportWithJSON(
     String importId,
     String json, {
@@ -5833,6 +5842,7 @@ class StyleManager {
   /// @param importId Identifier of import to update.
   /// @param uri URI of the import.
   /// @param config A map containing the configuration options of the import.
+  @override
   Future<void> updateStyleImportWithURI(
     String importId,
     String uri, {
@@ -5868,6 +5878,7 @@ class StyleManager {
   ///
   ///  @param importId Identifier of import to move.
   ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  @override
   Future<void> moveStyleImport(
     String importId,
     ImportPosition? importPosition,
@@ -5899,6 +5910,7 @@ class StyleManager {
   }
 
   /// Returns the list containing information about existing style import objects.
+  @override
   Future<List<StyleObjectInfo?>> getStyleImports() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports$pigeonVar_messageChannelSuffix';
@@ -5933,6 +5945,7 @@ class StyleManager {
   /// Removes an existing style import.
   ///
   /// @param importId Identifier of the style import to remove.
+  @override
   Future<void> removeStyleImport(String importId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport$pigeonVar_messageChannelSuffix';
@@ -5965,6 +5978,7 @@ class StyleManager {
   /// @param importId Identifier of the style import.
   ///
   /// Returns the style import schema, containing the default configurations for the style import.
+  @override
   Future<Object> getStyleImportSchema(String importId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema$pigeonVar_messageChannelSuffix';
@@ -6083,6 +6097,7 @@ class StyleManager {
   ///
   /// @param importId Identifier of the style import.
   /// @param configs A map of style import configurations.
+  @override
   Future<void> setStyleImportConfigProperties(
     String importId,
     Map<String, Object> configs,
@@ -6118,6 +6133,7 @@ class StyleManager {
   /// @param importId Identifier of the style import.
   /// @param config The style import config name.
   /// @param value The style import config value.
+  @override
   Future<void> setStyleImportConfigProperty(
     String importId,
     String config,
@@ -6154,6 +6170,7 @@ class StyleManager {
   /// The style transition is re-evaluated when a new style is loaded.
   ///
   /// @param transitionOptions The `transition options`.
+  @override
   Future<void> setStyleTransition(TransitionOptions transitionOptions) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTransition$pigeonVar_messageChannelSuffix';
@@ -6305,6 +6322,7 @@ class StyleManager {
   /// @param layerId An identifier of the style layer to remove.
   ///
   /// @return A string describing an error if the operation was not successful, or empty otherwise.
+  @override
   Future<void> removeStyleLayer(String layerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleLayer$pigeonVar_messageChannelSuffix';
@@ -6339,6 +6357,7 @@ class StyleManager {
   ///                      is provided then the layer is moved to the top of the layerstack.
   ///
   /// @return A string describing an error if the operation was not successful, or empty otherwise.
+  @override
   Future<void> moveStyleLayer(
     String layerId,
     LayerPosition? layerPosition,
@@ -6374,6 +6393,7 @@ class StyleManager {
   /// @param layerId Style layer identifier.
   ///
   /// @return A `true` value if the given style layer exists, `false` otherwise.
+  @override
   Future<bool> styleLayerExists(String layerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleLayerExists$pigeonVar_messageChannelSuffix';
@@ -6409,6 +6429,7 @@ class StyleManager {
   /// Returns the existing style layers.
   ///
   /// @return The list containing the information about existing style layer objects.
+  @override
   Future<List<StyleObjectInfo?>> getStyleLayers() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers$pigeonVar_messageChannelSuffix';
@@ -6487,6 +6508,7 @@ class StyleManager {
   /// @param value The style layer property value.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleLayerProperty(
     String layerId,
     String property,
@@ -6521,6 +6543,7 @@ class StyleManager {
   /// Gets style layer properties.
   ///
   /// @return The style layer properties or a string describing an error if the operation was not successful.
+  @override
   Future<String> getStyleLayerProperties(String layerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperties$pigeonVar_messageChannelSuffix';
@@ -6562,6 +6585,7 @@ class StyleManager {
   /// @param properties A map of style layer properties.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleLayerProperties(
     String layerId,
     String properties,
@@ -6675,6 +6699,7 @@ class StyleManager {
   /// @param value The style source property value.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleSourceProperty(
     String sourceId,
     String property,
@@ -6711,6 +6736,7 @@ class StyleManager {
   /// @param sourceId A style source identifier.
   ///
   /// @return The style source properties or a string describing an error if the operation was not successful.
+  @override
   Future<String> getStyleSourceProperties(String sourceId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperties$pigeonVar_messageChannelSuffix';
@@ -6753,6 +6779,7 @@ class StyleManager {
   /// @param properties A map of Style source properties.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleSourceProperties(
     String sourceId,
     String properties,
@@ -6990,6 +7017,7 @@ class StyleManager {
   /// Removes an existing style source.
   ///
   /// @param sourceId An identifier of the style source to remove.
+  @override
   Future<void> removeStyleSource(String sourceId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleSource$pigeonVar_messageChannelSuffix';
@@ -7022,6 +7050,7 @@ class StyleManager {
   /// @param sourceId A style source identifier.
   ///
   /// @return `true` if the given source exists, `false` otherwise.
+  @override
   Future<bool> styleSourceExists(String sourceId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleSourceExists$pigeonVar_messageChannelSuffix';
@@ -7057,6 +7086,7 @@ class StyleManager {
   /// Returns the existing style sources.
   ///
   /// @return The list containing the information about existing style source objects.
+  @override
   Future<List<StyleObjectInfo?>> getStyleSources() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources$pigeonVar_messageChannelSuffix';
@@ -7267,6 +7297,7 @@ class StyleManager {
   /// @param properties A map of style terrain properties values, with their names as a key.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleTerrain(String properties) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrain$pigeonVar_messageChannelSuffix';
@@ -7456,6 +7487,7 @@ class StyleManager {
   /// @param imageId The identifier of the image to remove.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> removeStyleImage(String imageId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImage$pigeonVar_messageChannelSuffix';
@@ -7488,6 +7520,7 @@ class StyleManager {
   /// @param imageId The identifier of the image.
   ///
   /// @return True if image exists, false otherwise.
+  @override
   Future<bool> hasStyleImage(String imageId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.hasStyleImage$pigeonVar_messageChannelSuffix';
@@ -7705,6 +7738,7 @@ class StyleManager {
   /// Function to get the projection provided by the Style Extension.
   ///
   /// @return Projection that is currently applied to the map
+  @override
   Future<StyleProjection?> getProjection() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getProjection$pigeonVar_messageChannelSuffix';
@@ -7733,6 +7767,7 @@ class StyleManager {
   /// Function to set the projection provided by the Style Extension.
   ///
   /// @param projection The projection to be set.
+  @override
   Future<void> setProjection(StyleProjection projection) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection$pigeonVar_messageChannelSuffix';

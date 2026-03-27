@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 /// Manages the map's style, including layers, sources, images, and imports.
-class Style {
+class StyleManager {
   final StylePlatformInterface _impl;
 
   @internal
-  Style(this._impl);
+  StyleManager(this._impl);
 
   // ===== Style loading =====
 
@@ -76,8 +76,8 @@ class Style {
 
   /// Moves an import to a new position.
   Future<void> moveStyleImport(String importId,
-          {ImportPosition? importPosition}) =>
-      _impl.moveStyleImport(importId, importPosition: importPosition);
+          ImportPosition? importPosition) =>
+      _impl.moveStyleImport(importId, importPosition);
 
   /// Returns all current style imports.
   Future<List<StyleObjectInfo?>> getStyleImports() => _impl.getStyleImports();
@@ -105,8 +105,8 @@ class Style {
 
   /// Moves a style layer to a new position.
   Future<void> moveStyleLayer(String layerId,
-          {LayerPosition? layerPosition}) =>
-      _impl.moveStyleLayer(layerId, layerPosition: layerPosition);
+          LayerPosition? layerPosition) =>
+      _impl.moveStyleLayer(layerId, layerPosition);
 
   // ===== Sources =====
 

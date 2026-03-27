@@ -64,7 +64,7 @@ abstract interface class StylePlatformInterface {
   });
 
   /// Moves an import to a new position.
-  Future<void> moveStyleImport(String importId, {ImportPosition? importPosition});
+  Future<void> moveStyleImport(String importId, ImportPosition? importPosition);
 
   /// Returns all current style imports.
   Future<List<StyleObjectInfo?>> getStyleImports();
@@ -87,7 +87,7 @@ abstract interface class StylePlatformInterface {
   Future<void> removeStyleLayer(String layerId);
 
   /// Moves a style layer to a new position.
-  Future<void> moveStyleLayer(String layerId, {LayerPosition? layerPosition});
+  Future<void> moveStyleLayer(String layerId, LayerPosition? layerPosition);
 
   // ===== Sources =====
 
