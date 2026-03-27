@@ -1,7 +1,7 @@
 part of mapbox_maps_flutter_mobile;
 
 /// A service that handles HTTP-related functionality for Mapbox
-class MapboxHttpService {
+class MapboxHttpService implements MapboxHttpServicePlatformInterface {
   late final MethodChannel _channel;
   final BinaryMessenger binaryMessenger;
   final int channelSuffix;
@@ -28,6 +28,7 @@ class MapboxHttpService {
   ///
   /// Throws a [PlatformException] if the native implementation is not available
   /// or if the operation fails
+  @override
   Future<void> setCustomHeaders(Map<String, String> headers) async {
     try {
       await _channel.invokeMethod('map#setCustomHeaders', {'headers': headers});
