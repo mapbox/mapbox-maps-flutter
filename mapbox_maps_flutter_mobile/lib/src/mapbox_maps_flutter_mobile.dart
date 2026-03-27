@@ -57,12 +57,12 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
 
   @override
   Future<void> clearData() => MapboxMapsOptions.clearData();
-      
+
   /// Registers the platform implementation.
   static void registerWith() {
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterMobile();
   }
-  
+
   @override
   MapboxMapsOptionsPlatformInterface get mapboxMapsOptions => this;
 
