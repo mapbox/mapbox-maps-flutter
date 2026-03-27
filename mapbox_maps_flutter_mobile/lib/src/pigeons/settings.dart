@@ -117,7 +117,7 @@ class Settings_PigeonCodec extends StandardMessageCodec {
 }
 
 /// Gesture configuration allows to control the user touch interaction.
-class GesturesSettingsInterface {
+class GesturesSettingsInterface implements GesturesSettingsPlatformInterface {
   /// Constructor for [GesturesSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -135,6 +135,7 @@ class GesturesSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  @override
   Future<GesturesSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -165,6 +166,7 @@ class GesturesSettingsInterface {
     }
   }
 
+  @override
   Future<void> updateSettings(GesturesSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -274,7 +276,7 @@ class _LocationComponentSettingsInterface {
 }
 
 /// Shows the scale bar on the map.
-class ScaleBarSettingsInterface {
+class ScaleBarSettingsInterface implements ScaleBarSettingsPlatformInterface {
   /// Constructor for [ScaleBarSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -292,6 +294,7 @@ class ScaleBarSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  @override
   Future<ScaleBarSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -322,6 +325,7 @@ class ScaleBarSettingsInterface {
     }
   }
 
+  @override
   Future<void> updateSettings(ScaleBarSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -351,7 +355,7 @@ class ScaleBarSettingsInterface {
 }
 
 /// Shows the compass on the map.
-class CompassSettingsInterface {
+class CompassSettingsInterface implements CompassSettingsPlatformInterface {
   /// Constructor for [CompassSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -369,6 +373,7 @@ class CompassSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  @override
   Future<CompassSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -399,6 +404,7 @@ class CompassSettingsInterface {
     }
   }
 
+  @override
   Future<void> updateSettings(CompassSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -428,7 +434,8 @@ class CompassSettingsInterface {
 }
 
 /// Shows the attribution icon on the map.
-class AttributionSettingsInterface {
+class AttributionSettingsInterface
+    implements AttributionSettingsPlatformInterface {
   /// Constructor for [AttributionSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -446,6 +453,7 @@ class AttributionSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  @override
   Future<AttributionSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -476,6 +484,7 @@ class AttributionSettingsInterface {
     }
   }
 
+  @override
   Future<void> updateSettings(AttributionSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -505,7 +514,7 @@ class AttributionSettingsInterface {
 }
 
 /// Shows the Mapbox logo on the map.
-class LogoSettingsInterface {
+class LogoSettingsInterface implements LogoSettingsPlatformInterface {
   /// Constructor for [LogoSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -523,6 +532,7 @@ class LogoSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  @override
   Future<LogoSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -553,6 +563,7 @@ class LogoSettingsInterface {
     }
   }
 
+  @override
   Future<void> updateSettings(LogoSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
@@ -582,7 +593,8 @@ class LogoSettingsInterface {
 }
 
 /// Settings for the indoor floor selector.
-class IndoorSelectorSettingsInterface {
+class IndoorSelectorSettingsInterface
+    implements IndoorSelectorSettingsPlatformInterface {
   /// Constructor for [IndoorSelectorSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -600,6 +612,7 @@ class IndoorSelectorSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  @override
   Future<IndoorSelectorSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -630,6 +643,7 @@ class IndoorSelectorSettingsInterface {
     }
   }
 
+  @override
   Future<void> updateSettings(IndoorSelectorSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
