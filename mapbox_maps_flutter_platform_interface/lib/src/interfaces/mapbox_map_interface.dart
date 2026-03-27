@@ -4,105 +4,50 @@ import '../events.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
 import 'http_service_interface.dart';
-import 'location_interface.dart';
+import 'location_settings_interface.dart';
 import 'settings_interfaces.dart';
 import 'style_interface.dart';
+
+/// Marker interface for a MapboxMap instance.
+abstract interface class MapboxMapInterface {}
 
 /// Abstract per-instance controller for a Mapbox map.
 ///
 /// Both [mapbox_maps_flutter_mobile] and [mapbox_maps_flutter_web] must
 /// provide a concrete implementation that is returned via
 /// [MapboxMapsFlutterPlatform.buildView]'s `onMapCreated` callback.
-abstract interface class MapboxMapInterface {
+abstract interface class MapboxMapPlatformInterface implements MapboxMapInterface {
   // ===== Sub-interfaces =====
 
   /// Provides access to the map's style APIs.
-  StyleInterface get style;
+  StylePlatformInterface get style;
 
   /// Provides access to gesture configuration.
-  GesturesSettingsInterface get gestures;
+  GesturesSettingsPlatformInterface get gestures;
 
   /// Provides access to the user location indicator.
-  LocationInterface get location;
+  LocationSettingsPlatformInterface get location;
 
   /// Provides access to the scale bar ornament settings.
-  ScaleBarSettingsInterface get scaleBar;
+  ScaleBarSettingsPlatformInterface get scaleBar;
 
   /// Provides access to the compass ornament settings.
-  CompassSettingsInterface get compass;
+  CompassSettingsPlatformInterface get compass;
 
   /// Provides access to the attribution ornament settings.
-  AttributionSettingsInterface get attribution;
+  AttributionSettingsPlatformInterface get attribution;
 
   /// Provides access to the Mapbox logo ornament settings.
-  LogoSettingsInterface get logo;
+  LogoSettingsPlatformInterface get logo;
 
   /// Provides access to the indoor floor selector settings.
-  IndoorSelectorSettingsInterface get indoorSelector;
+  IndoorSelectorSettingsPlatformInterface get indoorSelector;
 
   /// Provides access to annotation manager creation.
-  AnnotationManagerInterface get annotations;
+  AnnotationManagerPlatformInterface get annotations;
 
   /// Provides access to HTTP request configuration.
-  MapboxHttpServiceInterface get httpService;
-
-  // ===== Map events =====
-
-  /// Invoked when the requested style has been fully loaded.
-  OnStyleLoadedListener? get onStyleLoadedListener;
-  set onStyleLoadedListener(OnStyleLoadedListener? listener);
-
-  /// Invoked whenever the camera position changes.
-  OnCameraChangeListener? get onCameraChangeListener;
-  set onCameraChangeListener(OnCameraChangeListener? listener);
-
-  /// Invoked when the map enters the idle state.
-  OnMapIdleListener? get onMapIdleListener;
-  set onMapIdleListener(OnMapIdleListener? listener);
-
-  /// Invoked when the map finishes loading.
-  OnMapLoadedListener? get onMapLoadedListener;
-  set onMapLoadedListener(OnMapLoadedListener? listener);
-
-  /// Invoked when the map encounters a loading error.
-  OnMapLoadErrorListener? get onMapLoadErrorListener;
-  set onMapLoadErrorListener(OnMapLoadErrorListener? listener);
-
-  /// Invoked when the map starts rendering a frame.
-  OnRenderFrameStartedListener? get onRenderFrameStartedListener;
-  set onRenderFrameStartedListener(OnRenderFrameStartedListener? listener);
-
-  /// Invoked when the map finishes rendering a frame.
-  OnRenderFrameFinishedListener? get onRenderFrameFinishedListener;
-  set onRenderFrameFinishedListener(OnRenderFrameFinishedListener? listener);
-
-  /// Invoked when a source is added to the style.
-  OnSourceAddedListener? get onSourceAddedListener;
-  set onSourceAddedListener(OnSourceAddedListener? listener);
-
-  /// Invoked when source data has been loaded.
-  OnSourceDataLoadedListener? get onSourceDataLoadedListener;
-  set onSourceDataLoadedListener(OnSourceDataLoadedListener? listener);
-
-  /// Invoked when a source is removed from the style.
-  OnSourceRemovedListener? get onSourceRemovedListener;
-  set onSourceRemovedListener(OnSourceRemovedListener? listener);
-
-  /// Invoked when style data has been loaded.
-  OnStyleDataLoadedListener? get onStyleDataLoadedListener;
-  set onStyleDataLoadedListener(OnStyleDataLoadedListener? listener);
-
-  /// Invoked when the style has a missing image.
-  OnStyleImageMissingListener? get onStyleImageMissingListener;
-  set onStyleImageMissingListener(OnStyleImageMissingListener? listener);
-
-  /// Invoked when a style image is no longer needed.
-  OnStyleImageUnusedListener? get onStyleImageUnusedListener;
-  set onStyleImageUnusedListener(OnStyleImageUnusedListener? listener);
-
-  /// Invoked when the map makes a resource request.
-  OnResourceRequestListener? get onResourceRequestListener;
-  set onResourceRequestListener(OnResourceRequestListener? listener);
+  MapboxHttpServicePlatformInterface get httpService;
 
   // ===== Gesture listeners =====
 
@@ -152,7 +97,7 @@ abstract interface class MapboxMapInterface {
   /// Returns camera options that fit the given coordinate [bounds].
   Future<CameraOptions> cameraForCoordinateBounds(
     CoordinateBounds bounds,
-    MbxEdgeInsets? padding,
+    MbxEdgeInsets padding,
     double? bearing,
     double? pitch,
     double? maxZoom,

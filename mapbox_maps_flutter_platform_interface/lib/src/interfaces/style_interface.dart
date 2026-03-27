@@ -5,7 +5,7 @@ import '../pigeons/platform_interface_data_types.dart';
 /// Implementations are provided by platform packages (mobile, web).
 /// Layer and source typed APIs are provided through the platform-specific
 /// style generators and will be unified in a future update.
-abstract interface class StyleInterface {
+abstract interface class StylePlatformInterface {
   // ===== Style loading =====
 
   /// Loads a style from a URI.
@@ -64,7 +64,7 @@ abstract interface class StyleInterface {
   });
 
   /// Moves an import to a new position.
-  Future<void> moveStyleImport(String importId, ImportPosition? importPosition);
+  Future<void> moveStyleImport(String importId, {ImportPosition? importPosition});
 
   /// Returns all current style imports.
   Future<List<StyleObjectInfo?>> getStyleImports();
@@ -87,7 +87,7 @@ abstract interface class StyleInterface {
   Future<void> removeStyleLayer(String layerId);
 
   /// Moves a style layer to a new position.
-  Future<void> moveStyleLayer(String layerId, LayerPosition? layerPosition);
+  Future<void> moveStyleLayer(String layerId, {LayerPosition? layerPosition});
 
   // ===== Sources =====
 
@@ -101,16 +101,6 @@ abstract interface class StyleInterface {
   Future<void> removeStyleSource(String sourceId);
 
   // ===== Images =====
-
-  /// Adds an image to the style.
-  Future<void> addStyleImage(
-    String imageId,
-    double scale,
-    List<int> pixels,
-    int width,
-    int height, {
-    bool sdf = false,
-  });
 
   /// Returns whether an image with the given id exists.
   Future<bool> hasStyleImage(String imageId);
@@ -128,9 +118,6 @@ abstract interface class StyleInterface {
 
   // ===== Low-level property access =====
 
-  /// Returns the value of a layer property as a JSON string.
-  Future<String> getStyleLayerProperty(String layerId, String property);
-
   /// Sets a layer property value from a JSON string.
   Future<void> setStyleLayerProperty(
     String layerId,
@@ -144,8 +131,8 @@ abstract interface class StyleInterface {
   /// Sets all properties of a layer from a JSON object string.
   Future<void> setStyleLayerProperties(String layerId, String properties);
 
-  /// Returns the value of a source property as a JSON string.
-  Future<String> getStyleSourceProperty(String sourceId, String property);
+  /// Returns all properties of a source as a JSON string.
+  Future<String> getStyleSourceProperties(String sourceId);
 
   /// Sets a source property value from a JSON string.
   Future<void> setStyleSourceProperty(
@@ -154,14 +141,8 @@ abstract interface class StyleInterface {
     Object value,
   );
 
-  /// Returns all properties of a source as a JSON string.
-  Future<String> getStyleSourceProperties(String sourceId);
-
   /// Sets all properties of a source from a JSON object string.
   Future<void> setStyleSourceProperties(String sourceId, String properties);
-
-  /// Returns the value of an import configuration property.
-  Future<Object> getStyleImportConfigProperty(String importId, String config);
 
   /// Sets an import configuration property value.
   Future<void> setStyleImportConfigProperty(
@@ -170,33 +151,13 @@ abstract interface class StyleInterface {
     Object value,
   );
 
-  /// Returns all configuration properties for an import.
-  Future<Map<String, Object?>> getStyleImportConfigProperties(String importId);
-
   /// Sets all configuration properties for an import from a map.
   Future<void> setStyleImportConfigProperties(
     String importId,
     Map<String, Object> configs,
   );
 
-  /// Sets the style atmosphere properties from a JSON string.
-  Future<void> setStyleAtmosphere(String properties);
-
-  /// Returns the style atmosphere properties as a JSON string.
-  Future<String> getStyleAtmosphere();
-
   /// Sets the style terrain from a JSON string.
   Future<void> setStyleTerrain(String properties);
 
-  /// Returns the style terrain as a JSON string.
-  Future<String> getStyleTerrain();
-
-  /// Returns the glyphs URL set on the current style.
-  Future<String> getStyleGlyphURL();
-
-  /// Sets the glyphs URL for the current style.
-  Future<void> setStyleGlyphURL(String glyphURL);
-
-  /// Returns the sprite URLs set on the current style.
-  Future<List<Map<String, Object?>>> getStyleSprite();
 }

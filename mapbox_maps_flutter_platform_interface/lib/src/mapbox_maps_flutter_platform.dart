@@ -6,7 +6,7 @@ import 'pigeons/platform_interface_data_types.dart';
 export 'events.dart';
 export 'interfaces/annotations_interface.dart';
 export 'interfaces/http_service_interface.dart';
-export 'interfaces/location_interface.dart';
+export 'interfaces/location_settings_interface.dart';
 export 'interfaces/mapbox_map_interface.dart';
 export 'interfaces/offline_interface.dart';
 export 'interfaces/settings_interfaces.dart';
@@ -91,9 +91,12 @@ abstract base class MapboxMapsFlutterPlatform {
   /// Builds a platform-specific widget for displaying the map.
   ///
   /// [onMapCreated] is called once the underlying map view is ready, providing
-  /// a [MapboxMapInterface] that callers use to interact with the map.
-  Widget buildView({MapCreatedCallback? onMapCreated});
+  /// a [MapboxMapPlatformInterface] that callers use to interact with the map.
+  Widget buildView({PlatformMapCreatedCallback? onMapCreated});
 }
 
 /// Callback signature invoked when a map instance is ready.
-typedef MapCreatedCallback = void Function(MapboxMapInterface mapboxMap);
+typedef MapboxMapCreatedCallback<T extends MapboxMapInterface> =
+    void Function(T mapboxMap);
+typedef PlatformMapCreatedCallback =
+    MapboxMapCreatedCallback<MapboxMapPlatformInterface>;

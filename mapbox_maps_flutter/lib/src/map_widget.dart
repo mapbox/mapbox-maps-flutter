@@ -1,6 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
+import 'mapbox_map.dart';
+
+typedef MapCreatedCallback = MapboxMapCreatedCallback<MapboxMap>;
+
 /// A widget that displays a Mapbox map using the Mapbox Maps Flutter SDK.
 ///
 /// You use this class to display map information and to manipulate the map contents from your application.
@@ -23,6 +27,10 @@ class MapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _platform.buildView(onMapCreated: onMapCreated);
+    return _platform.buildView(
+      onMapCreated: onMapCreated != null
+          ? (map) => onMapCreated!(MapboxMap(map))
+          : null,
+    );
   }
 }

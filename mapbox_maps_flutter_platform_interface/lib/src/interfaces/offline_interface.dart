@@ -3,7 +3,7 @@ import '../pigeons/platform_interface_data_types.dart';
 // ===== Abstract interfaces =====
 
 /// Abstract interface for managing offline style packages.
-abstract interface class OfflineManagerInterface {
+abstract interface class OfflineManagerPlatformInterface {
   /// Loads or updates a style package.
   Future<StylePack> loadStylePack(
     String styleURI,
@@ -25,7 +25,7 @@ abstract interface class OfflineManagerInterface {
 }
 
 /// Abstract interface for managing tile store downloads.
-abstract interface class TileStoreInterface {
+abstract interface class TileStorePlatformInterface {
   /// Loads or updates a tile region.
   Future<TileRegion> loadTileRegion(
     String id,
@@ -70,7 +70,7 @@ abstract interface class TileStoreInterface {
 }
 
 /// Abstract interface for controlling the Mapbox network stack connectivity.
-abstract interface class OfflineSwitchInterface {
+abstract interface class OfflineSwitchPlatformInterface {
   /// Returns whether the Mapbox network stack is connected.
   Future<bool> get isMapboxStackConnected;
 
