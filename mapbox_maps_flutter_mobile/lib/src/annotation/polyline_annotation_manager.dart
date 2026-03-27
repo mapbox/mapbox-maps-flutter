@@ -2,7 +2,8 @@
 part of mapbox_maps_flutter_mobile;
 
 /// The PolylineAnnotationManager to add/update/delete PolylineAnnotationAnnotations on the map.
-class PolylineAnnotationManager extends BaseAnnotationManager {
+class PolylineAnnotationManager extends BaseAnnotationManager
+    implements PolylineAnnotationManagerPlatformInterface {
   PolylineAnnotationManager._({
     required super.id,
     required super.messenger,

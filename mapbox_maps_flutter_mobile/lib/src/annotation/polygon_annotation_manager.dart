@@ -2,7 +2,8 @@
 part of mapbox_maps_flutter_mobile;
 
 /// The PolygonAnnotationManager to add/update/delete PolygonAnnotationAnnotations on the map.
-class PolygonAnnotationManager extends BaseAnnotationManager {
+class PolygonAnnotationManager extends BaseAnnotationManager
+    implements PolygonAnnotationManagerPlatformInterface {
   PolygonAnnotationManager._({
     required super.id,
     required super.messenger,
