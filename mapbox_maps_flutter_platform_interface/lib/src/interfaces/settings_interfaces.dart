@@ -1,31 +1,31 @@
 import '../pigeons/platform_interface_data_types.dart';
 
 /// Generic interface for reading and updating a map settings object of type [T].
-abstract interface class SettingsInterface<T> {
+abstract interface class SettingsPlatformInterface<T> {
   Future<T> getSettings();
   Future<void> updateSettings(T settings);
 }
 
 /// Interface for gesture configuration settings.
-abstract interface class GesturesSettingsInterface
-    implements SettingsInterface<GesturesSettings> {}
+abstract interface class GesturesSettingsPlatformInterface
+    implements SettingsPlatformInterface<GesturesSettings> {}
 
 /// Interface for scale bar ornament settings.
-abstract interface class ScaleBarSettingsInterface
-    implements SettingsInterface<ScaleBarSettings> {}
+abstract interface class ScaleBarSettingsPlatformInterface
+    implements SettingsPlatformInterface<ScaleBarSettings> {}
 
 /// Interface for compass ornament settings.
-abstract interface class CompassSettingsInterface
-    implements SettingsInterface<CompassSettings> {}
+abstract interface class CompassSettingsPlatformInterface
+    implements SettingsPlatformInterface<CompassSettings> {}
 
 /// Interface for attribution ornament settings.
-abstract interface class AttributionSettingsInterface
-    implements SettingsInterface<AttributionSettings> {}
+abstract interface class AttributionSettingsPlatformInterface
+    implements SettingsPlatformInterface<AttributionSettings> {}
 
 /// Interface for logo ornament settings.
-abstract interface class LogoSettingsInterface
-    implements SettingsInterface<LogoSettings> {}
+abstract interface class LogoSettingsPlatformInterface
+    implements SettingsPlatformInterface<LogoSettings> {}
 
 /// Interface for indoor floor selector settings.
-abstract interface class IndoorSelectorSettingsInterface
-    implements SettingsInterface<IndoorSelectorSettings> {}
+abstract interface class IndoorSelectorSettingsPlatformInterface
+    implements SettingsPlatformInterface<IndoorSelectorSettings> {}

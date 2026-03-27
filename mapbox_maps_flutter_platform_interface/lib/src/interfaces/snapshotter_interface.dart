@@ -10,7 +10,7 @@ import '../pigeons/platform_interface_data_types.dart';
 /// Use a snapshotter to capture a static image of a map without a live [MapWidget].
 /// Configure the result via [MapSnapshotOptions] at construction time, set the style,
 /// adjust the camera, and then call [start] to capture the image.
-abstract interface class SnapshotterInterface {
+abstract interface class SnapshotterPlatformInterface {
   /// Event listeners wired at construction time.
   OnStyleLoadedListener? get onStyleLoadedListener;
   OnMapLoadErrorListener? get onMapLoadErrorListener;

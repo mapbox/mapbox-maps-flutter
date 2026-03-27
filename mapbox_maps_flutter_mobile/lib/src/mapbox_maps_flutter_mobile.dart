@@ -2,7 +2,7 @@ part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
   @override
-  Widget buildView({MapCreatedCallback? onMapCreated}) {
+  Widget buildView({PlatformMapCreatedCallback? onMapCreated}) {
     // TODO(MAPSFLT-XXX): Forward onMapCreated once MapboxMap implements MapboxMapInterface.
     return MapWidget();
   }
