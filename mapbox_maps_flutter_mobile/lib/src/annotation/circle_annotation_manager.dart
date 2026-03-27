@@ -2,7 +2,8 @@
 part of mapbox_maps_flutter_mobile;
 
 /// The CircleAnnotationManager to add/update/delete CircleAnnotationAnnotations on the map.
-class CircleAnnotationManager extends BaseAnnotationManager {
+class CircleAnnotationManager extends BaseAnnotationManager
+    implements CircleAnnotationManagerPlatformInterface {
   CircleAnnotationManager._({
     required super.id,
     required super.messenger,

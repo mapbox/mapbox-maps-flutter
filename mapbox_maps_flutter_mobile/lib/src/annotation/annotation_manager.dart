@@ -1,6 +1,6 @@
 part of mapbox_maps_flutter_mobile;
 
-class AnnotationManager {
+class AnnotationManager implements AnnotationManagerPlatformInterface {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
@@ -10,6 +10,7 @@ class AnnotationManager {
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
   /// Use [below] to specify the id of the layer above the annotation layer.
+  @override
   Future<PointAnnotationManager> createPointAnnotationManager({
     String? id,
     String? below,
@@ -29,6 +30,7 @@ class AnnotationManager {
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
   /// Use [below] to specify the id of the layer above the annotation layer.
+  @override
   Future<CircleAnnotationManager> createCircleAnnotationManager({
     String? id,
     String? below,
@@ -48,6 +50,7 @@ class AnnotationManager {
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
   /// Use [below] to specify the id of the layer above the annotation layer.
+  @override
   Future<PolylineAnnotationManager> createPolylineAnnotationManager({
     String? id,
     String? below,
@@ -67,6 +70,7 @@ class AnnotationManager {
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
   /// Use [below] to specify the id of the layer above the annotation layer.
+  @override
   Future<PolygonAnnotationManager> createPolygonAnnotationManager({
     String? id,
     String? below,
@@ -83,11 +87,15 @@ class AnnotationManager {
   }
 
   /// Remove an [AnnotationManager] and all the annotations created by it.
-  Future<void> removeAnnotationManager(BaseAnnotationManager manager) async {
+  @override
+  Future<void> removeAnnotationManager(
+    BaseAnnotationManagerPlatformInterface manager,
+  ) async {
     return _mapboxMapsPlatform.removeAnnotationManager(manager.id);
   }
 
   /// Remove an [AnnotationManager] with the specified [id] and all the annotation created by it.
+  @override
   Future<void> removeAnnotationManagerById(String id) async {
     return _mapboxMapsPlatform.removeAnnotationManager(id);
   }
