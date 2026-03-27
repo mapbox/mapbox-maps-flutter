@@ -1,13 +1,14 @@
 part of mapbox_maps_flutter_mobile;
 
 /// Shows a location puck on the map.
-class LocationSettings {
+class LocationSettings implements LocationSettingsPlatformInterface {
   final _LocationComponentSettingsInterface _api;
 
   LocationSettings._(this._api);
 
   /// Returns [LocationComponentSettings] allowing to show location indicator on the map,
   /// customize indicator's appearance and position.
+  @override
   Future<LocationComponentSettings> getSettings() async {
     return _api.getSettings();
   }
@@ -16,6 +17,7 @@ class LocationSettings {
   /// indicator configuration changes.
   ///
   /// Note: By default [DefaultLocationPuck2D] is used if no [LocationComponentSettings.locationPuck] specified.
+  @override
   Future<void> updateSettings(LocationComponentSettings settings) async {
     if (settings.locationPuck == null) {
       // If locationPuck is not set, fallback to use DefaultLocationPuck2D.
