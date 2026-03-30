@@ -1,11 +1,11 @@
 part of mapbox_maps_flutter_mobile;
 
-final class Point extends turf.Point {
-  Point({super.bbox, required super.coordinates});
+extension type Point._(turf.Point _point) implements turf.Point {
+  Point({turf.BBox? bbox, required turf.Position coordinates})
+    : _point = turf.Point(bbox: bbox, coordinates: coordinates);
 
   factory Point.fromJson(Map<String, dynamic> json) {
-    final turfPoint = turf.Point.fromJson(json);
-    return Point(bbox: turfPoint.bbox, coordinates: turfPoint.coordinates);
+    return Point._(turf.Point.fromJson(json));
   }
 
   static Point decode(Object result) {
@@ -18,11 +18,12 @@ final class Point extends turf.Point {
   }
 }
 
-final class Polygon extends turf.Polygon {
-  Polygon({super.bbox, required super.coordinates});
+extension type Polygon._(turf.Polygon _polygon) implements turf.Polygon {
+  Polygon({turf.BBox? bbox, required List<List<turf.Position>> coordinates})
+    : _polygon = turf.Polygon(bbox: bbox, coordinates: coordinates);
 
-  Object encode() {
-    return [toJson()];
+  factory Polygon.fromJson(Map<String, dynamic> json) {
+    return Polygon._(turf.Polygon.fromJson(json));
   }
 
   static Polygon decode(Object result) {
@@ -30,20 +31,20 @@ final class Polygon extends turf.Polygon {
     return Polygon.fromJson((map as Map).cast<String, dynamic>());
   }
 
-  factory Polygon.fromJson(Map<String, dynamic> json) {
-    final polygon = turf.Polygon.fromJson(json);
-    return Polygon(bbox: polygon.bbox, coordinates: polygon.coordinates);
+  Object encode() {
+    return [toJson()];
   }
 
   Polygon.fromPoints({turf.BBox? bbox, required List<List<Point>> points})
-    : super.fromPoints(bbox: bbox, points: points);
+    : _polygon = turf.Polygon.fromPoints(bbox: bbox, points: points);
 }
 
-final class LineString extends turf.LineString {
-  LineString({super.bbox, required super.coordinates});
+extension type LineString._(turf.LineString _line) implements turf.LineString {
+  LineString({turf.BBox? bbox, required List<turf.Position> coordinates})
+    : _line = turf.LineString(bbox: bbox, coordinates: coordinates);
 
-  Object encode() {
-    return [toJson()];
+  factory LineString.fromJson(Map<String, dynamic> json) {
+    return LineString._(turf.LineString.fromJson(json));
   }
 
   static LineString decode(Object result) {
@@ -51,26 +52,34 @@ final class LineString extends turf.LineString {
     return LineString.fromJson((map as Map).cast<String, dynamic>());
   }
 
-  factory LineString.fromJson(Map<String, dynamic> json) {
-    final line = turf.LineString.fromJson(json);
-    return LineString(bbox: line.bbox, coordinates: line.coordinates);
+  Object encode() {
+    return [toJson()];
   }
 
   LineString.fromPoints({turf.BBox? bbox, required List<Point> points})
-    : super.fromPoints(bbox: bbox, points: points);
+    : _line = turf.LineString.fromPoints(bbox: bbox, points: points);
 }
 
-final class Feature extends turf.Feature {
+extension type Feature<T extends turf.GeometryObject>._(
+  turf.Feature<T> _feature
+)
+    implements turf.Feature<T> {
   Feature({
-    super.bbox,
-    required super.id,
-    super.properties,
-    required super.geometry,
-    super.fields,
-  });
+    turf.BBox? bbox,
+    required Object? id,
+    Map<String, Object?>? properties,
+    required T geometry,
+    Map<String, Object?>? fields,
+  }) : _feature = turf.Feature(
+         bbox: bbox,
+         id: id,
+         properties: properties,
+         geometry: geometry,
+         fields: fields ?? const {},
+       );
 
-  Object encode() {
-    return [toJson()];
+  factory Feature.fromJson(Map<String, dynamic> json) {
+    return Feature._(turf.Feature.fromJson(json));
   }
 
   static Feature decode(Object result) {
@@ -78,20 +87,13 @@ final class Feature extends turf.Feature {
     return Feature.fromJson(jsonDecode(result.first as String));
   }
 
+  Object encode() {
+    return [toJson()];
+  }
+
   factory Feature.fromFeature(Map<String?, Object?> feature) {
     var valid = convertToValidMap(feature as Map<Object?, Object?>);
     return Feature.fromJson(valid);
-  }
-
-  factory Feature.fromJson(Map<String, dynamic> json) {
-    final feature = turf.Feature.fromJson(json);
-    return Feature(
-      bbox: feature.bbox,
-      id: feature.id,
-      properties: feature.properties,
-      geometry: feature.geometry,
-      fields: feature.fields,
-    );
   }
 }
 

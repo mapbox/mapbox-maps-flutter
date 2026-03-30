@@ -17,5 +17,5 @@ export 'src/annotations_manager.dart';
 export 'src/offline_switch.dart';
 export 'src/tile_store.dart';
 export 'src/snapshotter.dart';
-export 'src/style.dart';
+export 'src/style_manager.dart';
 export 'src/mapbox_map.dart';
