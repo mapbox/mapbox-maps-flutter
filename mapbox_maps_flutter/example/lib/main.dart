@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
+import 'ornaments_example.dart';
 import 'simple_map_page.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class _Example {
 
 final _examples = [
   _Example(title: 'Simple Map View', builder: (_) => const SimpleMapPage()),
+  _Example(title: 'Ornaments', builder: (_) => const OrnamentsExample()),
 ];
 
 class MyApp extends StatelessWidget {

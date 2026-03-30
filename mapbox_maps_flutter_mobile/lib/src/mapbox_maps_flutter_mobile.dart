@@ -6,8 +6,7 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
         MapboxOptionsPlatformInterface {
   @override
   Widget buildView({PlatformMapCreatedCallback? onMapCreated}) {
-    // TODO(MAPSFLT-XXX): Forward onMapCreated once MapboxMap implements MapboxMapInterface.
-    return MapWidget();
+    return MapWidget(onMapCreated: onMapCreated);
   }
 
   @override
