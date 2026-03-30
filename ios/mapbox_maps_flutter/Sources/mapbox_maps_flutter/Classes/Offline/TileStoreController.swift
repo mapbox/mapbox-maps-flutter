@@ -26,11 +26,15 @@ final class TileStoreController: _TileStore {
         }
 
         tileStore.loadTileRegion(forId: id, loadOptions: loadOptions) { [weak self] progress in
-            guard let self else { return }
-            self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
+            }
         } completion: { [weak self] result in
-            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
-            self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
+            DispatchQueue.main.async {
+                completion(result.map { $0.toFLTTileRegion() })
+                self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
+            }
         }
     }
 
@@ -52,11 +56,15 @@ final class TileStoreController: _TileStore {
             forId: id,
             loadOptions: loadOptions,
             estimateOptions: estimateOptions.map(MapboxCommon.TileRegionEstimateOptions.init(fltValue:))) { [weak self] progress in
-                guard let self else { return }
-                self.tileRegionEstimateProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    self.tileRegionEstimateProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
+                }
             } completion: { [weak self] result in
-                executeOnMainThread(completion)(result.map { $0.toFLTTileRegionEstimateResult() })
-                self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
+                DispatchQueue.main.async {
+                    completion(result.map { $0.toFLTTileRegionEstimateResult() })
+                    self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
+                }
             }
     }
 

@@ -32,10 +32,14 @@ final class OfflineController: _OfflineManager {
         offlineManager.loadStylePack(
             for: styleURI,
             loadOptions: loadOptions) { [weak self] progress in
-                self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
+                DispatchQueue.main.async {
+                    self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
+                }
             } completion: { [weak self] result in
-                executeOnMainThread(completion)(result.map { $0.toFLTStylePack() })
-                self?.progressHandlers.removeValue(forKey: uri)
+                DispatchQueue.main.async {
+                    completion(result.map { $0.toFLTStylePack() })
+                    self?.progressHandlers.removeValue(forKey: uri)
+                }
             }
     }
 
