@@ -29,8 +29,7 @@ class StyleManager {
       _impl.getStyleDefaultCamera();
 
   /// Returns the current style transition options.
-  Future<TransitionOptions> getStyleTransition() =>
-      _impl.getStyleTransition();
+  Future<TransitionOptions> getStyleTransition() => _impl.getStyleTransition();
 
   /// Sets the style transition options.
   Future<void> setStyleTransition(TransitionOptions transitionOptions) =>
@@ -44,9 +43,12 @@ class StyleManager {
     String json, {
     Map<String, Object>? config,
     ImportPosition? importPosition,
-  }) =>
-      _impl.addStyleImportFromJSON(importId, json,
-          config: config, importPosition: importPosition);
+  }) => _impl.addStyleImportFromJSON(
+    importId,
+    json,
+    config: config,
+    importPosition: importPosition,
+  );
 
   /// Adds a new import to the current style from a URI.
   Future<void> addStyleImportFromURI(
@@ -54,30 +56,32 @@ class StyleManager {
     String uri, {
     Map<String, Object>? config,
     ImportPosition? importPosition,
-  }) =>
-      _impl.addStyleImportFromURI(importId, uri,
-          config: config, importPosition: importPosition);
+  }) => _impl.addStyleImportFromURI(
+    importId,
+    uri,
+    config: config,
+    importPosition: importPosition,
+  );
 
   /// Updates an existing import from a JSON string.
   Future<void> updateStyleImportWithJSON(
     String importId,
     String json, {
     Map<String, Object>? config,
-  }) =>
-      _impl.updateStyleImportWithJSON(importId, json, config: config);
+  }) => _impl.updateStyleImportWithJSON(importId, json, config: config);
 
   /// Updates an existing import from a URI.
   Future<void> updateStyleImportWithURI(
     String importId,
     String uri, {
     Map<String, Object>? config,
-  }) =>
-      _impl.updateStyleImportWithURI(importId, uri, config: config);
+  }) => _impl.updateStyleImportWithURI(importId, uri, config: config);
 
   /// Moves an import to a new position.
-  Future<void> moveStyleImport(String importId,
-          ImportPosition? importPosition) =>
-      _impl.moveStyleImport(importId, importPosition);
+  Future<void> moveStyleImport(
+    String importId,
+    ImportPosition? importPosition,
+  ) => _impl.moveStyleImport(importId, importPosition);
 
   /// Returns all current style imports.
   Future<List<StyleObjectInfo?>> getStyleImports() => _impl.getStyleImports();
@@ -104,8 +108,7 @@ class StyleManager {
       _impl.removeStyleLayer(layerId);
 
   /// Moves a style layer to a new position.
-  Future<void> moveStyleLayer(String layerId,
-          LayerPosition? layerPosition) =>
+  Future<void> moveStyleLayer(String layerId, LayerPosition? layerPosition) =>
       _impl.moveStyleLayer(layerId, layerPosition);
 
   // ===== Sources =====
@@ -146,8 +149,7 @@ class StyleManager {
     String layerId,
     String property,
     Object value,
-  ) =>
-      _impl.setStyleLayerProperty(layerId, property, value);
+  ) => _impl.setStyleLayerProperty(layerId, property, value);
 
   /// Returns all properties of a layer as a JSON string.
   Future<String> getStyleLayerProperties(String layerId) =>
@@ -166,8 +168,7 @@ class StyleManager {
     String sourceId,
     String property,
     Object value,
-  ) =>
-      _impl.setStyleSourceProperty(sourceId, property, value);
+  ) => _impl.setStyleSourceProperty(sourceId, property, value);
 
   /// Sets all properties of a source from a JSON object string.
   Future<void> setStyleSourceProperties(String sourceId, String properties) =>
@@ -178,15 +179,13 @@ class StyleManager {
     String importId,
     String config,
     Object value,
-  ) =>
-      _impl.setStyleImportConfigProperty(importId, config, value);
+  ) => _impl.setStyleImportConfigProperty(importId, config, value);
 
   /// Sets all configuration properties for an import from a map.
   Future<void> setStyleImportConfigProperties(
     String importId,
     Map<String, Object> configs,
-  ) =>
-      _impl.setStyleImportConfigProperties(importId, configs);
+  ) => _impl.setStyleImportConfigProperties(importId, configs);
 
   /// Sets the style terrain from a JSON string.
   Future<void> setStyleTerrain(String properties) =>

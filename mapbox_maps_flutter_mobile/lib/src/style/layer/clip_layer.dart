@@ -13,7 +13,6 @@ class ClipLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     List<String?>? this.clipLayerScope,
     List<Object>? this.clipLayerScopeExpression,
     List<String?>? this.clipLayerTypes,

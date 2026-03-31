@@ -13,7 +13,6 @@ class FillExtrusionLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     double? this.fillExtrusionEdgeRadius,
     List<Object>? this.fillExtrusionEdgeRadiusExpression,
     double? this.fillExtrusionAmbientOcclusionGroundAttenuation,

@@ -13,8 +13,7 @@ class AnnotationManager {
     String? id,
     String? below,
   }) async {
-    final impl =
-        await _impl.createPointAnnotationManager(id: id, below: below);
+    final impl = await _impl.createPointAnnotationManager(id: id, below: below);
     return PointAnnotationManager(impl);
   }
 
@@ -23,8 +22,10 @@ class AnnotationManager {
     String? id,
     String? below,
   }) async {
-    final impl =
-        await _impl.createCircleAnnotationManager(id: id, below: below);
+    final impl = await _impl.createCircleAnnotationManager(
+      id: id,
+      below: below,
+    );
     return CircleAnnotationManager(impl);
   }
 
@@ -33,8 +34,10 @@ class AnnotationManager {
     String? id,
     String? below,
   }) async {
-    final impl =
-        await _impl.createPolylineAnnotationManager(id: id, below: below);
+    final impl = await _impl.createPolylineAnnotationManager(
+      id: id,
+      below: below,
+    );
     return PolylineAnnotationManager(impl);
   }
 
@@ -43,8 +46,10 @@ class AnnotationManager {
     String? id,
     String? below,
   }) async {
-    final impl =
-        await _impl.createPolygonAnnotationManager(id: id, below: below);
+    final impl = await _impl.createPolygonAnnotationManager(
+      id: id,
+      below: below,
+    );
     return PolygonAnnotationManager(impl);
   }
 

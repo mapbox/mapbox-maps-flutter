@@ -13,7 +13,6 @@ class LineLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     LineCap? this.lineCap,
     List<Object>? this.lineCapExpression,
     double? this.lineCrossSlope,

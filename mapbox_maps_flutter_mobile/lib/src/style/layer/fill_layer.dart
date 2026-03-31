@@ -13,7 +13,6 @@ class FillLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     bool? this.fillConstructBridgeGuardRail,
     List<Object>? this.fillConstructBridgeGuardRailExpression,
     FillElevationReference? this.fillElevationReference,

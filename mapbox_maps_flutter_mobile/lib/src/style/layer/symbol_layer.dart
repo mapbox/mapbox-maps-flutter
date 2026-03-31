@@ -13,7 +13,6 @@ class SymbolLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     bool? this.iconAllowOverlap,
     List<Object>? this.iconAllowOverlapExpression,
     IconAnchor? this.iconAnchor,

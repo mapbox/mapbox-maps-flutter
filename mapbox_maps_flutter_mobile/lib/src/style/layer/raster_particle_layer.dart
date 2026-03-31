@@ -14,7 +14,6 @@ class RasterParticleLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     String? this.rasterParticleArrayBand,
     List<Object>? this.rasterParticleArrayBandExpression,
     int? this.rasterParticleColor,

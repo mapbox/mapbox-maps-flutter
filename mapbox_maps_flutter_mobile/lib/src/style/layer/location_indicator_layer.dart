@@ -11,7 +11,6 @@ class LocationIndicatorLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
-
     double? this.accuracyRadius,
     List<Object>? this.accuracyRadiusExpression,
     int? this.accuracyRadiusBorderColor,
