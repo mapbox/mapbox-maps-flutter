@@ -13,7 +13,6 @@ class HillshadeLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     int? this.hillshadeAccentColor,
     List<Object>? this.hillshadeAccentColorExpression,
     double? this.hillshadeEmissiveStrength,

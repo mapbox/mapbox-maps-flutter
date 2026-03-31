@@ -159,5 +159,4 @@ abstract interface class StylePlatformInterface {
 
   /// Sets the style terrain from a JSON string.
   Future<void> setStyleTerrain(String properties);
-
 }

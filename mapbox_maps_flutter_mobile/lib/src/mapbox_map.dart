@@ -373,8 +373,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     MbxEdgeInsets padding,
     double? bearing,
     double? pitch,
-  ) =>
-      _cameraManager.cameraForCoordinates(
+  ) => _cameraManager.cameraForCoordinates(
     coordinates
         .map((e) => Point(coordinates: e.coordinates, bbox: e.bbox))
         .toList(),
@@ -478,8 +477,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   @override
   Future<List<turf.Point?>> coordinatesForPixels(
     List<ScreenCoordinate?> pixels,
-  ) =>
-      _cameraManager.coordinatesForPixels(pixels);
+  ) => _cameraManager.coordinatesForPixels(pixels);
 
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
   /// The map will retain its current values for any details not passed via the camera options argument.

@@ -13,8 +13,7 @@ class OfflineManager {
     String styleURI,
     StylePackLoadOptions loadOptions,
     OnStylePackLoadProgressListener? progressListener,
-  ) =>
-      _impl.loadStylePack(styleURI, loadOptions, progressListener);
+  ) => _impl.loadStylePack(styleURI, loadOptions, progressListener);
 
   /// Removes a style package.
   Future<StylePack> removeStylePack(String styleURI) =>

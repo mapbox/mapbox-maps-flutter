@@ -13,8 +13,7 @@ class TileStore {
     String id,
     TileRegionLoadOptions loadOptions,
     OnTileRegionLoadProgressListener? progressListener,
-  ) =>
-      _impl.loadTileRegion(id, loadOptions, progressListener);
+  ) => _impl.loadTileRegion(id, loadOptions, progressListener);
 
   /// Estimates the storage and transfer size of a tile region.
   Future<TileRegionEstimateResult> estimateTileRegion(
@@ -22,9 +21,12 @@ class TileStore {
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,
     OnTileRegionEstimateProgressListener? progressListener,
-  ) =>
-      _impl.estimateTileRegion(id, loadOptions, estimateOptions,
-          progressListener);
+  ) => _impl.estimateTileRegion(
+    id,
+    loadOptions,
+    estimateOptions,
+    progressListener,
+  );
 
   /// Returns all existing tile regions.
   Future<List<TileRegion>> allTileRegions() => _impl.allTileRegions();
@@ -36,8 +38,7 @@ class TileStore {
   Future<bool> tileRegionContainsDescriptor(
     String id,
     List<TilesetDescriptorOptions> options,
-  ) =>
-      _impl.tileRegionContainsDescriptor(id, options);
+  ) => _impl.tileRegionContainsDescriptor(id, options);
 
   /// Returns the metadata associated with a tile region.
   Future<Map<String, Object>> tileRegionMetadata(String id) =>

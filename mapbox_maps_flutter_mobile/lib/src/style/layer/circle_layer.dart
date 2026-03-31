@@ -13,7 +13,6 @@ class CircleLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-
     CircleElevationReference? this.circleElevationReference,
     List<Object>? this.circleElevationReferenceExpression,
     double? this.circleSortKey,

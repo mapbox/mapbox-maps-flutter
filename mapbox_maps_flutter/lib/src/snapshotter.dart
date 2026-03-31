@@ -56,13 +56,12 @@ class Snapshotter {
     MbxEdgeInsets? padding,
     double? bearing,
     double? pitch,
-  }) =>
-      _impl.camera(
-        coordinates: coordinates,
-        padding: padding,
-        bearing: bearing,
-        pitch: pitch,
-      );
+  }) => _impl.camera(
+    coordinates: coordinates,
+    padding: padding,
+    bearing: bearing,
+    pitch: pitch,
+  );
 
   /// Returns tile identifiers covering the current snapshotter camera.
   Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>

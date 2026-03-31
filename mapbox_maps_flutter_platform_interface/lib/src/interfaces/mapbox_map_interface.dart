@@ -16,7 +16,8 @@ abstract interface class MapboxMapInterface {}
 /// Both [mapbox_maps_flutter_mobile] and [mapbox_maps_flutter_web] must
 /// provide a concrete implementation that is returned via
 /// [MapboxMapsFlutterPlatform.buildView]'s `onMapCreated` callback.
-abstract interface class MapboxMapPlatformInterface implements MapboxMapInterface {
+abstract interface class MapboxMapPlatformInterface
+    implements MapboxMapInterface {
   // ===== Sub-interfaces =====
 
   /// Provides access to the map's style APIs.
