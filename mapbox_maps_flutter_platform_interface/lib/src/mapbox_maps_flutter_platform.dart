@@ -51,9 +51,13 @@ abstract base class MapboxMapsFlutterPlatform {
 
   /// Builds a platform-specific widget for displaying the map.
   ///
+  /// [styleUri] is the URI of the map style to load.
   /// [onMapCreated] is called once the underlying map view is ready, providing
   /// a [MapboxMapPlatformInterface] that callers use to interact with the map.
-  Widget buildView({PlatformMapCreatedCallback? onMapCreated});
+  Widget buildView({
+    required String styleUri,
+    PlatformMapCreatedCallback? onMapCreated,
+  });
 }
 
 /// Callback signature invoked when a map instance is ready.

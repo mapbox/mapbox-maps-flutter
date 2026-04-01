@@ -19,3 +19,4 @@ export 'src/tile_store.dart';
 export 'src/snapshotter.dart';
 export 'src/style_manager.dart';
 export 'src/mapbox_map.dart';
+export 'src/mapbox_styles.dart';

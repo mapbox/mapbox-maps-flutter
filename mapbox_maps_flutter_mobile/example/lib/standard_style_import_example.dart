@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:turf/turf.dart' show Position;
+
+import 'utils.dart';
 import 'example.dart';
 
 class StandardStyleImportExample extends StatefulWidget implements Example {

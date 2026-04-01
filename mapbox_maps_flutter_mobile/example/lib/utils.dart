@@ -14,6 +14,19 @@ extension City on Point {
   static var kyiv = Point(coordinates: Position(30.5234, 50.4501));
 }
 
+extension MapboxStyles on String {
+  static const String STANDARD = "mapbox://styles/mapbox/standard";
+  static const String STANDARD_SATELLITE =
+      "mapbox://styles/mapbox/standard-satellite";
+  static const MAPBOX_STREETS = "mapbox://styles/mapbox/streets-v11";
+  static const OUTDOORS = "mapbox://styles/mapbox/outdoors-v11";
+  static const LIGHT = "mapbox://styles/mapbox/light-v10";
+  static const DARK = "mapbox://styles/mapbox/dark-v10";
+  static const SATELLITE = "mapbox://styles/mapbox/satellite-v9";
+  static const SATELLITE_STREETS =
+      "mapbox://styles/mapbox/satellite-streets-v11";
+}
+
 Point createRandomPoint() {
   return Point(coordinates: createRandomPosition());
 }
