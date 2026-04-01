@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:turf/turf.dart' show Position;
 
+import 'utils.dart';
 import 'example.dart';
 
 class DrawGeoJsonLineExample extends StatefulWidget implements Example {

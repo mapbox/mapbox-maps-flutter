@@ -5,8 +5,11 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
         MapboxMapsOptionsPlatformInterface,
         MapboxOptionsPlatformInterface {
   @override
-  Widget buildView({PlatformMapCreatedCallback? onMapCreated}) {
-    return MapWidget(onMapCreated: onMapCreated);
+  Widget buildView({
+    required String styleUri,
+    PlatformMapCreatedCallback? onMapCreated,
+  }) {
+    return MapWidget(styleUri: styleUri, onMapCreated: onMapCreated);
   }
 
   @override

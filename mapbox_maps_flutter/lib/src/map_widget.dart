@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 import 'mapbox_map.dart';
+import 'mapbox_styles.dart';
 
 typedef MapCreatedCallback = MapboxMapCreatedCallback<MapboxMap>;
 
@@ -19,15 +20,22 @@ typedef MapCreatedCallback = MapboxMapCreatedCallback<MapboxMap>;
 class MapWidget extends StatelessWidget {
   final MapboxMapsFlutterPlatform _platform;
 
+  /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set. Default is [MapboxStyles.STANDARD].
+  final String styleUri;
+
   /// Called when the map is created and ready for interaction.
   final MapCreatedCallback? onMapCreated;
 
-  MapWidget({super.key, this.onMapCreated})
-    : _platform = MapboxMapsFlutterPlatform.instance;
+  MapWidget({
+    super.key,
+    this.styleUri = MapboxStyles.STANDARD,
+    this.onMapCreated,
+  }) : _platform = MapboxMapsFlutterPlatform.instance;
 
   @override
   Widget build(BuildContext context) {
     return _platform.buildView(
+      styleUri: styleUri,
       onMapCreated: onMapCreated != null
           ? (map) => onMapCreated!(MapboxMap(map))
           : null,

@@ -51,7 +51,6 @@ class MapWidget extends StatefulWidget {
     // As a workaround default is true.
     this.textureView = true,
     this.androidHostingMode = AndroidPlatformViewHostingMode.VD,
-    this.styleUri = MapboxStyles.STANDARD,
     this.gestureRecognizers,
     this.onMapCreated,
     this.onStyleLoadedListener,
@@ -75,7 +74,8 @@ class MapWidget extends StatefulWidget {
     this.onScrollListener,
     this.onZoomListener,
     this.viewport,
-  });
+    String? styleUri,
+  }) : _styleUri = styleUri;
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
@@ -96,8 +96,8 @@ class MapWidget extends StatefulWidget {
   @experimental
   final AndroidPlatformViewHostingMode androidHostingMode;
 
-  /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set. Default is [Style.MAPBOX_STREETS].
-  final String styleUri;
+  /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set.
+  final String? _styleUri;
 
   /// Invoked when a new Map is created and return a MapboxMap instance to handle the Map.
   final void Function(MapboxMap)? onMapCreated;
@@ -212,7 +212,7 @@ class _MapWidgetState extends State<MapWidget> {
       'mapOptions': widget.mapOptions,
       'cameraOptions': widget.cameraOptions,
       'textureView': widget.textureView,
-      'styleUri': widget.styleUri,
+      'styleUri': widget._styleUri,
       'channelSuffix': _mapboxMapsPlatform.channelSuffix,
       'mapboxPluginVersion': mapboxPluginVersion,
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),

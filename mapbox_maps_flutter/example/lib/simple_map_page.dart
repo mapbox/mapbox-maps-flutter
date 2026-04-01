@@ -11,7 +11,7 @@ class SimpleMapPage extends StatelessWidget {
         title: const Text('Simple Map View'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: MapWidget(),
+      body: MapWidget(styleUri: MapboxStyles.MAPBOX_STREETS),
     );
   }
 }
