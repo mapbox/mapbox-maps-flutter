@@ -1,3 +1,7 @@
+### 2.22.0-rc.1
+
+* Update Maps SDK to v11.22.0-rc.1
+
 ### 2.20.0
 
 * Add experimental `shadowDrawBeforeLayer` property to directional light to allow specifying the position in the layer stack for drawing shadows on the ground.
