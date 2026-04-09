@@ -24,6 +24,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   Widget buildView({
     required String styleUri,
     PlatformMapCreatedCallback? onMapCreated,
+    void Function(MapEvent)? onMapEvent,
   }) {
     final viewType = 'mapbox-maps-flutter-web/$hashCode';
 

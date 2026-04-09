@@ -19,25 +19,22 @@ final class _MapEvents {
   List<_MapEvent> subscribedEventTypes = [];
 
   List<_MapEvent> get eventTypes {
-    final listenersMap = {
-      _onStyleLoadedListener: _MapEvent.styleLoaded,
-      _onCameraChangeListener: _MapEvent.cameraChanged,
-      _onMapIdleListener: _MapEvent.mapIdle,
-      _onMapLoadedListener: _MapEvent.mapLoaded,
-      _onMapLoadErrorListener: _MapEvent.mapLoadingError,
-      _onRenderFrameFinishedListener: _MapEvent.renderFrameFinished,
-      _onRenderFrameStartedListener: _MapEvent.renderFrameStarted,
-      _onSourceAddedListener: _MapEvent.sourceAdded,
-      _onSourceDataLoadedListener: _MapEvent.sourceDataLoaded,
-      _onSourceRemovedListener: _MapEvent.sourceRemoved,
-      _onStyleDataLoadedListener: _MapEvent.styleDataLoaded,
-      _onStyleImageMissingListener: _MapEvent.styleImageMissing,
-      _onStyleImageUnusedListener: _MapEvent.styleImageRemoveUnused,
-      _onResourceRequestListener: _MapEvent.resourceRequest,
-    };
-    listenersMap.remove(null);
-
-    return listenersMap.values.toList();
+    return [
+      if (_onStyleLoadedListener != null) _MapEvent.styleLoaded,
+      if (_onCameraChangeListener != null) _MapEvent.cameraChanged,
+      if (_onMapIdleListener != null) _MapEvent.mapIdle,
+      if (_onMapLoadedListener != null) _MapEvent.mapLoaded,
+      if (_onMapLoadErrorListener != null) _MapEvent.mapLoadingError,
+      if (_onRenderFrameFinishedListener != null) _MapEvent.renderFrameFinished,
+      if (_onRenderFrameStartedListener != null) _MapEvent.renderFrameStarted,
+      if (_onSourceAddedListener != null) _MapEvent.sourceAdded,
+      if (_onSourceDataLoadedListener != null) _MapEvent.sourceDataLoaded,
+      if (_onSourceRemovedListener != null) _MapEvent.sourceRemoved,
+      if (_onStyleDataLoadedListener != null) _MapEvent.styleDataLoaded,
+      if (_onStyleImageMissingListener != null) _MapEvent.styleImageMissing,
+      if (_onStyleImageUnusedListener != null) _MapEvent.styleImageRemoveUnused,
+      if (_onResourceRequestListener != null) _MapEvent.resourceRequest,
+    ];
   }
 
   _MapEvents({

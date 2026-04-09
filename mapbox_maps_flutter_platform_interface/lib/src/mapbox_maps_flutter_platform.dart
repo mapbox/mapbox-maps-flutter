@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'events.dart' show MapEvent;
 import 'interfaces/mapbox_map_interface.dart';
 import 'interfaces/mapbox_maps_options_interface.dart';
 import 'interfaces/mapbox_options_interface.dart';
@@ -57,6 +58,7 @@ abstract base class MapboxMapsFlutterPlatform {
   Widget buildView({
     required String styleUri,
     PlatformMapCreatedCallback? onMapCreated,
+    void Function(MapEvent)? onMapEvent,
   });
 }
 
