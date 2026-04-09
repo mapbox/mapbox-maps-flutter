@@ -4,15 +4,6 @@ import 'pigeons/platform_interface_data_types.dart';
 
 // ===== Private JSON helpers =====
 
-EventTimeInterval _eventTimeIntervalFromJson(Map<String, dynamic> json) =>
-    EventTimeInterval(
-      begin: DateTime.fromMicrosecondsSinceEpoch(json['begin'] as int),
-      end: DateTime.fromMicrosecondsSinceEpoch(json['end'] as int),
-    );
-
-TileID _tileIDFromJson(Map<String, dynamic> json) =>
-    TileID(x: json['x'] as int, y: json['y'] as int, z: json['z'] as int);
-
 CameraState _cameraStateFromJson(Map<String, dynamic> json) {
   final padding = json['padding'] as Map<String, dynamic>;
   return CameraState(
@@ -105,20 +96,23 @@ class TileID {
 
 // ===== Event data classes =====
 
+/// Base sealed class for all map events.
+sealed class MapEvent {}
+
 /// Data for the `styleLoaded` event.
-class StyleLoadedEventData {
+class StyleLoadedEventData extends MapEvent {
   final EventTimeInterval timeInterval;
 
   StyleLoadedEventData({required this.timeInterval});
 
   StyleLoadedEventData.fromJson(Map<String, dynamic> json)
-    : timeInterval = _eventTimeIntervalFromJson(
+    : timeInterval = EventTimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
       );
 }
 
 /// Data for the `cameraChanged` event.
-class CameraChangedEventData {
+class CameraChangedEventData extends MapEvent {
   final int timestamp;
   final CameraState cameraState;
 
@@ -132,7 +126,7 @@ class CameraChangedEventData {
 }
 
 /// Data for the `mapIdle` event.
-class MapIdleEventData {
+class MapIdleEventData extends MapEvent {
   final int timestamp;
 
   MapIdleEventData({required this.timestamp});
@@ -142,13 +136,13 @@ class MapIdleEventData {
 }
 
 /// Data for the `mapLoaded` event.
-class MapLoadedEventData {
+class MapLoadedEventData extends MapEvent {
   final EventTimeInterval timeInterval;
 
   MapLoadedEventData({required this.timeInterval});
 
   MapLoadedEventData.fromJson(Map<String, dynamic> json)
-    : timeInterval = _eventTimeIntervalFromJson(
+    : timeInterval = EventTimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
       );
 }
@@ -172,7 +166,7 @@ enum MapLoadErrorType {
 }
 
 /// Data for the `mapLoadingError` event.
-class MapLoadingErrorEventData {
+class MapLoadingErrorEventData extends MapEvent {
   final MapLoadErrorType type;
   final String message;
   final String? sourceId;
@@ -192,7 +186,7 @@ class MapLoadingErrorEventData {
       message = json['message'] as String,
       sourceId = json['sourceId'] as String?,
       tileId = json['tileId'] != null
-          ? _tileIDFromJson(json['tileId'] as Map<String, dynamic>)
+          ? TileID.fromJson(json['tileId'] as Map<String, dynamic>)
           : null,
       timestamp = json['timestamp'] as int;
 }
@@ -207,7 +201,7 @@ enum RenderMode {
 }
 
 /// Data for the `renderFrameStarted` event.
-class RenderFrameStartedEventData {
+class RenderFrameStartedEventData extends MapEvent {
   final int timestamp;
 
   RenderFrameStartedEventData({required this.timestamp});
@@ -217,7 +211,7 @@ class RenderFrameStartedEventData {
 }
 
 /// Data for the `renderFrameFinished` event.
-class RenderFrameFinishedEventData {
+class RenderFrameFinishedEventData extends MapEvent {
   final EventTimeInterval timeInterval;
   final RenderMode renderMode;
   final bool needsRepaint;
@@ -231,7 +225,7 @@ class RenderFrameFinishedEventData {
   });
 
   RenderFrameFinishedEventData.fromJson(Map<String, dynamic> json)
-    : timeInterval = _eventTimeIntervalFromJson(
+    : timeInterval = EventTimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
       ),
       renderMode = RenderMode.values[json['renderMode'] as int],
@@ -240,7 +234,7 @@ class RenderFrameFinishedEventData {
 }
 
 /// Data for the `sourceAdded` event.
-class SourceAddedEventData {
+class SourceAddedEventData extends MapEvent {
   final int timestamp;
   final String id;
 
@@ -252,7 +246,7 @@ class SourceAddedEventData {
 }
 
 /// Data for the `sourceRemoved` event.
-class SourceRemovedEventData {
+class SourceRemovedEventData extends MapEvent {
   final int timestamp;
   final String id;
 
@@ -273,7 +267,7 @@ enum SourceDataType {
 }
 
 /// Data for the `sourceDataLoaded` event.
-class SourceDataLoadedEventData {
+class SourceDataLoadedEventData extends MapEvent {
   final String id;
   final SourceDataType type;
   final bool? loaded;
@@ -295,10 +289,10 @@ class SourceDataLoadedEventData {
       type = SourceDataType.values[json['type'] as int],
       loaded = json['loaded'] as bool?,
       tileID = json['tileId'] != null
-          ? _tileIDFromJson(json['tileId'] as Map<String, dynamic>)
+          ? TileID.fromJson(json['tileId'] as Map<String, dynamic>)
           : null,
       dataId = json['dataId'] as String?,
-      timeInterval = _eventTimeIntervalFromJson(
+      timeInterval = EventTimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
       );
 }
@@ -316,7 +310,7 @@ enum StyleDataType {
 }
 
 /// Data for the `styleDataLoaded` event.
-class StyleDataLoadedEventData {
+class StyleDataLoadedEventData extends MapEvent {
   final EventTimeInterval timeInterval;
   final StyleDataType type;
 
@@ -324,13 +318,13 @@ class StyleDataLoadedEventData {
 
   StyleDataLoadedEventData.fromJson(Map<String, dynamic> json)
     : type = StyleDataType.values[json['type'] as int],
-      timeInterval = _eventTimeIntervalFromJson(
+      timeInterval = EventTimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
       );
 }
 
 /// Data for the `styleImageMissing` event.
-class StyleImageMissingEventData {
+class StyleImageMissingEventData extends MapEvent {
   final int timestamp;
   final String id;
 
@@ -342,7 +336,7 @@ class StyleImageMissingEventData {
 }
 
 /// Data for the `styleImageUnused` event.
-class StyleImageUnusedEventData {
+class StyleImageUnusedEventData extends MapEvent {
   final int timestamp;
   final String id;
 
@@ -430,7 +424,7 @@ class ResourceRequest {
 }
 
 /// Data for the `resourceRequest` event.
-class ResourceEventData {
+class ResourceEventData extends MapEvent {
   final EventTimeInterval timeInterval;
   final DataSourceType dataSource;
   final ResourceRequest request;
@@ -446,7 +440,7 @@ class ResourceEventData {
   });
 
   ResourceEventData.fromJson(Map<String, dynamic> json)
-    : timeInterval = _eventTimeIntervalFromJson(
+    : timeInterval = EventTimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
       ),
       dataSource = DataSourceType.values[json['source'] as int],

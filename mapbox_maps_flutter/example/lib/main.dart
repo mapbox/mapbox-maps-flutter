@@ -3,6 +3,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'ornaments_example.dart';
 import 'simple_map_page.dart';
+import 'spinning_globe_example.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,10 @@ class _Example {
 final _examples = [
   _Example(title: 'Simple Map View', builder: (_) => const SimpleMapPage()),
   _Example(title: 'Ornaments', builder: (_) => const OrnamentsExample()),
+  _Example(
+    title: 'Spinning Globe',
+    builder: (_) => const SpinningGlobeExample(),
+  ),
 ];
 
 class MyApp extends StatelessWidget {
