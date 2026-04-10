@@ -49,7 +49,7 @@ class TileJsonExampleState extends State<TileJsonExample> {
     return new Scaffold(
       body: MapWidget(
         key: ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(
+        viewport: CameraViewportState(
           center: Point(coordinates: Position(-80.1263, 25.7845)),
           zoom: 12.0,
         ),

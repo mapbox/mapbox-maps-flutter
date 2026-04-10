@@ -3,6 +3,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 
 import 'mapbox_map.dart';
 import 'mapbox_styles.dart';
+import 'viewport_controller.dart';
 
 typedef MapCreatedCallback = MapboxMapCreatedCallback<MapboxMap>;
 
@@ -18,10 +19,28 @@ typedef MapCreatedCallback = MapboxMapCreatedCallback<MapboxMap>;
 /// <strong>Warning:</strong> Please note that you are responsible for getting permission to use the map data,
 /// and for ensuring your use adheres to the relevant terms of use.
 class MapWidget extends StatelessWidget {
-  final MapboxMapsFlutterPlatform _platform;
-
   /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set. Default is [MapboxStyles.STANDARD].
   final String styleUri;
+
+  /// The camera position and behavior of the map.
+  ///
+  /// Use [viewport] to specify how the camera is positioned when the map is displayed.
+  /// By providing a [ViewportState] subclass, you can control the camera's focus,
+  /// such as centering on a specific location or following the user's position.
+  ///
+  /// If [viewport] is not provided, the map uses its default camera settings.
+  ///
+  /// When a [viewportController] is provided, the controller's state takes precedence
+  /// over [viewport] once [ViewportController.moveTo] has been called.
+  final ViewportState? viewport;
+
+  /// A controller for imperatively changing the map's viewport with animations.
+  ///
+  /// Use [viewportController] when you need to animate the camera to a new position
+  /// in response to user actions. See [ViewportController] for usage details.
+  ///
+  /// If not provided, the map can only be positioned via [viewport].
+  final ViewportController? viewportController;
 
   /// Called when the map is created and ready for interaction.
   final MapCreatedCallback? onMapCreated;
@@ -74,9 +93,11 @@ class MapWidget extends StatelessWidget {
   /// Invoked when map makes a request to load required resources.
   final OnResourceRequestListener? onResourceRequestListener;
 
-  MapWidget({
+  const MapWidget({
     super.key,
     this.styleUri = MapboxStyles.STANDARD,
+    this.viewport,
+    this.viewportController,
     this.onMapCreated,
     this.onStyleLoadedListener,
     this.onCameraChangeListener,
@@ -92,15 +113,36 @@ class MapWidget extends StatelessWidget {
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
-  }) : _platform = MapboxMapsFlutterPlatform.instance;
+  });
 
   @override
   Widget build(BuildContext context) {
-    return _platform.buildView(
+    final controller = viewportController;
+    if (controller != null) {
+      return ListenableBuilder(
+        listenable: controller,
+        builder: (context, _) => _buildMap(
+          controller.state ?? viewport,
+          controller.consumeTransition(),
+          controller.consumeCompletion(),
+        ),
+      );
+    }
+    return _buildMap(viewport, null, null);
+  }
+
+  Widget _buildMap(
+    ViewportState? viewport,
+    ViewportTransition? transition,
+    void Function(bool)? completion,
+  ) {
+    return MapboxMapsFlutterPlatform.instance.buildView(
       styleUri: styleUri,
-      onMapCreated: onMapCreated != null
-          ? (map) => onMapCreated!(MapboxMap(map))
-          : null,
+      onMapCreated:
+          onMapCreated != null ? (map) => onMapCreated!(MapboxMap(map)) : null,
+      viewport: viewport,
+      viewportTransition: transition,
+      viewportTransitionCompletion: completion,
       onMapEvent: (event) {
         switch (event) {
           case StyleLoadedEventData():

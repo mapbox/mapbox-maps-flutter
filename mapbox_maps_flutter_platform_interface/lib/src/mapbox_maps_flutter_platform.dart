@@ -5,6 +5,8 @@ import 'interfaces/mapbox_map_interface.dart';
 import 'interfaces/mapbox_maps_options_interface.dart';
 import 'interfaces/mapbox_options_interface.dart';
 import 'interfaces/offline_interface.dart';
+import 'interfaces/viewport/viewport_state.dart';
+import 'interfaces/viewport/viewport_transition.dart';
 
 export 'events.dart';
 export 'interfaces/annotations_interface.dart';
@@ -17,6 +19,9 @@ export 'interfaces/offline_interface.dart';
 export 'interfaces/settings_interfaces.dart';
 export 'interfaces/snapshotter_interface.dart';
 export 'interfaces/style_interface.dart';
+export 'interfaces/viewport/viewport_interface.dart';
+export 'interfaces/viewport/viewport_state.dart';
+export 'interfaces/viewport/viewport_transition.dart';
 
 abstract base class MapboxMapsFlutterPlatform {
   static MapboxMapsFlutterPlatform? _instance;
@@ -63,6 +68,9 @@ abstract base class MapboxMapsFlutterPlatform {
   Widget buildView({
     required String styleUri,
     PlatformMapCreatedCallback? onMapCreated,
+    ViewportState? viewport,
+    ViewportTransition? viewportTransition,
+    void Function(bool)? viewportTransitionCompletion,
     void Function(MapEvent)? onMapEvent,
   });
 }

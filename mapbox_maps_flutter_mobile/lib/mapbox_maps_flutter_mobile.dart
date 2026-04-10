@@ -73,7 +73,6 @@ part 'src/offline/tile_store.dart';
 part 'src/offline/offline_switch.dart';
 part 'src/utils.dart';
 part 'src/viewport/viewport_internal.dart';
-part 'src/viewport/state_viewport_extension.dart';
 part 'src/viewport/states/viewport_state.dart';
 part 'src/viewport/states/overview_viewport_state.dart';
 part 'src/viewport/states/follow_puck_viewport_state.dart';

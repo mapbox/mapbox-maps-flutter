@@ -1,26 +1,16 @@
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:turf/turf.dart' show Position;
-import 'example.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'dart:developer' show log;
 
-class ViewportExample extends StatefulWidget implements Example {
+class ViewportExample extends StatefulWidget {
   const ViewportExample({super.key});
 
   @override
-  final Widget leading = const Icon(Icons.flight_takeoff);
-  @override
-  final String title = 'Move camera with viewport';
-  @override
-  final String subtitle =
-      'Move the camera to different cities with viewport animations.';
-
-  @override
-  State<StatefulWidget> createState() => _ViewportExampleState();
+  State<ViewportExample> createState() => _ViewportExampleState();
 }
 
 class _ViewportExampleState extends State<ViewportExample> {
-  _ViewportExampleState();
+  final _viewportController = ViewportController();
 
   List<City> cities = [
     City("Helsinki", helsinki, 180, const Duration(seconds: 4)),
@@ -31,23 +21,34 @@ class _ViewportExampleState extends State<ViewportExample> {
   int _flying = 0;
 
   @override
+  void dispose() {
+    _viewportController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final currentCity = cities[_cityIndex % cities.length];
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          setStateWithViewportAnimation(
-            () {
-              _cityIndex++;
-              _flying++;
-            },
+        onPressed: () {
+          final nextCity = cities[(_cityIndex + 1) % cities.length];
+          setState(() {
+            _cityIndex++;
+            _flying++;
+          });
+          _viewportController.moveTo(
+            OverviewViewportState(
+              geometry: nextCity.bounds,
+              bearing: nextCity.bearing,
+              pitch: 60,
+            ),
             transition: FlyViewportTransition(
-              duration:
-                  cities[(_cityIndex + 1) % cities.length].animationDuration,
+              duration: nextCity.animationDuration,
             ),
             completion: (result) {
-              print(
-                'Animation complete with $result, currentCity ${currentCity.name}',
+              log(
+                'Animation complete with $result, currentCity ${nextCity.name}',
               );
               setState(() => _flying--);
             },
@@ -64,6 +65,7 @@ class _ViewportExampleState extends State<ViewportExample> {
           bearing: currentCity.bearing,
           pitch: 60,
         ),
+        viewportController: _viewportController,
       ),
     );
   }

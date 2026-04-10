@@ -132,102 +132,96 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Offline Map'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: _state == _DownloadState.downloaded
-                ? MapWidget(
-                    key: ValueKey("mapWidget"),
-                    styleUri: MapboxStyles.STANDARD_SATELLITE,
-                    onMapCreated: (map) async {
-                      await map.setCamera(
-                        CameraOptions(center: City.helsinki, zoom: 14),
-                      );
-                    },
-                  )
-                : Center(
-                    child: Column(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: _state == _DownloadState.downloaded
+              ? MapWidget(
+                  key: ValueKey("mapWidget"),
+                  styleUri: MapboxStyles.STANDARD_SATELLITE,
+                  onMapCreated: (map) async {
+                    await map.setCamera(
+                      CameraOptions(center: City.helsinki, zoom: 14),
+                    );
+                  },
+                )
+              : Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Offline map will be shown here after downloading.",
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _state == _DownloadState.downloading
+                            ? null
+                            : () async {
+                                setState(
+                                  () => _state = _DownloadState.downloading,
+                                );
+                                await _initOfflineMap();
+                                _downloadStylePack();
+                                _downloadTileRegion();
+                                await Future.wait([
+                                  _tileRegionLoadProgress.sink.done,
+                                  _stylePackProgress.sink.done,
+                                ]);
+                                await OfflineSwitch.shared
+                                    .setMapboxStackConnected(false);
+                                if (!mounted) return;
+                                setState(
+                                  () => _state = _DownloadState.downloaded,
+                                );
+                              },
+                        child: const Text("Download Map"),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+        Card(
+          margin: const EdgeInsets.all(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StreamBuilder(
+                  stream: _stylePackProgress.stream,
+                  initialData: 0.0,
+                  builder: (context, snapshot) {
+                    return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          "Offline map will be shown here after downloading.",
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: _state == _DownloadState.downloading
-                              ? null
-                              : () async {
-                                  setState(
-                                    () => _state = _DownloadState.downloading,
-                                  );
-                                  await _initOfflineMap();
-                                  _downloadStylePack();
-                                  _downloadTileRegion();
-                                  await Future.wait([
-                                    _tileRegionLoadProgress.sink.done,
-                                    _stylePackProgress.sink.done,
-                                  ]);
-                                  await OfflineSwitch.shared
-                                      .setMapboxStackConnected(false);
-                                  if (!mounted) return;
-                                  setState(
-                                    () => _state = _DownloadState.downloaded,
-                                  );
-                                },
-                          child: const Text("Download Map"),
-                        ),
+                        Text("Style pack ${snapshot.requireData}"),
+                        const SizedBox(height: 4),
+                        LinearProgressIndicator(value: snapshot.requireData),
                       ],
-                    ),
-                  ),
-          ),
-          Card(
-            margin: const EdgeInsets.all(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StreamBuilder(
-                    stream: _stylePackProgress.stream,
-                    initialData: 0.0,
-                    builder: (context, snapshot) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text("Style pack ${snapshot.requireData}"),
-                          const SizedBox(height: 4),
-                          LinearProgressIndicator(value: snapshot.requireData),
-                        ],
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  StreamBuilder(
-                    stream: _tileRegionLoadProgress.stream,
-                    initialData: 0.0,
-                    builder: (context, snapshot) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text("Tile region ${snapshot.requireData}"),
-                          const SizedBox(height: 4),
-                          LinearProgressIndicator(value: snapshot.requireData),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                StreamBuilder(
+                  stream: _tileRegionLoadProgress.stream,
+                  initialData: 0.0,
+                  builder: (context, snapshot) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Tile region ${snapshot.requireData}"),
+                        const SizedBox(height: 4),
+                        LinearProgressIndicator(value: snapshot.requireData),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

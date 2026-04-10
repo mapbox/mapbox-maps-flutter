@@ -38,7 +38,7 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
   @override
   Widget build(BuildContext context) {
     return MapWidget(
-      cameraOptions: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(24.6881, 60.185755)),
         zoom: 16.0,
       ),

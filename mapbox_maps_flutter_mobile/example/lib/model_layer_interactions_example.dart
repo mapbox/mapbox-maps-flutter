@@ -217,7 +217,7 @@ class _ModelLayerInteractionsExampleState
         children: [
           MapWidget(
             key: ValueKey("mapWidget"),
-            cameraOptions: CameraOptions(
+            viewport: CameraViewportState(
               center: Point(coordinates: centerPosition),
               bearing: 49.92,
               zoom: 17.5,

@@ -61,7 +61,7 @@ class VectorTileSourceExampleState extends State<VectorTileSourceExample> {
       body: MapWidget(
         key: ValueKey("mapWidget"),
         styleUri: MapboxStyles.STANDARD,
-        cameraOptions: CameraOptions(
+        viewport: CameraViewportState(
           center: Point(coordinates: Position(-122.447303, 37.753574)),
           zoom: 13.0,
         ),

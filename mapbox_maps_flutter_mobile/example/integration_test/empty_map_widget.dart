@@ -36,7 +36,6 @@ const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 Future<MapboxMap> main({
   double? width,
   double? height,
-  CameraOptions? camera,
   ViewportState? viewport,
   Alignment alignment = Alignment.topLeft,
 }) {
@@ -55,7 +54,6 @@ Future<MapboxMap> main({
           child: MapWidget(
             key: ValueKey("mapWidget"),
             androidHostingMode: AndroidPlatformViewHostingMode.VD,
-            cameraOptions: camera,
             viewport: viewport,
             onMapCreated: (MapboxMap mapboxMap) {
               completer.complete(mapboxMap);

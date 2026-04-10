@@ -1,41 +1,12 @@
-import 'package:flutter/foundation.dart'
-    show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
-import 'ornaments_example.dart';
-import 'simple_map_page.dart';
-import 'spinning_globe_example.dart';
-import 'offline_map_example.dart';
+import 'examples.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MapboxOptions.setAccessToken(const String.fromEnvironment('ACCESS_TOKEN'));
   runApp(const MyApp());
 }
-
-class _Example {
-  final String title;
-  final WidgetBuilder builder;
-
-  const _Example({required this.title, required this.builder});
-}
-
-final _isMobile =
-    !kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android);
-
-final _examples = [
-  _Example(title: 'Simple Map', builder: (_) => const SimpleMapPage()),
-  _Example(title: 'Ornaments', builder: (_) => const OrnamentsExample()),
-  _Example(
-    title: 'Spinning Globe',
-    builder: (_) => const SpinningGlobeExample(),
-  ),
-  if (_isMobile)
-    _Example(title: 'Offline Map', builder: (_) => const OfflineMapExample()),
-];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,28 +19,40 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Examples'),
-          backgroundColor: ColorScheme.fromSeed(
-            seedColor: Colors.deepPurple,
-          ).inversePrimary,
-        ),
-        body: ListView.separated(
-          itemCount: _examples.length,
+        appBar: AppBar(title: const Text('MapboxMaps examples')),
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: ListView.separated(
+          itemCount: examples.length,
           separatorBuilder: (_, __) => const Divider(height: 1),
           itemBuilder: (context, index) {
-            final example = _examples[index];
+            final example = examples[index];
             return ListTile(
+              leading: example.leading,
               title: Text(example.title),
-              trailing: const Icon(Icons.chevron_right),
+              subtitle: (example.subtitle?.isNotEmpty == true)
+                  ? Text(
+                      example.subtitle!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  : null,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: example.builder),
+                  MaterialPageRoute(
+                    builder: (_) => Scaffold(
+                      appBar: AppBar(title: Text(example.title)),
+                      body: example.builder(context),
+                    ),
+                  ),
                 );
               },
             );
           },
+            ),
+          ),
         ),
       ),
     );

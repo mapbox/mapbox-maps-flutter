@@ -260,13 +260,13 @@ Platform docs: [Android](https://docs.mapbox.com/android/maps/guides/camera-and-
 The camera is the user's viewpoint above the map. The Maps Flutter SDK provides you with options to set and adjust the camera position, listen for camera changes, get the camera position, and restrict the camera position to set bounds.
 
 ### Camera position
-You can set the starting camera position using `MapWidget.cameraOptions`:
+You can set the starting camera position using `MapWidget.viewport`:
 
 ```
 MapWidget(
   key: ValueKey("mapWidget"),
-  cameraOptions: CameraOptions(
-      center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
+  viewport: CameraViewportState(
+      center: Point(coordinates: Position(-80.1263, 25.7845)),
       zoom: 12.0),
 ));
 ```

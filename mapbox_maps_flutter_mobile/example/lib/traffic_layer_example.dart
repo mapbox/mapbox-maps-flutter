@@ -129,7 +129,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
       key: ValueKey("mapWidget"),
-      cameraOptions: CameraOptions(center: _sfAirport, zoom: 11.0),
+      viewport: CameraViewportState(center: _sfAirport, zoom: 11.0),
       onMapCreated: _onMapCreated,
       onStyleLoadedListener: _onStyleLoadedCallback,
     );

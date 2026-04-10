@@ -80,7 +80,7 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
         children: [
           MapWidget(
             key: ValueKey("mapWidget"),
-            cameraOptions: CameraOptions(
+            viewport: CameraViewportState(
               center: Point(coordinates: Position(-73.99, 40.72)),
               zoom: 11,
               pitch: 45,

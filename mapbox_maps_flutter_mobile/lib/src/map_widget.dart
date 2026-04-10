@@ -75,6 +75,8 @@ class MapWidget extends StatefulWidget {
     this.onZoomListener,
     this.viewport,
     String? styleUri,
+    this.viewportTransition,
+    this.viewportTransitionCompletion,
   }) : _styleUri = styleUri;
 
   /// Describes the map options value when using a MapWidget.
@@ -182,6 +184,12 @@ class MapWidget extends StatefulWidget {
   /// ```
   final ViewportState? viewport;
 
+  /// The transition animation to use when changing the viewport state.
+  final ViewportTransition? viewportTransition;
+
+  /// Called when a viewport transition completes.
+  final void Function(bool)? viewportTransitionCompletion;
+
   @Deprecated('Use [MapboxMap.addInteraction] instead')
   final OnMapTapListener? onTapListener;
   @Deprecated('Use [MapboxMap.addInteraction] instead')
@@ -204,6 +212,7 @@ class _MapWidgetState extends State<MapWidget> {
   final int _suffix = _suffixesRegistry.getSuffix();
   late final _MapEvents _events;
   bool _needsStateUpdate = false;
+  int _viewportGeneration = 0;
   MapboxMap? mapboxMap;
   GlobalKey key = GlobalKey();
 
@@ -211,7 +220,7 @@ class _MapWidgetState extends State<MapWidget> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = <String, dynamic>{
       'mapOptions': widget.mapOptions,
-      'cameraOptions': widget.cameraOptions,
+      'cameraOptions': null,
       'textureView': widget.textureView,
       'styleUri': widget._styleUri,
       'channelSuffix': _mapboxMapsPlatform.channelSuffix,
@@ -290,20 +299,17 @@ class _MapWidgetState extends State<MapWidget> {
     if (currentViewport == oldWidget?.viewport || currentViewport == null) {
       return;
     }
-    final viewportAnimation = _viewportTransition;
-    _viewportTransition = null;
-    final completion = _viewportTransitionCompletion;
+    final gen = ++_viewportGeneration;
+    final viewportAnimation = widget.viewportTransition;
+    final completion = widget.viewportTransitionCompletion;
 
     final result = await mapboxMap._viewportMessenger.transition(
       currentViewport._toStorage(),
       viewportAnimation?._toStorage(),
     );
 
-    if (_viewportTransitionCompletion == completion) {
-      _viewportTransitionCompletion = null;
-      if (mounted) {
-        completion?.call(result);
-      }
+    if (mounted && gen == _viewportGeneration) {
+      completion?.call(result);
     }
   }
 

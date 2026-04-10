@@ -321,5 +321,17 @@
   {
     "changeDescription": "Interface \"TileCacheBudgetInTiles\" removed",
     "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "MapWidget: Changed supertype from \"StatefulWidget\" to \"StatelessWidget\"",
+    "reason": "MapWidget is now stateless; viewport animations are handled by the new ViewportController"
+  },
+  {
+    "changeDescription": "Function \"setStateWithViewportAnimation\" removed",
+    "reason": "Replaced by ViewportController.moveTo() for imperative viewport animations"
+  },
+  {
+    "changeDescription": "Interface \"WidgetViewportAnimation\" removed",
+    "reason": "Replaced by ViewportController for imperative viewport animations"
   }
 ]

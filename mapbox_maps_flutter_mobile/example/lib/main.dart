@@ -26,7 +26,6 @@ import 'package:mapbox_maps_example/spinning_globe_example.dart';
 import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
 import 'package:mapbox_maps_example/vector_tile_source_example.dart';
-import 'package:mapbox_maps_example/viewport_example.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 import 'full_map_example.dart';
@@ -41,7 +40,6 @@ import 'map_recorder_example.dart';
 
 final List<Example> _allPages = <Example>[
   SimpleMapExample(),
-  ViewportExample(),
   SnapshotterExample(),
   TrafficRouteLineExample(),
   ModelLayerExample(),
