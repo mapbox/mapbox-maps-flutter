@@ -28,7 +28,7 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
   @override
   Widget build(BuildContext context) {
     return MapWidget(
-      cameraOptions: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: centerPosition),
         zoom: 17,
         bearing: 15,

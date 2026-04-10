@@ -8,6 +8,8 @@ environment:
   flutter: ">=3.38.1"
 
 dependencies:
+  turf: ^0.0.10
+  meta: ^1.17.0
   flutter:
     sdk: flutter
   mapbox_maps_flutter_platform_interface: any

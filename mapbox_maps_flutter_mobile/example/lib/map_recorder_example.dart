@@ -212,7 +212,7 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
           Expanded(
             child: MapWidget(
               key: const ValueKey("mapWidget"),
-              cameraOptions: CameraOptions(
+              viewport: CameraViewportState(
                 center: Point(coordinates: Position(-74.0060, 40.7128)),
                 zoom: 10.0,
               ),

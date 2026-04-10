@@ -44,7 +44,7 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: MapWidget(
-        cameraOptions: CameraOptions(
+        viewport: CameraViewportState(
           center: Point(coordinates: Position(22.9556, 54.3800)),
           zoom: 3.5,
         ),

@@ -7,7 +7,7 @@ import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final initialCamera = CameraOptions(
+  final initialViewport = CameraViewportState(
     center: Point(coordinates: Position(0, 0)),
     zoom: 15,
     pitch: 60,
@@ -295,7 +295,7 @@ void main() {
   });
 
   testWidgets('getCameraState', (WidgetTester tester) async {
-    final mapFuture = app.main(camera: initialCamera);
+    final mapFuture = app.main(viewport: initialViewport);
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;

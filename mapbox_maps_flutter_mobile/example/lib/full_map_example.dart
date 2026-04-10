@@ -126,7 +126,7 @@ class FullMapExampleState extends State<FullMapExample> {
       ),
       body: MapWidget(
         key: ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(
+        viewport: CameraViewportState(
           center: Point(
             coordinates: Position(6.0033416748046875, 43.70908256335716),
           ),

@@ -8,11 +8,17 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
   Widget buildView({
     required String styleUri,
     PlatformMapCreatedCallback? onMapCreated,
+    ViewportState? viewport,
+    ViewportTransition? viewportTransition,
+    void Function(bool)? viewportTransitionCompletion,
     void Function(MapEvent)? onMapEvent,
   }) {
     return MapWidget(
       styleUri: styleUri,
       onMapCreated: onMapCreated,
+      viewport: viewport,
+      viewportTransition: viewportTransition,
+      viewportTransitionCompletion: viewportTransitionCompletion,
       onStyleLoadedListener: onMapEvent,
       onCameraChangeListener: onMapEvent,
       onMapIdleListener: onMapEvent,

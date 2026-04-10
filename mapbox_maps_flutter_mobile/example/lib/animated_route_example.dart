@@ -114,7 +114,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
       ),
       body: MapWidget(
         key: const ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(zoom: 3.0),
+        viewport: CameraViewportState(zoom: 3.0),
         styleUri: MapboxStyles.STANDARD,
         textureView: true,
         onMapCreated: _onMapCreated,

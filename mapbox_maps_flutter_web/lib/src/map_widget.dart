@@ -1,0 +1,111 @@
+import 'dart:js_interop';
+import 'dart:ui_web';
+
+import 'package:flutter/widgets.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:web/web.dart';
+
+import 'bindings/map_bindings.dart';
+import 'viewport/viewport_web.dart';
+
+class MapWebWidget extends StatefulWidget {
+  final PlatformMapCreatedCallback? onMapCreated;
+  final ViewportState? viewport;
+  final ViewportTransition? viewportTransition;
+  final void Function(bool)? viewportTransitionCompletion;
+
+  const MapWebWidget({
+    super.key,
+    this.onMapCreated,
+    this.viewport,
+    this.viewportTransition,
+    this.viewportTransitionCompletion,
+  });
+
+  @override
+  State<MapWebWidget> createState() => _MapWebWidgetState();
+}
+
+class _MapWebWidgetState extends State<MapWebWidget> {
+  static int _nextViewId = 0;
+
+  late final String _viewType;
+  late final HTMLDivElement _mapElement;
+  final ViewportWeb _viewport = ViewportWeb();
+  JSMap? _currentMap;
+  ResizeObserver? _resizeObserver;
+
+  @visibleForTesting
+  JSMap? get currentMap => _currentMap;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final viewId = _nextViewId++;
+    _viewType = 'mapbox-maps-flutter-web/$viewId';
+
+    platformViewRegistry.registerViewFactory(_viewType, (int id) {
+      _mapElement = document.createElement('div') as HTMLDivElement
+        ..style.position = 'absolute'
+        ..style.top = '0'
+        ..style.bottom = '0'
+        ..style.height = '100%'
+        ..style.width = '100%';
+      return _mapElement;
+    });
+  }
+
+  void _onPlatformViewCreated(int viewId) {
+    final nativeMap = JSMap(JSMapOptions(container: _mapElement));
+    _currentMap = nativeMap;
+
+    // The platform view container may not have its layout dimensions yet.
+    // Use a ResizeObserver to call map.resize() once it gets real size.
+    _resizeObserver = ResizeObserver(((JSArray entries, JSAny observer) {
+      nativeMap.resize();
+    }).toJS);
+    _resizeObserver!.observe(_mapElement);
+
+    // Apply the initial viewport immediately — camera commands like jumpTo
+    // and fitBounds work before the style finishes loading.
+    _viewport.onMapCreated(nativeMap);
+    _applyViewport();
+  }
+
+  @override
+  void didUpdateWidget(MapWebWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.viewport != oldWidget.viewport) {
+      _applyViewport();
+    }
+  }
+
+  void _applyViewport() {
+    final viewport = widget.viewport;
+    if (viewport == null) return;
+    _viewport.applyIfChanged(
+      viewport,
+      widget.viewportTransition,
+      widget.viewportTransitionCompletion,
+    );
+  }
+
+  @override
+  void dispose() {
+    _resizeObserver?.disconnect();
+    _resizeObserver = null;
+    _currentMap?.remove();
+    _currentMap = null;
+    _viewport.reset();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HtmlElementView(
+      viewType: _viewType,
+      onPlatformViewCreated: _onPlatformViewCreated,
+    );
+  }
+}

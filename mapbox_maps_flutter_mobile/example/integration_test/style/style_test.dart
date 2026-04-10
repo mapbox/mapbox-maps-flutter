@@ -375,7 +375,7 @@ void main() {
     var camera = await style.getStyleDefaultCamera();
     expect(camera.bearing, 0);
     expect(camera.pitch, 0);
-    expect(camera.zoom, 2.0);
+    expect(camera.zoom, 3.0);
     expect(camera.anchor, null);
     final point = camera.center;
     expect(point?.coordinates.lng, -92.25);

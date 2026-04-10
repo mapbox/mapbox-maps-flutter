@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/turf.dart' show Point, Position;
 
 class SpinningGlobeExample extends StatefulWidget {
   const SpinningGlobeExample({super.key});
@@ -42,10 +41,6 @@ class _SpinningGlobeExampleState extends State<SpinningGlobeExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Spinning Globe'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: MapWidget(
         onMapCreated: _onMapCreated,
         onMapLoadedListener: _onMapLoaded,

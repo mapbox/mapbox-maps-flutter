@@ -172,7 +172,7 @@ class StandardStyleInteractionsState
         children: [
           MapWidget(
             key: ValueKey("mapWidget"),
-            cameraOptions: CameraOptions(
+            viewport: CameraViewportState(
               center: Point(coordinates: Position(24.9453, 60.1718)),
               bearing: 49.92,
               zoom: 16.35,

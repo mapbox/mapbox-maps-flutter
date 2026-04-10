@@ -15,7 +15,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -75,7 +75,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -134,7 +134,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -188,7 +188,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -240,7 +240,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -264,7 +264,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -287,7 +287,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -336,7 +336,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -387,7 +387,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -426,7 +426,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -475,7 +475,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -527,7 +527,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -576,7 +576,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -627,7 +627,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),
@@ -664,7 +664,7 @@ void main() {
     final mapFuture = app.main(
       width: 200,
       height: 200,
-      camera: CameraOptions(
+      viewport: CameraViewportState(
         center: Point(coordinates: Position(0, 0)),
         zoom: 10,
       ),

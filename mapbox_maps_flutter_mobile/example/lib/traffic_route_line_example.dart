@@ -98,7 +98,7 @@ class TrafficRouteLineExampleState extends State<TrafficRouteLineExample> {
       ),
       body: MapWidget(
         key: const ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(center: _sfAirport, zoom: 11.0),
+        viewport: CameraViewportState(center: _sfAirport, zoom: 11.0),
         textureView: true,
         onMapCreated: _onMapCreated,
         onStyleLoadedListener: _onStyleLoadedCallback,

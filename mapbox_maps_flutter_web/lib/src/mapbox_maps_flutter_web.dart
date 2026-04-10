@@ -1,13 +1,8 @@
-import 'dart:js_interop';
-import 'dart:ui_web';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:mapbox_maps_flutter_web/src/bindings.dart';
-import 'package:web/web.dart';
-
-const mapboxGlCss = 'https://api.mapbox.com/mapbox-gl-js/v3.11.1/mapbox-gl.css';
+import 'package:mapbox_maps_flutter_web/src/bindings/map_bindings.dart';
+import 'package:mapbox_maps_flutter_web/src/map_widget.dart';
 
 base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     implements
@@ -18,49 +13,21 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterWeb();
   }
 
-  late HTMLDivElement _mapElement;
-
   @override
   Widget buildView({
     required String styleUri,
     PlatformMapCreatedCallback? onMapCreated,
+    ViewportState? viewport,
+    ViewportTransition? viewportTransition,
+    void Function(bool)? viewportTransitionCompletion,
     void Function(MapEvent)? onMapEvent,
   }) {
-    final viewType = 'mapbox-maps-flutter-web/$hashCode';
-
-    // Attach the mapDiv to the DOM
-    platformViewRegistry.registerViewFactory(viewType, (int id) {
-      _mapElement = document.createElement("div") as HTMLDivElement
-        ..style.position = 'absolute'
-        ..style.top = '0'
-        ..style.bottom = '0'
-        ..style.height = '100%'
-        ..style.width = '100%';
-
-      _initMap();
-      return _mapElement;
-    });
-    return HtmlElementView(
-      viewType: viewType,
-      // TODO(MAPSFLT-XXX): Call onMapCreated once a web MapboxMapInterface
-      // implementation exists and the JS map is initialised.
-      onPlatformViewCreated: (int viewId) {},
+    return MapWebWidget(
+      onMapCreated: onMapCreated,
+      viewport: viewport,
+      viewportTransition: viewportTransition,
+      viewportTransitionCompletion: viewportTransitionCompletion,
     );
-  }
-
-  Future<void> _initMap() async {
-    final link = document.createElement('link') as HTMLLinkElement
-      ..rel = 'stylesheet'
-      ..href = mapboxGlCss
-      ..type = 'text/css';
-    _mapElement.append(link);
-
-    await link.onLoad.first;
-
-    final options = MapOptions(container: _mapElement);
-    final nativeMap = Map(options);
-
-    nativeMap.on('load', (() {}).toJS);
   }
 
   @override
@@ -74,47 +41,62 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   }
 
   @override
-  Future<String> getBaseUrl() => throw UnimplementedError('getBaseUrl() is not implemented on web.');
+  Future<String> getBaseUrl() =>
+      throw UnimplementedError('getBaseUrl() is not implemented on web.');
 
   @override
-  void setBaseUrl(String url) => throw UnimplementedError('setBaseUrl() is not implemented on web.');
+  void setBaseUrl(String url) =>
+      throw UnimplementedError('setBaseUrl() is not implemented on web.');
 
   @override
-  Future<String> getDataPath() => throw UnimplementedError('getDataPath() is not implemented on web.');
+  Future<String> getDataPath() =>
+      throw UnimplementedError('getDataPath() is not implemented on web.');
 
   @override
-  void setDataPath(String path) => throw UnimplementedError('setDataPath() is not implemented on web.');
+  void setDataPath(String path) =>
+      throw UnimplementedError('setDataPath() is not implemented on web.');
 
   @override
-  Future<String> getAssetPath() => throw UnimplementedError('getAssetPath() is not implemented on web.');
+  Future<String> getAssetPath() =>
+      throw UnimplementedError('getAssetPath() is not implemented on web.');
 
   @override
-  void setAssetPath(String path) => throw UnimplementedError('setAssetPath() is not implemented on web.');
+  void setAssetPath(String path) =>
+      throw UnimplementedError('setAssetPath() is not implemented on web.');
 
   @override
-  Future<TileStoreUsageMode> getTileStoreUsageMode() => throw UnimplementedError('getTileStoreUsageMode() is not implemented on web.');
+  Future<TileStoreUsageMode> getTileStoreUsageMode() =>
+      throw UnimplementedError(
+          'getTileStoreUsageMode() is not implemented on web.');
 
   @override
-  void setTileStoreUsageMode(TileStoreUsageMode mode) => throw UnimplementedError('setTileStoreUsageMode() is not implemented on web.');
+  void setTileStoreUsageMode(TileStoreUsageMode mode) =>
+      throw UnimplementedError(
+          'setTileStoreUsageMode() is not implemented on web.');
 
   @override
-  Future<String?> getWorldview() => throw UnimplementedError('getWorldview() is not implemented on web.');
+  Future<String?> getWorldview() =>
+      throw UnimplementedError('getWorldview() is not implemented on web.');
 
   @override
-  void setWorldview(String? worldview) => throw UnimplementedError('setWorldview() is not implemented on web.');
+  void setWorldview(String? worldview) =>
+      throw UnimplementedError('setWorldview() is not implemented on web.');
 
   @override
-  Future<String?> getLanguage() => throw UnimplementedError('getLanguage() is not implemented on web.');
+  Future<String?> getLanguage() =>
+      throw UnimplementedError('getLanguage() is not implemented on web.');
 
   @override
-  void setLanguage(String? language) => throw UnimplementedError('setLanguage() is not implemented on web.');
+  void setLanguage(String? language) =>
+      throw UnimplementedError('setLanguage() is not implemented on web.');
 
   @override
-  Future<void> clearData() => throw UnimplementedError('clearData() is not implemented on web.');
-  
+  Future<void> clearData() =>
+      throw UnimplementedError('clearData() is not implemented on web.');
+
   @override
   MapboxMapsOptionsPlatformInterface get mapboxMapsOptions => this;
-  
+
   @override
   MapboxOptionsPlatformInterface get mapboxOptions => this;
 

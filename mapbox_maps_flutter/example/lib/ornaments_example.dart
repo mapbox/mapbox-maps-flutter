@@ -213,39 +213,36 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Ornaments')),
-      body: Column(
-        children: [
-          Expanded(
-            child: MapWidget(
-              key: const ValueKey('mapWidget'),
-              onMapCreated: _onMapCreated,
-            ),
+    return Column(
+      children: [
+        Expanded(
+          child: MapWidget(
+            key: const ValueKey('mapWidget'),
+            onMapCreated: _onMapCreated,
           ),
-          TabBar(
+        ),
+        TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'Compass'),
+            Tab(text: 'Scale Bar'),
+            Tab(text: 'Logo'),
+            Tab(text: 'Attribution'),
+          ],
+        ),
+        SizedBox(
+          height: 160,
+          child: TabBarView(
             controller: _tabController,
-            tabs: const [
-              Tab(text: 'Compass'),
-              Tab(text: 'Scale Bar'),
-              Tab(text: 'Logo'),
-              Tab(text: 'Attribution'),
+            children: [
+              _buildCompassTab(),
+              _buildScaleBarTab(),
+              _buildLogoTab(),
+              _buildAttributionTab(),
             ],
           ),
-          SizedBox(
-            height: 160,
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildCompassTab(),
-                _buildScaleBarTab(),
-                _buildLogoTab(),
-                _buildAttributionTab(),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
