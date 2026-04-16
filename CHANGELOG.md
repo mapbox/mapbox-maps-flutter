@@ -1,3 +1,8 @@
+### main
+
+* Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
+* Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
+
 ### 2.22.0-rc.1
 
 * Update Maps SDK to v11.22.0-rc.1
