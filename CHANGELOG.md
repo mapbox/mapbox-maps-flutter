@@ -7,6 +7,8 @@
 
 * Update Maps SDK to v11.22.0
 
+### 2.21.2
+
 ### 2.20.1
 
 * Update Maps SDK to v11.21.1
