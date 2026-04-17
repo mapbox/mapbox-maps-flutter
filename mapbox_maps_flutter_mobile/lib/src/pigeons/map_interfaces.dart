@@ -151,9 +151,6 @@ enum _InteractionType {
   LONG_TAP,
 }
 
-/// Type information of the variant's content
-enum Type { SCREEN_BOX, SCREEN_COORDINATE, LIST }
-
 /// Controls the behavior of fill extrusion base over terrain
 enum FillExtrusionBaseAlignment {
   /// The fill extrusion base follows terrain slope.
@@ -744,170 +741,6 @@ class QueriedFeature {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// Identifies a feature in a featureset.
-///
-/// Knowing the feature identifier allows to set the feature states to a particular feature, see ``MapboxMap/setFeatureState(featureset:featureId:state:callback:)``.
-///
-/// In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
-/// The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
-///
-/// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
-/// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
-class FeaturesetFeatureId {
-  FeaturesetFeatureId({required this.id, this.namespace});
-
-  /// A feature id coming from the feature itself.exp
-  String id;
-
-  /// A namespace of the feature
-  String? namespace;
-
-  List<Object?> _toList() {
-    return <Object?>[id, namespace];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static FeaturesetFeatureId decode(Object result) {
-    result as List<Object?>;
-    return FeaturesetFeatureId(
-      id: result[0]! as String,
-      namespace: result[1] as String?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! FeaturesetFeatureId || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return id == other.id && namespace == other.namespace;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Wraps a FeatureState map
-class FeatureState {
-  FeatureState({required this.map});
-
-  Map<String, Object?> map;
-
-  List<Object?> _toList() {
-    return <Object?>[map];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static FeatureState decode(Object result) {
-    result as List<Object?>;
-    return FeatureState(
-      map: (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>(),
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! FeatureState || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(map, other.map);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Internal: An interaction that can be added to the map.
-///
-/// To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
-///
-/// See also: ``MapboxMap/addInteraction``.
-class _Interaction {
-  _Interaction({
-    this.featuresetDescriptor,
-    required this.interactionType,
-    required this.stopPropagation,
-    this.filter,
-    this.radius,
-  });
-
-  /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  FeaturesetDescriptor? featuresetDescriptor;
-
-  /// The type of interaction, either tap or longTap
-  _InteractionType interactionType;
-
-  /// Whether to stop the propagation of the interaction to the map. Defaults to true.
-  bool stopPropagation;
-
-  /// An optional filter of features that should trigger the interaction.
-  String? filter;
-
-  /// Radius of a tappable area
-  double? radius;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      featuresetDescriptor,
-      interactionType,
-      stopPropagation,
-      filter,
-      radius,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static _Interaction decode(Object result) {
-    result as List<Object?>;
-    return _Interaction(
-      featuresetDescriptor: result[0] as FeaturesetDescriptor?,
-      interactionType: result[1]! as _InteractionType,
-      stopPropagation: result[2]! as bool,
-      filter: result[3] as String?,
-      radius: result[4] as double?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! _Interaction || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return featuresetDescriptor == other.featuresetDescriptor &&
-        interactionType == other.interactionType &&
-        stopPropagation == other.stopPropagation &&
-        filter == other.filter &&
-        radius == other.radius;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// Internal class to handle pigeon conversions for interactions.
 class _InteractionPigeon {
   _InteractionPigeon({
@@ -979,144 +812,6 @@ class _InteractionPigeon {
         identifier == other.identifier &&
         filter == other.filter &&
         radius == other.radius;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A featureset descriptor.
-///
-/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
-class FeaturesetDescriptor {
-  FeaturesetDescriptor({this.featuresetId, this.importId, this.layerId});
-
-  /// An optional unique identifier for the featureset within the style.
-  /// This id is used to reference a specific featureset.
-  ///
-  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
-  /// * meaning `layerId` will not be considered even if it has a valid value.
-  String? featuresetId;
-
-  /// An optional import id that is required if the featureset is defined within an imported style.
-  /// If the featureset belongs to the current style, this field should be set to a null string.
-  ///
-  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
-  /// and has no effect when used with `layerId`.
-  String? importId;
-
-  /// An optional unique identifier for the layer within the current style.
-  ///
-  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
-  /// Additionally, `importId` does not apply when using `layerId`.
-  String? layerId;
-
-  List<Object?> _toList() {
-    return <Object?>[featuresetId, importId, layerId];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static FeaturesetDescriptor decode(Object result) {
-    result as List<Object?>;
-    return FeaturesetDescriptor(
-      featuresetId: result[0] as String?,
-      importId: result[1] as String?,
-      layerId: result[2] as String?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! FeaturesetDescriptor || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return featuresetId == other.featuresetId &&
-        importId == other.importId &&
-        layerId == other.layerId;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A basic feature of a featureset.
-///
-/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
-///
-/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
-class FeaturesetFeature {
-  FeaturesetFeature({
-    this.id,
-    required this.featureset,
-    required this.geometry,
-    required this.properties,
-    required this.state,
-  });
-
-  /// An identifier of the feature.
-  ///
-  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
-  /// In this case it's impossible to set a feature state for an individual feature.
-  FeaturesetFeatureId? id;
-
-  /// A featureset descriptor denoting the featureset this feature belongs to.
-  FeaturesetDescriptor featureset;
-
-  /// A feature geometry.
-  Map<String?, Object?> geometry;
-
-  /// Feature JSON properties.
-  Map<String, Object?> properties;
-
-  /// A feature state.
-  ///
-  /// This is a **snapshot** of the state that the feature had when it was interacted with.
-  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
-  Map<String, Object?> state;
-
-  List<Object?> _toList() {
-    return <Object?>[id, featureset, geometry, properties, state];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static FeaturesetFeature decode(Object result) {
-    result as List<Object?>;
-    return FeaturesetFeature(
-      id: result[0] as FeaturesetFeatureId?,
-      featureset: result[1]! as FeaturesetDescriptor,
-      geometry: (result[2] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
-      properties: (result[3] as Map<Object?, Object?>?)!
-          .cast<String, Object?>(),
-      state: (result[4] as Map<Object?, Object?>?)!.cast<String, Object?>(),
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! FeaturesetFeature || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return id == other.id &&
-        featureset == other.featureset &&
-        _deepEquals(geometry, other.geometry) &&
-        _deepEquals(properties, other.properties) &&
-        _deepEquals(state, other.state);
   }
 
   @override
@@ -1920,53 +1615,50 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is FeatureState) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is _Interaction) {
+    } else if (value is _InteractionPigeon) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is _InteractionPigeon) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetDescriptor) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeature) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is FlatLight) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is MbxImage) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is ImageContent) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(201);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
-      buffer.putUint8(202);
-      writeValue(buffer, value.encode());
     } else if (value is StylePropertyValue) {
-      buffer.putUint8(203);
+      buffer.putUint8(202);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2124,36 +1816,34 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 187:
         return FeatureState.decode(readValue(buffer)!);
       case 188:
-        return _Interaction.decode(readValue(buffer)!);
-      case 189:
         return _InteractionPigeon.decode(readValue(buffer)!);
-      case 190:
+      case 189:
         return FeaturesetDescriptor.decode(readValue(buffer)!);
-      case 191:
+      case 190:
         return FeaturesetFeature.decode(readValue(buffer)!);
-      case 192:
+      case 191:
         return MapContentGestureContext.decode(readValue(buffer)!);
-      case 193:
+      case 192:
         return _RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 194:
+      case 193:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 195:
+      case 194:
         return MercatorCoordinate.decode(readValue(buffer)!);
-      case 196:
+      case 195:
         return FlatLight.decode(readValue(buffer)!);
-      case 197:
+      case 196:
         return DirectionalLight.decode(readValue(buffer)!);
-      case 198:
+      case 197:
         return AmbientLight.decode(readValue(buffer)!);
-      case 199:
+      case 198:
         return MbxImage.decode(readValue(buffer)!);
-      case 200:
+      case 199:
         return ImageStretches.decode(readValue(buffer)!);
-      case 201:
+      case 200:
         return ImageContent.decode(readValue(buffer)!);
-      case 202:
+      case 201:
         return CanonicalTileID.decode(readValue(buffer)!);
-      case 203:
+      case 202:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

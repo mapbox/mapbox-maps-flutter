@@ -1,21 +1,10 @@
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:turf/turf.dart' show Position;
 
-import 'utils.dart';
-import 'example.dart';
-
-class StandardStyleInteractionsExample extends StatefulWidget
-    implements Example {
-  @override
-  final Widget leading = const Icon(Icons.touch_app);
-  @override
-  final String title = 'Standard Style Interactions';
-  @override
-  final String? subtitle = 'Showcase of Standard Style interactions';
-
+class StandardStyleInteractionsExample extends StatefulWidget {
   const StandardStyleInteractionsExample({super.key});
 
   @override
@@ -32,7 +21,7 @@ class StandardStyleInteractionsState
   String theme = 'default';
   String buildingHighlightColor = 'hsl(214, 94%, 59%)';
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
     _updateMapStyle();
@@ -179,7 +168,6 @@ class StandardStyleInteractionsState
               pitch: 40,
             ),
             styleUri: MapboxStyles.STANDARD,
-            textureView: true,
             onMapCreated: _onMapCreated,
           ),
           Positioned(

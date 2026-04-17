@@ -1,4 +1,5 @@
 import 'simple_map_example.dart';
+import 'standard_style_interactions_example.dart';
 import 'viewport_example.dart';
 import 'ornaments_example.dart';
 import 'spinning_globe_example.dart';
@@ -38,7 +39,12 @@ final List<Example> examples = [
       subtitle: 'Shows how to use OfflineManager and TileStore to download regions for offline use.',
       builder: (_) => const OfflineMapExample()
     ),
-
+  Example(
+    leading: const Icon(Icons.touch_app),
+    title: "Standard Style Interactions",
+    subtitle: "Showcase of Standard Style interactions",
+    builder: (_) => const StandardStyleInteractionsExample(),
+  )
 ];
 
 class Example {

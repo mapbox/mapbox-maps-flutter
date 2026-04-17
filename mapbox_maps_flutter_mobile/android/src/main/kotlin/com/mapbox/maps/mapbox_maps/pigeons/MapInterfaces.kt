@@ -208,19 +208,6 @@ enum class _InteractionType(val raw: Int) {
   }
 }
 
-/** Type information of the variant's content */
-enum class Type(val raw: Int) {
-  SCREEN_BOX(0),
-  SCREEN_COORDINATE(1),
-  LIST(2);
-
-  companion object {
-    fun ofRaw(raw: Int): Type? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Controls the behavior of fill extrusion base over terrain */
 enum class FillExtrusionBaseAlignment(val raw: Int) {
   /** The fill extrusion base follows terrain slope. */
@@ -810,141 +797,6 @@ data class QueriedFeature(
 }
 
 /**
- * Identifies a feature in a featureset.
- *
- * Knowing the feature identifier allows to set the feature states to a particular feature, see ``MapboxMap/setFeatureState(featureset:featureId:state:callback:)``.
- *
- * In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
- * The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
- *
- * - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
- * If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class FeaturesetFeatureId(
-  /** A feature id coming from the feature itself.exp */
-  val id: String,
-  /** A namespace of the feature */
-  val namespace: String? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeatureId {
-      val id = pigeonVar_list[0] as String
-      val namespace = pigeonVar_list[1] as String?
-      return FeaturesetFeatureId(id, namespace)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      id,
-      namespace,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is FeaturesetFeatureId) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return id == other.id &&
-      namespace == other.namespace
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Wraps a FeatureState map
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class FeatureState(
-  val map: Map<String, Any?>
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): FeatureState {
-      val map = pigeonVar_list[0] as Map<String, Any?>
-      return FeatureState(map)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      map,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is FeatureState) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return deepEqualsMapInterfaces(map, other.map)
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Internal: An interaction that can be added to the map.
- *
- * To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
- *
- * See also: ``MapboxMap/addInteraction``.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class _Interaction(
-  /** The featureset descriptor that specifies the featureset to be included in the interaction. */
-  val featuresetDescriptor: FeaturesetDescriptor? = null,
-  /** The type of interaction, either tap or longTap */
-  val interactionType: _InteractionType,
-  /** Whether to stop the propagation of the interaction to the map. Defaults to true. */
-  val stopPropagation: Boolean,
-  /** An optional filter of features that should trigger the interaction. */
-  val filter: String? = null,
-  /** Radius of a tappable area */
-  val radius: Double? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): _Interaction {
-      val featuresetDescriptor = pigeonVar_list[0] as FeaturesetDescriptor?
-      val interactionType = pigeonVar_list[1] as _InteractionType
-      val stopPropagation = pigeonVar_list[2] as Boolean
-      val filter = pigeonVar_list[3] as String?
-      val radius = pigeonVar_list[4] as Double?
-      return _Interaction(featuresetDescriptor, interactionType, stopPropagation, filter, radius)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      featuresetDescriptor,
-      interactionType,
-      stopPropagation,
-      filter,
-      radius,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is _Interaction) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return featuresetDescriptor == other.featuresetDescriptor &&
-      interactionType == other.interactionType &&
-      stopPropagation == other.stopPropagation &&
-      filter == other.filter &&
-      radius == other.radius
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
  * Internal class to handle pigeon conversions for interactions.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -997,135 +849,6 @@ data class _InteractionPigeon(
       identifier == other.identifier &&
       filter == other.filter &&
       radius == other.radius
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * A featureset descriptor.
- *
- * The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class FeaturesetDescriptor(
-  /**
-   * An optional unique identifier for the featureset within the style.
-   * This id is used to reference a specific featureset.
-   *
-   * * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
-   * * meaning `layerId` will not be considered even if it has a valid value.
-   */
-  val featuresetId: String? = null,
-  /**
-   * An optional import id that is required if the featureset is defined within an imported style.
-   * If the featureset belongs to the current style, this field should be set to a null string.
-   *
-   * Note: `importId` is only applicable when used in conjunction with `featuresetId`
-   * and has no effect when used with `layerId`.
-   */
-  val importId: String? = null,
-  /**
-   * An optional unique identifier for the layer within the current style.
-   *
-   * Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
-   * Additionally, `importId` does not apply when using `layerId`.
-   */
-  val layerId: String? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): FeaturesetDescriptor {
-      val featuresetId = pigeonVar_list[0] as String?
-      val importId = pigeonVar_list[1] as String?
-      val layerId = pigeonVar_list[2] as String?
-      return FeaturesetDescriptor(featuresetId, importId, layerId)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      featuresetId,
-      importId,
-      layerId,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is FeaturesetDescriptor) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return featuresetId == other.featuresetId &&
-      importId == other.importId &&
-      layerId == other.layerId
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * A basic feature of a featureset.
- *
- * If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
- *
- * The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class FeaturesetFeature(
-  /**
-   * An identifier of the feature.
-   *
-   * The identifier can be `nil` if the underlying source doesn't have identifiers for features.
-   * In this case it's impossible to set a feature state for an individual feature.
-   */
-  val id: FeaturesetFeatureId? = null,
-  /** A featureset descriptor denoting the featureset this feature belongs to. */
-  val featureset: FeaturesetDescriptor,
-  /** A feature geometry. */
-  val geometry: Map<String?, Any?>,
-  /** Feature JSON properties. */
-  val properties: Map<String, Any?>,
-  /**
-   * A feature state.
-   *
-   * This is a **snapshot** of the state that the feature had when it was interacted with.
-   * To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
-   */
-  val state: Map<String, Any?>
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeature {
-      val id = pigeonVar_list[0] as FeaturesetFeatureId?
-      val featureset = pigeonVar_list[1] as FeaturesetDescriptor
-      val geometry = pigeonVar_list[2] as Map<String?, Any?>
-      val properties = pigeonVar_list[3] as Map<String, Any?>
-      val state = pigeonVar_list[4] as Map<String, Any?>
-      return FeaturesetFeature(id, featureset, geometry, properties, state)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      id,
-      featureset,
-      geometry,
-      properties,
-      state,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is FeaturesetFeature) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return id == other.id &&
-      featureset == other.featureset &&
-      deepEqualsMapInterfaces(geometry, other.geometry) &&
-      deepEqualsMapInterfaces(properties, other.properties) &&
-      deepEqualsMapInterfaces(state, other.state)
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1933,80 +1656,75 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _Interaction.fromList(it)
+          _InteractionPigeon.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _InteractionPigeon.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetDescriptor.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeature.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          DirectionalLight.fromList(it)
         }
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          AmbientLight.fromList(it)
         }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
-        }
-      }
-      202.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           CanonicalTileID.fromList(it)
         }
       }
-      203.toByte() -> {
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -2252,68 +1970,64 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is _Interaction -> {
+      is _InteractionPigeon -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is _InteractionPigeon -> {
+      is FeaturesetDescriptor -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is FeaturesetDescriptor -> {
+      is FeaturesetFeature -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeature -> {
+      is MapContentGestureContext -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is _RenderedQueryGeometry -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is ProjectedMeters -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is MercatorCoordinate -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is FlatLight -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is DirectionalLight -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is AmbientLight -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is MbxImage -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is ImageStretches -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is ImageContent -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is CanonicalTileID -> {
         stream.write(201)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
-        stream.write(202)
-        writeValue(stream, value.toList())
-      }
       is StylePropertyValue -> {
-        stream.write(203)
+        stream.write(202)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

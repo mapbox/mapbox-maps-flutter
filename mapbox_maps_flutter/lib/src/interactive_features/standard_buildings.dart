@@ -1,5 +1,5 @@
 // This file is generated.
-part of '../../../mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 /// Featureset describing the buildings.
 ///
@@ -32,6 +32,11 @@ extension StandardBuildingsFeature
 class StandardBuildings extends FeaturesetDescriptor {
   StandardBuildings({String importId = "basemap"})
     : super(featuresetId: "buildings", importId: importId);
+
+  static StandardBuildings decode(Object result) {
+    result as List<Object?>;
+    return StandardBuildings(importId: result[1] as String? ?? 'basemap');
+  }
 }
 
 /// Represents available states for StandardBuildings features in the Standard style.
@@ -49,4 +54,14 @@ class StandardBuildingsState extends FeatureState {
 
   StandardBuildingsState({this.highlight, this.select})
     : super(map: {"highlight": highlight, "select": select});
+
+  static StandardBuildingsState decode(Object result) {
+    result as List<Object?>;
+    final map =
+        (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
+    return StandardBuildingsState(
+      highlight: map['highlight'] as bool?,
+      select: map['select'] as bool?,
+    );
+  }
 }

@@ -333,5 +333,205 @@
   {
     "changeDescription": "Interface \"WidgetViewportAnimation\" removed",
     "reason": "Replaced by ViewportController for imperative viewport animations"
+  },
+  {
+    "changeDescription": "Interface \"TypedInteraction\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"_Interaction\" removed"
+  },
+  {
+    "changeDescription": "Interface \"_InteractionType\" removed"
+  },
+  {
+    "changeDescription": "MapWidget: Field \"onLongTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setOnMapTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setOnMapLongTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "TapInteraction: Super Type \"_Interaction\" removed"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Super Type \"_Interaction\" removed"
+  },
+  {
+    "changeDescription": "TapInteraction: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"action\" removed",
+    "reason": "False positive — field is inherited from TypedInteraction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"featuresetDescriptor\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"interactionType\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"stopPropagation\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"filter\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"radius\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"action\" removed",
+    "reason": "False positive — field is inherited from TypedInteraction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"featuresetDescriptor\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"interactionType\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"stopPropagation\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"filter\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"radius\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "Interface \"Type\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeaturesetDescriptor\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeaturesetFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeaturesetFeatureId\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeatureState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TypedFeaturesetFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "StandardBuildings: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"featuresetId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"importId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"layerId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardBuildingsState: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeatureState in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildingsState: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"featuresetId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"importId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"layerId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPlaceLabelsState: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeatureState in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabelsState: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPOIs: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"featuresetId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"importId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"layerId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPOIsState: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeatureState in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIsState: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
   }
 ]

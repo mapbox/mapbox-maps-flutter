@@ -9,6 +9,7 @@ import 'interfaces/viewport/viewport_state.dart';
 import 'interfaces/viewport/viewport_transition.dart';
 
 export 'events.dart';
+export 'interactive_features.dart';
 export 'interfaces/annotations_interface.dart';
 export 'interfaces/http_service_interface.dart';
 export 'interfaces/location_settings_interface.dart';

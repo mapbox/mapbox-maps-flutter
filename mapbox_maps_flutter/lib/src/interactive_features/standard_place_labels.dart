@@ -1,5 +1,5 @@
 // This file is generated.
-part of '../../../mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 /// Points for labeling places including countries, states, cities, towns, and neighborhoods.
 ///
@@ -38,6 +38,11 @@ extension StandardPlaceLabelsFeature
 class StandardPlaceLabels extends FeaturesetDescriptor {
   StandardPlaceLabels({String importId = "basemap"})
     : super(featuresetId: "place-labels", importId: importId);
+
+  static StandardPlaceLabels decode(Object result) {
+    result as List<Object?>;
+    return StandardPlaceLabels(importId: result[1] as String? ?? 'basemap');
+  }
 }
 
 /// Represents available states for StandardPlaceLabels features in the Standard style.
@@ -58,4 +63,15 @@ class StandardPlaceLabelsState extends FeatureState {
 
   StandardPlaceLabelsState({this.hide, this.highlight, this.select})
     : super(map: {"hide": hide, "highlight": highlight, "select": select});
+
+  static StandardPlaceLabelsState decode(Object result) {
+    result as List<Object?>;
+    final map =
+        (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
+    return StandardPlaceLabelsState(
+      hide: map['hide'] as bool?,
+      highlight: map['highlight'] as bool?,
+      select: map['select'] as bool?,
+    );
+  }
 }

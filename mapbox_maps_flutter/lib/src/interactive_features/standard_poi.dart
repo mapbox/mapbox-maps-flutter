@@ -1,5 +1,6 @@
 // This file is generated.
-part of '../../../mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart';
 
 /// A point of interest.
 ///
@@ -61,7 +62,7 @@ extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
 
   /// The coordinate of the Point of Interest.
   Point? get coordinate {
-    return this.geometry["coordinates"] as Point?;
+    return geometry["coordinates"] as Point?;
   }
 }
 
@@ -69,6 +70,11 @@ extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
 class StandardPOIs extends FeaturesetDescriptor {
   StandardPOIs({String importId = "basemap"})
     : super(featuresetId: "poi", importId: importId);
+
+  static StandardPOIs decode(Object result) {
+    result as List<Object?>;
+    return StandardPOIs(importId: result[1] as String? ?? 'basemap');
+  }
 }
 
 /// Represents available states for StandardPOIs features in the Standard style.
@@ -82,4 +88,11 @@ class StandardPOIsState extends FeatureState {
   }
 
   StandardPOIsState({this.hide}) : super(map: {"hide": hide});
+
+  static StandardPOIsState decode(Object result) {
+    result as List<Object?>;
+    final map =
+        (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
+    return StandardPOIsState(hide: map['hide'] as bool?);
+  }
 }

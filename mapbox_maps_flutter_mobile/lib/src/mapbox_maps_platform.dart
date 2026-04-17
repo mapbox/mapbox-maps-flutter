@@ -176,14 +176,17 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> addInteractionsListeners(
-    _Interaction interaction,
+    Interaction interaction,
     String interactionID,
   ) async {
     var interactionPigeon = _InteractionPigeon(
       featuresetDescriptor:
           interaction.featuresetDescriptor?.encode() as List<Object?>?,
       stopPropagation: interaction.stopPropagation,
-      interactionType: interaction.interactionType.name,
+      interactionType: switch (interaction.interactionType) {
+        InteractionType.tap => 'TAP',
+        InteractionType.longTap => 'LONG_TAP',
+      },
       identifier: interactionID,
       radius: interaction.radius,
       filter: interaction.filter,

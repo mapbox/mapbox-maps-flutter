@@ -521,3 +521,14 @@ typedef OnMapScrollListener = void Function(MapContentGestureContext context);
 
 /// Gesture listener called on map zoom.
 typedef OnMapZoomListener = void Function(MapContentGestureContext context);
+
+/// Interaction callback for any feature type.
+typedef OnInteraction<T extends FeaturesetFeature> =
+    void Function(T? feature, MapContentGestureContext context);
+
+/// Interaction callback for a specific featureset which returns a non-optional FeaturesetFeature.
+typedef OnInteractionFeatureContext<T extends FeaturesetFeature> =
+    void Function(T feature, MapContentGestureContext context);
+
+/// Interaction callback that just returns the MapContentGestureContext.
+typedef OnInteractionContext = void Function(MapContentGestureContext context);

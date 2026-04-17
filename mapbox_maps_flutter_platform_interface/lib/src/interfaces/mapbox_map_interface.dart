@@ -1,6 +1,7 @@
 import 'package:turf/turf.dart';
 
 import '../events.dart';
+import '../interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
 import 'http_service_interface.dart';
@@ -223,6 +224,71 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Sets the map's viewport mode.
   Future<void> setViewportMode(ViewportMode mode);
+
+  // ===== Interactions =====
+
+  /// Adds an interaction to the map.
+  ///
+  /// An [interactionID] can be provided to later remove the interaction
+  /// with [removeInteraction].
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
+    TypedInteraction<T> interaction, {
+    String? interactionID,
+  });
+
+  /// Removes an interaction from the map by its [interactionID].
+  void removeInteraction(String interactionID);
+
+  // ===== Feature queries =====
+
+  /// Queries the map for rendered features matching a [featureset].
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
+    required FeaturesetDescriptor featureset,
+    RenderedQueryGeometry? geometry,
+    String? filter,
+  });
+
+  // ===== Featureset state =====
+
+  /// Updates entries in the state map of a feature within a [featureset].
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    FeatureState state,
+  );
+
+  /// Updates the state map of an individual [feature].
+  Future<void> setFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+    FeatureState state,
+  );
+
+  /// Gets the state map of a feature within a [featureset].
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+  );
+
+  /// Gets the state map of a [feature].
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+  );
+
+  /// Removes entries from a feature state object within a [featureset].
+  Future<void> removeFeatureStateForFeaturesetDescriptor({
+    required FeaturesetDescriptor featureset,
+    required FeaturesetFeatureId featureId,
+    String? stateKey,
+  });
+
+  /// Removes entries from a [feature] state object.
+  Future<void> removeFeatureStateForFeaturesetFeature({
+    required FeaturesetFeature feature,
+    String? stateKey,
+  });
+
+  /// Resets all feature states within a [featureset].
+  Future<void> resetFeatureStatesForFeatureset(FeaturesetDescriptor featureset);
 
   // ===== Lifecycle =====
 

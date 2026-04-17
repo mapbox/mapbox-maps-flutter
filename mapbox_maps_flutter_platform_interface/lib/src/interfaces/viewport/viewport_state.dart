@@ -98,7 +98,8 @@ final class CameraViewportState extends ViewportState {
           pitch == other.pitch;
 
   @override
-  int get hashCode => Object.hash(center, padding, anchor, zoom, bearing, pitch);
+  int get hashCode =>
+      Object.hash(center, padding, anchor, zoom, bearing, pitch);
 }
 
 /// A viewport state that configures the camera to display an overview of a specified geometry.
