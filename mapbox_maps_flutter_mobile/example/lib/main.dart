@@ -16,7 +16,6 @@ import 'package:mapbox_maps_example/geojson_line_example.dart';
 import 'package:mapbox_maps_example/image_source_example.dart';
 import 'package:mapbox_maps_example/map_interface_example.dart';
 import 'package:mapbox_maps_example/standard_style_import_example.dart';
-import 'package:mapbox_maps_example/standard_style_interactions_example.dart';
 import 'package:mapbox_maps_example/polygon_annotations_example.dart';
 import 'package:mapbox_maps_example/polyline_annotations_example.dart';
 import 'package:mapbox_maps_example/simple_map_example.dart';
@@ -46,7 +45,6 @@ final List<Example> _allPages = <Example>[
   DebugOptionsExample(),
   SpinningGlobeExample(),
   StandardStyleImportExample(),
-  StandardStyleInteractionsExample(),
   ModelLayerInteractionsExample(),
   FullMapExample(),
   StyleExample(),

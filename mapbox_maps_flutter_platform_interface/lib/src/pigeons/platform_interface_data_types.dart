@@ -196,6 +196,9 @@ enum TileDataDomain {
   ADAS,
 }
 
+/// Type information of the variant's content
+enum Type { SCREEN_BOX, SCREEN_COORDINATE, LIST }
+
 /// Describes the reason for an offline request response error.
 /// Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
 enum ResponseErrorReason {
@@ -3166,6 +3169,231 @@ class TileCacheBudgetInTiles {
       return true;
     }
     return size == other.size;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// An identifier for a feature in a featureset.
+///
+/// In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
+/// The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
+///
+/// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
+/// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
+class FeaturesetFeatureId {
+  FeaturesetFeatureId({required this.id, this.namespace});
+
+  /// A feature id coming from the feature itself.
+  String id;
+
+  /// A namespace of the feature
+  String? namespace;
+
+  List<Object?> _toList() {
+    return <Object?>[id, namespace];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static FeaturesetFeatureId decode(Object result) {
+    result as List<Object?>;
+    return FeaturesetFeatureId(
+      id: result[0]! as String,
+      namespace: result[1] as String?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! FeaturesetFeatureId || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return id == other.id && namespace == other.namespace;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Wraps a FeatureState map
+class FeatureState {
+  FeatureState({required this.map});
+
+  Map<String, Object?> map;
+
+  List<Object?> _toList() {
+    return <Object?>[map];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static FeatureState decode(Object result) {
+    result as List<Object?>;
+    return FeatureState(
+      map: (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! FeatureState || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(map, other.map);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A featureset descriptor.
+///
+/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
+class FeaturesetDescriptor {
+  FeaturesetDescriptor({this.featuresetId, this.importId, this.layerId});
+
+  /// An optional unique identifier for the featureset within the style.
+  /// This id is used to reference a specific featureset.
+  ///
+  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+  /// * meaning `layerId` will not be considered even if it has a valid value.
+  String? featuresetId;
+
+  /// An optional import id that is required if the featureset is defined within an imported style.
+  /// If the featureset belongs to the current style, this field should be set to a null string.
+  ///
+  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
+  /// and has no effect when used with `layerId`.
+  String? importId;
+
+  /// An optional unique identifier for the layer within the current style.
+  ///
+  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+  /// Additionally, `importId` does not apply when using `layerId`.
+  String? layerId;
+
+  List<Object?> _toList() {
+    return <Object?>[featuresetId, importId, layerId];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static FeaturesetDescriptor decode(Object result) {
+    result as List<Object?>;
+    return FeaturesetDescriptor(
+      featuresetId: result[0] as String?,
+      importId: result[1] as String?,
+      layerId: result[2] as String?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! FeaturesetDescriptor || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return featuresetId == other.featuresetId &&
+        importId == other.importId &&
+        layerId == other.layerId;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A basic feature of a featureset.
+///
+/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+///
+/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+class FeaturesetFeature {
+  FeaturesetFeature({
+    this.id,
+    required this.featureset,
+    required this.geometry,
+    required this.properties,
+    required this.state,
+  });
+
+  /// An identifier of the feature.
+  ///
+  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+  /// In this case it's impossible to set a feature state for an individual feature.
+  FeaturesetFeatureId? id;
+
+  /// A featureset descriptor denoting the featureset this feature belongs to.
+  FeaturesetDescriptor featureset;
+
+  /// A feature geometry.
+  Map<String?, Object?> geometry;
+
+  /// Feature JSON properties.
+  Map<String, Object?> properties;
+
+  /// A feature state.
+  ///
+  /// This is a **snapshot** of the state that the feature had when it was interacted with.
+  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
+  Map<String, Object?> state;
+
+  List<Object?> _toList() {
+    return <Object?>[id, featureset, geometry, properties, state];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static FeaturesetFeature decode(Object result) {
+    result as List<Object?>;
+    return FeaturesetFeature(
+      id: result[0] as FeaturesetFeatureId?,
+      featureset: result[1]! as FeaturesetDescriptor,
+      geometry: (result[2] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      properties: (result[3] as Map<Object?, Object?>?)!
+          .cast<String, Object?>(),
+      state: (result[4] as Map<Object?, Object?>?)!.cast<String, Object?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! FeaturesetFeature || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return id == other.id &&
+        featureset == other.featureset &&
+        _deepEquals(geometry, other.geometry) &&
+        _deepEquals(properties, other.properties) &&
+        _deepEquals(state, other.state);
   }
 
   @override

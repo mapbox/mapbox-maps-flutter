@@ -279,6 +279,89 @@ class MapboxMap implements MapboxMapInterface {
   Future<void> setViewportMode(ViewportMode mode) =>
       _impl.setViewportMode(mode);
 
+  // ===== Interactions =====
+
+  /// Adds an interaction to the map.
+  ///
+  /// An [interactionID] can be provided to later remove the interaction
+  /// with [removeInteraction].
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
+    TypedInteraction<T> interaction, {
+    String? interactionID,
+  }) => _impl.addInteraction(interaction, interactionID: interactionID);
+
+  /// Removes an interaction from the map by its [interactionID].
+  void removeInteraction(String interactionID) =>
+      _impl.removeInteraction(interactionID);
+
+  // ===== Feature queries =====
+
+  /// Queries the map for rendered features matching a [featureset].
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
+    required FeaturesetDescriptor featureset,
+    RenderedQueryGeometry? geometry,
+    String? filter,
+  }) => _impl.queryRenderedFeaturesForFeatureset(
+    featureset: featureset,
+    geometry: geometry,
+    filter: filter,
+  );
+
+  // ===== Featureset state =====
+
+  /// Updates entries in the state map of a feature within a [featureset].
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    FeatureState state,
+  ) => _impl.setFeatureStateForFeaturesetDescriptor(
+    featureset,
+    featureId,
+    state,
+  );
+
+  /// Updates the state map of an individual [feature].
+  Future<void> setFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+    FeatureState state,
+  ) => _impl.setFeatureStateForFeaturesetFeature(feature, state);
+
+  /// Gets the state map of a feature within a [featureset].
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+  ) => _impl.getFeatureStateForFeaturesetDescriptor(featureset, featureId);
+
+  /// Gets the state map of a [feature].
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+  ) => _impl.getFeatureStateForFeaturesetFeature(feature);
+
+  /// Removes entries from a feature state object within a [featureset].
+  Future<void> removeFeatureStateForFeaturesetDescriptor({
+    required FeaturesetDescriptor featureset,
+    required FeaturesetFeatureId featureId,
+    String? stateKey,
+  }) => _impl.removeFeatureStateForFeaturesetDescriptor(
+    featureset: featureset,
+    featureId: featureId,
+    stateKey: stateKey,
+  );
+
+  /// Removes entries from a [feature] state object.
+  Future<void> removeFeatureStateForFeaturesetFeature({
+    required FeaturesetFeature feature,
+    String? stateKey,
+  }) => _impl.removeFeatureStateForFeaturesetFeature(
+    feature: feature,
+    stateKey: stateKey,
+  );
+
+  /// Resets all feature states within a [featureset].
+  Future<void> resetFeatureStatesForFeatureset(
+    FeaturesetDescriptor featureset,
+  ) => _impl.resetFeatureStatesForFeatureset(featureset);
+
   // ===== Lifecycle =====
 
   /// Releases resources held by this map instance.

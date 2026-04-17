@@ -138,8 +138,9 @@ class MapWidget extends StatelessWidget {
   ) {
     return MapboxMapsFlutterPlatform.instance.buildView(
       styleUri: styleUri,
-      onMapCreated:
-          onMapCreated != null ? (map) => onMapCreated!(MapboxMap(map)) : null,
+      onMapCreated: onMapCreated != null
+          ? (map) => onMapCreated!(MapboxMap(map))
+          : null,
       viewport: viewport,
       viewportTransition: transition,
       viewportTransitionCompletion: completion,

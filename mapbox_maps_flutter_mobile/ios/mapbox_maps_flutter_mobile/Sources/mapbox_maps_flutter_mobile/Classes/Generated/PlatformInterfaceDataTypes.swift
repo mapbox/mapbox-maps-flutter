@@ -176,6 +176,13 @@ enum TileDataDomain: Int {
   case aDAS = 3
 }
 
+/// Type information of the variant's content
+enum Type: Int {
+  case sCREENBOX = 0
+  case sCREENCOORDINATE = 1
+  case lIST = 2
+}
+
 /// Describes the reason for an offline request response error.
 /// Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
 enum ResponseErrorReason: Int {
@@ -2071,6 +2078,161 @@ struct TileCacheBudgetInTiles {
   func toList() -> [Any?] {
     return [
       size
+    ]
+  }
+}
+
+/// An identifier for a feature in a featureset.
+///
+/// In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
+/// The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
+///
+/// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
+/// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetFeatureId {
+  /// A feature id coming from the feature itself.
+  var id: String
+  /// A namespace of the feature
+  var namespace: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeatureId? {
+    let id = pigeonVar_list[0] as! String
+    let namespace: String? = nilOrValue(pigeonVar_list[1])
+
+    return FeaturesetFeatureId(
+      id: id,
+      namespace: namespace
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      namespace,
+    ]
+  }
+}
+
+/// Wraps a FeatureState map
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeatureState {
+  var map: [String: Any?]
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeatureState? {
+    let map = pigeonVar_list[0] as! [String: Any?]
+
+    return FeatureState(
+      map: map
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      map
+    ]
+  }
+}
+
+/// A featureset descriptor.
+///
+/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetDescriptor {
+  /// An optional unique identifier for the featureset within the style.
+  /// This id is used to reference a specific featureset.
+  ///
+  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+  /// * meaning `layerId` will not be considered even if it has a valid value.
+  var featuresetId: String? = nil
+  /// An optional import id that is required if the featureset is defined within an imported style.
+  /// If the featureset belongs to the current style, this field should be set to a null string.
+  ///
+  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
+  /// and has no effect when used with `layerId`.
+  var importId: String? = nil
+  /// An optional unique identifier for the layer within the current style.
+  ///
+  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+  /// Additionally, `importId` does not apply when using `layerId`.
+  var layerId: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetDescriptor? {
+    let featuresetId: String? = nilOrValue(pigeonVar_list[0])
+    let importId: String? = nilOrValue(pigeonVar_list[1])
+    let layerId: String? = nilOrValue(pigeonVar_list[2])
+
+    return FeaturesetDescriptor(
+      featuresetId: featuresetId,
+      importId: importId,
+      layerId: layerId
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      featuresetId,
+      importId,
+      layerId,
+    ]
+  }
+}
+
+/// A basic feature of a featureset.
+///
+/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+///
+/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetFeature {
+  /// An identifier of the feature.
+  ///
+  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+  /// In this case it's impossible to set a feature state for an individual feature.
+  var id: FeaturesetFeatureId? = nil
+  /// A featureset descriptor denoting the featureset this feature belongs to.
+  var featureset: FeaturesetDescriptor
+  /// A feature geometry.
+  var geometry: [String?: Any?]
+  /// Feature JSON properties.
+  var properties: [String: Any?]
+  /// A feature state.
+  ///
+  /// This is a **snapshot** of the state that the feature had when it was interacted with.
+  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
+  var state: [String: Any?]
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeature? {
+    let id: FeaturesetFeatureId? = nilOrValue(pigeonVar_list[0])
+    let featureset = pigeonVar_list[1] as! FeaturesetDescriptor
+    let geometry = pigeonVar_list[2] as! [String?: Any?]
+    let properties = pigeonVar_list[3] as! [String: Any?]
+    let state = pigeonVar_list[4] as! [String: Any?]
+
+    return FeaturesetFeature(
+      id: id,
+      featureset: featureset,
+      geometry: geometry,
+      properties: properties,
+      state: state
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      featureset,
+      geometry,
+      properties,
+      state,
     ]
   }
 }

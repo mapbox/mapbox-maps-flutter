@@ -1,31 +1,5 @@
 part of mapbox_maps_flutter_mobile;
 
-/// Geometry for querying rendered features.
-class RenderedQueryGeometry {
-  @Deprecated(
-    'Use RenderedQueryGeometry.fromList()/fromScreenBox()/fromScreenCoordinated() instead',
-  )
-  RenderedQueryGeometry({required this.value, required this.type});
-
-  RenderedQueryGeometry.fromList(List<ScreenCoordinate> points)
-    : value = jsonEncode(points.map((e) => e.toJson()).toList()),
-      type = Type.LIST;
-
-  RenderedQueryGeometry.fromScreenBox(ScreenBox box)
-    : value = jsonEncode(box.toJson()),
-      type = Type.SCREEN_BOX;
-
-  RenderedQueryGeometry.fromScreenCoordinate(ScreenCoordinate point)
-    : value = jsonEncode(point.toJson()),
-      type = Type.SCREEN_COORDINATE;
-
-  /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
-  String value;
-
-  /// Type of the geometry encoded in [value].
-  Type type;
-}
-
 /// Options for enabling debugging features in a map.
 class MapWidgetDebugOptions {
   final _MapWidgetDebugOptions _option;
@@ -681,6 +655,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Update the state map of a feature within a featureset.
   /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
   /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+  @override
   Future<void> setFeatureStateForFeaturesetDescriptor(
     FeaturesetDescriptor featureset,
     FeaturesetFeatureId featureId,
@@ -695,6 +670,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
   /// the operation will be no-op and callback will receive an error.
+  @override
   Future<void> setFeatureStateForFeaturesetFeature(
     FeaturesetFeature feature,
     FeatureState state,
@@ -711,6 +687,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ) => _mapInterface.getFeatureState(sourceId, sourceLayerId, featureId);
 
   /// Get the state map of a feature within a style source.
+  @override
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
     FeaturesetDescriptor featureset,
     FeaturesetFeatureId featureId,
@@ -720,6 +697,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   );
 
   /// Get the state map of a feature within a style source.
+  @override
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
     FeaturesetFeature feature,
   ) => _mapInterface.getFeatureStateForFeaturesetFeature(feature);
@@ -745,6 +723,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
 
   /// Removes entries from a feature state object of a feature in the specified featureset.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  @override
   Future<void> removeFeatureStateForFeaturesetDescriptor({
     required FeaturesetDescriptor featureset,
     required FeaturesetFeatureId featureId,
@@ -757,6 +736,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
 
   /// Removes entries from a specified Feature.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  @override
   Future<void> removeFeatureStateForFeaturesetFeature({
     required FeaturesetFeature feature,
     String? stateKey,
@@ -766,6 +746,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+  @override
   Future<void> resetFeatureStatesForFeatureset(
     FeaturesetDescriptor featureset,
   ) => _mapInterface.resetFeatureStatesForFeatureset(featureset);
@@ -776,6 +757,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Add an interaction to the map
   /// An identifier can be provided, which you can use to remove
   /// the interaction with `.removeInteraction(interactionID)`
+  @override
   void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
     TypedInteraction<T> interaction, {
     String? interactionID,
@@ -784,6 +766,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     _interactionsMap.interactions[id] = _InteractionListener<T>(
       onInteractionListener: interaction.action,
       interactionID: id,
+      featureFactory: interaction.featureFactory,
     );
     _InteractionsListener.setUp(
       _interactionsMap,
@@ -795,6 +778,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
 
   /// Remove an interaction from the map with the given interactionID
   /// that was passed with `.addInteraction(interaction, interactionID)`
+  @override
   void removeInteraction(String interactionID) {
     _interactionsMap.interactions.remove(interactionID);
     _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
@@ -1102,11 +1086,13 @@ class _InteractionListener<T extends FeaturesetFeature>
   _InteractionListener({
     required this.interactionID,
     required this.onInteractionListener,
+    required this.featureFactory,
   });
 
   String interactionID;
 
   final OnInteraction<T> onInteractionListener;
+  final T Function(FeaturesetFeature) featureFactory;
 
   @override
   void onInteraction(
@@ -1114,31 +1100,8 @@ class _InteractionListener<T extends FeaturesetFeature>
     MapContentGestureContext context,
     String interactionID,
   ) {
-    final featuresetID = feature?.featureset.featuresetId;
-    T? typedFeature;
-
     if (feature != null) {
-      if (featuresetID == "buildings") {
-        typedFeature =
-            TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
-                  feature,
-                )
-                as T;
-      } else if (featuresetID == "poi") {
-        typedFeature =
-            TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
-                as T;
-      } else if (featuresetID == "place-labels") {
-        typedFeature =
-            TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
-                  feature,
-                )
-                as T;
-      } else {
-        typedFeature =
-            TypedFeaturesetFeature.fromFeaturesetFeature(feature) as T;
-      }
-      onInteractionListener.call(typedFeature, context);
+      onInteractionListener.call(featureFactory(feature), context);
     } else {
       onInteractionListener.call(null, context);
     }

@@ -483,6 +483,64 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   }
 
   @override
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
+    TypedInteraction<T> interaction, {
+    String? interactionID,
+  }) {}
+
+  @override
+  void removeInteraction(String interactionID) {}
+
+  @override
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
+    required FeaturesetDescriptor featureset,
+    RenderedQueryGeometry? geometry,
+    String? filter,
+  }) async => [];
+
+  @override
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    FeatureState state,
+  ) async {}
+
+  @override
+  Future<void> setFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+    FeatureState state,
+  ) async {}
+
+  @override
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+  ) async => {};
+
+  @override
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+  ) async => {};
+
+  @override
+  Future<void> removeFeatureStateForFeaturesetDescriptor({
+    required FeaturesetDescriptor featureset,
+    required FeaturesetFeatureId featureId,
+    String? stateKey,
+  }) async {}
+
+  @override
+  Future<void> removeFeatureStateForFeaturesetFeature({
+    required FeaturesetFeature feature,
+    String? stateKey,
+  }) async {}
+
+  @override
+  Future<void> resetFeatureStatesForFeatureset(
+    FeaturesetDescriptor featureset,
+  ) async {}
+
+  @override
   void dispose() {
     disposeCallCount++;
   }

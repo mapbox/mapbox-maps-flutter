@@ -158,13 +158,6 @@ enum _InteractionType: Int {
   case lONGTAP = 1
 }
 
-/// Type information of the variant's content
-enum Type: Int {
-  case sCREENBOX = 0
-  case sCREENCOORDINATE = 1
-  case lIST = 2
-}
-
 /// Controls the behavior of fill extrusion base over terrain
 enum FillExtrusionBaseAlignment: Int {
   /// The fill extrusion base follows terrain slope.
@@ -577,111 +570,6 @@ struct QueriedFeature {
   }
 }
 
-/// Identifies a feature in a featureset.
-///
-/// Knowing the feature identifier allows to set the feature states to a particular feature, see ``MapboxMap/setFeatureState(featureset:featureId:state:callback:)``.
-///
-/// In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
-/// The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
-///
-/// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
-/// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FeaturesetFeatureId {
-  /// A feature id coming from the feature itself.exp
-  var id: String
-  /// A namespace of the feature
-  var namespace: String? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeatureId? {
-    let id = pigeonVar_list[0] as! String
-    let namespace: String? = nilOrValue(pigeonVar_list[1])
-
-    return FeaturesetFeatureId(
-      id: id,
-      namespace: namespace
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      id,
-      namespace,
-    ]
-  }
-}
-
-/// Wraps a FeatureState map
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FeatureState {
-  var map: [String: Any?]
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FeatureState? {
-    let map = pigeonVar_list[0] as! [String: Any?]
-
-    return FeatureState(
-      map: map
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      map
-    ]
-  }
-}
-
-/// Internal: An interaction that can be added to the map.
-///
-/// To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
-///
-/// See also: ``MapboxMap/addInteraction``.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct _Interaction {
-  /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  var featuresetDescriptor: FeaturesetDescriptor? = nil
-  /// The type of interaction, either tap or longTap
-  var interactionType: _InteractionType
-  /// Whether to stop the propagation of the interaction to the map. Defaults to true.
-  var stopPropagation: Bool
-  /// An optional filter of features that should trigger the interaction.
-  var filter: String? = nil
-  /// Radius of a tappable area
-  var radius: Double? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> _Interaction? {
-    let featuresetDescriptor: FeaturesetDescriptor? = nilOrValue(pigeonVar_list[0])
-    let interactionType = pigeonVar_list[1] as! _InteractionType
-    let stopPropagation = pigeonVar_list[2] as! Bool
-    let filter: String? = nilOrValue(pigeonVar_list[3])
-    let radius: Double? = nilOrValue(pigeonVar_list[4])
-
-    return _Interaction(
-      featuresetDescriptor: featuresetDescriptor,
-      interactionType: interactionType,
-      stopPropagation: stopPropagation,
-      filter: filter,
-      radius: radius
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      featuresetDescriptor,
-      interactionType,
-      stopPropagation,
-      filter,
-      radius,
-    ]
-  }
-}
-
 /// Internal class to handle pigeon conversions for interactions.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -726,105 +614,6 @@ struct _InteractionPigeon {
       identifier,
       filter,
       radius,
-    ]
-  }
-}
-
-/// A featureset descriptor.
-///
-/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FeaturesetDescriptor {
-  /// An optional unique identifier for the featureset within the style.
-  /// This id is used to reference a specific featureset.
-  ///
-  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
-  /// * meaning `layerId` will not be considered even if it has a valid value.
-  var featuresetId: String? = nil
-  /// An optional import id that is required if the featureset is defined within an imported style.
-  /// If the featureset belongs to the current style, this field should be set to a null string.
-  ///
-  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
-  /// and has no effect when used with `layerId`.
-  var importId: String? = nil
-  /// An optional unique identifier for the layer within the current style.
-  ///
-  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
-  /// Additionally, `importId` does not apply when using `layerId`.
-  var layerId: String? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetDescriptor? {
-    let featuresetId: String? = nilOrValue(pigeonVar_list[0])
-    let importId: String? = nilOrValue(pigeonVar_list[1])
-    let layerId: String? = nilOrValue(pigeonVar_list[2])
-
-    return FeaturesetDescriptor(
-      featuresetId: featuresetId,
-      importId: importId,
-      layerId: layerId
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      featuresetId,
-      importId,
-      layerId,
-    ]
-  }
-}
-
-/// A basic feature of a featureset.
-///
-/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
-///
-/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FeaturesetFeature {
-  /// An identifier of the feature.
-  ///
-  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
-  /// In this case it's impossible to set a feature state for an individual feature.
-  var id: FeaturesetFeatureId? = nil
-  /// A featureset descriptor denoting the featureset this feature belongs to.
-  var featureset: FeaturesetDescriptor
-  /// A feature geometry.
-  var geometry: [String?: Any?]
-  /// Feature JSON properties.
-  var properties: [String: Any?]
-  /// A feature state.
-  ///
-  /// This is a **snapshot** of the state that the feature had when it was interacted with.
-  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
-  var state: [String: Any?]
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeature? {
-    let id: FeaturesetFeatureId? = nilOrValue(pigeonVar_list[0])
-    let featureset = pigeonVar_list[1] as! FeaturesetDescriptor
-    let geometry = pigeonVar_list[2] as! [String?: Any?]
-    let properties = pigeonVar_list[3] as! [String: Any?]
-    let state = pigeonVar_list[4] as! [String: Any?]
-
-    return FeaturesetFeature(
-      id: id,
-      featureset: featureset,
-      geometry: geometry,
-      properties: properties,
-      state: state
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      id,
-      featureset,
-      geometry,
-      properties,
-      state,
     ]
   }
 }
@@ -1460,36 +1249,34 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 187:
       return FeatureState.fromList(self.readValue() as! [Any?])
     case 188:
-      return _Interaction.fromList(self.readValue() as! [Any?])
-    case 189:
       return _InteractionPigeon.fromList(self.readValue() as! [Any?])
-    case 190:
+    case 189:
       return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
-    case 191:
+    case 190:
       return FeaturesetFeature.fromList(self.readValue() as! [Any?])
-    case 192:
+    case 191:
       return MapContentGestureContext.fromList(self.readValue() as! [Any?])
-    case 193:
+    case 192:
       return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 194:
+    case 193:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 195:
+    case 194:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 196:
+    case 195:
       return FlatLight.fromList(self.readValue() as! [Any?])
-    case 197:
+    case 196:
       return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 198:
+    case 197:
       return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 199:
+    case 198:
       return MbxImage.fromList(self.readValue() as! [Any?])
-    case 200:
+    case 199:
       return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 201:
+    case 200:
       return ImageContent.fromList(self.readValue() as! [Any?])
-    case 202:
+    case 201:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 203:
+    case 202:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1676,53 +1463,50 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? FeatureState {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? _Interaction {
+    } else if let value = value as? _InteractionPigeon {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? _InteractionPigeon {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? FlatLight {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? AmbientLight {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? MbxImage {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? ImageStretches {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? ImageContent {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(201)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
-      super.writeByte(202)
-      super.writeValue(value.toList())
     } else if let value = value as? StylePropertyValue {
-      super.writeByte(203)
+      super.writeByte(202)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
