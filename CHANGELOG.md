@@ -1,4 +1,4 @@
-### main
+### 2.23.0-rc.1
 
 * Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
 * Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
