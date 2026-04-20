@@ -29,7 +29,7 @@ final class TileStoreController: _TileStore {
             guard let self else { return }
             self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
         } completion: { [weak self] result in
-            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
+            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() }.mapPigeonError())
             self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
         }
     }
@@ -55,7 +55,7 @@ final class TileStoreController: _TileStore {
                 guard let self else { return }
                 self.tileRegionEstimateProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
             } completion: { [weak self] result in
-                executeOnMainThread(completion)(result.map { $0.toFLTTileRegionEstimateResult() })
+                executeOnMainThread(completion)(result.map { $0.toFLTTileRegionEstimateResult() }.mapPigeonError())
                 self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
             }
     }
@@ -69,7 +69,7 @@ final class TileStoreController: _TileStore {
 
     func tileRegionMetadata(id: String, completion: @escaping (Result<[String: Any], Swift.Error>) -> Void) {
         tileStore.tileRegionMetadata(forId: id) { result in
-            completion(result.map { $0 as? [String: Any] ?? [:] })
+            completion(result.map { $0 as? [String: Any] ?? [:] }.mapPigeonError())
         }
     }
 
@@ -78,27 +78,29 @@ final class TileStoreController: _TileStore {
             .compactMap(MapboxCoreMaps.TilesetDescriptorOptions.init(fltValue:))
             .map(offlineManager.createTilesetDescriptor(for:))
 
-        tileStore.tileRegionContainsDescriptors(forId: id, descriptors: descriptors, completion: executeOnMainThread(completion))
+        tileStore.tileRegionContainsDescriptors(forId: id, descriptors: descriptors) { result in
+            executeOnMainThread(completion)(result.mapPigeonError())
+        }
     }
 
     func allTileRegions(completion: @escaping (Result<[TileRegion], Swift.Error>) -> Void) {
         tileStore.allTileRegions { result in
             let result = result.map { regions in
                 regions.map { $0.toFLTTileRegion() }
-            }
+            }.mapPigeonError()
             completion(result)
         }
     }
 
     func tileRegion(id: String, completion: @escaping (Result<TileRegion, Swift.Error>) -> Void) {
         tileStore.tileRegion(forId: id) { result in
-            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
+            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() }.mapPigeonError())
         }
     }
 
     func removeRegion(id: String, completion: @escaping (Result<TileRegion, Swift.Error>) -> Void) {
         tileStore.removeRegion(forId: id) { result in
-            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
+            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() }.mapPigeonError())
         }
     }
 

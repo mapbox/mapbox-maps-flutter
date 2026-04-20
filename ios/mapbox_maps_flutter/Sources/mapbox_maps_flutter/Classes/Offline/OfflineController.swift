@@ -34,7 +34,7 @@ final class OfflineController: _OfflineManager {
             loadOptions: loadOptions) { [weak self] progress in
                 self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
             } completion: { [weak self] result in
-                executeOnMainThread(completion)(result.map { $0.toFLTStylePack() })
+                executeOnMainThread(completion)(result.map { $0.toFLTStylePack() }.mapPigeonError())
                 self?.progressHandlers.removeValue(forKey: uri)
             }
     }
@@ -52,7 +52,7 @@ final class OfflineController: _OfflineManager {
             return
         }
         offlineManager.removeStylePack(for: styleURI) { result in
-            executeOnMainThread(completion)(result.map { $0.toFLTStylePack() })
+            executeOnMainThread(completion)(result.map { $0.toFLTStylePack() }.mapPigeonError())
         }
     }
 
@@ -62,7 +62,7 @@ final class OfflineController: _OfflineManager {
             return
         }
         offlineManager.stylePack(for: styleURI) { result in
-            executeOnMainThread(completion)(result.map { $0.toFLTStylePack() })
+            executeOnMainThread(completion)(result.map { $0.toFLTStylePack() }.mapPigeonError())
         }
     }
 
@@ -72,13 +72,13 @@ final class OfflineController: _OfflineManager {
             return
         }
         offlineManager.stylePackMetadata(for: styleURI) { result in
-            executeOnMainThread(completion)(result.map { $0 as? [String: Any] ?? [:] })
+            executeOnMainThread(completion)(result.map { $0 as? [String: Any] ?? [:] }.mapPigeonError())
         }
     }
 
     func allStylePacks(completion: @escaping (Result<[StylePack], Swift.Error>) -> Void) {
         offlineManager.allStylePacks { result in
-            executeOnMainThread(completion)(result.mapElement { $0.toFLTStylePack() })
+            executeOnMainThread(completion)(result.mapElement { $0.toFLTStylePack() }.mapPigeonError())
         }
     }
 }

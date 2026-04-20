@@ -911,7 +911,7 @@ fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
 fun <V : Any, NewValue> Expected<StylePackError, V>.toResult(valueTransform: (V) -> NewValue): Result<NewValue> {
   return fold(
     {
-      Result.failure(Throwable(it.message))
+      Result.failure(FlutterError(it.type.name, it.message, Throwable().stackTraceToString()))
     },
     {
       Result.success(valueTransform(it))
@@ -923,7 +923,7 @@ fun <V : Any, NewValue> Expected<StylePackError, V>.toResult(valueTransform: (V)
 fun <V : Any, NewValue> Expected<TileRegionError, V>.toResult(valueTransform: (V) -> NewValue): Result<NewValue> {
   return fold(
     {
-      Result.failure(Throwable(it.message))
+      Result.failure(FlutterError(it.type.name, it.message, Throwable().stackTraceToString()))
     },
     {
       Result.success(valueTransform(it))
