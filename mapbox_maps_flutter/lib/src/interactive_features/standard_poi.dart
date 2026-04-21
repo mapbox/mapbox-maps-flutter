@@ -91,8 +91,7 @@ class StandardPOIsState extends FeatureState {
 
   static StandardPOIsState decode(Object result) {
     result as List<Object?>;
-    final map =
-        (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
+    final map = (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
     return StandardPOIsState(hide: map['hide'] as bool?);
   }
 }

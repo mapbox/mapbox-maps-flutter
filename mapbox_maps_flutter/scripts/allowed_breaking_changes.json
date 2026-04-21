@@ -327,6 +327,10 @@
     "reason": "MapWidget is now stateless; viewport animations are handled by the new ViewportController"
   },
   {
+    "changeDescription": "MapWidget: Super Type \"StatefulWidget\" removed",
+    "reason": "MapWidget is now stateless; viewport animations are handled by the new ViewportController"
+  },
+  {
     "changeDescription": "Function \"setStateWithViewportAnimation\" removed",
     "reason": "Replaced by ViewportController.moveTo() for imperative viewport animations"
   },
@@ -343,6 +347,18 @@
   },
   {
     "changeDescription": "Interface \"_InteractionType\" removed"
+  },
+  {
+    "changeDescription": "MapWidget: Field \"cameraOptions\" removed",
+    "reason": "Deprecated in v2 in favor of Viewport API"
+  },
+  {
+    "changeDescription": "MapWidget: Method \"getMapboxMap\" removed",
+    "reason": "Deprecated in v2, use onMapCreated to get the instance of MapboxMap"
+  },
+  {
+    "changeDescription": "MapWidget: Field \"onTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
   },
   {
     "changeDescription": "MapWidget: Field \"onLongTapListener\" removed",
@@ -533,5 +549,193 @@
   {
     "changeDescription": "StandardPOIsState: Field \"hashCode\" removed",
     "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StyleManager: Constructor \"new\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "StyleManager: Field \"pigeonVar_binaryMessenger\" removed",
+    "reason": "Pigeon-related fields are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "StyleManager: Field \"pigeonChannelCodec\" removed",
+    "reason": "Pigeon-related fields are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "StyleManager: Field \"pigeonVar_messageChannelSuffix\" removed",
+    "reason": "Pigeon-related fields are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Constructor \"new\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Field \"binaryMessenger\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Field \"channelSuffix\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "Interface \"CameraChangedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"DataSourceType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"EventTimeInterval\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearing\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearingConstant\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearingCourse\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearingHeading\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapIdleEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapLoadErrorType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapLoadingErrorEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderedQueryGeometry\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderFrameFinishedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderFrameStartedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RequestLoadingMethodType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RequestPriority\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RequestType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ResourceEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ResponseSourceType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceAddedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceDataLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceDataType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceRemovedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleDataLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleDataType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleImageMissingEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleImageUnusedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileID\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"OverviewViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleDefaultViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IdleViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"DefaultViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FlyViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"EasingViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
   }
 ]

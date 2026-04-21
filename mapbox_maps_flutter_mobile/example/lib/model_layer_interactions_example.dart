@@ -92,103 +92,94 @@ class _ModelLayerInteractionsExampleState
     mapboxMap.style;
 
     // Tap Interaction for Buggy Layer
-    var tapInteractionBuggy = TapInteraction(
-      FeaturesetDescriptor(layerId: "modelLayer-buggy"),
-      (features, point) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Single Tap Interaction Detected"),
-              content: SingleChildScrollView(
-                child: Text(
-                  "You clicked on the ${features.properties['name'].toString()} model implemented using the ${features.properties['type'].toString()} type",
-                ),
-              ),
-            );
+    var tapInteractionBuggy =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            layerId: "modelLayer-buggy",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, point) {
+            if (feature == null) return;
+            _showInteractionDialog("Single Tap Interaction Detected", feature);
           },
+          radius: 100,
         );
-      },
-      radius: 100,
-    );
     mapboxMap.addInteraction(
       tapInteractionBuggy,
       interactionID: "tap_interaction_buggy",
     );
 
-    // LongTap Interaction for Car Layer
-    var tapInteractionCar = TapInteraction(
-      FeaturesetDescriptor(layerId: "modelLayer-car"),
-      (features, point) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Single Tap Interaction Detected'),
-              content: SingleChildScrollView(
-                child: Text(
-                  "You clicked on the ${features.properties['name'].toString()} model implemented using the ${features.properties['type'].toString()} type",
-                ),
-              ),
-            );
+    // Tap Interaction for Car Layer
+    var tapInteractionCar =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "modelLayer-car"),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, point) {
+            if (feature == null) return;
+            _showInteractionDialog("Single Tap Interaction Detected", feature);
           },
+          radius: 100,
         );
-      },
-      radius: 100,
-    );
     mapboxMap.addInteraction(
       tapInteractionCar,
       interactionID: "tap_interaction_car",
     );
 
     // LongTap Interaction for Car Layer
-    var longTapInteractionCar = LongTapInteraction(
-      FeaturesetDescriptor(layerId: "modelLayer-car"),
-      (features, point) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Long Tap Interaction Detected'),
-              content: SingleChildScrollView(
-                child: Text(
-                  "You clicked on the ${features.properties['name'].toString()} model implemented using the ${features.properties['type'].toString()} type",
-                ),
-              ),
-            );
+    var longTapInteractionCar =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "modelLayer-car"),
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, point) {
+            if (feature == null) return;
+            _showInteractionDialog("Long Tap Interaction Detected", feature);
           },
+          radius: 100,
         );
-      },
-      radius: 100,
-    );
     mapboxMap.addInteraction(
       longTapInteractionCar,
       interactionID: "long_tap_interaction_car",
     );
 
-    // Tap Interaction for Buggy Layer
-    var longTapInteractionBuggy = LongTapInteraction(
-      FeaturesetDescriptor(layerId: "modelLayer-buggy"),
-      (features, point) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Long Tap Interaction Detected'),
-              content: SingleChildScrollView(
-                child: Text(
-                  "You clicked on the ${features.properties['name'].toString()} model implemented using the ${features.properties['type'].toString()} type",
-                ),
-              ),
-            );
+    // LongTap Interaction for Buggy Layer
+    var longTapInteractionBuggy =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            layerId: "modelLayer-buggy",
+          ),
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, point) {
+            if (feature == null) return;
+            _showInteractionDialog("Long Tap Interaction Detected", feature);
           },
+          radius: 100,
         );
-      },
-      radius: 100,
-    );
     mapboxMap.addInteraction(
       longTapInteractionBuggy,
       interactionID: "long_tap_interaction_buggy",
+    );
+  }
+
+  void _showInteractionDialog(
+    String title,
+    TypedFeaturesetFeature<FeaturesetDescriptor> feature,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: Text(
+              "You clicked on the ${feature.properties['name']} model implemented using the ${feature.properties['type']} type",
+            ),
+          ),
+        );
+      },
     );
   }
 
