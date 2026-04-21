@@ -274,17 +274,16 @@ void main() {
     final mapboxMap = await mapFuture;
     var triggered = false;
 
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: null,
-      interactionType: InteractionType.longTap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) {
-        triggered = true;
-        expect(triggered, true);
-      },
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            triggered = true;
+            expect(triggered, true);
+          },
+        );
     mapboxMap.addInteraction(tapInteraction);
     mapboxMap.dispatch("longClick", ScreenCoordinate(x: 2, y: 2));
   });
@@ -308,19 +307,18 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the tap interaction
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: FeaturesetDescriptor(layerId: "circle-1"),
-      interactionType: InteractionType.tap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) {
-        if (feature != null) {
-          expectedFeature = feature;
-          expectedContext = context;
-        }
-      },
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "circle-1"),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
@@ -363,22 +361,21 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the tap interaction
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: FeaturesetDescriptor(
-        featuresetId: "poi",
-        importId: "nested",
-      ),
-      interactionType: InteractionType.tap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) {
-        if (feature != null) {
-          expectedFeature = feature;
-          expectedContext = context;
-        }
-      },
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
@@ -422,14 +419,13 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the tap interaction
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: null,
-      interactionType: InteractionType.tap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) => expectedContext = context,
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) => expectedContext = context,
+        );
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
@@ -466,20 +462,19 @@ void main() {
     int count = 0;
 
     // Add the tap interaction
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: FeaturesetDescriptor(
-        featuresetId: "poi",
-        importId: "nested",
-      ),
-      interactionType: InteractionType.tap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      radius: 5,
-      action: (feature, context) {
-        if (feature != null) count++;
-      },
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          radius: 5,
+          action: (feature, context) {
+            if (feature != null) count++;
+          },
+        );
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
@@ -523,23 +518,22 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the tap interaction
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: FeaturesetDescriptor(
-        featuresetId: "poi",
-        importId: "nested",
-      ),
-      interactionType: InteractionType.tap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      filter: '["==",["get", "type"], "A"]',
-      action: (feature, context) {
-        if (feature != null) {
-          expectedFeature = feature;
-          expectedContext = context;
-        }
-      },
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          filter: '["==",["get", "type"], "A"]',
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
@@ -584,19 +578,18 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the long tap interaction
-    var longTapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: FeaturesetDescriptor(layerId: "circle-1"),
-      interactionType: InteractionType.longTap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) {
-        if (feature != null) {
-          expectedFeature = feature;
-          expectedContext = context;
-        }
-      },
-    );
+    var longTapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "circle-1"),
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
     mapboxMap.addInteraction(longTapInteraction);
 
     // Long tap on the map
@@ -639,22 +632,21 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the long tap interaction
-    var longTapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: FeaturesetDescriptor(
-        featuresetId: "poi",
-        importId: "nested",
-      ),
-      interactionType: InteractionType.longTap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) {
-        if (feature != null) {
-          expectedFeature = feature;
-          expectedContext = context;
-        }
-      },
-    );
+    var longTapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
     mapboxMap.addInteraction(longTapInteraction);
 
     // Long tap on the map
@@ -698,14 +690,13 @@ void main() {
     MapContentGestureContext? expectedContext;
 
     // Add the long tap interaction
-    var longTapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: null,
-      interactionType: InteractionType.longTap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) => expectedContext = context,
-    );
+    var longTapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) => expectedContext = context,
+        );
     mapboxMap.addInteraction(longTapInteraction);
 
     // Long Tap on the map
@@ -740,14 +731,13 @@ void main() {
     int count = 0;
 
     // Add the tap interaction
-    var tapInteraction = TypedInteraction<
-      TypedFeaturesetFeature<FeaturesetDescriptor>
-    >(
-      featuresetDescriptor: null,
-      interactionType: InteractionType.tap,
-      featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
-      action: (feature, context) => count++,
-    );
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) => count++,
+        );
     mapboxMap.addInteraction(tapInteraction, interactionID: "tapInteraction");
 
     // Tap on the map

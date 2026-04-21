@@ -53,30 +53,33 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
     this.mapboxMap = mapboxMap;
 
     // Add tap interaction for the symbol layer
-    var tapInteraction = TapInteraction(FeaturesetDescriptor(layerId: "points"), (
-      feature,
-      point,
-    ) {
-      final id = feature.id?.id;
-      if (id == null) return;
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "points"),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, point) {
+            final id = feature?.id?.id;
+            if (id == null) return;
 
-      setState(() {
-        // Toggle selection: if tapping the same feature, deselect; otherwise select new one
-        selectedFlagId = (selectedFlagId == id) ? null : id;
-      });
+            setState(() {
+              // Toggle selection: if tapping the same feature, deselect; otherwise select new one
+              selectedFlagId = (selectedFlagId == id) ? null : id;
+            });
 
-      // Update icon size expression based on selection
-      mapboxMap.style.setStyleLayerProperty('points', 'icon-size', [
-        'case',
-        [
-          '==',
-          ['id'],
-          selectedFlagId ?? '',
-        ],
-        2.0,
-        1.0,
-      ]);
-    });
+            // Update icon size expression based on selection
+            mapboxMap.style.setStyleLayerProperty('points', 'icon-size', [
+              'case',
+              [
+                '==',
+                ['id'],
+                selectedFlagId ?? '',
+              ],
+              2.0,
+              1.0,
+            ]);
+          },
+        );
     mapboxMap.addInteraction(
       tapInteraction,
       interactionID: "tap_interaction_flags",

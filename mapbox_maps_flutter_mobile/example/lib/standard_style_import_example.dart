@@ -8,18 +8,6 @@ import 'package:turf/turf.dart' show Position;
 import 'utils.dart';
 import 'example.dart';
 
-// Temporary local wrappers — will be removed once examples are moved to the
-// app-facing mapbox_maps_flutter package.
-class StandardPlaceLabels extends FeaturesetDescriptor {
-  StandardPlaceLabels({String importId = "basemap"})
-    : super(featuresetId: "place-labels", importId: importId);
-}
-
-extension StandardPlaceLabelsFeature
-    on TypedFeaturesetFeature<StandardPlaceLabels> {
-  String? get name => properties["name"] as String?;
-}
-
 class StandardStyleImportExample extends StatefulWidget implements Example {
   @override
   final Widget leading = const Icon(Icons.touch_app);
@@ -55,11 +43,22 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
 
     // When the map is ready, add a tap interaction to show a snackbar with the name of the place that was tapped
     mapboxMap.addInteraction(
-      TapInteraction(StandardPlaceLabels(), (feature, _) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Tapped place: ${feature.name}")),
-        );
-      }),
+      TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+        featuresetDescriptor: FeaturesetDescriptor(
+          featuresetId: "place-labels",
+          importId: "basemap",
+        ),
+        interactionType: InteractionType.tap,
+        featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+        action: (feature, _) {
+          if (feature == null) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Tapped place: ${feature.properties['name']}"),
+            ),
+          );
+        },
+      ),
     );
   }
 

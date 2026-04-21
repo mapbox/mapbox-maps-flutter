@@ -66,8 +66,7 @@ class StandardPlaceLabelsState extends FeatureState {
 
   static StandardPlaceLabelsState decode(Object result) {
     result as List<Object?>;
-    final map =
-        (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
+    final map = (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
     return StandardPlaceLabelsState(
       hide: map['hide'] as bool?,
       highlight: map['highlight'] as bool?,

@@ -57,8 +57,7 @@ class StandardBuildingsState extends FeatureState {
 
   static StandardBuildingsState decode(Object result) {
     result as List<Object?>;
-    final map =
-        (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
+    final map = (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>();
     return StandardBuildingsState(
       highlight: map['highlight'] as bool?,
       select: map['select'] as bool?,
