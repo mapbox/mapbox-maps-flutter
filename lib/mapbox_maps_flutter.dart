@@ -3,12 +3,16 @@ library mapbox_maps_flutter;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' as turf;
 
@@ -19,6 +23,9 @@ part 'src/annotation/point_annotation_manager.dart';
 part 'src/annotation/polygon_annotation_manager.dart';
 part 'src/annotation/polyline_annotation_manager.dart';
 part 'src/annotation/annotation_manager.dart';
+part 'src/annotation/view_annotation/view_annotation.dart';
+part 'src/annotation/view_annotation/view_annotation_manager.dart';
+part 'src/annotation/view_annotation/widget_rasterizer.dart';
 part 'src/callbacks.dart';
 part 'src/events.dart';
 part 'src/map_widget.dart';

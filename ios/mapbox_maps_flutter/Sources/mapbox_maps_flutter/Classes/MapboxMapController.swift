@@ -12,6 +12,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapboxMap: MapboxMap
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
+    private let viewAnnotationController: ViewAnnotationController?
     private let gesturesController: GesturesController?
     private let interactionsController: InteractionsController?
     private let eventHandler: MapboxEventHandler
@@ -89,6 +90,8 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView, messenger: binaryMessenger)
         annotationController!.setup()
 
+        viewAnnotationController = ViewAnnotationController(mapView: mapView, messenger: binaryMessenger)
+
         let viewportController = ViewportController(
             viewportManager: mapView.viewport,
             cameraManager: mapView.camera,
@@ -124,6 +127,8 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
             annotationController!.handleRemoveManager(methodCall: methodCall, result: result)
+        case "view_annotation#create_manager":
+            viewAnnotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "gesture#add_listeners":
             gesturesController!.addListeners(messenger: binaryMessenger)
             result(nil)
@@ -194,6 +199,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         IndoorSelectorSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown()
+        viewAnnotationController?.tearDown()
         _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _PerformanceStatisticsApiSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }

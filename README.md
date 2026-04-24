@@ -40,7 +40,7 @@ Contributions welcome!
 | Viewport | :white_check_mark: | :white_check_mark: |
 | Style DSL   | :x:                | :x: |
 | Expression DSL   | :x:                | :x: |
-| View Annotations   | :x:                | :x: |
+| View Annotations   | :white_check_mark: | :white_check_mark: |
 
 ## Requirements
 
@@ -212,6 +212,27 @@ To create 5 point annotations using custom icon:
 You can find more examples of the AnnotationManagers usage in the sample app : [point annotations](example/lib/point_annotations.dart), [circle annotations](example/lib/circle_annotations.dart), [polygon annotations](example/lib/polygon_annotations.dart), [polyline annotations](example/lib/polyline_annotations.dart).
 
 1. Use style layers. This will require writing more code but is more flexible and provides better performance for the large amount of annotations (e.g. hundreds and thousands of them). More about adding style layers in the [Map styles section](#map-styles).
+
+### View Annotations (Flutter widgets as markers)
+
+Use the `ViewAnnotationManager` to anchor any Flutter `Widget` to a geographic coordinate. Widgets are rasterized once in an offscreen pipeline and handed to the platform's native view annotation manager (Android `viewAnnotationManager`, iOS `mapView.viewAnnotations`), so they reproject natively during camera animations without re-rendering.
+
+```dart
+final manager = await mapboxMap.annotations.createViewAnnotationManager();
+
+final pin = await manager.create(ViewAnnotationOptions(
+  geometry: Point(coordinates: Position(2.349, 48.864)),
+  widget: const _PricePin(label: '€129'),
+  anchor: ViewAnnotationAnchor.BOTTOM,
+  offsetY: -4,
+));
+
+manager.tapEvents.listen((event) {
+  debugPrint('Tapped ${event.annotationId}');
+});
+```
+
+Pass `image: Uint8List` instead of `widget:` to supply pre-rasterized bytes directly. A full example lives at [view_annotation_example.dart](example/lib/view_annotation_example.dart).
 
 ## Map styles
 Additional information is available in our [Flutter](https://docs.mapbox.com/flutter/maps/guides/styles/), [Android](https://docs.mapbox.com/android/maps/guides/styles/), and [iOS](https://docs.mapbox.com/ios/maps/guides/styles/) documentation.

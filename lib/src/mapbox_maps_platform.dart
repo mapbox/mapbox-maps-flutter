@@ -153,6 +153,20 @@ class _MapboxMapsPlatform {
     }
   }
 
+  /// Creates a native view annotation manager on the platform side and
+  /// returns its resolved id (auto-generated when none is supplied).
+  Future<String> createViewAnnotationManager({String? id}) async {
+    final result = await _channel.invokeMethod<String>(
+      'view_annotation#create_manager',
+      <String, dynamic>{'id': id},
+    );
+    if (result == null) {
+      throw StateError(
+          'Native platform did not return an id for the view annotation manager.');
+    }
+    return result;
+  }
+
   Future<dynamic> addGestureListeners() async {
     try {
       return _channel.invokeMethod('gesture#add_listeners');

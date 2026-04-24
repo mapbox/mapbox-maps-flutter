@@ -1,5 +1,6 @@
 ### 2.23.0-rc.1
 
+* Add `ViewAnnotationManager` for rendering arbitrary Flutter widgets (or pre-rasterized bitmaps) as native view annotations anchored to geographic coordinates. Create one with `mapboxMap.annotations.createViewAnnotationManager()` and pass a `widget:` into `ViewAnnotationOptions`; widgets are rendered once in an offscreen pipeline and reprojected natively during camera animations.
 * Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
 * Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
 

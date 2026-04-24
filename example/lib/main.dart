@@ -27,6 +27,7 @@ import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
 import 'package:mapbox_maps_example/vector_tile_source_example.dart';
 import 'package:mapbox_maps_example/viewport_example.dart';
+import 'package:mapbox_maps_example/view_annotation_example.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'full_map_example.dart';
@@ -65,6 +66,7 @@ final List<Example> _allPages = <Example>[
   PolygonAnnotationExample(),
   DraggableAnnotationExample(),
   EditPolygonExample(),
+  ViewAnnotationExample(),
   VectorTileSourceExample(),
   DrawGeoJsonLineExample(),
   ImageSourceExample(),

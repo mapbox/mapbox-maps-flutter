@@ -62,6 +62,27 @@ class AnnotationManager {
             channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
   }
 
+  /// Create a [ViewAnnotationManager] to add/remove/update [ViewAnnotation]s
+  /// (Flutter widgets anchored to geographic coordinates) rendered as native
+  /// platform views above the map surface.
+  ///
+  /// Unlike layer-based annotation managers, view annotations are rendered
+  /// through the platform's Mapbox `viewAnnotationManager` (Android) or
+  /// `ViewAnnotation` (iOS) APIs, which means they reproject for free during
+  /// camera animations and support arbitrary Flutter widgets through
+  /// [ViewAnnotationOptions.widget].
+  Future<ViewAnnotationManager> createViewAnnotationManager(
+      {String? id}) async {
+    final resolvedId = await _mapboxMapsPlatform.createViewAnnotationManager(
+      id: id,
+    );
+    return ViewAnnotationManager._(
+      id: resolvedId,
+      messenger: _mapboxMapsPlatform.binaryMessenger,
+      channelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    );
+  }
+
   /// Remove an [AnnotationManager] and all the annotations created by it.
   Future<void> removeAnnotationManager(BaseAnnotationManager manager) async {
     return _mapboxMapsPlatform.removeAnnotationManager(manager.id);

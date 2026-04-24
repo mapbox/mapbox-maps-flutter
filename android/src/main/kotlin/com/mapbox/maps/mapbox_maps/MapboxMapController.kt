@@ -20,6 +20,7 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.mapbox_maps.http.CustomHttpServiceInterceptor
+import com.mapbox.maps.mapbox_maps.viewannotation.ViewAnnotationController
 import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
@@ -117,6 +118,7 @@ class MapboxMapController(
   private val mapInterfaceController: MapInterfaceController
   private val animationController: AnimationController
   private val annotationController: AnnotationController
+  private val viewAnnotationController: ViewAnnotationController
   private val locationComponentController: LocationComponentController
   private val gestureController: GestureController
   private val interactionsController: InteractionsController
@@ -204,6 +206,7 @@ class MapboxMapController(
     mapInterfaceController = MapInterfaceController(mapboxMap, mapView, context)
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView, messenger, this.channelSuffix)
+    viewAnnotationController = ViewAnnotationController(mapView, messenger, this.channelSuffix)
     locationComponentController = LocationComponentController(mapView, context)
     gestureController = GestureController(mapView, context)
     interactionsController = InteractionsController(mapboxMap, context)
@@ -297,6 +300,7 @@ class MapboxMapController(
     _MapInterface.setUp(messenger, null, channelSuffix)
     _AnimationManager.setUp(messenger, null, channelSuffix)
     annotationController.dispose()
+    viewAnnotationController.dispose()
     _LocationComponentSettingsInterface.setUp(messenger, null, channelSuffix)
     LogoSettingsInterface.setUp(messenger, null, channelSuffix)
     GesturesSettingsInterface.setUp(messenger, null, channelSuffix)
@@ -317,6 +321,9 @@ class MapboxMapController(
       }
       "annotation#remove_manager" -> {
         annotationController.handleRemoveManager(call, result)
+      }
+      "view_annotation#create_manager" -> {
+        viewAnnotationController.handleCreateManager(call, result)
       }
       "gesture#add_listeners" -> {
         gestureController.addListeners(messenger, channelSuffix)
