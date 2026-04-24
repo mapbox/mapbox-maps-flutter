@@ -13,6 +13,7 @@ class ModelLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     bool? this.modelAllowDensityReduction,
     List<Object>? this.modelAllowDensityReductionExpression,
     String? this.modelId,

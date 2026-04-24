@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# NOTE: validate.sh (stage 4, api-breakage) parses the
+# "Found N breaking change(s) NOT in allow list" line emitted below
+# to feed its regression-detector. Keep that wording or update
+# validate.sh:305 in the same commit.
 set -e
 
 # Cleanup temp file on exit

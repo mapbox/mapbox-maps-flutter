@@ -11,6 +11,7 @@ class BackgroundLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     int? this.backgroundColor,
     List<Object>? this.backgroundColorExpression,
     double? this.backgroundEmissiveStrength,

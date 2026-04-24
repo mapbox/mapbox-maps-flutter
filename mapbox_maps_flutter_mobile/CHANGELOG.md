@@ -4,6 +4,9 @@
 
 ### 2.23.0-rc.1
 
+### 3.0.0-beta.1
+
+* Split the plugin into federated packages: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. This package is now the iOS/Android implementation endorsed by `mapbox_maps_flutter`.
 * Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
 * Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
 

@@ -11,6 +11,7 @@ class SlotLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     @Deprecated("This property has no effect on SlotLayer") String? sourceId,
     @Deprecated("This property has no effect on SlotLayer") String? sourceLayer,
   }) : super(

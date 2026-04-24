@@ -13,6 +13,7 @@ dependencies:
   flutter_plugin_android_lifecycle: ^2.0.29
   typed_data: ^1.3.0
   meta: ^1.9.1
+  turf: ^0.0.10
   mapbox_maps_flutter_platform_interface: any # TODO: update to released version.
 
 dev_dependencies:
