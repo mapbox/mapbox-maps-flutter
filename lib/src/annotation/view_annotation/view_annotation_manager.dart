@@ -23,6 +23,10 @@ typedef OnViewAnnotationTap = void Function(ViewAnnotationTapEvent event);
 ///   and only re-rasterized on [create] / [update]. Camera movement does not
 ///   re-encode bitmaps — the native view annotation manager reprojects the
 ///   platform view for free.
+/// * Widget-backed annotations get a short automatic refresh window after
+///   [create] / [update] so late async paints (for example network images)
+///   can replace the initial placeholder bitmap without the app having to
+///   manually call [update].
 /// * [update] diffs the incoming [ViewAnnotationOptions] against the last
 ///   committed ones and skips the rasterization step when only non-visual
 ///   fields (geometry, anchor, offset, visibility, overlap policy) changed.
@@ -47,6 +51,8 @@ class ViewAnnotationManager extends BaseAnnotationManager {
 
   final Map<String, _InternalViewAnnotation> _annotations =
       <String, _InternalViewAnnotation>{};
+  final Map<String, _WidgetRasterRefreshTask> _refreshTasks =
+      <String, _WidgetRasterRefreshTask>{};
 
   final StreamController<ViewAnnotationTapEvent> _tapController =
       StreamController<ViewAnnotationTapEvent>.broadcast();
@@ -69,6 +75,11 @@ class ViewAnnotationManager extends BaseAnnotationManager {
     _annotations[id] = _InternalViewAnnotation(
       options: options,
       cachedRaster: payload.raster,
+    );
+    _scheduleAutomaticWidgetRefresh(
+      id,
+      options,
+      payload.raster,
     );
     return ViewAnnotation._(id: id, options: options);
   }
@@ -94,6 +105,11 @@ class ViewAnnotationManager extends BaseAnnotationManager {
       options: options,
       cachedRaster: payload.raster,
     );
+    _scheduleAutomaticWidgetRefresh(
+      id,
+      options,
+      payload.raster,
+    );
     return ViewAnnotation._(id: id, options: options);
   }
 
@@ -103,6 +119,7 @@ class ViewAnnotationManager extends BaseAnnotationManager {
     if (_annotations.remove(id) == null) {
       return;
     }
+    _cancelAutomaticWidgetRefresh(id);
     await _channel.invokeMethod<void>('delete', <String, Object?>{'id': id});
   }
 
@@ -110,6 +127,7 @@ class ViewAnnotationManager extends BaseAnnotationManager {
   Future<void> deleteAll() async {
     _ensureLive();
     _annotations.clear();
+    _cancelAllAutomaticWidgetRefreshes();
     await _channel.invokeMethod<void>('deleteAll');
   }
 
@@ -129,6 +147,7 @@ class ViewAnnotationManager extends BaseAnnotationManager {
     _disposed = true;
     _channel.setMethodCallHandler(null);
     await _tapController.close();
+    _cancelAllAutomaticWidgetRefreshes();
     _annotations.clear();
     try {
       await _channel.invokeMethod<void>('dispose');
@@ -207,8 +226,8 @@ class ViewAnnotationManager extends BaseAnnotationManager {
         final args = call.arguments as Map<Object?, Object?>?;
         final annotationId = args?['id'] as String?;
         if (annotationId != null && !_tapController.isClosed) {
-          _tapController.add(
-              ViewAnnotationTapEvent(annotationId: annotationId));
+          _tapController
+              .add(ViewAnnotationTapEvent(annotationId: annotationId));
         }
         return null;
       default:
@@ -220,6 +239,84 @@ class ViewAnnotationManager extends BaseAnnotationManager {
     if (_disposed) {
       throw StateError('ViewAnnotationManager has been disposed.');
     }
+  }
+
+  void _scheduleAutomaticWidgetRefresh(
+    String id,
+    ViewAnnotationOptions options,
+    _RasterizedWidget? initialRaster,
+  ) {
+    _cancelAutomaticWidgetRefresh(id);
+
+    final Widget? widget = options.widget;
+    if (widget == null) {
+      return;
+    }
+
+    final _WidgetRasterRefreshTask task = _WidgetRasterRefreshTask(
+      options: options,
+      initialRaster: initialRaster,
+      onRasterChanged: (_RasterizedWidget raster) {
+        return _applyAutomaticWidgetRefresh(id, widget, raster);
+      },
+    );
+    _refreshTasks[id] = task;
+    unawaited(
+      task.start().whenComplete(() {
+        if (identical(_refreshTasks[id], task)) {
+          _refreshTasks.remove(id);
+        }
+      }),
+    );
+  }
+
+  void _cancelAutomaticWidgetRefresh(String id) {
+    _refreshTasks.remove(id)?.cancel();
+  }
+
+  void _cancelAllAutomaticWidgetRefreshes() {
+    for (final _WidgetRasterRefreshTask task in _refreshTasks.values) {
+      task.cancel();
+    }
+    _refreshTasks.clear();
+  }
+
+  Future<void> _applyAutomaticWidgetRefresh(
+    String id,
+    Widget originalWidget,
+    _RasterizedWidget raster,
+  ) async {
+    if (_disposed) {
+      return;
+    }
+
+    final _InternalViewAnnotation? existing = _annotations[id];
+    if (existing == null ||
+        !identical(existing.options.widget, originalWidget)) {
+      return;
+    }
+
+    final ViewAnnotationOptions currentOptions = existing.options;
+    final _PreparedPayload payload =
+        _buildPayloadFromRaster(id, currentOptions, raster);
+    try {
+      await _channel.invokeMethod<void>('update', payload.wireArgs);
+    } on PlatformException {
+      if (_disposed) {
+        return;
+      }
+      rethrow;
+    }
+
+    final _InternalViewAnnotation? latest = _annotations[id];
+    if (latest == null || !identical(latest.options.widget, originalWidget)) {
+      return;
+    }
+
+    _annotations[id] = _InternalViewAnnotation(
+      options: latest.options,
+      cachedRaster: raster,
+    );
   }
 }
 
@@ -233,4 +330,78 @@ class _PreparedPayload {
   _PreparedPayload({required this.raster, required this.wireArgs});
   final _RasterizedWidget? raster;
   final Map<String, Object?> wireArgs;
+}
+
+class _WidgetRasterRefreshTask {
+  _WidgetRasterRefreshTask({
+    required this.options,
+    required this.initialRaster,
+    required this.onRasterChanged,
+  });
+
+  static const List<Duration> _retrySchedule = <Duration>[
+    Duration(milliseconds: 80),
+    Duration(milliseconds: 160),
+    Duration(milliseconds: 320),
+    Duration(milliseconds: 640),
+    Duration(milliseconds: 1200),
+  ];
+
+  final ViewAnnotationOptions options;
+  final _RasterizedWidget? initialRaster;
+  final Future<void> Function(_RasterizedWidget raster) onRasterChanged;
+
+  bool _cancelled = false;
+  _RasterizedWidget? _lastRaster;
+
+  Future<void> start() async {
+    final Widget? widget = options.widget;
+    if (widget == null) {
+      return;
+    }
+
+    _lastRaster = initialRaster;
+    final double pixelRatio = options.pixelRatio ??
+        PlatformDispatcher.instance.views.first.devicePixelRatio;
+
+    for (final Duration delay in _retrySchedule) {
+      await Future<void>.delayed(delay);
+      if (_cancelled) {
+        return;
+      }
+
+      try {
+        final _RasterizedWidget raster = await _WidgetRasterizer.rasterize(
+          widget: widget,
+          size: options.size,
+          pixelRatio: pixelRatio,
+        );
+        if (_cancelled) {
+          return;
+        }
+
+        final _RasterizedWidget? previous = _lastRaster;
+        if (previous != null && _rasterEquals(previous, raster)) {
+          continue;
+        }
+
+        _lastRaster = raster;
+        await onRasterChanged(raster);
+      } catch (_) {
+        if (_cancelled) {
+          return;
+        }
+      }
+    }
+  }
+
+  void cancel() {
+    _cancelled = true;
+  }
+
+  bool _rasterEquals(_RasterizedWidget a, _RasterizedWidget b) {
+    return a.logicalSize == b.logicalSize &&
+        a.pixelRatio == b.pixelRatio &&
+        listEquals(a.bytes, b.bytes);
+  }
 }
