@@ -13,6 +13,7 @@ class HeatmapLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     int? this.heatmapColor,
     List<Object>? this.heatmapColorExpression,
     double? this.heatmapIntensity,

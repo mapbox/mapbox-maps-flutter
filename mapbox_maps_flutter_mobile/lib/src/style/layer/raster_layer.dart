@@ -13,6 +13,7 @@ class RasterLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     String? this.rasterArrayBand,
     List<Object>? this.rasterArrayBandExpression,
     double? this.rasterBrightnessMax,

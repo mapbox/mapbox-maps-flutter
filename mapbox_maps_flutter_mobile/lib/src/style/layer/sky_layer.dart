@@ -11,6 +11,7 @@ class SkyLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     int? this.skyAtmosphereColor,
     List<Object>? this.skyAtmosphereColorExpression,
     int? this.skyAtmosphereHaloColor,
