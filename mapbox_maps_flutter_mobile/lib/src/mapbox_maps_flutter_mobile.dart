@@ -61,6 +61,10 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
   void setAssetPath(String path) => MapboxMapsOptions.setAssetPath(path);
 
   @override
+  Future<String?> getFlutterAssetPath(String? flutterAssetUri) =>
+      MapboxMapsOptions.getFlutterAssetPath(flutterAssetUri);
+
+  @override
   Future<TileStoreUsageMode> getTileStoreUsageMode() =>
       MapboxMapsOptions.getTileStoreUsageMode();
 

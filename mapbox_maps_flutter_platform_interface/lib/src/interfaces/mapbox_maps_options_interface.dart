@@ -20,6 +20,11 @@ abstract interface class MapboxMapsOptionsPlatformInterface {
   /// Sets the path to the Maps asset directory.
   void setAssetPath(String path);
 
+  /// Resolves a Flutter asset URI (e.g. `asset://assets/path.glb`) to a
+  /// platform-native path usable by the Maps runtime. Returns the input
+  /// unchanged when [flutterAssetUri] is null or not a Flutter asset URI.
+  Future<String?> getFlutterAssetPath(String? flutterAssetUri);
+
   /// The tile store usage mode. Defaults to [TileStoreUsageMode.READ_ONLY].
   Future<TileStoreUsageMode> getTileStoreUsageMode();
 

@@ -108,6 +108,712 @@ enum class StyleProjectionName(val raw: Int) {
   }
 }
 
+/** Describes the kind of a style property value. */
+enum class StylePropertyValueKind(val raw: Int) {
+  /** The property value is not defined. */
+  UNDEFINED(0),
+  /** The property value is a constant. */
+  CONSTANT(1),
+  /** The property value is a style [expression](https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions). */
+  EXPRESSION(2),
+  /** Property value is a style [transition](https://docs.mapbox.com/mapbox-gl-js/style-spec/#transition). */
+  TRANSITION(3);
+
+  companion object {
+    fun ofRaw(raw: Int): StylePropertyValueKind? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Orientation of background layer. */
+enum class BackgroundPitchAlignment(val raw: Int) {
+  /** The background is aligned to the plane of the map. */
+  MAP(0),
+  /** The background is aligned to the plane of the viewport, covering the whole screen. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): BackgroundPitchAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Selects the base of the circle-elevation-reference.
+ * Default value: "none".
+ */
+enum class CircleElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevated rendering is enabled. Use this mode to elevate circles relative to the HD road markup. */
+  HD_ROAD_MARKUP(1);
+
+  companion object {
+    fun ofRaw(raw: Int): CircleElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Orientation of circle when map is pitched.
+ * Default value: "viewport".
+ */
+enum class CirclePitchAlignment(val raw: Int) {
+  /** The circle is aligned to the plane of the map. */
+  MAP(0),
+  /** The circle is aligned to the plane of the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): CirclePitchAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Controls the scaling behavior of the circle when the map is pitched.
+ * Default value: "map".
+ */
+enum class CirclePitchScale(val raw: Int) {
+  /** Circles are scaled according to their apparent distance to the camera. */
+  MAP(0),
+  /** Circles are not scaled. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): CirclePitchScale? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Controls the frame of reference for `circle-translate`.
+ * Default value: "map".
+ */
+enum class CircleTranslateAnchor(val raw: Int) {
+  /** The circle is translated relative to the map. */
+  MAP(0),
+  /** The circle is translated relative to the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): CircleTranslateAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Selects the base of fill-elevation-reference.
+ * Default value: "none".
+ */
+enum class FillElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevated rendering is enabled. Use this mode to describe base polygons of the road networks. */
+  HD_ROAD_BASE(1),
+  /** Elevated rendering is enabled. Use this mode to describe polygons of the road markup. */
+  HD_ROAD_MARKUP(2);
+
+  companion object {
+    fun ofRaw(raw: Int): FillElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Controls the behavior of fill extrusion base over terrain */
+enum class FillExtrusionBaseAlignment(val raw: Int) {
+  /** The fill extrusion base follows terrain slope. */
+  TERRAIN(0),
+  /** The fill extrusion base is flat over terrain. */
+  FLAT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): FillExtrusionBaseAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Controls the behavior of fill extrusion height over terrain */
+enum class FillExtrusionHeightAlignment(val raw: Int) {
+  /** The fill extrusion base follows terrain slope. */
+  TERRAIN(0),
+  /** The fill extrusion base is flat over terrain. */
+  FLAT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): FillExtrusionHeightAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Controls the frame of reference for `fill-translate`.
+ * Default value: "map".
+ */
+enum class FillTranslateAnchor(val raw: Int) {
+  /** The fill is translated relative to the map. */
+  MAP(0),
+  /** The fill is translated relative to the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): FillTranslateAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Part of the icon placed closest to the anchor.
+ * Default value: "center".
+ */
+enum class IconAnchor(val raw: Int) {
+  /** The center of the icon is placed closest to the anchor. */
+  CENTER(0),
+  /** The left side of the icon is placed closest to the anchor. */
+  LEFT(1),
+  /** The right side of the icon is placed closest to the anchor. */
+  RIGHT(2),
+  /** The top of the icon is placed closest to the anchor. */
+  TOP(3),
+  /** The bottom of the icon is placed closest to the anchor. */
+  BOTTOM(4),
+  /** The top left corner of the icon is placed closest to the anchor. */
+  TOP_LEFT(5),
+  /** The top right corner of the icon is placed closest to the anchor. */
+  TOP_RIGHT(6),
+  /** The bottom left corner of the icon is placed closest to the anchor. */
+  BOTTOM_LEFT(7),
+  /** The bottom right corner of the icon is placed closest to the anchor. */
+  BOTTOM_RIGHT(8);
+
+  companion object {
+    fun ofRaw(raw: Int): IconAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Orientation of icon when map is pitched.
+ * Default value: "auto".
+ */
+enum class IconPitchAlignment(val raw: Int) {
+  /** The icon is aligned to the plane of the map. */
+  MAP(0),
+  /** The icon is aligned to the plane of the viewport. */
+  VIEWPORT(1),
+  /** Automatically matches the value of `icon-rotation-alignment`. */
+  AUTO(2);
+
+  companion object {
+    fun ofRaw(raw: Int): IconPitchAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * In combination with `symbol-placement`, determines the rotation behavior of icons.
+ * Default value: "auto".
+ */
+enum class IconRotationAlignment(val raw: Int) {
+  /** For `symbol-placement: point`, aligns icons east-west. Otherwise, aligns icon x-axes with the line. */
+  MAP(0),
+  /** Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`. */
+  VIEWPORT(1),
+  /** When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`. */
+  AUTO(2);
+
+  companion object {
+    fun ofRaw(raw: Int): IconRotationAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Scales the icon to fit around the associated text.
+ * Default value: "none".
+ */
+enum class IconTextFit(val raw: Int) {
+  /** The icon is displayed at its intrinsic aspect ratio. */
+  NONE(0),
+  /** The icon is scaled in the x-dimension to fit the width of the text. */
+  WIDTH(1),
+  /** The icon is scaled in the y-dimension to fit the height of the text. */
+  HEIGHT(2),
+  /** The icon is scaled in both x- and y-dimensions. */
+  BOTH(3);
+
+  companion object {
+    fun ofRaw(raw: Int): IconTextFit? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Controls the frame of reference for `icon-translate`.
+ * Default value: "map".
+ */
+enum class IconTranslateAnchor(val raw: Int) {
+  /** Icons are translated relative to the map. */
+  MAP(0),
+  /** Icons are translated relative to the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): IconTranslateAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * The display of line endings.
+ * Default value: "butt".
+ */
+enum class LineCap(val raw: Int) {
+  /** A cap with a squared-off end which is drawn to the exact endpoint of the line. */
+  BUTT(0),
+  /** A cap with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line. */
+  ROUND(1),
+  /** A cap with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width. */
+  SQUARE(2);
+
+  companion object {
+    fun ofRaw(raw: Int): LineCap? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Selects the base of line-elevation-reference.
+ * Default value: "none".
+ */
+enum class LineElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level. */
+  SEA(1),
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them. */
+  GROUND(2),
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons. */
+  HD_ROAD_MARKUP(3);
+
+  companion object {
+    fun ofRaw(raw: Int): LineElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * The display of lines when joining.
+ * Default value: "miter".
+ */
+enum class LineJoin(val raw: Int) {
+  /** A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width. */
+  BEVEL(0),
+  /** A join with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line. */
+  ROUND(1),
+  /** A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet. */
+  MITER(2),
+  /** Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling. */
+  NONE(3);
+
+  companion object {
+    fun ofRaw(raw: Int): LineJoin? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Controls the frame of reference for `line-translate`.
+ * Default value: "map".
+ */
+enum class LineTranslateAnchor(val raw: Int) {
+  /** The line is translated relative to the map. */
+  MAP(0),
+  /** The line is translated relative to the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): LineTranslateAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property, and is subject to change in future versions.
+ * Default value: "pixels".
+ */
+enum class LineWidthUnit(val raw: Int) {
+  /** Width is rendered in pixels. */
+  PIXELS(0),
+  /** Width is rendered in meters. */
+  METERS(1);
+
+  companion object {
+    fun ofRaw(raw: Int): LineWidthUnit? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Occlusion opacity mode.
+ * Default value: "anchor".
+ */
+enum class OcclusionOpacityMode(val raw: Int) {
+  /** The occlusion opacity is based on the anchor point of the symbol/circle. */
+  ANCHOR(0),
+  /** The occlusion opacity is computed per pixel. */
+  PIXEL(1);
+
+  companion object {
+    fun ofRaw(raw: Int): OcclusionOpacityMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Selects the base of symbol-elevation.
+ * Default value: "ground".
+ */
+enum class SymbolElevationReference(val raw: Int) {
+  /** Elevated rendering is enabled. Use this mode to render symbols relative to the sea level. */
+  SEA(0),
+  /** Elevated rendering is enabled. Use this mode to render symbols relative to the ground's height below them. */
+  GROUND(1),
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HD_ROAD_MARKUP(2);
+
+  companion object {
+    fun ofRaw(raw: Int): SymbolElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Label placement relative to its geometry.
+ * Default value: "point".
+ */
+enum class SymbolPlacement(val raw: Int) {
+  /** The label is placed at the point where the geometry is located. */
+  POINT(0),
+  /** The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. */
+  LINE(1),
+  /** The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries. */
+  LINE_CENTER(2);
+
+  companion object {
+    fun ofRaw(raw: Int): SymbolPlacement? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
+ * Default value: "auto".
+ */
+enum class SymbolZOrder(val raw: Int) {
+  /** Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
+  AUTO(0),
+  /** Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
+  VIEWPORT_Y(1),
+  /** Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
+  SOURCE(2);
+
+  companion object {
+    fun ofRaw(raw: Int): SymbolZOrder? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Part of the text placed closest to the anchor.
+ * Default value: "center".
+ */
+enum class TextAnchor(val raw: Int) {
+  /** The center of the text is placed closest to the anchor. */
+  CENTER(0),
+  /** The left side of the text is placed closest to the anchor. */
+  LEFT(1),
+  /** The right side of the text is placed closest to the anchor. */
+  RIGHT(2),
+  /** The top of the text is placed closest to the anchor. */
+  TOP(3),
+  /** The bottom of the text is placed closest to the anchor. */
+  BOTTOM(4),
+  /** The top left corner of the text is placed closest to the anchor. */
+  TOP_LEFT(5),
+  /** The top right corner of the text is placed closest to the anchor. */
+  TOP_RIGHT(6),
+  /** The bottom left corner of the text is placed closest to the anchor. */
+  BOTTOM_LEFT(7),
+  /** The bottom right corner of the text is placed closest to the anchor. */
+  BOTTOM_RIGHT(8);
+
+  companion object {
+    fun ofRaw(raw: Int): TextAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Text justification options.
+ * Default value: "center".
+ */
+enum class TextJustify(val raw: Int) {
+  /** The text is aligned towards the anchor position. */
+  AUTO(0),
+  /** The text is aligned to the left. */
+  LEFT(1),
+  /** The text is centered. */
+  CENTER(2),
+  /** The text is aligned to the right. */
+  RIGHT(3);
+
+  companion object {
+    fun ofRaw(raw: Int): TextJustify? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Orientation of text when map is pitched.
+ * Default value: "auto".
+ */
+enum class TextPitchAlignment(val raw: Int) {
+  /** The text is aligned to the plane of the map. */
+  MAP(0),
+  /** The text is aligned to the plane of the viewport. */
+  VIEWPORT(1),
+  /** Automatically matches the value of `text-rotation-alignment`. */
+  AUTO(2);
+
+  companion object {
+    fun ofRaw(raw: Int): TextPitchAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+ * Default value: "auto".
+ */
+enum class TextRotationAlignment(val raw: Int) {
+  /** When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line. */
+  MAP(0),
+  /** Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`. */
+  VIEWPORT(1),
+  /** When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`. */
+  AUTO(2);
+
+  companion object {
+    fun ofRaw(raw: Int): TextRotationAlignment? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Specifies how to capitalize text, similar to the CSS `text-transform` property.
+ * Default value: "none".
+ */
+enum class TextTransform(val raw: Int) {
+  /** The text is not altered. */
+  NONE(0),
+  /** Forces all letters to be displayed in uppercase. */
+  UPPERCASE(1),
+  /** Forces all letters to be displayed in lowercase. */
+  LOWERCASE(2);
+
+  companion object {
+    fun ofRaw(raw: Int): TextTransform? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Controls the frame of reference for `text-translate`.
+ * Default value: "map".
+ */
+enum class TextTranslateAnchor(val raw: Int) {
+  /** The text is translated relative to the map. */
+  MAP(0),
+  /** The text is translated relative to the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): TextTranslateAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`. */
+enum class TextVariableAnchor(val raw: Int) {
+  /** The center of the text is placed closest to the anchor. */
+  CENTER(0),
+  /** The left side of the text is placed closest to the anchor. */
+  LEFT(1),
+  /** The right side of the text is placed closest to the anchor. */
+  RIGHT(2),
+  /** The top of the text is placed closest to the anchor. */
+  TOP(3),
+  /** The bottom of the text is placed closest to the anchor. */
+  BOTTOM(4),
+  /** The top left corner of the text is placed closest to the anchor. */
+  TOP_LEFT(5),
+  /** The top right corner of the text is placed closest to the anchor. */
+  TOP_RIGHT(6),
+  /** The bottom left corner of the text is placed closest to the anchor. */
+  BOTTOM_LEFT(7),
+  /** The bottom right corner of the text is placed closest to the anchor. */
+  BOTTOM_RIGHT(8);
+
+  companion object {
+    fun ofRaw(raw: Int): TextVariableAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn't support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement. */
+enum class TextWritingMode(val raw: Int) {
+  /** If a text's language supports horizontal writing mode, symbols would be laid out horizontally. */
+  HORIZONTAL(0),
+  /** If a text's language supports vertical writing mode, symbols would be laid out vertically. */
+  VERTICAL(1);
+
+  companion object {
+    fun ofRaw(raw: Int): TextWritingMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Encoding of raster-DEM tiles. */
+enum class Encoding(val raw: Int) {
+  /** Terrarium format PNG tiles. See https://aws.amazon.com/es/public-datasets/terrain/ for more info. */
+  TERRARIUM(0),
+  /** Mapbox Terrain RGB tiles. See https://www.mapbox.com/help/access-elevation-data/#mapbox-terrain-rgb for more info. */
+  MAPBOX(1);
+
+  companion object {
+    fun ofRaw(raw: Int): Encoding? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Controls the frame of reference for `fill-extrusion-translate`. */
+enum class FillExtrusionTranslateAnchor(val raw: Int) {
+  /** The fill extrusion is translated relative to the map. */
+  MAP(0),
+  /** The fill extrusion is translated relative to the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): FillExtrusionTranslateAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Direction of light source when map is rotated. */
+enum class HillshadeIlluminationAnchor(val raw: Int) {
+  /** The hillshade illumination is relative to the north direction. */
+  MAP(0),
+  /** The hillshade illumination is relative to the top of the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): HillshadeIlluminationAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Defines rendering behavior of model in respect to other 3D scene objects. */
+enum class ModelType(val raw: Int) {
+  /** Integrated to 3D scene, using depth testing, along with terrain, fill-extrusions and custom layer. */
+  COMMON_3D(0),
+  /** Displayed over other 3D content, occluded by terrain. */
+  LOCATION_INDICATOR(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ModelType? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** The resampling/interpolation method to use for overscaling, also known as texture magnification filter. */
+enum class RasterResampling(val raw: Int) {
+  /** (Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled */
+  LINEAR(0),
+  /** Nearest neighbor filtering interpolates pixel values using the nearest original source pixel creating a sharp but pixelated look when overscaled */
+  NEAREST(1);
+
+  companion object {
+    fun ofRaw(raw: Int): RasterResampling? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed. */
+enum class Scheme(val raw: Int) {
+  /** Slippy map tilenames scheme. */
+  XYZ(0),
+  /** OSGeo spec scheme. */
+  TMS(1);
+
+  companion object {
+    fun ofRaw(raw: Int): Scheme? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** The type of the sky. */
+enum class SkyType(val raw: Int) {
+  /** Renders the sky with a gradient that can be configured with `sky-gradient-radius` and `sky-gradient`. */
+  GRADIENT(0),
+  /** Renders the sky with a simulated atmospheric scattering algorithm, the sun direction can be attached to the light position or explicitly set through `sky-atmosphere-sun`. */
+  ATMOSPHERE(1);
+
+  companion object {
+    fun ofRaw(raw: Int): SkyType? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** Defines the position of an ornament (logo, compass, scale bar, attribution) on the map. */
 enum class OrnamentPosition(val raw: Int) {
   TOP_LEFT(0),
@@ -1019,6 +1725,181 @@ data class StyleProjection(
       return true
     }
     return name == other.name
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Holds a style property value with meta data.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StylePropertyValue(
+  /** The property value. */
+  val value: Any? = null,
+  /** The kind of the property value. */
+  val kind: StylePropertyValueKind
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StylePropertyValue {
+      val value = pigeonVar_list[0]
+      val kind = pigeonVar_list[1] as StylePropertyValueKind
+      return StylePropertyValue(value, kind)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      value,
+      kind,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StylePropertyValue) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return value == other.value &&
+      kind == other.kind
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Image type.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class MbxImage(
+  /** The width of the image, in screen pixels. */
+  val width: Long,
+  /** The height of the image, in screen pixels. */
+  val height: Long,
+  /**
+   * 32-bit premultiplied RGBA image data.
+   *
+   * An uncompressed image data encoded in 32-bit RGBA format with premultiplied
+   * alpha channel. This field should contain exactly `4 * width * height` bytes. It
+   * should consist of a sequence of scanlines.
+   */
+  val data: ByteArray
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MbxImage {
+      val width = pigeonVar_list[0] as Long
+      val height = pigeonVar_list[1] as Long
+      val data = pigeonVar_list[2] as ByteArray
+      return MbxImage(width, height, data)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      width,
+      height,
+      data,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MbxImage) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return width == other.width &&
+      height == other.height &&
+      data == other.data
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the image stretch areas.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ImageStretches(
+  /** The first stretchable part in screen pixel units. */
+  val first: Double,
+  /** The second stretchable part in screen pixel units. */
+  val second: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ImageStretches {
+      val first = pigeonVar_list[0] as Double
+      val second = pigeonVar_list[1] as Double
+      return ImageStretches(first, second)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      first,
+      second,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ImageStretches) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return first == other.first &&
+      second == other.second
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the image content, e.g. where text can be fit into an image.
+ *
+ * When sizing icons with `icon-text-fit`, the icon size will be adjusted so that the this content box fits exactly around the text.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ImageContent(
+  /** Distance to the left, in screen pixels. */
+  val left: Double,
+  /** Distance to the top, in screen pixels. */
+  val top: Double,
+  /** Distance to the right, in screen pixels. */
+  val right: Double,
+  /** Distance to the bottom, in screen pixels. */
+  val bottom: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ImageContent {
+      val left = pigeonVar_list[0] as Double
+      val top = pigeonVar_list[1] as Double
+      val right = pigeonVar_list[2] as Double
+      val bottom = pigeonVar_list[3] as Double
+      return ImageContent(left, top, right, bottom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      left,
+      top,
+      right,
+      bottom,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ImageContent) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return left == other.left &&
+      top == other.top &&
+      right == other.right &&
+      bottom == other.bottom
   }
 
   override fun hashCode(): Int = toList().hashCode()

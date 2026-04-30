@@ -82,7 +82,10 @@ final class MapboxMapsOptions {
     _options.setAssetPath(path);
   }
 
-  static Future<String?> _getFlutterAssetPath(String? flutterAssetUri) {
+  /// Resolves a Flutter asset URI to a platform-native path usable by the
+  /// Maps runtime. Exposed so the federated platform class can proxy the
+  /// call through `MapboxMapsOptionsPlatformInterface.getFlutterAssetPath`.
+  static Future<String?> getFlutterAssetPath(String? flutterAssetUri) {
     return _options.getFlutterAssetPath(flutterAssetUri);
   }
 

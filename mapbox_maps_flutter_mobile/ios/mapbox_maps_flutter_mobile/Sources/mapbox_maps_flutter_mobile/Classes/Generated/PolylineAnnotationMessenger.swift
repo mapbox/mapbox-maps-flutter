@@ -65,61 +65,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// The display of line endings.
-/// Default value: "butt".
-enum LineCap: Int {
-  /// A cap with a squared-off end which is drawn to the exact endpoint of the line.
-  case bUTT = 0
-  /// A cap with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line.
-  case rOUND = 1
-  /// A cap with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.
-  case sQUARE = 2
-}
-
-/// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum LineElevationReference: Int {
-  /// Elevated rendering is disabled.
-  case nONE = 0
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
-  case sEA = 1
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
-  case gROUND = 2
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
-  case hDROADMARKUP = 3
-}
-
-/// The display of lines when joining.
-/// Default value: "miter".
-enum LineJoin: Int {
-  /// A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.
-  case bEVEL = 0
-  /// A join with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line.
-  case rOUND = 1
-  /// A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet.
-  case mITER = 2
-  /// Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling.
-  case nONE = 3
-}
-
-/// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release.
-/// Default value: "pixels".
-enum LineWidthUnit: Int {
-  /// Width is rendered in pixels.
-  case pIXELS = 0
-  /// Width is rendered in meters.
-  case mETERS = 1
-}
-
-/// Controls the frame of reference for `line-translate`.
-/// Default value: "map".
-enum LineTranslateAnchor: Int {
-  /// The line is translated relative to the map.
-  case mAP = 0
-  /// The line is translated relative to the viewport.
-  case vIEWPORT = 1
-}
-
 /// Generated class from Pigeon that represents data sent in messages.
 struct PolylineAnnotation {
   /// The id for annotation

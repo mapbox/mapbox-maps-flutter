@@ -4,46 +4,6 @@
 
 part of mapbox_maps_flutter_mobile;
 
-/// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum CircleElevationReference {
-  /// Elevated rendering is disabled.
-  NONE,
-
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
-  HD_ROAD_MARKUP,
-}
-
-/// Orientation of circle when map is pitched.
-/// Default value: "viewport".
-enum CirclePitchAlignment {
-  /// The circle is aligned to the plane of the map.
-  MAP,
-
-  /// The circle is aligned to the plane of the viewport.
-  VIEWPORT,
-}
-
-/// Controls the scaling behavior of the circle when the map is pitched.
-/// Default value: "map".
-enum CirclePitchScale {
-  /// Circles are scaled according to their apparent distance to the camera.
-  MAP,
-
-  /// Circles are not scaled.
-  VIEWPORT,
-}
-
-/// Controls the frame of reference for `circle-translate`.
-/// Default value: "map".
-enum CircleTranslateAnchor {
-  /// The circle is translated relative to the map.
-  MAP,
-
-  /// The circle is translated relative to the viewport.
-  VIEWPORT,
-}
-
 class CircleAnnotation {
   CircleAnnotation({
     required this.id,

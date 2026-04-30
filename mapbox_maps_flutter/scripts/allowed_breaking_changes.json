@@ -737,5 +737,149 @@
   {
     "changeDescription": "Interface \"EasingViewportTransition\" removed",
     "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"BackgroundPitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CircleElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CirclePitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CirclePitchScale\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CircleTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillExtrusionBaseAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillExtrusionHeightAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconPitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconRotationAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconTextFit\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineCap\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineJoin\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineWidthUnit\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"OcclusionOpacityMode\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SymbolElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SymbolPlacement\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SymbolZOrder\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextJustify\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextPitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextRotationAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextTransform\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"Encoding\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillExtrusionTranslateAnchor\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"HillshadeIlluminationAnchor\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ModelType\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RasterResampling\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"Scheme\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SkyType\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
   }
 ]

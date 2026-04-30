@@ -59,42 +59,6 @@ private fun deepEqualsPolygonAnnotationMessenger(a: Any?, b: Any?): Boolean {
   return a == b
 }
 
-/**
- * Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
- * Default value: "none".
- */
-enum class FillElevationReference(val raw: Int) {
-  /** Elevated rendering is disabled. */
-  NONE(0),
-  /** Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks. */
-  HD_ROAD_BASE(1),
-  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons. */
-  HD_ROAD_MARKUP(2);
-
-  companion object {
-    fun ofRaw(raw: Int): FillElevationReference? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
- * Controls the frame of reference for `fill-translate`.
- * Default value: "map".
- */
-enum class FillTranslateAnchor(val raw: Int) {
-  /** The fill is translated relative to the map. */
-  MAP(0),
-  /** The fill is translated relative to the viewport. */
-  VIEWPORT(1);
-
-  companion object {
-    fun ofRaw(raw: Int): FillTranslateAnchor? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PolygonAnnotation(
   /** The id for annotation */

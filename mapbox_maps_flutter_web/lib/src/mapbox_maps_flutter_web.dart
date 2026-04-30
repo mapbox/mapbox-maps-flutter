@@ -65,6 +65,12 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       throw UnimplementedError('setAssetPath() is not implemented on web.');
 
   @override
+  Future<String?> getFlutterAssetPath(String? flutterAssetUri) =>
+      throw UnsupportedError(
+        'getFlutterAssetPath() is not supported on web.',
+      );
+
+  @override
   Future<TileStoreUsageMode> getTileStoreUsageMode() =>
       throw UnimplementedError(
           'getTileStoreUsageMode() is not implemented on web.');

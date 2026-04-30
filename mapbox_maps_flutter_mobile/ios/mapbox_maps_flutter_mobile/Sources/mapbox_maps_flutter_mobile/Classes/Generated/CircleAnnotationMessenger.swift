@@ -65,42 +65,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum CircleElevationReference: Int {
-  /// Elevated rendering is disabled.
-  case nONE = 0
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
-  case hDROADMARKUP = 1
-}
-
-/// Orientation of circle when map is pitched.
-/// Default value: "viewport".
-enum CirclePitchAlignment: Int {
-  /// The circle is aligned to the plane of the map.
-  case mAP = 0
-  /// The circle is aligned to the plane of the viewport.
-  case vIEWPORT = 1
-}
-
-/// Controls the scaling behavior of the circle when the map is pitched.
-/// Default value: "map".
-enum CirclePitchScale: Int {
-  /// Circles are scaled according to their apparent distance to the camera.
-  case mAP = 0
-  /// Circles are not scaled.
-  case vIEWPORT = 1
-}
-
-/// Controls the frame of reference for `circle-translate`.
-/// Default value: "map".
-enum CircleTranslateAnchor: Int {
-  /// The circle is translated relative to the map.
-  case mAP = 0
-  /// The circle is translated relative to the viewport.
-  case vIEWPORT = 1
-}
-
 /// Generated class from Pigeon that represents data sent in messages.
 struct CircleAnnotation {
   /// The id for annotation

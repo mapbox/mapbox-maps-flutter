@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import '_facade_shim.dart';
 import 'package:turf/turf.dart' show Position, Polyline;
 
 extension City on Point {

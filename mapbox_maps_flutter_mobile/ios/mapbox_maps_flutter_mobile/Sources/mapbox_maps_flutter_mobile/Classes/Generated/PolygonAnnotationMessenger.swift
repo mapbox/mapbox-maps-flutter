@@ -65,26 +65,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum FillElevationReference: Int {
-  /// Elevated rendering is disabled.
-  case nONE = 0
-  /// Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks.
-  case hDROADBASE = 1
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons.
-  case hDROADMARKUP = 2
-}
-
-/// Controls the frame of reference for `fill-translate`.
-/// Default value: "map".
-enum FillTranslateAnchor: Int {
-  /// The fill is translated relative to the map.
-  case mAP = 0
-  /// The fill is translated relative to the viewport.
-  case vIEWPORT = 1
-}
-
 /// Generated class from Pigeon that represents data sent in messages.
 struct PolygonAnnotation {
   /// The id for annotation

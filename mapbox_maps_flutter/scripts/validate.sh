@@ -276,8 +276,8 @@ stage_api_breakage() {
   else
     echo "❌ missing $baseline_file — required for the regression check"
     echo "   Seed it with the current unapproved count: run"
-    echo "     scripts/check_api_breakage.sh"
-    echo "   and write the 'Found N' number into scripts/breakage_baseline.txt"
+    echo "     scripts/check_api_breakage.sh --count"
+    echo "   and write its single-line stdout into scripts/breakage_baseline.txt"
     return 1
   fi
   if ! [[ "$baseline" =~ ^[0-9]+$ ]]; then
@@ -285,11 +285,11 @@ stage_api_breakage() {
     return 1
   fi
 
-  # Capture the inner script's stdout+stderr so we can parse the count
-  # AND surface the raw output on failure for the same context
-  # check_api_breakage.sh would show when run directly.
-  local report
-  report=$("$SCRIPT_DIR/check_api_breakage.sh" 2>&1)
+  # check_api_breakage.sh --count writes only the integer to stdout.
+  # Informational logs and the dart-apitool noise go to stderr, which we
+  # let pass through to the user.
+  local current
+  current=$("$SCRIPT_DIR/check_api_breakage.sh" --count)
   local inner_exit=$?
 
   # Restore PATH so subsequent stages see the env they started with.
@@ -297,18 +297,13 @@ stage_api_breakage() {
     PATH="${PATH#${pub_cache_bin}:}"
   fi
 
-  local current
-  if [[ "$inner_exit" == "0" ]]; then
-    current=0
-  else
-    # check_api_breakage.sh prints:  "❌ Found N breaking change(s) NOT in allow list:"
-    current=$(awk '/Found [0-9]+ breaking change\(s\)/ { for (i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) { print $i; exit } }' <<< "$report")
-    if [[ -z "$current" ]]; then
-      echo "❌ could not parse unapproved-breakage count from check_api_breakage.sh output"
-      echo ""
-      echo "$report"
-      return 1
-    fi
+  if (( inner_exit != 0 )); then
+    echo "❌ check_api_breakage.sh failed (exit $inner_exit) — see stderr above"
+    return 1
+  fi
+  if ! [[ "$current" =~ ^[0-9]+$ ]]; then
+    echo "❌ check_api_breakage.sh --count produced non-integer stdout: '$current'"
+    return 1
   fi
 
   echo "baseline unapproved breakages: $baseline"
@@ -318,8 +313,7 @@ stage_api_breakage() {
   if (( current > baseline )); then
     local delta=$(( current - baseline ))
     echo "❌ api-breakage regressed: +$delta new unapproved breaking change(s)"
-    echo ""
-    echo "$report"
+    echo "   Run 'scripts/check_api_breakage.sh' (without --count) for the full diff."
     return 1
   fi
 

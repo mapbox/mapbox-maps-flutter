@@ -67,6 +67,426 @@ enum StyleProjectionName: Int {
   case globe = 1
 }
 
+/// Describes the kind of a style property value.
+enum StylePropertyValueKind: Int {
+  /// The property value is not defined.
+  case uNDEFINED = 0
+  /// The property value is a constant.
+  case cONSTANT = 1
+  /// The property value is a style [expression](https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions).
+  case eXPRESSION = 2
+  /// Property value is a style [transition](https://docs.mapbox.com/mapbox-gl-js/style-spec/#transition).
+  case tRANSITION = 3
+}
+
+/// Orientation of background layer.
+enum BackgroundPitchAlignment: Int {
+  /// The background is aligned to the plane of the map.
+  case mAP = 0
+  /// The background is aligned to the plane of the viewport, covering the whole screen.
+  case vIEWPORT = 1
+}
+
+/// Selects the base of the circle-elevation-reference.
+/// Default value: "none".
+enum CircleElevationReference: Int {
+  /// Elevated rendering is disabled.
+  case nONE = 0
+  /// Elevated rendering is enabled. Use this mode to elevate circles relative to the HD road markup.
+  case hDROADMARKUP = 1
+}
+
+/// Orientation of circle when map is pitched.
+/// Default value: "viewport".
+enum CirclePitchAlignment: Int {
+  /// The circle is aligned to the plane of the map.
+  case mAP = 0
+  /// The circle is aligned to the plane of the viewport.
+  case vIEWPORT = 1
+}
+
+/// Controls the scaling behavior of the circle when the map is pitched.
+/// Default value: "map".
+enum CirclePitchScale: Int {
+  /// Circles are scaled according to their apparent distance to the camera.
+  case mAP = 0
+  /// Circles are not scaled.
+  case vIEWPORT = 1
+}
+
+/// Controls the frame of reference for `circle-translate`.
+/// Default value: "map".
+enum CircleTranslateAnchor: Int {
+  /// The circle is translated relative to the map.
+  case mAP = 0
+  /// The circle is translated relative to the viewport.
+  case vIEWPORT = 1
+}
+
+/// Selects the base of fill-elevation-reference.
+/// Default value: "none".
+enum FillElevationReference: Int {
+  /// Elevated rendering is disabled.
+  case nONE = 0
+  /// Elevated rendering is enabled. Use this mode to describe base polygons of the road networks.
+  case hDROADBASE = 1
+  /// Elevated rendering is enabled. Use this mode to describe polygons of the road markup.
+  case hDROADMARKUP = 2
+}
+
+/// Controls the behavior of fill extrusion base over terrain
+enum FillExtrusionBaseAlignment: Int {
+  /// The fill extrusion base follows terrain slope.
+  case tERRAIN = 0
+  /// The fill extrusion base is flat over terrain.
+  case fLAT = 1
+}
+
+/// Controls the behavior of fill extrusion height over terrain
+enum FillExtrusionHeightAlignment: Int {
+  /// The fill extrusion base follows terrain slope.
+  case tERRAIN = 0
+  /// The fill extrusion base is flat over terrain.
+  case fLAT = 1
+}
+
+/// Controls the frame of reference for `fill-translate`.
+/// Default value: "map".
+enum FillTranslateAnchor: Int {
+  /// The fill is translated relative to the map.
+  case mAP = 0
+  /// The fill is translated relative to the viewport.
+  case vIEWPORT = 1
+}
+
+/// Part of the icon placed closest to the anchor.
+/// Default value: "center".
+enum IconAnchor: Int {
+  /// The center of the icon is placed closest to the anchor.
+  case cENTER = 0
+  /// The left side of the icon is placed closest to the anchor.
+  case lEFT = 1
+  /// The right side of the icon is placed closest to the anchor.
+  case rIGHT = 2
+  /// The top of the icon is placed closest to the anchor.
+  case tOP = 3
+  /// The bottom of the icon is placed closest to the anchor.
+  case bOTTOM = 4
+  /// The top left corner of the icon is placed closest to the anchor.
+  case tOPLEFT = 5
+  /// The top right corner of the icon is placed closest to the anchor.
+  case tOPRIGHT = 6
+  /// The bottom left corner of the icon is placed closest to the anchor.
+  case bOTTOMLEFT = 7
+  /// The bottom right corner of the icon is placed closest to the anchor.
+  case bOTTOMRIGHT = 8
+}
+
+/// Orientation of icon when map is pitched.
+/// Default value: "auto".
+enum IconPitchAlignment: Int {
+  /// The icon is aligned to the plane of the map.
+  case mAP = 0
+  /// The icon is aligned to the plane of the viewport.
+  case vIEWPORT = 1
+  /// Automatically matches the value of `icon-rotation-alignment`.
+  case aUTO = 2
+}
+
+/// In combination with `symbol-placement`, determines the rotation behavior of icons.
+/// Default value: "auto".
+enum IconRotationAlignment: Int {
+  /// For `symbol-placement: point`, aligns icons east-west. Otherwise, aligns icon x-axes with the line.
+  case mAP = 0
+  /// Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`.
+  case vIEWPORT = 1
+  /// When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`.
+  case aUTO = 2
+}
+
+/// Scales the icon to fit around the associated text.
+/// Default value: "none".
+enum IconTextFit: Int {
+  /// The icon is displayed at its intrinsic aspect ratio.
+  case nONE = 0
+  /// The icon is scaled in the x-dimension to fit the width of the text.
+  case wIDTH = 1
+  /// The icon is scaled in the y-dimension to fit the height of the text.
+  case hEIGHT = 2
+  /// The icon is scaled in both x- and y-dimensions.
+  case bOTH = 3
+}
+
+/// Controls the frame of reference for `icon-translate`.
+/// Default value: "map".
+enum IconTranslateAnchor: Int {
+  /// Icons are translated relative to the map.
+  case mAP = 0
+  /// Icons are translated relative to the viewport.
+  case vIEWPORT = 1
+}
+
+/// The display of line endings.
+/// Default value: "butt".
+enum LineCap: Int {
+  /// A cap with a squared-off end which is drawn to the exact endpoint of the line.
+  case bUTT = 0
+  /// A cap with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line.
+  case rOUND = 1
+  /// A cap with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.
+  case sQUARE = 2
+}
+
+/// Selects the base of line-elevation-reference.
+/// Default value: "none".
+enum LineElevationReference: Int {
+  /// Elevated rendering is disabled.
+  case nONE = 0
+  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
+  case sEA = 1
+  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
+  case gROUND = 2
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons.
+  case hDROADMARKUP = 3
+}
+
+/// The display of lines when joining.
+/// Default value: "miter".
+enum LineJoin: Int {
+  /// A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.
+  case bEVEL = 0
+  /// A join with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line.
+  case rOUND = 1
+  /// A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet.
+  case mITER = 2
+  /// Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling.
+  case nONE = 3
+}
+
+/// Controls the frame of reference for `line-translate`.
+/// Default value: "map".
+enum LineTranslateAnchor: Int {
+  /// The line is translated relative to the map.
+  case mAP = 0
+  /// The line is translated relative to the viewport.
+  case vIEWPORT = 1
+}
+
+/// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property, and is subject to change in future versions.
+/// Default value: "pixels".
+enum LineWidthUnit: Int {
+  /// Width is rendered in pixels.
+  case pIXELS = 0
+  /// Width is rendered in meters.
+  case mETERS = 1
+}
+
+/// Occlusion opacity mode.
+/// Default value: "anchor".
+enum OcclusionOpacityMode: Int {
+  /// The occlusion opacity is based on the anchor point of the symbol/circle.
+  case aNCHOR = 0
+  /// The occlusion opacity is computed per pixel.
+  case pIXEL = 1
+}
+
+/// Selects the base of symbol-elevation.
+/// Default value: "ground".
+enum SymbolElevationReference: Int {
+  /// Elevated rendering is enabled. Use this mode to render symbols relative to the sea level.
+  case sEA = 0
+  /// Elevated rendering is enabled. Use this mode to render symbols relative to the ground's height below them.
+  case gROUND = 1
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
+  case hDROADMARKUP = 2
+}
+
+/// Label placement relative to its geometry.
+/// Default value: "point".
+enum SymbolPlacement: Int {
+  /// The label is placed at the point where the geometry is located.
+  case pOINT = 0
+  /// The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries.
+  case lINE = 1
+  /// The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries.
+  case lINECENTER = 2
+}
+
+/// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
+/// Default value: "auto".
+enum SymbolZOrder: Int {
+  /// Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
+  case aUTO = 0
+  /// Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
+  case vIEWPORTY = 1
+  /// Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.
+  case sOURCE = 2
+}
+
+/// Part of the text placed closest to the anchor.
+/// Default value: "center".
+enum TextAnchor: Int {
+  /// The center of the text is placed closest to the anchor.
+  case cENTER = 0
+  /// The left side of the text is placed closest to the anchor.
+  case lEFT = 1
+  /// The right side of the text is placed closest to the anchor.
+  case rIGHT = 2
+  /// The top of the text is placed closest to the anchor.
+  case tOP = 3
+  /// The bottom of the text is placed closest to the anchor.
+  case bOTTOM = 4
+  /// The top left corner of the text is placed closest to the anchor.
+  case tOPLEFT = 5
+  /// The top right corner of the text is placed closest to the anchor.
+  case tOPRIGHT = 6
+  /// The bottom left corner of the text is placed closest to the anchor.
+  case bOTTOMLEFT = 7
+  /// The bottom right corner of the text is placed closest to the anchor.
+  case bOTTOMRIGHT = 8
+}
+
+/// Text justification options.
+/// Default value: "center".
+enum TextJustify: Int {
+  /// The text is aligned towards the anchor position.
+  case aUTO = 0
+  /// The text is aligned to the left.
+  case lEFT = 1
+  /// The text is centered.
+  case cENTER = 2
+  /// The text is aligned to the right.
+  case rIGHT = 3
+}
+
+/// Orientation of text when map is pitched.
+/// Default value: "auto".
+enum TextPitchAlignment: Int {
+  /// The text is aligned to the plane of the map.
+  case mAP = 0
+  /// The text is aligned to the plane of the viewport.
+  case vIEWPORT = 1
+  /// Automatically matches the value of `text-rotation-alignment`.
+  case aUTO = 2
+}
+
+/// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+/// Default value: "auto".
+enum TextRotationAlignment: Int {
+  /// When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line.
+  case mAP = 0
+  /// Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`.
+  case vIEWPORT = 1
+  /// When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`.
+  case aUTO = 2
+}
+
+/// Specifies how to capitalize text, similar to the CSS `text-transform` property.
+/// Default value: "none".
+enum TextTransform: Int {
+  /// The text is not altered.
+  case nONE = 0
+  /// Forces all letters to be displayed in uppercase.
+  case uPPERCASE = 1
+  /// Forces all letters to be displayed in lowercase.
+  case lOWERCASE = 2
+}
+
+/// Controls the frame of reference for `text-translate`.
+/// Default value: "map".
+enum TextTranslateAnchor: Int {
+  /// The text is translated relative to the map.
+  case mAP = 0
+  /// The text is translated relative to the viewport.
+  case vIEWPORT = 1
+}
+
+/// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
+enum TextVariableAnchor: Int {
+  /// The center of the text is placed closest to the anchor.
+  case cENTER = 0
+  /// The left side of the text is placed closest to the anchor.
+  case lEFT = 1
+  /// The right side of the text is placed closest to the anchor.
+  case rIGHT = 2
+  /// The top of the text is placed closest to the anchor.
+  case tOP = 3
+  /// The bottom of the text is placed closest to the anchor.
+  case bOTTOM = 4
+  /// The top left corner of the text is placed closest to the anchor.
+  case tOPLEFT = 5
+  /// The top right corner of the text is placed closest to the anchor.
+  case tOPRIGHT = 6
+  /// The bottom left corner of the text is placed closest to the anchor.
+  case bOTTOMLEFT = 7
+  /// The bottom right corner of the text is placed closest to the anchor.
+  case bOTTOMRIGHT = 8
+}
+
+/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn't support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
+enum TextWritingMode: Int {
+  /// If a text's language supports horizontal writing mode, symbols would be laid out horizontally.
+  case hORIZONTAL = 0
+  /// If a text's language supports vertical writing mode, symbols would be laid out vertically.
+  case vERTICAL = 1
+}
+
+/// Encoding of raster-DEM tiles.
+enum Encoding: Int {
+  /// Terrarium format PNG tiles. See https://aws.amazon.com/es/public-datasets/terrain/ for more info.
+  case tERRARIUM = 0
+  /// Mapbox Terrain RGB tiles. See https://www.mapbox.com/help/access-elevation-data/#mapbox-terrain-rgb for more info.
+  case mAPBOX = 1
+}
+
+/// Controls the frame of reference for `fill-extrusion-translate`.
+enum FillExtrusionTranslateAnchor: Int {
+  /// The fill extrusion is translated relative to the map.
+  case mAP = 0
+  /// The fill extrusion is translated relative to the viewport.
+  case vIEWPORT = 1
+}
+
+/// Direction of light source when map is rotated.
+enum HillshadeIlluminationAnchor: Int {
+  /// The hillshade illumination is relative to the north direction.
+  case mAP = 0
+  /// The hillshade illumination is relative to the top of the viewport.
+  case vIEWPORT = 1
+}
+
+/// Defines rendering behavior of model in respect to other 3D scene objects.
+enum ModelType: Int {
+  /// Integrated to 3D scene, using depth testing, along with terrain, fill-extrusions and custom layer.
+  case cOMMON3D = 0
+  /// Displayed over other 3D content, occluded by terrain.
+  case lOCATIONINDICATOR = 1
+}
+
+/// The resampling/interpolation method to use for overscaling, also known as texture magnification filter.
+enum RasterResampling: Int {
+  /// (Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled
+  case lINEAR = 0
+  /// Nearest neighbor filtering interpolates pixel values using the nearest original source pixel creating a sharp but pixelated look when overscaled
+  case nEAREST = 1
+}
+
+/// Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed.
+enum Scheme: Int {
+  /// Slippy map tilenames scheme.
+  case xYZ = 0
+  /// OSGeo spec scheme.
+  case tMS = 1
+}
+
+/// The type of the sky.
+enum SkyType: Int {
+  /// Renders the sky with a gradient that can be configured with `sky-gradient-radius` and `sky-gradient`.
+  case gRADIENT = 0
+  /// Renders the sky with a simulated atmospheric scattering algorithm, the sun direction can be attached to the light position or explicitly set through `sky-atmosphere-sun`.
+  case aTMOSPHERE = 1
+}
+
 /// Defines the position of an ornament (logo, compass, scale bar, attribution) on the map.
 enum OrnamentPosition: Int {
   case tOPLEFT = 0
@@ -719,6 +1139,139 @@ struct StyleProjection {
   func toList() -> [Any?] {
     return [
       name
+    ]
+  }
+}
+
+/// Holds a style property value with meta data.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StylePropertyValue {
+  /// The property value.
+  var value: Any? = nil
+  /// The kind of the property value.
+  var kind: StylePropertyValueKind
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StylePropertyValue? {
+    let value: Any? = pigeonVar_list[0]
+    let kind = pigeonVar_list[1] as! StylePropertyValueKind
+
+    return StylePropertyValue(
+      value: value,
+      kind: kind
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      value,
+      kind,
+    ]
+  }
+}
+
+/// Image type.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MbxImage {
+  /// The width of the image, in screen pixels.
+  var width: Int64
+  /// The height of the image, in screen pixels.
+  var height: Int64
+  /// 32-bit premultiplied RGBA image data.
+  ///
+  /// An uncompressed image data encoded in 32-bit RGBA format with premultiplied
+  /// alpha channel. This field should contain exactly `4 * width * height` bytes. It
+  /// should consist of a sequence of scanlines.
+  var data: FlutterStandardTypedData
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MbxImage? {
+    let width = pigeonVar_list[0] as! Int64
+    let height = pigeonVar_list[1] as! Int64
+    let data = pigeonVar_list[2] as! FlutterStandardTypedData
+
+    return MbxImage(
+      width: width,
+      height: height,
+      data: data
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      width,
+      height,
+      data,
+    ]
+  }
+}
+
+/// Describes the image stretch areas.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ImageStretches {
+  /// The first stretchable part in screen pixel units.
+  var first: Double
+  /// The second stretchable part in screen pixel units.
+  var second: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ImageStretches? {
+    let first = pigeonVar_list[0] as! Double
+    let second = pigeonVar_list[1] as! Double
+
+    return ImageStretches(
+      first: first,
+      second: second
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      first,
+      second,
+    ]
+  }
+}
+
+/// Describes the image content, e.g. where text can be fit into an image.
+///
+/// When sizing icons with `icon-text-fit`, the icon size will be adjusted so that the this content box fits exactly around the text.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ImageContent {
+  /// Distance to the left, in screen pixels.
+  var left: Double
+  /// Distance to the top, in screen pixels.
+  var top: Double
+  /// Distance to the right, in screen pixels.
+  var right: Double
+  /// Distance to the bottom, in screen pixels.
+  var bottom: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ImageContent? {
+    let left = pigeonVar_list[0] as! Double
+    let top = pigeonVar_list[1] as! Double
+    let right = pigeonVar_list[2] as! Double
+    let bottom = pigeonVar_list[3] as! Double
+
+    return ImageContent(
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      left,
+      top,
+      right,
+      bottom,
     ]
   }
 }

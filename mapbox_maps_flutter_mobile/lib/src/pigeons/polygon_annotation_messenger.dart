@@ -4,29 +4,6 @@
 
 part of mapbox_maps_flutter_mobile;
 
-/// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum FillElevationReference {
-  /// Elevated rendering is disabled.
-  NONE,
-
-  /// Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks.
-  HD_ROAD_BASE,
-
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons.
-  HD_ROAD_MARKUP,
-}
-
-/// Controls the frame of reference for `fill-translate`.
-/// Default value: "map".
-enum FillTranslateAnchor {
-  /// The fill is translated relative to the map.
-  MAP,
-
-  /// The fill is translated relative to the viewport.
-  VIEWPORT,
-}
-
 class PolygonAnnotation {
   PolygonAnnotation({
     required this.id,
