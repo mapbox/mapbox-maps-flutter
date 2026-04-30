@@ -1,5 +1,31 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+
+import 'style/layer/background_layer.dart';
+import 'style/layer/circle_layer.dart';
+import 'style/layer/clip_layer.dart';
+import 'style/layer/fill_extrusion_layer.dart';
+import 'style/layer/fill_layer.dart';
+import 'style/layer/heatmap_layer.dart';
+import 'style/layer/hillshade_layer.dart';
+import 'style/layer/layer.dart';
+import 'style/layer/line_layer.dart';
+import 'style/layer/location_indicator_layer.dart';
+import 'style/layer/model_layer.dart';
+import 'style/layer/raster_layer.dart';
+import 'style/layer/raster_particle_layer.dart';
+import 'style/layer/sky_layer.dart';
+import 'style/layer/slot_layer.dart';
+import 'style/layer/symbol_layer.dart';
+import 'style/source/geojson_source.dart';
+import 'style/source/image_source.dart';
+import 'style/source/raster_source.dart';
+import 'style/source/rasterarray_source.dart';
+import 'style/source/rasterdem_source.dart';
+import 'style/source/source.dart';
+import 'style/source/vector_source.dart';
 
 /// Manages the map's style, including layers, sources, images, and imports.
 class StyleManager {
@@ -129,6 +155,27 @@ class StyleManager {
   /// Returns whether an image with the given id exists.
   Future<bool> hasStyleImage(String imageId) => _impl.hasStyleImage(imageId);
 
+  /// Adds an image to the style. Existing images with the same [imageId] are
+  /// replaced. [stretchX] and [stretchY] default to empty lists; [content]
+  /// and [sdf] to null/false — mirroring the most common usage.
+  Future<void> addStyleImage(
+    String imageId,
+    double scale,
+    MbxImage image, {
+    bool sdf = false,
+    List<ImageStretches?> stretchX = const <ImageStretches?>[],
+    List<ImageStretches?> stretchY = const <ImageStretches?>[],
+    ImageContent? content,
+  }) => _impl.addStyleImage(
+    imageId,
+    scale,
+    image,
+    sdf,
+    stretchX,
+    stretchY,
+    content,
+  );
+
   /// Removes a style image.
   Future<void> removeStyleImage(String imageId) =>
       _impl.removeStyleImage(imageId);
@@ -190,4 +237,115 @@ class StyleManager {
   /// Sets the style terrain from a JSON string.
   Future<void> setStyleTerrain(String properties) =>
       _impl.setStyleTerrain(properties);
+
+  // ===== Typed layer/source helpers =====
+
+  /// Adds a [Layer] to the current style. Serializes the layer to JSON and
+  /// forwards to [StylePlatformInterface.addStyleLayer].
+  Future<void> addLayer(Layer layer, [LayerPosition? position]) async {
+    final encoded = await layer.encode();
+    return _impl.addStyleLayer(encoded, null);
+  }
+
+  /// Adds a persistent [Layer] to the current style. Persistent layers
+  /// survive style reloads when the new style does not redefine the layer id.
+  Future<void> addPersistentLayer(Layer layer, [LayerPosition? position]) async {
+    final encoded = await layer.encode();
+    return _impl.addPersistentStyleLayer(encoded, null);
+  }
+
+  /// Updates an existing layer. Serializes the layer to JSON and forwards
+  /// to [StylePlatformInterface.setStyleLayerProperties].
+  Future<void> updateLayer(Layer layer) async {
+    final encoded = await layer.encode();
+    return _impl.setStyleLayerProperties(layer.id, encoded);
+  }
+
+  /// Returns a decoded [Layer] by id, or null when [layerId] is unknown or
+  /// its type is not handled.
+  Future<Layer?> getLayer(String layerId) async {
+    final properties = await _impl.getStyleLayerProperties(layerId);
+    final map = json.decode(properties);
+    switch (map["type"]) {
+      case "background":
+        return BackgroundLayer.decode(properties);
+      case "location-indicator":
+        return LocationIndicatorLayer.decode(properties);
+      case "sky":
+        return SkyLayer.decode(properties);
+      case "circle":
+        return CircleLayer.decode(properties);
+      case "fill-extrusion":
+        return FillExtrusionLayer.decode(properties);
+      case "fill":
+        return FillLayer.decode(properties);
+      case "heatmap":
+        return HeatmapLayer.decode(properties);
+      case "hillshade":
+        return HillshadeLayer.decode(properties);
+      case "line":
+        return LineLayer.decode(properties);
+      case "raster":
+        return RasterLayer.decode(properties);
+      case "symbol":
+        return SymbolLayer.decode(properties);
+      case "model":
+        return ModelLayer.decode(properties);
+      case "slot":
+        return SlotLayer.decode(properties);
+      case "raster-particle":
+        return RasterParticleLayer.decode(properties);
+      case "clip":
+        return ClipLayer.decode(properties);
+      default:
+        return null;
+    }
+  }
+
+  /// Adds a [Source] to the current style. Sources with multi-phase add
+  /// requirements (e.g. `GeoJsonSource` with initial data) override
+  /// [Source.addToStyle] to handle their specifics.
+  Future<void> addSource(Source source) => source.addToStyle(_impl);
+
+  /// Updates an existing source. Serializes the source to JSON and forwards
+  /// to [StylePlatformInterface.setStyleSourceProperties].
+  Future<void> updateSource(Source source) =>
+      _impl.setStyleSourceProperties(source.id, source.encode(volatile: true));
+
+  /// Returns a [Source] by id, or null when [sourceId] is unknown or its
+  /// type is not handled. The returned source is bound to this style so
+  /// subsequent property getters work.
+  Future<Source?> getSource(String sourceId) async {
+    final properties = await _impl.getStyleSourceProperties(sourceId);
+    final map = json.decode(properties);
+    Source? source;
+    switch (map["type"]) {
+      case "vector":
+        source = VectorSource(id: sourceId);
+        break;
+      case "geojson":
+        source = GeoJsonSource(id: sourceId);
+        break;
+      case "image":
+        source = ImageSource(id: sourceId);
+        break;
+      case "raster-dem":
+        source = RasterDemSource(id: sourceId);
+        break;
+      case "raster":
+        source = RasterSource(id: sourceId);
+        break;
+      case "raster-array":
+        source = RasterArraySource(id: sourceId);
+        break;
+    }
+    source?.bind(_impl);
+    return source;
+  }
 }
+
+// Silence analyzer warnings for layer/source imports that are used
+// dynamically by [StyleManager.getLayer] and [StyleManager.getSource]'s
+// switch dispatch. Flagged because Dart has no flow-sensitive reachability
+// check for `switch` arms that call static members.
+// ignore_for_file: unused_element

@@ -26,3 +26,36 @@ export 'src/mapbox_styles.dart';
 export 'src/interactive_features/standard_buildings.dart';
 export 'src/interactive_features/standard_place_labels.dart';
 export 'src/interactive_features/standard_poi.dart';
+
+// ===== Style layers / sources =====
+//
+// Hand-written style infrastructure (Layer / Source base classes, shared
+// enums lifted from mobile's old src/style/style.dart, LayerSlot) is in
+// style_types.dart plus the layer/source base files. Typed generated
+// layer/source classes come from the style codegen. Codegen-produced
+// enums are declared in codegen/pigeons/platform_interface_data_types.dart
+// and re-exported through the platform-interface package.
+export 'src/style/style_types.dart';
+export 'src/style/layer/layer.dart';
+export 'src/style/layer/background_layer.dart';
+export 'src/style/layer/circle_layer.dart';
+export 'src/style/layer/clip_layer.dart';
+export 'src/style/layer/fill_extrusion_layer.dart';
+export 'src/style/layer/fill_layer.dart';
+export 'src/style/layer/heatmap_layer.dart';
+export 'src/style/layer/hillshade_layer.dart';
+export 'src/style/layer/line_layer.dart';
+export 'src/style/layer/location_indicator_layer.dart';
+export 'src/style/layer/model_layer.dart';
+export 'src/style/layer/raster_layer.dart';
+export 'src/style/layer/raster_particle_layer.dart';
+export 'src/style/layer/sky_layer.dart';
+export 'src/style/layer/slot_layer.dart';
+export 'src/style/layer/symbol_layer.dart';
+export 'src/style/source/source.dart';
+export 'src/style/source/geojson_source.dart';
+export 'src/style/source/image_source.dart';
+export 'src/style/source/raster_source.dart';
+export 'src/style/source/rasterarray_source.dart';
+export 'src/style/source/rasterdem_source.dart';
+export 'src/style/source/vector_source.dart';

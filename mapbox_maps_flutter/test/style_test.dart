@@ -17,10 +17,13 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   int getStyleImportsCallCount = 0;
   int removeStyleImportCallCount = 0;
   int getStyleImportSchemaCallCount = 0;
+  int addStyleLayerCallCount = 0;
+  int addPersistentStyleLayerCallCount = 0;
   int getStyleLayersCallCount = 0;
   int styleLayerExistsCallCount = 0;
   int removeStyleLayerCallCount = 0;
   int moveStyleLayerCallCount = 0;
+  int addStyleSourceCallCount = 0;
   int getStyleSourcesCallCount = 0;
   int styleSourceExistsCallCount = 0;
   int removeStyleSourceCallCount = 0;
@@ -32,11 +35,16 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   int getStyleLayerPropertiesCallCount = 0;
   int setStyleLayerPropertiesCallCount = 0;
   int getStyleSourcePropertiesCallCount = 0;
+  int getStyleSourcePropertyCallCount = 0;
+  int addStyleImageCallCount = 0;
+  int updateStyleImageSourceImageCallCount = 0;
   int setStyleSourcePropertyCallCount = 0;
   int setStyleSourcePropertiesCallCount = 0;
   int setStyleImportConfigPropertyCallCount = 0;
   int setStyleImportConfigPropertiesCallCount = 0;
   int setStyleTerrainCallCount = 0;
+
+  String? lastProperties;
 
   String? lastUri;
   String? lastJson;
@@ -159,6 +167,26 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
+  Future<void> addStyleLayer(
+    String properties,
+    LayerPosition? layerPosition,
+  ) async {
+    addStyleLayerCallCount++;
+    lastProperties = properties;
+    lastLayerPosition = layerPosition;
+  }
+
+  @override
+  Future<void> addPersistentStyleLayer(
+    String properties,
+    LayerPosition? layerPosition,
+  ) async {
+    addPersistentStyleLayerCallCount++;
+    lastProperties = properties;
+    lastLayerPosition = layerPosition;
+  }
+
+  @override
   Future<List<StyleObjectInfo?>> getStyleLayers() async {
     getStyleLayersCallCount++;
     return [];
@@ -184,6 +212,13 @@ class MockStylePlatformInterface implements StylePlatformInterface {
     moveStyleLayerCallCount++;
     lastLayerId = layerId;
     lastLayerPosition = layerPosition;
+  }
+
+  @override
+  Future<void> addStyleSource(String sourceId, String properties) async {
+    addStyleSourceCallCount++;
+    lastSourceId = sourceId;
+    lastProperties = properties;
   }
 
   @override
@@ -272,6 +307,39 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   Future<void> setStyleSourceProperties(
       String sourceId, String properties) async {
     setStyleSourcePropertiesCallCount++;
+    lastSourceId = sourceId;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleSourceProperty(
+      String sourceId, String property) async {
+    getStyleSourcePropertyCallCount++;
+    lastSourceId = sourceId;
+    lastProperty = property;
+    return StylePropertyValue(
+      value: null,
+      kind: StylePropertyValueKind.UNDEFINED,
+    );
+  }
+
+  @override
+  Future<void> addStyleImage(
+    String imageId,
+    double scale,
+    MbxImage image,
+    bool sdf,
+    List<ImageStretches?> stretchX,
+    List<ImageStretches?> stretchY,
+    ImageContent? content,
+  ) async {
+    addStyleImageCallCount++;
+    lastImageId = imageId;
+  }
+
+  @override
+  Future<void> updateStyleImageSourceImage(
+      String sourceId, MbxImage image) async {
+    updateStyleImageSourceImageCallCount++;
     lastSourceId = sourceId;
   }
 

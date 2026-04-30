@@ -77,6 +77,16 @@ abstract interface class StylePlatformInterface {
 
   // ===== Layers =====
 
+  /// Adds a new style layer from a JSON properties string.
+  Future<void> addStyleLayer(String properties, LayerPosition? layerPosition);
+
+  /// Adds a persistent style layer. Persistent layers survive style reloads
+  /// when the new style does not redefine the same layer id.
+  Future<void> addPersistentStyleLayer(
+    String properties,
+    LayerPosition? layerPosition,
+  );
+
   /// Returns all style layers.
   Future<List<StyleObjectInfo?>> getStyleLayers();
 
@@ -91,6 +101,9 @@ abstract interface class StylePlatformInterface {
 
   // ===== Sources =====
 
+  /// Adds a new style source from a JSON properties string.
+  Future<void> addStyleSource(String sourceId, String properties);
+
   /// Returns all style sources.
   Future<List<StyleObjectInfo?>> getStyleSources();
 
@@ -104,6 +117,20 @@ abstract interface class StylePlatformInterface {
 
   /// Returns whether an image with the given id exists.
   Future<bool> hasStyleImage(String imageId);
+
+  /// Adds an image to the style. Existing images with the same [imageId] are replaced.
+  Future<void> addStyleImage(
+    String imageId,
+    double scale,
+    MbxImage image,
+    bool sdf,
+    List<ImageStretches?> stretchX,
+    List<ImageStretches?> stretchY,
+    ImageContent? content,
+  );
+
+  /// Replaces the image data of an existing image-type style source.
+  Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image);
 
   /// Removes a style image.
   Future<void> removeStyleImage(String imageId);
@@ -131,8 +158,20 @@ abstract interface class StylePlatformInterface {
   /// Sets all properties of a layer from a JSON object string.
   Future<void> setStyleLayerProperties(String layerId, String properties);
 
-  /// Returns all properties of a source as a JSON string.
+  /// Returns all properties of a source as a JSON string. This reflects
+  /// the source's declarative payload (the JSON passed to `addStyleSource`);
+  /// volatile runtime properties updated via [setStyleSourceProperty] or
+  /// [setStyleSourceProperties] are not always included. For a single-property
+  /// live read that does see volatile values, use [getStyleSourceProperty].
   Future<String> getStyleSourceProperties(String sourceId);
+
+  /// Returns the live value of a single source property as a
+  /// [StylePropertyValue] envelope (raw value + kind). Reflects volatile
+  /// runtime state, unlike [getStyleSourceProperties].
+  Future<StylePropertyValue> getStyleSourceProperty(
+    String sourceId,
+    String property,
+  );
 
   /// Sets a source property value from a JSON string.
   Future<void> setStyleSourceProperty(

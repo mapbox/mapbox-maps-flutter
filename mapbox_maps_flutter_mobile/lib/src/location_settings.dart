@@ -26,7 +26,7 @@ class LocationSettings implements LocationSettingsPlatformInterface {
       );
     } else {
       settings.locationPuck?.locationPuck3D?.modelUri =
-          await MapboxMapsOptions._getFlutterAssetPath(
+          await MapboxMapsOptions.getFlutterAssetPath(
             settings.locationPuck?.locationPuck3D?.modelUri,
           );
     }

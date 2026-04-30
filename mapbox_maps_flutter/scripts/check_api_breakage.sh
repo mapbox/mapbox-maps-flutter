@@ -1,9 +1,34 @@
 #!/usr/bin/env bash
-# NOTE: validate.sh (stage 4, api-breakage) parses the
-# "Found N breaking change(s) NOT in allow list" line emitted below
-# to feed its regression-detector. Keep that wording or update
-# validate.sh:305 in the same commit.
+#
+# Diff the local mapbox_maps_flutter package against the latest stable on
+# pub.dev and report breaking changes that aren't in
+# scripts/allowed_breaking_changes.json.
+#
+# Usage:
+#   scripts/check_api_breakage.sh           # human-readable report on stdout
+#   scripts/check_api_breakage.sh --count   # only the unapproved count on
+#                                           # stdout; everything else (logs,
+#                                           # banner, list) goes to stderr.
+#                                           # Always exits 0 unless the
+#                                           # tooling itself fails.
+#
+# validate.sh's api-breakage stage uses --count to feed the regression
+# detector — keep stdout in --count mode to a single integer.
+
 set -e
+
+COUNT_ONLY=0
+if [[ "${1:-}" == "--count" ]]; then
+  COUNT_ONLY=1
+fi
+
+# In --count mode, re-route all informational output to stderr and keep
+# the original stdout on file descriptor 3. The integer count is written
+# to fd 3 at the end. This decouples the data channel from the human one
+# without touching the existing echos.
+if (( COUNT_ONLY )); then
+  exec 3>&1 1>&2
+fi
 
 # Cleanup temp file on exit
 TEMP_JSON=""
@@ -84,6 +109,10 @@ UNAPPROVED=$(jq -r \
 ' "$TEMP_JSON")
 
 if [ -z "$UNAPPROVED" ]; then
+  if (( COUNT_ONLY )); then
+    echo 0 >&3
+    exit 0
+  fi
   echo ""
   echo "✅ No unapproved breaking changes"
   echo ""
@@ -91,6 +120,11 @@ if [ -z "$UNAPPROVED" ]; then
 fi
 
 UNAPPROVED_COUNT=$(echo "$UNAPPROVED" | wc -l | tr -d ' ')
+
+if (( COUNT_ONLY )); then
+  echo "$UNAPPROVED_COUNT" >&3
+  exit 0
+fi
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

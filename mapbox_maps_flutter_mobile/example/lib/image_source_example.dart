@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import '_facade_shim.dart';
 import 'package:turf/turf.dart' show Position;
 
 import 'utils.dart';
@@ -59,11 +60,18 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
         rasterEmissiveStrength: 1.0,
       ),
     );
+    // ignore: unused_local_variable
     var imageSource =
         await mapboxMap?.style.getSource("image_source-id") as ImageSource;
     final ByteData bytes = await rootBundle.load('assets/miami_beach.png');
+    // ignore: unused_local_variable
     final Uint8List list = bytes.buffer.asUint8List();
-    imageSource.updateImage(MbxImage(width: 280, height: 203, data: list));
+    // TODO(WS2): re-enable once `ImageSource.updateImage` is restored on the
+    // facade. The method requires `MbxImage` / `ImageStretches` /
+    // `ImageContent` to migrate from mobile's Pigeon to
+    // `platform_interface_data_types.dart`. See PR #12543 / WS1 handoff
+    // notes in we-are-in-the-declarative-panda.md.
+    // imageSource.updateImage(MbxImage(width: 280, height: 203, data: list));
   }
 
   @override
