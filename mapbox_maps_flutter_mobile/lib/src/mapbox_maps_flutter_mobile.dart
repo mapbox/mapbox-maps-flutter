@@ -100,6 +100,10 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
   MapboxOptionsPlatformInterface get mapboxOptions => this;
 
   @override
+  LogConfigurationPlatformInterface get logConfiguration =>
+      LogConfiguration.shared;
+
+  @override
   OfflineSwitchPlatformInterface get offlineSwitch => OfflineSwitch.shared;
 
   @override

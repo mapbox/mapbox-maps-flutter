@@ -4,11 +4,11 @@ import Foundation
 final class PerformanceStatisticsController: _PerformanceStatisticsApi {
     private let mapboxMap: MapboxMap
     private var collectionCancelable: AnyCancelable?
-    private var performanceStatisticsListener: PerformanceStatisticsListener?
+    private var performanceStatisticsListener: _PerformanceStatisticsListenerApi?
 
     init(mapboxMap: MapboxMap, messenger: SuffixBinaryMessenger) {
         self.mapboxMap = mapboxMap
-        performanceStatisticsListener = PerformanceStatisticsListener(
+        performanceStatisticsListener = _PerformanceStatisticsListenerApi(
             binaryMessenger: messenger.messenger,
             messageChannelSuffix: messenger.suffix
         )

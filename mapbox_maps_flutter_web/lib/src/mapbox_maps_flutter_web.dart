@@ -113,6 +113,12 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   );
 
   @override
+  LogConfigurationPlatformInterface get logConfiguration =>
+      throw UnsupportedError(
+        'LogConfiguration is not supported on web; use the browser console.',
+      );
+
+  @override
   Future<OfflineManagerPlatformInterface> createOfflineManager() =>
       throw UnsupportedError(
         'Offline functionalities are not supported on web.',

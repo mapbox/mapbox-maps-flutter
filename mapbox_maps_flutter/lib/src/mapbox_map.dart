@@ -372,6 +372,24 @@ class MapboxMap implements MapboxMapInterface {
     FeaturesetDescriptor featureset,
   ) => _impl.resetFeatureStatesForFeatureset(featureset);
 
+  // ===== Performance statistics =====
+
+  /// Starts collecting CPU/GPU render performance statistics with the
+  /// given [options], delivering each sampled snapshot to [listener].
+  /// Calling this while collection is already active replaces the previous
+  /// listener; call [stopPerformanceStatisticsCollection] before restarting.
+  @experimental
+  void startPerformanceStatisticsCollection(
+    PerformanceStatisticsOptions options,
+    PerformanceStatisticsListener listener,
+  ) => _impl.startPerformanceStatisticsCollection(options, listener);
+
+  /// Stops collection started by [startPerformanceStatisticsCollection].
+  /// No-op when no collection is active.
+  @experimental
+  void stopPerformanceStatisticsCollection() =>
+      _impl.stopPerformanceStatisticsCollection();
+
   // ===== Lifecycle =====
 
   /// Releases resources held by this map instance.

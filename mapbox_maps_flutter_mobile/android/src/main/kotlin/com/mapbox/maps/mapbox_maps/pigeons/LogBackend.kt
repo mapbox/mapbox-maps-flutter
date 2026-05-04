@@ -14,23 +14,6 @@ import java.nio.ByteBuffer
 private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
-
-enum class LoggingLevel(val raw: Int) {
-  /** Verbose log data to understand how the code executes. */
-  DEBUG(0),
-  /** Logs related to normal application behavior. */
-  INFO(1),
-  /** To log a situation that might be a problem, or an unusual situation. */
-  WARNING(2),
-  /** A log message providing information when a significant error occurred */
-  ERROR(3);
-
-  companion object {
-    fun ofRaw(raw: Int): LoggingLevel? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
 private open class LogBackendPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -54,13 +37,16 @@ private open class LogBackendPigeonCodec : StandardMessageCodec() {
 }
 
 /**
- * An interface for implementing log writing backends, e.g. for using platform specific log backends or logging to a notification service.
+ * Mobile-internal Pigeon FlutterApi for log backends. Facade users
+ * subclass the hand-written `LogWriterBackend` in
+ * `mapbox_maps_flutter_platform_interface`; mobile bridges to this class
+ * via `_LogWriterBackendBridge` (see lib/src/log_configuration.dart).
  *
  * Generated class from Pigeon that represents Flutter messages that can be called from Kotlin.
  */
-class LogWriterBackend(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
+class _LogWriterBackendApi(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
   companion object {
-    /** The codec used by LogWriterBackend. */
+    /** The codec used by _LogWriterBackendApi. */
     val codec: MessageCodec<Any?> by lazy {
       LogBackendPigeonCodec()
     }
@@ -68,7 +54,7 @@ class LogWriterBackend(private val binaryMessenger: BinaryMessenger, private val
   /** Writes a log message with a given level. */
   fun writeLog(levelArg: LoggingLevel, messageArg: String, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter._LogWriterBackendApi.writeLog$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(levelArg, messageArg)) {
       if (it is List<*>) {

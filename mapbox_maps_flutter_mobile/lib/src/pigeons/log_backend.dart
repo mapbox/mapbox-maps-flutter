@@ -4,20 +4,6 @@
 
 part of mapbox_maps_flutter_mobile;
 
-enum LoggingLevel {
-  /// Verbose log data to understand how the code executes.
-  debug,
-
-  /// Logs related to normal application behavior.
-  info,
-
-  /// To log a situation that might be a problem, or an unusual situation.
-  warning,
-
-  /// A log message providing information when a significant error occurred
-  error,
-}
-
 class LogBackend_PigeonCodec extends StandardMessageCodec {
   const LogBackend_PigeonCodec();
   @override
@@ -45,8 +31,11 @@ class LogBackend_PigeonCodec extends StandardMessageCodec {
   }
 }
 
-/// An interface for implementing log writing backends, e.g. for using platform specific log backends or logging to a notification service.
-abstract class LogWriterBackend {
+/// Mobile-internal Pigeon FlutterApi for log backends. Facade users
+/// subclass the hand-written `LogWriterBackend` in
+/// `mapbox_maps_flutter_platform_interface`; mobile bridges to this class
+/// via `_LogWriterBackendBridge` (see lib/src/log_configuration.dart).
+abstract class _LogWriterBackendApi {
   static const MessageCodec<Object?> pigeonChannelCodec =
       LogBackend_PigeonCodec();
 
@@ -54,7 +43,7 @@ abstract class LogWriterBackend {
   void writeLog(LoggingLevel level, String message);
 
   static void setUp(
-    LogWriterBackend? api, {
+    _LogWriterBackendApi? api, {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
@@ -64,7 +53,7 @@ abstract class LogWriterBackend {
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog$messageChannelSuffix',
+        'dev.flutter.pigeon.mapbox_maps_flutter._LogWriterBackendApi.writeLog$messageChannelSuffix',
         pigeonChannelCodec,
         binaryMessenger: binaryMessenger,
       );
@@ -74,18 +63,18 @@ abstract class LogWriterBackend {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(
             message != null,
-            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null.',
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._LogWriterBackendApi.writeLog was null.',
           );
           final List<Object?> args = (message as List<Object?>?)!;
           final LoggingLevel? arg_level = (args[0] as LoggingLevel?);
           assert(
             arg_level != null,
-            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null LoggingLevel.',
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._LogWriterBackendApi.writeLog was null, expected non-null LoggingLevel.',
           );
           final String? arg_message = (args[1] as String?);
           assert(
             arg_message != null,
-            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null String.',
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._LogWriterBackendApi.writeLog was null, expected non-null String.',
           );
           try {
             api.writeLog(arg_level!, arg_message!);

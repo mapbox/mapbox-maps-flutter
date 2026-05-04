@@ -38,6 +38,7 @@ part 'src/pigeons/performace_statistics.dart';
 part 'src/location_settings.dart';
 part 'src/snapshotter/snapshotter.dart';
 part 'src/log_configuration.dart';
+part 'src/performance_statistics.dart';
 part 'src/extensions.dart';
 part 'src/map_events.dart';
 part 'src/offline/offline_messenger.dart';

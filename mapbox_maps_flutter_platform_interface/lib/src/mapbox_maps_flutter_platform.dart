@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'events.dart' show MapEvent;
+import 'interfaces/log_configuration_interface.dart';
 import 'interfaces/mapbox_map_interface.dart';
 import 'interfaces/mapbox_maps_options_interface.dart';
 import 'interfaces/mapbox_options_interface.dart';
@@ -13,11 +14,13 @@ export 'interactive_features.dart';
 export 'interfaces/annotations_interface.dart';
 export 'interfaces/http_service_interface.dart';
 export 'interfaces/location_settings_interface.dart';
+export 'interfaces/log_configuration_interface.dart';
 export 'interfaces/map_recorder_interface.dart';
 export 'interfaces/mapbox_map_interface.dart';
 export 'interfaces/mapbox_maps_options_interface.dart';
 export 'interfaces/mapbox_options_interface.dart';
 export 'interfaces/offline_interface.dart';
+export 'interfaces/performance_statistics_listener.dart';
 export 'interfaces/projection_interface.dart';
 export 'interfaces/settings_interfaces.dart';
 export 'interfaces/snapshotter_interface.dart';
@@ -55,6 +58,7 @@ abstract base class MapboxMapsFlutterPlatform {
   OfflineSwitchPlatformInterface get offlineSwitch;
   MapboxOptionsPlatformInterface get mapboxOptions;
   MapboxMapsOptionsPlatformInterface get mapboxMapsOptions;
+  LogConfigurationPlatformInterface get logConfiguration;
 
   // ===== Offline Interfaces =====
 

@@ -1,17 +1,28 @@
 part of mapbox_maps_flutter_mobile;
 
 /// A class that allows to configure Mapbox SDKs logging per application.
-final class LogConfiguration {
+///
+/// Facade callers reach this through
+/// `MapboxMapsFlutterPlatform.instance.logConfiguration`
+/// (via [LogConfigurationPlatformInterface]); the class also keeps a
+/// mobile-internal static entry point used by [_setupDebugLoggingIfNeeded].
+final class LogConfiguration implements LogConfigurationPlatformInterface {
   static bool _initialized = false;
 
-  LogConfiguration._() {}
+  /// Instance used by `MapboxMapsFlutterMobile.logConfiguration` to
+  /// satisfy [LogConfigurationPlatformInterface].
+  static final LogConfiguration shared = LogConfiguration._();
 
-  /// Sets the backend which writes the log.
-  ///
-  /// Pass backend which writes logs as [backend], if you provide null for this parameter then previously
-  /// used logger backend will be replaced with Mapbox default implementation.
-  static void registerLogWriterBackend(LogWriterBackend? backend) {
-    LogWriterBackend.setUp(backend);
+  LogConfiguration._();
+
+  /// Bridges [LogWriterBackend] (hand-written, lives in
+  /// platform_interface) to Pigeon's mobile-internal
+  /// `_LogWriterBackendApi`. Passing `null` unregisters.
+  @override
+  void registerLogWriterBackend(LogWriterBackend? backend) {
+    _LogWriterBackendApi.setUp(
+      backend == null ? null : _LogWriterBackendBridge(backend),
+    );
   }
 
   static void _setupDebugLoggingIfNeeded() {
@@ -25,7 +36,7 @@ final class LogConfiguration {
     _initialized = true;
 
     if (bool.fromEnvironment('MAPBOX_LOG_DEBUG', defaultValue: true)) {
-      LogConfiguration.registerLogWriterBackend(_DebugLoggingBackend());
+      shared.registerLogWriterBackend(_DebugLoggingBackend());
     }
   }
 }
@@ -56,7 +67,7 @@ extension on LoggingLevel {
   }
 }
 
-final class _DebugLoggingBackend extends LogWriterBackend {
+final class _DebugLoggingBackend implements LogWriterBackend {
   @override
   void writeLog(LoggingLevel level, String message) {
     developer.log(
@@ -64,5 +75,19 @@ final class _DebugLoggingBackend extends LogWriterBackend {
       level: level.asFlutterLoggingLevel.value,
       name: 'mapbox-maps-flutter',
     );
+  }
+}
+
+/// Pigeon-side handler that forwards to a hand-written [LogWriterBackend].
+/// Keeps the Pigeon FlutterApi class entirely internal to the mobile
+/// package.
+final class _LogWriterBackendBridge extends _LogWriterBackendApi {
+  final LogWriterBackend _backend;
+
+  _LogWriterBackendBridge(this._backend);
+
+  @override
+  void writeLog(LoggingLevel level, String message) {
+    _backend.writeLog(level, message);
   }
 }

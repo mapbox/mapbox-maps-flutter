@@ -3,7 +3,7 @@ import Foundation
 import Flutter
 
 final class LoggingController {
-    static private var backend: LogWriterBackend?
+    static private var backend: _LogWriterBackendApi?
     static private let instance = LoggingController()
 
     static func setup(_ binaryMessanger: FlutterBinaryMessenger) {
