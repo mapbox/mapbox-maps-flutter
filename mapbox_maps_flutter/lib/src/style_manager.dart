@@ -249,7 +249,10 @@ class StyleManager {
 
   /// Adds a persistent [Layer] to the current style. Persistent layers
   /// survive style reloads when the new style does not redefine the layer id.
-  Future<void> addPersistentLayer(Layer layer, [LayerPosition? position]) async {
+  Future<void> addPersistentLayer(
+    Layer layer, [
+    LayerPosition? position,
+  ]) async {
     final encoded = await layer.encode();
     return _impl.addPersistentStyleLayer(encoded, null);
   }

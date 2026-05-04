@@ -75,8 +75,14 @@ extension StyleManagerWS1CompatShim on StyleManager {
   Future<void> addLayer(mbx.Layer layer) =>
       mbx.StyleManager(this).addLayer(layer);
 
+  Future<void> addLayerAt(mbx.Layer layer, LayerPosition position) =>
+      mbx.StyleManager(this).addLayerAt(layer, position);
+
   Future<void> addPersistentLayer(mbx.Layer layer) =>
       mbx.StyleManager(this).addPersistentLayer(layer);
+
+  Future<void> addPersistentLayerAt(mbx.Layer layer, LayerPosition position) =>
+      mbx.StyleManager(this).addPersistentLayerAt(layer, position);
 
   Future<void> updateLayer(mbx.Layer layer) =>
       mbx.StyleManager(this).updateLayer(layer);

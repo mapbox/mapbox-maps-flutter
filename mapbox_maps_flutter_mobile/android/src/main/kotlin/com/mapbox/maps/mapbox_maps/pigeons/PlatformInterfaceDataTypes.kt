@@ -1731,6 +1731,87 @@ data class StyleProjection(
 }
 
 /**
+ * ProjectedMeters is a coordinate in a specific
+ * [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection.
+ *
+ * This specific Spherical Mercator projection assumes the Earth is a sphere with a radius
+ * of 6,378,137 meters. Coordinates are determined as distances, in meters, on the surface
+ * of that sphere.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ProjectedMeters(
+  /** Projected meters in north direction. */
+  val northing: Double,
+  /** Projected meters in east direction. */
+  val easting: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ProjectedMeters {
+      val northing = pigeonVar_list[0] as Double
+      val easting = pigeonVar_list[1] as Double
+      return ProjectedMeters(northing, easting)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      northing,
+      easting,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ProjectedMeters) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return northing == other.northing &&
+      easting == other.easting
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes a point on the map in Mercator projection.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class MercatorCoordinate(
+  /** A value representing the x position of this coordinate. */
+  val x: Double,
+  /** A value representing the y position of this coordinate. */
+  val y: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MercatorCoordinate {
+      val x = pigeonVar_list[0] as Double
+      val y = pigeonVar_list[1] as Double
+      return MercatorCoordinate(x, y)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      x,
+      y,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MercatorCoordinate) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return x == other.x &&
+      y == other.y
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * Holds a style property value with meta data.
  *
  * Generated class from Pigeon that represents data sent in messages.

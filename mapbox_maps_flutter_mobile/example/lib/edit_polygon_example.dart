@@ -6,7 +6,7 @@ import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import '_facade_shim.dart';
-import 'package:turf/turf.dart' show Position;
+import 'package:turf/turf.dart' show Feature, Point, Polygon, Position;
 
 class EditPolygonExample extends StatefulWidget implements Example {
   @override

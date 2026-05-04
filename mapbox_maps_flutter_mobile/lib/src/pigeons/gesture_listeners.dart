@@ -211,15 +211,15 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
     } else if (value is GestureState) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is turf.Point) {
       buffer.putUint8(136);
-      writeValue(buffer, value.encode());
-    } else if (value is Polygon) {
+      writeValue(buffer, <Object?>[value.toJson()]);
+    } else if (value is turf.Polygon) {
       buffer.putUint8(137);
-      writeValue(buffer, value.encode());
-    } else if (value is LineString) {
+      writeValue(buffer, <Object?>[value.toJson()]);
+    } else if (value is turf.LineString) {
       buffer.putUint8(138);
-      writeValue(buffer, value.encode());
+      writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is ScreenCoordinate) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
@@ -280,11 +280,17 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : GestureState.values[value];
       case 136:
-        return Point.decode(readValue(buffer)!);
+        return turf.Point.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 137:
-        return Polygon.decode(readValue(buffer)!);
+        return turf.Polygon.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 138:
-        return LineString.decode(readValue(buffer)!);
+        return turf.LineString.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 139:
         return ScreenCoordinate.decode(readValue(buffer)!);
       case 140:

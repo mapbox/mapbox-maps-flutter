@@ -285,9 +285,9 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is FillTranslateAnchor) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is Polygon) {
+    } else if (value is turf.Polygon) {
       buffer.putUint8(131);
-      writeValue(buffer, value.encode());
+      writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is PolygonAnnotation) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
@@ -309,7 +309,9 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : FillTranslateAnchor.values[value];
       case 131:
-        return Polygon.decode(readValue(buffer)!);
+        return turf.Polygon.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 132:
         return PolygonAnnotation.decode(readValue(buffer)!);
       case 133:

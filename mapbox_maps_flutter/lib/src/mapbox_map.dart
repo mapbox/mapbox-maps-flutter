@@ -10,6 +10,7 @@ import 'http_service.dart';
 import 'indoor_selector_settings.dart';
 import 'location_settings.dart';
 import 'logo_settings.dart';
+import 'projection.dart';
 import 'scale_bar_settings.dart';
 import 'style_manager.dart';
 
@@ -68,6 +69,9 @@ class MapboxMap implements MapboxMapInterface {
   late final MapboxHttpService httpService = MapboxHttpService(
     _impl.httpService,
   );
+
+  /// Provides access to Spherical Mercator projection math.
+  late final Projection projection = Projection(_impl.projection);
 
   // ===== Gesture listeners =====
 

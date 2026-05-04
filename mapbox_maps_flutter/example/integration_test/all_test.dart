@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'map_events_test.dart' as map_events_test;
+import 'projection_test.dart' as projection_test;
 
 // Style layer tests (WS1: relocated from mobile example).
 import 'style/layer/background_layer_test.dart' as background_layer_test;
@@ -39,6 +40,7 @@ void main() {
   });
 
   map_events_test.main();
+  projection_test.main();
 
   // Style layers.
   background_layer_test.main();

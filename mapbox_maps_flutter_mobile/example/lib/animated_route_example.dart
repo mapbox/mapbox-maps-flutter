@@ -12,7 +12,7 @@ import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:turf/turf.dart' show Position;
+import 'package:turf/turf.dart' show LineString, Point, Position;
 
 import 'example.dart';
 

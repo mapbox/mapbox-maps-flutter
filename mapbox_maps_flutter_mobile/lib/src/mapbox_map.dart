@@ -226,7 +226,8 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
-  late final Projection projection = Projection(
+  @override
+  late final ProjectionPlatformInterface projection = Projection(
     binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
     messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
   );

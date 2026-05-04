@@ -759,9 +759,9 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is TextTranslateAnchor) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is turf.Point) {
       buffer.putUint8(146);
-      writeValue(buffer, value.encode());
+      writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is PointAnnotation) {
       buffer.putUint8(147);
       writeValue(buffer, value.encode());
@@ -828,7 +828,9 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TextTranslateAnchor.values[value];
       case 146:
-        return Point.decode(readValue(buffer)!);
+        return turf.Point.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 147:
         return PointAnnotation.decode(readValue(buffer)!);
       case 148:

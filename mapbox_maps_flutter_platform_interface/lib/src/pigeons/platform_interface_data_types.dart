@@ -1509,6 +1509,94 @@ class StyleProjection {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// ProjectedMeters is a coordinate in a specific
+/// [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection.
+///
+/// This specific Spherical Mercator projection assumes the Earth is a sphere with a radius
+/// of 6,378,137 meters. Coordinates are determined as distances, in meters, on the surface
+/// of that sphere.
+class ProjectedMeters {
+  ProjectedMeters({required this.northing, required this.easting});
+
+  /// Projected meters in north direction.
+  double northing;
+
+  /// Projected meters in east direction.
+  double easting;
+
+  List<Object?> _toList() {
+    return <Object?>[northing, easting];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ProjectedMeters decode(Object result) {
+    result as List<Object?>;
+    return ProjectedMeters(
+      northing: result[0]! as double,
+      easting: result[1]! as double,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ProjectedMeters || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return northing == other.northing && easting == other.easting;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Describes a point on the map in Mercator projection.
+class MercatorCoordinate {
+  MercatorCoordinate({required this.x, required this.y});
+
+  /// A value representing the x position of this coordinate.
+  double x;
+
+  /// A value representing the y position of this coordinate.
+  double y;
+
+  List<Object?> _toList() {
+    return <Object?>[x, y];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static MercatorCoordinate decode(Object result) {
+    result as List<Object?>;
+    return MercatorCoordinate(x: result[0]! as double, y: result[1]! as double);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! MercatorCoordinate || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return x == other.x && y == other.y;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// Holds a style property value with meta data.
 class StylePropertyValue {
   StylePropertyValue({this.value, required this.kind});
