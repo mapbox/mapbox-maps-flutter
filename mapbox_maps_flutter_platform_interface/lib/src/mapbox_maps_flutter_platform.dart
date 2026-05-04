@@ -9,6 +9,7 @@ import 'interfaces/offline_interface.dart';
 import 'interfaces/viewport/viewport_state.dart';
 import 'interfaces/viewport/viewport_transition.dart';
 
+export 'debug_options.dart';
 export 'events.dart';
 export 'interactive_features.dart';
 export 'interfaces/annotations_interface.dart';

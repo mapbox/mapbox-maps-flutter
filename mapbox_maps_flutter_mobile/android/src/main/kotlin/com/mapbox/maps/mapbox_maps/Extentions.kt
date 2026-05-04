@@ -44,22 +44,22 @@ fun PerformanceSamplerOptions.toPerformanceSamplerOptions(): com.mapbox.maps.Per
   }
 }
 
-fun _MapWidgetDebugOptions.toMapViewDebugOptions(): MapViewDebugOptions {
+fun MapWidgetDebugOptionsData.toMapViewDebugOptions(): MapViewDebugOptions {
   return when (this) {
-    _MapWidgetDebugOptions.TILE_BORDERS -> MapViewDebugOptions.TILE_BORDERS
-    _MapWidgetDebugOptions.PARSE_STATUS -> MapViewDebugOptions.PARSE_STATUS
-    _MapWidgetDebugOptions.TIMESTAMPS -> MapViewDebugOptions.TIMESTAMPS
-    _MapWidgetDebugOptions.COLLISION -> MapViewDebugOptions.COLLISION
-    _MapWidgetDebugOptions.OVERDRAW -> MapViewDebugOptions.OVERDRAW
-    _MapWidgetDebugOptions.STENCIL_CLIP -> MapViewDebugOptions.STENCIL_CLIP
-    _MapWidgetDebugOptions.DEPTH_BUFFER -> MapViewDebugOptions.DEPTH_BUFFER
-    _MapWidgetDebugOptions.MODEL_BOUNDS -> MapViewDebugOptions.MODEL_BOUNDS
-    _MapWidgetDebugOptions.TERRAIN_WIREFRAME -> MapViewDebugOptions.TERRAIN_WIREFRAME
-    _MapWidgetDebugOptions.LAYERS2DWIREFRAME -> MapViewDebugOptions.LAYERS2_DWIREFRAME
-    _MapWidgetDebugOptions.LAYERS3DWIREFRAME -> MapViewDebugOptions.LAYERS3_DWIREFRAME
-    _MapWidgetDebugOptions.LIGHT -> MapViewDebugOptions.LIGHT
-    _MapWidgetDebugOptions.CAMERA -> MapViewDebugOptions.CAMERA
-    _MapWidgetDebugOptions.PADDING -> MapViewDebugOptions.PADDING
+    MapWidgetDebugOptionsData.TILE_BORDERS -> MapViewDebugOptions.TILE_BORDERS
+    MapWidgetDebugOptionsData.PARSE_STATUS -> MapViewDebugOptions.PARSE_STATUS
+    MapWidgetDebugOptionsData.TIMESTAMPS -> MapViewDebugOptions.TIMESTAMPS
+    MapWidgetDebugOptionsData.COLLISION -> MapViewDebugOptions.COLLISION
+    MapWidgetDebugOptionsData.OVERDRAW -> MapViewDebugOptions.OVERDRAW
+    MapWidgetDebugOptionsData.STENCIL_CLIP -> MapViewDebugOptions.STENCIL_CLIP
+    MapWidgetDebugOptionsData.DEPTH_BUFFER -> MapViewDebugOptions.DEPTH_BUFFER
+    MapWidgetDebugOptionsData.MODEL_BOUNDS -> MapViewDebugOptions.MODEL_BOUNDS
+    MapWidgetDebugOptionsData.TERRAIN_WIREFRAME -> MapViewDebugOptions.TERRAIN_WIREFRAME
+    MapWidgetDebugOptionsData.LAYERS2DWIREFRAME -> MapViewDebugOptions.LAYERS2_DWIREFRAME
+    MapWidgetDebugOptionsData.LAYERS3DWIREFRAME -> MapViewDebugOptions.LAYERS3_DWIREFRAME
+    MapWidgetDebugOptionsData.LIGHT -> MapViewDebugOptions.LIGHT
+    MapWidgetDebugOptionsData.CAMERA -> MapViewDebugOptions.CAMERA
+    MapWidgetDebugOptionsData.PADDING -> MapViewDebugOptions.PADDING
   }
 }
 
@@ -562,22 +562,22 @@ fun com.mapbox.maps.GroupPerformanceStatistics.toGroupPerformanceStatistics(): G
   return GroupPerformanceStatistics(durationMillis = durationMillis, name = name)
 }
 
-fun MapViewDebugOptions.toFLTDebugOptions(): _MapWidgetDebugOptions? {
+fun MapViewDebugOptions.toFLTDebugOptions(): MapWidgetDebugOptionsData? {
   return when (this) {
-    MapViewDebugOptions.TILE_BORDERS -> _MapWidgetDebugOptions.TILE_BORDERS
-    MapViewDebugOptions.PARSE_STATUS -> _MapWidgetDebugOptions.PARSE_STATUS
-    MapViewDebugOptions.TIMESTAMPS -> _MapWidgetDebugOptions.TIMESTAMPS
-    MapViewDebugOptions.COLLISION -> _MapWidgetDebugOptions.COLLISION
-    MapViewDebugOptions.OVERDRAW -> _MapWidgetDebugOptions.OVERDRAW
-    MapViewDebugOptions.STENCIL_CLIP -> _MapWidgetDebugOptions.STENCIL_CLIP
-    MapViewDebugOptions.DEPTH_BUFFER -> _MapWidgetDebugOptions.DEPTH_BUFFER
-    MapViewDebugOptions.MODEL_BOUNDS -> _MapWidgetDebugOptions.MODEL_BOUNDS
-    MapViewDebugOptions.TERRAIN_WIREFRAME -> _MapWidgetDebugOptions.TERRAIN_WIREFRAME
-    MapViewDebugOptions.LAYERS2_DWIREFRAME -> _MapWidgetDebugOptions.LAYERS2DWIREFRAME
-    MapViewDebugOptions.LAYERS3_DWIREFRAME -> _MapWidgetDebugOptions.LAYERS3DWIREFRAME
-    MapViewDebugOptions.LIGHT -> _MapWidgetDebugOptions.LIGHT
-    MapViewDebugOptions.CAMERA -> _MapWidgetDebugOptions.CAMERA
-    MapViewDebugOptions.PADDING -> _MapWidgetDebugOptions.PADDING
+    MapViewDebugOptions.TILE_BORDERS -> MapWidgetDebugOptionsData.TILE_BORDERS
+    MapViewDebugOptions.PARSE_STATUS -> MapWidgetDebugOptionsData.PARSE_STATUS
+    MapViewDebugOptions.TIMESTAMPS -> MapWidgetDebugOptionsData.TIMESTAMPS
+    MapViewDebugOptions.COLLISION -> MapWidgetDebugOptionsData.COLLISION
+    MapViewDebugOptions.OVERDRAW -> MapWidgetDebugOptionsData.OVERDRAW
+    MapViewDebugOptions.STENCIL_CLIP -> MapWidgetDebugOptionsData.STENCIL_CLIP
+    MapViewDebugOptions.DEPTH_BUFFER -> MapWidgetDebugOptionsData.DEPTH_BUFFER
+    MapViewDebugOptions.MODEL_BOUNDS -> MapWidgetDebugOptionsData.MODEL_BOUNDS
+    MapViewDebugOptions.TERRAIN_WIREFRAME -> MapWidgetDebugOptionsData.TERRAIN_WIREFRAME
+    MapViewDebugOptions.LAYERS2_DWIREFRAME -> MapWidgetDebugOptionsData.LAYERS2DWIREFRAME
+    MapViewDebugOptions.LAYERS3_DWIREFRAME -> MapWidgetDebugOptionsData.LAYERS3DWIREFRAME
+    MapViewDebugOptions.LIGHT -> MapWidgetDebugOptionsData.LIGHT
+    MapViewDebugOptions.CAMERA -> MapWidgetDebugOptionsData.CAMERA
+    MapViewDebugOptions.PADDING -> MapWidgetDebugOptionsData.PADDING
     else -> null
   }
 }

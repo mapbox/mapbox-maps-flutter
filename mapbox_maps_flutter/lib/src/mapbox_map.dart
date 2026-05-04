@@ -390,6 +390,16 @@ class MapboxMap implements MapboxMapInterface {
   void stopPerformanceStatisticsCollection() =>
       _impl.stopPerformanceStatisticsCollection();
 
+  // ===== Debug options =====
+
+  /// Returns the currently-enabled widget debug options for this map.
+  Future<List<MapWidgetDebugOptions>> getDebugOptions() =>
+      _impl.getDebugOptions();
+
+  /// Replaces the set of enabled widget debug options with [options].
+  Future<void> setDebugOptions(List<MapWidgetDebugOptions> options) =>
+      _impl.setDebugOptions(options);
+
   // ===== Lifecycle =====
 
   /// Releases resources held by this map instance.

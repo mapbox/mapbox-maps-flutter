@@ -23,6 +23,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeature
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeatureId
 import com.mapbox.maps.mapbox_maps.pigeons.MapDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
+import com.mapbox.maps.mapbox_maps.pigeons.MapWidgetDebugOptionsData
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
 import com.mapbox.maps.mapbox_maps.pigeons.QueriedRenderedFeature
 import com.mapbox.maps.mapbox_maps.pigeons.QueriedSourceFeature
@@ -34,7 +35,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInTiles
 import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
 import com.mapbox.maps.mapbox_maps.pigeons.ViewportMode
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
-import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 import org.json.JSONObject
@@ -138,13 +138,13 @@ class MapInterfaceController(
     return mapboxMap.getMapOptions().toFLTMapOptions(context)
   }
 
-  override fun getDebugOptions(): List<_MapWidgetDebugOptions> {
+  override fun getDebugOptions(): List<MapWidgetDebugOptionsData> {
     return mapView.debugOptions.mapNotNull { nativeOption ->
       nativeOption.toFLTDebugOptions()
     }
   }
 
-  override fun setDebugOptions(debugOptions: List<_MapWidgetDebugOptions>) {
+  override fun setDebugOptions(debugOptions: List<MapWidgetDebugOptionsData>) {
     mapView.debugOptions = debugOptions.map { it.toMapViewDebugOptions() }.toSet()
   }
 

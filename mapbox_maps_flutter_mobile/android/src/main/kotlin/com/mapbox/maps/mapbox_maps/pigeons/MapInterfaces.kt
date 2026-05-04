@@ -100,29 +100,6 @@ enum class ContextMode(val raw: Int) {
   }
 }
 
-enum class _MapWidgetDebugOptions(val raw: Int) {
-  TILE_BORDERS(0),
-  PARSE_STATUS(1),
-  TIMESTAMPS(2),
-  COLLISION(3),
-  OVERDRAW(4),
-  STENCIL_CLIP(5),
-  DEPTH_BUFFER(6),
-  MODEL_BOUNDS(7),
-  TERRAIN_WIREFRAME(8),
-  LAYERS2DWIREFRAME(9),
-  LAYERS3DWIREFRAME(10),
-  LIGHT(11),
-  CAMERA(12),
-  PADDING(13);
-
-  companion object {
-    fun ofRaw(raw: Int): _MapWidgetDebugOptions? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Options for enabling debugging features in a map. */
 enum class MapDebugOptionsData(val raw: Int) {
   /**
@@ -1075,7 +1052,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       135.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _MapWidgetDebugOptions.ofRaw(it.toInt())
+          MapWidgetDebugOptionsData.ofRaw(it.toInt())
         }
       }
       136.toByte() -> {
@@ -1427,7 +1404,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is _MapWidgetDebugOptions -> {
+      is MapWidgetDebugOptionsData -> {
         stream.write(135)
         writeValue(stream, value.raw)
       }
@@ -2464,8 +2441,8 @@ interface _MapInterface {
    * @return The map's `map options`.
    */
   fun getMapOptions(): MapOptions
-  fun getDebugOptions(): List<_MapWidgetDebugOptions>
-  fun setDebugOptions(debugOptions: List<_MapWidgetDebugOptions>)
+  fun getDebugOptions(): List<MapWidgetDebugOptionsData>
+  fun setDebugOptions(debugOptions: List<MapWidgetDebugOptionsData>)
   /**
    * Returns the `map debug options`.
    *
@@ -3014,7 +2991,7 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val debugOptionsArg = args[0] as List<_MapWidgetDebugOptions>
+            val debugOptionsArg = args[0] as List<MapWidgetDebugOptionsData>
             val wrapped: List<Any?> = try {
               api.setDebugOptions(debugOptionsArg)
               listOf(null)

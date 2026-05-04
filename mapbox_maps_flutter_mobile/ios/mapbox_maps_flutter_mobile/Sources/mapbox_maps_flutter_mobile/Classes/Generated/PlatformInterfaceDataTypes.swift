@@ -67,6 +67,27 @@ enum StyleProjectionName: Int {
   case globe = 1
 }
 
+/// Raw Pigeon enum underlying the [MapWidgetDebugOptions] typed wrapper.
+/// Exposed publicly (rather than with an underscore prefix) because the
+/// wrapper now lives in the platform-interface package and needs to round-
+/// trip values across package boundaries for mobile's Pigeon channels.
+enum MapWidgetDebugOptionsData: Int {
+  case tileBorders = 0
+  case parseStatus = 1
+  case timestamps = 2
+  case collision = 3
+  case overdraw = 4
+  case stencilClip = 5
+  case depthBuffer = 6
+  case modelBounds = 7
+  case terrainWireframe = 8
+  case layers2DWireframe = 9
+  case layers3DWireframe = 10
+  case light = 11
+  case camera = 12
+  case padding = 13
+}
+
 /// States level of a log message.
 enum LoggingLevel: Int {
   /// Verbose log data to understand how the code executes.
