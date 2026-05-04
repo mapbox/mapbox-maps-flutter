@@ -57,23 +57,6 @@ enum ContextMode {
   SHARED,
 }
 
-enum _MapWidgetDebugOptions {
-  tileBorders,
-  parseStatus,
-  timestamps,
-  collision,
-  overdraw,
-  stencilClip,
-  depthBuffer,
-  modelBounds,
-  terrainWireframe,
-  layers2DWireframe,
-  layers3DWireframe,
-  light,
-  camera,
-  padding,
-}
-
 /// Options for enabling debugging features in a map.
 enum MapDebugOptionsData {
   /// Edges of tile boundaries are shown as thick, red lines to help diagnose
@@ -1126,7 +1109,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is ContextMode) {
       buffer.putUint8(134);
       writeValue(buffer, value.index);
-    } else if (value is _MapWidgetDebugOptions) {
+    } else if (value is MapWidgetDebugOptionsData) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
     } else if (value is MapDebugOptionsData) {
@@ -1349,7 +1332,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : ContextMode.values[value];
       case 135:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _MapWidgetDebugOptions.values[value];
+        return value == null ? null : MapWidgetDebugOptionsData.values[value];
       case 136:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MapDebugOptionsData.values[value];
@@ -3054,7 +3037,7 @@ class _MapInterface {
     }
   }
 
-  Future<List<_MapWidgetDebugOptions>> getDebugOptions() async {
+  Future<List<MapWidgetDebugOptionsData>> getDebugOptions() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3081,12 +3064,12 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<_MapWidgetDebugOptions>();
+          .cast<MapWidgetDebugOptionsData>();
     }
   }
 
   Future<void> setDebugOptions(
-    List<_MapWidgetDebugOptions> debugOptions,
+    List<MapWidgetDebugOptionsData> debugOptions,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions$pigeonVar_messageChannelSuffix';

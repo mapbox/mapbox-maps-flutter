@@ -36,7 +36,7 @@ extension PerformanceSamplerOptions {
     }
 }
 
-extension [_MapWidgetDebugOptions] {
+extension [MapWidgetDebugOptionsData] {
     func toDebugOptions() -> MapViewDebugOptions {
         return reduce(into: []) { partialResult, option in
             switch option {
@@ -447,8 +447,8 @@ extension UIEdgeInsets {
 }
 
 extension MapViewDebugOptions {
-    func toFLTDebugOptions() -> [_MapWidgetDebugOptions] {
-        var debugOptions = [_MapWidgetDebugOptions]()
+    func toFLTDebugOptions() -> [MapWidgetDebugOptionsData] {
+        var debugOptions = [MapWidgetDebugOptionsData]()
         if contains(.tileBorders) { debugOptions.append(.tileBorders) }
         if contains(.parseStatus) { debugOptions.append(.parseStatus) }
         if contains(.timestamps) { debugOptions.append(.timestamps) }

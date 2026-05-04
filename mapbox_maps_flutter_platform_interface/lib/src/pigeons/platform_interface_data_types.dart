@@ -76,6 +76,27 @@ enum GlyphsRasterizationMode {
 /// The style projection name.
 enum StyleProjectionName { mercator, globe }
 
+/// Raw Pigeon enum underlying the [MapWidgetDebugOptions] typed wrapper.
+/// Exposed publicly (rather than with an underscore prefix) because the
+/// wrapper now lives in the platform-interface package and needs to round-
+/// trip values across package boundaries for mobile's Pigeon channels.
+enum MapWidgetDebugOptionsData {
+  tileBorders,
+  parseStatus,
+  timestamps,
+  collision,
+  overdraw,
+  stencilClip,
+  depthBuffer,
+  modelBounds,
+  terrainWireframe,
+  layers2DWireframe,
+  layers3DWireframe,
+  light,
+  camera,
+  padding,
+}
+
 /// States level of a log message.
 enum LoggingLevel {
   /// Verbose log data to understand how the code executes.

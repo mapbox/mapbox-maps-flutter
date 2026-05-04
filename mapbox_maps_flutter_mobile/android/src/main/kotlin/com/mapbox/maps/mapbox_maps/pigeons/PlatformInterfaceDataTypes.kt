@@ -108,6 +108,35 @@ enum class StyleProjectionName(val raw: Int) {
   }
 }
 
+/**
+ * Raw Pigeon enum underlying the [MapWidgetDebugOptions] typed wrapper.
+ * Exposed publicly (rather than with an underscore prefix) because the
+ * wrapper now lives in the platform-interface package and needs to round-
+ * trip values across package boundaries for mobile's Pigeon channels.
+ */
+enum class MapWidgetDebugOptionsData(val raw: Int) {
+  TILE_BORDERS(0),
+  PARSE_STATUS(1),
+  TIMESTAMPS(2),
+  COLLISION(3),
+  OVERDRAW(4),
+  STENCIL_CLIP(5),
+  DEPTH_BUFFER(6),
+  MODEL_BOUNDS(7),
+  TERRAIN_WIREFRAME(8),
+  LAYERS2DWIREFRAME(9),
+  LAYERS3DWIREFRAME(10),
+  LIGHT(11),
+  CAMERA(12),
+  PADDING(13);
+
+  companion object {
+    fun ofRaw(raw: Int): MapWidgetDebugOptionsData? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** States level of a log message. */
 enum class LoggingLevel(val raw: Int) {
   /** Verbose log data to understand how the code executes. */

@@ -158,6 +158,8 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   int setNorthOrientationCallCount = 0;
   int setConstrainModeCallCount = 0;
   int setViewportModeCallCount = 0;
+  int getDebugOptionsCallCount = 0;
+  int setDebugOptionsCallCount = 0;
   int disposeCallCount = 0;
 
   // Captured arguments
@@ -578,6 +580,19 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   void stopPerformanceStatisticsCollection() {
     stopPerformanceStatisticsCollectionCallCount++;
+
+  List<MapWidgetDebugOptions> lastDebugOptions = const [];
+
+  @override
+  Future<List<MapWidgetDebugOptions>> getDebugOptions() async {
+    getDebugOptionsCallCount++;
+    return lastDebugOptions;
+  }
+
+  @override
+  Future<void> setDebugOptions(List<MapWidgetDebugOptions> options) async {
+    setDebugOptionsCallCount++;
+    lastDebugOptions = options;
   }
 
   @override
@@ -1030,6 +1045,29 @@ void main() {
       mapboxMap.stopPerformanceStatisticsCollection();
 
       expect(mockImpl.stopPerformanceStatisticsCollectionCallCount, 1);
+    });
+
+    // ===== Debug options =====
+
+    test('getDebugOptions delegates to interface', () async {
+      mockImpl.lastDebugOptions = [MapWidgetDebugOptions.tileBorders];
+      final options = await mapboxMap.getDebugOptions();
+
+      expect(mockImpl.getDebugOptionsCallCount, 1);
+      expect(options, [MapWidgetDebugOptions.tileBorders]);
+    });
+
+    test('setDebugOptions delegates to interface', () async {
+      await mapboxMap.setDebugOptions([
+        MapWidgetDebugOptions.tileBorders,
+        MapWidgetDebugOptions.camera,
+      ]);
+
+      expect(mockImpl.setDebugOptionsCallCount, 1);
+      expect(mockImpl.lastDebugOptions, [
+        MapWidgetDebugOptions.tileBorders,
+        MapWidgetDebugOptions.camera,
+      ]);
     });
 
     // ===== Lifecycle =====

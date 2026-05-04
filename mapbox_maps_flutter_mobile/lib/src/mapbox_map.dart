@@ -1,124 +1,5 @@
 part of mapbox_maps_flutter_mobile;
 
-/// Options for enabling debugging features in a map.
-class MapWidgetDebugOptions {
-  final _MapWidgetDebugOptions _option;
-
-  const MapWidgetDebugOptions._(this._option);
-
-  /// Edges of tile boundaries are shown as thick, red lines to help diagnose
-  /// tile clipping issues.
-  static const MapWidgetDebugOptions tileBorders = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.tileBorders,
-  );
-
-  /// Each tile shows its tile coordinate (x/y/z) in the upper-left corner.
-  static const MapWidgetDebugOptions parseStatus = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.parseStatus,
-  );
-
-  /// Each tile shows a timestamps with modified and expires dates or n/a if
-  /// timestamp is not available.
-  static const MapWidgetDebugOptions timestamps = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.timestamps,
-  );
-
-  /// Edges of glyphs and symbols are shown as faint, green lines to help
-  /// diagnose collision and label placement issues.
-  static const MapWidgetDebugOptions collision = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.collision,
-  );
-
-  /// Each drawing operation is replaced by a translucent fill. Overlapping
-  /// drawing operations appear more prominent to help diagnose overdrawing.
-  static const MapWidgetDebugOptions overdraw = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.overdraw,
-  );
-
-  /// The stencil buffer is shown instead of the color buffer.
-  static const MapWidgetDebugOptions stencilClip = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.stencilClip,
-  );
-
-  /// The depth buffer is shown instead of the color buffer.
-  static const MapWidgetDebugOptions depthBuffer = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.depthBuffer,
-  );
-
-  /// Show 3D model bounding boxes.
-  static const MapWidgetDebugOptions modelBounds = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.modelBounds,
-  );
-
-  /// Show a wireframe for terrain.
-  /// Supported on Android only.
-  static const MapWidgetDebugOptions terrainWireframe = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.terrainWireframe,
-  );
-
-  /// Show a wireframe for 2D layers.
-  /// Supported on Android only.
-  static const MapWidgetDebugOptions layers2DWireframe =
-      MapWidgetDebugOptions._(_MapWidgetDebugOptions.layers2DWireframe);
-
-  /// Show a wireframe for 3D layers.
-  /// Supported on Android only.
-  static const MapWidgetDebugOptions layers3DWireframe =
-      MapWidgetDebugOptions._(_MapWidgetDebugOptions.layers3DWireframe);
-
-  /// Each tile shows its local lighting conditions in the upper-left corner.
-  /// (If `lights` properties are used, otherwise they show zero.)
-  static const MapWidgetDebugOptions light = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.light,
-  );
-
-  /// Show a debug overlay with information about the CameraState
-  /// including lat, long, zoom, pitch, & bearing.
-  static const MapWidgetDebugOptions camera = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.camera,
-  );
-
-  /// Draws camera padding frame.
-  static const MapWidgetDebugOptions padding = MapWidgetDebugOptions._(
-    _MapWidgetDebugOptions.padding,
-  );
-}
-
-extension on _MapWidgetDebugOptions {
-  MapWidgetDebugOptions get widgetDebugOptions {
-    switch (this) {
-      case _MapWidgetDebugOptions.tileBorders:
-        return MapWidgetDebugOptions.tileBorders;
-      case _MapWidgetDebugOptions.parseStatus:
-        return MapWidgetDebugOptions.parseStatus;
-      case _MapWidgetDebugOptions.timestamps:
-        return MapWidgetDebugOptions.timestamps;
-      case _MapWidgetDebugOptions.collision:
-        return MapWidgetDebugOptions.collision;
-      case _MapWidgetDebugOptions.overdraw:
-        return MapWidgetDebugOptions.overdraw;
-      case _MapWidgetDebugOptions.stencilClip:
-        return MapWidgetDebugOptions.stencilClip;
-      case _MapWidgetDebugOptions.depthBuffer:
-        return MapWidgetDebugOptions.depthBuffer;
-      case _MapWidgetDebugOptions.modelBounds:
-        return MapWidgetDebugOptions.modelBounds;
-      case _MapWidgetDebugOptions.terrainWireframe:
-        return MapWidgetDebugOptions.terrainWireframe;
-      case _MapWidgetDebugOptions.layers2DWireframe:
-        return MapWidgetDebugOptions.layers2DWireframe;
-      case _MapWidgetDebugOptions.layers3DWireframe:
-        return MapWidgetDebugOptions.layers3DWireframe;
-      case _MapWidgetDebugOptions.light:
-        return MapWidgetDebugOptions.light;
-      case _MapWidgetDebugOptions.camera:
-        return MapWidgetDebugOptions.camera;
-      case _MapWidgetDebugOptions.padding:
-        return MapWidgetDebugOptions.padding;
-    }
-  }
-}
-
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   MapboxMap._({
@@ -524,16 +405,17 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
       _mapInterface.setStyleGlyphURL(glyphURL);
 
   /// Debug options for the widget associated with the map.
+  @override
   Future<List<MapWidgetDebugOptions>> getDebugOptions() async {
-    return _mapInterface.getDebugOptions().then((value) {
-      return value.map((e) => e.widgetDebugOptions).toList();
-    });
+    final raw = await _mapInterface.getDebugOptions();
+    return raw.map(MapWidgetDebugOptions.fromData).toList();
   }
 
   /// Set debug options for the widget associated with the map.
+  @override
   Future<void> setDebugOptions(List<MapWidgetDebugOptions> debugOptions) {
     return _mapInterface.setDebugOptions(
-      debugOptions.map((e) => e._option).toList(),
+      debugOptions.map((e) => e.data).toList(),
     );
   }
 

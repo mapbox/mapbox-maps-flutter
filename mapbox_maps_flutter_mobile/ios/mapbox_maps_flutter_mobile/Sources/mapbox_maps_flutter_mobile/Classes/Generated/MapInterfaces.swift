@@ -82,23 +82,6 @@ enum ContextMode: Int {
   case sHARED = 1
 }
 
-enum _MapWidgetDebugOptions: Int {
-  case tileBorders = 0
-  case parseStatus = 1
-  case timestamps = 2
-  case collision = 3
-  case overdraw = 4
-  case stencilClip = 5
-  case depthBuffer = 6
-  case modelBounds = 7
-  case terrainWireframe = 8
-  case layers2DWireframe = 9
-  case layers3DWireframe = 10
-  case light = 11
-  case camera = 12
-  case padding = 13
-}
-
 /// Options for enabling debugging features in a map.
 enum MapDebugOptionsData: Int {
   /// Edges of tile boundaries are shown as thick, red lines to help diagnose
@@ -831,7 +814,7 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 135:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _MapWidgetDebugOptions(rawValue: enumResultAsInt)
+        return MapWidgetDebugOptionsData(rawValue: enumResultAsInt)
       }
       return nil
     case 136:
@@ -1056,7 +1039,7 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ContextMode {
       super.writeByte(134)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _MapWidgetDebugOptions {
+    } else if let value = value as? MapWidgetDebugOptionsData {
       super.writeByte(135)
       super.writeValue(value.rawValue)
     } else if let value = value as? MapDebugOptionsData {
@@ -2067,8 +2050,8 @@ protocol _MapInterface {
   ///
   /// @return The map's `map options`.
   func getMapOptions() throws -> MapOptions
-  func getDebugOptions() throws -> [_MapWidgetDebugOptions]
-  func setDebugOptions(debugOptions: [_MapWidgetDebugOptions]) throws
+  func getDebugOptions() throws -> [MapWidgetDebugOptionsData]
+  func setDebugOptions(debugOptions: [MapWidgetDebugOptionsData]) throws
   /// Returns the `map debug options`.
   ///
   /// @return An array of `map debug options` flags currently set to the map.
@@ -2561,7 +2544,7 @@ class _MapInterfaceSetup {
     if let api = api {
       setDebugOptionsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let debugOptionsArg = args[0] as! [_MapWidgetDebugOptions]
+        let debugOptionsArg = args[0] as! [MapWidgetDebugOptionsData]
         do {
           try api.setDebugOptions(debugOptions: debugOptionsArg)
           reply(wrapResult(nil))

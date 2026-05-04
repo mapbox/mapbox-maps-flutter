@@ -1,5 +1,6 @@
 import 'package:turf/turf.dart';
 
+import '../debug_options.dart';
 import '../events.dart';
 import '../interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
@@ -314,6 +315,14 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Resets all feature states within a [featureset].
   Future<void> resetFeatureStatesForFeatureset(FeaturesetDescriptor featureset);
+
+  // ===== Debug options =====
+
+  /// Returns the currently-enabled widget debug options for this map.
+  Future<List<MapWidgetDebugOptions>> getDebugOptions();
+
+  /// Replaces the set of enabled widget debug options with [options].
+  Future<void> setDebugOptions(List<MapWidgetDebugOptions> options);
 
   // ===== Lifecycle =====
 
