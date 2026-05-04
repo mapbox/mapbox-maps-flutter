@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:meta/meta.dart';
 import 'package:turf/turf.dart';
 
 import 'annotations_manager.dart';
@@ -10,6 +11,7 @@ import 'http_service.dart';
 import 'indoor_selector_settings.dart';
 import 'location_settings.dart';
 import 'logo_settings.dart';
+import 'map_recorder.dart';
 import 'projection.dart';
 import 'scale_bar_settings.dart';
 import 'style_manager.dart';
@@ -72,6 +74,10 @@ class MapboxMap implements MapboxMapInterface {
 
   /// Provides access to Spherical Mercator projection math.
   late final Projection projection = Projection(_impl.projection);
+
+  /// Provides access to recording and replaying API calls on the map.
+  @experimental
+  late final MapRecorder mapRecorder = MapRecorder(_impl.mapRecorder);
 
   // ===== Gesture listeners =====
 

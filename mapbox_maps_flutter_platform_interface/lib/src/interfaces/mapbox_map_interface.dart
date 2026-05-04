@@ -6,6 +6,7 @@ import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
 import 'http_service_interface.dart';
 import 'location_settings_interface.dart';
+import 'map_recorder_interface.dart';
 import 'projection_interface.dart';
 import 'settings_interfaces.dart';
 import 'style_interface.dart';
@@ -54,6 +55,9 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Provides access to Spherical Mercator projection math.
   ProjectionPlatformInterface get projection;
+
+  /// Provides access to recording and replaying API calls on the map.
+  MapRecorderPlatformInterface get mapRecorder;
 
   // ===== Gesture listeners =====
 

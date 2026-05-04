@@ -31,131 +31,12 @@ private fun wrapError(exception: Throwable): List<Any?> {
     )
   }
 }
-
-/**
- * Options for recording the map when using MapRecorder.
- *
- * These recordings can be used to debug issues which require multiple steps to reproduce.
- * Additionally, playbacks can be used for performance testing custom scenarios.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class MapRecorderOptions(
-  /**
-   * The maximum duration (in milliseconds) from the current time until API calls are kept.
-   * If not specified, all API calls will be kept during the recording,
-   * which can lead to significant memory consumption for long sessions.
-   */
-  val timeWindow: Long? = null,
-  /** If set to true, the recorded API calls will be printed in the logs. */
-  val loggingEnabled: Boolean,
-  /** If set to true, the recorded output will be compressed with gzip. */
-  val compressed: Boolean
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapRecorderOptions {
-      val timeWindow = pigeonVar_list[0] as Long?
-      val loggingEnabled = pigeonVar_list[1] as Boolean
-      val compressed = pigeonVar_list[2] as Boolean
-      return MapRecorderOptions(timeWindow, loggingEnabled, compressed)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      timeWindow,
-      loggingEnabled,
-      compressed,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapRecorderOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return timeWindow == other.timeWindow &&
-      loggingEnabled == other.loggingEnabled &&
-      compressed == other.compressed
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Options for playback when using MapRecorder.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class MapPlayerOptions(
-  /** The number of times the sequence is played. If negative, the playback loops indefinitely. */
-  val playbackCount: Long,
-  /** Multiplies the speed of playback for faster or slower replays. (1 means no change.) */
-  val playbackSpeedMultiplier: Double,
-  /**
-   * When set to true, the player will try to interpolate actions between short wait actions,
-   * to continuously render during the playback.
-   * This can help to maintain a consistent load during performance testing.
-   */
-  val avoidPlaybackPauses: Boolean
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapPlayerOptions {
-      val playbackCount = pigeonVar_list[0] as Long
-      val playbackSpeedMultiplier = pigeonVar_list[1] as Double
-      val avoidPlaybackPauses = pigeonVar_list[2] as Boolean
-      return MapPlayerOptions(playbackCount, playbackSpeedMultiplier, avoidPlaybackPauses)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      playbackCount,
-      playbackSpeedMultiplier,
-      avoidPlaybackPauses,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapPlayerOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return playbackCount == other.playbackCount &&
-      playbackSpeedMultiplier == other.playbackSpeedMultiplier &&
-      avoidPlaybackPauses == other.avoidPlaybackPauses
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
 private open class MapRecorderMessengerPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapRecorderOptions.fromList(it)
-        }
-      }
-      130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapPlayerOptions.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
+    return super.readValueOfType(type, buffer)
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
-    when (value) {
-      is MapRecorderOptions -> {
-        stream.write(129)
-        writeValue(stream, value.toList())
-      }
-      is MapPlayerOptions -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
+    super.writeValue(stream, value)
   }
 }
 
@@ -175,9 +56,11 @@ interface _MapRecorderMessenger {
   /**
    * Begins the recording session.
    *
-   * @param options MapRecorderOptions to control recording.
+   * [timeWindow] caps the retained API history (in milliseconds); null retains the entire session.
+   * [loggingEnabled] prints recorded calls to logs.
+   * [compressed] gzips the output of [stopRecording].
    */
-  fun startRecording(options: MapRecorderOptions)
+  fun startRecording(timeWindow: Long?, loggingEnabled: Boolean, compressed: Boolean)
   /**
    * Stops the current recording session.
    * Recorded section could be replayed with replay function.
@@ -188,14 +71,15 @@ interface _MapRecorderMessenger {
   /**
    * Replay a supplied sequence.
    *
-   * @param recordedSequence Sequence recorded with stopRecording method.
-   * @param options Options to customize the behaviour of the playback.
+   * [playbackCount] number of times to play; negative loops indefinitely.
+   * [playbackSpeedMultiplier] multiplies playback speed; 1.0 means no change.
+   * [avoidPlaybackPauses] interpolates short waits to keep render load steady.
    */
-  fun replay(recordedSequence: ByteArray, options: MapPlayerOptions, callback: (Result<Unit>) -> Unit)
+  fun replay(recordedSequence: ByteArray, playbackCount: Long, playbackSpeedMultiplier: Double, avoidPlaybackPauses: Boolean, callback: (Result<Unit>) -> Unit)
   /** Temporarily pauses or resumes playback if already paused. */
-  fun togglePauseReplay()
+  fun togglePause()
   /** Returns the string description of the current state of playback. */
-  fun getPlaybackState(): String
+  fun getState(): String
 
   companion object {
     /** The codec used by _MapRecorderMessenger. */
@@ -211,9 +95,11 @@ interface _MapRecorderMessenger {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val optionsArg = args[0] as MapRecorderOptions
+            val timeWindowArg = args[0] as Long?
+            val loggingEnabledArg = args[1] as Boolean
+            val compressedArg = args[2] as Boolean
             val wrapped: List<Any?> = try {
-              api.startRecording(optionsArg)
+              api.startRecording(timeWindowArg, loggingEnabledArg, compressedArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -248,8 +134,10 @@ interface _MapRecorderMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val recordedSequenceArg = args[0] as ByteArray
-            val optionsArg = args[1] as MapPlayerOptions
-            api.replay(recordedSequenceArg, optionsArg) { result: Result<Unit> ->
+            val playbackCountArg = args[1] as Long
+            val playbackSpeedMultiplierArg = args[2] as Double
+            val avoidPlaybackPausesArg = args[3] as Boolean
+            api.replay(recordedSequenceArg, playbackCountArg, playbackSpeedMultiplierArg, avoidPlaybackPausesArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -263,11 +151,11 @@ interface _MapRecorderMessenger {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePauseReplay$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePause$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              api.togglePauseReplay()
+              api.togglePause()
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -279,11 +167,11 @@ interface _MapRecorderMessenger {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getPlaybackState$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getState$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              listOf(api.getPlaybackState())
+              listOf(api.getState())
             } catch (exception: Throwable) {
               wrapError(exception)
             }

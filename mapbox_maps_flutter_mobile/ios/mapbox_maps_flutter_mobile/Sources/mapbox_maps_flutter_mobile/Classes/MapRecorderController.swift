@@ -23,11 +23,11 @@ class MapRecorderController: _MapRecorderMessenger {
         return recorder!
     }
 
-    func startRecording(options: MapRecorderOptions) throws {
+    func startRecording(timeWindow: Int64?, loggingEnabled: Bool, compressed: Bool) throws {
         let nativeOptions = MapboxMaps.MapRecorderOptions(
-            timeWindow: options.timeWindow.map { Int($0) },
-            loggingEnabled: options.loggingEnabled,
-            compressed: options.compressed
+            timeWindow: timeWindow.map { Int($0) },
+            loggingEnabled: loggingEnabled,
+            compressed: compressed
         )
 
         try getRecorder().start(options: nativeOptions)
@@ -45,14 +45,16 @@ class MapRecorderController: _MapRecorderMessenger {
 
     func replay(
         recordedSequence: FlutterStandardTypedData,
-        options: MapPlayerOptions,
+        playbackCount: Int64,
+        playbackSpeedMultiplier: Double,
+        avoidPlaybackPauses: Bool,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         do {
             let nativeOptions = MapboxMaps.MapPlayerOptions(
-                playbackCount: Int(options.playbackCount),
-                playbackSpeedMultiplier: options.playbackSpeedMultiplier,
-                avoidPlaybackPauses: options.avoidPlaybackPauses
+                playbackCount: Int(playbackCount),
+                playbackSpeedMultiplier: playbackSpeedMultiplier,
+                avoidPlaybackPauses: avoidPlaybackPauses
             )
 
             try getRecorder().replay(
@@ -66,11 +68,11 @@ class MapRecorderController: _MapRecorderMessenger {
         }
     }
 
-    func togglePauseReplay() throws {
+    func togglePause() throws {
         try getRecorder().togglePauseReplay()
     }
 
-    func getPlaybackState() throws -> String {
+    func getState() throws -> String {
         return try getRecorder().playbackState()
     }
 }

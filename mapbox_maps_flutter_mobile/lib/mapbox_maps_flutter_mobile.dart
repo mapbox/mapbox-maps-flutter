@@ -23,7 +23,6 @@ part 'src/callbacks.dart';
 part 'src/map_widget.dart';
 part 'src/mapbox_map.dart';
 part 'src/mapbox_maps_options.dart';
-part 'src/map_recorder.dart';
 part 'src/mapbox_maps_platform.dart';
 part 'src/pigeons/circle_annotation_messenger.dart';
 part 'src/pigeons/point_annotation_messenger.dart';

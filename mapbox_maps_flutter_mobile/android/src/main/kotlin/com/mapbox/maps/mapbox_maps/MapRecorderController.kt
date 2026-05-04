@@ -3,8 +3,6 @@ package com.mapbox.maps.mapbox_maps
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.MapboxMapRecorder
-import com.mapbox.maps.mapbox_maps.pigeons.MapPlayerOptions
-import com.mapbox.maps.mapbox_maps.pigeons.MapRecorderOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapRecorderMessenger
 import java.nio.ByteBuffer
 
@@ -32,12 +30,12 @@ class MapRecorderController(
     return recorder!!
   }
 
-  override fun startRecording(options: MapRecorderOptions) {
+  override fun startRecording(timeWindow: Long?, loggingEnabled: Boolean, compressed: Boolean) {
     val nativeOptions = com.mapbox.maps.MapRecorderOptions.Builder()
       .apply {
-        options.timeWindow?.let { timeWindow(it) }
-        loggingEnabled(options.loggingEnabled)
-        compressed(options.compressed)
+        timeWindow?.let { timeWindow(it) }
+        loggingEnabled(loggingEnabled)
+        compressed(compressed)
       }
       .build()
 
@@ -57,14 +55,16 @@ class MapRecorderController(
 
   override fun replay(
     recordedSequence: ByteArray,
-    options: MapPlayerOptions,
+    playbackCount: Long,
+    playbackSpeedMultiplier: Double,
+    avoidPlaybackPauses: Boolean,
     callback: (Result<Unit>) -> Unit
   ) {
     try {
       val nativeOptions = com.mapbox.maps.MapPlayerOptions.Builder()
-        .playbackCount(options.playbackCount.toInt())
-        .playbackSpeedMultiplier(options.playbackSpeedMultiplier)
-        .avoidPlaybackPauses(options.avoidPlaybackPauses)
+        .playbackCount(playbackCount.toInt())
+        .playbackSpeedMultiplier(playbackSpeedMultiplier)
+        .avoidPlaybackPauses(avoidPlaybackPauses)
         .build()
 
       val buffer = ByteBuffer.wrap(recordedSequence)
@@ -76,11 +76,11 @@ class MapRecorderController(
     }
   }
 
-  override fun togglePauseReplay() {
+  override fun togglePause() {
     getRecorder().togglePauseReplay()
   }
 
-  override fun getPlaybackState(): String {
+  override fun getState(): String {
     return getRecorder().getPlaybackState()
   }
 

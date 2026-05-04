@@ -4,123 +4,6 @@
 
 part of mapbox_maps_flutter_mobile;
 
-/// Options for recording the map when using MapRecorder.
-///
-/// These recordings can be used to debug issues which require multiple steps to reproduce.
-/// Additionally, playbacks can be used for performance testing custom scenarios.
-class MapRecorderOptions {
-  MapRecorderOptions({
-    this.timeWindow,
-    required this.loggingEnabled,
-    required this.compressed,
-  });
-
-  /// The maximum duration (in milliseconds) from the current time until API calls are kept.
-  /// If not specified, all API calls will be kept during the recording,
-  /// which can lead to significant memory consumption for long sessions.
-  int? timeWindow;
-
-  /// If set to true, the recorded API calls will be printed in the logs.
-  bool loggingEnabled;
-
-  /// If set to true, the recorded output will be compressed with gzip.
-  bool compressed;
-
-  List<Object?> _toList() {
-    return <Object?>[timeWindow, loggingEnabled, compressed];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MapRecorderOptions decode(Object result) {
-    result as List<Object?>;
-    return MapRecorderOptions(
-      timeWindow: result[0] as int?,
-      loggingEnabled: result[1]! as bool,
-      compressed: result[2]! as bool,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MapRecorderOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return timeWindow == other.timeWindow &&
-        loggingEnabled == other.loggingEnabled &&
-        compressed == other.compressed;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Options for playback when using MapRecorder.
-class MapPlayerOptions {
-  MapPlayerOptions({
-    required this.playbackCount,
-    required this.playbackSpeedMultiplier,
-    required this.avoidPlaybackPauses,
-  });
-
-  /// The number of times the sequence is played. If negative, the playback loops indefinitely.
-  int playbackCount;
-
-  /// Multiplies the speed of playback for faster or slower replays. (1 means no change.)
-  double playbackSpeedMultiplier;
-
-  /// When set to true, the player will try to interpolate actions between short wait actions,
-  /// to continuously render during the playback.
-  /// This can help to maintain a consistent load during performance testing.
-  bool avoidPlaybackPauses;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      playbackCount,
-      playbackSpeedMultiplier,
-      avoidPlaybackPauses,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MapPlayerOptions decode(Object result) {
-    result as List<Object?>;
-    return MapPlayerOptions(
-      playbackCount: result[0]! as int,
-      playbackSpeedMultiplier: result[1]! as double,
-      avoidPlaybackPauses: result[2]! as bool,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MapPlayerOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return playbackCount == other.playbackCount &&
-        playbackSpeedMultiplier == other.playbackSpeedMultiplier &&
-        avoidPlaybackPauses == other.avoidPlaybackPauses;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 class MapRecorderMessenger_PigeonCodec extends StandardMessageCodec {
   const MapRecorderMessenger_PigeonCodec();
   @override
@@ -128,12 +11,6 @@ class MapRecorderMessenger_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is MapRecorderOptions) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is MapPlayerOptions) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -142,10 +19,6 @@ class MapRecorderMessenger_PigeonCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 129:
-        return MapRecorderOptions.decode(readValue(buffer)!);
-      case 130:
-        return MapPlayerOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -160,7 +33,7 @@ class MapRecorderMessenger_PigeonCodec extends StandardMessageCodec {
 ///
 /// Note: The raw format produced by stopRecording is experimental and there is no guarantee
 /// for version cross-compatibility when feeding it to replay.
-class _MapRecorderMessenger {
+class _MapRecorderMessenger implements MapRecorderPlatformInterface {
   /// Constructor for [_MapRecorderMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -180,8 +53,15 @@ class _MapRecorderMessenger {
 
   /// Begins the recording session.
   ///
-  /// @param options MapRecorderOptions to control recording.
-  Future<void> startRecording(MapRecorderOptions options) async {
+  /// [timeWindow] caps the retained API history (in milliseconds); null retains the entire session.
+  /// [loggingEnabled] prints recorded calls to logs.
+  /// [compressed] gzips the output of [stopRecording].
+  @override
+  Future<void> startRecording({
+    int? timeWindow,
+    required bool loggingEnabled,
+    required bool compressed,
+  }) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.startRecording$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -191,7 +71,7 @@ class _MapRecorderMessenger {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[options],
+      <Object?>[timeWindow, loggingEnabled, compressed],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -212,6 +92,7 @@ class _MapRecorderMessenger {
   /// Recorded section could be replayed with replay function.
   ///
   /// @return the Uint8List containing the recorded sequence in raw format.
+  @override
   Future<Uint8List> stopRecording() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.stopRecording$pigeonVar_messageChannelSuffix';
@@ -244,12 +125,16 @@ class _MapRecorderMessenger {
 
   /// Replay a supplied sequence.
   ///
-  /// @param recordedSequence Sequence recorded with stopRecording method.
-  /// @param options Options to customize the behaviour of the playback.
+  /// [playbackCount] number of times to play; negative loops indefinitely.
+  /// [playbackSpeedMultiplier] multiplies playback speed; 1.0 means no change.
+  /// [avoidPlaybackPauses] interpolates short waits to keep render load steady.
+  @override
   Future<void> replay(
-    Uint8List recordedSequence,
-    MapPlayerOptions options,
-  ) async {
+    Uint8List recordedSequence, {
+    required int playbackCount,
+    required double playbackSpeedMultiplier,
+    required bool avoidPlaybackPauses,
+  }) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.replay$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -259,7 +144,12 @@ class _MapRecorderMessenger {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[recordedSequence, options],
+      <Object?>[
+        recordedSequence,
+        playbackCount,
+        playbackSpeedMultiplier,
+        avoidPlaybackPauses,
+      ],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -277,9 +167,10 @@ class _MapRecorderMessenger {
   }
 
   /// Temporarily pauses or resumes playback if already paused.
-  Future<void> togglePauseReplay() async {
+  @override
+  Future<void> togglePause() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePauseReplay$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePause$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
           pigeonVar_channelName,
@@ -303,9 +194,10 @@ class _MapRecorderMessenger {
   }
 
   /// Returns the string description of the current state of playback.
-  Future<String> getPlaybackState() async {
+  @override
+  Future<String> getState() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getPlaybackState$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
           pigeonVar_channelName,

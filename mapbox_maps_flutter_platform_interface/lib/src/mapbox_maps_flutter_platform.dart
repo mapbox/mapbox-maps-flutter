@@ -13,6 +13,7 @@ export 'interactive_features.dart';
 export 'interfaces/annotations_interface.dart';
 export 'interfaces/http_service_interface.dart';
 export 'interfaces/location_settings_interface.dart';
+export 'interfaces/map_recorder_interface.dart';
 export 'interfaces/mapbox_map_interface.dart';
 export 'interfaces/mapbox_maps_options_interface.dart';
 export 'interfaces/mapbox_options_interface.dart';
