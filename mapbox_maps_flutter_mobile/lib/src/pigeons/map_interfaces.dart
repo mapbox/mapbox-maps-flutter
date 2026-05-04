@@ -819,94 +819,6 @@ class _RenderedQueryGeometry {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// ProjectedMeters is a coordinate in a specific
-/// [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection.
-///
-/// This specific Spherical Mercator projection assumes the Earth is a sphere with a radius
-/// of 6,378,137 meters. Coordinates are determined as distances, in meters, on the surface
-/// of that sphere.
-class ProjectedMeters {
-  ProjectedMeters({required this.northing, required this.easting});
-
-  /// Projected meters in north direction.
-  double northing;
-
-  /// Projected meters in east direction.
-  double easting;
-
-  List<Object?> _toList() {
-    return <Object?>[northing, easting];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static ProjectedMeters decode(Object result) {
-    result as List<Object?>;
-    return ProjectedMeters(
-      northing: result[0]! as double,
-      easting: result[1]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! ProjectedMeters || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return northing == other.northing && easting == other.easting;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Describes a point on the map in Mercator projection.
-class MercatorCoordinate {
-  MercatorCoordinate({required this.x, required this.y});
-
-  /// A value representing the x position of this coordinate.
-  double x;
-
-  /// A value representing the y position of this coordinate.
-  double y;
-
-  List<Object?> _toList() {
-    return <Object?>[x, y];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MercatorCoordinate decode(Object result) {
-    result as List<Object?>;
-    return MercatorCoordinate(x: result[0]! as double, y: result[1]! as double);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MercatorCoordinate || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return x == other.x && y == other.y;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
 ///
 /// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
@@ -1268,12 +1180,12 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is _MapEvent) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is turf.Point) {
       buffer.putUint8(153);
-      writeValue(buffer, value.encode());
-    } else if (value is Feature) {
+      writeValue(buffer, <Object?>[value.toJson()]);
+    } else if (value is turf.Feature) {
       buffer.putUint8(154);
-      writeValue(buffer, value.encode());
+      writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is MbxEdgeInsets) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
@@ -1490,9 +1402,13 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _MapEvent.values[value];
       case 153:
-        return Point.decode(readValue(buffer)!);
+        return turf.Point.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 154:
-        return Feature.decode(readValue(buffer)!);
+        return turf.Feature.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 155:
         return MbxEdgeInsets.decode(readValue(buffer)!);
       case 156:
@@ -4125,7 +4041,7 @@ class _MapInterface {
 }
 
 /// Collection of [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection methods.
-class Projection {
+class Projection implements ProjectionPlatformInterface {
   /// Constructor for [Projection].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -4150,6 +4066,7 @@ class Projection {
   /// @param zoom The zoom level.
   ///
   /// @return Returns the distance measured in meters.
+  @override
   Future<double> getMetersPerPixelAtLatitude(
     double latitude,
     double zoom,
@@ -4191,6 +4108,7 @@ class Projection {
   /// `projected meters` coordinates.
   ///
   /// @return Returns Spherical Mercator ProjectedMeters coordinates.
+  @override
   Future<ProjectedMeters> projectedMetersForCoordinate(Point coordinate) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.projectedMetersForCoordinate$pigeonVar_messageChannelSuffix';
@@ -4230,6 +4148,7 @@ class Projection {
   /// which to calculate a longitude-latitude pair.
   ///
   /// @return Returns a longitude-latitude pair.
+  @override
   Future<Point> coordinateForProjectedMeters(
     ProjectedMeters projectedMeters,
   ) async {
@@ -4273,6 +4192,7 @@ class Projection {
   /// where tileSize is the width of a tile in pixels.
   ///
   /// @return Returns a point on the map in Mercator projection.
+  @override
   Future<MercatorCoordinate> project(Point coordinate, double zoomScale) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.project$pigeonVar_messageChannelSuffix';
@@ -4313,6 +4233,7 @@ class Projection {
   /// where tileSize is the width of a tile in pixels.
   ///
   /// @return Returns a coordinate.
+  @override
   Future<Point> unproject(
     MercatorCoordinate coordinate,
     double zoomScale,

@@ -17,6 +17,7 @@ export 'interfaces/mapbox_map_interface.dart';
 export 'interfaces/mapbox_maps_options_interface.dart';
 export 'interfaces/mapbox_options_interface.dart';
 export 'interfaces/offline_interface.dart';
+export 'interfaces/projection_interface.dart';
 export 'interfaces/settings_interfaces.dart';
 export 'interfaces/snapshotter_interface.dart';
 export 'interfaces/style_interface.dart';

@@ -14,9 +14,9 @@ class SnapshotterMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is GlyphsRasterizationMode) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is turf.Point) {
       buffer.putUint8(130);
-      writeValue(buffer, value.encode());
+      writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is MbxEdgeInsets) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
@@ -62,7 +62,9 @@ class SnapshotterMessenger_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : GlyphsRasterizationMode.values[value];
       case 130:
-        return Point.decode(readValue(buffer)!);
+        return turf.Point.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 131:
         return MbxEdgeInsets.decode(readValue(buffer)!);
       case 132:

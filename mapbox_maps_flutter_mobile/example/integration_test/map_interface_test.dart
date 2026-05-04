@@ -7,7 +7,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_example/_facade_shim.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:turf/turf.dart' show Position;
+import 'package:turf/turf.dart' show Point, Position;
 import 'package:mapbox_maps_example/utils.dart' show MapboxStyles;
 
 import 'empty_map_widget.dart' as app;

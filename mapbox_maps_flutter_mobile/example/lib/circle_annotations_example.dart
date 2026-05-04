@@ -2,7 +2,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:turf/turf.dart' show Position;
+import 'package:turf/turf.dart' show Point, Position;
 import 'example.dart';
 
 class CircleAnnotationExample extends StatefulWidget implements Example {

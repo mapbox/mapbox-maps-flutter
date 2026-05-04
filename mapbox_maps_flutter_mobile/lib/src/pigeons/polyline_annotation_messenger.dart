@@ -368,9 +368,9 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is LineTranslateAnchor) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    } else if (value is LineString) {
+    } else if (value is turf.LineString) {
       buffer.putUint8(134);
-      writeValue(buffer, value.encode());
+      writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is PolylineAnnotation) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
@@ -401,7 +401,9 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : LineTranslateAnchor.values[value];
       case 134:
-        return LineString.decode(readValue(buffer)!);
+        return turf.LineString.fromJson(
+          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+        );
       case 135:
         return PolylineAnnotation.decode(readValue(buffer)!);
       case 136:

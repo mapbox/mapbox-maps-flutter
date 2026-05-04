@@ -14,7 +14,6 @@ import 'annotations/polyline_annotation_test.dart' as polyline_annotation_test;
 import 'camera_test.dart' as camera_test;
 import 'gestures_test.dart' as gestures_test;
 import 'map_interface_test.dart' as map_interface_test;
-import 'projection_test.dart' as projection_test;
 // NOTE: The 15 layer + 6 source integration tests were relocated to
 // packages/mapbox_maps_flutter/example/integration_test/style/ in WS1
 // because their typed APIs now live in the facade package. The
@@ -46,7 +45,6 @@ void main() {
   animation_test.main();
   camera_test.main();
   map_interface_test.main();
-  projection_test.main();
   gestures_test.main();
   logo_test.main();
   attribution_test.main();

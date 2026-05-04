@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import '_facade_shim.dart';
-import 'package:turf/turf.dart' show Position;
+import 'package:turf/turf.dart' show Point, Position;
 import 'example.dart';
 
 class StyleClustersExample extends StatefulWidget implements Example {

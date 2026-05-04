@@ -1143,6 +1143,67 @@ struct StyleProjection {
   }
 }
 
+/// ProjectedMeters is a coordinate in a specific
+/// [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection.
+///
+/// This specific Spherical Mercator projection assumes the Earth is a sphere with a radius
+/// of 6,378,137 meters. Coordinates are determined as distances, in meters, on the surface
+/// of that sphere.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ProjectedMeters {
+  /// Projected meters in north direction.
+  var northing: Double
+  /// Projected meters in east direction.
+  var easting: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ProjectedMeters? {
+    let northing = pigeonVar_list[0] as! Double
+    let easting = pigeonVar_list[1] as! Double
+
+    return ProjectedMeters(
+      northing: northing,
+      easting: easting
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      northing,
+      easting,
+    ]
+  }
+}
+
+/// Describes a point on the map in Mercator projection.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MercatorCoordinate {
+  /// A value representing the x position of this coordinate.
+  var x: Double
+  /// A value representing the y position of this coordinate.
+  var y: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MercatorCoordinate? {
+    let x = pigeonVar_list[0] as! Double
+    let y = pigeonVar_list[1] as! Double
+
+    return MercatorCoordinate(
+      x: x,
+      y: y
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      x,
+      y,
+    ]
+  }
+}
+
 /// Holds a style property value with meta data.
 ///
 /// Generated class from Pigeon that represents data sent in messages.

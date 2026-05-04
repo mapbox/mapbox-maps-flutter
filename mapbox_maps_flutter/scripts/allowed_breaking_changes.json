@@ -881,5 +881,21 @@
   {
     "changeDescription": "Interface \"SkyType\" removed",
     "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Projection: Constructor \"new\" removed",
+    "reason": "WS2b: facade Projection is now a hand-written wrapper over ProjectionPlatformInterface; the mobile-only Pigeon constructor is internal"
+  },
+  {
+    "changeDescription": "Projection: Field \"pigeonChannelCodec\" removed",
+    "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon codec field"
+  },
+  {
+    "changeDescription": "Projection: Field \"pigeonVar_binaryMessenger\" removed",
+    "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon binaryMessenger field"
+  },
+  {
+    "changeDescription": "Projection: Field \"pigeonVar_messageChannelSuffix\" removed",
+    "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon messageChannelSuffix field"
   }
 ]

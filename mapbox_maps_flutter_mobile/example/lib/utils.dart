@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import '_facade_shim.dart';
-import 'package:turf/turf.dart' show Position, Polyline;
+import 'package:turf/turf.dart' show LineString, Point, Polyline, Position;
 
 extension City on Point {
   static var helsinki = Point(coordinates: Position(24.945831, 60.192059));
