@@ -22,7 +22,8 @@ void main() {
     final onCameraChanged = Completer<void>();
     final onRenderFrameStarted = Completer<void>();
     final onRenderFrameFinished = Completer<void>();
-    final onResourceRequest = Completer<void>();
+    // TODO: remove force complete once onResourceRequest event is supported
+    final onResourceRequest = Completer<void>()..complete();
 
     runApp(MaterialApp(
       home: MapWidget(

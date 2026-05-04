@@ -1,6 +1,7 @@
 // This file is generated.
 // ignore_for_file: experimental_member_use
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -10,7 +11,10 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Add GeoJsonSource', (WidgetTester tester) async {
+  // Web unsupported: style-mutation APIs (addSource/getSource) route through
+  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
+  // epic wires MapboxStyleWeb onto Mapbox GL JS.
+  testWidgets('Add GeoJsonSource', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

@@ -183,9 +183,9 @@ stage_static() {
 
   # Format check mirrors `make format`'s target list exactly, so this
   # gate stays aligned with the canonical formatter invocation. Paths
-  # outside this list (e.g. packages/mapbox_maps_flutter_web, test/
-  # directories) have historical drift and are not gated here; expand
-  # this list in lockstep with Makefile's `format` rule.
+  # outside this list (test/ directories especially) still carry
+  # historical drift and are not gated here; expand this list in
+  # lockstep with Makefile's `format` rule.
   echo ""
   echo "── dart format check (matches make format scope)"
   (
@@ -198,7 +198,8 @@ stage_static() {
       packages/mapbox_maps_flutter_mobile/example/lib \
       packages/mapbox_maps_flutter_mobile/example/integration_test \
       packages/mapbox_maps_flutter/lib \
-      packages/mapbox_maps_flutter_platform_interface/lib
+      packages/mapbox_maps_flutter_platform_interface/lib \
+      packages/mapbox_maps_flutter_web/lib
   ) || failed=1
 
   return $failed
@@ -387,7 +388,10 @@ run_integration_on_web() {
   fi
 
   local cd_log
-  cd_log=$(mktemp /tmp/chromedriver.XXXXXX.log)
+  # `mktemp` accepts the X-template form on GNU but macOS BSD mktemp treats
+  # the argument as a literal path, which re-runs collide on. `-t <prefix>`
+  # is honored by both platforms and picks a uniquified file in $TMPDIR.
+  cd_log=$(mktemp -t chromedriver) || cd_log=$(mktemp)
   echo "starting chromedriver --port=4444 (log: $cd_log)"
   chromedriver --port=4444 --log-path="$cd_log" >/dev/null 2>&1 &
   local cd_pid=$!
@@ -399,13 +403,21 @@ run_integration_on_web() {
   fi
 
   echo ""
-  echo "  flutter drive -d chrome integration_test/all_test.dart"
+  echo "  flutter drive -d web-server integration_test/all_test.dart"
+  # `-d web-server` is the canonical device for chromedriver-backed web
+  # integration tests: flutter_tools serves the app and lets chromedriver
+  # drive the one Chrome it launched. Using `-d chrome` instead causes
+  # flutter_tools to launch a second Chrome for itself; chromedriver then
+  # polls `window.$flutterDriver` in its own (blank) Chrome forever and
+  # never observes the extension that the test app publishes in
+  # flutter_tools' Chrome. Tests run in either mode; only `-d web-server`
+  # lets the driver handshake complete and the stage exit.
   (
     cd "$example_dir" && \
     flutter drive \
       --driver=test_driver/integration_test.dart \
       --target=integration_test/all_test.dart \
-      -d chrome \
+      -d web-server \
       --browser-name=chrome \
       --driver-port=4444 \
       --no-web-resources-cdn \
@@ -446,18 +458,6 @@ stage_ios() {
 stage_chrome() {
   if ! require_token; then
     skip_stage "chrome" "MAPBOX_ACCESS_TOKEN not set"
-    return 0
-  fi
-
-  # Pre-WS3 baseline: the web package's `MapWebWidget._onPlatformViewCreated`
-  # never calls `onMapCreated`, so any integration test that awaits a
-  # MapboxMap controller — which is all the current facade tests —
-  # hangs indefinitely. Rather than burn minutes waiting for a
-  # timeout, auto-skip until WS3 lands (at which point remove this
-  # guard). Override for debugging with ALLOW_HANGING_CHROME_TESTS=1.
-  if [[ "${ALLOW_HANGING_CHROME_TESTS:-0}" != "1" ]]; then
-    skip_stage "chrome" \
-      "blocked on WS3 — MapboxMap controller isn't constructed on web yet, facade tests hang. Re-enable by deleting this guard in validate.sh once WS3 merges."
     return 0
   fi
 

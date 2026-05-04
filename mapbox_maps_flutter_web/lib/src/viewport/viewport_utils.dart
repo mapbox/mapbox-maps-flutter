@@ -46,8 +46,7 @@ int? transitionDurationMs(ViewportTransition? transition) {
   return switch (transition) {
     FlyViewportTransition(:final duration) => duration?.inMilliseconds,
     EasingViewportTransition(:final duration) => duration.inMilliseconds,
-    DefaultViewportTransition(:final maxDuration) =>
-      maxDuration.inMilliseconds,
+    DefaultViewportTransition(:final maxDuration) => maxDuration.inMilliseconds,
     null => null,
   };
 }

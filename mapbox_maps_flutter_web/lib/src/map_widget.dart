@@ -6,10 +6,13 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 import 'package:web/web.dart';
 
 import 'bindings/map_bindings.dart';
+import 'event_adapters.dart';
+import 'mapbox_map_web.dart';
 import 'viewport/viewport_web.dart';
 
 class MapWebWidget extends StatefulWidget {
   final PlatformMapCreatedCallback? onMapCreated;
+  final void Function(MapEvent)? onMapEvent;
   final ViewportState? viewport;
   final ViewportTransition? viewportTransition;
   final void Function(bool)? viewportTransitionCompletion;
@@ -17,6 +20,7 @@ class MapWebWidget extends StatefulWidget {
   const MapWebWidget({
     super.key,
     this.onMapCreated,
+    this.onMapEvent,
     this.viewport,
     this.viewportTransition,
     this.viewportTransitionCompletion,
@@ -34,6 +38,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   final ViewportWeb _viewport = ViewportWeb();
   JSMap? _currentMap;
   ResizeObserver? _resizeObserver;
+  MapEventBridge? _eventBridge;
 
   @visibleForTesting
   JSMap? get currentMap => _currentMap;
@@ -62,15 +67,28 @@ class _MapWebWidgetState extends State<MapWebWidget> {
 
     // The platform view container may not have its layout dimensions yet.
     // Use a ResizeObserver to call map.resize() once it gets real size.
-    _resizeObserver = ResizeObserver(((JSArray entries, JSAny observer) {
-      nativeMap.resize();
-    }).toJS);
+    _resizeObserver = ResizeObserver(
+      ((JSArray entries, JSAny observer) {
+        nativeMap.resize();
+      }).toJS,
+    );
     _resizeObserver!.observe(_mapElement);
 
     // Apply the initial viewport immediately — camera commands like jumpTo
     // and fitBounds work before the style finishes loading.
     _viewport.onMapCreated(nativeMap);
     _applyViewport();
+
+    // Wire GL JS events → platform-interface MapEvent subclasses. Subscribe
+    // before firing onMapCreated so any listener registered inside that
+    // callback sees the full event stream (load/style.load arrive shortly
+    // after construction).
+    final onMapEvent = widget.onMapEvent;
+    if (onMapEvent != null) {
+      _eventBridge = MapEventBridge(nativeMap, onMapEvent);
+    }
+
+    widget.onMapCreated?.call(MapboxMapWeb(nativeMap));
   }
 
   @override
@@ -93,6 +111,8 @@ class _MapWebWidgetState extends State<MapWebWidget> {
 
   @override
   void dispose() {
+    _eventBridge?.dispose();
+    _eventBridge = null;
     _resizeObserver?.disconnect();
     _resizeObserver = null;
     _currentMap?.remove();

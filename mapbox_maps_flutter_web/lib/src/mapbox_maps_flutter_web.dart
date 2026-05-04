@@ -24,6 +24,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   }) {
     return MapWebWidget(
       onMapCreated: onMapCreated,
+      onMapEvent: onMapEvent,
       viewport: viewport,
       viewportTransition: viewportTransition,
       viewportTransitionCompletion: viewportTransitionCompletion,
@@ -66,19 +67,19 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
 
   @override
   Future<String?> getFlutterAssetPath(String? flutterAssetUri) =>
-      throw UnsupportedError(
-        'getFlutterAssetPath() is not supported on web.',
-      );
+      throw UnsupportedError('getFlutterAssetPath() is not supported on web.');
 
   @override
   Future<TileStoreUsageMode> getTileStoreUsageMode() =>
       throw UnimplementedError(
-          'getTileStoreUsageMode() is not implemented on web.');
+        'getTileStoreUsageMode() is not implemented on web.',
+      );
 
   @override
   void setTileStoreUsageMode(TileStoreUsageMode mode) =>
       throw UnimplementedError(
-          'setTileStoreUsageMode() is not implemented on web.');
+        'setTileStoreUsageMode() is not implemented on web.',
+      );
 
   @override
   Future<String?> getWorldview() =>
@@ -107,8 +108,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   MapboxOptionsPlatformInterface get mapboxOptions => this;
 
   @override
-  OfflineSwitchPlatformInterface get offlineSwitch =>
-      throw UnsupportedError(
+  OfflineSwitchPlatformInterface get offlineSwitch => throw UnsupportedError(
     'Offline functionalities are not supported on web.',
   );
 
