@@ -68,6 +68,12 @@ class StubProjectionPlatformInterface implements ProjectionPlatformInterface {
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
+class StubMapRecorderPlatformInterface
+    implements MapRecorderPlatformInterface {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
+}
+
 // ===== Mock MapboxMapPlatformInterface =====
 
 class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
@@ -104,6 +110,9 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   final ProjectionPlatformInterface projection =
       StubProjectionPlatformInterface();
+  @override
+  final MapRecorderPlatformInterface mapRecorder =
+      StubMapRecorderPlatformInterface();
 
   // Gesture listeners
   @override
@@ -604,6 +613,10 @@ void main() {
 
     test('projection returns a Projection', () {
       expect(mapboxMap.projection, isA<Projection>());
+    });
+
+    test('mapRecorder returns a MapRecorder', () {
+      expect(mapboxMap.mapRecorder, isA<MapRecorder>());
     });
 
     test('httpService returns a MapboxHttpService', () {

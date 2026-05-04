@@ -64,104 +64,10 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Options for recording the map when using MapRecorder.
-///
-/// These recordings can be used to debug issues which require multiple steps to reproduce.
-/// Additionally, playbacks can be used for performance testing custom scenarios.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapRecorderOptions {
-  /// The maximum duration (in milliseconds) from the current time until API calls are kept.
-  /// If not specified, all API calls will be kept during the recording,
-  /// which can lead to significant memory consumption for long sessions.
-  var timeWindow: Int64? = nil
-  /// If set to true, the recorded API calls will be printed in the logs.
-  var loggingEnabled: Bool
-  /// If set to true, the recorded output will be compressed with gzip.
-  var compressed: Bool
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapRecorderOptions? {
-    let timeWindow: Int64? = nilOrValue(pigeonVar_list[0])
-    let loggingEnabled = pigeonVar_list[1] as! Bool
-    let compressed = pigeonVar_list[2] as! Bool
-
-    return MapRecorderOptions(
-      timeWindow: timeWindow,
-      loggingEnabled: loggingEnabled,
-      compressed: compressed
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      timeWindow,
-      loggingEnabled,
-      compressed,
-    ]
-  }
-}
-
-/// Options for playback when using MapRecorder.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapPlayerOptions {
-  /// The number of times the sequence is played. If negative, the playback loops indefinitely.
-  var playbackCount: Int64
-  /// Multiplies the speed of playback for faster or slower replays. (1 means no change.)
-  var playbackSpeedMultiplier: Double
-  /// When set to true, the player will try to interpolate actions between short wait actions,
-  /// to continuously render during the playback.
-  /// This can help to maintain a consistent load during performance testing.
-  var avoidPlaybackPauses: Bool
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapPlayerOptions? {
-    let playbackCount = pigeonVar_list[0] as! Int64
-    let playbackSpeedMultiplier = pigeonVar_list[1] as! Double
-    let avoidPlaybackPauses = pigeonVar_list[2] as! Bool
-
-    return MapPlayerOptions(
-      playbackCount: playbackCount,
-      playbackSpeedMultiplier: playbackSpeedMultiplier,
-      avoidPlaybackPauses: avoidPlaybackPauses
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      playbackCount,
-      playbackSpeedMultiplier,
-      avoidPlaybackPauses,
-    ]
-  }
-}
-
 private class MapRecorderMessengerPigeonCodecReader: FlutterStandardReader {
-  override func readValue(ofType type: UInt8) -> Any? {
-    switch type {
-    case 129:
-      return MapRecorderOptions.fromList(self.readValue() as! [Any?])
-    case 130:
-      return MapPlayerOptions.fromList(self.readValue() as! [Any?])
-    default:
-      return super.readValue(ofType: type)
-    }
-  }
 }
 
 private class MapRecorderMessengerPigeonCodecWriter: FlutterStandardWriter {
-  override func writeValue(_ value: Any) {
-    if let value = value as? MapRecorderOptions {
-      super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapPlayerOptions {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else {
-      super.writeValue(value)
-    }
-  }
 }
 
 private class MapRecorderMessengerPigeonCodecReaderWriter: FlutterStandardReaderWriter {
@@ -191,8 +97,10 @@ class MapRecorderMessengerPigeonCodec: FlutterStandardMessageCodec, @unchecked S
 protocol _MapRecorderMessenger {
   /// Begins the recording session.
   ///
-  /// @param options MapRecorderOptions to control recording.
-  func startRecording(options: MapRecorderOptions) throws
+  /// [timeWindow] caps the retained API history (in milliseconds); null retains the entire session.
+  /// [loggingEnabled] prints recorded calls to logs.
+  /// [compressed] gzips the output of [stopRecording].
+  func startRecording(timeWindow: Int64?, loggingEnabled: Bool, compressed: Bool) throws
   /// Stops the current recording session.
   /// Recorded section could be replayed with replay function.
   ///
@@ -200,13 +108,14 @@ protocol _MapRecorderMessenger {
   func stopRecording(completion: @escaping (Result<FlutterStandardTypedData, Error>) -> Void)
   /// Replay a supplied sequence.
   ///
-  /// @param recordedSequence Sequence recorded with stopRecording method.
-  /// @param options Options to customize the behaviour of the playback.
-  func replay(recordedSequence: FlutterStandardTypedData, options: MapPlayerOptions, completion: @escaping (Result<Void, Error>) -> Void)
+  /// [playbackCount] number of times to play; negative loops indefinitely.
+  /// [playbackSpeedMultiplier] multiplies playback speed; 1.0 means no change.
+  /// [avoidPlaybackPauses] interpolates short waits to keep render load steady.
+  func replay(recordedSequence: FlutterStandardTypedData, playbackCount: Int64, playbackSpeedMultiplier: Double, avoidPlaybackPauses: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   /// Temporarily pauses or resumes playback if already paused.
-  func togglePauseReplay() throws
+  func togglePause() throws
   /// Returns the string description of the current state of playback.
-  func getPlaybackState() throws -> String
+  func getState() throws -> String
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -217,14 +126,18 @@ class _MapRecorderMessengerSetup {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
     /// Begins the recording session.
     ///
-    /// @param options MapRecorderOptions to control recording.
+    /// [timeWindow] caps the retained API history (in milliseconds); null retains the entire session.
+    /// [loggingEnabled] prints recorded calls to logs.
+    /// [compressed] gzips the output of [stopRecording].
     let startRecordingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.startRecording\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       startRecordingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let optionsArg = args[0] as! MapRecorderOptions
+        let timeWindowArg: Int64? = nilOrValue(args[0])
+        let loggingEnabledArg = args[1] as! Bool
+        let compressedArg = args[2] as! Bool
         do {
-          try api.startRecording(options: optionsArg)
+          try api.startRecording(timeWindow: timeWindowArg, loggingEnabled: loggingEnabledArg, compressed: compressedArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
@@ -254,15 +167,18 @@ class _MapRecorderMessengerSetup {
     }
     /// Replay a supplied sequence.
     ///
-    /// @param recordedSequence Sequence recorded with stopRecording method.
-    /// @param options Options to customize the behaviour of the playback.
+    /// [playbackCount] number of times to play; negative loops indefinitely.
+    /// [playbackSpeedMultiplier] multiplies playback speed; 1.0 means no change.
+    /// [avoidPlaybackPauses] interpolates short waits to keep render load steady.
     let replayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.replay\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       replayChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let recordedSequenceArg = args[0] as! FlutterStandardTypedData
-        let optionsArg = args[1] as! MapPlayerOptions
-        api.replay(recordedSequence: recordedSequenceArg, options: optionsArg) { result in
+        let playbackCountArg = args[1] as! Int64
+        let playbackSpeedMultiplierArg = args[2] as! Double
+        let avoidPlaybackPausesArg = args[3] as! Bool
+        api.replay(recordedSequence: recordedSequenceArg, playbackCount: playbackCountArg, playbackSpeedMultiplier: playbackSpeedMultiplierArg, avoidPlaybackPauses: avoidPlaybackPausesArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -275,32 +191,32 @@ class _MapRecorderMessengerSetup {
       replayChannel.setMessageHandler(nil)
     }
     /// Temporarily pauses or resumes playback if already paused.
-    let togglePauseReplayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePauseReplay\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let togglePauseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.togglePause\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      togglePauseReplayChannel.setMessageHandler { _, reply in
+      togglePauseChannel.setMessageHandler { _, reply in
         do {
-          try api.togglePauseReplay()
+          try api.togglePause()
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      togglePauseReplayChannel.setMessageHandler(nil)
+      togglePauseChannel.setMessageHandler(nil)
     }
     /// Returns the string description of the current state of playback.
-    let getPlaybackStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getPlaybackState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapRecorderMessenger.getState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      getPlaybackStateChannel.setMessageHandler { _, reply in
+      getStateChannel.setMessageHandler { _, reply in
         do {
-          let result = try api.getPlaybackState()
+          let result = try api.getState()
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      getPlaybackStateChannel.setMessageHandler(nil)
+      getStateChannel.setMessageHandler(nil)
     }
   }
 }

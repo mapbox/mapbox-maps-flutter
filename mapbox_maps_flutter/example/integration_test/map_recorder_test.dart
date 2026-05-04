@@ -2,9 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:turf/turf.dart' show Point, Position;
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -16,17 +15,14 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    // Start recording
-    await mapboxMap.recorder.startRecording(
-      timeWindow: Duration(seconds: 60),
+    await mapboxMap.mapRecorder.startRecording(
+      timeWindow: const Duration(seconds: 60),
       loggingEnabled: false,
       compressed: true,
     );
 
-    // Give recording a moment to initialize
     await Future.delayed(const Duration(milliseconds: 100));
 
-    // Perform some map operations to record
     await mapboxMap.setCamera(
       CameraOptions(
         center: Point(coordinates: Position(-74.0060, 40.7128)),
@@ -35,13 +31,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Give the recorder time to capture the camera change
     await Future.delayed(const Duration(milliseconds: 100));
 
-    // Stop recording and get the sequence
-    final sequence = await mapboxMap.recorder.stopRecording();
+    final sequence = await mapboxMap.mapRecorder.stopRecording();
 
-    // Verify we got a non-empty sequence
     expect(sequence, isNotNull);
     expect(sequence, isA<Uint8List>());
     expect(sequence.length, greaterThan(0));
@@ -53,8 +46,7 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    // Get initial state (should be "stopped")
-    final state = await mapboxMap.recorder.getState();
+    final state = await mapboxMap.mapRecorder.getState();
     expect(state, 'stopped');
   });
 
@@ -64,17 +56,14 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    // Start recording
-    await mapboxMap.recorder.startRecording(
-      timeWindow: Duration(seconds: 60),
+    await mapboxMap.mapRecorder.startRecording(
+      timeWindow: const Duration(seconds: 60),
       loggingEnabled: false,
       compressed: true,
     );
 
-    // Give recording a moment to initialize
     await Future.delayed(const Duration(milliseconds: 100));
 
-    // Perform a camera movement
     await mapboxMap.setCamera(
       CameraOptions(
         center: Point(coordinates: Position(-73.581, 45.4588)),
@@ -83,43 +72,36 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Give the recorder time to capture the camera change
     await Future.delayed(const Duration(milliseconds: 100));
 
-    // Stop recording
-    final sequence = await mapboxMap.recorder.stopRecording();
+    final sequence = await mapboxMap.mapRecorder.stopRecording();
     expect(sequence.length, greaterThan(0));
 
-    // Replay the sequence
-    await mapboxMap.recorder.replay(
+    await mapboxMap.mapRecorder.replay(
       sequence,
       playbackCount: 1,
       playbackSpeedMultiplier: 1.0,
       avoidPlaybackPauses: false,
     );
 
-    // Verify state after replay completes
-    final stateAfterReplay = await mapboxMap.recorder.getState();
+    final stateAfterReplay = await mapboxMap.mapRecorder.getState();
     expect(stateAfterReplay, 'stopped');
   });
 
-  testWidgets('togglePauseReplay', (WidgetTester tester) async {
+  testWidgets('togglePause', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;
 
-    // Start recording
-    await mapboxMap.recorder.startRecording(
-      timeWindow: Duration(seconds: 60),
+    await mapboxMap.mapRecorder.startRecording(
+      timeWindow: const Duration(seconds: 60),
       loggingEnabled: false,
       compressed: true,
     );
 
-    // Give recording a moment to initialize
     await Future.delayed(const Duration(milliseconds: 100));
 
-    // Perform multiple camera operations to create a longer recording
     for (int i = 0; i < 5; i++) {
       await mapboxMap.setCamera(
         CameraOptions(
@@ -133,48 +115,37 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 100));
     }
 
-    // Stop recording
-    final sequence = await mapboxMap.recorder.stopRecording();
+    final sequence = await mapboxMap.mapRecorder.stopRecording();
     expect(sequence.length, greaterThan(0));
 
-    // Start replay with multiple loops and slower speed to ensure enough time
-    final replayFuture = mapboxMap.recorder.replay(
+    final replayFuture = mapboxMap.mapRecorder.replay(
       sequence,
-      playbackCount: 3, // Multiple loops
-      playbackSpeedMultiplier: 0.3, // Slower to give more time
+      playbackCount: 3,
+      playbackSpeedMultiplier: 0.3,
       avoidPlaybackPauses: false,
     );
 
-    // Give it a moment to start
     await Future.delayed(const Duration(milliseconds: 200));
 
-    // Verify state is "playing"
-    final playingState = await mapboxMap.recorder.getState();
+    final playingState = await mapboxMap.mapRecorder.getState();
     expect(playingState, 'playing');
 
-    // Toggle pause
-    await mapboxMap.recorder.togglePause();
+    await mapboxMap.mapRecorder.togglePause();
 
-    // Give pause a moment to take effect
     await Future.delayed(const Duration(milliseconds: 50));
 
-    // Verify state changed to "paused"
-    final pausedState = await mapboxMap.recorder.getState();
+    final pausedState = await mapboxMap.mapRecorder.getState();
     expect(pausedState, 'paused');
 
-    // Resume
-    await mapboxMap.recorder.togglePause();
+    await mapboxMap.mapRecorder.togglePause();
 
-    // Check state immediately after resume, it should be "playing"
     await Future.delayed(const Duration(milliseconds: 50));
-    final resumedState = await mapboxMap.recorder.getState();
+    final resumedState = await mapboxMap.mapRecorder.getState();
     expect(resumedState, 'playing');
 
-    // Wait for replay to complete
     await replayFuture;
 
-    // Verify state returns to "stopped"
-    final finalState = await mapboxMap.recorder.getState();
+    final finalState = await mapboxMap.mapRecorder.getState();
     expect(finalState, 'stopped');
   });
 
@@ -184,14 +155,12 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    // Test with uncompressed recording
-    await mapboxMap.recorder.startRecording(
-      timeWindow: Duration(seconds: 30),
+    await mapboxMap.mapRecorder.startRecording(
+      timeWindow: const Duration(seconds: 30),
       loggingEnabled: false,
       compressed: false,
     );
 
-    // Give recording a moment to initialize
     await Future.delayed(const Duration(milliseconds: 100));
 
     await mapboxMap.setCamera(
@@ -199,20 +168,16 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Give the recorder time to capture the camera change
     await Future.delayed(const Duration(milliseconds: 100));
 
-    final sequence = await mapboxMap.recorder.stopRecording();
+    final sequence = await mapboxMap.mapRecorder.stopRecording();
     expect(sequence.length, greaterThan(0));
 
-    // Verify we can replay the uncompressed sequence
-    await mapboxMap.recorder.replay(
+    await mapboxMap.mapRecorder.replay(
       sequence,
       playbackCount: 1,
       playbackSpeedMultiplier: 2.0,
       avoidPlaybackPauses: true,
     );
-
-    // Test passed if no exception was thrown
   });
 }
