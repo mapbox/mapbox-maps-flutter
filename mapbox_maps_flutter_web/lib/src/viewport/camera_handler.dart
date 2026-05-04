@@ -16,18 +16,27 @@ class CameraHandler implements WebViewportStateHandler {
     final padding = edgeInsetsToJSPadding(state.padding);
 
     if (transition == null) {
-      map.jumpTo(JSCameraOptions(
-        center: center,
-        zoom: state.zoom,
-        bearing: state.bearing,
-        pitch: state.pitch,
-        padding: padding,
-      ));
+      map.jumpTo(
+        JSCameraOptions(
+          center: center,
+          zoom: state.zoom,
+          bearing: state.bearing,
+          pitch: state.pitch,
+          padding: padding,
+        ),
+      );
       return true;
     }
 
-    animate(map, center, state.zoom, state.bearing, state.pitch, padding,
-        transition);
+    animate(
+      map,
+      center,
+      state.zoom,
+      state.bearing,
+      state.pitch,
+      padding,
+      transition,
+    );
     await map.onceAsync('moveend').toDart;
     return true;
   }

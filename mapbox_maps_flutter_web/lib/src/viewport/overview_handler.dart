@@ -16,7 +16,8 @@ class OverviewHandler implements WebViewportStateHandler {
     final bounds = geometryToBounds(state.geometry);
     if (bounds == null) return false;
 
-    final duration = transitionDurationMs(transition) ??
+    final duration =
+        transitionDurationMs(transition) ??
         state.animationDuration.inMilliseconds;
 
     final padding = JSPadding(
@@ -37,7 +38,8 @@ class OverviewHandler implements WebViewportStateHandler {
       pitch: state.pitch,
       offset: offset,
       duration: transition == null ? 0 : duration,
-      linear: transition is EasingViewportTransition &&
+      linear:
+          transition is EasingViewportTransition &&
           transition.curve == const Cubic(0, 0, 1, 1),
       essential: true,
     );

@@ -2,6 +2,7 @@
 // ignore_for_file: experimental_member_use
 import 'dart:convert';
 import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -12,7 +13,10 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Add LineLayer', (WidgetTester tester) async {
+  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
+  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
+  // epic wires MapboxStyleWeb onto Mapbox GL JS.
+  testWidgets('Add LineLayer', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -100,7 +104,7 @@ void main() {
     expect(layer.lineWidth,  1.0);
   });
 
-testWidgets('Add LineLayer with expressions', (WidgetTester tester) async {
+testWidgets('Add LineLayer with expressions', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

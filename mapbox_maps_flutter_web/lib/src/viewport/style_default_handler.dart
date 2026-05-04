@@ -15,19 +15,27 @@ class StyleDefaultHandler implements WebViewportStateHandler {
 
     final style = map.getStyle();
     final center = style.center;
-    final jsCenter =
-        center != null ? <JSAny>[center[0], center[1]].toJS : null;
+    final jsCenter = center != null ? <JSAny>[center[0], center[1]].toJS : null;
 
     if (transition == null) {
-      map.jumpTo(JSCameraOptions(
-        center: jsCenter,
-        zoom: style.zoom,
-        bearing: style.bearing,
-        pitch: style.pitch,
-      ));
+      map.jumpTo(
+        JSCameraOptions(
+          center: jsCenter,
+          zoom: style.zoom,
+          bearing: style.bearing,
+          pitch: style.pitch,
+        ),
+      );
     } else {
-      animate(map, jsCenter, style.zoom, style.bearing, style.pitch, null,
-          transition);
+      animate(
+        map,
+        jsCenter,
+        style.zoom,
+        style.bearing,
+        style.pitch,
+        null,
+        transition,
+      );
       await map.onceAsync('moveend').toDart;
     }
     return true;

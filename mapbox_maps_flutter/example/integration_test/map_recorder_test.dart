@@ -4,13 +4,17 @@
 
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'empty_map_widget.dart' as app;
 
+// MapRecorder is a native-only debug/replay tool; the web stub throws
+// UnsupportedError. Skip the whole suite on web per WS2 handoff intent.
 void main() {
+  if (kIsWeb) return;
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('startRecording', (WidgetTester tester) async {

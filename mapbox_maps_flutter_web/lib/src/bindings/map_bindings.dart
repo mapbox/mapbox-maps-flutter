@@ -74,6 +74,9 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Returns the map's style specification object.
   external JSStyleSpec getStyle();
 
+  /// Loads a new style by URI (`mapbox://styles/...`) or inline JSON object.
+  external void setStyle(JSAny style);
+
   /// Returns whether the map's style is fully loaded.
   external bool isStyleLoaded();
 
@@ -83,4 +86,53 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Cleans up all resources associated with this map instance:
   /// destroys the WebGL context, removes DOM elements, clears event listeners.
   external void remove();
+}
+
+// ===== Event names =====
+
+/// Mapbox GL JS event names that the web implementation subscribes to.
+/// Kept as constants so callers can reference one name from bindings and
+/// adapters without a typo-prone duplicate string.
+class JSMapEvents {
+  JSMapEvents._();
+
+  static const load = 'load';
+  static const styleLoad = 'style.load';
+  static const styleData = 'styledata';
+  static const idle = 'idle';
+
+  /// Camera-position change. GL JS calls this `'move'`; renamed at the
+  /// constant level to disambiguate from gesture events (mouse/touch
+  /// `move` belongs to the gesture surface, not the camera surface).
+  static const cameraMove = 'move';
+
+  static const sourceData = 'sourcedata';
+  static const renderStart = 'renderstart';
+  static const render = 'render';
+}
+
+// ===== Event payload extern types =====
+
+/// Shared shape of every Mapbox GL JS map event. Carries `type`; the full
+/// object also exposes `target: JSMap` but we reach the map via closure
+/// capture instead, so it isn't declared here.
+@JS()
+@anonymous
+extension type JSMapBaseEvent._(JSObject _) implements JSObject {
+  external String get type;
+}
+
+/// Payload of the `sourcedata` event (and the parent `data` event before
+/// the Map re-fires it as `sourcedata`/`styledata`). Only the fields the
+/// adapters read are declared.
+@JS()
+@anonymous
+extension type JSMapDataEvent._(JSObject _) implements JSObject {
+  /// Source id the event relates to, when `dataType == 'source'`.
+  external String? get sourceId;
+
+  /// True once the source has finished its initial load. Per
+  /// `gl-js/src/ui/events.ts`, transitions to `true` on metadata-complete
+  /// and stays true for subsequent content updates.
+  external bool? get isSourceLoaded;
 }

@@ -1,10 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'empty_map_widget.dart' as app;
 
+// Projection APIs are not yet wired to GL JS on web; the web stub throws
+// UnimplementedError. Skip the whole suite on web until MapboxStyleWeb's
+// projection math lands as part of the web-parity epic.
 void main() {
+  if (kIsWeb) return;
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('getMetersPerPixelAtLatitude', (WidgetTester tester) async {

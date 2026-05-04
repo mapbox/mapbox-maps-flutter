@@ -580,6 +580,7 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   void stopPerformanceStatisticsCollection() {
     stopPerformanceStatisticsCollectionCallCount++;
+  }
 
   List<MapWidgetDebugOptions> lastDebugOptions = const [];
 
