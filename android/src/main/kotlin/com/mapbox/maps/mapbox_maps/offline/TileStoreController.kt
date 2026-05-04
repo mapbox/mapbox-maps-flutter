@@ -154,11 +154,15 @@ class TileStoreController(
     )
   }
 
-  override fun setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?) {
+  override fun setOptionForKey(key: _KeyedTileStoreOptions, domain: TileDataDomain?, value: Any?) {
+    val keyString = when (key) {
+      is _PredefinedTileStoreOptionsKey -> key.key.toTileStoreOptionsKey()
+      is _CustomTileStoreOptionsKey -> key.key
+    }
     domain?.also {
-      tileStore.setOption(key.toTileStoreOptionsKey(), it.toTileDataDomain(), value?.toValue() ?: com.mapbox.bindgen.Value.nullValue())
+      tileStore.setOption(keyString, it.toTileDataDomain(), value?.toValue() ?: com.mapbox.bindgen.Value.nullValue())
     } ?: run {
-      tileStore.setOption(key.toTileStoreOptionsKey(), value?.toValue() ?: com.mapbox.bindgen.Value.nullValue())
+      tileStore.setOption(keyString, value?.toValue() ?: com.mapbox.bindgen.Value.nullValue())
     }
   }
 }

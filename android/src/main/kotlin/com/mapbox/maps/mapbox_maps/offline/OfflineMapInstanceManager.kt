@@ -21,7 +21,12 @@ class OfflineMapInstanceManager(
   }
 
   override fun setupTileStore(channelSuffix: String, filePath: String?) {
-    val tileStore = filePath?.let { TileStore.create(it) } ?: TileStore.create()
+    filePath?.let {
+      TileStore.setRootPath(it).error?.let { error ->
+        throw RuntimeException("Failed to set TileStore root path to '$it': $error")
+      }
+    }
+    val tileStore = TileStore.create()
     MapboxMapsOptions.tileStore = tileStore
     val tileStoreController = TileStoreController(context, messenger, channelSuffix, tileStore)
     _TileStore.setUp(messenger, tileStoreController, channelSuffix)

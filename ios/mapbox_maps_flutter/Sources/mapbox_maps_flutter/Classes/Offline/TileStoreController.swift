@@ -104,11 +104,20 @@ final class TileStoreController: _TileStore {
         }
     }
 
-    func setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?) throws {
+    func setOptionForKey(key: _KeyedTileStoreOptions, domain: TileDataDomain?, value: Any?) throws {
+        let resolvedKey: String
+        switch key {
+        case let predefinedKey as _PredefinedTileStoreOptionsKey:
+            resolvedKey = predefinedKey.key.toTileStoreOptionsKey()
+        case let customKey as _CustomTileStoreOptionsKey:
+            resolvedKey = customKey.key
+        default:
+            fatalError("unexpected _KeyedTileStoreOptions subtype: \(key)")
+        }
         if let domain {
-            tileStore.setOptionForKey(key.toTileStoreOptionsKey(), domain: domain.toTileDataDomain(), value: value as Any)
+            tileStore.setOptionForKey(resolvedKey, domain: domain.toTileDataDomain(), value: value as Any)
         } else {
-            tileStore.setOptionForKey(key.toTileStoreOptionsKey(), value: value as Any)
+            tileStore.setOptionForKey(resolvedKey, value: value as Any)
         }
     }
 }

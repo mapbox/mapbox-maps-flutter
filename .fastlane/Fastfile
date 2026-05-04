@@ -6,7 +6,7 @@ ENV["SPACESHIP_SKIP_2FA_UPGRADE"] = "1"
 platform :ios do
 
   lane :build_examples_tests do
-    setup_circle_ci
+    setup_ci
     sync_code_signing(type: "development")
     update_code_signing_settings(
       use_automatic_signing: false,

@@ -1,3 +1,7 @@
+### main
+
+* Add `TileStore.setOptionForKey` to allow setting custom tile store options by arbitrary string key, in addition to the existing predefined options (`diskQuota`, `mapboxApiUrl`, `tileUrlTemplate`).
+
 ### 2.23.0-rc.1
 
 * Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.

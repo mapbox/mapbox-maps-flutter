@@ -649,6 +649,52 @@ struct TileRegionEstimateProgress {
   }
 }
 
+/// Generated class from Pigeon that represents data sent in messages.
+/// This protocol should not be extended by any user class outside of the generated file.
+protocol _KeyedTileStoreOptions {
+
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _PredefinedTileStoreOptionsKey: _KeyedTileStoreOptions {
+  var key: _TileStoreOptionsKey
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _PredefinedTileStoreOptionsKey? {
+    let key = pigeonVar_list[0] as! _TileStoreOptionsKey
+
+    return _PredefinedTileStoreOptionsKey(
+      key: key
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      key
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _CustomTileStoreOptionsKey: _KeyedTileStoreOptions {
+  var key: String
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _CustomTileStoreOptionsKey? {
+    let key = pigeonVar_list[0] as! String
+
+    return _CustomTileStoreOptionsKey(
+      key: key
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      key
+    ]
+  }
+}
+
 private class OfflineMessengerPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -698,6 +744,10 @@ private class OfflineMessengerPigeonCodecReader: FlutterStandardReader {
       return TileRegionLoadProgress.fromList(self.readValue() as! [Any?])
     case 143:
       return TileRegionEstimateProgress.fromList(self.readValue() as! [Any?])
+    case 144:
+      return _PredefinedTileStoreOptionsKey.fromList(self.readValue() as! [Any?])
+    case 145:
+      return _CustomTileStoreOptionsKey.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -750,6 +800,12 @@ private class OfflineMessengerPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? TileRegionEstimateProgress {
       super.writeByte(143)
+      super.writeValue(value.toList())
+    } else if let value = value as? _PredefinedTileStoreOptionsKey {
+      super.writeByte(144)
+      super.writeValue(value.toList())
+    } else if let value = value as? _CustomTileStoreOptionsKey {
+      super.writeByte(145)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -899,7 +955,7 @@ protocol _TileStore {
   func allTileRegions(completion: @escaping (Result<[TileRegion], Error>) -> Void)
   func tileRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
   func removeRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
-  func setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?) throws
+  func setOptionForKey(key: _KeyedTileStoreOptions, domain: TileDataDomain?, value: Any?) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -1063,7 +1119,7 @@ class _TileStoreSetup {
     if let api = api {
       setOptionForKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let keyArg = args[0] as! _TileStoreOptionsKey
+        let keyArg = args[0] as! _KeyedTileStoreOptions
         let domainArg: TileDataDomain? = nilOrValue(args[1])
         let valueArg: Any? = args[2]
         do {
