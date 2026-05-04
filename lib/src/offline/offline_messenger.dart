@@ -886,6 +886,92 @@ class TileRegionEstimateProgress {
   int get hashCode => Object.hashAll(_toList());
 }
 
+sealed class _KeyedTileStoreOptions {}
+
+class _PredefinedTileStoreOptionsKey extends _KeyedTileStoreOptions {
+  _PredefinedTileStoreOptionsKey({
+    required this.key,
+  });
+
+  _TileStoreOptionsKey key;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      key,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static _PredefinedTileStoreOptionsKey decode(Object result) {
+    result as List<Object?>;
+    return _PredefinedTileStoreOptionsKey(
+      key: result[0]! as _TileStoreOptionsKey,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! _PredefinedTileStoreOptionsKey ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return key == other.key;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+class _CustomTileStoreOptionsKey extends _KeyedTileStoreOptions {
+  _CustomTileStoreOptionsKey({
+    required this.key,
+  });
+
+  String key;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      key,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static _CustomTileStoreOptionsKey decode(Object result) {
+    result as List<Object?>;
+    return _CustomTileStoreOptionsKey(
+      key: result[0]! as String,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! _CustomTileStoreOptionsKey ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return key == other.key;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
   const OfflineMessenger_PigeonCodec();
   @override
@@ -938,6 +1024,12 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is TileRegionEstimateProgress) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
+    } else if (value is _PredefinedTileStoreOptionsKey) {
+      buffer.putUint8(144);
+      writeValue(buffer, value.encode());
+    } else if (value is _CustomTileStoreOptionsKey) {
+      buffer.putUint8(145);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -980,6 +1072,10 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
         return TileRegionLoadProgress.decode(readValue(buffer)!);
       case 143:
         return TileRegionEstimateProgress.decode(readValue(buffer)!);
+      case 144:
+        return _PredefinedTileStoreOptionsKey.decode(readValue(buffer)!);
+      case 145:
+        return _CustomTileStoreOptionsKey.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -1476,7 +1572,7 @@ class _TileStore {
   }
 
   Future<void> setOptionForKey(
-      _TileStoreOptionsKey key, TileDataDomain? domain, Object? value) async {
+      _KeyedTileStoreOptions key, TileDataDomain? domain, Object? value) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =

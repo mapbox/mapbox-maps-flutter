@@ -57,8 +57,7 @@ void main() {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
 
-    final tmpDir = await getTemporaryDirectory();
-    final tileStore = await TileStore.createAt(tmpDir.uri);
+    final tileStore = await TileStore.createDefault();
 
     final downloadedTileRegion = await tileStore.loadTileRegion(
         "my-tile-region-id", _tileRegionLoadOptions, null);
@@ -80,5 +79,13 @@ void main() {
               styleURI: MapboxStyles.OUTDOORS, minZoom: 0, maxZoom: 16)
         ]),
         true);
+
+    // Remove tile region before releasing the tile store to prevent
+    // stale regions from leaking into subsequent tests.
+    tileStore.removeRegion('my-tile-region-id');
+    // Force eviction of tile data, then restore default quota
+    tileStore.setDiskQuota(0);
+    await tileStore.allTileRegions();
+    tileStore.setDiskQuota(null);
   });
 }

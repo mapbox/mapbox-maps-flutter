@@ -824,6 +824,67 @@ data class TileRegionEstimateProgress(
 
   override fun hashCode(): Int = toList().hashCode()
 }
+
+/**
+ * Generated class from Pigeon that represents data sent in messages.
+ * This class should not be extended by any user class outside of the generated file.
+ */
+sealed class _KeyedTileStoreOptions
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _PredefinedTileStoreOptionsKey(
+  val key: _TileStoreOptionsKey
+) : _KeyedTileStoreOptions() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _PredefinedTileStoreOptionsKey {
+      val key = pigeonVar_list[0] as _TileStoreOptionsKey
+      return _PredefinedTileStoreOptionsKey(key)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      key,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is _PredefinedTileStoreOptionsKey) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return key == other.key
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _CustomTileStoreOptionsKey(
+  val key: String
+) : _KeyedTileStoreOptions() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _CustomTileStoreOptionsKey {
+      val key = pigeonVar_list[0] as String
+      return _CustomTileStoreOptionsKey(key)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      key,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is _CustomTileStoreOptionsKey) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return key == other.key
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class OfflineMessengerPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -902,6 +963,16 @@ private open class OfflineMessengerPigeonCodec : StandardMessageCodec() {
           TileRegionEstimateProgress.fromList(it)
         }
       }
+      144.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _PredefinedTileStoreOptionsKey.fromList(it)
+        }
+      }
+      145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _CustomTileStoreOptionsKey.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -965,6 +1036,14 @@ private open class OfflineMessengerPigeonCodec : StandardMessageCodec() {
       }
       is TileRegionEstimateProgress -> {
         stream.write(143)
+        writeValue(stream, value.toList())
+      }
+      is _PredefinedTileStoreOptionsKey -> {
+        stream.write(144)
+        writeValue(stream, value.toList())
+      }
+      is _CustomTileStoreOptionsKey -> {
+        stream.write(145)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1121,7 +1200,7 @@ interface _TileStore {
   fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit)
   fun tileRegion(id: String, callback: (Result<TileRegion>) -> Unit)
   fun removeRegion(id: String, callback: (Result<TileRegion>) -> Unit)
-  fun setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?)
+  fun setOptionForKey(key: _KeyedTileStoreOptions, domain: TileDataDomain?, value: Any?)
 
   companion object {
     /** The codec used by _TileStore. */
@@ -1315,7 +1394,7 @@ interface _TileStore {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val keyArg = args[0] as _TileStoreOptionsKey
+            val keyArg = args[0] as _KeyedTileStoreOptions
             val domainArg = args[1] as TileDataDomain?
             val valueArg = args[2]
             val wrapped: List<Any?> = try {

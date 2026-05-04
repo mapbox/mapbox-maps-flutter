@@ -167,14 +167,21 @@ final class TileStore {
   /// Sets the maximum amount of bytes [TileStore] can use to store files.
   /// If the new value causes the quota to be exceed, request will fail and data will be evicted to enforce the quota.
   /// Accepts a (positive) number of bytes, or null for resetting to the default value.
-  void setDiskQuota(int? quota, {TileDataDomain? domain = null}) {
-    _api.setOptionForKey(_TileStoreOptionsKey.DISK_QUOTA, domain, quota);
+  void setDiskQuota(int? quota, {TileDataDomain? domain}) {
+    _api.setOptionForKey(
+        _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.DISK_QUOTA),
+        domain,
+        quota);
   }
 
   /// Sets the base URL to use for requests to the Mapbox API. Defaults to "https://api.mapbox.com".
   /// Accepts a string, or null for resetting to the default value.
-  void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain = null}) {
-    _api.setOptionForKey(_TileStoreOptionsKey.MAPBOX_API_URL, domain, url);
+  void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) {
+    _api.setOptionForKey(
+        _PredefinedTileStoreOptionsKey(
+            key: _TileStoreOptionsKey.MAPBOX_API_URL),
+        domain,
+        url);
   }
 
   /// Sets the URL template for making tile requests. Defaults to the Mapbox API endpoints.
@@ -194,8 +201,20 @@ final class TileStore {
   /// - {y}: The y coordinate of the Map tile to be loaded.
   /// - {z_min}: The zoom range minimum of the Map tile to be loaded.
   /// - {z_max}: The zoom range maximum of the Map tile to be loaded.
-  void setTileUrlTemplate(String? template, {TileDataDomain? domain = null}) {
+  void setTileUrlTemplate(String? template, {TileDataDomain? domain}) {
     _api.setOptionForKey(
-        _TileStoreOptionsKey.TILE_URL_TEMPLATE, domain, template);
+        _PredefinedTileStoreOptionsKey(
+            key: _TileStoreOptionsKey.TILE_URL_TEMPLATE),
+        domain,
+        template);
+  }
+
+  /// Sets additional options for this [TileStore] that are specific to a data type.
+  ///
+  /// @param key The configuration option that should be changed.
+  /// @param domain The domain this setting should be applied for.
+  /// @param value The value for the configuration option, or null if it should be reset.
+  void setOptionForKey(String key, {TileDataDomain? domain, Object? value}) {
+    _api.setOptionForKey(_CustomTileStoreOptionsKey(key: key), domain, value);
   }
 }
