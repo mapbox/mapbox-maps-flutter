@@ -4,369 +4,6 @@
 
 part of mapbox_maps_flutter_mobile;
 
-/// Samplers which can be optionally enabled to collect performance statistics.
-enum PerformanceSamplerOptions {
-  /// Enables the collection of `cumulativeValues`, which are GPU resource statistics.
-  CUMULATIVE,
-
-  /// Enables the collection of `perFrameValues`, which are CPU timeline duration statistics.
-  PER_FRAME,
-}
-
-/// Options for the following statistics collection behaviors:
-/// - Specify the types of sampling: cumulative, per-frame, or both.
-/// - Define the minimum elapsed time for collecting performance samples.
-class PerformanceStatisticsOptions {
-  PerformanceStatisticsOptions({
-    required this.samplerOptions,
-    required this.samplingDurationMillis,
-  });
-
-  /// List of optional samplers to be used to collect performance statistics.
-  List<PerformanceSamplerOptions> samplerOptions;
-
-  /// The minimum elapsed time required before performance statistics become available.
-  /// It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
-  /// The effective collection interval can be observed through the `PerformanceStatistics` instance.
-  /// Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
-  ///
-  /// A negative sampling duration is an error and results in no operation.
-  double samplingDurationMillis;
-
-  List<Object?> _toList() {
-    return <Object?>[samplerOptions, samplingDurationMillis];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static PerformanceStatisticsOptions decode(Object result) {
-    result as List<Object?>;
-    return PerformanceStatisticsOptions(
-      samplerOptions: (result[0] as List<Object?>?)!
-          .cast<PerformanceSamplerOptions>(),
-      samplingDurationMillis: result[1]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! PerformanceStatisticsOptions ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(samplerOptions, other.samplerOptions) &&
-        samplingDurationMillis == other.samplingDurationMillis;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class DurationStatistics {
-  DurationStatistics({required this.maxMillis, required this.medianMillis});
-
-  /// The largest measured duration over the sampling window.
-  double maxMillis;
-
-  /// The median duration over the sampling window.
-  double medianMillis;
-
-  List<Object?> _toList() {
-    return <Object?>[maxMillis, medianMillis];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static DurationStatistics decode(Object result) {
-    result as List<Object?>;
-    return DurationStatistics(
-      maxMillis: result[0]! as double,
-      medianMillis: result[1]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! DurationStatistics || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return maxMillis == other.maxMillis && medianMillis == other.medianMillis;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class CumulativeRenderingStatistics {
-  CumulativeRenderingStatistics({
-    this.drawCalls,
-    this.textureBytes,
-    this.vertexBytes,
-    this.graphicsPrograms,
-    this.graphicsProgramsCreationTimeMillis,
-    this.fboSwitchCount,
-  });
-
-  /// The number of draw calls at the end of the collection window.
-  int? drawCalls;
-
-  /// The amount of texture memory in use at the end of the collection window.
-  int? textureBytes;
-
-  /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
-  int? vertexBytes;
-
-  /// The number of graphics pipeline programs created.
-  int? graphicsPrograms;
-
-  /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
-  double? graphicsProgramsCreationTimeMillis;
-
-  /// The number of FBO switches.
-  int? fboSwitchCount;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      drawCalls,
-      textureBytes,
-      vertexBytes,
-      graphicsPrograms,
-      graphicsProgramsCreationTimeMillis,
-      fboSwitchCount,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CumulativeRenderingStatistics decode(Object result) {
-    result as List<Object?>;
-    return CumulativeRenderingStatistics(
-      drawCalls: result[0] as int?,
-      textureBytes: result[1] as int?,
-      vertexBytes: result[2] as int?,
-      graphicsPrograms: result[3] as int?,
-      graphicsProgramsCreationTimeMillis: result[4] as double?,
-      fboSwitchCount: result[5] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CumulativeRenderingStatistics ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return drawCalls == other.drawCalls &&
-        textureBytes == other.textureBytes &&
-        vertexBytes == other.vertexBytes &&
-        graphicsPrograms == other.graphicsPrograms &&
-        graphicsProgramsCreationTimeMillis ==
-            other.graphicsProgramsCreationTimeMillis &&
-        fboSwitchCount == other.fboSwitchCount;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class GroupPerformanceStatistics {
-  GroupPerformanceStatistics({
-    required this.durationMillis,
-    required this.name,
-  });
-
-  /// The duration of the group or layer on the CPU timeline.
-  double durationMillis;
-
-  /// The name of the group or layer.
-  String name;
-
-  List<Object?> _toList() {
-    return <Object?>[durationMillis, name];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static GroupPerformanceStatistics decode(Object result) {
-    result as List<Object?>;
-    return GroupPerformanceStatistics(
-      durationMillis: result[0]! as double,
-      name: result[1]! as String,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! GroupPerformanceStatistics ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return durationMillis == other.durationMillis && name == other.name;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class PerFrameRenderingStatistics {
-  PerFrameRenderingStatistics({
-    required this.topRenderGroups,
-    required this.topRenderLayers,
-    required this.shadowMapDurationStatistics,
-    required this.uploadDurationStatistics,
-  });
-
-  /// The CPU timeline duration statistics of each render group, in descending order by duration.
-  List<GroupPerformanceStatistics> topRenderGroups;
-
-  /// The CPU timeline duration statistics of each layer, in descending order by duration.
-  List<GroupPerformanceStatistics> topRenderLayers;
-
-  /// The CPU timeline duration of the shadowmap render pass.
-  DurationStatistics shadowMapDurationStatistics;
-
-  /// The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass.
-  DurationStatistics uploadDurationStatistics;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      topRenderGroups,
-      topRenderLayers,
-      shadowMapDurationStatistics,
-      uploadDurationStatistics,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static PerFrameRenderingStatistics decode(Object result) {
-    result as List<Object?>;
-    return PerFrameRenderingStatistics(
-      topRenderGroups: (result[0] as List<Object?>?)!
-          .cast<GroupPerformanceStatistics>(),
-      topRenderLayers: (result[1] as List<Object?>?)!
-          .cast<GroupPerformanceStatistics>(),
-      shadowMapDurationStatistics: result[2]! as DurationStatistics,
-      uploadDurationStatistics: result[3]! as DurationStatistics,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! PerFrameRenderingStatistics ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(topRenderGroups, other.topRenderGroups) &&
-        _deepEquals(topRenderLayers, other.topRenderLayers) &&
-        shadowMapDurationStatistics == other.shadowMapDurationStatistics &&
-        uploadDurationStatistics == other.uploadDurationStatistics;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// The performance statistics collected at the end of the sampling duration.
-class PerformanceStatistics {
-  PerformanceStatistics({
-    required this.collectionDurationMillis,
-    required this.mapRenderDurationStatistics,
-    this.cumulativeStatistics,
-    this.perFrameStatistics,
-  });
-
-  /// The actual amount of time elapsed during statistics collection. Note that this duration is always a little bit larger
-  /// than the configured duration, as collection happens at a fixed point during the map render call.
-  double collectionDurationMillis;
-
-  /// The CPU timeline duration statistics of the map render call.
-  DurationStatistics mapRenderDurationStatistics;
-
-  /// Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option.
-  CumulativeRenderingStatistics? cumulativeStatistics;
-
-  /// Aggregated, per-frame, timings. Enable using the  `PerFrameRenderingStats` performance sampler option.
-  PerFrameRenderingStatistics? perFrameStatistics;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      collectionDurationMillis,
-      mapRenderDurationStatistics,
-      cumulativeStatistics,
-      perFrameStatistics,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static PerformanceStatistics decode(Object result) {
-    result as List<Object?>;
-    return PerformanceStatistics(
-      collectionDurationMillis: result[0]! as double,
-      mapRenderDurationStatistics: result[1]! as DurationStatistics,
-      cumulativeStatistics: result[2] as CumulativeRenderingStatistics?,
-      perFrameStatistics: result[3] as PerFrameRenderingStatistics?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! PerformanceStatistics || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return collectionDurationMillis == other.collectionDurationMillis &&
-        mapRenderDurationStatistics == other.mapRenderDurationStatistics &&
-        cumulativeStatistics == other.cumulativeStatistics &&
-        perFrameStatistics == other.perFrameStatistics;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 class PerformaceStatistics_PigeonCodec extends StandardMessageCodec {
   const PerformaceStatistics_PigeonCodec();
   @override
@@ -424,14 +61,19 @@ class PerformaceStatistics_PigeonCodec extends StandardMessageCodec {
   }
 }
 
-abstract class PerformanceStatisticsListener {
+/// Mobile-internal Pigeon FlutterApi for performance-statistics callbacks.
+/// Facade users subclass the hand-written `PerformanceStatisticsListener`
+/// in `mapbox_maps_flutter_platform_interface`; mobile bridges to this
+/// class via `_PerformanceStatisticsListenerBridge` (see
+/// lib/src/mapbox_map.dart).
+abstract class _PerformanceStatisticsListenerApi {
   static const MessageCodec<Object?> pigeonChannelCodec =
       PerformaceStatistics_PigeonCodec();
 
   void onPerformanceStatisticsCollected(PerformanceStatistics statistics);
 
   static void setUp(
-    PerformanceStatisticsListener? api, {
+    _PerformanceStatisticsListenerApi? api, {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
@@ -441,7 +83,7 @@ abstract class PerformanceStatisticsListener {
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected$messageChannelSuffix',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsListenerApi.onPerformanceStatisticsCollected$messageChannelSuffix',
         pigeonChannelCodec,
         binaryMessenger: binaryMessenger,
       );
@@ -451,14 +93,14 @@ abstract class PerformanceStatisticsListener {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(
             message != null,
-            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null.',
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsListenerApi.onPerformanceStatisticsCollected was null.',
           );
           final List<Object?> args = (message as List<Object?>?)!;
           final PerformanceStatistics? arg_statistics =
               (args[0] as PerformanceStatistics?);
           assert(
             arg_statistics != null,
-            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null, expected non-null PerformanceStatistics.',
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsListenerApi.onPerformanceStatisticsCollected was null, expected non-null PerformanceStatistics.',
           );
           try {
             api.onPerformanceStatisticsCollected(arg_statistics!);

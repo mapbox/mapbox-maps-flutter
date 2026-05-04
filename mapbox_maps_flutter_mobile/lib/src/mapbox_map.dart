@@ -267,7 +267,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
     );
-    PerformanceStatisticsListener.setUp(
+    _PerformanceStatisticsListenerApi.setUp(
       null,
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
@@ -931,13 +931,14 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// In order to stop the collection process, call [stopPerformanceStatisticsCollection].
   /// After calling [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
   /// restarted.
+  @override
   @experimental
   void startPerformanceStatisticsCollection(
     PerformanceStatisticsOptions options,
     PerformanceStatisticsListener listener,
   ) {
-    PerformanceStatisticsListener.setUp(
-      listener,
+    _PerformanceStatisticsListenerApi.setUp(
+      _PerformanceStatisticsListenerBridge(listener),
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
     );
@@ -950,11 +951,12 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Calling [stopPerformanceStatisticsCollection] when no collection is enabled is a no-op. After calling
   /// [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
   /// restarted.
+  @override
   @experimental
   void stopPerformanceStatisticsCollection() {
     _performanceStatistics.stopPerformanceStatisticsCollection();
 
-    PerformanceStatisticsListener.setUp(
+    _PerformanceStatisticsListenerApi.setUp(
       null,
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),

@@ -42,17 +42,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-enum LoggingLevel: Int {
-  /// Verbose log data to understand how the code executes.
-  case debug = 0
-  /// Logs related to normal application behavior.
-  case info = 1
-  /// To log a situation that might be a problem, or an unusual situation.
-  case warning = 2
-  /// A log message providing information when a significant error occurred
-  case error = 3
-}
-
 private class LogBackendPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -93,14 +82,17 @@ class LogBackendPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
   static let shared = LogBackendPigeonCodec(readerWriter: LogBackendPigeonCodecReaderWriter())
 }
 
-/// An interface for implementing log writing backends, e.g. for using platform specific log backends or logging to a notification service.
+/// Mobile-internal Pigeon FlutterApi for log backends. Facade users
+/// subclass the hand-written `LogWriterBackend` in
+/// `mapbox_maps_flutter_platform_interface`; mobile bridges to this class
+/// via `_LogWriterBackendBridge` (see lib/src/log_configuration.dart).
 ///
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol LogWriterBackendProtocol {
+protocol _LogWriterBackendApiProtocol {
   /// Writes a log message with a given level.
   func writeLog(level levelArg: LoggingLevel, message messageArg: String, completion: @escaping (Result<Void, LogBackendError>) -> Void)
 }
-class LogWriterBackend: LogWriterBackendProtocol {
+class _LogWriterBackendApi: _LogWriterBackendApiProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
   private let messageChannelSuffix: String
   init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
@@ -112,7 +104,7 @@ class LogWriterBackend: LogWriterBackendProtocol {
   }
   /// Writes a log message with a given level.
   func writeLog(level levelArg: LoggingLevel, message messageArg: String, completion: @escaping (Result<Void, LogBackendError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter._LogWriterBackendApi.writeLog\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([levelArg, messageArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {

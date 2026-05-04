@@ -74,6 +74,7 @@ class StubMapRecorderPlatformInterface
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
+
 // ===== Mock MapboxMapPlatformInterface =====
 
 class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
@@ -557,6 +558,28 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
     FeaturesetDescriptor featureset,
   ) async {}
 
+  // ===== Performance statistics =====
+
+  int startPerformanceStatisticsCollectionCallCount = 0;
+  int stopPerformanceStatisticsCollectionCallCount = 0;
+  PerformanceStatisticsOptions? lastPerfStatsOptions;
+  PerformanceStatisticsListener? lastPerfStatsListener;
+
+  @override
+  void startPerformanceStatisticsCollection(
+    PerformanceStatisticsOptions options,
+    PerformanceStatisticsListener listener,
+  ) {
+    startPerformanceStatisticsCollectionCallCount++;
+    lastPerfStatsOptions = options;
+    lastPerfStatsListener = listener;
+  }
+
+  @override
+  void stopPerformanceStatisticsCollection() {
+    stopPerformanceStatisticsCollectionCallCount++;
+  }
+
   @override
   void dispose() {
     disposeCallCount++;
@@ -988,6 +1011,27 @@ void main() {
       expect(mockImpl.lastViewportMode, ViewportMode.FLIPPED_Y);
     });
 
+    // ===== Performance statistics =====
+
+    test('startPerformanceStatisticsCollection delegates to interface', () {
+      final options = PerformanceStatisticsOptions(
+        samplerOptions: [PerformanceSamplerOptions.CUMULATIVE],
+        samplingDurationMillis: 1000,
+      );
+      final listener = _RecordingPerformanceStatisticsListener();
+      mapboxMap.startPerformanceStatisticsCollection(options, listener);
+
+      expect(mockImpl.startPerformanceStatisticsCollectionCallCount, 1);
+      expect(mockImpl.lastPerfStatsOptions, options);
+      expect(mockImpl.lastPerfStatsListener, listener);
+    });
+
+    test('stopPerformanceStatisticsCollection delegates to interface', () {
+      mapboxMap.stopPerformanceStatisticsCollection();
+
+      expect(mockImpl.stopPerformanceStatisticsCollectionCallCount, 1);
+    });
+
     // ===== Lifecycle =====
 
     test('dispose delegates to interface', () {
@@ -996,4 +1040,10 @@ void main() {
       expect(mockImpl.disposeCallCount, 1);
     });
   });
+}
+
+class _RecordingPerformanceStatisticsListener
+    implements PerformanceStatisticsListener {
+  @override
+  void onPerformanceStatisticsCollected(PerformanceStatistics statistics) {}
 }

@@ -7,6 +7,7 @@ import 'annotations_interface.dart';
 import 'http_service_interface.dart';
 import 'location_settings_interface.dart';
 import 'map_recorder_interface.dart';
+import 'performance_statistics_listener.dart';
 import 'projection_interface.dart';
 import 'settings_interfaces.dart';
 import 'style_interface.dart';
@@ -58,6 +59,22 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Provides access to recording and replaying API calls on the map.
   MapRecorderPlatformInterface get mapRecorder;
+
+  // ===== Performance statistics =====
+
+  /// Starts collecting CPU/GPU render performance statistics with the
+  /// given [options], delivering each sampled snapshot to [listener].
+  /// Calling this while collection is already active replaces the
+  /// previous listener; call [stopPerformanceStatisticsCollection]
+  /// before restarting.
+  void startPerformanceStatisticsCollection(
+    PerformanceStatisticsOptions options,
+    PerformanceStatisticsListener listener,
+  );
+
+  /// Stops collection started by [startPerformanceStatisticsCollection].
+  /// No-op when no collection is active.
+  void stopPerformanceStatisticsCollection();
 
   // ===== Gesture listeners =====
 

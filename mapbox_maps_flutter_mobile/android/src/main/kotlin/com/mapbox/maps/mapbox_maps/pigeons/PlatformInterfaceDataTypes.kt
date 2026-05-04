@@ -108,6 +108,38 @@ enum class StyleProjectionName(val raw: Int) {
   }
 }
 
+/** States level of a log message. */
+enum class LoggingLevel(val raw: Int) {
+  /** Verbose log data to understand how the code executes. */
+  DEBUG(0),
+  /** Logs related to normal application behavior. */
+  INFO(1),
+  /** To log a situation that might be a problem, or an unusual situation. */
+  WARNING(2),
+  /** A log message providing information when a significant error occurred. */
+  ERROR(3);
+
+  companion object {
+    fun ofRaw(raw: Int): LoggingLevel? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Samplers which can be optionally enabled to collect performance statistics. */
+enum class PerformanceSamplerOptions(val raw: Int) {
+  /** Enables the collection of `cumulativeValues`, which are GPU resource statistics. */
+  CUMULATIVE(0),
+  /** Enables the collection of `perFrameValues`, which are CPU timeline duration statistics. */
+  PER_FRAME(1);
+
+  companion object {
+    fun ofRaw(raw: Int): PerformanceSamplerOptions? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** Describes the kind of a style property value. */
 enum class StylePropertyValueKind(val raw: Int) {
   /** The property value is not defined. */
@@ -1806,6 +1838,270 @@ data class MercatorCoordinate(
     }
     return x == other.x &&
       y == other.y
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Options for the following statistics collection behaviors:
+ * - Specify the types of sampling: cumulative, per-frame, or both.
+ * - Define the minimum elapsed time for collecting performance samples.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class PerformanceStatisticsOptions(
+  /** List of optional samplers to be used to collect performance statistics. */
+  val samplerOptions: List<PerformanceSamplerOptions>,
+  /**
+   * The minimum elapsed time required before performance statistics become available.
+   * It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
+   * The effective collection interval can be observed through the `PerformanceStatistics` instance.
+   * Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
+   *
+   * A negative sampling duration is an error and results in no operation.
+   */
+  val samplingDurationMillis: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): PerformanceStatisticsOptions {
+      val samplerOptions = pigeonVar_list[0] as List<PerformanceSamplerOptions>
+      val samplingDurationMillis = pigeonVar_list[1] as Double
+      return PerformanceStatisticsOptions(samplerOptions, samplingDurationMillis)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      samplerOptions,
+      samplingDurationMillis,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is PerformanceStatisticsOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(samplerOptions, other.samplerOptions) &&
+      samplingDurationMillis == other.samplingDurationMillis
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class DurationStatistics(
+  /** The largest measured duration over the sampling window. */
+  val maxMillis: Double,
+  /** The median duration over the sampling window. */
+  val medianMillis: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): DurationStatistics {
+      val maxMillis = pigeonVar_list[0] as Double
+      val medianMillis = pigeonVar_list[1] as Double
+      return DurationStatistics(maxMillis, medianMillis)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      maxMillis,
+      medianMillis,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is DurationStatistics) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return maxMillis == other.maxMillis &&
+      medianMillis == other.medianMillis
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class CumulativeRenderingStatistics(
+  /** The number of draw calls at the end of the collection window. */
+  val drawCalls: Long? = null,
+  /** The amount of texture memory in use at the end of the collection window. */
+  val textureBytes: Long? = null,
+  /** The amount of vertex memory (array and index buffer memory) in use at the end of the collection window. */
+  val vertexBytes: Long? = null,
+  /** The number of graphics pipeline programs created. */
+  val graphicsPrograms: Long? = null,
+  /** The total amount of time spent on all graphics pipeline program creation, in milliseconds. */
+  val graphicsProgramsCreationTimeMillis: Double? = null,
+  /** The number of FBO switches. */
+  val fboSwitchCount: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CumulativeRenderingStatistics {
+      val drawCalls = pigeonVar_list[0] as Long?
+      val textureBytes = pigeonVar_list[1] as Long?
+      val vertexBytes = pigeonVar_list[2] as Long?
+      val graphicsPrograms = pigeonVar_list[3] as Long?
+      val graphicsProgramsCreationTimeMillis = pigeonVar_list[4] as Double?
+      val fboSwitchCount = pigeonVar_list[5] as Long?
+      return CumulativeRenderingStatistics(drawCalls, textureBytes, vertexBytes, graphicsPrograms, graphicsProgramsCreationTimeMillis, fboSwitchCount)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      drawCalls,
+      textureBytes,
+      vertexBytes,
+      graphicsPrograms,
+      graphicsProgramsCreationTimeMillis,
+      fboSwitchCount,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CumulativeRenderingStatistics) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return drawCalls == other.drawCalls &&
+      textureBytes == other.textureBytes &&
+      vertexBytes == other.vertexBytes &&
+      graphicsPrograms == other.graphicsPrograms &&
+      graphicsProgramsCreationTimeMillis == other.graphicsProgramsCreationTimeMillis &&
+      fboSwitchCount == other.fboSwitchCount
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class GroupPerformanceStatistics(
+  /** The duration of the group or layer on the CPU timeline. */
+  val durationMillis: Double,
+  /** The name of the group or layer. */
+  val name: String
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GroupPerformanceStatistics {
+      val durationMillis = pigeonVar_list[0] as Double
+      val name = pigeonVar_list[1] as String
+      return GroupPerformanceStatistics(durationMillis, name)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      durationMillis,
+      name,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is GroupPerformanceStatistics) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return durationMillis == other.durationMillis &&
+      name == other.name
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class PerFrameRenderingStatistics(
+  /** The CPU timeline duration statistics of each render group, in descending order by duration. */
+  val topRenderGroups: List<GroupPerformanceStatistics>,
+  /** The CPU timeline duration statistics of each layer, in descending order by duration. */
+  val topRenderLayers: List<GroupPerformanceStatistics>,
+  /** The CPU timeline duration of the shadowmap render pass. */
+  val shadowMapDurationStatistics: DurationStatistics,
+  /** The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass. */
+  val uploadDurationStatistics: DurationStatistics
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): PerFrameRenderingStatistics {
+      val topRenderGroups = pigeonVar_list[0] as List<GroupPerformanceStatistics>
+      val topRenderLayers = pigeonVar_list[1] as List<GroupPerformanceStatistics>
+      val shadowMapDurationStatistics = pigeonVar_list[2] as DurationStatistics
+      val uploadDurationStatistics = pigeonVar_list[3] as DurationStatistics
+      return PerFrameRenderingStatistics(topRenderGroups, topRenderLayers, shadowMapDurationStatistics, uploadDurationStatistics)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      topRenderGroups,
+      topRenderLayers,
+      shadowMapDurationStatistics,
+      uploadDurationStatistics,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is PerFrameRenderingStatistics) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(topRenderGroups, other.topRenderGroups) &&
+      deepEqualsPlatformInterfaceDataTypes(topRenderLayers, other.topRenderLayers) &&
+      shadowMapDurationStatistics == other.shadowMapDurationStatistics &&
+      uploadDurationStatistics == other.uploadDurationStatistics
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * The performance statistics collected at the end of the sampling duration.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class PerformanceStatistics(
+  /**
+   * The actual amount of time elapsed during statistics collection. Note that this duration is always a little bit larger
+   * than the configured duration, as collection happens at a fixed point during the map render call.
+   */
+  val collectionDurationMillis: Double,
+  /** The CPU timeline duration statistics of the map render call. */
+  val mapRenderDurationStatistics: DurationStatistics,
+  /** Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option. */
+  val cumulativeStatistics: CumulativeRenderingStatistics? = null,
+  /** Aggregated, per-frame, timings. Enable using the `PerFrameRenderingStats` performance sampler option. */
+  val perFrameStatistics: PerFrameRenderingStatistics? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): PerformanceStatistics {
+      val collectionDurationMillis = pigeonVar_list[0] as Double
+      val mapRenderDurationStatistics = pigeonVar_list[1] as DurationStatistics
+      val cumulativeStatistics = pigeonVar_list[2] as CumulativeRenderingStatistics?
+      val perFrameStatistics = pigeonVar_list[3] as PerFrameRenderingStatistics?
+      return PerformanceStatistics(collectionDurationMillis, mapRenderDurationStatistics, cumulativeStatistics, perFrameStatistics)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      collectionDurationMillis,
+      mapRenderDurationStatistics,
+      cumulativeStatistics,
+      perFrameStatistics,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is PerformanceStatistics) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return collectionDurationMillis == other.collectionDurationMillis &&
+      mapRenderDurationStatistics == other.mapRenderDurationStatistics &&
+      cumulativeStatistics == other.cumulativeStatistics &&
+      perFrameStatistics == other.perFrameStatistics
   }
 
   override fun hashCode(): Int = toList().hashCode()

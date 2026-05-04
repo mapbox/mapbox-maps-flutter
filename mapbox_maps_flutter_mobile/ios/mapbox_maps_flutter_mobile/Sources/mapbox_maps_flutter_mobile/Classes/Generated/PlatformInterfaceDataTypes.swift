@@ -67,6 +67,26 @@ enum StyleProjectionName: Int {
   case globe = 1
 }
 
+/// States level of a log message.
+enum LoggingLevel: Int {
+  /// Verbose log data to understand how the code executes.
+  case debug = 0
+  /// Logs related to normal application behavior.
+  case info = 1
+  /// To log a situation that might be a problem, or an unusual situation.
+  case warning = 2
+  /// A log message providing information when a significant error occurred.
+  case error = 3
+}
+
+/// Samplers which can be optionally enabled to collect performance statistics.
+enum PerformanceSamplerOptions: Int {
+  /// Enables the collection of `cumulativeValues`, which are GPU resource statistics.
+  case cUMULATIVE = 0
+  /// Enables the collection of `perFrameValues`, which are CPU timeline duration statistics.
+  case pERFRAME = 1
+}
+
 /// Describes the kind of a style property value.
 enum StylePropertyValueKind: Int {
   /// The property value is not defined.
@@ -1200,6 +1220,214 @@ struct MercatorCoordinate {
     return [
       x,
       y,
+    ]
+  }
+}
+
+/// Options for the following statistics collection behaviors:
+/// - Specify the types of sampling: cumulative, per-frame, or both.
+/// - Define the minimum elapsed time for collecting performance samples.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct PerformanceStatisticsOptions {
+  /// List of optional samplers to be used to collect performance statistics.
+  var samplerOptions: [PerformanceSamplerOptions]
+  /// The minimum elapsed time required before performance statistics become available.
+  /// It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
+  /// The effective collection interval can be observed through the `PerformanceStatistics` instance.
+  /// Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
+  ///
+  /// A negative sampling duration is an error and results in no operation.
+  var samplingDurationMillis: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> PerformanceStatisticsOptions? {
+    let samplerOptions = pigeonVar_list[0] as! [PerformanceSamplerOptions]
+    let samplingDurationMillis = pigeonVar_list[1] as! Double
+
+    return PerformanceStatisticsOptions(
+      samplerOptions: samplerOptions,
+      samplingDurationMillis: samplingDurationMillis
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      samplerOptions,
+      samplingDurationMillis,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct DurationStatistics {
+  /// The largest measured duration over the sampling window.
+  var maxMillis: Double
+  /// The median duration over the sampling window.
+  var medianMillis: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> DurationStatistics? {
+    let maxMillis = pigeonVar_list[0] as! Double
+    let medianMillis = pigeonVar_list[1] as! Double
+
+    return DurationStatistics(
+      maxMillis: maxMillis,
+      medianMillis: medianMillis
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      maxMillis,
+      medianMillis,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CumulativeRenderingStatistics {
+  /// The number of draw calls at the end of the collection window.
+  var drawCalls: Int64? = nil
+  /// The amount of texture memory in use at the end of the collection window.
+  var textureBytes: Int64? = nil
+  /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
+  var vertexBytes: Int64? = nil
+  /// The number of graphics pipeline programs created.
+  var graphicsPrograms: Int64? = nil
+  /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
+  var graphicsProgramsCreationTimeMillis: Double? = nil
+  /// The number of FBO switches.
+  var fboSwitchCount: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CumulativeRenderingStatistics? {
+    let drawCalls: Int64? = nilOrValue(pigeonVar_list[0])
+    let textureBytes: Int64? = nilOrValue(pigeonVar_list[1])
+    let vertexBytes: Int64? = nilOrValue(pigeonVar_list[2])
+    let graphicsPrograms: Int64? = nilOrValue(pigeonVar_list[3])
+    let graphicsProgramsCreationTimeMillis: Double? = nilOrValue(pigeonVar_list[4])
+    let fboSwitchCount: Int64? = nilOrValue(pigeonVar_list[5])
+
+    return CumulativeRenderingStatistics(
+      drawCalls: drawCalls,
+      textureBytes: textureBytes,
+      vertexBytes: vertexBytes,
+      graphicsPrograms: graphicsPrograms,
+      graphicsProgramsCreationTimeMillis: graphicsProgramsCreationTimeMillis,
+      fboSwitchCount: fboSwitchCount
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      drawCalls,
+      textureBytes,
+      vertexBytes,
+      graphicsPrograms,
+      graphicsProgramsCreationTimeMillis,
+      fboSwitchCount,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct GroupPerformanceStatistics {
+  /// The duration of the group or layer on the CPU timeline.
+  var durationMillis: Double
+  /// The name of the group or layer.
+  var name: String
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GroupPerformanceStatistics? {
+    let durationMillis = pigeonVar_list[0] as! Double
+    let name = pigeonVar_list[1] as! String
+
+    return GroupPerformanceStatistics(
+      durationMillis: durationMillis,
+      name: name
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      durationMillis,
+      name,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct PerFrameRenderingStatistics {
+  /// The CPU timeline duration statistics of each render group, in descending order by duration.
+  var topRenderGroups: [GroupPerformanceStatistics]
+  /// The CPU timeline duration statistics of each layer, in descending order by duration.
+  var topRenderLayers: [GroupPerformanceStatistics]
+  /// The CPU timeline duration of the shadowmap render pass.
+  var shadowMapDurationStatistics: DurationStatistics
+  /// The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass.
+  var uploadDurationStatistics: DurationStatistics
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> PerFrameRenderingStatistics? {
+    let topRenderGroups = pigeonVar_list[0] as! [GroupPerformanceStatistics]
+    let topRenderLayers = pigeonVar_list[1] as! [GroupPerformanceStatistics]
+    let shadowMapDurationStatistics = pigeonVar_list[2] as! DurationStatistics
+    let uploadDurationStatistics = pigeonVar_list[3] as! DurationStatistics
+
+    return PerFrameRenderingStatistics(
+      topRenderGroups: topRenderGroups,
+      topRenderLayers: topRenderLayers,
+      shadowMapDurationStatistics: shadowMapDurationStatistics,
+      uploadDurationStatistics: uploadDurationStatistics
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      topRenderGroups,
+      topRenderLayers,
+      shadowMapDurationStatistics,
+      uploadDurationStatistics,
+    ]
+  }
+}
+
+/// The performance statistics collected at the end of the sampling duration.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct PerformanceStatistics {
+  /// The actual amount of time elapsed during statistics collection. Note that this duration is always a little bit larger
+  /// than the configured duration, as collection happens at a fixed point during the map render call.
+  var collectionDurationMillis: Double
+  /// The CPU timeline duration statistics of the map render call.
+  var mapRenderDurationStatistics: DurationStatistics
+  /// Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option.
+  var cumulativeStatistics: CumulativeRenderingStatistics? = nil
+  /// Aggregated, per-frame, timings. Enable using the `PerFrameRenderingStats` performance sampler option.
+  var perFrameStatistics: PerFrameRenderingStatistics? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> PerformanceStatistics? {
+    let collectionDurationMillis = pigeonVar_list[0] as! Double
+    let mapRenderDurationStatistics = pigeonVar_list[1] as! DurationStatistics
+    let cumulativeStatistics: CumulativeRenderingStatistics? = nilOrValue(pigeonVar_list[2])
+    let perFrameStatistics: PerFrameRenderingStatistics? = nilOrValue(pigeonVar_list[3])
+
+    return PerformanceStatistics(
+      collectionDurationMillis: collectionDurationMillis,
+      mapRenderDurationStatistics: mapRenderDurationStatistics,
+      cumulativeStatistics: cumulativeStatistics,
+      perFrameStatistics: perFrameStatistics
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      collectionDurationMillis,
+      mapRenderDurationStatistics,
+      cumulativeStatistics,
+      perFrameStatistics,
     ]
   }
 }

@@ -18,6 +18,7 @@ export 'src/annotations_manager.dart';
 export 'src/offline_switch.dart';
 export 'src/offline/offline_manager.dart';
 export 'src/offline/tile_store.dart';
+export 'src/log_configuration.dart';
 export 'src/map_recorder.dart';
 export 'src/projection.dart';
 export 'src/snapshotter.dart';
