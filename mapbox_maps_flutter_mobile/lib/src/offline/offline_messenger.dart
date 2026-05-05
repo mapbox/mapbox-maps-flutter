@@ -101,7 +101,7 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is _TileStoreOptionsKey) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    } else if (value is turf.Point) {
+    } else if (value is Point) {
       buffer.putUint8(133);
       writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is StylePackLoadOptions) {
@@ -161,7 +161,7 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _TileStoreOptionsKey.values[value];
       case 133:
-        return turf.Point.fromJson(
+        return Point.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 134:

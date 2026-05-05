@@ -1163,10 +1163,10 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is _MapEvent) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    } else if (value is turf.Point) {
+    } else if (value is Point) {
       buffer.putUint8(153);
       writeValue(buffer, <Object?>[value.toJson()]);
-    } else if (value is turf.Feature) {
+    } else if (value is Feature) {
       buffer.putUint8(154);
       writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is MbxEdgeInsets) {
@@ -1385,11 +1385,11 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _MapEvent.values[value];
       case 153:
-        return turf.Point.fromJson(
+        return Point.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 154:
-        return turf.Feature.fromJson(
+        return Feature.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 155:

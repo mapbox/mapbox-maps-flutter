@@ -392,7 +392,7 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
     } else if (value is CameraOptions) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is turf.Point) {
+    } else if (value is Point) {
       buffer.putUint8(135);
       writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is _DefaultViewportTransitionOptions) {
@@ -442,7 +442,7 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
       case 134:
         return CameraOptions.decode(readValue(buffer)!);
       case 135:
-        return turf.Point.fromJson(
+        return Point.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 136:

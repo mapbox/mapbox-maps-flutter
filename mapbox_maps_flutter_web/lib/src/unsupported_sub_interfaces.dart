@@ -342,4 +342,3 @@ class UnsupportedMapRecorderWeb implements MapRecorderPlatformInterface {
   Future<String> getState() =>
       throw _unsupported('MapRecorder.getState', _reason);
 }
-

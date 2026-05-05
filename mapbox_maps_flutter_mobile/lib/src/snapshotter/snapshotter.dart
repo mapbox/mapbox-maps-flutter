@@ -143,7 +143,7 @@ final class Snapshotter implements SnapshotterPlatformInterface {
   /// Calculates a `CameraOptions` to fit a list of coordinates.
   @override
   Future<CameraOptions> camera({
-    required List<turf.Point> coordinates,
+    required List<Point> coordinates,
     MbxEdgeInsets? padding,
     double? bearing,
     double? pitch,

@@ -4,185 +4,6 @@
 
 part of mapbox_maps_flutter_mobile;
 
-sealed class AnnotationInteractionContext {}
-
-class PointAnnotationInteractionContext extends AnnotationInteractionContext {
-  PointAnnotationInteractionContext({
-    required this.annotation,
-    required this.gestureState,
-  });
-
-  PointAnnotation annotation;
-
-  GestureState gestureState;
-
-  List<Object?> _toList() {
-    return <Object?>[annotation, gestureState];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static PointAnnotationInteractionContext decode(Object result) {
-    result as List<Object?>;
-    return PointAnnotationInteractionContext(
-      annotation: result[0]! as PointAnnotation,
-      gestureState: result[1]! as GestureState,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! PointAnnotationInteractionContext ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return annotation == other.annotation && gestureState == other.gestureState;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class CircleAnnotationInteractionContext extends AnnotationInteractionContext {
-  CircleAnnotationInteractionContext({
-    required this.annotation,
-    required this.gestureState,
-  });
-
-  CircleAnnotation annotation;
-
-  GestureState gestureState;
-
-  List<Object?> _toList() {
-    return <Object?>[annotation, gestureState];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CircleAnnotationInteractionContext decode(Object result) {
-    result as List<Object?>;
-    return CircleAnnotationInteractionContext(
-      annotation: result[0]! as CircleAnnotation,
-      gestureState: result[1]! as GestureState,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CircleAnnotationInteractionContext ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return annotation == other.annotation && gestureState == other.gestureState;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class PolygonAnnotationInteractionContext extends AnnotationInteractionContext {
-  PolygonAnnotationInteractionContext({
-    required this.annotation,
-    required this.gestureState,
-  });
-
-  PolygonAnnotation annotation;
-
-  GestureState gestureState;
-
-  List<Object?> _toList() {
-    return <Object?>[annotation, gestureState];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static PolygonAnnotationInteractionContext decode(Object result) {
-    result as List<Object?>;
-    return PolygonAnnotationInteractionContext(
-      annotation: result[0]! as PolygonAnnotation,
-      gestureState: result[1]! as GestureState,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! PolygonAnnotationInteractionContext ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return annotation == other.annotation && gestureState == other.gestureState;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class PolylineAnnotationInteractionContext
-    extends AnnotationInteractionContext {
-  PolylineAnnotationInteractionContext({
-    required this.annotation,
-    required this.gestureState,
-  });
-
-  PolylineAnnotation annotation;
-
-  GestureState gestureState;
-
-  List<Object?> _toList() {
-    return <Object?>[annotation, gestureState];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static PolylineAnnotationInteractionContext decode(Object result) {
-    result as List<Object?>;
-    return PolylineAnnotationInteractionContext(
-      annotation: result[0]! as PolylineAnnotation,
-      gestureState: result[1]! as GestureState,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! PolylineAnnotationInteractionContext ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return annotation == other.annotation && gestureState == other.gestureState;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 class GestureListeners_PigeonCodec extends StandardMessageCodec {
   const GestureListeners_PigeonCodec();
   @override
@@ -211,13 +32,13 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
     } else if (value is GestureState) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    } else if (value is turf.Point) {
+    } else if (value is Point) {
       buffer.putUint8(136);
       writeValue(buffer, <Object?>[value.toJson()]);
-    } else if (value is turf.Polygon) {
+    } else if (value is Polygon) {
       buffer.putUint8(137);
       writeValue(buffer, <Object?>[value.toJson()]);
-    } else if (value is turf.LineString) {
+    } else if (value is LineString) {
       buffer.putUint8(138);
       writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is ScreenCoordinate) {
@@ -280,15 +101,15 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : GestureState.values[value];
       case 136:
-        return turf.Point.fromJson(
+        return Point.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 137:
-        return turf.Polygon.fromJson(
+        return Polygon.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 138:
-        return turf.LineString.fromJson(
+        return LineString.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
       case 139:
