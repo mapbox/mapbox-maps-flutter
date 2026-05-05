@@ -9,6 +9,7 @@ final _SnapshotterInstanceManager _snapshotterInstanceManager =
 /// You can configure the final result via [MapSnapshotOptions] upon construction time and then start the snapshot.
 final class Snapshotter implements SnapshotterPlatformInterface {
   /// A `style` object that can be manipulated to set different styles for a snapshot.
+  @override
   late StyleManager style;
 
   /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.

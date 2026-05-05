@@ -129,4 +129,15 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       throw UnsupportedError(
         'Offline functionalities are not supported on web.',
       );
+
+  @override
+  Future<SnapshotterPlatformInterface> createSnapshotter({
+    required MapSnapshotOptions options,
+    OnStyleLoadedListener? onStyleLoadedListener,
+    OnMapLoadErrorListener? onMapLoadErrorListener,
+    OnStyleDataLoadedListener? onStyleDataLoadedListener,
+    OnStyleImageMissingListener? onStyleImageMissingListener,
+  }) => throw UnimplementedError(
+    'MapboxMapsFlutterWeb.createSnapshotter is not yet implemented on web.',
+  );
 }
