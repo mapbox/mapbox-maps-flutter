@@ -159,7 +159,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Convenience method that returns the `camera options` object for given parameters.
   @override
   Future<CameraOptions> cameraForCoordinatesPadding(
-    List<turf.Point> coordinates,
+    List<Point> coordinates,
     CameraOptions camera,
     MbxEdgeInsets? coordinatesPadding,
     double? maxZoom,
@@ -197,7 +197,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   @Deprecated('Use [cameraForCoordinatesPadding] instead')
   @override
   Future<CameraOptions> cameraForCoordinates(
-    List<turf.Point> coordinates,
+    List<Point> coordinates,
     MbxEdgeInsets padding,
     double? bearing,
     double? pitch,
@@ -269,7 +269,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// The `screen coordinate` is in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   @override
-  Future<ScreenCoordinate> pixelForCoordinate(turf.Point coordinate) =>
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) =>
       _cameraManager.pixelForCoordinate(
         Point(coordinates: coordinate.coordinates, bbox: coordinate.bbox),
       );
@@ -280,7 +280,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// The screen coordinate is in `logical pixels`relative to the top left corner
   /// of the map (not of the whole screen).
   @override
-  Future<turf.Point> coordinateForPixel(ScreenCoordinate pixel) =>
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) =>
       _cameraManager.coordinateForPixel(pixel);
 
   /// Calculates `screen coordinates` that correspond to geographical `coordinates`
@@ -290,7 +290,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// of the map (not of the whole screen).
   @override
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
-    List<turf.Point> coordinates,
+    List<Point> coordinates,
   ) => _cameraManager.pixelsForCoordinates(
     coordinates
         .map((point) => Point(coordinates: point.coordinates, bbox: point.bbox))
@@ -303,9 +303,8 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// The screen coordinates are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   @override
-  Future<List<turf.Point?>> coordinatesForPixels(
-    List<ScreenCoordinate?> pixels,
-  ) => _cameraManager.coordinatesForPixels(pixels);
+  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
+      _cameraManager.coordinatesForPixels(pixels);
 
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
   /// The map will retain its current values for any details not passed via the camera options argument.
@@ -646,10 +645,9 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Gets elevation for the given coordinate.
   /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
   @override
-  Future<double?> getElevation(turf.Point coordinate) =>
-      _mapInterface.getElevation(
-        Point(coordinates: coordinate.coordinates, bbox: coordinate.bbox),
-      );
+  Future<double?> getElevation(Point coordinate) => _mapInterface.getElevation(
+    Point(coordinates: coordinate.coordinates, bbox: coordinate.bbox),
+  );
 
   /// Will load a new map style asynchronous from the specified URI.
   ///

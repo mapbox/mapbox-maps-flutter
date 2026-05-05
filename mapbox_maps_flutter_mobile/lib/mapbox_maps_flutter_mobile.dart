@@ -11,7 +11,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:turf/turf.dart' as turf;
 import 'package:turf/turf.dart' show Feature, LineString, Point, Polygon;
 
 part 'src/annotation/circle_annotation_manager.dart';
