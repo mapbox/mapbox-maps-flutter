@@ -115,4 +115,19 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
       filePath != null
       ? TileStore.createAt(filePath)
       : TileStore.createDefault();
+
+  @override
+  Future<SnapshotterPlatformInterface> createSnapshotter({
+    required MapSnapshotOptions options,
+    OnStyleLoadedListener? onStyleLoadedListener,
+    OnMapLoadErrorListener? onMapLoadErrorListener,
+    OnStyleDataLoadedListener? onStyleDataLoadedListener,
+    OnStyleImageMissingListener? onStyleImageMissingListener,
+  }) => Snapshotter.create(
+    options: options,
+    onStyleLoadedListener: onStyleLoadedListener,
+    onMapLoadErrorListener: onMapLoadErrorListener,
+    onStyleDataLoadedListener: onStyleDataLoadedListener,
+    onStyleImageMissingListener: onStyleImageMissingListener,
+  );
 }

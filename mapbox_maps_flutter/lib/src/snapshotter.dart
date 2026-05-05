@@ -4,12 +4,38 @@ import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:turf/turf.dart';
 
+import 'style_manager.dart';
+
 /// Captures styled map snapshots without a live [MapWidget].
 class Snapshotter {
   final SnapshotterPlatformInterface _impl;
 
   @internal
   Snapshotter(this._impl);
+
+  /// Creates a new [Snapshotter] configured with the given [options].
+  ///
+  /// Set the style via [style] before calling [start].
+  static Future<Snapshotter> create({
+    required MapSnapshotOptions options,
+    OnStyleLoadedListener? onStyleLoadedListener,
+    OnMapLoadErrorListener? onMapLoadErrorListener,
+    OnStyleDataLoadedListener? onStyleDataLoadedListener,
+    OnStyleImageMissingListener? onStyleImageMissingListener,
+  }) async {
+    final impl = await MapboxMapsFlutterPlatform.instance.createSnapshotter(
+      options: options,
+      onStyleLoadedListener: onStyleLoadedListener,
+      onMapLoadErrorListener: onMapLoadErrorListener,
+      onStyleDataLoadedListener: onStyleDataLoadedListener,
+      onStyleImageMissingListener: onStyleImageMissingListener,
+    );
+    return Snapshotter(impl);
+  }
+
+  /// Style manager for the snapshotter — set the style URI/JSON and mutate
+  /// runtime style properties (import configs, layers, sources).
+  late final StyleManager style = StyleManager(_impl.style);
 
   /// Event listener invoked when the style has been fully loaded.
   OnStyleLoadedListener? get onStyleLoadedListener =>

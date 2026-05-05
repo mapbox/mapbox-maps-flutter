@@ -4,6 +4,7 @@ import 'package:turf/turf.dart';
 
 import '../events.dart';
 import '../pigeons/platform_interface_data_types.dart';
+import 'style_interface.dart';
 
 /// Abstract interface for capturing styled map snapshots.
 ///
@@ -11,6 +12,10 @@ import '../pigeons/platform_interface_data_types.dart';
 /// Configure the result via [MapSnapshotOptions] at construction time, set the style,
 /// adjust the camera, and then call [start] to capture the image.
 abstract interface class SnapshotterPlatformInterface {
+  /// Style manager for setting the snapshot's style URI/JSON and runtime
+  /// style properties (import configs, layers, sources).
+  StylePlatformInterface get style;
+
   /// Event listeners wired at construction time.
   OnStyleLoadedListener? get onStyleLoadedListener;
   OnMapLoadErrorListener? get onMapLoadErrorListener;

@@ -1,13 +1,21 @@
 import 'package:flutter/widgets.dart';
 
-import 'events.dart' show MapEvent;
+import 'events.dart'
+    show
+        MapEvent,
+        OnMapLoadErrorListener,
+        OnStyleDataLoadedListener,
+        OnStyleImageMissingListener,
+        OnStyleLoadedListener;
 import 'interfaces/log_configuration_interface.dart';
 import 'interfaces/mapbox_map_interface.dart';
 import 'interfaces/mapbox_maps_options_interface.dart';
 import 'interfaces/mapbox_options_interface.dart';
 import 'interfaces/offline_interface.dart';
+import 'interfaces/snapshotter_interface.dart';
 import 'interfaces/viewport/viewport_state.dart';
 import 'interfaces/viewport/viewport_transition.dart';
+import 'pigeons/platform_interface_data_types.dart' show MapSnapshotOptions;
 
 export 'debug_options.dart';
 export 'events.dart';
@@ -65,6 +73,18 @@ abstract base class MapboxMapsFlutterPlatform {
 
   Future<OfflineManagerPlatformInterface> createOfflineManager();
   Future<TileStorePlatformInterface> createTileStore({Uri filePath});
+
+  // ===== Snapshotter =====
+
+  /// Creates a [SnapshotterPlatformInterface] for capturing styled map
+  /// snapshots without a live map view.
+  Future<SnapshotterPlatformInterface> createSnapshotter({
+    required MapSnapshotOptions options,
+    OnStyleLoadedListener? onStyleLoadedListener,
+    OnMapLoadErrorListener? onMapLoadErrorListener,
+    OnStyleDataLoadedListener? onStyleDataLoadedListener,
+    OnStyleImageMissingListener? onStyleImageMissingListener,
+  });
 
   // ===== Widget =====
 

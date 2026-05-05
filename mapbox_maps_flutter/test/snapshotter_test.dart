@@ -4,6 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart';
 
+class StubStylePlatformInterface implements StylePlatformInterface {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
+}
+
 class MockSnapshotterPlatformInterface
     implements SnapshotterPlatformInterface {
   int getCameraStateCallCount = 0;
@@ -22,6 +27,9 @@ class MockSnapshotterPlatformInterface
   Size? lastSize;
   TileCoverOptions? lastTileCoverOptions;
   List<Point>? lastCoordinates;
+
+  @override
+  final StylePlatformInterface style = StubStylePlatformInterface();
 
   @override
   OnStyleLoadedListener? get onStyleLoadedListener => null;
