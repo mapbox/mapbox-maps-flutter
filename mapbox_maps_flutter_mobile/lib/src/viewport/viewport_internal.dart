@@ -394,7 +394,7 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.encode());
     } else if (value is Point) {
       buffer.putUint8(135);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is _DefaultViewportTransitionOptions) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
@@ -443,7 +443,7 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
         return CameraOptions.decode(readValue(buffer)!);
       case 135:
         return Point.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 136:
         return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);

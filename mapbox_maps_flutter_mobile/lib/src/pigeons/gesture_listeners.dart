@@ -34,13 +34,13 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.index);
     } else if (value is Point) {
       buffer.putUint8(136);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is Polygon) {
       buffer.putUint8(137);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is LineString) {
       buffer.putUint8(138);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is ScreenCoordinate) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
@@ -102,15 +102,15 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : GestureState.values[value];
       case 136:
         return Point.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 137:
         return Polygon.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 138:
         return LineString.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 139:
         return ScreenCoordinate.decode(readValue(buffer)!);

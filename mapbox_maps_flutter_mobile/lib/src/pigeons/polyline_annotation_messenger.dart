@@ -28,7 +28,7 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.index);
     } else if (value is LineString) {
       buffer.putUint8(134);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is PolylineAnnotation) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
@@ -60,7 +60,7 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : LineTranslateAnchor.values[value];
       case 134:
         return LineString.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 135:
         return PolylineAnnotation.decode(readValue(buffer)!);

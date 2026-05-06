@@ -103,7 +103,7 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.index);
     } else if (value is Point) {
       buffer.putUint8(133);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is StylePackLoadOptions) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
@@ -162,7 +162,7 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : _TileStoreOptionsKey.values[value];
       case 133:
         return Point.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 134:
         return StylePackLoadOptions.decode(readValue(buffer)!);

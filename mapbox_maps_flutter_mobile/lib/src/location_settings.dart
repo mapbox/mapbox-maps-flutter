@@ -37,15 +37,8 @@ class LocationSettings implements LocationSettingsPlatformInterface {
   }
 }
 
-/// Default 2D location indicator appearance.
-class DefaultLocationPuck2D extends LocationPuck2D {
-  /// Creates an instance of the default 2D location indicator,
-  /// allowing to customize apects of it([topImage], [bearingImage], [opacity] etc.).
-  DefaultLocationPuck2D({
-    super.topImage,
-    super.bearingImage,
-    super.shadowImage,
-    super.scaleExpression,
-    super.opacity,
-  });
-}
+// `DefaultLocationPuck2D` was lifted to
+// `packages/mapbox_maps_flutter_platform_interface/lib/src/default_location_puck_2d.dart`
+// in WS4f when `location_example` needed it from the facade. Mobile's
+// `is DefaultLocationPuck2D` check above continues to work via the
+// platform-interface re-export already imported by mobile's barrel.

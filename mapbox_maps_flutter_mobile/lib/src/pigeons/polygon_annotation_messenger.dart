@@ -19,7 +19,7 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.index);
     } else if (value is Polygon) {
       buffer.putUint8(131);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is PolygonAnnotation) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
@@ -42,7 +42,7 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : FillTranslateAnchor.values[value];
       case 131:
         return Polygon.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 132:
         return PolygonAnnotation.decode(readValue(buffer)!);
