@@ -1,4 +1,4 @@
-### main
+### 2.25.0-alpha.2
 
 * Add `TileStore.setOptionForKey` to allow setting custom tile store options by arbitrary string key, in addition to the existing predefined options (`diskQuota`, `mapboxApiUrl`, `tileUrlTemplate`).
 
