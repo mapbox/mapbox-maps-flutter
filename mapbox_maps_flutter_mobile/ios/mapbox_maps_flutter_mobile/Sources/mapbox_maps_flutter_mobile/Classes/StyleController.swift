@@ -439,24 +439,25 @@ final class StyleController: StyleManager {
         }
     }
 
-    func getStyleImportConfigProperties(importId: String) throws -> [String: StylePropertyValue] {
+    func getStyleImportConfigProperties(importId: String, completion: @escaping (Result<[String: StylePropertyValue], Error>) -> Void) {
         do {
             let styleImportsConfig = try styleManager.getStyleImportConfigProperties(for: importId)
-            return styleImportsConfig.reduce(into: [:]) { partialResult, pair in
+            let mapped = styleImportsConfig.reduce(into: [String: StylePropertyValue]()) { partialResult, pair in
                 let (key, value) = pair
                 partialResult[key] = value.toFLTStylePropertyValue(property: key)
             }
+            completion(.success(mapped))
         } catch let styleError {
-            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)))
         }
     }
 
-    func getStyleImportConfigProperty(importId: String, config: String) throws -> StylePropertyValue {
+    func getStyleImportConfigProperty(importId: String, config: String, completion: @escaping (Result<StylePropertyValue, Error>) -> Void) {
         do {
             let value = try styleManager.getStyleImportConfigProperty(for: importId, config: config)
-            return value.toFLTStylePropertyValue(property: config)
+            completion(.success(value.toFLTStylePropertyValue(property: config)))
         } catch let styleError {
-            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)))
         }
     }
 
@@ -476,33 +477,34 @@ final class StyleController: StyleManager {
         }
     }
 
-    func getFeaturesets() throws -> [FeaturesetDescriptor] {
-        return styleManager.featuresets.map {
-            $0.toFLTFeaturesetDescriptor()
-        }
+    func getFeaturesets(completion: @escaping (Result<[FeaturesetDescriptor], Error>) -> Void) {
+        completion(.success(styleManager.featuresets.map { $0.toFLTFeaturesetDescriptor() }))
     }
 
     // MARK: Style Lights
 
-    func getStyleLights() throws -> [StyleObjectInfo?] {
-        styleManager.allLightIdentifiers.map {
+    func getStyleLights(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void) {
+        let lights = styleManager.allLightIdentifiers.map {
             StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
         }
+        completion(.success(lights))
     }
 
-    func setLight(flatLight: FlatLight) throws {
+    func setLight(flatLight: FlatLight, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             try styleManager.setLights(MapboxMaps.FlatLight(flatLight))
+            completion(.success(()))
         } catch let styleError {
-            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)))
         }
     }
 
-    func setLights(ambientLight: AmbientLight, directionalLight: DirectionalLight) throws {
+    func setLights(ambientLight: AmbientLight, directionalLight: DirectionalLight, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             try styleManager.setLights(ambient: MapboxMaps.AmbientLight(ambientLight), directional: MapboxMaps.DirectionalLight(directionalLight))
+            completion(.success(()))
         } catch let styleError {
-            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)))
         }
     }
 

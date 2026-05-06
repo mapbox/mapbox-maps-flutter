@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart';
 
 import 'style/layer/background_layer.dart';
 import 'style/layer/circle_layer.dart';
@@ -120,7 +121,44 @@ class StyleManager {
   Future<Object> getStyleImportSchema(String importId) =>
       _impl.getStyleImportSchema(importId);
 
+  /// Returns all configuration properties for a style import as a map.
+  Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
+    String importId,
+  ) => _impl.getStyleImportConfigProperties(importId);
+
+  /// Returns a single configuration property for a style import.
+  Future<StylePropertyValue> getStyleImportConfigProperty(
+    String importId,
+    String config,
+  ) => _impl.getStyleImportConfigProperty(importId, config);
+
   // ===== Layers =====
+
+  /// Adds a new style layer from a JSON properties string. Prefer the typed
+  /// [addLayer] / [addLayerAt] helpers when constructing layers from facade
+  /// classes; this raw-JSON form is for callers driving layers from style
+  /// spec strings directly.
+  Future<void> addStyleLayer(String properties, LayerPosition? layerPosition) =>
+      _impl.addStyleLayer(properties, layerPosition);
+
+  /// Adds a persistent style layer from a JSON properties string. Persistent
+  /// layers survive style reloads when the new style does not redefine the
+  /// same layer id. Prefer the typed [addPersistentLayer] helpers for facade
+  /// layer classes.
+  Future<void> addPersistentStyleLayer(
+    String properties,
+    LayerPosition? layerPosition,
+  ) => _impl.addPersistentStyleLayer(properties, layerPosition);
+
+  /// Returns whether the layer with the given id is persistent.
+  Future<bool> isStyleLayerPersistent(String layerId) =>
+      _impl.isStyleLayerPersistent(layerId);
+
+  /// Returns the live value of a single layer property.
+  Future<StylePropertyValue> getStyleLayerProperty(
+    String layerId,
+    String property,
+  ) => _impl.getStyleLayerProperty(layerId, property);
 
   /// Returns all style layers.
   Future<List<StyleObjectInfo?>> getStyleLayers() => _impl.getStyleLayers();
@@ -139,6 +177,12 @@ class StyleManager {
 
   // ===== Sources =====
 
+  /// Adds a new style source from a JSON properties string. Prefer the typed
+  /// [addSource] helper when constructing sources from facade classes; this
+  /// raw-JSON form is for callers driving sources from style spec strings.
+  Future<void> addStyleSource(String sourceId, String properties) =>
+      _impl.addStyleSource(sourceId, properties);
+
   /// Returns all style sources.
   Future<List<StyleObjectInfo?>> getStyleSources() => _impl.getStyleSources();
 
@@ -149,6 +193,29 @@ class StyleManager {
   /// Removes a style source.
   Future<void> removeStyleSource(String sourceId) =>
       _impl.removeStyleSource(sourceId);
+
+  // ===== GeoJSON source partial updates =====
+
+  /// Adds features to a GeoJSON style source.
+  Future<void> addGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) => _impl.addGeoJSONSourceFeatures(sourceId, dataId, features);
+
+  /// Updates existing features in a GeoJSON style source.
+  Future<void> updateGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) => _impl.updateGeoJSONSourceFeatures(sourceId, dataId, features);
+
+  /// Removes features from a GeoJSON style source by id.
+  Future<void> removeGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<String> featureIds,
+  ) => _impl.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds);
 
   // ===== Images =====
 
@@ -176,9 +243,93 @@ class StyleManager {
     content,
   );
 
+  /// Replaces the image data of an existing image-type style source.
+  Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image) =>
+      _impl.updateStyleImageSourceImage(sourceId, image);
+
   /// Removes a style image.
   Future<void> removeStyleImage(String imageId) =>
       _impl.removeStyleImage(imageId);
+
+  // ===== Models =====
+
+  /// Adds a 3D model to the style for use as `model-id` in a model layer.
+  Future<void> addStyleModel(String modelId, String modelUri) =>
+      _impl.addStyleModel(modelId, modelUri);
+
+  /// Removes a 3D model from the style.
+  Future<void> removeStyleModel(String modelId) =>
+      _impl.removeStyleModel(modelId);
+
+  // ===== Lights =====
+
+  /// Returns the current style's lights.
+  Future<List<StyleObjectInfo?>> getStyleLights() => _impl.getStyleLights();
+
+  /// Sets a single flat light source. Use [setLights] for ambient + directional.
+  Future<void> setLight(FlatLight flatLight) => _impl.setLight(flatLight);
+
+  /// Sets ambient + directional lights together. Disables any flat light.
+  Future<void> setLights(
+    AmbientLight ambientLight,
+    DirectionalLight directionalLight,
+  ) => _impl.setLights(ambientLight, directionalLight);
+
+  /// Returns the live value of a single light property.
+  Future<StylePropertyValue> getStyleLightProperty(
+    String id,
+    String property,
+  ) => _impl.getStyleLightProperty(id, property);
+
+  /// Sets a value on a single light property.
+  Future<void> setStyleLightProperty(
+    String id,
+    String property,
+    Object value,
+  ) => _impl.setStyleLightProperty(id, property, value);
+
+  // ===== Terrain property access =====
+
+  /// Returns the live value of a single terrain property.
+  Future<StylePropertyValue> getStyleTerrainProperty(String property) =>
+      _impl.getStyleTerrainProperty(property);
+
+  /// Sets a value on a single terrain property.
+  Future<void> setStyleTerrainProperty(String property, Object value) =>
+      _impl.setStyleTerrainProperty(property, value);
+
+  // ===== Image lookup =====
+
+  /// Returns a previously-added style image, or null when [imageId] is unknown.
+  Future<MbxImage?> getStyleImage(String imageId) =>
+      _impl.getStyleImage(imageId);
+
+  // ===== Custom geometry source invalidation =====
+
+  /// Invalidates a tile in a custom geometry source so it gets re-fetched.
+  Future<void> invalidateStyleCustomGeometrySourceTile(
+    String sourceId,
+    CanonicalTileID tileId,
+  ) => _impl.invalidateStyleCustomGeometrySourceTile(sourceId, tileId);
+
+  /// Invalidates a region in a custom geometry source so its tiles get re-fetched.
+  Future<void> invalidateStyleCustomGeometrySourceRegion(
+    String sourceId,
+    CoordinateBounds bounds,
+  ) => _impl.invalidateStyleCustomGeometrySourceRegion(sourceId, bounds);
+
+  // ===== Style state =====
+
+  /// Returns whether the style is fully loaded.
+  Future<bool> isStyleLoaded() => _impl.isStyleLoaded();
+
+  /// Localizes label text in the style for the given locale, optionally
+  /// scoped to a subset of layers.
+  Future<void> localizeLabels(String locale, List<String>? layerIds) =>
+      _impl.localizeLabels(locale, layerIds);
+
+  /// Returns the featuresets defined by the currently loaded style.
+  Future<List<FeaturesetDescriptor>> getFeaturesets() => _impl.getFeaturesets();
 
   // ===== Projection =====
 
@@ -209,6 +360,13 @@ class StyleManager {
   /// Returns all properties of a source as a JSON string.
   Future<String> getStyleSourceProperties(String sourceId) =>
       _impl.getStyleSourceProperties(sourceId);
+
+  /// Returns the live value of a single source property as a
+  /// [StylePropertyValue] envelope.
+  Future<StylePropertyValue> getStyleSourceProperty(
+    String sourceId,
+    String property,
+  ) => _impl.getStyleSourceProperty(sourceId, property);
 
   /// Sets a source property value from a JSON string.
   Future<void> setStyleSourceProperty(

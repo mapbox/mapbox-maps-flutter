@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -43,6 +45,28 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   int setStyleImportConfigPropertyCallCount = 0;
   int setStyleImportConfigPropertiesCallCount = 0;
   int setStyleTerrainCallCount = 0;
+  int addGeoJSONSourceFeaturesCallCount = 0;
+  int updateGeoJSONSourceFeaturesCallCount = 0;
+  int removeGeoJSONSourceFeaturesCallCount = 0;
+  int addStyleModelCallCount = 0;
+  int removeStyleModelCallCount = 0;
+  int getStyleLightsCallCount = 0;
+  int setLightCallCount = 0;
+  int setLightsCallCount = 0;
+  int getStyleLightPropertyCallCount = 0;
+  int setStyleLightPropertyCallCount = 0;
+  int getStyleTerrainPropertyCallCount = 0;
+  int setStyleTerrainPropertyCallCount = 0;
+  int getStyleImageCallCount = 0;
+  int invalidateStyleCustomGeometrySourceTileCallCount = 0;
+  int invalidateStyleCustomGeometrySourceRegionCallCount = 0;
+  int getStyleImportConfigPropertiesCallCount = 0;
+  int getStyleImportConfigPropertyCallCount = 0;
+  int isStyleLayerPersistentCallCount = 0;
+  int getStyleLayerPropertyCallCount = 0;
+  int isStyleLoadedCallCount = 0;
+  int localizeLabelsCallCount = 0;
+  int getFeaturesetsCallCount = 0;
 
   String? lastProperties;
 
@@ -58,6 +82,18 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   LayerPosition? lastLayerPosition;
   Map<String, Object>? lastConfig;
   Map<String, Object>? lastConfigs;
+  String? lastDataId;
+  String? lastModelId;
+  String? lastModelUri;
+  List<Feature>? lastFeatures;
+  List<String>? lastFeatureIds;
+  FlatLight? lastFlatLight;
+  AmbientLight? lastAmbientLight;
+  DirectionalLight? lastDirectionalLight;
+  CanonicalTileID? lastTileId;
+  CoordinateBounds? lastBounds;
+  String? lastLocale;
+  List<String>? lastLayerIds;
 
   @override
   Future<void> setStyleURI(String uri) async {
@@ -365,6 +401,210 @@ class MockStylePlatformInterface implements StylePlatformInterface {
     setStyleTerrainCallCount++;
     lastJson = properties;
   }
+
+  @override
+  Future<void> addGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) async {
+    addGeoJSONSourceFeaturesCallCount++;
+    lastSourceId = sourceId;
+    lastDataId = dataId;
+    lastFeatures = features;
+  }
+
+  @override
+  Future<void> updateGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) async {
+    updateGeoJSONSourceFeaturesCallCount++;
+    lastSourceId = sourceId;
+    lastDataId = dataId;
+    lastFeatures = features;
+  }
+
+  @override
+  Future<void> removeGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<String> featureIds,
+  ) async {
+    removeGeoJSONSourceFeaturesCallCount++;
+    lastSourceId = sourceId;
+    lastDataId = dataId;
+    lastFeatureIds = featureIds;
+  }
+
+  @override
+  Future<void> addStyleModel(String modelId, String modelUri) async {
+    addStyleModelCallCount++;
+    lastModelId = modelId;
+    lastModelUri = modelUri;
+  }
+
+  @override
+  Future<void> removeStyleModel(String modelId) async {
+    removeStyleModelCallCount++;
+    lastModelId = modelId;
+  }
+
+  @override
+  Future<List<StyleObjectInfo?>> getStyleLights() async {
+    getStyleLightsCallCount++;
+    return [];
+  }
+
+  @override
+  Future<void> setLight(FlatLight flatLight) async {
+    setLightCallCount++;
+    lastFlatLight = flatLight;
+  }
+
+  @override
+  Future<void> setLights(
+    AmbientLight ambientLight,
+    DirectionalLight directionalLight,
+  ) async {
+    setLightsCallCount++;
+    lastAmbientLight = ambientLight;
+    lastDirectionalLight = directionalLight;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleLightProperty(
+    String id,
+    String property,
+  ) async {
+    getStyleLightPropertyCallCount++;
+    lastLayerId = id;
+    lastProperty = property;
+    return StylePropertyValue(
+      value: null,
+      kind: StylePropertyValueKind.UNDEFINED,
+    );
+  }
+
+  @override
+  Future<void> setStyleLightProperty(
+    String id,
+    String property,
+    Object value,
+  ) async {
+    setStyleLightPropertyCallCount++;
+    lastLayerId = id;
+    lastProperty = property;
+    lastValue = value;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleTerrainProperty(String property) async {
+    getStyleTerrainPropertyCallCount++;
+    lastProperty = property;
+    return StylePropertyValue(
+      value: null,
+      kind: StylePropertyValueKind.UNDEFINED,
+    );
+  }
+
+  @override
+  Future<void> setStyleTerrainProperty(String property, Object value) async {
+    setStyleTerrainPropertyCallCount++;
+    lastProperty = property;
+    lastValue = value;
+  }
+
+  @override
+  Future<MbxImage?> getStyleImage(String imageId) async {
+    getStyleImageCallCount++;
+    lastImageId = imageId;
+    return null;
+  }
+
+  @override
+  Future<void> invalidateStyleCustomGeometrySourceTile(
+    String sourceId,
+    CanonicalTileID tileId,
+  ) async {
+    invalidateStyleCustomGeometrySourceTileCallCount++;
+    lastSourceId = sourceId;
+    lastTileId = tileId;
+  }
+
+  @override
+  Future<void> invalidateStyleCustomGeometrySourceRegion(
+    String sourceId,
+    CoordinateBounds bounds,
+  ) async {
+    invalidateStyleCustomGeometrySourceRegionCallCount++;
+    lastSourceId = sourceId;
+    lastBounds = bounds;
+  }
+
+  @override
+  Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
+    String importId,
+  ) async {
+    getStyleImportConfigPropertiesCallCount++;
+    lastImportId = importId;
+    return {};
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleImportConfigProperty(
+    String importId,
+    String config,
+  ) async {
+    getStyleImportConfigPropertyCallCount++;
+    lastImportId = importId;
+    lastProperty = config;
+    return StylePropertyValue(
+      value: null,
+      kind: StylePropertyValueKind.UNDEFINED,
+    );
+  }
+
+  @override
+  Future<bool> isStyleLayerPersistent(String layerId) async {
+    isStyleLayerPersistentCallCount++;
+    lastLayerId = layerId;
+    return false;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleLayerProperty(
+    String layerId,
+    String property,
+  ) async {
+    getStyleLayerPropertyCallCount++;
+    lastLayerId = layerId;
+    lastProperty = property;
+    return StylePropertyValue(
+      value: null,
+      kind: StylePropertyValueKind.UNDEFINED,
+    );
+  }
+
+  @override
+  Future<bool> isStyleLoaded() async {
+    isStyleLoadedCallCount++;
+    return true;
+  }
+
+  @override
+  Future<void> localizeLabels(String locale, List<String>? layerIds) async {
+    localizeLabelsCallCount++;
+    lastLocale = locale;
+    lastLayerIds = layerIds;
+  }
+
+  @override
+  Future<List<FeaturesetDescriptor>> getFeaturesets() async {
+    getFeaturesetsCallCount++;
+    return [];
+  }
 }
 
 void main() {
@@ -492,7 +732,59 @@ void main() {
       expect(mockImpl.lastImportId, 'import-1');
     });
 
+    test('getStyleImportConfigProperties delegates to interface', () async {
+      final result = await style.getStyleImportConfigProperties('import-1');
+
+      expect(mockImpl.getStyleImportConfigPropertiesCallCount, 1);
+      expect(mockImpl.lastImportId, 'import-1');
+      expect(result, isEmpty);
+    });
+
+    test('getStyleImportConfigProperty delegates to interface', () async {
+      final result =
+          await style.getStyleImportConfigProperty('import-1', 'theme');
+
+      expect(mockImpl.getStyleImportConfigPropertyCallCount, 1);
+      expect(mockImpl.lastImportId, 'import-1');
+      expect(mockImpl.lastProperty, 'theme');
+      expect(result.kind, StylePropertyValueKind.UNDEFINED);
+    });
+
     // ===== Layers =====
+
+    test('addStyleLayer delegates to interface', () async {
+      await style.addStyleLayer('{"id": "layer-1"}', null);
+
+      expect(mockImpl.addStyleLayerCallCount, 1);
+      expect(mockImpl.lastProperties, '{"id": "layer-1"}');
+      expect(mockImpl.lastLayerPosition, null);
+    });
+
+    test('addPersistentStyleLayer delegates to interface', () async {
+      await style.addPersistentStyleLayer('{"id": "layer-1"}', null);
+
+      expect(mockImpl.addPersistentStyleLayerCallCount, 1);
+      expect(mockImpl.lastProperties, '{"id": "layer-1"}');
+      expect(mockImpl.lastLayerPosition, null);
+    });
+
+    test('isStyleLayerPersistent delegates to interface', () async {
+      final result = await style.isStyleLayerPersistent('layer-1');
+
+      expect(mockImpl.isStyleLayerPersistentCallCount, 1);
+      expect(mockImpl.lastLayerId, 'layer-1');
+      expect(result, false);
+    });
+
+    test('getStyleLayerProperty delegates to interface', () async {
+      final result =
+          await style.getStyleLayerProperty('layer-1', 'visibility');
+
+      expect(mockImpl.getStyleLayerPropertyCallCount, 1);
+      expect(mockImpl.lastLayerId, 'layer-1');
+      expect(mockImpl.lastProperty, 'visibility');
+      expect(result.kind, StylePropertyValueKind.UNDEFINED);
+    });
 
     test('getStyleLayers delegates to interface', () async {
       final result = await style.getStyleLayers();
@@ -525,6 +817,14 @@ void main() {
 
     // ===== Sources =====
 
+    test('addStyleSource delegates to interface', () async {
+      await style.addStyleSource('source-1', '{"type": "geojson"}');
+
+      expect(mockImpl.addStyleSourceCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastProperties, '{"type": "geojson"}');
+    });
+
     test('getStyleSources delegates to interface', () async {
       final result = await style.getStyleSources();
 
@@ -547,6 +847,45 @@ void main() {
       expect(mockImpl.lastSourceId, 'source-1');
     });
 
+    // ===== GeoJSON source partial updates =====
+
+    test('addGeoJSONSourceFeatures delegates to interface', () async {
+      final features = [
+        Feature(id: 'f-1', geometry: Point(coordinates: Position(0, 0))),
+      ];
+      await style.addGeoJSONSourceFeatures('source-1', 'data-1', features);
+
+      expect(mockImpl.addGeoJSONSourceFeaturesCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastDataId, 'data-1');
+      expect(mockImpl.lastFeatures, same(features));
+    });
+
+    test('updateGeoJSONSourceFeatures delegates to interface', () async {
+      final features = [
+        Feature(id: 'f-1', geometry: Point(coordinates: Position(1, 1))),
+      ];
+      await style.updateGeoJSONSourceFeatures('source-1', 'data-1', features);
+
+      expect(mockImpl.updateGeoJSONSourceFeaturesCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastDataId, 'data-1');
+      expect(mockImpl.lastFeatures, same(features));
+    });
+
+    test('removeGeoJSONSourceFeatures delegates to interface', () async {
+      await style.removeGeoJSONSourceFeatures(
+        'source-1',
+        'data-1',
+        ['f-1', 'f-2'],
+      );
+
+      expect(mockImpl.removeGeoJSONSourceFeaturesCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastDataId, 'data-1');
+      expect(mockImpl.lastFeatureIds, ['f-1', 'f-2']);
+    });
+
     // ===== Images =====
 
     test('hasStyleImage delegates to interface', () async {
@@ -562,6 +901,155 @@ void main() {
 
       expect(mockImpl.removeStyleImageCallCount, 1);
       expect(mockImpl.lastImageId, 'marker-icon');
+    });
+
+    test('updateStyleImageSourceImage delegates to interface', () async {
+      final image = MbxImage(width: 1, height: 1, data: Uint8List(4));
+      await style.updateStyleImageSourceImage('source-1', image);
+
+      expect(mockImpl.updateStyleImageSourceImageCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+    });
+
+    // ===== Models =====
+
+    test('addStyleModel delegates to interface', () async {
+      await style.addStyleModel('car', 'asset://models/car.glb');
+
+      expect(mockImpl.addStyleModelCallCount, 1);
+      expect(mockImpl.lastModelId, 'car');
+      expect(mockImpl.lastModelUri, 'asset://models/car.glb');
+    });
+
+    test('removeStyleModel delegates to interface', () async {
+      await style.removeStyleModel('car');
+
+      expect(mockImpl.removeStyleModelCallCount, 1);
+      expect(mockImpl.lastModelId, 'car');
+    });
+
+    // ===== Lights =====
+
+    test('getStyleLights delegates to interface', () async {
+      final result = await style.getStyleLights();
+
+      expect(mockImpl.getStyleLightsCallCount, 1);
+      expect(result, isEmpty);
+    });
+
+    test('setLight delegates to interface', () async {
+      final flatLight = FlatLight(id: 'flat-1');
+      await style.setLight(flatLight);
+
+      expect(mockImpl.setLightCallCount, 1);
+      expect(mockImpl.lastFlatLight, same(flatLight));
+    });
+
+    test('setLights delegates to interface', () async {
+      final ambient = AmbientLight(id: 'ambient-1');
+      final directional = DirectionalLight(id: 'directional-1');
+      await style.setLights(ambient, directional);
+
+      expect(mockImpl.setLightsCallCount, 1);
+      expect(mockImpl.lastAmbientLight, same(ambient));
+      expect(mockImpl.lastDirectionalLight, same(directional));
+    });
+
+    test('getStyleLightProperty delegates to interface', () async {
+      final result = await style.getStyleLightProperty('flat-1', 'intensity');
+
+      expect(mockImpl.getStyleLightPropertyCallCount, 1);
+      expect(mockImpl.lastLayerId, 'flat-1');
+      expect(mockImpl.lastProperty, 'intensity');
+      expect(result.kind, StylePropertyValueKind.UNDEFINED);
+    });
+
+    test('setStyleLightProperty delegates to interface', () async {
+      await style.setStyleLightProperty('flat-1', 'intensity', 0.5);
+
+      expect(mockImpl.setStyleLightPropertyCallCount, 1);
+      expect(mockImpl.lastLayerId, 'flat-1');
+      expect(mockImpl.lastProperty, 'intensity');
+      expect(mockImpl.lastValue, 0.5);
+    });
+
+    // ===== Terrain property access =====
+
+    test('getStyleTerrainProperty delegates to interface', () async {
+      final result = await style.getStyleTerrainProperty('exaggeration');
+
+      expect(mockImpl.getStyleTerrainPropertyCallCount, 1);
+      expect(mockImpl.lastProperty, 'exaggeration');
+      expect(result.kind, StylePropertyValueKind.UNDEFINED);
+    });
+
+    test('setStyleTerrainProperty delegates to interface', () async {
+      await style.setStyleTerrainProperty('exaggeration', 1.5);
+
+      expect(mockImpl.setStyleTerrainPropertyCallCount, 1);
+      expect(mockImpl.lastProperty, 'exaggeration');
+      expect(mockImpl.lastValue, 1.5);
+    });
+
+    // ===== Image lookup =====
+
+    test('getStyleImage delegates to interface', () async {
+      final result = await style.getStyleImage('marker-icon');
+
+      expect(mockImpl.getStyleImageCallCount, 1);
+      expect(mockImpl.lastImageId, 'marker-icon');
+      expect(result, isNull);
+    });
+
+    // ===== Custom geometry source invalidation =====
+
+    test('invalidateStyleCustomGeometrySourceTile delegates to interface',
+        () async {
+      final tileId = CanonicalTileID(z: 10, x: 5, y: 7);
+      await style.invalidateStyleCustomGeometrySourceTile('source-1', tileId);
+
+      expect(mockImpl.invalidateStyleCustomGeometrySourceTileCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastTileId, same(tileId));
+    });
+
+    test('invalidateStyleCustomGeometrySourceRegion delegates to interface',
+        () async {
+      final bounds = CoordinateBounds(
+        southwest: Point(coordinates: Position(0, 0)),
+        northeast: Point(coordinates: Position(1, 1)),
+        infiniteBounds: false,
+      );
+      await style.invalidateStyleCustomGeometrySourceRegion(
+          'source-1', bounds);
+
+      expect(mockImpl.invalidateStyleCustomGeometrySourceRegionCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastBounds, same(bounds));
+    });
+
+    // ===== Style state =====
+
+    test('isStyleLoaded delegates to interface', () async {
+      final result = await style.isStyleLoaded();
+
+      expect(mockImpl.isStyleLoadedCallCount, 1);
+      expect(result, true);
+    });
+
+    test('localizeLabels delegates to interface', () async {
+      await style.localizeLabels('en', ['layer-1']);
+
+      expect(mockImpl.localizeLabelsCallCount, 1);
+      expect(mockImpl.lastLocale, 'en');
+      expect(mockImpl.lastLayerIds, ['layer-1']);
+    });
+
+    test('getFeaturesets delegates to interface', () async {
+      final result = await style.getFeaturesets();
+
+      expect(mockImpl.getFeaturesetsCallCount, 1);
+      expect(result, isEmpty);
     });
 
     // ===== Projection =====
@@ -612,6 +1100,16 @@ void main() {
       expect(mockImpl.getStyleSourcePropertiesCallCount, 1);
       expect(mockImpl.lastSourceId, 'source-1');
       expect(result, '{"type": "geojson"}');
+    });
+
+    test('getStyleSourceProperty delegates to interface', () async {
+      final result =
+          await style.getStyleSourceProperty('source-1', 'data');
+
+      expect(mockImpl.getStyleSourcePropertyCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastProperty, 'data');
+      expect(result.kind, StylePropertyValueKind.UNDEFINED);
     });
 
     test('setStyleSourceProperty delegates to interface', () async {

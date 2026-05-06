@@ -1,3 +1,5 @@
+import 'package:turf/turf.dart';
+
 import '../pigeons/platform_interface_data_types.dart';
 
 /// Abstract interface for managing the map's style.
@@ -75,6 +77,17 @@ abstract interface class StylePlatformInterface {
   /// Returns the schema of a style import.
   Future<Object> getStyleImportSchema(String importId);
 
+  /// Returns all configuration properties for a style import as a map.
+  Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
+    String importId,
+  );
+
+  /// Returns a single configuration property for a style import.
+  Future<StylePropertyValue> getStyleImportConfigProperty(
+    String importId,
+    String config,
+  );
+
   // ===== Layers =====
 
   /// Adds a new style layer from a JSON properties string.
@@ -85,6 +98,15 @@ abstract interface class StylePlatformInterface {
   Future<void> addPersistentStyleLayer(
     String properties,
     LayerPosition? layerPosition,
+  );
+
+  /// Returns whether the layer with the given id is persistent.
+  Future<bool> isStyleLayerPersistent(String layerId);
+
+  /// Returns the live value of a single layer property.
+  Future<StylePropertyValue> getStyleLayerProperty(
+    String layerId,
+    String property,
   );
 
   /// Returns all style layers.
@@ -113,6 +135,32 @@ abstract interface class StylePlatformInterface {
   /// Removes a style source.
   Future<void> removeStyleSource(String sourceId);
 
+  // ===== GeoJSON source partial updates =====
+
+  /// Adds features to a GeoJSON style source. The add operation is scheduled
+  /// and applied on a GeoJSON serialization queue; observe `onSourceDataLoaded`
+  /// to know when changes are visible.
+  Future<void> addGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  );
+
+  /// Updates existing features in a GeoJSON style source. Features are matched
+  /// by id; provide unique ids on every feature to avoid `map-loading-error`.
+  Future<void> updateGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  );
+
+  /// Removes features from a GeoJSON style source by id.
+  Future<void> removeGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<String> featureIds,
+  );
+
   // ===== Images =====
 
   /// Returns whether an image with the given id exists.
@@ -134,6 +182,74 @@ abstract interface class StylePlatformInterface {
 
   /// Removes a style image.
   Future<void> removeStyleImage(String imageId);
+
+  // ===== Models =====
+
+  /// Adds a 3D model to the style for use as `model-id` in a model layer.
+  /// If a model with the same id already exists, it is replaced.
+  Future<void> addStyleModel(String modelId, String modelUri);
+
+  /// Removes a 3D model from the style.
+  Future<void> removeStyleModel(String modelId);
+
+  // ===== Lights =====
+
+  /// Returns the current style's lights.
+  Future<List<StyleObjectInfo?>> getStyleLights();
+
+  /// Sets a single flat light source. Use [setLights] for ambient + directional.
+  Future<void> setLight(FlatLight flatLight);
+
+  /// Sets ambient + directional lights together. Disables any flat light.
+  Future<void> setLights(
+    AmbientLight ambientLight,
+    DirectionalLight directionalLight,
+  );
+
+  /// Returns the live value of a single light property.
+  Future<StylePropertyValue> getStyleLightProperty(String id, String property);
+
+  /// Sets a value on a single light property.
+  Future<void> setStyleLightProperty(String id, String property, Object value);
+
+  // ===== Terrain property access =====
+
+  /// Returns the live value of a single terrain property.
+  Future<StylePropertyValue> getStyleTerrainProperty(String property);
+
+  /// Sets a value on a single terrain property.
+  Future<void> setStyleTerrainProperty(String property, Object value);
+
+  // ===== Image lookup =====
+
+  /// Returns a previously-added style image, or null if none exists for [imageId].
+  Future<MbxImage?> getStyleImage(String imageId);
+
+  // ===== Custom geometry source invalidation =====
+
+  /// Invalidates a tile in a custom geometry source so it gets re-fetched.
+  Future<void> invalidateStyleCustomGeometrySourceTile(
+    String sourceId,
+    CanonicalTileID tileId,
+  );
+
+  /// Invalidates a region in a custom geometry source so its tiles get re-fetched.
+  Future<void> invalidateStyleCustomGeometrySourceRegion(
+    String sourceId,
+    CoordinateBounds bounds,
+  );
+
+  // ===== Style state =====
+
+  /// Returns whether the style is fully loaded.
+  Future<bool> isStyleLoaded();
+
+  /// Localizes label text in the style for the given locale, optionally
+  /// scoped to a subset of layers.
+  Future<void> localizeLabels(String locale, List<String>? layerIds);
+
+  /// Returns the featuresets defined by the currently loaded style.
+  Future<List<FeaturesetDescriptor>> getFeaturesets();
 
   // ===== Projection =====
 

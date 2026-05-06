@@ -158,15 +158,6 @@ enum OfflineRegionDownloadState {
   ACTIVE,
 }
 
-/// Whether extruded geometries are lit relative to the map or viewport.
-enum Anchor {
-  /// The position of the light source is aligned to the rotation of the map.
-  MAP,
-
-  /// The position of the light source is aligned to the rotation of the viewport.
-  VIEWPORT,
-}
-
 /// HTTP defines a set of request methods to indicate the desired action to be performed for a given resource.
 enum HttpMethod {
   /// The GET method requests a representation of the specified resource. Requests using GET should only retrieve data.
@@ -795,288 +786,6 @@ class _RenderedQueryGeometry {
       return true;
     }
     return value == other.value && type == other.type;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
-///
-/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
-class FlatLight {
-  FlatLight({
-    required this.id,
-    this.anchor,
-    this.color,
-    this.colorTransition,
-    this.intensity,
-    this.intensityTransition,
-    this.position,
-    this.positionTransition,
-  });
-
-  /// Unique light name
-  String id;
-
-  /// Whether extruded geometries are lit relative to the map or viewport.
-  Anchor? anchor;
-
-  /// Color tint for lighting extruded geometries.
-  int? color;
-
-  /// Transition property for `color`
-  TransitionOptions? colorTransition;
-
-  /// Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
-  double? intensity;
-
-  /// Transition property for `intensity`
-  TransitionOptions? intensityTransition;
-
-  /// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
-  List<double?>? position;
-
-  /// Transition property for `position`
-  TransitionOptions? positionTransition;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      id,
-      anchor,
-      color,
-      colorTransition,
-      intensity,
-      intensityTransition,
-      position,
-      positionTransition,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static FlatLight decode(Object result) {
-    result as List<Object?>;
-    return FlatLight(
-      id: result[0]! as String,
-      anchor: result[1] as Anchor?,
-      color: result[2] as int?,
-      colorTransition: result[3] as TransitionOptions?,
-      intensity: result[4] as double?,
-      intensityTransition: result[5] as TransitionOptions?,
-      position: (result[6] as List<Object?>?)?.cast<double?>(),
-      positionTransition: result[7] as TransitionOptions?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! FlatLight || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return id == other.id &&
-        anchor == other.anchor &&
-        color == other.color &&
-        colorTransition == other.colorTransition &&
-        intensity == other.intensity &&
-        intensityTransition == other.intensityTransition &&
-        _deepEquals(position, other.position) &&
-        positionTransition == other.positionTransition;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A light that has a direction and is located at infinite, so its rays are parallel. Simulates the sun light and it can cast shadows
-///
-/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
-class DirectionalLight {
-  DirectionalLight({
-    required this.id,
-    this.castShadows,
-    this.color,
-    this.colorTransition,
-    this.direction,
-    this.directionTransition,
-    this.intensity,
-    this.intensityTransition,
-    this.shadowIntensity,
-    this.shadowIntensityTransition,
-    this.shadowDrawBeforeLayer,
-  });
-
-  /// Unique light name
-  String id;
-
-  /// Enable/Disable shadow casting for this light
-  bool? castShadows;
-
-  /// Color of the directional light.
-  int? color;
-
-  /// Transition property for `color`
-  TransitionOptions? colorTransition;
-
-  /// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
-  List<double?>? direction;
-
-  /// Transition property for `direction`
-  TransitionOptions? directionTransition;
-
-  /// A multiplier for the color of the directional light.
-  double? intensity;
-
-  /// Transition property for `intensity`
-  TransitionOptions? intensityTransition;
-
-  /// Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1.
-  double? shadowIntensity;
-
-  /// Transition property for `shadowIntensity`
-  TransitionOptions? shadowIntensityTransition;
-
-  /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
-  String? shadowDrawBeforeLayer;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      id,
-      castShadows,
-      color,
-      colorTransition,
-      direction,
-      directionTransition,
-      intensity,
-      intensityTransition,
-      shadowIntensity,
-      shadowIntensityTransition,
-      shadowDrawBeforeLayer,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static DirectionalLight decode(Object result) {
-    result as List<Object?>;
-    return DirectionalLight(
-      id: result[0]! as String,
-      castShadows: result[1] as bool?,
-      color: result[2] as int?,
-      colorTransition: result[3] as TransitionOptions?,
-      direction: (result[4] as List<Object?>?)?.cast<double?>(),
-      directionTransition: result[5] as TransitionOptions?,
-      intensity: result[6] as double?,
-      intensityTransition: result[7] as TransitionOptions?,
-      shadowIntensity: result[8] as double?,
-      shadowIntensityTransition: result[9] as TransitionOptions?,
-      shadowDrawBeforeLayer: result[10] as String?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! DirectionalLight || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return id == other.id &&
-        castShadows == other.castShadows &&
-        color == other.color &&
-        colorTransition == other.colorTransition &&
-        _deepEquals(direction, other.direction) &&
-        directionTransition == other.directionTransition &&
-        intensity == other.intensity &&
-        intensityTransition == other.intensityTransition &&
-        shadowIntensity == other.shadowIntensity &&
-        shadowIntensityTransition == other.shadowIntensityTransition &&
-        shadowDrawBeforeLayer == other.shadowDrawBeforeLayer;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// An indirect light affecting all objects in the map adding a constant amount of light on them. It has no explicit direction and cannot cast shadows.
-///
-/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
-class AmbientLight {
-  AmbientLight({
-    required this.id,
-    this.color,
-    this.colorTransition,
-    this.intensity,
-    this.intensityTransition,
-  });
-
-  /// Unique light name
-  String id;
-
-  /// Color of the ambient light.
-  int? color;
-
-  /// Transition property for `color`
-  TransitionOptions? colorTransition;
-
-  /// A multiplier for the color of the ambient light.
-  double? intensity;
-
-  /// Transition property for `intensity`
-  TransitionOptions? intensityTransition;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      id,
-      color,
-      colorTransition,
-      intensity,
-      intensityTransition,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static AmbientLight decode(Object result) {
-    result as List<Object?>;
-    return AmbientLight(
-      id: result[0]! as String,
-      color: result[1] as int?,
-      colorTransition: result[2] as TransitionOptions?,
-      intensity: result[3] as double?,
-      intensityTransition: result[4] as TransitionOptions?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! AmbientLight || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return id == other.id &&
-        color == other.color &&
-        colorTransition == other.colorTransition &&
-        intensity == other.intensity &&
-        intensityTransition == other.intensityTransition;
   }
 
   @override
@@ -5348,6 +5057,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param importId Identifier of the style import.
   ///
   /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  @override
   Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
     String importId,
   ) async {
@@ -5389,6 +5099,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param config The style import config name.
   ///
   /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  @override
   Future<StylePropertyValue> getStyleImportConfigProperty(
     String importId,
     String config,
@@ -5619,6 +5330,7 @@ class StyleManager implements StylePlatformInterface {
   ///
   /// @param layerId A style layer identifier.
   /// @return A string describing an error if the operation was not successful, boolean representing state otherwise.
+  @override
   Future<bool> isStyleLayerPersistent(String layerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLayerPersistent$pigeonVar_messageChannelSuffix';
@@ -5800,6 +5512,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param layerId A style layer identifier.
   /// @param property The style layer property name.
   /// @return The `style property value`.
+  @override
   Future<StylePropertyValue> getStyleLayerProperty(
     String layerId,
     String property,
@@ -6171,6 +5884,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param features An array of GeoJSON features to be added to the source.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> addGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
@@ -6227,6 +5941,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param features The GeoJSON features to be updated in the source.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> updateGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
@@ -6283,6 +5998,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param featureIds The Ids of the features that need to be removed from the source.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> removeGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
@@ -6456,6 +6172,7 @@ class StyleManager implements StylePlatformInterface {
   }
 
   /// Returns an ordered list of the current style lights.
+  @override
   Future<List<StyleObjectInfo?>> getStyleLights() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights$pigeonVar_messageChannelSuffix';
@@ -6490,6 +6207,7 @@ class StyleManager implements StylePlatformInterface {
   /// Set global directional lightning.
   ///
   /// @param flatLight The flat light source.
+  @override
   Future<void> setLight(FlatLight flatLight) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLight$pigeonVar_messageChannelSuffix';
@@ -6521,6 +6239,7 @@ class StyleManager implements StylePlatformInterface {
   ///
   /// @param ambientLight The ambient light source.
   /// @param directionalLight The directional light source.
+  @override
   Future<void> setLights(
     AmbientLight ambientLight,
     DirectionalLight directionalLight,
@@ -6556,6 +6275,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param property The style light property name.
   /// @param id The unique identifier of the style light in lights list.
   /// @return The style light property value.
+  @override
   Future<StylePropertyValue> getStyleLightProperty(
     String id,
     String property,
@@ -6598,6 +6318,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param value The style light property value.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleLightProperty(
     String id,
     String property,
@@ -6666,6 +6387,7 @@ class StyleManager implements StylePlatformInterface {
   ///
   /// @param property The style terrain property name.
   /// @return The style terrain property value.
+  @override
   Future<StylePropertyValue> getStyleTerrainProperty(String property) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTerrainProperty$pigeonVar_messageChannelSuffix';
@@ -6704,6 +6426,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param value The style terrain property value.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> setStyleTerrainProperty(String property, Object value) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrainProperty$pigeonVar_messageChannelSuffix';
@@ -6736,6 +6459,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param imageId The identifier of the `image`.
   ///
   /// @return The `image` for the given `imageId`, or empty if no image is associated with the `imageId`.
+  @override
   Future<MbxImage?> getStyleImage(String imageId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImage$pigeonVar_messageChannelSuffix';
@@ -6900,6 +6624,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param modelUri A URI for the model.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> addStyleModel(String modelId, String modelUri) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel$pigeonVar_messageChannelSuffix';
@@ -6932,6 +6657,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param modelId The identifier of the model to remove.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> removeStyleModel(String modelId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel$pigeonVar_messageChannelSuffix';
@@ -6970,6 +6696,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param tileId A `canonical tile id` of the tile.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> invalidateStyleCustomGeometrySourceTile(
     String sourceId,
     CanonicalTileID tileId,
@@ -7006,6 +6733,7 @@ class StyleManager implements StylePlatformInterface {
   /// @param bounds A `coordinate bounds` object.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
+  @override
   Future<void> invalidateStyleCustomGeometrySourceRegion(
     String sourceId,
     CoordinateBounds bounds,
@@ -7043,6 +6771,7 @@ class StyleManager implements StylePlatformInterface {
   ///
   /// @return `true` iff the style JSON contents, the style specified sprite and sources are all loaded, otherwise returns `false`.
   ///
+  @override
   Future<bool> isStyleLoaded() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLoaded$pigeonVar_messageChannelSuffix';
@@ -7137,6 +6866,7 @@ class StyleManager implements StylePlatformInterface {
   ///
   /// @param locale The locale to apply for localization
   /// @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
+  @override
   Future<void> localizeLabels(String locale, List<String>? layerIds) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.localizeLabels$pigeonVar_messageChannelSuffix';
@@ -7167,6 +6897,7 @@ class StyleManager implements StylePlatformInterface {
   /// Returns the available featuresets in the currently loaded style.
   ///
   /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+  @override
   Future<List<FeaturesetDescriptor>> getFeaturesets() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
