@@ -399,11 +399,11 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
     } else if (value is Point) {
-      buffer.putUint8(152);
-      writeValue(buffer, <Object?>[value.toJson()]);
-    } else if (value is Feature) {
       buffer.putUint8(153);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
+    } else if (value is Feature) {
+      buffer.putUint8(154);
+      writeValue(buffer, value.toJson());
     } else if (value is MbxEdgeInsets) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
@@ -615,11 +615,11 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : _MapEvent.values[value];
       case 152:
         return Point.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 153:
         return Feature.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 154:
         return MbxEdgeInsets.decode(readValue(buffer)!);

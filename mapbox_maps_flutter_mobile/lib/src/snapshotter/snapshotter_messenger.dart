@@ -16,7 +16,7 @@ class SnapshotterMessenger_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.index);
     } else if (value is Point) {
       buffer.putUint8(130);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is MbxEdgeInsets) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
@@ -63,7 +63,7 @@ class SnapshotterMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : GlyphsRasterizationMode.values[value];
       case 130:
         return Point.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 131:
         return MbxEdgeInsets.decode(readValue(buffer)!);

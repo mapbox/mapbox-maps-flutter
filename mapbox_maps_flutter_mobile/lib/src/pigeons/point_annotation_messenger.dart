@@ -64,7 +64,7 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
       writeValue(buffer, value.index);
     } else if (value is Point) {
       buffer.putUint8(146);
-      writeValue(buffer, <Object?>[value.toJson()]);
+      writeValue(buffer, value.toJson());
     } else if (value is PointAnnotation) {
       buffer.putUint8(147);
       writeValue(buffer, value.encode());
@@ -132,7 +132,7 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : TextTranslateAnchor.values[value];
       case 146:
         return Point.fromJson(
-          ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
+          (readValue(buffer)! as Map).cast<String, dynamic>(),
         );
       case 147:
         return PointAnnotation.decode(readValue(buffer)!);

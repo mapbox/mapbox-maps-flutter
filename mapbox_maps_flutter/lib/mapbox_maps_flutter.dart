@@ -4,6 +4,7 @@ export 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 export 'package:turf/turf.dart';
 
 export 'src/attribution_settings.dart';
+export 'src/camera_state_extensions.dart';
 export 'src/compass_settings.dart';
 export 'src/gestures_settings.dart';
 export 'src/indoor_selector_settings.dart';
@@ -12,6 +13,7 @@ export 'src/logo_settings.dart';
 export 'src/map_widget.dart';
 export 'src/viewport_controller.dart';
 export 'src/scale_bar_settings.dart';
+export 'src/mapbox_maps_options.dart';
 export 'src/mapbox_options.dart';
 export 'src/http_service.dart';
 export 'src/annotations_manager.dart';

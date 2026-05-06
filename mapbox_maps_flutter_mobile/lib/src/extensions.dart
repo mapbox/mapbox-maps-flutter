@@ -1,37 +1,12 @@
 part of mapbox_maps_flutter_mobile;
 
-extension Conversion on CameraState {
-  CameraOptions toCameraOptions() {
-    return CameraOptions(
-      center: center,
-      padding: padding,
-      zoom: zoom,
-      bearing: bearing,
-      pitch: pitch,
-    );
-  }
-
-  static CameraState fromJson(Map<String, dynamic> json) {
-    return CameraState(
-      center: Point.fromJson(json['center']),
-      padding: _MbxEdgeInsetsCodable.fromJson(json['padding']),
-      zoom: json['zoom'].toDouble(),
-      bearing: json['bearing'].toDouble(),
-      pitch: json['pitch'].toDouble(),
-    );
-  }
-}
+// `extension Conversion on CameraState { CameraOptions toCameraOptions() }`
+// lives in `packages/mapbox_maps_flutter/lib/src/camera_state_extensions.dart`
+// (facade-only — platform-interface doesn't reference it). The
+// extension's previously-unused `static CameraState fromJson(...)` was
+// dropped during the lift (verified no callers in any package).
 
 extension _MbxEdgeInsetsCodable on MbxEdgeInsets {
-  static MbxEdgeInsets fromJson(Map<String, dynamic> json) {
-    return MbxEdgeInsets(
-      top: json["top"].toDouble(),
-      left: json["left"].toDouble(),
-      bottom: json["bottom"].toDouble(),
-      right: json["right"].toDouble(),
-    );
-  }
-
   static MbxEdgeInsets fromEdgeInsets(EdgeInsets edgeInsets) {
     return MbxEdgeInsets(
       top: edgeInsets.top,
