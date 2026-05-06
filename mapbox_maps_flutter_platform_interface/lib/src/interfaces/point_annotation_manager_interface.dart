@@ -1,805 +1,473 @@
 // This file is generated.
-part of mapbox_maps_flutter_mobile;
+import 'package:meta/meta.dart';
 
-/// The PointAnnotationManager to add/update/delete PointAnnotationAnnotations on the map.
-class PointAnnotationManager extends BaseAnnotationManager
-    implements PointAnnotationManagerPlatformInterface {
-  PointAnnotationManager._({
-    required super.id,
-    required super.messenger,
-    required String channelSuffix,
-  }) : _annotationMessenger = _PointAnnotationMessenger(
-         binaryMessenger: messenger,
-         messageChannelSuffix: channelSuffix,
-       ),
-       _channelSuffix = channelSuffix,
-       super._();
+import '../cancelable.dart';
+import '../pigeons/annotation_data_types.dart';
+import '../pigeons/platform_interface_data_types.dart';
+import 'annotations_interface.dart';
 
-  final _PointAnnotationMessenger _annotationMessenger;
-  final String _channelSuffix;
-
+/// Abstract interface for managing point annotations.
+abstract interface class PointAnnotationManagerPlatformInterface
+    implements BaseAnnotationManagerPlatformInterface {
   /// Registers tap event callbacks for the annotations managed by this manager.
-  ///
-  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
-  @override
-  Cancelable tapEvents({required Function(PointAnnotation) onTap}) {
-    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
-        .cast<PointAnnotationInteractionContext>()
-        .listen((data) => onTap(data.annotation))
-        .asCancelable();
-  }
+  Cancelable tapEvents({required Function(PointAnnotation) onTap});
 
   /// Registers long press event callbacks for the annotations managed by this manager.
-  ///
-  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
-  @override
-  Cancelable longPressEvents({required Function(PointAnnotation) onLongPress}) {
-    return _annotationInteractionEvents(
-          instanceName: "$_channelSuffix/$id/long_press",
-        )
-        .cast<PointAnnotationInteractionContext>()
-        .listen((data) => onLongPress(data.annotation))
-        .asCancelable();
-  }
+  Cancelable longPressEvents({required Function(PointAnnotation) onLongPress});
 
   /// Registers drag event callbacks for the annotations managed by this manager.
-  ///
-  /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
-  /// - [onChanged]: Triggered continuously as the annotation is being dragged.
-  /// - [onEnd]: Triggered when the drag gesture ends.
-  ///
-  /// This method returns a [Cancelable] object that can be used to cancel
-  /// the drag event listener when it's no longer needed.
-  /// Example usage:
-  /// ```dart
-  /// manager.dragEvents(
-  ///   onBegin: (annotation) {
-  ///     print("Drag started for: ${annotation.id}");
-  ///   },
-  ///   onChanged: (annotation) {
-  ///     print("Dragging at: ${annotation.geometry}");
-  ///   },
-  ///   onEnd: (annotation) {
-  ///     print("Drag ended at: ${annotation.geometry}");
-  ///   },
-  /// );
-  /// ```
-  @override
   Cancelable dragEvents({
     Function(PointAnnotation)? onBegin,
     Function(PointAnnotation)? onChanged,
     Function(PointAnnotation)? onEnd,
-  }) {
-    return _annotationInteractionEvents(
-      instanceName: "$_channelSuffix/$id/drag",
-    ).cast<PointAnnotationInteractionContext>().listen((data) {
-      switch (data.gestureState) {
-        case GestureState.started when onBegin != null:
-          onBegin(data.annotation);
-        case GestureState.changed when onChanged != null:
-          onChanged(data.annotation);
-        case GestureState.ended when onEnd != null:
-          onEnd(data.annotation);
-        default:
-          break;
-      }
-    }).asCancelable();
-  }
+  });
 
   /// Get all annotations of manager.
-  @override
-  Future<List<PointAnnotation>> getAnnotations() =>
-      _annotationMessenger.getAnnotations(id);
+  Future<List<PointAnnotation>> getAnnotations();
 
   /// Create a new annotation with the option.
-  @override
-  Future<PointAnnotation> create(PointAnnotationOptions annotation) =>
-      _annotationMessenger.create(id, annotation);
+  Future<PointAnnotation> create(PointAnnotationOptions annotation);
 
   /// Create multi annotations with the options.
-  @override
   Future<List<PointAnnotation?>> createMulti(
     List<PointAnnotationOptions> annotations,
-  ) => _annotationMessenger.createMulti(id, annotations);
+  );
 
   /// Update an added annotation with new properties.
-  @override
-  Future<void> update(PointAnnotation annotation) =>
-      _annotationMessenger.update(id, annotation);
+  Future<void> update(PointAnnotation annotation);
 
   /// Delete an added annotation.
-  @override
-  Future<void> delete(PointAnnotation annotation) =>
-      _annotationMessenger.delete(id, annotation);
+  Future<void> delete(PointAnnotation annotation);
 
   /// Delete all the annotation added by this manager.
-  @override
-  Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
+  Future<void> deleteAll();
 
   /// Delete multiple annotations added by this manager.
-  @override
-  Future<void> deleteMulti(List<PointAnnotation> annotations) =>
-      _annotationMessenger.deleteMulti(id, annotations);
+  Future<void> deleteMulti(List<PointAnnotation> annotations);
 
   /// If true, the icon will be visible even if it collides with other previously drawn symbols. Default value: false.
-  @override
-  Future<void> setIconAllowOverlap(bool iconAllowOverlap) =>
-      _annotationMessenger.setIconAllowOverlap(id, iconAllowOverlap);
+  Future<void> setIconAllowOverlap(bool iconAllowOverlap);
 
   /// If true, the icon will be visible even if it collides with other previously drawn symbols. Default value: false.
-  @override
-  Future<bool?> getIconAllowOverlap() =>
-      _annotationMessenger.getIconAllowOverlap(id);
+  Future<bool?> getIconAllowOverlap();
 
   /// Part of the icon placed closest to the anchor. Default value: "center".
-  @override
-  Future<void> setIconAnchor(IconAnchor iconAnchor) =>
-      _annotationMessenger.setIconAnchor(id, iconAnchor);
+  Future<void> setIconAnchor(IconAnchor iconAnchor);
 
   /// Part of the icon placed closest to the anchor. Default value: "center".
-  @override
-  Future<IconAnchor?> getIconAnchor() => _annotationMessenger.getIconAnchor(id);
+  Future<IconAnchor?> getIconAnchor();
 
   /// If true, other symbols can be visible even if they collide with the icon. Default value: false.
-  @override
-  Future<void> setIconIgnorePlacement(bool iconIgnorePlacement) =>
-      _annotationMessenger.setIconIgnorePlacement(id, iconIgnorePlacement);
+  Future<void> setIconIgnorePlacement(bool iconIgnorePlacement);
 
   /// If true, other symbols can be visible even if they collide with the icon. Default value: false.
-  @override
-  Future<bool?> getIconIgnorePlacement() =>
-      _annotationMessenger.getIconIgnorePlacement(id);
+  Future<bool?> getIconIgnorePlacement();
 
   /// Name of image in sprite to use for drawing an image background.
-  @override
-  Future<void> setIconImage(String iconImage) =>
-      _annotationMessenger.setIconImage(id, iconImage);
+  Future<void> setIconImage(String iconImage);
 
   /// Name of image in sprite to use for drawing an image background.
-  @override
-  Future<String?> getIconImage() => _annotationMessenger.getIconImage(id);
+  Future<String?> getIconImage();
 
   /// If true, the icon may be flipped to prevent it from being rendered upside-down. Default value: false.
-  @override
-  Future<void> setIconKeepUpright(bool iconKeepUpright) =>
-      _annotationMessenger.setIconKeepUpright(id, iconKeepUpright);
+  Future<void> setIconKeepUpright(bool iconKeepUpright);
 
   /// If true, the icon may be flipped to prevent it from being rendered upside-down. Default value: false.
-  @override
-  Future<bool?> getIconKeepUpright() =>
-      _annotationMessenger.getIconKeepUpright(id);
+  Future<bool?> getIconKeepUpright();
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up. Default value: [0,0].
-  @override
-  Future<void> setIconOffset(List<double?> iconOffset) =>
-      _annotationMessenger.setIconOffset(id, iconOffset);
+  Future<void> setIconOffset(List<double?> iconOffset);
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up. Default value: [0,0].
-  @override
-  Future<List<double?>?> getIconOffset() =>
-      _annotationMessenger.getIconOffset(id);
+  Future<List<double?>?> getIconOffset();
 
   /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not. Default value: false.
-  @override
-  Future<void> setIconOptional(bool iconOptional) =>
-      _annotationMessenger.setIconOptional(id, iconOptional);
+  Future<void> setIconOptional(bool iconOptional);
 
   /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not. Default value: false.
-  @override
-  Future<bool?> getIconOptional() => _annotationMessenger.getIconOptional(id);
+  Future<bool?> getIconOptional();
 
   /// Size of the additional area around the icon bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of iconPadding is in pixels.
-  @override
-  Future<void> setIconPadding(double iconPadding) =>
-      _annotationMessenger.setIconPadding(id, iconPadding);
+  Future<void> setIconPadding(double iconPadding);
 
   /// Size of the additional area around the icon bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of iconPadding is in pixels.
-  @override
-  Future<double?> getIconPadding() => _annotationMessenger.getIconPadding(id);
+  Future<double?> getIconPadding();
 
   /// Orientation of icon when map is pitched. Default value: "auto".
-  @override
-  Future<void> setIconPitchAlignment(IconPitchAlignment iconPitchAlignment) =>
-      _annotationMessenger.setIconPitchAlignment(id, iconPitchAlignment);
+  Future<void> setIconPitchAlignment(IconPitchAlignment iconPitchAlignment);
 
   /// Orientation of icon when map is pitched. Default value: "auto".
-  @override
-  Future<IconPitchAlignment?> getIconPitchAlignment() =>
-      _annotationMessenger.getIconPitchAlignment(id);
+  Future<IconPitchAlignment?> getIconPitchAlignment();
 
   /// Rotates the icon clockwise. Default value: 0. The unit of iconRotate is in degrees.
-  @override
-  Future<void> setIconRotate(double iconRotate) =>
-      _annotationMessenger.setIconRotate(id, iconRotate);
+  Future<void> setIconRotate(double iconRotate);
 
   /// Rotates the icon clockwise. Default value: 0. The unit of iconRotate is in degrees.
-  @override
-  Future<double?> getIconRotate() => _annotationMessenger.getIconRotate(id);
+  Future<double?> getIconRotate();
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons. Default value: "auto".
-  @override
   Future<void> setIconRotationAlignment(
     IconRotationAlignment iconRotationAlignment,
-  ) => _annotationMessenger.setIconRotationAlignment(id, iconRotationAlignment);
+  );
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons. Default value: "auto".
-  @override
-  Future<IconRotationAlignment?> getIconRotationAlignment() =>
-      _annotationMessenger.getIconRotationAlignment(id);
+  Future<IconRotationAlignment?> getIconRotationAlignment();
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
-  @override
-  Future<void> setIconSize(double iconSize) =>
-      _annotationMessenger.setIconSize(id, iconSize);
+  Future<void> setIconSize(double iconSize);
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
-  @override
-  Future<double?> getIconSize() => _annotationMessenger.getIconSize(id);
+  Future<double?> getIconSize();
 
   /// Limits the possible scaling range for `icon-size`, `icon-halo-width`, `icon-halo-blur` properties to be within [min-scale, max-scale] Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
-  @override
-  Future<void> setIconSizeScaleRange(List<double?> iconSizeScaleRange) =>
-      _annotationMessenger.setIconSizeScaleRange(id, iconSizeScaleRange);
+  Future<void> setIconSizeScaleRange(List<double?> iconSizeScaleRange);
 
   /// Limits the possible scaling range for `icon-size`, `icon-halo-width`, `icon-halo-blur` properties to be within [min-scale, max-scale] Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
-  @override
-  Future<List<double?>?> getIconSizeScaleRange() =>
-      _annotationMessenger.getIconSizeScaleRange(id);
+  Future<List<double?>?> getIconSizeScaleRange();
 
   /// Scales the icon to fit around the associated text. Default value: "none".
-  @override
-  Future<void> setIconTextFit(IconTextFit iconTextFit) =>
-      _annotationMessenger.setIconTextFit(id, iconTextFit);
+  Future<void> setIconTextFit(IconTextFit iconTextFit);
 
   /// Scales the icon to fit around the associated text. Default value: "none".
-  @override
-  Future<IconTextFit?> getIconTextFit() =>
-      _annotationMessenger.getIconTextFit(id);
+  Future<IconTextFit?> getIconTextFit();
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
-  @override
-  Future<void> setIconTextFitPadding(List<double?> iconTextFitPadding) =>
-      _annotationMessenger.setIconTextFitPadding(id, iconTextFitPadding);
+  Future<void> setIconTextFitPadding(List<double?> iconTextFitPadding);
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
-  @override
-  Future<List<double?>?> getIconTextFitPadding() =>
-      _annotationMessenger.getIconTextFitPadding(id);
+  Future<List<double?>?> getIconTextFitPadding();
 
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries. Default value: false.
-  @override
-  Future<void> setSymbolAvoidEdges(bool symbolAvoidEdges) =>
-      _annotationMessenger.setSymbolAvoidEdges(id, symbolAvoidEdges);
+  Future<void> setSymbolAvoidEdges(bool symbolAvoidEdges);
 
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries. Default value: false.
-  @override
-  Future<bool?> getSymbolAvoidEdges() =>
-      _annotationMessenger.getSymbolAvoidEdges(id);
+  Future<bool?> getSymbolAvoidEdges();
 
   /// Selects the base of symbol-elevation. Default value: "ground".
   @experimental
-  @override
   Future<void> setSymbolElevationReference(
     SymbolElevationReference symbolElevationReference,
-  ) => _annotationMessenger.setSymbolElevationReference(
-    id,
-    symbolElevationReference,
   );
 
   /// Selects the base of symbol-elevation. Default value: "ground".
   @experimental
-  @override
-  Future<SymbolElevationReference?> getSymbolElevationReference() =>
-      _annotationMessenger.getSymbolElevationReference(id);
+  Future<SymbolElevationReference?> getSymbolElevationReference();
 
   /// Label placement relative to its geometry. Default value: "point".
-  @override
-  Future<void> setSymbolPlacement(SymbolPlacement symbolPlacement) =>
-      _annotationMessenger.setSymbolPlacement(id, symbolPlacement);
+  Future<void> setSymbolPlacement(SymbolPlacement symbolPlacement);
 
   /// Label placement relative to its geometry. Default value: "point".
-  @override
-  Future<SymbolPlacement?> getSymbolPlacement() =>
-      _annotationMessenger.getSymbolPlacement(id);
+  Future<SymbolPlacement?> getSymbolPlacement();
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
-  @override
-  Future<void> setSymbolSortKey(double symbolSortKey) =>
-      _annotationMessenger.setSymbolSortKey(id, symbolSortKey);
+  Future<void> setSymbolSortKey(double symbolSortKey);
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
-  @override
-  Future<double?> getSymbolSortKey() =>
-      _annotationMessenger.getSymbolSortKey(id);
+  Future<double?> getSymbolSortKey();
 
   /// Distance between two symbol anchors. Default value: 250. Minimum value: 1. The unit of symbolSpacing is in pixels.
-  @override
-  Future<void> setSymbolSpacing(double symbolSpacing) =>
-      _annotationMessenger.setSymbolSpacing(id, symbolSpacing);
+  Future<void> setSymbolSpacing(double symbolSpacing);
 
   /// Distance between two symbol anchors. Default value: 250. Minimum value: 1. The unit of symbolSpacing is in pixels.
-  @override
-  Future<double?> getSymbolSpacing() =>
-      _annotationMessenger.getSymbolSpacing(id);
+  Future<double?> getSymbolSpacing();
 
   /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied. Default value: false.
-  @override
-  Future<void> setSymbolZElevate(bool symbolZElevate) =>
-      _annotationMessenger.setSymbolZElevate(id, symbolZElevate);
+  Future<void> setSymbolZElevate(bool symbolZElevate);
 
   /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied. Default value: false.
-  @override
-  Future<bool?> getSymbolZElevate() =>
-      _annotationMessenger.getSymbolZElevate(id);
+  Future<bool?> getSymbolZElevate();
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`. Default value: "auto".
-  @override
-  Future<void> setSymbolZOrder(SymbolZOrder symbolZOrder) =>
-      _annotationMessenger.setSymbolZOrder(id, symbolZOrder);
+  Future<void> setSymbolZOrder(SymbolZOrder symbolZOrder);
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`. Default value: "auto".
-  @override
-  Future<SymbolZOrder?> getSymbolZOrder() =>
-      _annotationMessenger.getSymbolZOrder(id);
+  Future<SymbolZOrder?> getSymbolZOrder();
 
   /// If true, the text will be visible even if it collides with other previously drawn symbols. Default value: false.
-  @override
-  Future<void> setTextAllowOverlap(bool textAllowOverlap) =>
-      _annotationMessenger.setTextAllowOverlap(id, textAllowOverlap);
+  Future<void> setTextAllowOverlap(bool textAllowOverlap);
 
   /// If true, the text will be visible even if it collides with other previously drawn symbols. Default value: false.
-  @override
-  Future<bool?> getTextAllowOverlap() =>
-      _annotationMessenger.getTextAllowOverlap(id);
+  Future<bool?> getTextAllowOverlap();
 
   /// Part of the text placed closest to the anchor. Default value: "center".
-  @override
-  Future<void> setTextAnchor(TextAnchor textAnchor) =>
-      _annotationMessenger.setTextAnchor(id, textAnchor);
+  Future<void> setTextAnchor(TextAnchor textAnchor);
 
   /// Part of the text placed closest to the anchor. Default value: "center".
-  @override
-  Future<TextAnchor?> getTextAnchor() => _annotationMessenger.getTextAnchor(id);
+  Future<TextAnchor?> getTextAnchor();
 
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored. Default value: "".
-  @override
-  Future<void> setTextField(String textField) =>
-      _annotationMessenger.setTextField(id, textField);
+  Future<void> setTextField(String textField);
 
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored. Default value: "".
-  @override
-  Future<String?> getTextField() => _annotationMessenger.getTextField(id);
+  Future<String?> getTextField();
 
   /// Font stack to use for displaying text.
-  @override
-  Future<void> setTextFont(List<String?> textFont) =>
-      _annotationMessenger.setTextFont(id, textFont);
+  Future<void> setTextFont(List<String?> textFont);
 
   /// Font stack to use for displaying text.
-  @override
-  Future<List<String?>?> getTextFont() => _annotationMessenger.getTextFont(id);
+  Future<List<String?>?> getTextFont();
 
   /// If true, other symbols can be visible even if they collide with the text. Default value: false.
-  @override
-  Future<void> setTextIgnorePlacement(bool textIgnorePlacement) =>
-      _annotationMessenger.setTextIgnorePlacement(id, textIgnorePlacement);
+  Future<void> setTextIgnorePlacement(bool textIgnorePlacement);
 
   /// If true, other symbols can be visible even if they collide with the text. Default value: false.
-  @override
-  Future<bool?> getTextIgnorePlacement() =>
-      _annotationMessenger.getTextIgnorePlacement(id);
+  Future<bool?> getTextIgnorePlacement();
 
   /// Text justification options. Default value: "center".
-  @override
-  Future<void> setTextJustify(TextJustify textJustify) =>
-      _annotationMessenger.setTextJustify(id, textJustify);
+  Future<void> setTextJustify(TextJustify textJustify);
 
   /// Text justification options. Default value: "center".
-  @override
-  Future<TextJustify?> getTextJustify() =>
-      _annotationMessenger.getTextJustify(id);
+  Future<TextJustify?> getTextJustify();
 
   /// If true, the text may be flipped vertically to prevent it from being rendered upside-down. Default value: true.
-  @override
-  Future<void> setTextKeepUpright(bool textKeepUpright) =>
-      _annotationMessenger.setTextKeepUpright(id, textKeepUpright);
+  Future<void> setTextKeepUpright(bool textKeepUpright);
 
   /// If true, the text may be flipped vertically to prevent it from being rendered upside-down. Default value: true.
-  @override
-  Future<bool?> getTextKeepUpright() =>
-      _annotationMessenger.getTextKeepUpright(id);
+  Future<bool?> getTextKeepUpright();
 
   /// Text tracking amount. Default value: 0. The unit of textLetterSpacing is in ems.
-  @override
-  Future<void> setTextLetterSpacing(double textLetterSpacing) =>
-      _annotationMessenger.setTextLetterSpacing(id, textLetterSpacing);
+  Future<void> setTextLetterSpacing(double textLetterSpacing);
 
   /// Text tracking amount. Default value: 0. The unit of textLetterSpacing is in ems.
-  @override
-  Future<double?> getTextLetterSpacing() =>
-      _annotationMessenger.getTextLetterSpacing(id);
+  Future<double?> getTextLetterSpacing();
 
   /// Text leading value for multi-line text. Default value: 1.2. The unit of textLineHeight is in ems.
-  @override
-  Future<void> setTextLineHeight(double textLineHeight) =>
-      _annotationMessenger.setTextLineHeight(id, textLineHeight);
+  Future<void> setTextLineHeight(double textLineHeight);
 
   /// Text leading value for multi-line text. Default value: 1.2. The unit of textLineHeight is in ems.
-  @override
-  Future<double?> getTextLineHeight() =>
-      _annotationMessenger.getTextLineHeight(id);
+  Future<double?> getTextLineHeight();
 
   /// Maximum angle change between adjacent characters. Default value: 45. The unit of textMaxAngle is in degrees.
-  @override
-  Future<void> setTextMaxAngle(double textMaxAngle) =>
-      _annotationMessenger.setTextMaxAngle(id, textMaxAngle);
+  Future<void> setTextMaxAngle(double textMaxAngle);
 
   /// Maximum angle change between adjacent characters. Default value: 45. The unit of textMaxAngle is in degrees.
-  @override
-  Future<double?> getTextMaxAngle() => _annotationMessenger.getTextMaxAngle(id);
+  Future<double?> getTextMaxAngle();
 
   /// The maximum line width for text wrapping. Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
-  @override
-  Future<void> setTextMaxWidth(double textMaxWidth) =>
-      _annotationMessenger.setTextMaxWidth(id, textMaxWidth);
+  Future<void> setTextMaxWidth(double textMaxWidth);
 
   /// The maximum line width for text wrapping. Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
-  @override
-  Future<double?> getTextMaxWidth() => _annotationMessenger.getTextMaxWidth(id);
+  Future<double?> getTextMaxWidth();
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0]. The unit of textOffset is in ems.
-  @override
-  Future<void> setTextOffset(List<double?> textOffset) =>
-      _annotationMessenger.setTextOffset(id, textOffset);
+  Future<void> setTextOffset(List<double?> textOffset);
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0]. The unit of textOffset is in ems.
-  @override
-  Future<List<double?>?> getTextOffset() =>
-      _annotationMessenger.getTextOffset(id);
+  Future<List<double?>?> getTextOffset();
 
   /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not. Default value: false.
-  @override
-  Future<void> setTextOptional(bool textOptional) =>
-      _annotationMessenger.setTextOptional(id, textOptional);
+  Future<void> setTextOptional(bool textOptional);
 
   /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not. Default value: false.
-  @override
-  Future<bool?> getTextOptional() => _annotationMessenger.getTextOptional(id);
+  Future<bool?> getTextOptional();
 
   /// Size of the additional area around the text bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of textPadding is in pixels.
-  @override
-  Future<void> setTextPadding(double textPadding) =>
-      _annotationMessenger.setTextPadding(id, textPadding);
+  Future<void> setTextPadding(double textPadding);
 
   /// Size of the additional area around the text bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of textPadding is in pixels.
-  @override
-  Future<double?> getTextPadding() => _annotationMessenger.getTextPadding(id);
+  Future<double?> getTextPadding();
 
   /// Orientation of text when map is pitched. Default value: "auto".
-  @override
-  Future<void> setTextPitchAlignment(TextPitchAlignment textPitchAlignment) =>
-      _annotationMessenger.setTextPitchAlignment(id, textPitchAlignment);
+  Future<void> setTextPitchAlignment(TextPitchAlignment textPitchAlignment);
 
   /// Orientation of text when map is pitched. Default value: "auto".
-  @override
-  Future<TextPitchAlignment?> getTextPitchAlignment() =>
-      _annotationMessenger.getTextPitchAlignment(id);
+  Future<TextPitchAlignment?> getTextPitchAlignment();
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. Default value: 0. The unit of textRadialOffset is in ems.
-  @override
-  Future<void> setTextRadialOffset(double textRadialOffset) =>
-      _annotationMessenger.setTextRadialOffset(id, textRadialOffset);
+  Future<void> setTextRadialOffset(double textRadialOffset);
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. Default value: 0. The unit of textRadialOffset is in ems.
-  @override
-  Future<double?> getTextRadialOffset() =>
-      _annotationMessenger.getTextRadialOffset(id);
+  Future<double?> getTextRadialOffset();
 
   /// Rotates the text clockwise. Default value: 0. The unit of textRotate is in degrees.
-  @override
-  Future<void> setTextRotate(double textRotate) =>
-      _annotationMessenger.setTextRotate(id, textRotate);
+  Future<void> setTextRotate(double textRotate);
 
   /// Rotates the text clockwise. Default value: 0. The unit of textRotate is in degrees.
-  @override
-  Future<double?> getTextRotate() => _annotationMessenger.getTextRotate(id);
+  Future<double?> getTextRotate();
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text. Default value: "auto".
-  @override
   Future<void> setTextRotationAlignment(
     TextRotationAlignment textRotationAlignment,
-  ) => _annotationMessenger.setTextRotationAlignment(id, textRotationAlignment);
+  );
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text. Default value: "auto".
-  @override
-  Future<TextRotationAlignment?> getTextRotationAlignment() =>
-      _annotationMessenger.getTextRotationAlignment(id);
+  Future<TextRotationAlignment?> getTextRotationAlignment();
 
   /// Font size. Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
-  @override
-  Future<void> setTextSize(double textSize) =>
-      _annotationMessenger.setTextSize(id, textSize);
+  Future<void> setTextSize(double textSize);
 
   /// Font size. Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
-  @override
-  Future<double?> getTextSize() => _annotationMessenger.getTextSize(id);
+  Future<double?> getTextSize();
 
   /// Limits the possible scaling range for `text-size`, `text-halo-width`, `text-halo-blur` properties to be within [min-scale, max-scale] Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
-  @override
-  Future<void> setTextSizeScaleRange(List<double?> textSizeScaleRange) =>
-      _annotationMessenger.setTextSizeScaleRange(id, textSizeScaleRange);
+  Future<void> setTextSizeScaleRange(List<double?> textSizeScaleRange);
 
   /// Limits the possible scaling range for `text-size`, `text-halo-width`, `text-halo-blur` properties to be within [min-scale, max-scale] Default value: [0.8,2]. Minimum value: [0.1,0.1]. Maximum value: [10,10].
   @experimental
-  @override
-  Future<List<double?>?> getTextSizeScaleRange() =>
-      _annotationMessenger.getTextSizeScaleRange(id);
+  Future<List<double?>?> getTextSizeScaleRange();
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property. Default value: "none".
-  @override
-  Future<void> setTextTransform(TextTransform textTransform) =>
-      _annotationMessenger.setTextTransform(id, textTransform);
+  Future<void> setTextTransform(TextTransform textTransform);
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property. Default value: "none".
-  @override
-  Future<TextTransform?> getTextTransform() =>
-      _annotationMessenger.getTextTransform(id);
+  Future<TextTransform?> getTextTransform();
 
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "#000000".
-  @override
-  Future<void> setIconColor(int iconColor) =>
-      _annotationMessenger.setIconColor(id, iconColor);
+  Future<void> setIconColor(int iconColor);
 
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "#000000".
-  @override
-  Future<int?> getIconColor() => _annotationMessenger.getIconColor(id);
+  Future<int?> getIconColor();
 
   /// Increase or reduce the brightness of the symbols. The value is the maximum brightness. Default value: 1. Value range: [0, 1]
-  @override
-  Future<void> setIconColorBrightnessMax(double iconColorBrightnessMax) =>
-      _annotationMessenger.setIconColorBrightnessMax(
-        id,
-        iconColorBrightnessMax,
-      );
+  Future<void> setIconColorBrightnessMax(double iconColorBrightnessMax);
 
   /// Increase or reduce the brightness of the symbols. The value is the maximum brightness. Default value: 1. Value range: [0, 1]
-  @override
-  Future<double?> getIconColorBrightnessMax() =>
-      _annotationMessenger.getIconColorBrightnessMax(id);
+  Future<double?> getIconColorBrightnessMax();
 
   /// Increase or reduce the brightness of the symbols. The value is the minimum brightness. Default value: 0. Value range: [0, 1]
-  @override
-  Future<void> setIconColorBrightnessMin(double iconColorBrightnessMin) =>
-      _annotationMessenger.setIconColorBrightnessMin(
-        id,
-        iconColorBrightnessMin,
-      );
+  Future<void> setIconColorBrightnessMin(double iconColorBrightnessMin);
 
   /// Increase or reduce the brightness of the symbols. The value is the minimum brightness. Default value: 0. Value range: [0, 1]
-  @override
-  Future<double?> getIconColorBrightnessMin() =>
-      _annotationMessenger.getIconColorBrightnessMin(id);
+  Future<double?> getIconColorBrightnessMin();
 
   /// Increase or reduce the contrast of the symbol icon. Default value: 0. Value range: [-1, 1]
-  @override
-  Future<void> setIconColorContrast(double iconColorContrast) =>
-      _annotationMessenger.setIconColorContrast(id, iconColorContrast);
+  Future<void> setIconColorContrast(double iconColorContrast);
 
   /// Increase or reduce the contrast of the symbol icon. Default value: 0. Value range: [-1, 1]
-  @override
-  Future<double?> getIconColorContrast() =>
-      _annotationMessenger.getIconColorContrast(id);
+  Future<double?> getIconColorContrast();
 
   /// Increase or reduce the saturation of the symbol icon. Default value: 0. Value range: [-1, 1]
-  @override
-  Future<void> setIconColorSaturation(double iconColorSaturation) =>
-      _annotationMessenger.setIconColorSaturation(id, iconColorSaturation);
+  Future<void> setIconColorSaturation(double iconColorSaturation);
 
   /// Increase or reduce the saturation of the symbol icon. Default value: 0. Value range: [-1, 1]
-  @override
-  Future<double?> getIconColorSaturation() =>
-      _annotationMessenger.getIconColorSaturation(id);
+  Future<double?> getIconColorSaturation();
 
   /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
-  @override
-  Future<void> setIconEmissiveStrength(double iconEmissiveStrength) =>
-      _annotationMessenger.setIconEmissiveStrength(id, iconEmissiveStrength);
+  Future<void> setIconEmissiveStrength(double iconEmissiveStrength);
 
   /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
-  @override
-  Future<double?> getIconEmissiveStrength() =>
-      _annotationMessenger.getIconEmissiveStrength(id);
+  Future<double?> getIconEmissiveStrength();
 
   /// Fade out the halo towards the outside. Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
-  @override
-  Future<void> setIconHaloBlur(double iconHaloBlur) =>
-      _annotationMessenger.setIconHaloBlur(id, iconHaloBlur);
+  Future<void> setIconHaloBlur(double iconHaloBlur);
 
   /// Fade out the halo towards the outside. Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
-  @override
-  Future<double?> getIconHaloBlur() => _annotationMessenger.getIconHaloBlur(id);
+  Future<double?> getIconHaloBlur();
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "rgba(0, 0, 0, 0)".
-  @override
-  Future<void> setIconHaloColor(int iconHaloColor) =>
-      _annotationMessenger.setIconHaloColor(id, iconHaloColor);
+  Future<void> setIconHaloColor(int iconHaloColor);
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "rgba(0, 0, 0, 0)".
-  @override
-  Future<int?> getIconHaloColor() => _annotationMessenger.getIconHaloColor(id);
+  Future<int?> getIconHaloColor();
 
   /// Distance of halo to the icon outline. Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
-  @override
-  Future<void> setIconHaloWidth(double iconHaloWidth) =>
-      _annotationMessenger.setIconHaloWidth(id, iconHaloWidth);
+  Future<void> setIconHaloWidth(double iconHaloWidth);
 
   /// Distance of halo to the icon outline. Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
-  @override
-  Future<double?> getIconHaloWidth() =>
-      _annotationMessenger.getIconHaloWidth(id);
+  Future<double?> getIconHaloWidth();
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
-  @override
-  Future<void> setIconImageCrossFade(double iconImageCrossFade) =>
-      _annotationMessenger.setIconImageCrossFade(id, iconImageCrossFade);
+  Future<void> setIconImageCrossFade(double iconImageCrossFade);
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector). Default value: 0. Value range: [0, 1]
-  @override
-  Future<double?> getIconImageCrossFade() =>
-      _annotationMessenger.getIconImageCrossFade(id);
+  Future<double?> getIconImageCrossFade();
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only. Default value: 0. Value range: [0, 1]
-  @override
-  Future<void> setIconOcclusionOpacity(double iconOcclusionOpacity) =>
-      _annotationMessenger.setIconOcclusionOpacity(id, iconOcclusionOpacity);
+  Future<void> setIconOcclusionOpacity(double iconOcclusionOpacity);
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only. Default value: 0. Value range: [0, 1]
-  @override
-  Future<double?> getIconOcclusionOpacity() =>
-      _annotationMessenger.getIconOcclusionOpacity(id);
+  Future<double?> getIconOcclusionOpacity();
 
   /// The opacity at which the icon will be drawn. Default value: 1. Value range: [0, 1]
-  @override
-  Future<void> setIconOpacity(double iconOpacity) =>
-      _annotationMessenger.setIconOpacity(id, iconOpacity);
+  Future<void> setIconOpacity(double iconOpacity);
 
   /// The opacity at which the icon will be drawn. Default value: 1. Value range: [0, 1]
-  @override
-  Future<double?> getIconOpacity() => _annotationMessenger.getIconOpacity(id);
+  Future<double?> getIconOpacity();
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of iconTranslate is in pixels.
-  @override
-  Future<void> setIconTranslate(List<double?> iconTranslate) =>
-      _annotationMessenger.setIconTranslate(id, iconTranslate);
+  Future<void> setIconTranslate(List<double?> iconTranslate);
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of iconTranslate is in pixels.
-  @override
-  Future<List<double?>?> getIconTranslate() =>
-      _annotationMessenger.getIconTranslate(id);
+  Future<List<double?>?> getIconTranslate();
 
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
-  @override
-  Future<void> setIconTranslateAnchor(
-    IconTranslateAnchor iconTranslateAnchor,
-  ) => _annotationMessenger.setIconTranslateAnchor(id, iconTranslateAnchor);
+  Future<void> setIconTranslateAnchor(IconTranslateAnchor iconTranslateAnchor);
 
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
-  @override
-  Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
-      _annotationMessenger.getIconTranslateAnchor(id);
+  Future<IconTranslateAnchor?> getIconTranslateAnchor();
 
   /// Specify how opacity in case of being occluded should be applied Default value: "anchor".
-  @override
   Future<void> setOcclusionOpacityMode(
     OcclusionOpacityMode occlusionOpacityMode,
-  ) => _annotationMessenger.setOcclusionOpacityMode(id, occlusionOpacityMode);
+  );
 
   /// Specify how opacity in case of being occluded should be applied Default value: "anchor".
-  @override
-  Future<OcclusionOpacityMode?> getOcclusionOpacityMode() =>
-      _annotationMessenger.getOcclusionOpacityMode(id);
+  Future<OcclusionOpacityMode?> getOcclusionOpacityMode();
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
   @experimental
-  @override
-  Future<void> setSymbolZOffset(double symbolZOffset) =>
-      _annotationMessenger.setSymbolZOffset(id, symbolZOffset);
+  Future<void> setSymbolZOffset(double symbolZOffset);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
   @experimental
-  @override
-  Future<double?> getSymbolZOffset() =>
-      _annotationMessenger.getSymbolZOffset(id);
+  Future<double?> getSymbolZOffset();
 
   /// The color with which the text will be drawn. Default value: "#000000".
-  @override
-  Future<void> setTextColor(int textColor) =>
-      _annotationMessenger.setTextColor(id, textColor);
+  Future<void> setTextColor(int textColor);
 
   /// The color with which the text will be drawn. Default value: "#000000".
-  @override
-  Future<int?> getTextColor() => _annotationMessenger.getTextColor(id);
+  Future<int?> getTextColor();
 
   /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
-  @override
-  Future<void> setTextEmissiveStrength(double textEmissiveStrength) =>
-      _annotationMessenger.setTextEmissiveStrength(id, textEmissiveStrength);
+  Future<void> setTextEmissiveStrength(double textEmissiveStrength);
 
   /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
-  @override
-  Future<double?> getTextEmissiveStrength() =>
-      _annotationMessenger.getTextEmissiveStrength(id);
+  Future<double?> getTextEmissiveStrength();
 
   /// The halo's fadeout distance towards the outside. Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
-  @override
-  Future<void> setTextHaloBlur(double textHaloBlur) =>
-      _annotationMessenger.setTextHaloBlur(id, textHaloBlur);
+  Future<void> setTextHaloBlur(double textHaloBlur);
 
   /// The halo's fadeout distance towards the outside. Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
-  @override
-  Future<double?> getTextHaloBlur() => _annotationMessenger.getTextHaloBlur(id);
+  Future<double?> getTextHaloBlur();
 
   /// The color of the text's halo, which helps it stand out from backgrounds. Default value: "rgba(0, 0, 0, 0)".
-  @override
-  Future<void> setTextHaloColor(int textHaloColor) =>
-      _annotationMessenger.setTextHaloColor(id, textHaloColor);
+  Future<void> setTextHaloColor(int textHaloColor);
 
   /// The color of the text's halo, which helps it stand out from backgrounds. Default value: "rgba(0, 0, 0, 0)".
-  @override
-  Future<int?> getTextHaloColor() => _annotationMessenger.getTextHaloColor(id);
+  Future<int?> getTextHaloColor();
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
-  @override
-  Future<void> setTextHaloWidth(double textHaloWidth) =>
-      _annotationMessenger.setTextHaloWidth(id, textHaloWidth);
+  Future<void> setTextHaloWidth(double textHaloWidth);
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
-  @override
-  Future<double?> getTextHaloWidth() =>
-      _annotationMessenger.getTextHaloWidth(id);
+  Future<double?> getTextHaloWidth();
 
   /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only. Default value: 0. Value range: [0, 1]
-  @override
-  Future<void> setTextOcclusionOpacity(double textOcclusionOpacity) =>
-      _annotationMessenger.setTextOcclusionOpacity(id, textOcclusionOpacity);
+  Future<void> setTextOcclusionOpacity(double textOcclusionOpacity);
 
   /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only. Default value: 0. Value range: [0, 1]
-  @override
-  Future<double?> getTextOcclusionOpacity() =>
-      _annotationMessenger.getTextOcclusionOpacity(id);
+  Future<double?> getTextOcclusionOpacity();
 
   /// The opacity at which the text will be drawn. Default value: 1. Value range: [0, 1]
-  @override
-  Future<void> setTextOpacity(double textOpacity) =>
-      _annotationMessenger.setTextOpacity(id, textOpacity);
+  Future<void> setTextOpacity(double textOpacity);
 
   /// The opacity at which the text will be drawn. Default value: 1. Value range: [0, 1]
-  @override
-  Future<double?> getTextOpacity() => _annotationMessenger.getTextOpacity(id);
+  Future<double?> getTextOpacity();
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of textTranslate is in pixels.
-  @override
-  Future<void> setTextTranslate(List<double?> textTranslate) =>
-      _annotationMessenger.setTextTranslate(id, textTranslate);
+  Future<void> setTextTranslate(List<double?> textTranslate);
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of textTranslate is in pixels.
-  @override
-  Future<List<double?>?> getTextTranslate() =>
-      _annotationMessenger.getTextTranslate(id);
+  Future<List<double?>?> getTextTranslate();
 
   /// Controls the frame of reference for `text-translate`. Default value: "map".
-  @override
-  Future<void> setTextTranslateAnchor(
-    TextTranslateAnchor textTranslateAnchor,
-  ) => _annotationMessenger.setTextTranslateAnchor(id, textTranslateAnchor);
+  Future<void> setTextTranslateAnchor(TextTranslateAnchor textTranslateAnchor);
 
   /// Controls the frame of reference for `text-translate`. Default value: "map".
-  @override
-  Future<TextTranslateAnchor?> getTextTranslateAnchor() =>
-      _annotationMessenger.getTextTranslateAnchor(id);
+  Future<TextTranslateAnchor?> getTextTranslateAnchor();
 }
 
 // End of generated file.

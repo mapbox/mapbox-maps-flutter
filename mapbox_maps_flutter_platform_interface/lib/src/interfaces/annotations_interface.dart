@@ -1,3 +1,8 @@
+import 'circle_annotation_manager_interface.dart';
+import 'point_annotation_manager_interface.dart';
+import 'polygon_annotation_manager_interface.dart';
+import 'polyline_annotation_manager_interface.dart';
+
 /// Abstract interface for the annotation manager factory.
 ///
 /// Provides methods for creating typed annotation managers for each
@@ -39,18 +44,6 @@ abstract interface class BaseAnnotationManagerPlatformInterface {
   String get id;
 }
 
-/// Abstract interface for managing point annotations.
-abstract interface class PointAnnotationManagerPlatformInterface
-    implements BaseAnnotationManagerPlatformInterface {}
-
-/// Abstract interface for managing circle annotations.
-abstract interface class CircleAnnotationManagerPlatformInterface
-    implements BaseAnnotationManagerPlatformInterface {}
-
-/// Abstract interface for managing polyline annotations.
-abstract interface class PolylineAnnotationManagerPlatformInterface
-    implements BaseAnnotationManagerPlatformInterface {}
-
-/// Abstract interface for managing polygon annotations.
-abstract interface class PolygonAnnotationManagerPlatformInterface
-    implements BaseAnnotationManagerPlatformInterface {}
+// {Point, Circle, Polygon, Polyline}AnnotationManagerPlatformInterface
+// live in the generated <kind>_annotation_manager_interface.dart files
+// (ws4c-point + ws4c-rest lifts).

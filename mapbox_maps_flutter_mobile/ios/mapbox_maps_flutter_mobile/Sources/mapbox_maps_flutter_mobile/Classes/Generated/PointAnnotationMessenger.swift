@@ -171,7 +171,7 @@ private class PointAnnotationMessengerPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 146:
-      return Point.fromList(self.readValue() as! [Any?])
+      return Point.fromMap(self.readValue() as! [String: Any])
     case 147:
       return PointAnnotation.fromList(self.readValue() as! [Any?])
     case 148:
@@ -237,7 +237,7 @@ private class PointAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.rawValue)
     } else if let value = value as? Point {
       super.writeByte(146)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? PointAnnotation {
       super.writeByte(147)
       super.writeValue(value.toList())

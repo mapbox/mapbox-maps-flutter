@@ -59,18 +59,18 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
         }
       }
       136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PointDecoder.fromMap(it)
         }
       }
       137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PolygonDecoder.fromMap(it)
         }
       }
       138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          LineStringDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          LineStringDecoder.fromMap(it)
         }
       }
       139.toByte() -> {
@@ -158,15 +158,15 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
       }
       is Point -> {
         stream.write(136)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is Polygon -> {
         stream.write(137)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is LineString -> {
         stream.write(138)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is ScreenCoordinate -> {
         stream.write(139)

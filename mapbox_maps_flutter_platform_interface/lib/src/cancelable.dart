@@ -1,4 +1,4 @@
-part of '../mapbox_maps_flutter_mobile.dart';
+import 'dart:async';
 
 /// A class representing a cancelable operation or task.
 ///
@@ -15,7 +15,7 @@ class Cancelable {
   }
 }
 
-extension on StreamSubscription {
+extension AsCancelable on StreamSubscription {
   /// Cancels the subscription and returns a [Cancelable] object.
   Cancelable asCancelable() {
     return Cancelable._(cancel);

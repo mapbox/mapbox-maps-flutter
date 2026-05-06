@@ -46,8 +46,8 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
         }
       }
       130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PointDecoder.fromMap(it)
         }
       }
       131.toByte() -> {
@@ -116,7 +116,7 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
       }
       is Point -> {
         stream.write(130)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is MbxEdgeInsets -> {
         stream.write(131)

@@ -79,7 +79,7 @@ private class SnapshotterMessengerPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 130:
-      return Point.fromList(self.readValue() as! [Any?])
+      return Point.fromMap(self.readValue() as! [String: Any])
     case 131:
       return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 132:
@@ -115,7 +115,7 @@ private class SnapshotterMessengerPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.rawValue)
     } else if let value = value as? Point {
       super.writeByte(130)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? MbxEdgeInsets {
       super.writeByte(131)
       super.writeValue(value.toList())

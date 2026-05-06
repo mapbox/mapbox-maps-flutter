@@ -1141,13 +1141,13 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         }
       }
       153.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PointDecoder.fromMap(it)
         }
       }
       154.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          FeatureDecoder.fromMap(it)
         }
       }
       155.toByte() -> {
@@ -1478,11 +1478,11 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       is Point -> {
         stream.write(153)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is Feature -> {
         stream.write(154)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is MbxEdgeInsets -> {
         stream.write(155)

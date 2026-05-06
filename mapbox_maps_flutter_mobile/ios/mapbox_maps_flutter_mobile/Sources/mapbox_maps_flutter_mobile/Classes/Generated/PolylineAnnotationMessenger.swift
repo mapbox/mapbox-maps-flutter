@@ -99,7 +99,7 @@ private class PolylineAnnotationMessengerPigeonCodecReader: FlutterStandardReade
       }
       return nil
     case 134:
-      return LineString.fromList(self.readValue() as! [Any?])
+      return LineString.fromMap(self.readValue() as! [String: Any])
     case 135:
       return PolylineAnnotation.fromList(self.readValue() as! [Any?])
     case 136:
@@ -129,7 +129,7 @@ private class PolylineAnnotationMessengerPigeonCodecWriter: FlutterStandardWrite
       super.writeValue(value.rawValue)
     } else if let value = value as? LineString {
       super.writeByte(134)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? PolylineAnnotation {
       super.writeByte(135)
       super.writeValue(value.toList())

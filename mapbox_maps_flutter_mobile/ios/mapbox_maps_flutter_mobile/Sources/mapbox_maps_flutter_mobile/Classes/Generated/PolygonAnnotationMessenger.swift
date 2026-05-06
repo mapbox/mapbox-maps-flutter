@@ -81,7 +81,7 @@ private class PolygonAnnotationMessengerPigeonCodecReader: FlutterStandardReader
       }
       return nil
     case 131:
-      return Polygon.fromList(self.readValue() as! [Any?])
+      return Polygon.fromMap(self.readValue() as! [String: Any])
     case 132:
       return PolygonAnnotation.fromList(self.readValue() as! [Any?])
     case 133:
@@ -102,7 +102,7 @@ private class PolygonAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter
       super.writeValue(value.rawValue)
     } else if let value = value as? Polygon {
       super.writeByte(131)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? PolygonAnnotation {
       super.writeByte(132)
       super.writeValue(value.toList())

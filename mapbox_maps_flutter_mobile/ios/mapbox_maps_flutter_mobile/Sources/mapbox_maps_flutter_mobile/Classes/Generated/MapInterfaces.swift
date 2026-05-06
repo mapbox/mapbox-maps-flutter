@@ -920,9 +920,9 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 153:
-      return Point.fromList(self.readValue() as! [Any?])
+      return Point.fromMap(self.readValue() as! [String: Any])
     case 154:
-      return Feature.fromList(self.readValue() as! [Any?])
+      return Feature.fromMap(self.readValue() as! [String: Any])
     case 155:
       return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 156:
@@ -1095,10 +1095,10 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.rawValue)
     } else if let value = value as? Point {
       super.writeByte(153)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? Feature {
       super.writeByte(154)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? MbxEdgeInsets {
       super.writeByte(155)
       super.writeValue(value.toList())
