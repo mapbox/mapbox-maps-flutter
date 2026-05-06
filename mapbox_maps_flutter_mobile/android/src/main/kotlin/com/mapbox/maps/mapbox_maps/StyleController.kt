@@ -178,20 +178,32 @@ class StyleController(private val context: Context, private val styleManager: Ma
       }
   }
 
-  override fun getStyleImportConfigProperties(importId: String): Map<String, StylePropertyValue> {
-    return styleManager.getStyleImportConfigProperties(importId)
-      .getValueOrElse { throw RuntimeException(it) }
-      .mapValues { it.value.toFLTStylePropertyValue() }
-      .toMutableMap()
+  override fun getStyleImportConfigProperties(
+    importId: String,
+    callback: (Result<Map<String, StylePropertyValue>>) -> Unit,
+  ) {
+    callback(
+      Result.success(
+        styleManager.getStyleImportConfigProperties(importId)
+          .getValueOrElse { throw RuntimeException(it) }
+          .mapValues { it.value.toFLTStylePropertyValue() }
+          .toMutableMap()
+      )
+    )
   }
 
   override fun getStyleImportConfigProperty(
     importId: String,
-    config: String
-  ): StylePropertyValue {
-    return styleManager.getStyleImportConfigProperty(importId, config)
-      .getValueOrElse { throw RuntimeException(it) }
-      .toFLTStylePropertyValue()
+    config: String,
+    callback: (Result<StylePropertyValue>) -> Unit,
+  ) {
+    callback(
+      Result.success(
+        styleManager.getStyleImportConfigProperty(importId, config)
+          .getValueOrElse { throw RuntimeException(it) }
+          .toFLTStylePropertyValue()
+      )
+    )
   }
 
   override fun setStyleImportConfigProperties(importId: String, configs: Map<String, Any>) {
@@ -510,19 +522,24 @@ class StyleController(private val context: Context, private val styleManager: Ma
     )
   }
 
-  override fun getStyleLights(): List<StyleObjectInfo> {
-    return styleManager.getStyleLights().map { it.toFLTStyleObjectInfo() }
+  override fun getStyleLights(callback: (Result<List<StyleObjectInfo?>>) -> Unit) {
+    callback(
+      Result.success(styleManager.getStyleLights().map { it.toFLTStyleObjectInfo() })
+    )
   }
 
-  override fun setLight(flatLight: FlatLight) {
+  override fun setLight(flatLight: FlatLight, callback: (Result<Unit>) -> Unit) {
     styleManager.setLight(flatLight.toFlatLight())
+    callback(Result.success(Unit))
   }
 
   override fun setLights(
     ambientLight: AmbientLight,
-    directionalLight: DirectionalLight
+    directionalLight: DirectionalLight,
+    callback: (Result<Unit>) -> Unit,
   ) {
     styleManager.setLight(ambientLight.toAmbientLight(), directionalLight.toDirectionalLight())
+    callback(Result.success(Unit))
   }
 
   override fun getStyleLightProperty(
@@ -672,8 +689,12 @@ class StyleController(private val context: Context, private val styleManager: Ma
     callback(Result.success(Unit))
   }
 
-  override fun getFeaturesets(): List<FeaturesetDescriptor> {
-    return styleManager.styleManager.styleFeaturesets.map { it.toFLTFeaturesetDescriptor() }
+  override fun getFeaturesets(callback: (Result<List<FeaturesetDescriptor>>) -> Unit) {
+    callback(
+      Result.success(
+        styleManager.styleManager.styleFeaturesets.map { it.toFLTFeaturesetDescriptor() }
+      )
+    )
   }
 
   override fun addStyleImage(

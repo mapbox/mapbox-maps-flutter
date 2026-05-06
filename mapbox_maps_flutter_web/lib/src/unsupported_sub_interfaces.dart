@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:turf/turf.dart' show Point;
+import 'package:turf/turf.dart' show Feature, Point;
 
 import 'annotation/circle_annotation_manager_web.dart';
 import 'annotation/point_annotation_manager_web.dart';
@@ -90,6 +90,15 @@ class UnsupportedStyleWeb implements StylePlatformInterface {
   Future<Object> getStyleImportSchema(String importId) =>
       throw _unimplemented('getStyleImportSchema', 'Style');
   @override
+  Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
+    String importId,
+  ) => throw _unimplemented('getStyleImportConfigProperties', 'Style');
+  @override
+  Future<StylePropertyValue> getStyleImportConfigProperty(
+    String importId,
+    String config,
+  ) => throw _unimplemented('getStyleImportConfigProperty', 'Style');
+  @override
   Future<void> addStyleLayer(String properties, LayerPosition? layerPosition) =>
       throw _unimplemented('addStyleLayer', 'Style');
   @override
@@ -97,6 +106,14 @@ class UnsupportedStyleWeb implements StylePlatformInterface {
     String properties,
     LayerPosition? layerPosition,
   ) => throw _unimplemented('addPersistentStyleLayer', 'Style');
+  @override
+  Future<bool> isStyleLayerPersistent(String layerId) =>
+      throw _unimplemented('isStyleLayerPersistent', 'Style');
+  @override
+  Future<StylePropertyValue> getStyleLayerProperty(
+    String layerId,
+    String property,
+  ) => throw _unimplemented('getStyleLayerProperty', 'Style');
   @override
   Future<List<StyleObjectInfo?>> getStyleLayers() =>
       throw _unimplemented('getStyleLayers', 'Style');
@@ -122,6 +139,24 @@ class UnsupportedStyleWeb implements StylePlatformInterface {
   Future<void> removeStyleSource(String sourceId) =>
       throw _unimplemented('removeStyleSource', 'Style');
   @override
+  Future<void> addGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) => throw _unimplemented('addGeoJSONSourceFeatures', 'Style');
+  @override
+  Future<void> updateGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) => throw _unimplemented('updateGeoJSONSourceFeatures', 'Style');
+  @override
+  Future<void> removeGeoJSONSourceFeatures(
+    String sourceId,
+    String dataId,
+    List<String> featureIds,
+  ) => throw _unimplemented('removeGeoJSONSourceFeatures', 'Style');
+  @override
   Future<bool> hasStyleImage(String imageId) =>
       throw _unimplemented('hasStyleImage', 'Style');
   @override
@@ -140,6 +175,65 @@ class UnsupportedStyleWeb implements StylePlatformInterface {
   @override
   Future<void> removeStyleImage(String imageId) =>
       throw _unimplemented('removeStyleImage', 'Style');
+  @override
+  Future<void> addStyleModel(String modelId, String modelUri) =>
+      throw _unimplemented('addStyleModel', 'Style');
+  @override
+  Future<void> removeStyleModel(String modelId) =>
+      throw _unimplemented('removeStyleModel', 'Style');
+  @override
+  Future<List<StyleObjectInfo?>> getStyleLights() =>
+      throw _unimplemented('getStyleLights', 'Style');
+  @override
+  Future<void> setLight(FlatLight flatLight) =>
+      throw _unimplemented('setLight', 'Style');
+  @override
+  Future<void> setLights(
+    AmbientLight ambientLight,
+    DirectionalLight directionalLight,
+  ) => throw _unimplemented('setLights', 'Style');
+  @override
+  Future<StylePropertyValue> getStyleLightProperty(
+    String id,
+    String property,
+  ) => throw _unimplemented('getStyleLightProperty', 'Style');
+  @override
+  Future<void> setStyleLightProperty(
+    String id,
+    String property,
+    Object value,
+  ) => throw _unimplemented('setStyleLightProperty', 'Style');
+  @override
+  Future<StylePropertyValue> getStyleTerrainProperty(String property) =>
+      throw _unimplemented('getStyleTerrainProperty', 'Style');
+  @override
+  Future<void> setStyleTerrainProperty(String property, Object value) =>
+      throw _unimplemented('setStyleTerrainProperty', 'Style');
+  @override
+  Future<MbxImage?> getStyleImage(String imageId) =>
+      throw _unimplemented('getStyleImage', 'Style');
+  @override
+  Future<void> invalidateStyleCustomGeometrySourceTile(
+    String sourceId,
+    CanonicalTileID tileId,
+  ) => throw _unimplemented('invalidateStyleCustomGeometrySourceTile', 'Style');
+  @override
+  Future<void> invalidateStyleCustomGeometrySourceRegion(
+    String sourceId,
+    CoordinateBounds bounds,
+  ) => throw _unimplemented(
+    'invalidateStyleCustomGeometrySourceRegion',
+    'Style',
+  );
+  @override
+  Future<bool> isStyleLoaded() =>
+      throw _unimplemented('isStyleLoaded', 'Style');
+  @override
+  Future<void> localizeLabels(String locale, List<String>? layerIds) =>
+      throw _unimplemented('localizeLabels', 'Style');
+  @override
+  Future<List<FeaturesetDescriptor>> getFeaturesets() =>
+      throw _unimplemented('getFeaturesets', 'Style');
   @override
   Future<StyleProjection?> getProjection() =>
       throw _unimplemented('getProjection', 'Style');

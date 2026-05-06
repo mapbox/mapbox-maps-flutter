@@ -161,14 +161,6 @@ enum OfflineRegionDownloadState: Int {
   case aCTIVE = 1
 }
 
-/// Whether extruded geometries are lit relative to the map or viewport.
-enum Anchor: Int {
-  /// The position of the light source is aligned to the rotation of the map.
-  case mAP = 0
-  /// The position of the light source is aligned to the rotation of the viewport.
-  case vIEWPORT = 1
-}
-
 /// HTTP defines a set of request methods to indicate the desired action to be performed for a given resource.
 enum HttpMethod: Int {
   /// The GET method requests a representation of the specified resource. Requests using GET should only retrieve data.
@@ -588,186 +580,6 @@ struct _RenderedQueryGeometry {
     return [
       value,
       type,
-    ]
-  }
-}
-
-/// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
-///
-/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FlatLight {
-  /// Unique light name
-  var id: String
-  /// Whether extruded geometries are lit relative to the map or viewport.
-  var anchor: Anchor? = nil
-  /// Color tint for lighting extruded geometries.
-  var color: Int64? = nil
-  /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
-  /// Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
-  var intensity: Double? = nil
-  /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
-  /// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var position: [Double?]? = nil
-  /// Transition property for `position`
-  var positionTransition: TransitionOptions? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FlatLight? {
-    let id = pigeonVar_list[0] as! String
-    let anchor: Anchor? = nilOrValue(pigeonVar_list[1])
-    let color: Int64? = nilOrValue(pigeonVar_list[2])
-    let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[3])
-    let intensity: Double? = nilOrValue(pigeonVar_list[4])
-    let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[5])
-    let position: [Double?]? = nilOrValue(pigeonVar_list[6])
-    let positionTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
-
-    return FlatLight(
-      id: id,
-      anchor: anchor,
-      color: color,
-      colorTransition: colorTransition,
-      intensity: intensity,
-      intensityTransition: intensityTransition,
-      position: position,
-      positionTransition: positionTransition
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      id,
-      anchor,
-      color,
-      colorTransition,
-      intensity,
-      intensityTransition,
-      position,
-      positionTransition,
-    ]
-  }
-}
-
-/// A light that has a direction and is located at infinite, so its rays are parallel. Simulates the sun light and it can cast shadows
-///
-/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct DirectionalLight {
-  /// Unique light name
-  var id: String
-  /// Enable/Disable shadow casting for this light
-  var castShadows: Bool? = nil
-  /// Color of the directional light.
-  var color: Int64? = nil
-  /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
-  /// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var direction: [Double?]? = nil
-  /// Transition property for `direction`
-  var directionTransition: TransitionOptions? = nil
-  /// A multiplier for the color of the directional light.
-  var intensity: Double? = nil
-  /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
-  /// Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1.
-  var shadowIntensity: Double? = nil
-  /// Transition property for `shadowIntensity`
-  var shadowIntensityTransition: TransitionOptions? = nil
-  /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
-  var shadowDrawBeforeLayer: String? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> DirectionalLight? {
-    let id = pigeonVar_list[0] as! String
-    let castShadows: Bool? = nilOrValue(pigeonVar_list[1])
-    let color: Int64? = nilOrValue(pigeonVar_list[2])
-    let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[3])
-    let direction: [Double?]? = nilOrValue(pigeonVar_list[4])
-    let directionTransition: TransitionOptions? = nilOrValue(pigeonVar_list[5])
-    let intensity: Double? = nilOrValue(pigeonVar_list[6])
-    let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
-    let shadowIntensity: Double? = nilOrValue(pigeonVar_list[8])
-    let shadowIntensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[9])
-    let shadowDrawBeforeLayer: String? = nilOrValue(pigeonVar_list[10])
-
-    return DirectionalLight(
-      id: id,
-      castShadows: castShadows,
-      color: color,
-      colorTransition: colorTransition,
-      direction: direction,
-      directionTransition: directionTransition,
-      intensity: intensity,
-      intensityTransition: intensityTransition,
-      shadowIntensity: shadowIntensity,
-      shadowIntensityTransition: shadowIntensityTransition,
-      shadowDrawBeforeLayer: shadowDrawBeforeLayer
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      id,
-      castShadows,
-      color,
-      colorTransition,
-      direction,
-      directionTransition,
-      intensity,
-      intensityTransition,
-      shadowIntensity,
-      shadowIntensityTransition,
-      shadowDrawBeforeLayer,
-    ]
-  }
-}
-
-/// An indirect light affecting all objects in the map adding a constant amount of light on them. It has no explicit direction and cannot cast shadows.
-///
-/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct AmbientLight {
-  /// Unique light name
-  var id: String
-  /// Color of the ambient light.
-  var color: Int64? = nil
-  /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
-  /// A multiplier for the color of the ambient light.
-  var intensity: Double? = nil
-  /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> AmbientLight? {
-    let id = pigeonVar_list[0] as! String
-    let color: Int64? = nilOrValue(pigeonVar_list[1])
-    let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[2])
-    let intensity: Double? = nilOrValue(pigeonVar_list[3])
-    let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[4])
-
-    return AmbientLight(
-      id: id,
-      color: color,
-      colorTransition: colorTransition,
-      intensity: intensity,
-      intensityTransition: intensityTransition
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      id,
-      color,
-      colorTransition,
-      intensity,
-      intensityTransition,
     ]
   }
 }
@@ -3725,14 +3537,14 @@ protocol StyleManager {
   /// @param importId Identifier of the style import.
   ///
   /// Returns the style import configuration or a string describing an error if the operation was not successful.
-  func getStyleImportConfigProperties(importId: String) throws -> [String: StylePropertyValue]
+  func getStyleImportConfigProperties(importId: String, completion: @escaping (Result<[String: StylePropertyValue], Error>) -> Void)
   /// Gets the value of style import config.
   ///
   /// @param importId Identifier of the style import.
   /// @param config The style import config name.
   ///
   /// Returns the style import configuration or a string describing an error if the operation was not successful.
-  func getStyleImportConfigProperty(importId: String, config: String) throws -> StylePropertyValue
+  func getStyleImportConfigProperty(importId: String, config: String, completion: @escaping (Result<StylePropertyValue, Error>) -> Void)
   /// Sets style import config.
   /// This method can be used to perform batch update for a style import configurations.
   ///
@@ -3974,16 +3786,16 @@ protocol StyleManager {
   /// @return The list containing the information about existing style source objects.
   func getStyleSources(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void)
   /// Returns an ordered list of the current style lights.
-  func getStyleLights() throws -> [StyleObjectInfo?]
+  func getStyleLights(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void)
   /// Set global directional lightning.
   ///
   /// @param flatLight The flat light source.
-  func setLight(flatLight: FlatLight) throws
+  func setLight(flatLight: FlatLight, completion: @escaping (Result<Void, Error>) -> Void)
   /// Set dynamic lightning.
   ///
   /// @param ambientLight The ambient light source.
   /// @param directionalLight The directional light source.
-  func setLights(ambientLight: AmbientLight, directionalLight: DirectionalLight) throws
+  func setLights(ambientLight: AmbientLight, directionalLight: DirectionalLight, completion: @escaping (Result<Void, Error>) -> Void)
   /// Gets the value of a style light property.
   ///
   /// @param property The style light property name.
@@ -4115,7 +3927,7 @@ protocol StyleManager {
   /// Returns the available featuresets in the currently loaded style.
   ///
   /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
-  func getFeaturesets() throws -> [FeaturesetDescriptor]
+  func getFeaturesets(completion: @escaping (Result<[FeaturesetDescriptor], Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -4429,11 +4241,13 @@ class StyleManagerSetup {
       getStyleImportConfigPropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let importIdArg = args[0] as! String
-        do {
-          let result = try api.getStyleImportConfigProperties(importId: importIdArg)
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
+        api.getStyleImportConfigProperties(importId: importIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {
@@ -4451,11 +4265,13 @@ class StyleManagerSetup {
         let args = message as! [Any?]
         let importIdArg = args[0] as! String
         let configArg = args[1] as! String
-        do {
-          let result = try api.getStyleImportConfigProperty(importId: importIdArg, config: configArg)
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
+        api.getStyleImportConfigProperty(importId: importIdArg, config: configArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {
@@ -5135,11 +4951,13 @@ class StyleManagerSetup {
     let getStyleLightsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleLightsChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getStyleLights()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
+        api.getStyleLights { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {
@@ -5153,11 +4971,13 @@ class StyleManagerSetup {
       setLightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let flatLightArg = args[0] as! FlatLight
-        do {
-          try api.setLight(flatLight: flatLightArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
+        api.setLight(flatLight: flatLightArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {
@@ -5173,11 +4993,13 @@ class StyleManagerSetup {
         let args = message as! [Any?]
         let ambientLightArg = args[0] as! AmbientLight
         let directionalLightArg = args[1] as! DirectionalLight
-        do {
-          try api.setLights(ambientLight: ambientLightArg, directionalLight: directionalLightArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
+        api.setLights(ambientLight: ambientLightArg, directionalLight: directionalLightArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {
@@ -5595,11 +5417,13 @@ class StyleManagerSetup {
     let getFeaturesetsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFeaturesetsChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getFeaturesets()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
+        api.getFeaturesets { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {

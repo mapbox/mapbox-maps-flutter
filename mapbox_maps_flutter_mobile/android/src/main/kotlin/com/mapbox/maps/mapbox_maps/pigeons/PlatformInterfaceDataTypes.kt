@@ -187,6 +187,20 @@ enum class StylePropertyValueKind(val raw: Int) {
   }
 }
 
+/** Whether extruded geometries are lit relative to the map or viewport. */
+enum class Anchor(val raw: Int) {
+  /** The position of the light source is aligned to the rotation of the map. */
+  MAP(0),
+  /** The position of the light source is aligned to the rotation of the viewport. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): Anchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** Orientation of background layer. */
 enum class BackgroundPitchAlignment(val raw: Int) {
   /** The background is aligned to the plane of the map. */
@@ -2306,6 +2320,216 @@ data class ImageContent(
       top == other.top &&
       right == other.right &&
       bottom == other.bottom
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
+ *
+ * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FlatLight(
+  /** Unique light name */
+  val id: String,
+  /** Whether extruded geometries are lit relative to the map or viewport. */
+  val anchor: Anchor? = null,
+  /** Color tint for lighting extruded geometries. */
+  val color: Long? = null,
+  /** Transition property for `color` */
+  val colorTransition: TransitionOptions? = null,
+  /** Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast. */
+  val intensity: Double? = null,
+  /** Transition property for `intensity` */
+  val intensityTransition: TransitionOptions? = null,
+  /** Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below). */
+  val position: List<Double?>? = null,
+  /** Transition property for `position` */
+  val positionTransition: TransitionOptions? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FlatLight {
+      val id = pigeonVar_list[0] as String
+      val anchor = pigeonVar_list[1] as Anchor?
+      val color = pigeonVar_list[2] as Long?
+      val colorTransition = pigeonVar_list[3] as TransitionOptions?
+      val intensity = pigeonVar_list[4] as Double?
+      val intensityTransition = pigeonVar_list[5] as TransitionOptions?
+      val position = pigeonVar_list[6] as List<Double?>?
+      val positionTransition = pigeonVar_list[7] as TransitionOptions?
+      return FlatLight(id, anchor, color, colorTransition, intensity, intensityTransition, position, positionTransition)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      anchor,
+      color,
+      colorTransition,
+      intensity,
+      intensityTransition,
+      position,
+      positionTransition,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is FlatLight) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return id == other.id &&
+      anchor == other.anchor &&
+      color == other.color &&
+      colorTransition == other.colorTransition &&
+      intensity == other.intensity &&
+      intensityTransition == other.intensityTransition &&
+      deepEqualsPlatformInterfaceDataTypes(position, other.position) &&
+      positionTransition == other.positionTransition
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A light that has a direction and is located at infinite, so its rays are parallel. Simulates the sun light and it can cast shadows
+ *
+ * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class DirectionalLight(
+  /** Unique light name */
+  val id: String,
+  /** Enable/Disable shadow casting for this light */
+  val castShadows: Boolean? = null,
+  /** Color of the directional light. */
+  val color: Long? = null,
+  /** Transition property for `color` */
+  val colorTransition: TransitionOptions? = null,
+  /** Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below). */
+  val direction: List<Double?>? = null,
+  /** Transition property for `direction` */
+  val directionTransition: TransitionOptions? = null,
+  /** A multiplier for the color of the directional light. */
+  val intensity: Double? = null,
+  /** Transition property for `intensity` */
+  val intensityTransition: TransitionOptions? = null,
+  /** Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1. */
+  val shadowIntensity: Double? = null,
+  /** Transition property for `shadowIntensity` */
+  val shadowIntensityTransition: TransitionOptions? = null,
+  /** Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain. */
+  val shadowDrawBeforeLayer: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): DirectionalLight {
+      val id = pigeonVar_list[0] as String
+      val castShadows = pigeonVar_list[1] as Boolean?
+      val color = pigeonVar_list[2] as Long?
+      val colorTransition = pigeonVar_list[3] as TransitionOptions?
+      val direction = pigeonVar_list[4] as List<Double?>?
+      val directionTransition = pigeonVar_list[5] as TransitionOptions?
+      val intensity = pigeonVar_list[6] as Double?
+      val intensityTransition = pigeonVar_list[7] as TransitionOptions?
+      val shadowIntensity = pigeonVar_list[8] as Double?
+      val shadowIntensityTransition = pigeonVar_list[9] as TransitionOptions?
+      val shadowDrawBeforeLayer = pigeonVar_list[10] as String?
+      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition, shadowDrawBeforeLayer)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      castShadows,
+      color,
+      colorTransition,
+      direction,
+      directionTransition,
+      intensity,
+      intensityTransition,
+      shadowIntensity,
+      shadowIntensityTransition,
+      shadowDrawBeforeLayer,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is DirectionalLight) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return id == other.id &&
+      castShadows == other.castShadows &&
+      color == other.color &&
+      colorTransition == other.colorTransition &&
+      deepEqualsPlatformInterfaceDataTypes(direction, other.direction) &&
+      directionTransition == other.directionTransition &&
+      intensity == other.intensity &&
+      intensityTransition == other.intensityTransition &&
+      shadowIntensity == other.shadowIntensity &&
+      shadowIntensityTransition == other.shadowIntensityTransition &&
+      shadowDrawBeforeLayer == other.shadowDrawBeforeLayer
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * An indirect light affecting all objects in the map adding a constant amount of light on them. It has no explicit direction and cannot cast shadows.
+ *
+ * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class AmbientLight(
+  /** Unique light name */
+  val id: String,
+  /** Color of the ambient light. */
+  val color: Long? = null,
+  /** Transition property for `color` */
+  val colorTransition: TransitionOptions? = null,
+  /** A multiplier for the color of the ambient light. */
+  val intensity: Double? = null,
+  /** Transition property for `intensity` */
+  val intensityTransition: TransitionOptions? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): AmbientLight {
+      val id = pigeonVar_list[0] as String
+      val color = pigeonVar_list[1] as Long?
+      val colorTransition = pigeonVar_list[2] as TransitionOptions?
+      val intensity = pigeonVar_list[3] as Double?
+      val intensityTransition = pigeonVar_list[4] as TransitionOptions?
+      return AmbientLight(id, color, colorTransition, intensity, intensityTransition)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      color,
+      colorTransition,
+      intensity,
+      intensityTransition,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is AmbientLight) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return id == other.id &&
+      color == other.color &&
+      colorTransition == other.colorTransition &&
+      intensity == other.intensity &&
+      intensityTransition == other.intensityTransition
   }
 
   override fun hashCode(): Int = toList().hashCode()
