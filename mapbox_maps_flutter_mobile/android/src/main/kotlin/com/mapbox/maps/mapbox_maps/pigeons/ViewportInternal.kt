@@ -369,8 +369,8 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
         }
       }
       135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PointDecoder.fromMap(it)
         }
       }
       136.toByte() -> {
@@ -439,7 +439,7 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
       }
       is Point -> {
         stream.write(135)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is _DefaultViewportTransitionOptions -> {
         stream.write(136)

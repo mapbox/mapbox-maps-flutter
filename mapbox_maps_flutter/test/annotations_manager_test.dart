@@ -6,6 +6,9 @@ class MockPointAnnotationManagerPlatformInterface
   @override
   final String id;
   MockPointAnnotationManagerPlatformInterface(this.id);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
 }
 
 class MockCircleAnnotationManagerPlatformInterface
@@ -13,6 +16,9 @@ class MockCircleAnnotationManagerPlatformInterface
   @override
   final String id;
   MockCircleAnnotationManagerPlatformInterface(this.id);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
 }
 
 class MockPolylineAnnotationManagerPlatformInterface
@@ -20,6 +26,9 @@ class MockPolylineAnnotationManagerPlatformInterface
   @override
   final String id;
   MockPolylineAnnotationManagerPlatformInterface(this.id);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
 }
 
 class MockPolygonAnnotationManagerPlatformInterface
@@ -27,6 +36,9 @@ class MockPolygonAnnotationManagerPlatformInterface
   @override
   final String id;
   MockPolygonAnnotationManagerPlatformInterface(this.id);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
 }
 
 class MockAnnotationManagerPlatformInterface

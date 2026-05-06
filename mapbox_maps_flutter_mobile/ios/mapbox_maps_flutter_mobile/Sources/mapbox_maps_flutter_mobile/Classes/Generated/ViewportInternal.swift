@@ -321,7 +321,7 @@ private class ViewportInternalPigeonCodecReader: FlutterStandardReader {
     case 134:
       return CameraOptions.fromList(self.readValue() as! [Any?])
     case 135:
-      return Point.fromList(self.readValue() as! [Any?])
+      return Point.fromMap(self.readValue() as! [String: Any])
     case 136:
       return _DefaultViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 137:
@@ -364,7 +364,7 @@ private class ViewportInternalPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? Point {
       super.writeByte(135)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? _DefaultViewportTransitionOptions {
       super.writeByte(136)
       super.writeValue(value.toList())

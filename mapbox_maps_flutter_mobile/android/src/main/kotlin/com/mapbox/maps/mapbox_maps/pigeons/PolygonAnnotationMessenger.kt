@@ -47,8 +47,8 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
         }
       }
       131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PolygonDecoder.fromMap(it)
         }
       }
       132.toByte() -> {
@@ -76,7 +76,7 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
       }
       is Polygon -> {
         stream.write(131)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is PolygonAnnotation -> {
         stream.write(132)

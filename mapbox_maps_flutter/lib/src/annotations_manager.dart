@@ -1,6 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
+import 'annotation/circle_annotation_manager_facade.dart';
+import 'annotation/point_annotation_manager_facade.dart';
+import 'annotation/polygon_annotation_manager_facade.dart';
+import 'annotation/polyline_annotation_manager_facade.dart';
+
 /// Factory for creating typed annotation managers.
 class AnnotationManager {
   final AnnotationManagerPlatformInterface _impl;
@@ -63,40 +68,30 @@ class AnnotationManager {
 }
 
 /// Base class for all annotation managers.
-abstract class BaseAnnotationManager {
-  final BaseAnnotationManagerPlatformInterface _impl;
+///
+/// Parameterized on the platform-interface type so subclasses can read
+/// [impl] already typed as their concrete `XxxAnnotationManagerPlatformInterface`
+/// without holding a duplicate field.
+abstract base class BaseAnnotationManager<
+  T extends BaseAnnotationManagerPlatformInterface
+> {
+  final T _impl;
 
   @internal
   BaseAnnotationManager(this._impl);
+
+  /// Platform-interface implementation backing this manager.
+  ///
+  /// Exposed for use by typed subclass wrappers; not part of the public
+  /// customer API. Lint-flagged via [protected] when called from outside
+  /// a subclass.
+  @protected
+  T get impl => _impl;
 
   /// The identifier of the annotation layer backing this manager.
   String get id => _impl.id;
 }
 
-/// Manages point annotations.
-class PointAnnotationManager extends BaseAnnotationManager {
-  @internal
-  PointAnnotationManager(PointAnnotationManagerPlatformInterface super.impl);
-}
-
-/// Manages circle annotations.
-class CircleAnnotationManager extends BaseAnnotationManager {
-  @internal
-  CircleAnnotationManager(CircleAnnotationManagerPlatformInterface super.impl);
-}
-
-/// Manages polyline annotations.
-class PolylineAnnotationManager extends BaseAnnotationManager {
-  @internal
-  PolylineAnnotationManager(
-    PolylineAnnotationManagerPlatformInterface super.impl,
-  );
-}
-
-/// Manages polygon annotations.
-class PolygonAnnotationManager extends BaseAnnotationManager {
-  @internal
-  PolygonAnnotationManager(
-    PolygonAnnotationManagerPlatformInterface super.impl,
-  );
-}
+// {Point, Circle, Polygon, Polyline}AnnotationManager wrappers live in
+// the generated annotation/<kind>_annotation_manager_facade.dart files
+// (ws4c-point + ws4c-rest lifts).

@@ -62,8 +62,8 @@ private open class PolylineAnnotationMessengerPigeonCodec : StandardMessageCodec
         }
       }
       134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          LineStringDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          LineStringDecoder.fromMap(it)
         }
       }
       135.toByte() -> {
@@ -103,7 +103,7 @@ private open class PolylineAnnotationMessengerPigeonCodec : StandardMessageCodec
       }
       is LineString -> {
         stream.write(134)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is PolylineAnnotation -> {
         stream.write(135)

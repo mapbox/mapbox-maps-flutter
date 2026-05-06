@@ -1,72 +1,47 @@
 import Foundation
 import Turf
 
+// Pigeon's default codec wraps custom data classes as `[Any?]` lists.
+// Mobile's Dart-side codec (rewritten in mapbox_dart_generator.dart) uses
+// `turf.<Name>.toJson()` / `turf.<Name>.fromJson()` which produces /
+// consumes a bare GeoJSON `Map<String, dynamic>`
+// (e.g. `{type: "Point", coordinates: [lng, lat]}`).
+//
+// To keep Dart ↔ Swift wire format identical, the Swift codec for these
+// four turf types is rewritten in `mapbox_swift_generator.dart` to call
+// `value.toMap()` / `<Name>.fromMap(...)` instead of `value.toList()` /
+// `<Name>.fromList(...)`. `toMap()` is already provided by
+// Extensions.swift for Point / LineString / Polygon, and Feature ships
+// its own `toMap()`. Here we add the matching `fromMap()` decoders,
+// which deserialize via turf's Codable conformance through
+// JSONEncoder / JSONDecoder.
+
+private func _turfDecode<T: Decodable>(_ map: [String: Any]) -> T? {
+    guard let data = try? JSONSerialization.data(withJSONObject: map, options: []) else { return nil }
+    return try? JSONDecoder().decode(T.self, from: data)
+}
+
 extension Point {
-    static func fromList(_ list: [Any?]) -> Point! {
-        // swiftlint:disable:next force_cast
-        let rawPoint = list.first as! [String: Any]
-        // swiftlint:disable:next force_cast
-        let coordinates = rawPoint["coordinates"] as! [Double]
-
-        return Point(
-            LocationCoordinate2D(latitude: coordinates[1], longitude: coordinates[0])
-        )
-    }
-
-    func toList() -> [Any?] {
-        return [
-            ["coordinates": [coordinates.longitude, coordinates.latitude]]
-        ]
+    static func fromMap(_ map: [String: Any]) -> Point! {
+        return _turfDecode(map)
     }
 }
 
 extension LineString {
-
-    static func fromList(_ list: [Any?]) -> LineString? {
-        guard let raw = list.first as? [String: Any] else { return nil }
-        guard let coordinates = raw["coordinates"] as? [[Double]] else { return nil }
-
-        return LineString(coordinates.map(LocationCoordinate2D.init(values:)))
-    }
-
-    func toList() -> [Any?] {
-        [
-            ["coordinates": coordinates.map(\.values)]
-        ]
+    static func fromMap(_ map: [String: Any]) -> LineString? {
+        return _turfDecode(map)
     }
 }
 
 extension Polygon {
-
-    static func fromList(_ list: [Any?]) -> Polygon? {
-        guard let raw = list.first as? [String: Any] else { return nil }
-        guard let coordinates = raw["coordinates"] as? [[[Double]]] else { return nil }
-
-        return Polygon(coordinates.map { values in
-            values.map(LocationCoordinate2D.init(values:))
-        })
-    }
-
-    func toList() -> [Any?] {
-        [
-            ["coordinates": coordinates.map { $0.map(\.values) }]
-        ]
+    static func fromMap(_ map: [String: Any]) -> Polygon? {
+        return _turfDecode(map)
     }
 }
 
 extension Feature {
-    static func fromList(_ list: [Any?]) -> Feature? {
-        guard let raw = list.first as? [String: Any],
-              let jsonData = try? JSONSerialization.data(withJSONObject: raw, options: []),
-              let feature = try? JSONDecoder().decode(Feature.self, from: jsonData) else { return nil }
-
-        return feature
-    }
-
-    func toList() -> [Any?] {
-        return [
-            self.toMap()
-        ]
+    static func fromMap(_ map: [String: Any]) -> Feature? {
+        return _turfDecode(map)
     }
 }
 

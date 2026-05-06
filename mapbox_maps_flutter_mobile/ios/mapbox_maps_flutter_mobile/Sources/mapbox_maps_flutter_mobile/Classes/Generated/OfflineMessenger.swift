@@ -145,7 +145,7 @@ private class OfflineMessengerPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 133:
-      return Point.fromList(self.readValue() as! [Any?])
+      return Point.fromMap(self.readValue() as! [String: Any])
     case 134:
       return StylePackLoadOptions.fromList(self.readValue() as! [Any?])
     case 135:
@@ -192,7 +192,7 @@ private class OfflineMessengerPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.rawValue)
     } else if let value = value as? Point {
       super.writeByte(133)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? StylePackLoadOptions {
       super.writeByte(134)
       super.writeValue(value.toList())

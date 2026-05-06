@@ -1,286 +1,173 @@
 // This file is generated.
-part of mapbox_maps_flutter_mobile;
+import 'package:flutter/foundation.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:meta/meta.dart';
 
-/// The PolygonAnnotationManager to add/update/delete PolygonAnnotationAnnotations on the map.
-class PolygonAnnotationManager extends BaseAnnotationManager
-    implements PolygonAnnotationManagerPlatformInterface {
-  PolygonAnnotationManager._({
-    required super.id,
-    required super.messenger,
-    required String channelSuffix,
-  }) : _annotationMessenger = _PolygonAnnotationMessenger(
-         binaryMessenger: messenger,
-         messageChannelSuffix: channelSuffix,
-       ),
-       _channelSuffix = channelSuffix,
-       super._();
+import '../annotations_manager.dart' show BaseAnnotationManager;
 
-  final _PolygonAnnotationMessenger _annotationMessenger;
-  final String _channelSuffix;
+/// Manages polygon annotations.
+final class PolygonAnnotationManager
+    extends BaseAnnotationManager<PolygonAnnotationManagerPlatformInterface> {
+  @internal
+  PolygonAnnotationManager(
+    PolygonAnnotationManagerPlatformInterface super.impl,
+  );
 
   /// Registers tap event callbacks for the annotations managed by this manager.
-  ///
-  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
-  @override
-  Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) {
-    return _annotationInteractionEvents(instanceName: "$_channelSuffix/$id/tap")
-        .cast<PolygonAnnotationInteractionContext>()
-        .listen((data) => onTap(data.annotation))
-        .asCancelable();
-  }
+  Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) =>
+      impl.tapEvents(onTap: onTap);
 
   /// Registers long press event callbacks for the annotations managed by this manager.
-  ///
-  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
-  @override
   Cancelable longPressEvents({
     required Function(PolygonAnnotation) onLongPress,
-  }) {
-    return _annotationInteractionEvents(
-          instanceName: "$_channelSuffix/$id/long_press",
-        )
-        .cast<PolygonAnnotationInteractionContext>()
-        .listen((data) => onLongPress(data.annotation))
-        .asCancelable();
-  }
+  }) => impl.longPressEvents(onLongPress: onLongPress);
 
   /// Registers drag event callbacks for the annotations managed by this manager.
-  ///
-  /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
-  /// - [onChanged]: Triggered continuously as the annotation is being dragged.
-  /// - [onEnd]: Triggered when the drag gesture ends.
-  ///
-  /// This method returns a [Cancelable] object that can be used to cancel
-  /// the drag event listener when it's no longer needed.
-  /// Example usage:
-  /// ```dart
-  /// manager.dragEvents(
-  ///   onBegin: (annotation) {
-  ///     print("Drag started for: ${annotation.id}");
-  ///   },
-  ///   onChanged: (annotation) {
-  ///     print("Dragging at: ${annotation.geometry}");
-  ///   },
-  ///   onEnd: (annotation) {
-  ///     print("Drag ended at: ${annotation.geometry}");
-  ///   },
-  /// );
-  /// ```
-  @override
   Cancelable dragEvents({
     Function(PolygonAnnotation)? onBegin,
     Function(PolygonAnnotation)? onChanged,
     Function(PolygonAnnotation)? onEnd,
-  }) {
-    return _annotationInteractionEvents(
-      instanceName: "$_channelSuffix/$id/drag",
-    ).cast<PolygonAnnotationInteractionContext>().listen((data) {
-      switch (data.gestureState) {
-        case GestureState.started when onBegin != null:
-          onBegin(data.annotation);
-        case GestureState.changed when onChanged != null:
-          onChanged(data.annotation);
-        case GestureState.ended when onEnd != null:
-          onEnd(data.annotation);
-        default:
-          break;
-      }
-    }).asCancelable();
-  }
+  }) => impl.dragEvents(onBegin: onBegin, onChanged: onChanged, onEnd: onEnd);
 
   /// Get all annotations of manager.
-  @override
-  Future<List<PolygonAnnotation>> getAnnotations() =>
-      _annotationMessenger.getAnnotations(id);
+  Future<List<PolygonAnnotation>> getAnnotations() => impl.getAnnotations();
 
   /// Create a new annotation with the option.
-  @override
   Future<PolygonAnnotation> create(PolygonAnnotationOptions annotation) =>
-      _annotationMessenger.create(id, annotation);
+      impl.create(annotation);
 
   /// Create multi annotations with the options.
-  @override
   Future<List<PolygonAnnotation?>> createMulti(
     List<PolygonAnnotationOptions> annotations,
-  ) => _annotationMessenger.createMulti(id, annotations);
+  ) => impl.createMulti(annotations);
 
   /// Update an added annotation with new properties.
-  @override
-  Future<void> update(PolygonAnnotation annotation) =>
-      _annotationMessenger.update(id, annotation);
+  Future<void> update(PolygonAnnotation annotation) => impl.update(annotation);
 
   /// Delete an added annotation.
-  @override
-  Future<void> delete(PolygonAnnotation annotation) =>
-      _annotationMessenger.delete(id, annotation);
+  Future<void> delete(PolygonAnnotation annotation) => impl.delete(annotation);
 
   /// Delete all the annotation added by this manager.
-  @override
-  Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
+  Future<void> deleteAll() => impl.deleteAll();
 
   /// Delete multiple annotations added by this manager.
-  @override
   Future<void> deleteMulti(List<PolygonAnnotation> annotations) =>
-      _annotationMessenger.deleteMulti(id, annotations);
+      impl.deleteMulti(annotations);
 
   /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
   @experimental
-  @override
   Future<void> setFillConstructBridgeGuardRail(
     bool fillConstructBridgeGuardRail,
-  ) => _annotationMessenger.setFillConstructBridgeGuardRail(
-    id,
-    fillConstructBridgeGuardRail,
-  );
+  ) => impl.setFillConstructBridgeGuardRail(fillConstructBridgeGuardRail);
 
   /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
   @experimental
-  @override
   Future<bool?> getFillConstructBridgeGuardRail() =>
-      _annotationMessenger.getFillConstructBridgeGuardRail(id);
+      impl.getFillConstructBridgeGuardRail();
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
-  @override
   Future<void> setFillElevationReference(
     FillElevationReference fillElevationReference,
-  ) => _annotationMessenger.setFillElevationReference(
-    id,
-    fillElevationReference,
-  );
+  ) => impl.setFillElevationReference(fillElevationReference);
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
-  @override
   Future<FillElevationReference?> getFillElevationReference() =>
-      _annotationMessenger.getFillElevationReference(id);
+      impl.getFillElevationReference();
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  @override
   Future<void> setFillSortKey(double fillSortKey) =>
-      _annotationMessenger.setFillSortKey(id, fillSortKey);
+      impl.setFillSortKey(fillSortKey);
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  @override
-  Future<double?> getFillSortKey() => _annotationMessenger.getFillSortKey(id);
+  Future<double?> getFillSortKey() => impl.getFillSortKey();
 
   /// Whether or not the fill should be antialiased. Default value: true.
-  @override
   Future<void> setFillAntialias(bool fillAntialias) =>
-      _annotationMessenger.setFillAntialias(id, fillAntialias);
+      impl.setFillAntialias(fillAntialias);
 
   /// Whether or not the fill should be antialiased. Default value: true.
-  @override
-  Future<bool?> getFillAntialias() => _annotationMessenger.getFillAntialias(id);
+  Future<bool?> getFillAntialias() => impl.getFillAntialias();
 
   /// The color of bridge guard rail. Default value: "rgba(241, 236, 225, 255)".
   @experimental
-  @override
   Future<void> setFillBridgeGuardRailColor(int fillBridgeGuardRailColor) =>
-      _annotationMessenger.setFillBridgeGuardRailColor(
-        id,
-        fillBridgeGuardRailColor,
-      );
+      impl.setFillBridgeGuardRailColor(fillBridgeGuardRailColor);
 
   /// The color of bridge guard rail. Default value: "rgba(241, 236, 225, 255)".
   @experimental
-  @override
   Future<int?> getFillBridgeGuardRailColor() =>
-      _annotationMessenger.getFillBridgeGuardRailColor(id);
+      impl.getFillBridgeGuardRailColor();
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. Default value: "#000000".
-  @override
-  Future<void> setFillColor(int fillColor) =>
-      _annotationMessenger.setFillColor(id, fillColor);
+  Future<void> setFillColor(int fillColor) => impl.setFillColor(fillColor);
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. Default value: "#000000".
-  @override
-  Future<int?> getFillColor() => _annotationMessenger.getFillColor(id);
+  Future<int?> getFillColor() => impl.getFillColor();
 
   /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of fillEmissiveStrength is in intensity.
-  @override
   Future<void> setFillEmissiveStrength(double fillEmissiveStrength) =>
-      _annotationMessenger.setFillEmissiveStrength(id, fillEmissiveStrength);
+      impl.setFillEmissiveStrength(fillEmissiveStrength);
 
   /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of fillEmissiveStrength is in intensity.
-  @override
-  Future<double?> getFillEmissiveStrength() =>
-      _annotationMessenger.getFillEmissiveStrength(id);
+  Future<double?> getFillEmissiveStrength() => impl.getFillEmissiveStrength();
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used. Default value: 1. Value range: [0, 1]
-  @override
   Future<void> setFillOpacity(double fillOpacity) =>
-      _annotationMessenger.setFillOpacity(id, fillOpacity);
+      impl.setFillOpacity(fillOpacity);
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used. Default value: 1. Value range: [0, 1]
-  @override
-  Future<double?> getFillOpacity() => _annotationMessenger.getFillOpacity(id);
+  Future<double?> getFillOpacity() => impl.getFillOpacity();
 
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  @override
   Future<void> setFillOutlineColor(int fillOutlineColor) =>
-      _annotationMessenger.setFillOutlineColor(id, fillOutlineColor);
+      impl.setFillOutlineColor(fillOutlineColor);
 
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  @override
-  Future<int?> getFillOutlineColor() =>
-      _annotationMessenger.getFillOutlineColor(id);
+  Future<int?> getFillOutlineColor() => impl.getFillOutlineColor();
 
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  @override
   Future<void> setFillPattern(String fillPattern) =>
-      _annotationMessenger.setFillPattern(id, fillPattern);
+      impl.setFillPattern(fillPattern);
 
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  @override
-  Future<String?> getFillPattern() => _annotationMessenger.getFillPattern(id);
+  Future<String?> getFillPattern() => impl.getFillPattern();
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of fillTranslate is in pixels.
-  @override
   Future<void> setFillTranslate(List<double?> fillTranslate) =>
-      _annotationMessenger.setFillTranslate(id, fillTranslate);
+      impl.setFillTranslate(fillTranslate);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of fillTranslate is in pixels.
-  @override
-  Future<List<double?>?> getFillTranslate() =>
-      _annotationMessenger.getFillTranslate(id);
+  Future<List<double?>?> getFillTranslate() => impl.getFillTranslate();
 
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
-  @override
   Future<void> setFillTranslateAnchor(
     FillTranslateAnchor fillTranslateAnchor,
-  ) => _annotationMessenger.setFillTranslateAnchor(id, fillTranslateAnchor);
+  ) => impl.setFillTranslateAnchor(fillTranslateAnchor);
 
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
-  @override
   Future<FillTranslateAnchor?> getFillTranslateAnchor() =>
-      _annotationMessenger.getFillTranslateAnchor(id);
+      impl.getFillTranslateAnchor();
 
   /// The color of tunnel structures (tunnel entrance and tunnel walls). Default value: "rgba(241, 236, 225, 255)".
   @experimental
-  @override
   Future<void> setFillTunnelStructureColor(int fillTunnelStructureColor) =>
-      _annotationMessenger.setFillTunnelStructureColor(
-        id,
-        fillTunnelStructureColor,
-      );
+      impl.setFillTunnelStructureColor(fillTunnelStructureColor);
 
   /// The color of tunnel structures (tunnel entrance and tunnel walls). Default value: "rgba(241, 236, 225, 255)".
   @experimental
-  @override
   Future<int?> getFillTunnelStructureColor() =>
-      _annotationMessenger.getFillTunnelStructureColor(id);
+      impl.getFillTunnelStructureColor();
 
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
   @experimental
-  @override
   Future<void> setFillZOffset(double fillZOffset) =>
-      _annotationMessenger.setFillZOffset(id, fillZOffset);
+      impl.setFillZOffset(fillZOffset);
 
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
   @experimental
-  @override
-  Future<double?> getFillZOffset() => _annotationMessenger.getFillZOffset(id);
+  Future<double?> getFillZOffset() => impl.getFillZOffset();
 }
 
 // End of generated file.

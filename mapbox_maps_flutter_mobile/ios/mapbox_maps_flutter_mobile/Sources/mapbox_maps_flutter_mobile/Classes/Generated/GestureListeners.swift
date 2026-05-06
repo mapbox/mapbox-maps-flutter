@@ -89,11 +89,11 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 136:
-      return Point.fromList(self.readValue() as! [Any?])
+      return Point.fromMap(self.readValue() as! [String: Any])
     case 137:
-      return Polygon.fromList(self.readValue() as! [Any?])
+      return Polygon.fromMap(self.readValue() as! [String: Any])
     case 138:
-      return LineString.fromList(self.readValue() as! [Any?])
+      return LineString.fromMap(self.readValue() as! [String: Any])
     case 139:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 140:
@@ -145,13 +145,13 @@ private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.rawValue)
     } else if let value = value as? Point {
       super.writeByte(136)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? Polygon {
       super.writeByte(137)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? LineString {
       super.writeByte(138)
-      super.writeValue(value.toList())
+      super.writeValue(value.toMap())
     } else if let value = value as? ScreenCoordinate {
       super.writeByte(139)
       super.writeValue(value.toList())

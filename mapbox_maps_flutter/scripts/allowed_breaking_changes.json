@@ -897,5 +897,61 @@
   {
     "changeDescription": "Projection: Field \"pigeonVar_messageChannelSuffix\" removed",
     "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon messageChannelSuffix field"
+  },
+  {
+    "changeDescription": "BaseAnnotationManager: Number of type parameters changed. Before: \"\" After: \"T\" (required)",
+    "reason": "Parameterized on the platform-interface type so subclasses use super.impl forwarding without holding a duplicate _impl field. Bound: T extends BaseAnnotationManagerPlatformInterface."
+  },
+  {
+    "changeDescription": "BaseAnnotationManager: Field \"impl\" added (required)",
+    "reason": "@protected typed getter exposing the private _impl to subclass wrappers in different files — Dart library-private fields aren't accessible across files even in the same package."
+  },
+  {
+    "changeDescription": "PointAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<PointAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition. Customer code referencing PointAnnotationManager compiles unchanged."
+  },
+  {
+    "changeDescription": "CircleAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<CircleAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "PolygonAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<PolygonAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "PolylineAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<PolylineAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "Interface \"OnCircleAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [CircleAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "Interface \"OnPointAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PointAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "Interface \"OnPolygonAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolygonAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "Interface \"OnPolylineAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolylineAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "CircleAnnotationManager: Method \"addOnCircleAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [CircleAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "PointAnnotationManager: Method \"addOnPointAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PointAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "PolygonAnnotationManager: Method \"addOnPolygonAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolygonAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "PolylineAnnotationManager: Method \"addOnPolylineAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolylineAnnotationManager.tapEvents] instead."
   }
 ]

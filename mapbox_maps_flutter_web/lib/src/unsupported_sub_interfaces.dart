@@ -3,6 +3,11 @@ import 'dart:typed_data';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:turf/turf.dart' show Point;
 
+import 'annotation/circle_annotation_manager_web.dart';
+import 'annotation/point_annotation_manager_web.dart';
+import 'annotation/polygon_annotation_manager_web.dart';
+import 'annotation/polyline_annotation_manager_web.dart';
+
 /// Throwing stubs for every [MapboxMapPlatformInterface] sub-interface that
 /// the web implementation does not yet back with Mapbox GL JS.
 ///
@@ -261,29 +266,19 @@ class UnsupportedAnnotationManagerWeb
   Future<PointAnnotationManagerPlatformInterface> createPointAnnotationManager({
     String? id,
     String? below,
-  }) =>
-      throw _unimplemented('createPointAnnotationManager', 'AnnotationManager');
+  }) async => UnsupportedPointAnnotationManagerWeb(id ?? '');
   @override
   Future<CircleAnnotationManagerPlatformInterface>
-  createCircleAnnotationManager({String? id, String? below}) =>
-      throw _unimplemented(
-        'createCircleAnnotationManager',
-        'AnnotationManager',
-      );
+  createCircleAnnotationManager({String? id, String? below}) async =>
+      UnsupportedCircleAnnotationManagerWeb(id ?? '');
   @override
   Future<PolylineAnnotationManagerPlatformInterface>
-  createPolylineAnnotationManager({String? id, String? below}) =>
-      throw _unimplemented(
-        'createPolylineAnnotationManager',
-        'AnnotationManager',
-      );
+  createPolylineAnnotationManager({String? id, String? below}) async =>
+      UnsupportedPolylineAnnotationManagerWeb(id ?? '');
   @override
   Future<PolygonAnnotationManagerPlatformInterface>
-  createPolygonAnnotationManager({String? id, String? below}) =>
-      throw _unimplemented(
-        'createPolygonAnnotationManager',
-        'AnnotationManager',
-      );
+  createPolygonAnnotationManager({String? id, String? below}) async =>
+      UnsupportedPolygonAnnotationManagerWeb(id ?? '');
   @override
   Future<void> removeAnnotationManager(
     BaseAnnotationManagerPlatformInterface manager,

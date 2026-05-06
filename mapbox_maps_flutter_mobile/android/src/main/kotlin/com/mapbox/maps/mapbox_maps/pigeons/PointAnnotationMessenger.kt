@@ -122,8 +122,8 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
         }
       }
       146.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as? Map<String, Any?>)?.let {
+          PointDecoder.fromMap(it)
         }
       }
       147.toByte() -> {
@@ -211,7 +211,7 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
       }
       is Point -> {
         stream.write(146)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.toMap())
       }
       is PointAnnotation -> {
         stream.write(147)
