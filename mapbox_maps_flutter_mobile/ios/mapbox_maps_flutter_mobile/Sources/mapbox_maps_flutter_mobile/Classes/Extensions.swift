@@ -276,11 +276,6 @@ extension ProjectedMeters {
         return MapboxMaps.ProjectedMeters(northing: northing, easting: easting)
     }
 }
-extension MapDebugOptions {
-    func toMapDebugOptions() -> MapboxCoreMaps.MapDebugOptions {
-        return MapboxCoreMaps.MapDebugOptions(rawValue: Int(self.data.rawValue))!
-    }
-}
 extension CameraOptions {
     func toCameraOptions() -> MapboxMaps.CameraOptions {
         return MapboxMaps.CameraOptions(
@@ -565,13 +560,6 @@ extension MapboxMaps.MercatorCoordinate {
         return MercatorCoordinate(x: x, y: y)
     }
 }
-extension MapboxMaps.MapDebugOptions {
-    func toFLTMapDebugOptions() -> MapDebugOptions {
-        let data = MapDebugOptionsData(rawValue: rawValue)!
-        return MapDebugOptions(data: data)
-    }
-}
-
 extension CGSize {
     func toFLTSize() -> Size {
         return Size(width: width, height: height)

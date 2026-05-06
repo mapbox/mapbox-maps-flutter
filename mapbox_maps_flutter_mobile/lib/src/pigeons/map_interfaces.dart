@@ -44,57 +44,6 @@ bool _deepEquals(Object? a, Object? b) {
   return a == b;
 }
 
-/// Describes the map context mode.
-/// We can make some optimizations if we know that the drawing context is not shared with other code.
-enum ContextMode {
-  /// Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state
-  /// from a previous render pass. It also enables clearing the screen using glClear for the bottommost background
-  /// layer when no pattern is applied to that layer.
-  UNIQUE,
-
-  /// Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
-  /// state set from a previous render pass.
-  SHARED,
-}
-
-/// Options for enabling debugging features in a map.
-enum MapDebugOptionsData {
-  /// Edges of tile boundaries are shown as thick, red lines to help diagnose
-  /// tile clipping issues.
-  TILE_BORDERS,
-
-  /// Each tile shows its tile coordinate (x/y/z) in the upper-left corner.
-  PARSE_STATUS,
-
-  /// Each tile shows a timestamp indicating when it was loaded.
-  TIMESTAMPS,
-
-  /// Edges of glyphs and symbols are shown as faint, green lines to help
-  /// diagnose collision and label placement issues.
-  COLLISION,
-
-  /// Each drawing operation is replaced by a translucent fill. Overlapping
-  /// drawing operations appear more prominent to help diagnose overdrawing.
-  OVERDRAW,
-
-  /// The stencil buffer is shown instead of the color buffer.
-  STENCIL_CLIP,
-
-  /// The depth buffer is shown instead of the color buffer.
-  DEPTH_BUFFER,
-
-  /// Visualize residency of tiles in the render cache. Tile boundaries of cached tiles
-  /// are rendered with green, tiles waiting for an update with yellow and tiles not in the cache
-  /// with red.
-  RENDER_CACHE,
-
-  /// Show 3D model bounding boxes.
-  MODEL_BOUNDS,
-
-  /// Show a wireframe for terrain.
-  TERRAIN_WIREFRAME,
-}
-
 /// Enum describing how to place view annotation relatively to geometry.
 enum ViewAnnotationAnchor {
   /// The top of the view annotation is placed closest to the geometry.
@@ -253,426 +202,6 @@ enum _MapEvent {
   resourceRequest,
 }
 
-/// Options for enabling debugging features in a map.
-@Deprecated("Use 'MapWidgetDebugOptions' instead")
-class MapDebugOptions {
-  MapDebugOptions({required this.data});
-
-  MapDebugOptionsData data;
-
-  List<Object?> _toList() {
-    return <Object?>[data];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MapDebugOptions decode(Object result) {
-    result as List<Object?>;
-    return MapDebugOptions(data: result[0]! as MapDebugOptionsData);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MapDebugOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return data == other.data;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Describes the map option values.
-class MapOptions {
-  MapOptions({
-    this.contextMode,
-    this.constrainMode,
-    this.viewportMode,
-    this.orientation,
-    this.crossSourceCollisions,
-    this.size,
-    required this.pixelRatio,
-    this.glyphsRasterizationOptions,
-  });
-
-  /// The map context mode. This can be used to optimizations
-  /// if we know that the drawing context is not shared with other code.
-  ContextMode? contextMode;
-
-  /// The map constrain mode. This can be used to limit the map
-  /// to wrap around the globe horizontally. By default, it is set to
-  /// `HeightOnly`.
-  ConstrainMode? constrainMode;
-
-  /// The viewport mode. This can be used to flip the vertical
-  /// orientation of the map as some devices may use inverted orientation.
-  ViewportMode? viewportMode;
-
-  /// The orientation of the Map. By default, it is set to
-  /// `Upwards`.
-  NorthOrientation? orientation;
-
-  /// Specify whether to enable cross-source symbol collision detection
-  /// or not. By default, it is set to `true`.
-  bool? crossSourceCollisions;
-
-  /// The size to resize the map object and renderer backend.
-  /// The size is given in `logical pixel` units. macOS and iOS platforms use
-  /// device-independent pixel units, while other platforms, such as Android,
-  /// use screen pixel units.
-  Size? size;
-
-  /// The custom pixel ratio. By default, it is set to 1.0
-  double pixelRatio;
-
-  /// Glyphs rasterization options to use for client-side text rendering.
-  GlyphsRasterizationOptions? glyphsRasterizationOptions;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      contextMode,
-      constrainMode,
-      viewportMode,
-      orientation,
-      crossSourceCollisions,
-      size,
-      pixelRatio,
-      glyphsRasterizationOptions,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MapOptions decode(Object result) {
-    result as List<Object?>;
-    return MapOptions(
-      contextMode: result[0] as ContextMode?,
-      constrainMode: result[1] as ConstrainMode?,
-      viewportMode: result[2] as ViewportMode?,
-      orientation: result[3] as NorthOrientation?,
-      crossSourceCollisions: result[4] as bool?,
-      size: result[5] as Size?,
-      pixelRatio: result[6]! as double,
-      glyphsRasterizationOptions: result[7] as GlyphsRasterizationOptions?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MapOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return contextMode == other.contextMode &&
-        constrainMode == other.constrainMode &&
-        viewportMode == other.viewportMode &&
-        orientation == other.orientation &&
-        crossSourceCollisions == other.crossSourceCollisions &&
-        size == other.size &&
-        pixelRatio == other.pixelRatio &&
-        glyphsRasterizationOptions == other.glyphsRasterizationOptions;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Options for querying rendered features.
-class RenderedQueryOptions {
-  RenderedQueryOptions({this.layerIds, this.filter});
-
-  /// Layer IDs to include in the query.
-  List<String?>? layerIds;
-
-  /// Filters the returned features with an expression
-  String? filter;
-
-  List<Object?> _toList() {
-    return <Object?>[layerIds, filter];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static RenderedQueryOptions decode(Object result) {
-    result as List<Object?>;
-    return RenderedQueryOptions(
-      layerIds: (result[0] as List<Object?>?)?.cast<String?>(),
-      filter: result[1] as String?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! RenderedQueryOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(layerIds, other.layerIds) && filter == other.filter;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Options for querying source features.
-class SourceQueryOptions {
-  SourceQueryOptions({this.sourceLayerIds, required this.filter});
-
-  /// Source layer IDs to include in the query.
-  List<String?>? sourceLayerIds;
-
-  /// Filters the returned features with an expression
-  String filter;
-
-  List<Object?> _toList() {
-    return <Object?>[sourceLayerIds, filter];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static SourceQueryOptions decode(Object result) {
-    result as List<Object?>;
-    return SourceQueryOptions(
-      sourceLayerIds: (result[0] as List<Object?>?)?.cast<String?>(),
-      filter: result[1]! as String,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! SourceQueryOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(sourceLayerIds, other.sourceLayerIds) &&
-        filter == other.filter;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A value or a collection of a feature extension.
-class FeatureExtensionValue {
-  FeatureExtensionValue({this.value, this.featureCollection});
-
-  /// An optional value of a feature extension
-  String? value;
-
-  /// An optional array of features from a feature extension.
-  List<Map<String?, Object?>?>? featureCollection;
-
-  List<Object?> _toList() {
-    return <Object?>[value, featureCollection];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static FeatureExtensionValue decode(Object result) {
-    result as List<Object?>;
-    return FeatureExtensionValue(
-      value: result[0] as String?,
-      featureCollection: (result[1] as List<Object?>?)?.map((e) {
-        return Map<Object?, Object?>.from(
-          e as Map<dynamic, dynamic>,
-        ).cast<String?, Object?>();
-      }).toList(),
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! FeatureExtensionValue || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return value == other.value &&
-        _deepEquals(featureCollection, other.featureCollection);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Represents query result that is returned in QueryRenderedFeaturesCallback.
-/// @see `queryRenderedFeatures`
-class QueriedRenderedFeature {
-  QueriedRenderedFeature({required this.queriedFeature, required this.layers});
-
-  /// Feature returned by the query.
-  QueriedFeature queriedFeature;
-
-  /// An array of layer Ids for the queried feature.
-  /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
-  /// If the feature is only rendered in one layer, a single Id will be provided.
-  List<String?> layers;
-
-  List<Object?> _toList() {
-    return <Object?>[queriedFeature, layers];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static QueriedRenderedFeature decode(Object result) {
-    result as List<Object?>;
-    return QueriedRenderedFeature(
-      queriedFeature: result[0]! as QueriedFeature,
-      layers: (result[1] as List<Object?>?)!.cast<String?>(),
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! QueriedRenderedFeature || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return queriedFeature == other.queriedFeature &&
-        _deepEquals(layers, other.layers);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Represents query result that is returned in QuerySourceFeaturesCallback.
-/// @see `querySourceFeatures`
-class QueriedSourceFeature {
-  QueriedSourceFeature({required this.queriedFeature});
-
-  /// Feature returned by the query.
-  QueriedFeature queriedFeature;
-
-  List<Object?> _toList() {
-    return <Object?>[queriedFeature];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static QueriedSourceFeature decode(Object result) {
-    result as List<Object?>;
-    return QueriedSourceFeature(queriedFeature: result[0]! as QueriedFeature);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! QueriedSourceFeature || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return queriedFeature == other.queriedFeature;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Represents query result that is returned in QueryFeaturesCallback.
-/// @see `queryRenderedFeatures` or `querySourceFeatures`
-class QueriedFeature {
-  QueriedFeature({
-    required this.feature,
-    required this.source,
-    this.sourceLayer,
-    required this.state,
-  });
-
-  /// Feature returned by the query.
-  Map<String?, Object?> feature;
-
-  /// Source id for a queried feature.
-  String source;
-
-  /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
-  /// or when data provided by the source is not layered.
-  String? sourceLayer;
-
-  /// Feature state for a queried feature. Type of the value is an Object.
-  /// @see `setFeatureState` and `getFeatureState`
-  String state;
-
-  List<Object?> _toList() {
-    return <Object?>[feature, source, sourceLayer, state];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static QueriedFeature decode(Object result) {
-    result as List<Object?>;
-    return QueriedFeature(
-      feature: (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
-      source: result[1]! as String,
-      sourceLayer: result[2] as String?,
-      state: result[3]! as String,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! QueriedFeature || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(feature, other.feature) &&
-        source == other.source &&
-        sourceLayer == other.sourceLayer &&
-        state == other.state;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// Internal class to handle pigeon conversions for interactions.
 class _InteractionPigeon {
   _InteractionPigeon({
@@ -821,197 +350,191 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is MapWidgetDebugOptionsData) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    } else if (value is MapDebugOptionsData) {
+    } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is ViewAnnotationAnchor) {
+    } else if (value is _InteractionType) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is _InteractionType) {
+    } else if (value is GestureState) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is GestureState) {
+    } else if (value is Type) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is Type) {
+    } else if (value is StylePackErrorType) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is StylePackErrorType) {
+    } else if (value is ResponseErrorReason) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is ResponseErrorReason) {
+    } else if (value is OfflineRegionDownloadState) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is OfflineRegionDownloadState) {
+    } else if (value is TileStoreUsageMode) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is TileStoreUsageMode) {
+    } else if (value is StylePropertyValueKind) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is StylePropertyValueKind) {
+    } else if (value is Anchor) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is Anchor) {
+    } else if (value is HttpMethod) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is HttpMethod) {
+    } else if (value is HttpRequestErrorType) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is HttpRequestErrorType) {
+    } else if (value is DownloadErrorCode) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
-    } else if (value is DownloadErrorCode) {
+    } else if (value is DownloadState) {
       buffer.putUint8(149);
       writeValue(buffer, value.index);
-    } else if (value is DownloadState) {
+    } else if (value is TileRegionErrorType) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    } else if (value is TileRegionErrorType) {
+    } else if (value is _MapEvent) {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
-    } else if (value is _MapEvent) {
-      buffer.putUint8(152);
-      writeValue(buffer, value.index);
     } else if (value is Point) {
-      buffer.putUint8(153);
+      buffer.putUint8(152);
       writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is Feature) {
-      buffer.putUint8(154);
+      buffer.putUint8(153);
       writeValue(buffer, <Object?>[value.toJson()]);
     } else if (value is MbxEdgeInsets) {
-      buffer.putUint8(155);
+      buffer.putUint8(154);
       writeValue(buffer, value.encode());
     } else if (value is CameraOptions) {
-      buffer.putUint8(156);
+      buffer.putUint8(155);
       writeValue(buffer, value.encode());
     } else if (value is CameraState) {
-      buffer.putUint8(157);
+      buffer.putUint8(156);
       writeValue(buffer, value.encode());
     } else if (value is ScreenCoordinate) {
-      buffer.putUint8(158);
+      buffer.putUint8(157);
       writeValue(buffer, value.encode());
     } else if (value is CoordinateBounds) {
-      buffer.putUint8(159);
+      buffer.putUint8(158);
       writeValue(buffer, value.encode());
     } else if (value is CoordinateBoundsZoom) {
-      buffer.putUint8(160);
+      buffer.putUint8(159);
       writeValue(buffer, value.encode());
     } else if (value is CameraBoundsOptions) {
-      buffer.putUint8(161);
+      buffer.putUint8(160);
       writeValue(buffer, value.encode());
     } else if (value is CameraBounds) {
-      buffer.putUint8(162);
+      buffer.putUint8(161);
       writeValue(buffer, value.encode());
     } else if (value is MapAnimationOptions) {
-      buffer.putUint8(163);
+      buffer.putUint8(162);
       writeValue(buffer, value.encode());
     } else if (value is Size) {
-      buffer.putUint8(164);
+      buffer.putUint8(163);
       writeValue(buffer, value.encode());
     } else if (value is ScreenBox) {
-      buffer.putUint8(165);
+      buffer.putUint8(164);
       writeValue(buffer, value.encode());
     } else if (value is GlyphsRasterizationOptions) {
-      buffer.putUint8(166);
+      buffer.putUint8(165);
       writeValue(buffer, value.encode());
     } else if (value is TileCoverOptions) {
-      buffer.putUint8(167);
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else if (value is StyleObjectInfo) {
-      buffer.putUint8(168);
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else if (value is StyleProjection) {
-      buffer.putUint8(169);
+      buffer.putUint8(168);
       writeValue(buffer, value.encode());
     } else if (value is LayerPosition) {
-      buffer.putUint8(170);
+      buffer.putUint8(169);
       writeValue(buffer, value.encode());
     } else if (value is ImportPosition) {
-      buffer.putUint8(171);
+      buffer.putUint8(170);
       writeValue(buffer, value.encode());
     } else if (value is TransitionOptions) {
-      buffer.putUint8(172);
-      writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
-      buffer.putUint8(173);
+      buffer.putUint8(171);
       writeValue(buffer, value.encode());
     } else if (value is TileCacheBudgetInMegabytes) {
-      buffer.putUint8(174);
+      buffer.putUint8(172);
       writeValue(buffer, value.encode());
     } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(175);
+      buffer.putUint8(173);
       writeValue(buffer, value.encode());
     } else if (value is MapOptions) {
-      buffer.putUint8(176);
+      buffer.putUint8(174);
       writeValue(buffer, value.encode());
     } else if (value is RenderedQueryOptions) {
-      buffer.putUint8(177);
+      buffer.putUint8(175);
       writeValue(buffer, value.encode());
     } else if (value is SourceQueryOptions) {
-      buffer.putUint8(178);
+      buffer.putUint8(176);
       writeValue(buffer, value.encode());
     } else if (value is FeatureExtensionValue) {
-      buffer.putUint8(179);
+      buffer.putUint8(177);
       writeValue(buffer, value.encode());
     } else if (value is QueriedRenderedFeature) {
-      buffer.putUint8(180);
+      buffer.putUint8(178);
       writeValue(buffer, value.encode());
     } else if (value is QueriedSourceFeature) {
-      buffer.putUint8(181);
+      buffer.putUint8(179);
       writeValue(buffer, value.encode());
     } else if (value is QueriedFeature) {
-      buffer.putUint8(182);
+      buffer.putUint8(180);
       writeValue(buffer, value.encode());
     } else if (value is FeaturesetFeatureId) {
-      buffer.putUint8(183);
+      buffer.putUint8(181);
       writeValue(buffer, value.encode());
     } else if (value is FeatureState) {
-      buffer.putUint8(184);
+      buffer.putUint8(182);
       writeValue(buffer, value.encode());
     } else if (value is _InteractionPigeon) {
-      buffer.putUint8(185);
+      buffer.putUint8(183);
       writeValue(buffer, value.encode());
     } else if (value is FeaturesetDescriptor) {
-      buffer.putUint8(186);
+      buffer.putUint8(184);
       writeValue(buffer, value.encode());
     } else if (value is FeaturesetFeature) {
-      buffer.putUint8(187);
+      buffer.putUint8(185);
       writeValue(buffer, value.encode());
     } else if (value is MapContentGestureContext) {
-      buffer.putUint8(188);
+      buffer.putUint8(186);
       writeValue(buffer, value.encode());
     } else if (value is _RenderedQueryGeometry) {
-      buffer.putUint8(189);
+      buffer.putUint8(187);
       writeValue(buffer, value.encode());
     } else if (value is ProjectedMeters) {
-      buffer.putUint8(190);
+      buffer.putUint8(188);
       writeValue(buffer, value.encode());
     } else if (value is MercatorCoordinate) {
-      buffer.putUint8(191);
+      buffer.putUint8(189);
       writeValue(buffer, value.encode());
     } else if (value is FlatLight) {
-      buffer.putUint8(192);
+      buffer.putUint8(190);
       writeValue(buffer, value.encode());
     } else if (value is DirectionalLight) {
-      buffer.putUint8(193);
+      buffer.putUint8(191);
       writeValue(buffer, value.encode());
     } else if (value is AmbientLight) {
-      buffer.putUint8(194);
+      buffer.putUint8(192);
       writeValue(buffer, value.encode());
     } else if (value is MbxImage) {
-      buffer.putUint8(195);
+      buffer.putUint8(193);
       writeValue(buffer, value.encode());
     } else if (value is ImageStretches) {
-      buffer.putUint8(196);
+      buffer.putUint8(194);
       writeValue(buffer, value.encode());
     } else if (value is ImageContent) {
-      buffer.putUint8(197);
+      buffer.putUint8(195);
       writeValue(buffer, value.encode());
     } else if (value is CanonicalTileID) {
-      buffer.putUint8(198);
+      buffer.putUint8(196);
       writeValue(buffer, value.encode());
     } else if (value is StylePropertyValue) {
-      buffer.putUint8(199);
+      buffer.putUint8(197);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1044,152 +567,147 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : MapWidgetDebugOptionsData.values[value];
       case 136:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : MapDebugOptionsData.values[value];
+        return value == null ? null : ViewAnnotationAnchor.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ViewAnnotationAnchor.values[value];
+        return value == null ? null : _InteractionType.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _InteractionType.values[value];
+        return value == null ? null : GestureState.values[value];
       case 139:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : GestureState.values[value];
+        return value == null ? null : Type.values[value];
       case 140:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Type.values[value];
+        return value == null ? null : StylePackErrorType.values[value];
       case 141:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePackErrorType.values[value];
+        return value == null ? null : ResponseErrorReason.values[value];
       case 142:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ResponseErrorReason.values[value];
+        return value == null ? null : OfflineRegionDownloadState.values[value];
       case 143:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : OfflineRegionDownloadState.values[value];
+        return value == null ? null : TileStoreUsageMode.values[value];
       case 144:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileStoreUsageMode.values[value];
+        return value == null ? null : StylePropertyValueKind.values[value];
       case 145:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePropertyValueKind.values[value];
+        return value == null ? null : Anchor.values[value];
       case 146:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Anchor.values[value];
+        return value == null ? null : HttpMethod.values[value];
       case 147:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpMethod.values[value];
+        return value == null ? null : HttpRequestErrorType.values[value];
       case 148:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpRequestErrorType.values[value];
+        return value == null ? null : DownloadErrorCode.values[value];
       case 149:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadErrorCode.values[value];
+        return value == null ? null : DownloadState.values[value];
       case 150:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadState.values[value];
+        return value == null ? null : TileRegionErrorType.values[value];
       case 151:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileRegionErrorType.values[value];
-      case 152:
-        final int? value = readValue(buffer) as int?;
         return value == null ? null : _MapEvent.values[value];
-      case 153:
+      case 152:
         return Point.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
-      case 154:
+      case 153:
         return Feature.fromJson(
           ((readValue(buffer)! as List).first as Map).cast<String, dynamic>(),
         );
-      case 155:
+      case 154:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 156:
+      case 155:
         return CameraOptions.decode(readValue(buffer)!);
-      case 157:
+      case 156:
         return CameraState.decode(readValue(buffer)!);
-      case 158:
+      case 157:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 159:
+      case 158:
         return CoordinateBounds.decode(readValue(buffer)!);
-      case 160:
+      case 159:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 161:
+      case 160:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 162:
+      case 161:
         return CameraBounds.decode(readValue(buffer)!);
-      case 163:
+      case 162:
         return MapAnimationOptions.decode(readValue(buffer)!);
-      case 164:
+      case 163:
         return Size.decode(readValue(buffer)!);
-      case 165:
+      case 164:
         return ScreenBox.decode(readValue(buffer)!);
-      case 166:
+      case 165:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 167:
+      case 166:
         return TileCoverOptions.decode(readValue(buffer)!);
-      case 168:
+      case 167:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 169:
+      case 168:
         return StyleProjection.decode(readValue(buffer)!);
-      case 170:
+      case 169:
         return LayerPosition.decode(readValue(buffer)!);
-      case 171:
+      case 170:
         return ImportPosition.decode(readValue(buffer)!);
-      case 172:
+      case 171:
         return TransitionOptions.decode(readValue(buffer)!);
-      case 173:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 174:
+      case 172:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 175:
+      case 173:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 176:
+      case 174:
         return MapOptions.decode(readValue(buffer)!);
-      case 177:
+      case 175:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 178:
+      case 176:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 179:
+      case 177:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 180:
+      case 178:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 181:
+      case 179:
         return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 182:
+      case 180:
         return QueriedFeature.decode(readValue(buffer)!);
-      case 183:
+      case 181:
         return FeaturesetFeatureId.decode(readValue(buffer)!);
-      case 184:
+      case 182:
         return FeatureState.decode(readValue(buffer)!);
-      case 185:
+      case 183:
         return _InteractionPigeon.decode(readValue(buffer)!);
-      case 186:
+      case 184:
         return FeaturesetDescriptor.decode(readValue(buffer)!);
-      case 187:
+      case 185:
         return FeaturesetFeature.decode(readValue(buffer)!);
-      case 188:
+      case 186:
         return MapContentGestureContext.decode(readValue(buffer)!);
-      case 189:
+      case 187:
         return _RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 190:
+      case 188:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 191:
+      case 189:
         return MercatorCoordinate.decode(readValue(buffer)!);
-      case 192:
+      case 190:
         return FlatLight.decode(readValue(buffer)!);
-      case 193:
+      case 191:
         return DirectionalLight.decode(readValue(buffer)!);
-      case 194:
+      case 192:
         return AmbientLight.decode(readValue(buffer)!);
-      case 195:
+      case 193:
         return MbxImage.decode(readValue(buffer)!);
-      case 196:
+      case 194:
         return ImageStretches.decode(readValue(buffer)!);
-      case 197:
+      case 195:
         return ImageContent.decode(readValue(buffer)!);
-      case 198:
+      case 196:
         return CanonicalTileID.decode(readValue(buffer)!);
-      case 199:
+      case 197:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -2806,74 +2324,6 @@ class _MapInterface {
     }
   }
 
-  /// Returns the `map debug options`.
-  ///
-  /// @return An array of `map debug options` flags currently set to the map.
-  @Deprecated("Use [MapboxMap.debugOptions] instead")
-  Future<List<MapDebugOptions?>> getDebug() async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-          pigeonVar_channelName,
-          pigeonChannelCodec,
-          binaryMessenger: pigeonVar_binaryMessenger,
-        );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<MapDebugOptions?>();
-    }
-  }
-
-  /// Sets the `map debug options` and enables debug mode based on the passed value.
-  ///
-  /// @param debugOptions An array of `map debug options` to be set.
-  /// @param value A `boolean` value representing the state for a given `map debug options`.
-  ///
-  @Deprecated("Use [MapboxMap.debugOptions] instead")
-  Future<void> setDebug(List<MapDebugOptions?> debugOptions, bool value) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-          pigeonVar_channelName,
-          pigeonChannelCodec,
-          binaryMessenger: pigeonVar_binaryMessenger,
-        );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[debugOptions, value],
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
   /// Queries the map for rendered features.
   ///
   /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
@@ -3728,6 +3178,35 @@ class _MapInterface {
       );
     } else {
       return;
+    }
+  }
+
+  /// Captures a snapshot of the current map view as PNG-encoded bytes.
+  ///
+  /// Returns null if the snapshot operation timed out or otherwise failed
+  /// to produce an image.
+  Future<Uint8List?> snapshot() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.snapshot$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as Uint8List?);
     }
   }
 }

@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
@@ -21,7 +22,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeature
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeatureId
-import com.mapbox.maps.mapbox_maps.pigeons.MapDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapWidgetDebugOptionsData
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
@@ -38,6 +38,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 
 class MapInterfaceController(
   private val mapboxMap: MapboxMap,
@@ -50,9 +51,13 @@ class MapInterfaceController(
     callback(Result.success(Unit))
   }
 
-  override fun styleGlyphURL(): String = mapboxMap.getStyleGlyphURL()
+  override fun styleGlyphURL(): String {
+    return mapboxMap.getStyleGlyphURL()
+  }
 
-  override fun setStyleGlyphURL(glyphURL: String) = mapboxMap.setStyleGlyphURL(glyphURL)
+  override fun setStyleGlyphURL(glyphURL: String) {
+    mapboxMap.setStyleGlyphURL(glyphURL)
+  }
 
   override fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit) {
     mapboxMap.loadStyleUri(
@@ -146,14 +151,6 @@ class MapInterfaceController(
 
   override fun setDebugOptions(debugOptions: List<MapWidgetDebugOptionsData>) {
     mapView.debugOptions = debugOptions.map { it.toMapViewDebugOptions() }.toSet()
-  }
-
-  override fun getDebug(): List<MapDebugOptions> {
-    return mapboxMap.getDebug().map { it.toFLTMapDebugOptions() }.toMutableList()
-  }
-
-  override fun setDebug(debugOptions: List<MapDebugOptions?>, value: Boolean) {
-    mapboxMap.setDebug(debugOptions.map { it!!.toMapDebugOptions() }, value)
   }
 
   override fun queryRenderedFeatures(
@@ -480,7 +477,10 @@ class MapInterfaceController(
 
   @OptIn(MapboxExperimental::class)
   @SuppressLint("RestrictedApi")
-  override fun dispatch(gesture: String, screenCoordinate: com.mapbox.maps.mapbox_maps.pigeons.ScreenCoordinate) {
+  override fun dispatch(
+    gesture: String,
+    screenCoordinate: com.mapbox.maps.mapbox_maps.pigeons.ScreenCoordinate,
+  ) {
     val eventType: PlatformEventType = when (gesture) {
       "click" -> PlatformEventType.CLICK
       "longClick" -> PlatformEventType.LONG_CLICK
@@ -495,5 +495,17 @@ class MapInterfaceController(
         screenCoordinate.toScreenCoordinate(context)
       )
     )
+  }
+
+  override fun snapshot(callback: (Result<ByteArray?>) -> Unit) {
+    val snapshot = mapView.snapshot()
+    if (snapshot == null) {
+      callback(Result.success(null))
+    } else {
+      val bytes = ByteArrayOutputStream().also { stream ->
+        snapshot.compress(Bitmap.CompressFormat.PNG, 100, stream)
+      }.toByteArray()
+      callback(Result.success(bytes))
+    }
   }
 }

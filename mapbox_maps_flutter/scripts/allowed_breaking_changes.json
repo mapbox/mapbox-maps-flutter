@@ -3,6 +3,26 @@
     "changeDescription": "MapboxOptions: Method \"getAccessToken\" removed"
   },
   {
+    "changeDescription": "Interface \"MapDebugOptions\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapWidgetDebugOptions + MapboxMap.setDebugOptions / getDebugOptions instead."
+  },
+  {
+    "changeDescription": "Interface \"MapDebugOptionsData\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapWidgetDebugOptions + MapboxMap.setDebugOptions / getDebugOptions instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"getDebug\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapboxMap.getDebugOptions instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setDebug\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapboxMap.setDebugOptions instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"dispatch\" removed",
+    "reason": "Internal-only synthetic gesture dispatcher used for testing; not a real customer-facing API. Mobile keeps it on the Pigeon HostApi for native test infrastructure; the federated facade no longer surfaces it. Tests should use the flutter_driver gesture API instead."
+  },
+  {
     "changeDescription": "iOS platform removed",
     "reason": "Mobile implementation is now consolidated in the endorsed package, mapbox_maps_flutter_mobile."
   },
@@ -371,6 +391,10 @@
   {
     "changeDescription": "MapboxMap: Method \"setOnMapLongTapListener\" removed",
     "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"fromNativeController\" removed",
+    "reason": "Pre-federation entry point. Federated SDK constructs MapboxMap via platform-specific implementations in onMapCreated; customers don't construct from native handles. Removed without deprecation cycle because the construction model itself changed."
   },
   {
     "changeDescription": "TapInteraction: Super Type \"_Interaction\" removed"

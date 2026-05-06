@@ -139,13 +139,6 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         case "platform#releaseMethodChannels":
             releaseMethodChannels()
             result(nil)
-        case "map#snapshot":
-            do {
-                let snapshot = try mapView.snapshot()
-                result(snapshot.pngData())
-            } catch {
-                result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
-            }
         case "mapView#submitViewSizeHint":
             if let arguments = methodCall.arguments as? [String: Double],
                let width = arguments["width"], let height = arguments["height"] {

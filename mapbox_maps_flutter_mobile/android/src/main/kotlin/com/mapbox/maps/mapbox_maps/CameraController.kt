@@ -61,7 +61,7 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
   override fun cameraForCoordinatesCameraOptions(
     coordinates: List<Point>,
     camera: CameraOptions,
-    box: ScreenBox
+    box: ScreenBox,
   ): CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
       coordinates,
@@ -75,7 +75,7 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
     geometry: Map<String?, Any?>,
     padding: MbxEdgeInsets,
     bearing: Double?,
-    pitch: Double?
+    pitch: Double?,
   ): CameraOptions {
     val cameraOptions = mapboxMap.cameraForGeometry(
       geometry.toGeometry(),

@@ -1088,6 +1088,30 @@ enum class Type(val raw: Int) {
 }
 
 /**
+ * Describes the map context mode.
+ * We can make some optimizations if we know that the drawing context is not shared with other code.
+ */
+enum class ContextMode(val raw: Int) {
+  /**
+   * Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state
+   * from a previous render pass. It also enables clearing the screen using glClear for the bottommost background
+   * layer when no pattern is applied to that layer.
+   */
+  UNIQUE(0),
+  /**
+   * Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
+   * state set from a previous render pass.
+   */
+  SHARED(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ContextMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Describes the reason for an offline request response error.
  * Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
  */
@@ -4394,6 +4418,335 @@ data class FeaturesetFeature(
       deepEqualsPlatformInterfaceDataTypes(geometry, other.geometry) &&
       deepEqualsPlatformInterfaceDataTypes(properties, other.properties) &&
       deepEqualsPlatformInterfaceDataTypes(state, other.state)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the map option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class MapOptions(
+  /**
+   * The map context mode. This can be used to optimizations
+   * if we know that the drawing context is not shared with other code.
+   */
+  val contextMode: ContextMode? = null,
+  /**
+   * The map constrain mode. This can be used to limit the map
+   * to wrap around the globe horizontally. By default, it is set to
+   * `HeightOnly`.
+   */
+  val constrainMode: ConstrainMode? = null,
+  /**
+   * The viewport mode. This can be used to flip the vertical
+   * orientation of the map as some devices may use inverted orientation.
+   */
+  val viewportMode: ViewportMode? = null,
+  /**
+   * The orientation of the Map. By default, it is set to
+   * `Upwards`.
+   */
+  val orientation: NorthOrientation? = null,
+  /**
+   * Specify whether to enable cross-source symbol collision detection
+   * or not. By default, it is set to `true`.
+   */
+  val crossSourceCollisions: Boolean? = null,
+  /**
+   * The size to resize the map object and renderer backend.
+   * The size is given in `logical pixel` units. macOS and iOS platforms use
+   * device-independent pixel units, while other platforms, such as Android,
+   * use screen pixel units.
+   */
+  val size: Size? = null,
+  /** The custom pixel ratio. By default, it is set to 1.0 */
+  val pixelRatio: Double,
+  /** Glyphs rasterization options to use for client-side text rendering. */
+  val glyphsRasterizationOptions: GlyphsRasterizationOptions? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MapOptions {
+      val contextMode = pigeonVar_list[0] as ContextMode?
+      val constrainMode = pigeonVar_list[1] as ConstrainMode?
+      val viewportMode = pigeonVar_list[2] as ViewportMode?
+      val orientation = pigeonVar_list[3] as NorthOrientation?
+      val crossSourceCollisions = pigeonVar_list[4] as Boolean?
+      val size = pigeonVar_list[5] as Size?
+      val pixelRatio = pigeonVar_list[6] as Double
+      val glyphsRasterizationOptions = pigeonVar_list[7] as GlyphsRasterizationOptions?
+      return MapOptions(contextMode, constrainMode, viewportMode, orientation, crossSourceCollisions, size, pixelRatio, glyphsRasterizationOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      contextMode,
+      constrainMode,
+      viewportMode,
+      orientation,
+      crossSourceCollisions,
+      size,
+      pixelRatio,
+      glyphsRasterizationOptions,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MapOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return contextMode == other.contextMode &&
+      constrainMode == other.constrainMode &&
+      viewportMode == other.viewportMode &&
+      orientation == other.orientation &&
+      crossSourceCollisions == other.crossSourceCollisions &&
+      size == other.size &&
+      pixelRatio == other.pixelRatio &&
+      glyphsRasterizationOptions == other.glyphsRasterizationOptions
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Options for querying rendered features.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class RenderedQueryOptions(
+  /** Layer IDs to include in the query. */
+  val layerIds: List<String?>? = null,
+  /** Filters the returned features with an expression */
+  val filter: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): RenderedQueryOptions {
+      val layerIds = pigeonVar_list[0] as List<String?>?
+      val filter = pigeonVar_list[1] as String?
+      return RenderedQueryOptions(layerIds, filter)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      layerIds,
+      filter,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is RenderedQueryOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(layerIds, other.layerIds) &&
+      filter == other.filter
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Options for querying source features.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class SourceQueryOptions(
+  /** Source layer IDs to include in the query. */
+  val sourceLayerIds: List<String?>? = null,
+  /** Filters the returned features with an expression */
+  val filter: String
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): SourceQueryOptions {
+      val sourceLayerIds = pigeonVar_list[0] as List<String?>?
+      val filter = pigeonVar_list[1] as String
+      return SourceQueryOptions(sourceLayerIds, filter)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      sourceLayerIds,
+      filter,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is SourceQueryOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(sourceLayerIds, other.sourceLayerIds) &&
+      filter == other.filter
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A value or a collection of a feature extension.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeatureExtensionValue(
+  /** An optional value of a feature extension */
+  val value: String? = null,
+  /** An optional array of features from a feature extension. */
+  val featureCollection: List<Map<String?, Any?>?>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeatureExtensionValue {
+      val value = pigeonVar_list[0] as String?
+      val featureCollection = pigeonVar_list[1] as List<Map<String?, Any?>?>?
+      return FeatureExtensionValue(value, featureCollection)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      value,
+      featureCollection,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is FeatureExtensionValue) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return value == other.value &&
+      deepEqualsPlatformInterfaceDataTypes(featureCollection, other.featureCollection)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Represents query result that is returned in QueryFeaturesCallback.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class QueriedFeature(
+  /** Feature returned by the query. */
+  val feature: Map<String?, Any?>,
+  /** Source id for a queried feature. */
+  val source: String,
+  /**
+   * Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
+   * or when data provided by the source is not layered.
+   */
+  val sourceLayer: String? = null,
+  /** Feature state for a queried feature. Type of the value is an Object. */
+  val state: String
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): QueriedFeature {
+      val feature = pigeonVar_list[0] as Map<String?, Any?>
+      val source = pigeonVar_list[1] as String
+      val sourceLayer = pigeonVar_list[2] as String?
+      val state = pigeonVar_list[3] as String
+      return QueriedFeature(feature, source, sourceLayer, state)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      feature,
+      source,
+      sourceLayer,
+      state,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is QueriedFeature) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(feature, other.feature) &&
+      source == other.source &&
+      sourceLayer == other.sourceLayer &&
+      state == other.state
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Represents query result that is returned in QueryRenderedFeaturesCallback.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class QueriedRenderedFeature(
+  /** Feature returned by the query. */
+  val queriedFeature: QueriedFeature,
+  /**
+   * An array of layer Ids for the queried feature.
+   * If the feature has been rendered in multiple layers, multiple Ids will be provided.
+   * If the feature is only rendered in one layer, a single Id will be provided.
+   */
+  val layers: List<String?>
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): QueriedRenderedFeature {
+      val queriedFeature = pigeonVar_list[0] as QueriedFeature
+      val layers = pigeonVar_list[1] as List<String?>
+      return QueriedRenderedFeature(queriedFeature, layers)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      queriedFeature,
+      layers,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is QueriedRenderedFeature) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return queriedFeature == other.queriedFeature &&
+      deepEqualsPlatformInterfaceDataTypes(layers, other.layers)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Represents query result that is returned in QuerySourceFeaturesCallback.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class QueriedSourceFeature(
+  /** Feature returned by the query. */
+  val queriedFeature: QueriedFeature
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): QueriedSourceFeature {
+      val queriedFeature = pigeonVar_list[0] as QueriedFeature
+      return QueriedSourceFeature(queriedFeature)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      queriedFeature,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is QueriedSourceFeature) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return queriedFeature == other.queriedFeature
   }
 
   override fun hashCode(): Int = toList().hashCode()

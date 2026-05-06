@@ -331,10 +331,6 @@ fun Map<String, Any?>.toFeatureState(): com.mapbox.maps.interactions.FeatureStat
   }
 }
 
-fun MapDebugOptions.toMapDebugOptions(): com.mapbox.maps.MapDebugOptions {
-  return com.mapbox.maps.MapDebugOptions.values()[data.ordinal]
-}
-
 fun MercatorCoordinate.toMercatorCoordinate(): com.mapbox.maps.MercatorCoordinate {
   return com.mapbox.maps.MercatorCoordinate(x, y)
 }
@@ -690,10 +686,6 @@ fun com.mapbox.maps.QueriedSourceFeature.toFLTQueriedSourceFeature(): QueriedSou
 
 fun com.mapbox.maps.TileStoreUsageMode.toFLTTileStoreUsageMode(): TileStoreUsageMode {
   return TileStoreUsageMode.values()[ordinal]
-}
-
-fun com.mapbox.maps.MapDebugOptions.toFLTMapDebugOptions(): MapDebugOptions {
-  return MapDebugOptions(MapDebugOptionsData.values()[ordinal])
 }
 
 fun com.mapbox.maps.GlyphsRasterizationOptions.toFLTGlyphsRasterizationOptions(): GlyphsRasterizationOptions {

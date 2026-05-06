@@ -219,15 +219,6 @@ class _MapboxMapsPlatform {
       return new Future.error(e);
     }
   }
-
-  Future<Uint8List> snapshot() async {
-    try {
-      final List<int> data = await _channel.invokeMethod('map#snapshot');
-      return Uint8List.fromList(data);
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
-  }
 }
 
 /// A registry to hold suffixes for Channels.

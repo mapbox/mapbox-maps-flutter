@@ -19,6 +19,19 @@ final class MapInterfaceController: _MapInterface {
         completion(.success(()))
     }
 
+    func snapshot(completion: @escaping (Result<FlutterStandardTypedData?, Error>) -> Void) {
+        do {
+            let snapshot = try mapView.snapshot()
+            if let data = snapshot.pngData() {
+                completion(.success(FlutterStandardTypedData(bytes: data)))
+            } else {
+                completion(.success(nil))
+            }
+        } catch {
+            completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: error.localizedDescription, details: nil)))
+        }
+    }
+
     func styleGlyphURL() throws -> String {
         return mapboxMap.styleGlyphURL
     }
@@ -143,14 +156,6 @@ final class MapInterfaceController: _MapInterface {
 
     func setDebugOptions(debugOptions: [MapWidgetDebugOptionsData]) throws {
         mapView.debugOptions = debugOptions.toDebugOptions()
-    }
-
-    func getDebug() throws -> [MapDebugOptions?] {
-        return self.mapboxMap.debugOptions.map {$0.toFLTMapDebugOptions()}
-    }
-
-    func setDebug(debugOptions: [MapDebugOptions?], value: Bool) throws {
-        self.mapboxMap.debugOptions = debugOptions.compactMap {$0?.toMapDebugOptions()}
     }
 
     func queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void) {

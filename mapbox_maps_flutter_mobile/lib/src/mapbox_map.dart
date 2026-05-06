@@ -217,6 +217,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Returns the provided `camera` options object unchanged upon an error.
   /// Note that this method may fail if the principal point of the projection is not inside the `box` or
   /// if there is no sufficient screen space, defined by principal point and the `box`, to fit the geometry.
+  @override
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
     List<Point> coordinates,
     CameraOptions camera,
@@ -228,6 +229,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   );
 
   /// Convenience method that returns the `camera options` object for given parameters.
+  @override
   Future<CameraOptions> cameraForGeometry(
     Map<String?, Object?> geometry,
     MbxEdgeInsets padding,
@@ -343,33 +345,35 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Tells the map rendering engine that there is currently a gesture in progress. This
   /// affects how the map renders labels, as it will use different texture filters if a gesture
   /// is ongoing.
+  @override
   Future<void> setGestureInProgress(bool inProgress) =>
       _mapInterface.setGestureInProgress(inProgress);
 
   /// Returns `true` if a gesture is currently in progress.
+  @override
   Future<bool> isGestureInProgress() => _mapInterface.isGestureInProgress();
-
-  @visibleForTesting
-  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
-      _mapInterface.dispatch(gesture, screenCoordinate);
 
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
   /// In particular, it brings more stability to symbol placement and rendering.
+  @override
   Future<void> setUserAnimationInProgress(bool inProgress) =>
       _mapInterface.setUserAnimationInProgress(inProgress);
 
   /// Returns `true` if user animation is currently in progress.
+  @override
   Future<bool> isUserAnimationInProgress() =>
       _mapInterface.isUserAnimationInProgress();
 
   /// When loading a map, if prefetch zoom `delta` is set to any number greater than 0,
   /// the map will first request a tile at zoom level lower than `zoom - delta`, with requested
   /// zoom level a multiple of `delta`, in an attempt to display a full map at lower resolution as quick as possible.
+  @override
   Future<void> setPrefetchZoomDelta(int delta) =>
       _mapInterface.setPrefetchZoomDelta(delta);
 
   /// Returns the map's prefetch zoom delta.
+  @override
   Future<int> getPrefetchZoomDelta() => _mapInterface.getPrefetchZoomDelta();
 
   /// Sets the north `orientation mode`.
@@ -388,18 +392,23 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
       _mapInterface.setViewportMode(mode);
 
   /// Returns the `map options`.
+  @override
   Future<MapOptions> getMapOptions() => _mapInterface.getMapOptions();
 
   /// The URL that points to the glyphs used by the style for rendering text labels on the map.
   ///
   /// This property allows setting a custom glyph URL at runtime, making it easier to
   /// apply custom fonts to the map without modifying the base style.
+  @override
+  @experimental
   Future<String> styleGlyphURL() => _mapInterface.styleGlyphURL();
 
   /// The URL that points to the glyphs used by the style for rendering text labels on the map.
   ///
   /// This property allows setting a custom glyph URL at runtime, making it easier to
   /// apply custom fonts to the map without modifying the base style.
+  @override
+  @experimental
   Future<void> setStyleGlyphURL(String glyphURL) =>
       _mapInterface.setStyleGlyphURL(glyphURL);
 
@@ -418,16 +427,8 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     );
   }
 
-  /// Returns the `map debug options`.
-  @Deprecated("Use 'getDebugOptions()' instead")
-  Future<List<MapDebugOptions?>> getDebug() => _mapInterface.getDebug();
-
-  /// Sets the `map debug options` and enables debug mode based on the passed value.
-  @Deprecated("Use 'setDebugOptions()' instead")
-  Future<void> setDebug(List<MapDebugOptions?> debugOptions, bool value) =>
-      _mapInterface.setDebug(debugOptions, value);
-
   /// Queries the map for rendered features.
+  @override
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
     RenderedQueryGeometry geometry,
     RenderedQueryOptions options,
@@ -452,6 +453,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   }
 
   /// Queries the map for source features.
+  @override
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
     String sourceId,
     SourceQueryOptions options,
@@ -461,6 +463,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
   ///
   /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  @override
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
@@ -477,6 +480,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
   /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  @override
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
@@ -486,6 +490,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
   /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  @override
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
@@ -499,6 +504,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
+  @override
   Future<void> setFeatureState(
     String sourceId,
     String? sourceLayerId,
@@ -534,6 +540,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
   /// immediately visible.
+  @override
   Future<String> getFeatureState(
     String sourceId,
     String? sourceLayerId,
@@ -563,6 +570,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
+  @override
   Future<void> removeFeatureState(
     String sourceId,
     String? sourceLayerId,
@@ -688,6 +696,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// Note that calling this API will affect all maps that use the same data path and does not
   /// affect persistent map data like offline style packages.
+  @override
   Future<void> clearData() => _mapInterface.clearData();
 
   /// The memory budget hint to be used by the map. The budget can be given in
@@ -863,9 +872,10 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     _setupGestures();
   }
 
-  /// Returns a snapshot of the map.
-  /// The snapshot is taken from the current state of the map.
-  Future<Uint8List> snapshot() => _mapboxMapsPlatform.snapshot();
+  /// Returns a snapshot of the map as PNG-encoded bytes.
+  /// Returns null if the snapshot operation timed out or otherwise failed.
+  @override
+  Future<Uint8List?> snapshot() => _mapInterface.snapshot();
 
   /// Set whether legacy mode should be used for [snapshot].
   ///
@@ -874,6 +884,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
   ///
   /// Note: This method has no effect on iOS platform.
+  @override
   @experimental
   Future<void> setSnapshotLegacyMode(bool enable) =>
       _mapInterface.setSnapshotLegacyMode(enable);

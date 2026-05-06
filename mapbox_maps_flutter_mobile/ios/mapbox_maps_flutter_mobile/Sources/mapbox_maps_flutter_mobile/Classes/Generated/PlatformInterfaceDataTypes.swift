@@ -652,6 +652,18 @@ enum Type: Int {
   case lIST = 2
 }
 
+/// Describes the map context mode.
+/// We can make some optimizations if we know that the drawing context is not shared with other code.
+enum ContextMode: Int {
+  /// Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state
+  /// from a previous render pass. It also enables clearing the screen using glClear for the bottommost background
+  /// layer when no pattern is applied to that layer.
+  case uNIQUE = 0
+  /// Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
+  /// state set from a previous render pass.
+  case sHARED = 1
+}
+
 /// Describes the reason for an offline request response error.
 /// Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
 enum ResponseErrorReason: Int {
@@ -3284,6 +3296,249 @@ struct FeaturesetFeature {
       geometry,
       properties,
       state,
+    ]
+  }
+}
+
+/// Describes the map option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MapOptions {
+  /// The map context mode. This can be used to optimizations
+  /// if we know that the drawing context is not shared with other code.
+  var contextMode: ContextMode? = nil
+  /// The map constrain mode. This can be used to limit the map
+  /// to wrap around the globe horizontally. By default, it is set to
+  /// `HeightOnly`.
+  var constrainMode: ConstrainMode? = nil
+  /// The viewport mode. This can be used to flip the vertical
+  /// orientation of the map as some devices may use inverted orientation.
+  var viewportMode: ViewportMode? = nil
+  /// The orientation of the Map. By default, it is set to
+  /// `Upwards`.
+  var orientation: NorthOrientation? = nil
+  /// Specify whether to enable cross-source symbol collision detection
+  /// or not. By default, it is set to `true`.
+  var crossSourceCollisions: Bool? = nil
+  /// The size to resize the map object and renderer backend.
+  /// The size is given in `logical pixel` units. macOS and iOS platforms use
+  /// device-independent pixel units, while other platforms, such as Android,
+  /// use screen pixel units.
+  var size: Size? = nil
+  /// The custom pixel ratio. By default, it is set to 1.0
+  var pixelRatio: Double
+  /// Glyphs rasterization options to use for client-side text rendering.
+  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MapOptions? {
+    let contextMode: ContextMode? = nilOrValue(pigeonVar_list[0])
+    let constrainMode: ConstrainMode? = nilOrValue(pigeonVar_list[1])
+    let viewportMode: ViewportMode? = nilOrValue(pigeonVar_list[2])
+    let orientation: NorthOrientation? = nilOrValue(pigeonVar_list[3])
+    let crossSourceCollisions: Bool? = nilOrValue(pigeonVar_list[4])
+    let size: Size? = nilOrValue(pigeonVar_list[5])
+    let pixelRatio = pigeonVar_list[6] as! Double
+    let glyphsRasterizationOptions: GlyphsRasterizationOptions? = nilOrValue(pigeonVar_list[7])
+
+    return MapOptions(
+      contextMode: contextMode,
+      constrainMode: constrainMode,
+      viewportMode: viewportMode,
+      orientation: orientation,
+      crossSourceCollisions: crossSourceCollisions,
+      size: size,
+      pixelRatio: pixelRatio,
+      glyphsRasterizationOptions: glyphsRasterizationOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      contextMode,
+      constrainMode,
+      viewportMode,
+      orientation,
+      crossSourceCollisions,
+      size,
+      pixelRatio,
+      glyphsRasterizationOptions,
+    ]
+  }
+}
+
+/// Options for querying rendered features.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct RenderedQueryOptions {
+  /// Layer IDs to include in the query.
+  var layerIds: [String?]? = nil
+  /// Filters the returned features with an expression
+  var filter: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> RenderedQueryOptions? {
+    let layerIds: [String?]? = nilOrValue(pigeonVar_list[0])
+    let filter: String? = nilOrValue(pigeonVar_list[1])
+
+    return RenderedQueryOptions(
+      layerIds: layerIds,
+      filter: filter
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      layerIds,
+      filter,
+    ]
+  }
+}
+
+/// Options for querying source features.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct SourceQueryOptions {
+  /// Source layer IDs to include in the query.
+  var sourceLayerIds: [String?]? = nil
+  /// Filters the returned features with an expression
+  var filter: String
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> SourceQueryOptions? {
+    let sourceLayerIds: [String?]? = nilOrValue(pigeonVar_list[0])
+    let filter = pigeonVar_list[1] as! String
+
+    return SourceQueryOptions(
+      sourceLayerIds: sourceLayerIds,
+      filter: filter
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      sourceLayerIds,
+      filter,
+    ]
+  }
+}
+
+/// A value or a collection of a feature extension.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeatureExtensionValue {
+  /// An optional value of a feature extension
+  var value: String? = nil
+  /// An optional array of features from a feature extension.
+  var featureCollection: [[String?: Any?]?]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeatureExtensionValue? {
+    let value: String? = nilOrValue(pigeonVar_list[0])
+    let featureCollection: [[String?: Any?]?]? = nilOrValue(pigeonVar_list[1])
+
+    return FeatureExtensionValue(
+      value: value,
+      featureCollection: featureCollection
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      value,
+      featureCollection,
+    ]
+  }
+}
+
+/// Represents query result that is returned in QueryFeaturesCallback.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct QueriedFeature {
+  /// Feature returned by the query.
+  var feature: [String?: Any?]
+  /// Source id for a queried feature.
+  var source: String
+  /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
+  /// or when data provided by the source is not layered.
+  var sourceLayer: String? = nil
+  /// Feature state for a queried feature. Type of the value is an Object.
+  var state: String
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> QueriedFeature? {
+    let feature = pigeonVar_list[0] as! [String?: Any?]
+    let source = pigeonVar_list[1] as! String
+    let sourceLayer: String? = nilOrValue(pigeonVar_list[2])
+    let state = pigeonVar_list[3] as! String
+
+    return QueriedFeature(
+      feature: feature,
+      source: source,
+      sourceLayer: sourceLayer,
+      state: state
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      feature,
+      source,
+      sourceLayer,
+      state,
+    ]
+  }
+}
+
+/// Represents query result that is returned in QueryRenderedFeaturesCallback.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct QueriedRenderedFeature {
+  /// Feature returned by the query.
+  var queriedFeature: QueriedFeature
+  /// An array of layer Ids for the queried feature.
+  /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
+  /// If the feature is only rendered in one layer, a single Id will be provided.
+  var layers: [String?]
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> QueriedRenderedFeature? {
+    let queriedFeature = pigeonVar_list[0] as! QueriedFeature
+    let layers = pigeonVar_list[1] as! [String?]
+
+    return QueriedRenderedFeature(
+      queriedFeature: queriedFeature,
+      layers: layers
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      queriedFeature,
+      layers,
+    ]
+  }
+}
+
+/// Represents query result that is returned in QuerySourceFeaturesCallback.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct QueriedSourceFeature {
+  /// Feature returned by the query.
+  var queriedFeature: QueriedFeature
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> QueriedSourceFeature? {
+    let queriedFeature = pigeonVar_list[0] as! QueriedFeature
+
+    return QueriedSourceFeature(
+      queriedFeature: queriedFeature
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      queriedFeature
     ]
   }
 }
