@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart';
@@ -161,8 +163,49 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   int getDebugOptionsCallCount = 0;
   int setDebugOptionsCallCount = 0;
   int disposeCallCount = 0;
+  int cameraForCoordinatesCameraOptionsCallCount = 0;
+  int cameraForGeometryCallCount = 0;
+  int clearDataCallCount = 0;
+  int getMapOptionsCallCount = 0;
+  int snapshotCallCount = 0;
+  int setGestureInProgressCallCount = 0;
+  int isGestureInProgressCallCount = 0;
+  int setUserAnimationInProgressCallCount = 0;
+  int isUserAnimationInProgressCallCount = 0;
+  int setPrefetchZoomDeltaCallCount = 0;
+  int getPrefetchZoomDeltaCallCount = 0;
+  int setSnapshotLegacyModeCallCount = 0;
+  int styleGlyphURLCallCount = 0;
+  int setStyleGlyphURLCallCount = 0;
+  int queryRenderedFeaturesCallCount = 0;
+  int querySourceFeaturesCallCount = 0;
+  int getGeoJsonClusterLeavesCallCount = 0;
+  int getGeoJsonClusterChildrenCallCount = 0;
+  int getGeoJsonClusterExpansionZoomCallCount = 0;
+  int setFeatureStateCallCount = 0;
+  int getFeatureStateCallCount = 0;
+  int removeFeatureStateCallCount = 0;
 
   // Captured arguments
+  ScreenBox? lastScreenBox;
+  Map<String?, Object?>? lastGeometry;
+  bool? lastGestureInProgress;
+  bool? lastUserAnimationInProgress;
+  int? lastPrefetchZoomDelta;
+  bool? lastSnapshotLegacyMode;
+  String? lastStyleGlyphURL;
+  RenderedQueryGeometry? lastRenderedQueryGeometry;
+  RenderedQueryOptions? lastRenderedQueryOptions;
+  String? lastSourceId;
+  SourceQueryOptions? lastSourceQueryOptions;
+  String? lastSourceIdentifier;
+  Map<String?, Object?>? lastCluster;
+  int? lastLimit;
+  int? lastClusterOffset;
+  String? lastSourceLayerId;
+  String? lastFeatureId;
+  String? lastFeatureState;
+  String? lastFeatureStateKey;
   String? lastStyleURI;
   String? lastStyleJson;
   CameraOptions? lastCameraOptions;
@@ -599,6 +642,205 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   void dispose() {
     disposeCallCount++;
+  }
+
+  @override
+  Future<CameraOptions> cameraForCoordinatesCameraOptions(
+    List<Point> coordinates,
+    CameraOptions camera,
+    ScreenBox box,
+  ) async {
+    cameraForCoordinatesCameraOptionsCallCount++;
+    lastCoordinates = coordinates;
+    lastCameraOptions = camera;
+    lastScreenBox = box;
+    return cameraOptionsToReturn;
+  }
+
+  @override
+  Future<CameraOptions> cameraForGeometry(
+    Map<String?, Object?> geometry,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) async {
+    cameraForGeometryCallCount++;
+    lastGeometry = geometry;
+    lastPadding = padding;
+    lastBearing = bearing;
+    lastPitch = pitch;
+    return cameraOptionsToReturn;
+  }
+
+  @override
+  Future<void> clearData() async {
+    clearDataCallCount++;
+  }
+
+  @override
+  Future<MapOptions> getMapOptions() async {
+    getMapOptionsCallCount++;
+    return MapOptions(pixelRatio: 1.0);
+  }
+
+  @override
+  Future<Uint8List?> snapshot() async {
+    snapshotCallCount++;
+    return null;
+  }
+
+  @override
+  Future<void> setGestureInProgress(bool inProgress) async {
+    setGestureInProgressCallCount++;
+    lastGestureInProgress = inProgress;
+  }
+
+  @override
+  Future<bool> isGestureInProgress() async {
+    isGestureInProgressCallCount++;
+    return false;
+  }
+
+  @override
+  Future<void> setUserAnimationInProgress(bool inProgress) async {
+    setUserAnimationInProgressCallCount++;
+    lastUserAnimationInProgress = inProgress;
+  }
+
+  @override
+  Future<bool> isUserAnimationInProgress() async {
+    isUserAnimationInProgressCallCount++;
+    return false;
+  }
+
+  @override
+  Future<void> setPrefetchZoomDelta(int delta) async {
+    setPrefetchZoomDeltaCallCount++;
+    lastPrefetchZoomDelta = delta;
+  }
+
+  @override
+  Future<int> getPrefetchZoomDelta() async {
+    getPrefetchZoomDeltaCallCount++;
+    return 0;
+  }
+
+  @override
+  Future<void> setSnapshotLegacyMode(bool enabled) async {
+    setSnapshotLegacyModeCallCount++;
+    lastSnapshotLegacyMode = enabled;
+  }
+
+  @override
+  Future<String> styleGlyphURL() async {
+    styleGlyphURLCallCount++;
+    return 'https://example.com/glyphs';
+  }
+
+  @override
+  Future<void> setStyleGlyphURL(String glyphURL) async {
+    setStyleGlyphURLCallCount++;
+    lastStyleGlyphURL = glyphURL;
+  }
+
+  @override
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+    RenderedQueryGeometry geometry,
+    RenderedQueryOptions options,
+  ) async {
+    queryRenderedFeaturesCallCount++;
+    lastRenderedQueryGeometry = geometry;
+    lastRenderedQueryOptions = options;
+    return [];
+  }
+
+  @override
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+    String sourceId,
+    SourceQueryOptions options,
+  ) async {
+    querySourceFeaturesCallCount++;
+    lastSourceId = sourceId;
+    lastSourceQueryOptions = options;
+    return [];
+  }
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+    int? limit,
+    int? offset,
+  ) async {
+    getGeoJsonClusterLeavesCallCount++;
+    lastSourceIdentifier = sourceIdentifier;
+    lastCluster = cluster;
+    lastLimit = limit;
+    lastClusterOffset = offset;
+    return FeatureExtensionValue();
+  }
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterChildren(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) async {
+    getGeoJsonClusterChildrenCallCount++;
+    lastSourceIdentifier = sourceIdentifier;
+    lastCluster = cluster;
+    return FeatureExtensionValue();
+  }
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) async {
+    getGeoJsonClusterExpansionZoomCallCount++;
+    lastSourceIdentifier = sourceIdentifier;
+    lastCluster = cluster;
+    return FeatureExtensionValue();
+  }
+
+  @override
+  Future<void> setFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String state,
+  ) async {
+    setFeatureStateCallCount++;
+    lastSourceId = sourceId;
+    lastSourceLayerId = sourceLayerId;
+    lastFeatureId = featureId;
+    lastFeatureState = state;
+  }
+
+  @override
+  Future<String> getFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+  ) async {
+    getFeatureStateCallCount++;
+    lastSourceId = sourceId;
+    lastSourceLayerId = sourceLayerId;
+    lastFeatureId = featureId;
+    return '{}';
+  }
+
+  @override
+  Future<void> removeFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String? stateKey,
+  ) async {
+    removeFeatureStateCallCount++;
+    lastSourceId = sourceId;
+    lastSourceLayerId = sourceLayerId;
+    lastFeatureId = featureId;
+    lastFeatureStateKey = stateKey;
   }
 }
 
@@ -1069,6 +1311,202 @@ void main() {
         MapWidgetDebugOptions.tileBorders,
         MapWidgetDebugOptions.camera,
       ]);
+    });
+
+    // ===== Camera convenience (legacy) =====
+
+    test('cameraForCoordinatesCameraOptions delegates to interface', () async {
+      final box = ScreenBox(
+        min: ScreenCoordinate(x: 0, y: 0),
+        max: ScreenCoordinate(x: 10, y: 10),
+      );
+      await mapboxMap.cameraForCoordinatesCameraOptions(
+        [Point(coordinates: Position(0, 0))],
+        CameraOptions(),
+        box,
+      );
+
+      expect(mockImpl.cameraForCoordinatesCameraOptionsCallCount, 1);
+      expect(mockImpl.lastScreenBox, same(box));
+    });
+
+    test('cameraForGeometry delegates to interface', () async {
+      final geometry = <String?, Object?>{'type': 'Point'};
+      await mapboxMap.cameraForGeometry(
+        geometry,
+        MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+        null,
+        null,
+      );
+
+      expect(mockImpl.cameraForGeometryCallCount, 1);
+      expect(mockImpl.lastGeometry, same(geometry));
+    });
+
+    // ===== Map state (legacy) =====
+
+    test('clearData delegates to interface', () async {
+      await mapboxMap.clearData();
+      expect(mockImpl.clearDataCallCount, 1);
+    });
+
+    test('getMapOptions delegates to interface', () async {
+      final result = await mapboxMap.getMapOptions();
+      expect(mockImpl.getMapOptionsCallCount, 1);
+      expect(result.pixelRatio, 1.0);
+    });
+
+    test('snapshot delegates to interface', () async {
+      final result = await mapboxMap.snapshot();
+      expect(mockImpl.snapshotCallCount, 1);
+      expect(result, isNull);
+    });
+
+    // ===== Gesture / animation flags =====
+
+    test('setGestureInProgress delegates to interface', () async {
+      await mapboxMap.setGestureInProgress(true);
+      expect(mockImpl.setGestureInProgressCallCount, 1);
+      expect(mockImpl.lastGestureInProgress, true);
+    });
+
+    test('isGestureInProgress delegates to interface', () async {
+      final result = await mapboxMap.isGestureInProgress();
+      expect(mockImpl.isGestureInProgressCallCount, 1);
+      expect(result, false);
+    });
+
+    test('setUserAnimationInProgress delegates to interface', () async {
+      await mapboxMap.setUserAnimationInProgress(true);
+      expect(mockImpl.setUserAnimationInProgressCallCount, 1);
+      expect(mockImpl.lastUserAnimationInProgress, true);
+    });
+
+    test('isUserAnimationInProgress delegates to interface', () async {
+      final result = await mapboxMap.isUserAnimationInProgress();
+      expect(mockImpl.isUserAnimationInProgressCallCount, 1);
+      expect(result, false);
+    });
+
+    test('setPrefetchZoomDelta delegates to interface', () async {
+      await mapboxMap.setPrefetchZoomDelta(3);
+      expect(mockImpl.setPrefetchZoomDeltaCallCount, 1);
+      expect(mockImpl.lastPrefetchZoomDelta, 3);
+    });
+
+    test('getPrefetchZoomDelta delegates to interface', () async {
+      final result = await mapboxMap.getPrefetchZoomDelta();
+      expect(mockImpl.getPrefetchZoomDeltaCallCount, 1);
+      expect(result, 0);
+    });
+
+    // ===== Legacy gesture listener aliases =====
+
+    test('setOnMapMoveListener stores listener on interface', () {
+      void listener(_) {}
+      mapboxMap.setOnMapMoveListener(listener);
+      expect(mockImpl.onMapScrollListener, same(listener));
+    });
+
+    test('setOnMapZoomListener stores listener on interface', () {
+      void listener(_) {}
+      mapboxMap.setOnMapZoomListener(listener);
+      expect(mockImpl.onMapZoomListener, same(listener));
+    });
+
+    // ===== Snapshotter / glyphs =====
+
+    test('setSnapshotLegacyMode delegates to interface', () async {
+      await mapboxMap.setSnapshotLegacyMode(true);
+      expect(mockImpl.setSnapshotLegacyModeCallCount, 1);
+      expect(mockImpl.lastSnapshotLegacyMode, true);
+    });
+
+    test('styleGlyphURL delegates to interface', () async {
+      final result = await mapboxMap.styleGlyphURL();
+      expect(mockImpl.styleGlyphURLCallCount, 1);
+      expect(result, 'https://example.com/glyphs');
+    });
+
+    test('setStyleGlyphURL delegates to interface', () async {
+      await mapboxMap.setStyleGlyphURL('https://x/glyphs');
+      expect(mockImpl.setStyleGlyphURLCallCount, 1);
+      expect(mockImpl.lastStyleGlyphURL, 'https://x/glyphs');
+    });
+
+    // ===== Feature queries =====
+
+    test('queryRenderedFeatures delegates to interface', () async {
+      final geometry = RenderedQueryGeometry.fromScreenCoordinate(
+        ScreenCoordinate(x: 1, y: 1),
+      );
+      final options = RenderedQueryOptions();
+      await mapboxMap.queryRenderedFeatures(geometry, options);
+      expect(mockImpl.queryRenderedFeaturesCallCount, 1);
+      expect(mockImpl.lastRenderedQueryGeometry, same(geometry));
+      expect(mockImpl.lastRenderedQueryOptions, same(options));
+    });
+
+    test('querySourceFeatures delegates to interface', () async {
+      final options = SourceQueryOptions(filter: '');
+      await mapboxMap.querySourceFeatures('source-1', options);
+      expect(mockImpl.querySourceFeaturesCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastSourceQueryOptions, same(options));
+    });
+
+    test('getGeoJsonClusterLeaves delegates to interface', () async {
+      await mapboxMap.getGeoJsonClusterLeaves('source-1', {}, 10, 0);
+      expect(mockImpl.getGeoJsonClusterLeavesCallCount, 1);
+      expect(mockImpl.lastSourceIdentifier, 'source-1');
+      expect(mockImpl.lastLimit, 10);
+      expect(mockImpl.lastClusterOffset, 0);
+    });
+
+    test('getGeoJsonClusterChildren delegates to interface', () async {
+      await mapboxMap.getGeoJsonClusterChildren('source-1', {});
+      expect(mockImpl.getGeoJsonClusterChildrenCallCount, 1);
+      expect(mockImpl.lastSourceIdentifier, 'source-1');
+    });
+
+    test('getGeoJsonClusterExpansionZoom delegates to interface', () async {
+      await mapboxMap.getGeoJsonClusterExpansionZoom('source-1', {});
+      expect(mockImpl.getGeoJsonClusterExpansionZoomCallCount, 1);
+      expect(mockImpl.lastSourceIdentifier, 'source-1');
+    });
+
+    // ===== Source-feature state (pre-Featureset shapes) =====
+
+    test('setFeatureState delegates to interface', () async {
+      await mapboxMap.setFeatureState('source-1', 'layer-1', 'feature-1', '{}');
+      expect(mockImpl.setFeatureStateCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastSourceLayerId, 'layer-1');
+      expect(mockImpl.lastFeatureId, 'feature-1');
+      expect(mockImpl.lastFeatureState, '{}');
+    });
+
+    test('getFeatureState delegates to interface', () async {
+      final result = await mapboxMap.getFeatureState(
+        'source-1',
+        'layer-1',
+        'feature-1',
+      );
+      expect(mockImpl.getFeatureStateCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(result, '{}');
+    });
+
+    test('removeFeatureState delegates to interface', () async {
+      await mapboxMap.removeFeatureState(
+        'source-1',
+        'layer-1',
+        'feature-1',
+        'k',
+      );
+      expect(mockImpl.removeFeatureStateCallCount, 1);
+      expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastFeatureStateKey, 'k');
     });
 
     // ===== Lifecycle =====

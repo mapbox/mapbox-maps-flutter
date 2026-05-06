@@ -1,4 +1,5 @@
 import 'dart:js_interop';
+import 'dart:typed_data';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:turf/turf.dart' show Point, Position;
@@ -167,6 +168,21 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   ) => throw _ni('cameraForCoordinates');
 
   @override
+  Future<CameraOptions> cameraForCoordinatesCameraOptions(
+    List<Point> coordinates,
+    CameraOptions camera,
+    ScreenBox box,
+  ) => throw _ni('cameraForCoordinatesCameraOptions');
+
+  @override
+  Future<CameraOptions> cameraForGeometry(
+    Map<String?, Object?> geometry,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) => throw _ni('cameraForGeometry');
+
+  @override
   Future<CoordinateBounds> coordinateBoundsForCamera(CameraOptions camera) =>
       throw _ni('coordinateBoundsForCamera');
 
@@ -275,6 +291,52 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     TileCacheBudgetInTiles? tileCacheBudgetInTiles,
   ) => throw _ni('setTileCacheBudget');
 
+  @override
+  Future<void> clearData() => throw _ni('clearData');
+
+  @override
+  Future<MapOptions> getMapOptions() => throw _ni('getMapOptions');
+
+  @override
+  Future<Uint8List?> snapshot() => throw _ni('snapshot');
+
+  // ===== Gesture / animation flags =====
+
+  @override
+  Future<void> setGestureInProgress(bool inProgress) =>
+      throw _ni('setGestureInProgress');
+
+  @override
+  Future<bool> isGestureInProgress() => throw _ni('isGestureInProgress');
+
+  @override
+  Future<void> setUserAnimationInProgress(bool inProgress) =>
+      throw _ni('setUserAnimationInProgress');
+
+  @override
+  Future<bool> isUserAnimationInProgress() =>
+      throw _ni('isUserAnimationInProgress');
+
+  @override
+  Future<void> setPrefetchZoomDelta(int delta) =>
+      throw _ni('setPrefetchZoomDelta');
+
+  @override
+  Future<int> getPrefetchZoomDelta() => throw _ni('getPrefetchZoomDelta');
+
+  // ===== Snapshotter / glyphs =====
+
+  @override
+  Future<void> setSnapshotLegacyMode(bool enabled) =>
+      throw _ni('setSnapshotLegacyMode');
+
+  @override
+  Future<String> styleGlyphURL() => throw _ni('styleGlyphURL');
+
+  @override
+  Future<void> setStyleGlyphURL(String glyphURL) =>
+      throw _ni('setStyleGlyphURL');
+
   // ===== Orientation =====
 
   @override
@@ -304,11 +366,68 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Feature queries =====
 
   @override
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+    RenderedQueryGeometry geometry,
+    RenderedQueryOptions options,
+  ) => throw _ni('queryRenderedFeatures');
+
+  @override
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+    String sourceId,
+    SourceQueryOptions options,
+  ) => throw _ni('querySourceFeatures');
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+    int? limit,
+    int? offset,
+  ) => throw _ni('getGeoJsonClusterLeaves');
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterChildren(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) => throw _ni('getGeoJsonClusterChildren');
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) => throw _ni('getGeoJsonClusterExpansionZoom');
+
+  @override
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
     required FeaturesetDescriptor featureset,
     RenderedQueryGeometry? geometry,
     String? filter,
   }) => throw _ni('queryRenderedFeaturesForFeatureset');
+
+  // ===== Source-feature state (pre-Featureset shapes) =====
+
+  @override
+  Future<void> setFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String state,
+  ) => throw _ni('setFeatureState');
+
+  @override
+  Future<String> getFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+  ) => throw _ni('getFeatureState');
+
+  @override
+  Future<void> removeFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String? stateKey,
+  ) => throw _ni('removeFeatureState');
 
   // ===== Featureset state =====
 

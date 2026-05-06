@@ -70,47 +70,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Describes the map context mode.
-/// We can make some optimizations if we know that the drawing context is not shared with other code.
-enum ContextMode: Int {
-  /// Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state
-  /// from a previous render pass. It also enables clearing the screen using glClear for the bottommost background
-  /// layer when no pattern is applied to that layer.
-  case uNIQUE = 0
-  /// Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
-  /// state set from a previous render pass.
-  case sHARED = 1
-}
-
-/// Options for enabling debugging features in a map.
-enum MapDebugOptionsData: Int {
-  /// Edges of tile boundaries are shown as thick, red lines to help diagnose
-  /// tile clipping issues.
-  case tILEBORDERS = 0
-  /// Each tile shows its tile coordinate (x/y/z) in the upper-left corner.
-  case pARSESTATUS = 1
-  /// Each tile shows a timestamp indicating when it was loaded.
-  case tIMESTAMPS = 2
-  /// Edges of glyphs and symbols are shown as faint, green lines to help
-  /// diagnose collision and label placement issues.
-  case cOLLISION = 3
-  /// Each drawing operation is replaced by a translucent fill. Overlapping
-  /// drawing operations appear more prominent to help diagnose overdrawing.
-  case oVERDRAW = 4
-  /// The stencil buffer is shown instead of the color buffer.
-  case sTENCILCLIP = 5
-  /// The depth buffer is shown instead of the color buffer.
-  case dEPTHBUFFER = 6
-  /// Visualize residency of tiles in the render cache. Tile boundaries of cached tiles
-  /// are rendered with green, tiles waiting for an update with yellow and tiles not in the cache
-  /// with red.
-  case rENDERCACHE = 7
-  /// Show 3D model bounding boxes.
-  case mODELBOUNDS = 8
-  /// Show a wireframe for terrain.
-  case tERRAINWIREFRAME = 9
-}
-
 /// Enum describing how to place view annotation relatively to geometry.
 enum ViewAnnotationAnchor: Int {
   /// The top of the view annotation is placed closest to the geometry.
@@ -240,275 +199,6 @@ enum _MapEvent: Int {
   case resourceRequest = 13
 }
 
-/// Options for enabling debugging features in a map.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapDebugOptions {
-  var data: MapDebugOptionsData
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapDebugOptions? {
-    let data = pigeonVar_list[0] as! MapDebugOptionsData
-
-    return MapDebugOptions(
-      data: data
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      data
-    ]
-  }
-}
-
-/// Describes the map option values.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapOptions {
-  /// The map context mode. This can be used to optimizations
-  /// if we know that the drawing context is not shared with other code.
-  var contextMode: ContextMode? = nil
-  /// The map constrain mode. This can be used to limit the map
-  /// to wrap around the globe horizontally. By default, it is set to
-  /// `HeightOnly`.
-  var constrainMode: ConstrainMode? = nil
-  /// The viewport mode. This can be used to flip the vertical
-  /// orientation of the map as some devices may use inverted orientation.
-  var viewportMode: ViewportMode? = nil
-  /// The orientation of the Map. By default, it is set to
-  /// `Upwards`.
-  var orientation: NorthOrientation? = nil
-  /// Specify whether to enable cross-source symbol collision detection
-  /// or not. By default, it is set to `true`.
-  var crossSourceCollisions: Bool? = nil
-  /// The size to resize the map object and renderer backend.
-  /// The size is given in `logical pixel` units. macOS and iOS platforms use
-  /// device-independent pixel units, while other platforms, such as Android,
-  /// use screen pixel units.
-  var size: Size? = nil
-  /// The custom pixel ratio. By default, it is set to 1.0
-  var pixelRatio: Double
-  /// Glyphs rasterization options to use for client-side text rendering.
-  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapOptions? {
-    let contextMode: ContextMode? = nilOrValue(pigeonVar_list[0])
-    let constrainMode: ConstrainMode? = nilOrValue(pigeonVar_list[1])
-    let viewportMode: ViewportMode? = nilOrValue(pigeonVar_list[2])
-    let orientation: NorthOrientation? = nilOrValue(pigeonVar_list[3])
-    let crossSourceCollisions: Bool? = nilOrValue(pigeonVar_list[4])
-    let size: Size? = nilOrValue(pigeonVar_list[5])
-    let pixelRatio = pigeonVar_list[6] as! Double
-    let glyphsRasterizationOptions: GlyphsRasterizationOptions? = nilOrValue(pigeonVar_list[7])
-
-    return MapOptions(
-      contextMode: contextMode,
-      constrainMode: constrainMode,
-      viewportMode: viewportMode,
-      orientation: orientation,
-      crossSourceCollisions: crossSourceCollisions,
-      size: size,
-      pixelRatio: pixelRatio,
-      glyphsRasterizationOptions: glyphsRasterizationOptions
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      contextMode,
-      constrainMode,
-      viewportMode,
-      orientation,
-      crossSourceCollisions,
-      size,
-      pixelRatio,
-      glyphsRasterizationOptions,
-    ]
-  }
-}
-
-/// Options for querying rendered features.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct RenderedQueryOptions {
-  /// Layer IDs to include in the query.
-  var layerIds: [String?]? = nil
-  /// Filters the returned features with an expression
-  var filter: String? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> RenderedQueryOptions? {
-    let layerIds: [String?]? = nilOrValue(pigeonVar_list[0])
-    let filter: String? = nilOrValue(pigeonVar_list[1])
-
-    return RenderedQueryOptions(
-      layerIds: layerIds,
-      filter: filter
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      layerIds,
-      filter,
-    ]
-  }
-}
-
-/// Options for querying source features.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct SourceQueryOptions {
-  /// Source layer IDs to include in the query.
-  var sourceLayerIds: [String?]? = nil
-  /// Filters the returned features with an expression
-  var filter: String
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> SourceQueryOptions? {
-    let sourceLayerIds: [String?]? = nilOrValue(pigeonVar_list[0])
-    let filter = pigeonVar_list[1] as! String
-
-    return SourceQueryOptions(
-      sourceLayerIds: sourceLayerIds,
-      filter: filter
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      sourceLayerIds,
-      filter,
-    ]
-  }
-}
-
-/// A value or a collection of a feature extension.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FeatureExtensionValue {
-  /// An optional value of a feature extension
-  var value: String? = nil
-  /// An optional array of features from a feature extension.
-  var featureCollection: [[String?: Any?]?]? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FeatureExtensionValue? {
-    let value: String? = nilOrValue(pigeonVar_list[0])
-    let featureCollection: [[String?: Any?]?]? = nilOrValue(pigeonVar_list[1])
-
-    return FeatureExtensionValue(
-      value: value,
-      featureCollection: featureCollection
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      value,
-      featureCollection,
-    ]
-  }
-}
-
-/// Represents query result that is returned in QueryRenderedFeaturesCallback.
-/// @see `queryRenderedFeatures`
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct QueriedRenderedFeature {
-  /// Feature returned by the query.
-  var queriedFeature: QueriedFeature
-  /// An array of layer Ids for the queried feature.
-  /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
-  /// If the feature is only rendered in one layer, a single Id will be provided.
-  var layers: [String?]
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> QueriedRenderedFeature? {
-    let queriedFeature = pigeonVar_list[0] as! QueriedFeature
-    let layers = pigeonVar_list[1] as! [String?]
-
-    return QueriedRenderedFeature(
-      queriedFeature: queriedFeature,
-      layers: layers
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      queriedFeature,
-      layers,
-    ]
-  }
-}
-
-/// Represents query result that is returned in QuerySourceFeaturesCallback.
-/// @see `querySourceFeatures`
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct QueriedSourceFeature {
-  /// Feature returned by the query.
-  var queriedFeature: QueriedFeature
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> QueriedSourceFeature? {
-    let queriedFeature = pigeonVar_list[0] as! QueriedFeature
-
-    return QueriedSourceFeature(
-      queriedFeature: queriedFeature
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      queriedFeature
-    ]
-  }
-}
-
-/// Represents query result that is returned in QueryFeaturesCallback.
-/// @see `queryRenderedFeatures` or `querySourceFeatures`
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct QueriedFeature {
-  /// Feature returned by the query.
-  var feature: [String?: Any?]
-  /// Source id for a queried feature.
-  var source: String
-  /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
-  /// or when data provided by the source is not layered.
-  var sourceLayer: String? = nil
-  /// Feature state for a queried feature. Type of the value is an Object.
-  /// @see `setFeatureState` and `getFeatureState`
-  var state: String
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> QueriedFeature? {
-    let feature = pigeonVar_list[0] as! [String?: Any?]
-    let source = pigeonVar_list[1] as! String
-    let sourceLayer: String? = nilOrValue(pigeonVar_list[2])
-    let state = pigeonVar_list[3] as! String
-
-    return QueriedFeature(
-      feature: feature,
-      source: source,
-      sourceLayer: sourceLayer,
-      state: state
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      feature,
-      source,
-      sourceLayer,
-      state,
-    ]
-  }
-}
-
 /// Internal class to handle pigeon conversions for interactions.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -632,198 +322,190 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 136:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return MapDebugOptionsData(rawValue: enumResultAsInt)
+        return ViewAnnotationAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ViewAnnotationAnchor(rawValue: enumResultAsInt)
+        return _InteractionType(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _InteractionType(rawValue: enumResultAsInt)
+        return GestureState(rawValue: enumResultAsInt)
       }
       return nil
     case 139:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return GestureState(rawValue: enumResultAsInt)
+        return Type(rawValue: enumResultAsInt)
       }
       return nil
     case 140:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return Type(rawValue: enumResultAsInt)
+        return StylePackErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 141:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StylePackErrorType(rawValue: enumResultAsInt)
+        return ResponseErrorReason(rawValue: enumResultAsInt)
       }
       return nil
     case 142:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ResponseErrorReason(rawValue: enumResultAsInt)
+        return OfflineRegionDownloadState(rawValue: enumResultAsInt)
       }
       return nil
     case 143:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return OfflineRegionDownloadState(rawValue: enumResultAsInt)
+        return TileStoreUsageMode(rawValue: enumResultAsInt)
       }
       return nil
     case 144:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TileStoreUsageMode(rawValue: enumResultAsInt)
+        return StylePropertyValueKind(rawValue: enumResultAsInt)
       }
       return nil
     case 145:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StylePropertyValueKind(rawValue: enumResultAsInt)
+        return Anchor(rawValue: enumResultAsInt)
       }
       return nil
     case 146:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return Anchor(rawValue: enumResultAsInt)
+        return HttpMethod(rawValue: enumResultAsInt)
       }
       return nil
     case 147:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return HttpMethod(rawValue: enumResultAsInt)
+        return HttpRequestErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 148:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return HttpRequestErrorType(rawValue: enumResultAsInt)
+        return DownloadErrorCode(rawValue: enumResultAsInt)
       }
       return nil
     case 149:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return DownloadErrorCode(rawValue: enumResultAsInt)
+        return DownloadState(rawValue: enumResultAsInt)
       }
       return nil
     case 150:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return DownloadState(rawValue: enumResultAsInt)
+        return TileRegionErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 151:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TileRegionErrorType(rawValue: enumResultAsInt)
-      }
-      return nil
-    case 152:
-      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
-      if let enumResultAsInt = enumResultAsInt {
         return _MapEvent(rawValue: enumResultAsInt)
       }
       return nil
-    case 153:
+    case 152:
       return Point.fromMap(self.readValue() as! [String: Any])
-    case 154:
+    case 153:
       return Feature.fromMap(self.readValue() as! [String: Any])
-    case 155:
+    case 154:
       return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
-    case 156:
+    case 155:
       return CameraOptions.fromList(self.readValue() as! [Any?])
-    case 157:
+    case 156:
       return CameraState.fromList(self.readValue() as! [Any?])
-    case 158:
+    case 157:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 159:
+    case 158:
       return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 160:
+    case 159:
       return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
-    case 161:
+    case 160:
       return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
-    case 162:
+    case 161:
       return CameraBounds.fromList(self.readValue() as! [Any?])
-    case 163:
+    case 162:
       return MapAnimationOptions.fromList(self.readValue() as! [Any?])
-    case 164:
+    case 163:
       return Size.fromList(self.readValue() as! [Any?])
-    case 165:
+    case 164:
       return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 166:
+    case 165:
       return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
-    case 167:
+    case 166:
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
-    case 168:
+    case 167:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 169:
+    case 168:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 170:
+    case 169:
       return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 171:
+    case 170:
       return ImportPosition.fromList(self.readValue() as! [Any?])
-    case 172:
+    case 171:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
-    case 173:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 174:
+    case 172:
       return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 175:
+    case 173:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 176:
+    case 174:
       return MapOptions.fromList(self.readValue() as! [Any?])
-    case 177:
+    case 175:
       return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 178:
+    case 176:
       return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 179:
+    case 177:
       return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 180:
+    case 178:
       return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 181:
+    case 179:
       return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 182:
+    case 180:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 183:
+    case 181:
       return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
-    case 184:
+    case 182:
       return FeatureState.fromList(self.readValue() as! [Any?])
-    case 185:
+    case 183:
       return _InteractionPigeon.fromList(self.readValue() as! [Any?])
-    case 186:
+    case 184:
       return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
-    case 187:
+    case 185:
       return FeaturesetFeature.fromList(self.readValue() as! [Any?])
-    case 188:
+    case 186:
       return MapContentGestureContext.fromList(self.readValue() as! [Any?])
-    case 189:
+    case 187:
       return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 190:
+    case 188:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 191:
+    case 189:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 192:
+    case 190:
       return FlatLight.fromList(self.readValue() as! [Any?])
-    case 193:
+    case 191:
       return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 194:
+    case 192:
       return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 195:
+    case 193:
       return MbxImage.fromList(self.readValue() as! [Any?])
-    case 196:
+    case 194:
       return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 197:
+    case 195:
       return ImageContent.fromList(self.readValue() as! [Any?])
-    case 198:
+    case 196:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 199:
+    case 197:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -854,197 +536,191 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapWidgetDebugOptionsData {
       super.writeByte(135)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MapDebugOptionsData {
+    } else if let value = value as? ViewAnnotationAnchor {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ViewAnnotationAnchor {
+    } else if let value = value as? _InteractionType {
       super.writeByte(137)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _InteractionType {
+    } else if let value = value as? GestureState {
       super.writeByte(138)
       super.writeValue(value.rawValue)
-    } else if let value = value as? GestureState {
+    } else if let value = value as? Type {
       super.writeByte(139)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Type {
+    } else if let value = value as? StylePackErrorType {
       super.writeByte(140)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePackErrorType {
+    } else if let value = value as? ResponseErrorReason {
       super.writeByte(141)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ResponseErrorReason {
+    } else if let value = value as? OfflineRegionDownloadState {
       super.writeByte(142)
       super.writeValue(value.rawValue)
-    } else if let value = value as? OfflineRegionDownloadState {
+    } else if let value = value as? TileStoreUsageMode {
       super.writeByte(143)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileStoreUsageMode {
+    } else if let value = value as? StylePropertyValueKind {
       super.writeByte(144)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePropertyValueKind {
+    } else if let value = value as? Anchor {
       super.writeByte(145)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Anchor {
+    } else if let value = value as? HttpMethod {
       super.writeByte(146)
       super.writeValue(value.rawValue)
-    } else if let value = value as? HttpMethod {
+    } else if let value = value as? HttpRequestErrorType {
       super.writeByte(147)
       super.writeValue(value.rawValue)
-    } else if let value = value as? HttpRequestErrorType {
+    } else if let value = value as? DownloadErrorCode {
       super.writeByte(148)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DownloadErrorCode {
+    } else if let value = value as? DownloadState {
       super.writeByte(149)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DownloadState {
+    } else if let value = value as? TileRegionErrorType {
       super.writeByte(150)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileRegionErrorType {
+    } else if let value = value as? _MapEvent {
       super.writeByte(151)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _MapEvent {
-      super.writeByte(152)
-      super.writeValue(value.rawValue)
     } else if let value = value as? Point {
-      super.writeByte(153)
+      super.writeByte(152)
       super.writeValue(value.toMap())
     } else if let value = value as? Feature {
-      super.writeByte(154)
+      super.writeByte(153)
       super.writeValue(value.toMap())
     } else if let value = value as? MbxEdgeInsets {
-      super.writeByte(155)
+      super.writeByte(154)
       super.writeValue(value.toList())
     } else if let value = value as? CameraOptions {
-      super.writeByte(156)
+      super.writeByte(155)
       super.writeValue(value.toList())
     } else if let value = value as? CameraState {
-      super.writeByte(157)
+      super.writeByte(156)
       super.writeValue(value.toList())
     } else if let value = value as? ScreenCoordinate {
-      super.writeByte(158)
+      super.writeByte(157)
       super.writeValue(value.toList())
     } else if let value = value as? CoordinateBounds {
-      super.writeByte(159)
+      super.writeByte(158)
       super.writeValue(value.toList())
     } else if let value = value as? CoordinateBoundsZoom {
-      super.writeByte(160)
+      super.writeByte(159)
       super.writeValue(value.toList())
     } else if let value = value as? CameraBoundsOptions {
-      super.writeByte(161)
+      super.writeByte(160)
       super.writeValue(value.toList())
     } else if let value = value as? CameraBounds {
-      super.writeByte(162)
+      super.writeByte(161)
       super.writeValue(value.toList())
     } else if let value = value as? MapAnimationOptions {
-      super.writeByte(163)
+      super.writeByte(162)
       super.writeValue(value.toList())
     } else if let value = value as? Size {
-      super.writeByte(164)
+      super.writeByte(163)
       super.writeValue(value.toList())
     } else if let value = value as? ScreenBox {
-      super.writeByte(165)
+      super.writeByte(164)
       super.writeValue(value.toList())
     } else if let value = value as? GlyphsRasterizationOptions {
-      super.writeByte(166)
+      super.writeByte(165)
       super.writeValue(value.toList())
     } else if let value = value as? TileCoverOptions {
-      super.writeByte(167)
+      super.writeByte(166)
       super.writeValue(value.toList())
     } else if let value = value as? StyleObjectInfo {
-      super.writeByte(168)
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else if let value = value as? StyleProjection {
-      super.writeByte(169)
+      super.writeByte(168)
       super.writeValue(value.toList())
     } else if let value = value as? LayerPosition {
-      super.writeByte(170)
+      super.writeByte(169)
       super.writeValue(value.toList())
     } else if let value = value as? ImportPosition {
-      super.writeByte(171)
+      super.writeByte(170)
       super.writeValue(value.toList())
     } else if let value = value as? TransitionOptions {
-      super.writeByte(172)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
-      super.writeByte(173)
+      super.writeByte(171)
       super.writeValue(value.toList())
     } else if let value = value as? TileCacheBudgetInMegabytes {
-      super.writeByte(174)
+      super.writeByte(172)
       super.writeValue(value.toList())
     } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(175)
+      super.writeByte(173)
       super.writeValue(value.toList())
     } else if let value = value as? MapOptions {
-      super.writeByte(176)
+      super.writeByte(174)
       super.writeValue(value.toList())
     } else if let value = value as? RenderedQueryOptions {
-      super.writeByte(177)
+      super.writeByte(175)
       super.writeValue(value.toList())
     } else if let value = value as? SourceQueryOptions {
-      super.writeByte(178)
+      super.writeByte(176)
       super.writeValue(value.toList())
     } else if let value = value as? FeatureExtensionValue {
-      super.writeByte(179)
+      super.writeByte(177)
       super.writeValue(value.toList())
     } else if let value = value as? QueriedRenderedFeature {
-      super.writeByte(180)
+      super.writeByte(178)
       super.writeValue(value.toList())
     } else if let value = value as? QueriedSourceFeature {
-      super.writeByte(181)
+      super.writeByte(179)
       super.writeValue(value.toList())
     } else if let value = value as? QueriedFeature {
-      super.writeByte(182)
+      super.writeByte(180)
       super.writeValue(value.toList())
     } else if let value = value as? FeaturesetFeatureId {
-      super.writeByte(183)
+      super.writeByte(181)
       super.writeValue(value.toList())
     } else if let value = value as? FeatureState {
-      super.writeByte(184)
+      super.writeByte(182)
       super.writeValue(value.toList())
     } else if let value = value as? _InteractionPigeon {
-      super.writeByte(185)
+      super.writeByte(183)
       super.writeValue(value.toList())
     } else if let value = value as? FeaturesetDescriptor {
-      super.writeByte(186)
+      super.writeByte(184)
       super.writeValue(value.toList())
     } else if let value = value as? FeaturesetFeature {
-      super.writeByte(187)
+      super.writeByte(185)
       super.writeValue(value.toList())
     } else if let value = value as? MapContentGestureContext {
-      super.writeByte(188)
+      super.writeByte(186)
       super.writeValue(value.toList())
     } else if let value = value as? _RenderedQueryGeometry {
-      super.writeByte(189)
+      super.writeByte(187)
       super.writeValue(value.toList())
     } else if let value = value as? ProjectedMeters {
-      super.writeByte(190)
+      super.writeByte(188)
       super.writeValue(value.toList())
     } else if let value = value as? MercatorCoordinate {
-      super.writeByte(191)
+      super.writeByte(189)
       super.writeValue(value.toList())
     } else if let value = value as? FlatLight {
-      super.writeByte(192)
+      super.writeByte(190)
       super.writeValue(value.toList())
     } else if let value = value as? DirectionalLight {
-      super.writeByte(193)
+      super.writeByte(191)
       super.writeValue(value.toList())
     } else if let value = value as? AmbientLight {
-      super.writeByte(194)
+      super.writeByte(192)
       super.writeValue(value.toList())
     } else if let value = value as? MbxImage {
-      super.writeByte(195)
+      super.writeByte(193)
       super.writeValue(value.toList())
     } else if let value = value as? ImageStretches {
-      super.writeByte(196)
+      super.writeByte(194)
       super.writeValue(value.toList())
     } else if let value = value as? ImageContent {
-      super.writeByte(197)
+      super.writeByte(195)
       super.writeValue(value.toList())
     } else if let value = value as? CanonicalTileID {
-      super.writeByte(198)
+      super.writeByte(196)
       super.writeValue(value.toList())
     } else if let value = value as? StylePropertyValue {
-      super.writeByte(199)
+      super.writeByte(197)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1864,16 +1540,6 @@ protocol _MapInterface {
   func getMapOptions() throws -> MapOptions
   func getDebugOptions() throws -> [MapWidgetDebugOptionsData]
   func setDebugOptions(debugOptions: [MapWidgetDebugOptionsData]) throws
-  /// Returns the `map debug options`.
-  ///
-  /// @return An array of `map debug options` flags currently set to the map.
-  func getDebug() throws -> [MapDebugOptions?]
-  /// Sets the `map debug options` and enables debug mode based on the passed value.
-  ///
-  /// @param debugOptions An array of `map debug options` to be set.
-  /// @param value A `boolean` value representing the state for a given `map debug options`.
-  ///
-  func setDebug(debugOptions: [MapDebugOptions?], value: Bool) throws
   /// Queries the map for rendered features.
   ///
   /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
@@ -2046,6 +1712,11 @@ protocol _MapInterface {
   /// This property allows setting a custom glyph URL at runtime, making it easier to
   /// apply custom fonts to the map without modifying the base style.
   func setStyleGlyphURL(glyphURL: String) throws
+  /// Captures a snapshot of the current map view as PNG-encoded bytes.
+  ///
+  /// Returns null if the snapshot operation timed out or otherwise failed
+  /// to produce an image.
+  func snapshot(completion: @escaping (Result<FlutterStandardTypedData?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -2366,43 +2037,6 @@ class _MapInterfaceSetup {
       }
     } else {
       setDebugOptionsChannel.setMessageHandler(nil)
-    }
-    /// Returns the `map debug options`.
-    ///
-    /// @return An array of `map debug options` flags currently set to the map.
-    let getDebugChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getDebugChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getDebug()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getDebugChannel.setMessageHandler(nil)
-    }
-    /// Sets the `map debug options` and enables debug mode based on the passed value.
-    ///
-    /// @param debugOptions An array of `map debug options` to be set.
-    /// @param value A `boolean` value representing the state for a given `map debug options`.
-    ///
-    let setDebugChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setDebugChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let debugOptionsArg = args[0] as! [MapDebugOptions?]
-        let valueArg = args[1] as! Bool
-        do {
-          try api.setDebug(debugOptions: debugOptionsArg, value: valueArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setDebugChannel.setMessageHandler(nil)
     }
     /// Queries the map for rendered features.
     ///
@@ -2937,6 +2571,25 @@ class _MapInterfaceSetup {
       }
     } else {
       setStyleGlyphURLChannel.setMessageHandler(nil)
+    }
+    /// Captures a snapshot of the current map view as PNG-encoded bytes.
+    ///
+    /// Returns null if the snapshot operation timed out or otherwise failed
+    /// to produce an image.
+    let snapshotChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.snapshot\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      snapshotChannel.setMessageHandler { _, reply in
+        api.snapshot { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      snapshotChannel.setMessageHandler(nil)
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
@@ -161,6 +163,22 @@ class MapboxMap implements MapboxMapInterface {
     double? pitch,
   ) => _impl.cameraForCoordinates(coordinates, padding, bearing, pitch);
 
+  /// Returns the camera options adjusted so the given [coordinates] fit
+  /// inside the given [box], using the given starting [camera] state.
+  Future<CameraOptions> cameraForCoordinatesCameraOptions(
+    List<Point> coordinates,
+    CameraOptions camera,
+    ScreenBox box,
+  ) => _impl.cameraForCoordinatesCameraOptions(coordinates, camera, box);
+
+  /// Returns camera options that fit the given GeoJSON [geometry].
+  Future<CameraOptions> cameraForGeometry(
+    Map<String?, Object?> geometry,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) => _impl.cameraForGeometry(geometry, padding, bearing, pitch);
+
   /// Returns the coordinate bounds that are visible for a given [camera].
   Future<CoordinateBounds> coordinateBoundsForCamera(CameraOptions camera) =>
       _impl.coordinateBoundsForCamera(camera);
@@ -275,6 +293,73 @@ class MapboxMap implements MapboxMapInterface {
     tileCacheBudgetInTiles,
   );
 
+  /// Clears temporary map data for this instance, freeing resources.
+  Future<void> clearData() => _impl.clearData();
+
+  /// Returns the configured `MapOptions` for this map.
+  Future<MapOptions> getMapOptions() => _impl.getMapOptions();
+
+  /// Captures a snapshot of the current map view as PNG-encoded bytes.
+  /// Returns null if the snapshot operation timed out or otherwise failed.
+  Future<Uint8List?> snapshot() => _impl.snapshot();
+
+  // ===== Gesture / animation flags =====
+
+  /// Tells the rendering engine that a gesture is in progress so labels can
+  /// switch to gesture-friendly texture filters.
+  Future<void> setGestureInProgress(bool inProgress) =>
+      _impl.setGestureInProgress(inProgress);
+
+  /// Returns whether a gesture is currently in progress.
+  Future<bool> isGestureInProgress() => _impl.isGestureInProgress();
+
+  /// Tells the rendering engine that a user-driven animation is in progress
+  /// so symbol placement is more stable.
+  Future<void> setUserAnimationInProgress(bool inProgress) =>
+      _impl.setUserAnimationInProgress(inProgress);
+
+  /// Returns whether a user-driven animation is currently in progress.
+  Future<bool> isUserAnimationInProgress() => _impl.isUserAnimationInProgress();
+
+  /// Sets the prefetch zoom delta. When non-zero, the engine first requests
+  /// tiles `delta` levels below the target zoom so the map fills in faster
+  /// at lower resolution.
+  Future<void> setPrefetchZoomDelta(int delta) =>
+      _impl.setPrefetchZoomDelta(delta);
+
+  /// Returns the current prefetch zoom delta.
+  Future<int> getPrefetchZoomDelta() => _impl.getPrefetchZoomDelta();
+
+  // ===== Legacy gesture listener aliases (v2 surface) =====
+
+  /// Legacy alias for `MapWidget.onScrollListener`. Stores the callback;
+  /// it fires on map scroll gestures.
+  void setOnMapMoveListener(OnMapScrollListener? listener) {
+    _impl.onMapScrollListener = listener;
+  }
+
+  /// Legacy alias for `MapWidget.onZoomListener`. Stores the callback;
+  /// it fires on map zoom gestures.
+  void setOnMapZoomListener(OnMapZoomListener? listener) {
+    _impl.onMapZoomListener = listener;
+  }
+
+  // ===== Snapshotter / glyphs =====
+
+  /// Sets whether legacy mode is used for [snapshot]. Has no effect on iOS.
+  @experimental
+  Future<void> setSnapshotLegacyMode(bool enabled) =>
+      _impl.setSnapshotLegacyMode(enabled);
+
+  /// Returns the runtime glyph URL used for text labels.
+  @experimental
+  Future<String> styleGlyphURL() => _impl.styleGlyphURL();
+
+  /// Sets the runtime glyph URL used for text labels.
+  @experimental
+  Future<void> setStyleGlyphURL(String glyphURL) =>
+      _impl.setStyleGlyphURL(glyphURL);
+
   // ===== Map orientation =====
 
   /// Sets the map's north orientation.
@@ -306,6 +391,40 @@ class MapboxMap implements MapboxMapInterface {
 
   // ===== Feature queries =====
 
+  /// Queries the map for rendered features inside [geometry] matching the
+  /// given query [options].
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+    RenderedQueryGeometry geometry,
+    RenderedQueryOptions options,
+  ) => _impl.queryRenderedFeatures(geometry, options);
+
+  /// Queries the source identified by [sourceId] for features matching the
+  /// given query [options].
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+    String sourceId,
+    SourceQueryOptions options,
+  ) => _impl.querySourceFeatures(sourceId, options);
+
+  /// Returns the leaves (original points) of a cluster from a GeoJSON source.
+  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+    int? limit,
+    int? offset,
+  ) => _impl.getGeoJsonClusterLeaves(sourceIdentifier, cluster, limit, offset);
+
+  /// Returns the children of a cluster from a GeoJSON source.
+  Future<FeatureExtensionValue> getGeoJsonClusterChildren(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) => _impl.getGeoJsonClusterChildren(sourceIdentifier, cluster);
+
+  /// Returns the zoom at which a cluster expands into multiple children.
+  Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) => _impl.getGeoJsonClusterExpansionZoom(sourceIdentifier, cluster);
+
   /// Queries the map for rendered features matching a [featureset].
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
     required FeaturesetDescriptor featureset,
@@ -316,6 +435,32 @@ class MapboxMap implements MapboxMapInterface {
     geometry: geometry,
     filter: filter,
   );
+
+  // ===== Source-feature state (pre-Featureset shapes) =====
+
+  /// Updates entries in the state map of a feature within a style source.
+  Future<void> setFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String state,
+  ) => _impl.setFeatureState(sourceId, sourceLayerId, featureId, state);
+
+  /// Returns the state map of a feature within a style source as a JSON string.
+  Future<String> getFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+  ) => _impl.getFeatureState(sourceId, sourceLayerId, featureId);
+
+  /// Removes a single state property (or all properties) from a feature
+  /// within a style source. Pass `null` for [stateKey] to remove all.
+  Future<void> removeFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String? stateKey,
+  ) => _impl.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey);
 
   // ===== Featureset state =====
 

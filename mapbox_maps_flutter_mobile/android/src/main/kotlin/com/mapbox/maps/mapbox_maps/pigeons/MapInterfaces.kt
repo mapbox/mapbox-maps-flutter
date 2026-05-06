@@ -76,73 +76,6 @@ private fun deepEqualsMapInterfaces(a: Any?, b: Any?): Boolean {
   return a == b
 }
 
-/**
- * Describes the map context mode.
- * We can make some optimizations if we know that the drawing context is not shared with other code.
- */
-enum class ContextMode(val raw: Int) {
-  /**
-   * Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state
-   * from a previous render pass. It also enables clearing the screen using glClear for the bottommost background
-   * layer when no pattern is applied to that layer.
-   */
-  UNIQUE(0),
-  /**
-   * Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
-   * state set from a previous render pass.
-   */
-  SHARED(1);
-
-  companion object {
-    fun ofRaw(raw: Int): ContextMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Options for enabling debugging features in a map. */
-enum class MapDebugOptionsData(val raw: Int) {
-  /**
-   * Edges of tile boundaries are shown as thick, red lines to help diagnose
-   * tile clipping issues.
-   */
-  TILE_BORDERS(0),
-  /** Each tile shows its tile coordinate (x/y/z) in the upper-left corner. */
-  PARSE_STATUS(1),
-  /** Each tile shows a timestamp indicating when it was loaded. */
-  TIMESTAMPS(2),
-  /**
-   * Edges of glyphs and symbols are shown as faint, green lines to help
-   * diagnose collision and label placement issues.
-   */
-  COLLISION(3),
-  /**
-   * Each drawing operation is replaced by a translucent fill. Overlapping
-   * drawing operations appear more prominent to help diagnose overdrawing.
-   */
-  OVERDRAW(4),
-  /** The stencil buffer is shown instead of the color buffer. */
-  STENCIL_CLIP(5),
-  /** The depth buffer is shown instead of the color buffer. */
-  DEPTH_BUFFER(6),
-  /**
-   * Visualize residency of tiles in the render cache. Tile boundaries of cached tiles
-   * are rendered with green, tiles waiting for an update with yellow and tiles not in the cache
-   * with red.
-   */
-  RENDER_CACHE(7),
-  /** Show 3D model bounding boxes. */
-  MODEL_BOUNDS(8),
-  /** Show a wireframe for terrain. */
-  TERRAIN_WIREFRAME(9);
-
-  companion object {
-    fun ofRaw(raw: Int): MapDebugOptionsData? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Enum describing how to place view annotation relatively to geometry. */
 enum class ViewAnnotationAnchor(val raw: Int) {
   /** The top of the view annotation is placed closest to the geometry. */
@@ -333,373 +266,6 @@ enum class _MapEvent(val raw: Int) {
 }
 
 /**
- * Options for enabling debugging features in a map.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class MapDebugOptions(
-  val data: MapDebugOptionsData
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapDebugOptions {
-      val data = pigeonVar_list[0] as MapDebugOptionsData
-      return MapDebugOptions(data)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      data,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapDebugOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return data == other.data
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Describes the map option values.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class MapOptions(
-  /**
-   * The map context mode. This can be used to optimizations
-   * if we know that the drawing context is not shared with other code.
-   */
-  val contextMode: ContextMode? = null,
-  /**
-   * The map constrain mode. This can be used to limit the map
-   * to wrap around the globe horizontally. By default, it is set to
-   * `HeightOnly`.
-   */
-  val constrainMode: ConstrainMode? = null,
-  /**
-   * The viewport mode. This can be used to flip the vertical
-   * orientation of the map as some devices may use inverted orientation.
-   */
-  val viewportMode: ViewportMode? = null,
-  /**
-   * The orientation of the Map. By default, it is set to
-   * `Upwards`.
-   */
-  val orientation: NorthOrientation? = null,
-  /**
-   * Specify whether to enable cross-source symbol collision detection
-   * or not. By default, it is set to `true`.
-   */
-  val crossSourceCollisions: Boolean? = null,
-  /**
-   * The size to resize the map object and renderer backend.
-   * The size is given in `logical pixel` units. macOS and iOS platforms use
-   * device-independent pixel units, while other platforms, such as Android,
-   * use screen pixel units.
-   */
-  val size: Size? = null,
-  /** The custom pixel ratio. By default, it is set to 1.0 */
-  val pixelRatio: Double,
-  /** Glyphs rasterization options to use for client-side text rendering. */
-  val glyphsRasterizationOptions: GlyphsRasterizationOptions? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapOptions {
-      val contextMode = pigeonVar_list[0] as ContextMode?
-      val constrainMode = pigeonVar_list[1] as ConstrainMode?
-      val viewportMode = pigeonVar_list[2] as ViewportMode?
-      val orientation = pigeonVar_list[3] as NorthOrientation?
-      val crossSourceCollisions = pigeonVar_list[4] as Boolean?
-      val size = pigeonVar_list[5] as Size?
-      val pixelRatio = pigeonVar_list[6] as Double
-      val glyphsRasterizationOptions = pigeonVar_list[7] as GlyphsRasterizationOptions?
-      return MapOptions(contextMode, constrainMode, viewportMode, orientation, crossSourceCollisions, size, pixelRatio, glyphsRasterizationOptions)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      contextMode,
-      constrainMode,
-      viewportMode,
-      orientation,
-      crossSourceCollisions,
-      size,
-      pixelRatio,
-      glyphsRasterizationOptions,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return contextMode == other.contextMode &&
-      constrainMode == other.constrainMode &&
-      viewportMode == other.viewportMode &&
-      orientation == other.orientation &&
-      crossSourceCollisions == other.crossSourceCollisions &&
-      size == other.size &&
-      pixelRatio == other.pixelRatio &&
-      glyphsRasterizationOptions == other.glyphsRasterizationOptions
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Options for querying rendered features.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class RenderedQueryOptions(
-  /** Layer IDs to include in the query. */
-  val layerIds: List<String?>? = null,
-  /** Filters the returned features with an expression */
-  val filter: String? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): RenderedQueryOptions {
-      val layerIds = pigeonVar_list[0] as List<String?>?
-      val filter = pigeonVar_list[1] as String?
-      return RenderedQueryOptions(layerIds, filter)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      layerIds,
-      filter,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is RenderedQueryOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return deepEqualsMapInterfaces(layerIds, other.layerIds) &&
-      filter == other.filter
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Options for querying source features.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class SourceQueryOptions(
-  /** Source layer IDs to include in the query. */
-  val sourceLayerIds: List<String?>? = null,
-  /** Filters the returned features with an expression */
-  val filter: String
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): SourceQueryOptions {
-      val sourceLayerIds = pigeonVar_list[0] as List<String?>?
-      val filter = pigeonVar_list[1] as String
-      return SourceQueryOptions(sourceLayerIds, filter)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      sourceLayerIds,
-      filter,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is SourceQueryOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return deepEqualsMapInterfaces(sourceLayerIds, other.sourceLayerIds) &&
-      filter == other.filter
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * A value or a collection of a feature extension.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class FeatureExtensionValue(
-  /** An optional value of a feature extension */
-  val value: String? = null,
-  /** An optional array of features from a feature extension. */
-  val featureCollection: List<Map<String?, Any?>?>? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): FeatureExtensionValue {
-      val value = pigeonVar_list[0] as String?
-      val featureCollection = pigeonVar_list[1] as List<Map<String?, Any?>?>?
-      return FeatureExtensionValue(value, featureCollection)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      value,
-      featureCollection,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is FeatureExtensionValue) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return value == other.value &&
-      deepEqualsMapInterfaces(featureCollection, other.featureCollection)
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Represents query result that is returned in QueryRenderedFeaturesCallback.
- * @see `queryRenderedFeatures`
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class QueriedRenderedFeature(
-  /** Feature returned by the query. */
-  val queriedFeature: QueriedFeature,
-  /**
-   * An array of layer Ids for the queried feature.
-   * If the feature has been rendered in multiple layers, multiple Ids will be provided.
-   * If the feature is only rendered in one layer, a single Id will be provided.
-   */
-  val layers: List<String?>
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): QueriedRenderedFeature {
-      val queriedFeature = pigeonVar_list[0] as QueriedFeature
-      val layers = pigeonVar_list[1] as List<String?>
-      return QueriedRenderedFeature(queriedFeature, layers)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      queriedFeature,
-      layers,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is QueriedRenderedFeature) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return queriedFeature == other.queriedFeature &&
-      deepEqualsMapInterfaces(layers, other.layers)
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Represents query result that is returned in QuerySourceFeaturesCallback.
- * @see `querySourceFeatures`
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class QueriedSourceFeature(
-  /** Feature returned by the query. */
-  val queriedFeature: QueriedFeature
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): QueriedSourceFeature {
-      val queriedFeature = pigeonVar_list[0] as QueriedFeature
-      return QueriedSourceFeature(queriedFeature)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      queriedFeature,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is QueriedSourceFeature) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return queriedFeature == other.queriedFeature
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Represents query result that is returned in QueryFeaturesCallback.
- * @see `queryRenderedFeatures` or `querySourceFeatures`
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class QueriedFeature(
-  /** Feature returned by the query. */
-  val feature: Map<String?, Any?>,
-  /** Source id for a queried feature. */
-  val source: String,
-  /**
-   * Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
-   * or when data provided by the source is not layered.
-   */
-  val sourceLayer: String? = null,
-  /**
-   * Feature state for a queried feature. Type of the value is an Object.
-   * @see `setFeatureState` and `getFeatureState`
-   */
-  val state: String
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): QueriedFeature {
-      val feature = pigeonVar_list[0] as Map<String?, Any?>
-      val source = pigeonVar_list[1] as String
-      val sourceLayer = pigeonVar_list[2] as String?
-      val state = pigeonVar_list[3] as String
-      return QueriedFeature(feature, source, sourceLayer, state)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      feature,
-      source,
-      sourceLayer,
-      state,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is QueriedFeature) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return deepEqualsMapInterfaces(feature, other.feature) &&
-      source == other.source &&
-      sourceLayer == other.sourceLayer &&
-      state == other.state
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
  * Internal class to handle pigeon conversions for interactions.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -833,320 +399,310 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       136.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          MapDebugOptionsData.ofRaw(it.toInt())
+          ViewAnnotationAnchor.ofRaw(it.toInt())
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ViewAnnotationAnchor.ofRaw(it.toInt())
+          _InteractionType.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _InteractionType.ofRaw(it.toInt())
+          GestureState.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          GestureState.ofRaw(it.toInt())
+          Type.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Type.ofRaw(it.toInt())
+          StylePackErrorType.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePackErrorType.ofRaw(it.toInt())
+          ResponseErrorReason.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ResponseErrorReason.ofRaw(it.toInt())
+          OfflineRegionDownloadState.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          OfflineRegionDownloadState.ofRaw(it.toInt())
+          TileStoreUsageMode.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileStoreUsageMode.ofRaw(it.toInt())
+          StylePropertyValueKind.ofRaw(it.toInt())
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePropertyValueKind.ofRaw(it.toInt())
+          Anchor.ofRaw(it.toInt())
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Anchor.ofRaw(it.toInt())
+          HttpMethod.ofRaw(it.toInt())
         }
       }
       147.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpMethod.ofRaw(it.toInt())
+          HttpRequestErrorType.ofRaw(it.toInt())
         }
       }
       148.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpRequestErrorType.ofRaw(it.toInt())
+          DownloadErrorCode.ofRaw(it.toInt())
         }
       }
       149.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadErrorCode.ofRaw(it.toInt())
+          DownloadState.ofRaw(it.toInt())
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadState.ofRaw(it.toInt())
+          TileRegionErrorType.ofRaw(it.toInt())
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileRegionErrorType.ofRaw(it.toInt())
-        }
-      }
-      152.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
           _MapEvent.ofRaw(it.toInt())
         }
       }
-      153.toByte() -> {
+      152.toByte() -> {
         return (readValue(buffer) as? Map<String, Any?>)?.let {
           PointDecoder.fromMap(it)
         }
       }
-      154.toByte() -> {
+      153.toByte() -> {
         return (readValue(buffer) as? Map<String, Any?>)?.let {
           FeatureDecoder.fromMap(it)
         }
       }
-      155.toByte() -> {
+      154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MbxEdgeInsets.fromList(it)
         }
       }
-      156.toByte() -> {
+      155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraOptions.fromList(it)
         }
       }
-      157.toByte() -> {
+      156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraState.fromList(it)
         }
       }
-      158.toByte() -> {
+      157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ScreenCoordinate.fromList(it)
         }
       }
-      159.toByte() -> {
+      158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CoordinateBounds.fromList(it)
         }
       }
-      160.toByte() -> {
+      159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CoordinateBoundsZoom.fromList(it)
         }
       }
-      161.toByte() -> {
+      160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraBoundsOptions.fromList(it)
         }
       }
-      162.toByte() -> {
+      161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CameraBounds.fromList(it)
         }
       }
-      163.toByte() -> {
+      162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapAnimationOptions.fromList(it)
         }
       }
-      164.toByte() -> {
+      163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           Size.fromList(it)
         }
       }
-      165.toByte() -> {
+      164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ScreenBox.fromList(it)
         }
       }
-      166.toByte() -> {
+      165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GlyphsRasterizationOptions.fromList(it)
         }
       }
-      167.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TileCoverOptions.fromList(it)
         }
       }
-      168.toByte() -> {
+      167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StyleObjectInfo.fromList(it)
         }
       }
-      169.toByte() -> {
+      168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StyleProjection.fromList(it)
         }
       }
-      170.toByte() -> {
+      169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LayerPosition.fromList(it)
         }
       }
-      171.toByte() -> {
+      170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ImportPosition.fromList(it)
         }
       }
-      172.toByte() -> {
+      171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
       }
-      173.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
-        }
-      }
-      174.toByte() -> {
+      172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TileCacheBudgetInMegabytes.fromList(it)
         }
       }
-      175.toByte() -> {
+      173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TileCacheBudgetInTiles.fromList(it)
         }
       }
-      176.toByte() -> {
+      174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapOptions.fromList(it)
         }
       }
-      177.toByte() -> {
+      175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RenderedQueryOptions.fromList(it)
         }
       }
-      178.toByte() -> {
+      176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SourceQueryOptions.fromList(it)
         }
       }
-      179.toByte() -> {
+      177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeatureExtensionValue.fromList(it)
         }
       }
-      180.toByte() -> {
+      178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           QueriedRenderedFeature.fromList(it)
         }
       }
-      181.toByte() -> {
+      179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           QueriedSourceFeature.fromList(it)
         }
       }
-      182.toByte() -> {
+      180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           QueriedFeature.fromList(it)
         }
       }
-      183.toByte() -> {
+      181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeaturesetFeatureId.fromList(it)
         }
       }
-      184.toByte() -> {
+      182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeatureState.fromList(it)
         }
       }
-      185.toByte() -> {
+      183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           _InteractionPigeon.fromList(it)
         }
       }
-      186.toByte() -> {
+      184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeaturesetDescriptor.fromList(it)
         }
       }
-      187.toByte() -> {
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FeaturesetFeature.fromList(it)
         }
       }
-      188.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapContentGestureContext.fromList(it)
         }
       }
-      189.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           _RenderedQueryGeometry.fromList(it)
         }
       }
-      190.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ProjectedMeters.fromList(it)
         }
       }
-      191.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MercatorCoordinate.fromList(it)
         }
       }
-      192.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           FlatLight.fromList(it)
         }
       }
-      193.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           DirectionalLight.fromList(it)
         }
       }
-      194.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           AmbientLight.fromList(it)
         }
       }
-      195.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MbxImage.fromList(it)
         }
       }
-      196.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ImageStretches.fromList(it)
         }
       }
-      197.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ImageContent.fromList(it)
         }
       }
-      198.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CanonicalTileID.fromList(it)
         }
       }
-      199.toByte() -> {
+      197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -1184,260 +740,252 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(135)
         writeValue(stream, value.raw)
       }
-      is MapDebugOptionsData -> {
+      is ViewAnnotationAnchor -> {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is ViewAnnotationAnchor -> {
+      is _InteractionType -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is _InteractionType -> {
+      is GestureState -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is GestureState -> {
+      is Type -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is Type -> {
+      is StylePackErrorType -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is StylePackErrorType -> {
+      is ResponseErrorReason -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is ResponseErrorReason -> {
+      is OfflineRegionDownloadState -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is OfflineRegionDownloadState -> {
+      is TileStoreUsageMode -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is TileStoreUsageMode -> {
+      is StylePropertyValueKind -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is StylePropertyValueKind -> {
+      is Anchor -> {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is Anchor -> {
+      is HttpMethod -> {
         stream.write(146)
         writeValue(stream, value.raw)
       }
-      is HttpMethod -> {
+      is HttpRequestErrorType -> {
         stream.write(147)
         writeValue(stream, value.raw)
       }
-      is HttpRequestErrorType -> {
+      is DownloadErrorCode -> {
         stream.write(148)
         writeValue(stream, value.raw)
       }
-      is DownloadErrorCode -> {
+      is DownloadState -> {
         stream.write(149)
         writeValue(stream, value.raw)
       }
-      is DownloadState -> {
+      is TileRegionErrorType -> {
         stream.write(150)
         writeValue(stream, value.raw)
       }
-      is TileRegionErrorType -> {
+      is _MapEvent -> {
         stream.write(151)
         writeValue(stream, value.raw)
       }
-      is _MapEvent -> {
-        stream.write(152)
-        writeValue(stream, value.raw)
-      }
       is Point -> {
-        stream.write(153)
+        stream.write(152)
         writeValue(stream, value.toMap())
       }
       is Feature -> {
-        stream.write(154)
+        stream.write(153)
         writeValue(stream, value.toMap())
       }
       is MbxEdgeInsets -> {
-        stream.write(155)
+        stream.write(154)
         writeValue(stream, value.toList())
       }
       is CameraOptions -> {
-        stream.write(156)
+        stream.write(155)
         writeValue(stream, value.toList())
       }
       is CameraState -> {
-        stream.write(157)
+        stream.write(156)
         writeValue(stream, value.toList())
       }
       is ScreenCoordinate -> {
-        stream.write(158)
+        stream.write(157)
         writeValue(stream, value.toList())
       }
       is CoordinateBounds -> {
-        stream.write(159)
+        stream.write(158)
         writeValue(stream, value.toList())
       }
       is CoordinateBoundsZoom -> {
-        stream.write(160)
+        stream.write(159)
         writeValue(stream, value.toList())
       }
       is CameraBoundsOptions -> {
-        stream.write(161)
+        stream.write(160)
         writeValue(stream, value.toList())
       }
       is CameraBounds -> {
-        stream.write(162)
+        stream.write(161)
         writeValue(stream, value.toList())
       }
       is MapAnimationOptions -> {
-        stream.write(163)
+        stream.write(162)
         writeValue(stream, value.toList())
       }
       is Size -> {
-        stream.write(164)
+        stream.write(163)
         writeValue(stream, value.toList())
       }
       is ScreenBox -> {
-        stream.write(165)
+        stream.write(164)
         writeValue(stream, value.toList())
       }
       is GlyphsRasterizationOptions -> {
-        stream.write(166)
+        stream.write(165)
         writeValue(stream, value.toList())
       }
       is TileCoverOptions -> {
-        stream.write(167)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       is StyleObjectInfo -> {
-        stream.write(168)
+        stream.write(167)
         writeValue(stream, value.toList())
       }
       is StyleProjection -> {
-        stream.write(169)
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       is LayerPosition -> {
-        stream.write(170)
+        stream.write(169)
         writeValue(stream, value.toList())
       }
       is ImportPosition -> {
-        stream.write(171)
+        stream.write(170)
         writeValue(stream, value.toList())
       }
       is TransitionOptions -> {
-        stream.write(172)
-        writeValue(stream, value.toList())
-      }
-      is MapDebugOptions -> {
-        stream.write(173)
+        stream.write(171)
         writeValue(stream, value.toList())
       }
       is TileCacheBudgetInMegabytes -> {
-        stream.write(174)
+        stream.write(172)
         writeValue(stream, value.toList())
       }
       is TileCacheBudgetInTiles -> {
-        stream.write(175)
+        stream.write(173)
         writeValue(stream, value.toList())
       }
       is MapOptions -> {
-        stream.write(176)
+        stream.write(174)
         writeValue(stream, value.toList())
       }
       is RenderedQueryOptions -> {
-        stream.write(177)
+        stream.write(175)
         writeValue(stream, value.toList())
       }
       is SourceQueryOptions -> {
-        stream.write(178)
+        stream.write(176)
         writeValue(stream, value.toList())
       }
       is FeatureExtensionValue -> {
-        stream.write(179)
+        stream.write(177)
         writeValue(stream, value.toList())
       }
       is QueriedRenderedFeature -> {
-        stream.write(180)
+        stream.write(178)
         writeValue(stream, value.toList())
       }
       is QueriedSourceFeature -> {
-        stream.write(181)
+        stream.write(179)
         writeValue(stream, value.toList())
       }
       is QueriedFeature -> {
-        stream.write(182)
+        stream.write(180)
         writeValue(stream, value.toList())
       }
       is FeaturesetFeatureId -> {
-        stream.write(183)
+        stream.write(181)
         writeValue(stream, value.toList())
       }
       is FeatureState -> {
-        stream.write(184)
+        stream.write(182)
         writeValue(stream, value.toList())
       }
       is _InteractionPigeon -> {
-        stream.write(185)
+        stream.write(183)
         writeValue(stream, value.toList())
       }
       is FeaturesetDescriptor -> {
-        stream.write(186)
+        stream.write(184)
         writeValue(stream, value.toList())
       }
       is FeaturesetFeature -> {
-        stream.write(187)
+        stream.write(185)
         writeValue(stream, value.toList())
       }
       is MapContentGestureContext -> {
-        stream.write(188)
+        stream.write(186)
         writeValue(stream, value.toList())
       }
       is _RenderedQueryGeometry -> {
-        stream.write(189)
+        stream.write(187)
         writeValue(stream, value.toList())
       }
       is ProjectedMeters -> {
-        stream.write(190)
+        stream.write(188)
         writeValue(stream, value.toList())
       }
       is MercatorCoordinate -> {
-        stream.write(191)
+        stream.write(189)
         writeValue(stream, value.toList())
       }
       is FlatLight -> {
-        stream.write(192)
+        stream.write(190)
         writeValue(stream, value.toList())
       }
       is DirectionalLight -> {
-        stream.write(193)
+        stream.write(191)
         writeValue(stream, value.toList())
       }
       is AmbientLight -> {
-        stream.write(194)
+        stream.write(192)
         writeValue(stream, value.toList())
       }
       is MbxImage -> {
-        stream.write(195)
+        stream.write(193)
         writeValue(stream, value.toList())
       }
       is ImageStretches -> {
-        stream.write(196)
+        stream.write(194)
         writeValue(stream, value.toList())
       }
       is ImageContent -> {
-        stream.write(197)
+        stream.write(195)
         writeValue(stream, value.toList())
       }
       is CanonicalTileID -> {
-        stream.write(198)
+        stream.write(196)
         writeValue(stream, value.toList())
       }
       is StylePropertyValue -> {
-        stream.write(199)
+        stream.write(197)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -2220,20 +1768,6 @@ interface _MapInterface {
   fun getDebugOptions(): List<MapWidgetDebugOptionsData>
   fun setDebugOptions(debugOptions: List<MapWidgetDebugOptionsData>)
   /**
-   * Returns the `map debug options`.
-   *
-   * @return An array of `map debug options` flags currently set to the map.
-   */
-  fun getDebug(): List<MapDebugOptions?>
-  /**
-   * Sets the `map debug options` and enables debug mode based on the passed value.
-   *
-   * @param debugOptions An array of `map debug options` to be set.
-   * @param value A `boolean` value representing the state for a given `map debug options`.
-   *
-   */
-  fun setDebug(debugOptions: List<MapDebugOptions?>, value: Boolean)
-  /**
    * Queries the map for rendered features.
    *
    * @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
@@ -2445,6 +1979,13 @@ interface _MapInterface {
    * apply custom fonts to the map without modifying the base style.
    */
   fun setStyleGlyphURL(glyphURL: String)
+  /**
+   * Captures a snapshot of the current map view as PNG-encoded bytes.
+   *
+   * Returns null if the snapshot operation timed out or otherwise failed
+   * to produce an image.
+   */
+  fun snapshot(callback: (Result<ByteArray?>) -> Unit)
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -2770,40 +2311,6 @@ interface _MapInterface {
             val debugOptionsArg = args[0] as List<MapWidgetDebugOptionsData>
             val wrapped: List<Any?> = try {
               api.setDebugOptions(debugOptionsArg)
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.getDebug())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val debugOptionsArg = args[0] as List<MapDebugOptions?>
-            val valueArg = args[1] as Boolean
-            val wrapped: List<Any?> = try {
-              api.setDebug(debugOptionsArg, valueArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -3248,6 +2755,24 @@ interface _MapInterface {
               wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.snapshot$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.snapshot { result: Result<ByteArray?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
           }
         } else {
           channel.setMessageHandler(null)

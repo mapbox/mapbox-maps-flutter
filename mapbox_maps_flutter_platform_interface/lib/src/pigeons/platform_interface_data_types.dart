@@ -753,6 +753,19 @@ enum TileDataDomain {
 /// Type information of the variant's content
 enum Type { SCREEN_BOX, SCREEN_COORDINATE, LIST }
 
+/// Describes the map context mode.
+/// We can make some optimizations if we know that the drawing context is not shared with other code.
+enum ContextMode {
+  /// Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state
+  /// from a previous render pass. It also enables clearing the screen using glClear for the bottommost background
+  /// layer when no pattern is applied to that layer.
+  UNIQUE,
+
+  /// Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
+  /// state set from a previous render pass.
+  SHARED,
+}
+
 /// Describes the reason for an offline request response error.
 /// Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
 enum ResponseErrorReason {
@@ -4870,6 +4883,385 @@ class FeaturesetFeature {
         _deepEquals(geometry, other.geometry) &&
         _deepEquals(properties, other.properties) &&
         _deepEquals(state, other.state);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Describes the map option values.
+class MapOptions {
+  MapOptions({
+    this.contextMode,
+    this.constrainMode,
+    this.viewportMode,
+    this.orientation,
+    this.crossSourceCollisions,
+    this.size,
+    required this.pixelRatio,
+    this.glyphsRasterizationOptions,
+  });
+
+  /// The map context mode. This can be used to optimizations
+  /// if we know that the drawing context is not shared with other code.
+  ContextMode? contextMode;
+
+  /// The map constrain mode. This can be used to limit the map
+  /// to wrap around the globe horizontally. By default, it is set to
+  /// `HeightOnly`.
+  ConstrainMode? constrainMode;
+
+  /// The viewport mode. This can be used to flip the vertical
+  /// orientation of the map as some devices may use inverted orientation.
+  ViewportMode? viewportMode;
+
+  /// The orientation of the Map. By default, it is set to
+  /// `Upwards`.
+  NorthOrientation? orientation;
+
+  /// Specify whether to enable cross-source symbol collision detection
+  /// or not. By default, it is set to `true`.
+  bool? crossSourceCollisions;
+
+  /// The size to resize the map object and renderer backend.
+  /// The size is given in `logical pixel` units. macOS and iOS platforms use
+  /// device-independent pixel units, while other platforms, such as Android,
+  /// use screen pixel units.
+  Size? size;
+
+  /// The custom pixel ratio. By default, it is set to 1.0
+  double pixelRatio;
+
+  /// Glyphs rasterization options to use for client-side text rendering.
+  GlyphsRasterizationOptions? glyphsRasterizationOptions;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      contextMode,
+      constrainMode,
+      viewportMode,
+      orientation,
+      crossSourceCollisions,
+      size,
+      pixelRatio,
+      glyphsRasterizationOptions,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static MapOptions decode(Object result) {
+    result as List<Object?>;
+    return MapOptions(
+      contextMode: result[0] as ContextMode?,
+      constrainMode: result[1] as ConstrainMode?,
+      viewportMode: result[2] as ViewportMode?,
+      orientation: result[3] as NorthOrientation?,
+      crossSourceCollisions: result[4] as bool?,
+      size: result[5] as Size?,
+      pixelRatio: result[6]! as double,
+      glyphsRasterizationOptions: result[7] as GlyphsRasterizationOptions?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! MapOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return contextMode == other.contextMode &&
+        constrainMode == other.constrainMode &&
+        viewportMode == other.viewportMode &&
+        orientation == other.orientation &&
+        crossSourceCollisions == other.crossSourceCollisions &&
+        size == other.size &&
+        pixelRatio == other.pixelRatio &&
+        glyphsRasterizationOptions == other.glyphsRasterizationOptions;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Options for querying rendered features.
+class RenderedQueryOptions {
+  RenderedQueryOptions({this.layerIds, this.filter});
+
+  /// Layer IDs to include in the query.
+  List<String?>? layerIds;
+
+  /// Filters the returned features with an expression
+  String? filter;
+
+  List<Object?> _toList() {
+    return <Object?>[layerIds, filter];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static RenderedQueryOptions decode(Object result) {
+    result as List<Object?>;
+    return RenderedQueryOptions(
+      layerIds: (result[0] as List<Object?>?)?.cast<String?>(),
+      filter: result[1] as String?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! RenderedQueryOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(layerIds, other.layerIds) && filter == other.filter;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Options for querying source features.
+class SourceQueryOptions {
+  SourceQueryOptions({this.sourceLayerIds, required this.filter});
+
+  /// Source layer IDs to include in the query.
+  List<String?>? sourceLayerIds;
+
+  /// Filters the returned features with an expression
+  String filter;
+
+  List<Object?> _toList() {
+    return <Object?>[sourceLayerIds, filter];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static SourceQueryOptions decode(Object result) {
+    result as List<Object?>;
+    return SourceQueryOptions(
+      sourceLayerIds: (result[0] as List<Object?>?)?.cast<String?>(),
+      filter: result[1]! as String,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! SourceQueryOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(sourceLayerIds, other.sourceLayerIds) &&
+        filter == other.filter;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A value or a collection of a feature extension.
+class FeatureExtensionValue {
+  FeatureExtensionValue({this.value, this.featureCollection});
+
+  /// An optional value of a feature extension
+  String? value;
+
+  /// An optional array of features from a feature extension.
+  List<Map<String?, Object?>?>? featureCollection;
+
+  List<Object?> _toList() {
+    return <Object?>[value, featureCollection];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static FeatureExtensionValue decode(Object result) {
+    result as List<Object?>;
+    return FeatureExtensionValue(
+      value: result[0] as String?,
+      featureCollection: (result[1] as List<Object?>?)?.map((e) {
+        return Map<Object?, Object?>.from(
+          e as Map<dynamic, dynamic>,
+        ).cast<String?, Object?>();
+      }).toList(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! FeatureExtensionValue || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return value == other.value &&
+        _deepEquals(featureCollection, other.featureCollection);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Represents query result that is returned in QueryFeaturesCallback.
+class QueriedFeature {
+  QueriedFeature({
+    required this.feature,
+    required this.source,
+    this.sourceLayer,
+    required this.state,
+  });
+
+  /// Feature returned by the query.
+  Map<String?, Object?> feature;
+
+  /// Source id for a queried feature.
+  String source;
+
+  /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
+  /// or when data provided by the source is not layered.
+  String? sourceLayer;
+
+  /// Feature state for a queried feature. Type of the value is an Object.
+  String state;
+
+  List<Object?> _toList() {
+    return <Object?>[feature, source, sourceLayer, state];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static QueriedFeature decode(Object result) {
+    result as List<Object?>;
+    return QueriedFeature(
+      feature: (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      source: result[1]! as String,
+      sourceLayer: result[2] as String?,
+      state: result[3]! as String,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! QueriedFeature || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(feature, other.feature) &&
+        source == other.source &&
+        sourceLayer == other.sourceLayer &&
+        state == other.state;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Represents query result that is returned in QueryRenderedFeaturesCallback.
+class QueriedRenderedFeature {
+  QueriedRenderedFeature({required this.queriedFeature, required this.layers});
+
+  /// Feature returned by the query.
+  QueriedFeature queriedFeature;
+
+  /// An array of layer Ids for the queried feature.
+  /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
+  /// If the feature is only rendered in one layer, a single Id will be provided.
+  List<String?> layers;
+
+  List<Object?> _toList() {
+    return <Object?>[queriedFeature, layers];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static QueriedRenderedFeature decode(Object result) {
+    result as List<Object?>;
+    return QueriedRenderedFeature(
+      queriedFeature: result[0]! as QueriedFeature,
+      layers: (result[1] as List<Object?>?)!.cast<String?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! QueriedRenderedFeature || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return queriedFeature == other.queriedFeature &&
+        _deepEquals(layers, other.layers);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Represents query result that is returned in QuerySourceFeaturesCallback.
+class QueriedSourceFeature {
+  QueriedSourceFeature({required this.queriedFeature});
+
+  /// Feature returned by the query.
+  QueriedFeature queriedFeature;
+
+  List<Object?> _toList() {
+    return <Object?>[queriedFeature];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static QueriedSourceFeature decode(Object result) {
+    result as List<Object?>;
+    return QueriedSourceFeature(queriedFeature: result[0]! as QueriedFeature);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! QueriedSourceFeature || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return queriedFeature == other.queriedFeature;
   }
 
   @override
