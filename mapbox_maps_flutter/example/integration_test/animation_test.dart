@@ -1,16 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('easeTo', (WidgetTester tester) async {
+  testWidgets('easeTo', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -27,7 +27,7 @@ void main() {
     );
   });
 
-  testWidgets('flyTo', (WidgetTester tester) async {
+  testWidgets('flyTo', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -85,7 +85,9 @@ void main() {
       );
     });
   }
-  testWidgets('cancelCameraAnimation', (WidgetTester tester) async {
+  testWidgets('cancelCameraAnimation', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

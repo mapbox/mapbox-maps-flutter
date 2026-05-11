@@ -22,22 +22,6 @@ dependencies:
     # mapbox_maps_flutter_mobile: ^x.y.z
     path: ../
 
-  # WS1 patch (delete in WS4): the mobile example app uses typed style
-  # layer/source classes that moved to the facade in WS1. The shim file
-  # lib/_facade_shim.dart re-exports them and re-attaches the
-  # addLayer/addSource/getLayer/getSource extension on the mobile
-  # StyleManager. WS4 migrates the example app to the facade and deletes
-  # both the dep and the shim.
-  mapbox_maps_flutter:
-    path: ../../mapbox_maps_flutter
-
-  cupertino_icons: ^1.0.2
-  geolocator: ^13.0.4
-  geolocator_android: 4.6.1 # pinned as 4.6.2 doesn't work with our old gradle, safe to unpin after gradle update
-  font_awesome_flutter: ^10.1.0
-  http: ^1.3.0
-  path_provider: ^2.1.3
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

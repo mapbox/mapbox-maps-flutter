@@ -4,11 +4,15 @@ part of mapbox_maps_flutter_mobile;
 class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   MapboxMap._({
     required _MapboxMapsPlatform mapboxMapsPlatform,
-    this.onMapTapListener,
-    this.onMapLongTapListener,
-    this.onMapScrollListener,
-    this.onMapZoomListener,
-  }) : _mapboxMapsPlatform = mapboxMapsPlatform {
+    OnMapTapListener? onMapTapListener,
+    OnMapLongTapListener? onMapLongTapListener,
+    OnMapScrollListener? onMapScrollListener,
+    OnMapZoomListener? onMapZoomListener,
+  }) : _mapboxMapsPlatform = mapboxMapsPlatform,
+       _onMapTapListener = onMapTapListener,
+       _onMapLongTapListener = onMapLongTapListener,
+       _onMapScrollListener = onMapScrollListener,
+       _onMapZoomListener = onMapZoomListener {
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
   }
@@ -135,10 +139,45 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
     channelSuffix: _mapboxMapsPlatform.channelSuffix,
   );
-  OnMapTapListener? onMapTapListener;
-  OnMapLongTapListener? onMapLongTapListener;
-  OnMapScrollListener? onMapScrollListener;
-  OnMapZoomListener? onMapZoomListener;
+  // Listener fields are exposed via explicit getter+setter pairs so that
+  // assignment-style updates (`mapboxMap.onMapTapListener = ...`) trigger
+  // `_setupGestures()` — the field-level auto-setter alone won't wire
+  // the native channel, leaving listener registrations silent.
+  OnMapTapListener? _onMapTapListener;
+  @override
+  OnMapTapListener? get onMapTapListener => _onMapTapListener;
+  @override
+  set onMapTapListener(OnMapTapListener? listener) {
+    _onMapTapListener = listener;
+    _setupGestures();
+  }
+
+  OnMapLongTapListener? _onMapLongTapListener;
+  @override
+  OnMapLongTapListener? get onMapLongTapListener => _onMapLongTapListener;
+  @override
+  set onMapLongTapListener(OnMapLongTapListener? listener) {
+    _onMapLongTapListener = listener;
+    _setupGestures();
+  }
+
+  OnMapScrollListener? _onMapScrollListener;
+  @override
+  OnMapScrollListener? get onMapScrollListener => _onMapScrollListener;
+  @override
+  set onMapScrollListener(OnMapScrollListener? listener) {
+    _onMapScrollListener = listener;
+    _setupGestures();
+  }
+
+  OnMapZoomListener? _onMapZoomListener;
+  @override
+  OnMapZoomListener? get onMapZoomListener => _onMapZoomListener;
+  @override
+  set onMapZoomListener(OnMapZoomListener? listener) {
+    _onMapZoomListener = listener;
+    _setupGestures();
+  }
 
   @override
   void dispose() {
@@ -352,6 +391,11 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Returns `true` if a gesture is currently in progress.
   @override
   Future<bool> isGestureInProgress() => _mapInterface.isGestureInProgress();
+
+  @override
+  @visibleForTesting
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      _mapInterface.dispatch(gesture, screenCoordinate);
 
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.

@@ -1,21 +1,20 @@
+// ignore_for_file: experimental_member_use
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_example/_facade_shim.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Position;
-import 'package:mapbox_maps_example/utils.dart' show MapboxStyles;
 
 import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('styleGlyphURL', (WidgetTester tester) async {
+  testWidgets('styleGlyphURL', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -25,7 +24,7 @@ void main() {
     expect(await mapboxMap.styleGlyphURL(), styleGlyphURL);
   });
 
-  testWidgets('loadStyleURI', (WidgetTester tester) async {
+  testWidgets('loadStyleURI', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -34,7 +33,7 @@ void main() {
     expect(MapboxStyles.DARK, style);
   });
 
-  testWidgets('loadStyleJson', (WidgetTester tester) async {
+  testWidgets('loadStyleJson', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -48,7 +47,7 @@ void main() {
     expect(styleJson, getStyleJson);
   });
 
-  testWidgets('loadRasterArray', (WidgetTester tester) async {
+  testWidgets('loadRasterArray', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -109,14 +108,14 @@ void main() {
     }
   });
 
-  testWidgets('clearData', (WidgetTester tester) async {
+  testWidgets('clearData', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     mapboxMap.clearData();
   });
 
-  testWidgets('setTileCacheBudget', (WidgetTester tester) async {
+  testWidgets('setTileCacheBudget', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -124,7 +123,7 @@ void main() {
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
   });
 
-  testWidgets('getSize', (WidgetTester tester) async {
+  testWidgets('getSize', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -151,7 +150,7 @@ void main() {
     }
   });
 
-  testWidgets('reduceMemoryUse', (WidgetTester tester) async {
+  testWidgets('reduceMemoryUse', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -159,14 +158,14 @@ void main() {
     await mapboxMap.reduceMemoryUse();
   });
 
-  testWidgets('triggerRepaint', (WidgetTester tester) async {
+  testWidgets('triggerRepaint', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     await mapboxMap.triggerRepaint();
   });
 
-  testWidgets('PrefetchZoomDelta', (WidgetTester tester) async {
+  testWidgets('PrefetchZoomDelta', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -175,7 +174,7 @@ void main() {
     expect(prefetchZoomDelta, 10);
   });
 
-  testWidgets('MapOptions', (WidgetTester tester) async {
+  testWidgets('MapOptions', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -201,7 +200,7 @@ void main() {
     expect(options.viewportMode, ViewportMode.FLIPPED_Y);
   });
 
-  testWidgets('isGestureInProgress', (WidgetTester tester) async {
+  testWidgets('isGestureInProgress', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -212,7 +211,9 @@ void main() {
     expect(await mapboxMap.isGestureInProgress(), true);
   });
 
-  testWidgets('isUserAnimationInProgress', (WidgetTester tester) async {
+  testWidgets('isUserAnimationInProgress', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -223,7 +224,7 @@ void main() {
     expect(await mapboxMap.isUserAnimationInProgress(), true);
   });
 
-  testWidgets('debugOptions', (WidgetTester tester) async {
+  testWidgets('debugOptions', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -233,7 +234,7 @@ void main() {
     expect(debugOptions.first, MapWidgetDebugOptions.tileBorders);
   });
 
-  testWidgets('featureState', (WidgetTester tester) async {
+  testWidgets('featureState', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -266,11 +267,13 @@ void main() {
     expect(stateMap.length, 0);
   });
 
-  testWidgets('MapboxMapsOptions default values', (WidgetTester tester) async {
+  testWidgets('MapboxMapsOptions default values', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final _ = app.main();
     await tester.pumpAndSettle();
 
-    expect(await MapboxOptions.getAccessToken(), isNotNull);
+    expect(await MapboxOptions.accessToken, isNotNull);
     expect(await MapboxMapsOptions.getBaseUrl(), 'https://api.mapbox.com');
     expect(await MapboxMapsOptions.getDataPath(), isNotNull);
     expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
@@ -280,10 +283,13 @@ void main() {
     );
   });
 
-  testWidgets('MapboxMapsOptions read and update', (WidgetTester tester) async {
+  testWidgets('MapboxMapsOptions read and update', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final _ = app.main();
     await tester.pumpAndSettle();
 
+    final originalAccessToken = await MapboxOptions.accessToken;
     final originalBaseURL = await MapboxMapsOptions.getBaseUrl();
     final originalDataPath = await MapboxMapsOptions.getDataPath();
     final originalAssetPath = await MapboxMapsOptions.getAssetPath();
@@ -309,7 +315,7 @@ void main() {
     MapboxMapsOptions.setWorldview(worldview);
 
     // then
-    expect(await MapboxOptions.getAccessToken(), token);
+    expect(await MapboxOptions.accessToken, token);
     expect(await MapboxMapsOptions.getBaseUrl(), baseUrl);
     expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
     expect(
@@ -321,6 +327,7 @@ void main() {
     expect(await MapboxMapsOptions.getWorldview(), worldview);
 
     // restore original values
+    MapboxOptions.setAccessToken(originalAccessToken);
     MapboxMapsOptions.setBaseUrl(originalBaseURL);
     MapboxMapsOptions.setDataPath(originalDataPath);
     MapboxMapsOptions.setAssetPath(originalAssetPath);
@@ -329,7 +336,9 @@ void main() {
     MapboxMapsOptions.setWorldview(null);
   });
 
-  testWidgets('queryRenderedFeatures', (WidgetTester tester) async {
+  testWidgets('queryRenderedFeatures', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -353,10 +362,10 @@ void main() {
       'icon',
       1.0,
       MbxImage(width: 40, height: 40, data: list),
-      true,
-      [],
-      [],
-      null,
+      sdf: true,
+      stretchX: [],
+      stretchY: [],
+      content: null,
     );
 
     app.events.resetOnSourceDataLoaded();
@@ -396,7 +405,7 @@ void main() {
     expect(query.length, 0);
   });
 
-  testWidgets('querySourceFeatures', (WidgetTester tester) async {
+  testWidgets('querySourceFeatures', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -432,7 +441,9 @@ void main() {
     expect(query[0]!.queriedFeature.feature['id'], 'point');
   });
 
-  testWidgets('queryFeatureExtensions', (WidgetTester tester) async {
+  testWidgets('queryFeatureExtensions', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -495,7 +506,7 @@ void main() {
     expect(clusterExpansionZoom.value, '1');
   });
 
-  testWidgets('snapshot', (WidgetTester tester) async {
+  testWidgets('snapshot', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

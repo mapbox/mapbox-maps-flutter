@@ -1,7 +1,6 @@
 // This file is generated.
 import 'package:meta/meta.dart';
 
-import '../cancelable.dart';
 import '../pigeons/annotation_data_types.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
@@ -9,18 +8,17 @@ import 'annotations_interface.dart';
 /// Abstract interface for managing point annotations.
 abstract interface class PointAnnotationManagerPlatformInterface
     implements BaseAnnotationManagerPlatformInterface {
-  /// Registers tap event callbacks for the annotations managed by this manager.
-  Cancelable tapEvents({required Function(PointAnnotation) onTap});
+  /// Broadcast stream of raw tap interaction contexts. The facade's
+  /// `tapEvents` subscribes to this stream, projects the payload to
+  /// the annotation type, and wraps the subscription in a `Cancelable`.
+  Stream<PointAnnotationInteractionContext> get tapInteractionStream;
 
-  /// Registers long press event callbacks for the annotations managed by this manager.
-  Cancelable longPressEvents({required Function(PointAnnotation) onLongPress});
+  /// Broadcast stream of raw long-press interaction contexts.
+  Stream<PointAnnotationInteractionContext> get longPressInteractionStream;
 
-  /// Registers drag event callbacks for the annotations managed by this manager.
-  Cancelable dragEvents({
-    Function(PointAnnotation)? onBegin,
-    Function(PointAnnotation)? onChanged,
-    Function(PointAnnotation)? onEnd,
-  });
+  /// Broadcast stream of raw drag interaction contexts. The facade's
+  /// `dragEvents` filters by `gestureState` to dispatch begin/changed/end.
+  Stream<PointAnnotationInteractionContext> get dragInteractionStream;
 
   /// Get all annotations of manager.
   Future<List<PointAnnotation>> getAnnotations();

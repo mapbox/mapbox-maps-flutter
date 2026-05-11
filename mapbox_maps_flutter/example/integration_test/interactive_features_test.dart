@@ -1,16 +1,17 @@
+// ignore_for_file: experimental_member_use
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('test_featureset_QRF', (WidgetTester tester) async {
+  testWidgets('test_featureset_QRF', skip: kIsWeb, (WidgetTester tester) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -70,7 +71,9 @@ void main() {
     expect(viewportQuery[2].properties["class"], "poi");
   });
 
-  testWidgets('test_featurestate_methods', (WidgetTester tester) async {
+  testWidgets('test_featurestate_methods', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -127,7 +130,7 @@ void main() {
     expect(returnedFeatureState4, {});
   });
 
-  testWidgets('test_featurestate_descriptor_methods', (
+  testWidgets('test_featurestate_descriptor_methods', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
     // load style and position camera
@@ -183,7 +186,9 @@ void main() {
     expect(returnedFeatureState2, {});
   });
 
-  testWidgets('test_state_is_queried', (WidgetTester tester) async {
+  testWidgets('test_state_is_queried', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -235,7 +240,7 @@ void main() {
     expect(poi.properties, expectedProperties);
   });
 
-  testWidgets('test_getFeaturesets', (WidgetTester tester) async {
+  testWidgets('test_getFeaturesets', skip: kIsWeb, (WidgetTester tester) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -259,7 +264,9 @@ void main() {
     expect(returnedFeaturesets.first.importId, "nested");
   });
 
-  testWidgets('test_addLongTapInteractionToMap', (WidgetTester tester) async {
+  testWidgets('test_addLongTapInteractionToMap', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -288,7 +295,9 @@ void main() {
     mapboxMap.dispatch("longClick", ScreenCoordinate(x: 2, y: 2));
   });
 
-  testWidgets('test_addTapInteractionToLayer', (WidgetTester tester) async {
+  testWidgets('test_addTapInteractionToLayer', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -340,7 +349,7 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(0, 1e-4));
   });
 
-  testWidgets('test_addTapInteractionToFeatureset', (
+  testWidgets('test_addTapInteractionToFeatureset', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
     // load style and position camera
@@ -401,7 +410,9 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
   });
 
-  testWidgets('test_addTapInteractionToMap', (WidgetTester tester) async {
+  testWidgets('test_addTapInteractionToMap', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -442,7 +453,7 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(-0.01, 1e-4));
   });
 
-  testWidgets('test_addTapInteractionToFeaturesetWithRadius', (
+  testWidgets('test_addTapInteractionToFeaturesetWithRadius', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
     // load style and position camera
@@ -497,7 +508,7 @@ void main() {
     expect(count, 2);
   });
 
-  testWidgets('test_addTapInteractionToFeaturesetWithFilter', (
+  testWidgets('test_addTapInteractionToFeaturesetWithFilter', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
     // load style and position camera
@@ -559,7 +570,9 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
   });
 
-  testWidgets('test_addLongTapInteractionToLayer', (WidgetTester tester) async {
+  testWidgets('test_addLongTapInteractionToLayer', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -611,7 +624,7 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(0, 1e-4));
   });
 
-  testWidgets('test_addLongTapInteractionToFeatureset', (
+  testWidgets('test_addLongTapInteractionToFeatureset', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
     // load style and position camera
@@ -672,7 +685,9 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
   });
 
-  testWidgets('test_addLongTapInteractionToMap', (WidgetTester tester) async {
+  testWidgets('test_addLongTapInteractionToMap', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,
@@ -713,7 +728,9 @@ void main() {
     expect(expectedContext?.point.coordinates.lng, closeTo(-0.01, 1e-4));
   });
 
-  testWidgets('test_removeTapInteraction', (WidgetTester tester) async {
+  testWidgets('test_removeTapInteraction', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     // load style and position camera
     final mapFuture = app.main(
       width: 200,

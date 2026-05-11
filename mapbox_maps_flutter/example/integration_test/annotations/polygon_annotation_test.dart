@@ -1,16 +1,18 @@
 // This file is generated.
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Polygon, Position;
 import '../empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('create PolygonAnnotation', (WidgetTester tester) async {
+  testWidgets('create PolygonAnnotation', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -61,7 +63,7 @@ void main() {
     expect({'foo': 'bar'}, annotation.customData);
   });
 
-  testWidgets('update and delete PolygonAnnotation', (
+  testWidgets('update and delete PolygonAnnotation', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
     final mapFuture = app.main();
@@ -102,7 +104,9 @@ void main() {
     await manager.deleteAll();
   });
 
-  testWidgets('deleteMulti PolygonAnnotation', (WidgetTester tester) async {
+  testWidgets('deleteMulti PolygonAnnotation', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

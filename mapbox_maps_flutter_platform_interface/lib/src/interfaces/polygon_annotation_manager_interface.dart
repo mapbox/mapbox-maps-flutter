@@ -1,7 +1,6 @@
 // This file is generated.
 import 'package:meta/meta.dart';
 
-import '../cancelable.dart';
 import '../pigeons/annotation_data_types.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
@@ -9,20 +8,17 @@ import 'annotations_interface.dart';
 /// Abstract interface for managing polygon annotations.
 abstract interface class PolygonAnnotationManagerPlatformInterface
     implements BaseAnnotationManagerPlatformInterface {
-  /// Registers tap event callbacks for the annotations managed by this manager.
-  Cancelable tapEvents({required Function(PolygonAnnotation) onTap});
+  /// Broadcast stream of raw tap interaction contexts. The facade's
+  /// `tapEvents` subscribes to this stream, projects the payload to
+  /// the annotation type, and wraps the subscription in a `Cancelable`.
+  Stream<PolygonAnnotationInteractionContext> get tapInteractionStream;
 
-  /// Registers long press event callbacks for the annotations managed by this manager.
-  Cancelable longPressEvents({
-    required Function(PolygonAnnotation) onLongPress,
-  });
+  /// Broadcast stream of raw long-press interaction contexts.
+  Stream<PolygonAnnotationInteractionContext> get longPressInteractionStream;
 
-  /// Registers drag event callbacks for the annotations managed by this manager.
-  Cancelable dragEvents({
-    Function(PolygonAnnotation)? onBegin,
-    Function(PolygonAnnotation)? onChanged,
-    Function(PolygonAnnotation)? onEnd,
-  });
+  /// Broadcast stream of raw drag interaction contexts. The facade's
+  /// `dragEvents` filters by `gestureState` to dispatch begin/changed/end.
+  Stream<PolygonAnnotationInteractionContext> get dragInteractionStream;
 
   /// Get all annotations of manager.
   Future<List<PolygonAnnotation>> getAnnotations();

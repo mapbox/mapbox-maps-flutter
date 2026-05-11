@@ -330,6 +330,14 @@ class MapboxMap implements MapboxMapInterface {
   /// Returns the current prefetch zoom delta.
   Future<int> getPrefetchZoomDelta() => _impl.getPrefetchZoomDelta();
 
+  /// Dispatches a synthetic gesture event for testing purposes.
+  ///
+  /// For internal use only.
+  @experimental
+  @visibleForTesting
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      _impl.dispatch(gesture, screenCoordinate);
+
   // ===== Legacy gesture listener aliases (v2 surface) =====
 
   /// Legacy alias for `MapWidget.onScrollListener`. Stores the callback;

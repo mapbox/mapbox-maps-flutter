@@ -12,14 +12,17 @@ void main() {
   // Web unsupported: style-mutation APIs (addSource/getSource) route through
   // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
   // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add RasterArraySource', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('Add RasterArraySource', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     await app.events.onMapLoaded.future;
 
-    await mapboxMap.style
-        .addSource(RasterArraySource(id: "source",
+    await mapboxMap.style.addSource(
+      RasterArraySource(
+        id: "source",
         tiles: ["a", "b", "c"],
         bounds: [0.0, 1.0, 2.0, 3.0],
         minzoom: 1.0,
@@ -27,36 +30,45 @@ void main() {
         tileSize: 1.0,
         attribution: "abc",
         volatile: true,
-        tileCacheBudget: TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
-    ));
+        tileCacheBudget: TileCacheBudget.inMegabytes(
+          TileCacheBudgetInMegabytes(size: 3),
+        ),
+      ),
+    );
 
     var source = await mapboxMap.style.getSource('source') as RasterArraySource;
     expect(source.id, 'source');
     var tiles = await source.tiles;
-    expect( tiles,  ["a", "b", "c"]);
-  
+    expect(tiles, ["a", "b", "c"]);
+
     var bounds = await source.bounds;
-    expect( bounds,  [0.0, 1.0, 2.0, 3.0]);
-  
+    expect(bounds, [0.0, 1.0, 2.0, 3.0]);
+
     var minzoom = await source.minzoom;
-    expect( minzoom,  1.0);
-  
+    expect(minzoom, 1.0);
+
     var maxzoom = await source.maxzoom;
-    expect( maxzoom,  1.0);
-  
+    expect(maxzoom, 1.0);
+
     var tileSize = await source.tileSize;
-    expect( tileSize,  1.0);
-  
+    expect(tileSize, 1.0);
+
     var attribution = await source.attribution;
-    expect( attribution,  "abc");
-  
+    expect(attribution, "abc");
+
     var volatile = await source.volatile;
-    expect( volatile,  true);
-  
+    expect(volatile, true);
+
     var tileCacheBudget = await source.tileCacheBudget;
-    expect( tileCacheBudget?.size,  TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
-    expect( tileCacheBudget?.type,  TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
-  
+    expect(
+      tileCacheBudget?.size,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+    );
+    expect(
+      tileCacheBudget?.type,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+    );
   });
 }
+
 // End of generated file.

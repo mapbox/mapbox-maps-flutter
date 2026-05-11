@@ -174,6 +174,7 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   int isUserAnimationInProgressCallCount = 0;
   int setPrefetchZoomDeltaCallCount = 0;
   int getPrefetchZoomDeltaCallCount = 0;
+  int dispatchCallCount = 0;
   int setSnapshotLegacyModeCallCount = 0;
   int styleGlyphURLCallCount = 0;
   int setStyleGlyphURLCallCount = 0;
@@ -192,6 +193,7 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   bool? lastGestureInProgress;
   bool? lastUserAnimationInProgress;
   int? lastPrefetchZoomDelta;
+  String? lastDispatchGesture;
   bool? lastSnapshotLegacyMode;
   String? lastStyleGlyphURL;
   RenderedQueryGeometry? lastRenderedQueryGeometry;
@@ -723,6 +725,13 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   Future<int> getPrefetchZoomDelta() async {
     getPrefetchZoomDeltaCallCount++;
     return 0;
+  }
+
+  @override
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) async {
+    dispatchCallCount++;
+    lastDispatchGesture = gesture;
+    lastScreenCoordinate = screenCoordinate;
   }
 
   @override
@@ -1398,6 +1407,14 @@ void main() {
       final result = await mapboxMap.getPrefetchZoomDelta();
       expect(mockImpl.getPrefetchZoomDeltaCallCount, 1);
       expect(result, 0);
+    });
+
+    test('dispatch delegates to interface', () async {
+      final coord = ScreenCoordinate(x: 1, y: 2);
+      await mapboxMap.dispatch('click', coord);
+      expect(mockImpl.dispatchCallCount, 1);
+      expect(mockImpl.lastDispatchGesture, 'click');
+      expect(mockImpl.lastScreenCoordinate, same(coord));
     });
 
     // ===== Legacy gesture listener aliases =====

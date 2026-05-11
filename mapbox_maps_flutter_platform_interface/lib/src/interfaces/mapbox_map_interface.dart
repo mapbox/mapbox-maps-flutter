@@ -293,6 +293,12 @@ abstract interface class MapboxMapPlatformInterface
   /// Returns the current prefetch zoom delta.
   Future<int> getPrefetchZoomDelta();
 
+  /// Dispatches a synthetic gesture event for testing purposes.
+  ///
+  /// For internal use only.
+  @experimental
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate);
+
   // ===== Snapshotter / glyphs =====
 
   /// Sets whether legacy mode is used for [snapshot]. Has no effect on iOS.

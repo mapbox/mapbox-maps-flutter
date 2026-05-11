@@ -1,8 +1,9 @@
 // This file is generated.
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
-/// Web stub: GL JS has annotation-like primitives, wiring is post-WS4
-/// web-parity work. Every method throws [UnimplementedError].
+/// Web stub. Methods that mutate the map throw [UnimplementedError];
+/// the interaction streams are empty broadcast streams so listener
+/// registration succeeds with a Cancelable that never fires.
 class UnsupportedPolylineAnnotationManagerWeb
     implements PolylineAnnotationManagerPlatformInterface {
   UnsupportedPolylineAnnotationManagerWeb(this.id);
@@ -15,20 +16,16 @@ class UnsupportedPolylineAnnotationManagerWeb
   );
 
   @override
-  Cancelable tapEvents({required Function(PolylineAnnotation) onTap}) =>
-      _unimplemented('tapEvents');
+  Stream<PolylineAnnotationInteractionContext> get tapInteractionStream =>
+      Stream<PolylineAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
-  Cancelable longPressEvents({
-    required Function(PolylineAnnotation) onLongPress,
-  }) => _unimplemented('longPressEvents');
+  Stream<PolylineAnnotationInteractionContext> get longPressInteractionStream =>
+      Stream<PolylineAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
-  Cancelable dragEvents({
-    Function(PolylineAnnotation)? onBegin,
-    Function(PolylineAnnotation)? onChanged,
-    Function(PolylineAnnotation)? onEnd,
-  }) => _unimplemented('dragEvents');
+  Stream<PolylineAnnotationInteractionContext> get dragInteractionStream =>
+      Stream<PolylineAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
   Future<List<PolylineAnnotation>> getAnnotations() =>

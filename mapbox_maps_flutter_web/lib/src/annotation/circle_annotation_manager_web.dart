@@ -1,8 +1,9 @@
 // This file is generated.
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
-/// Web stub: GL JS has annotation-like primitives, wiring is post-WS4
-/// web-parity work. Every method throws [UnimplementedError].
+/// Web stub. Methods that mutate the map throw [UnimplementedError];
+/// the interaction streams are empty broadcast streams so listener
+/// registration succeeds with a Cancelable that never fires.
 class UnsupportedCircleAnnotationManagerWeb
     implements CircleAnnotationManagerPlatformInterface {
   UnsupportedCircleAnnotationManagerWeb(this.id);
@@ -15,20 +16,16 @@ class UnsupportedCircleAnnotationManagerWeb
   );
 
   @override
-  Cancelable tapEvents({required Function(CircleAnnotation) onTap}) =>
-      _unimplemented('tapEvents');
+  Stream<CircleAnnotationInteractionContext> get tapInteractionStream =>
+      Stream<CircleAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
-  Cancelable longPressEvents({
-    required Function(CircleAnnotation) onLongPress,
-  }) => _unimplemented('longPressEvents');
+  Stream<CircleAnnotationInteractionContext> get longPressInteractionStream =>
+      Stream<CircleAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
-  Cancelable dragEvents({
-    Function(CircleAnnotation)? onBegin,
-    Function(CircleAnnotation)? onChanged,
-    Function(CircleAnnotation)? onEnd,
-  }) => _unimplemented('dragEvents');
+  Stream<CircleAnnotationInteractionContext> get dragInteractionStream =>
+      Stream<CircleAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
   Future<List<CircleAnnotation>> getAnnotations() =>
