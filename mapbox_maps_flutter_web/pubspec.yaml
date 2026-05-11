@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   web: ^1.0.0
   plugin_platform_interface: ^2.0.2
+  meta: ^1.9.1
   turf: ^0.0.10
   mapbox_maps_flutter_platform_interface: ^0.0.1 # Change to fixed version when the platform interface is published.
 

@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 /// MapRecorder provides functions to record and replay API calls of a map instance.
 ///
 /// These recordings can be used to debug issues which require multiple steps to reproduce.
@@ -7,6 +9,7 @@ import 'dart:typed_data';
 ///
 /// Note: the raw format produced by [stopRecording] is experimental and there is no
 /// guarantee of version cross-compatibility when feeding it to [replay].
+@experimental
 abstract interface class MapRecorderPlatformInterface {
   /// Begins a recording session.
   ///

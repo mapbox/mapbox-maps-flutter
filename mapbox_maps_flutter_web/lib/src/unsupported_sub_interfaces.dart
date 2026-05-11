@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' show Feature, Point;
 
 import 'annotation/circle_annotation_manager_web.dart';
@@ -406,6 +407,7 @@ class UnsupportedProjectionWeb implements ProjectionPlatformInterface {
       throw _unimplemented('unproject', 'Projection');
 }
 
+@experimental
 class UnsupportedMapRecorderWeb implements MapRecorderPlatformInterface {
   static const _reason = 'debug/replay tool is native-only';
   @override

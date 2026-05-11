@@ -2,6 +2,7 @@ import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' show Point, Position;
 
 import 'bindings/map_bindings.dart';
@@ -59,6 +60,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   late final ProjectionPlatformInterface projection =
       UnsupportedProjectionWeb();
   @override
+  @experimental
   late final MapRecorderPlatformInterface mapRecorder =
       UnsupportedMapRecorderWeb();
 

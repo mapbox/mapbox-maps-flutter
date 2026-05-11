@@ -168,18 +168,15 @@ stage_static() {
 
   local failed=0
 
-  # Analyze each package. Mobile's example/, integration_test/, and
-  # test/ ship pre-existing unused_import + experimental_member_use
-  # warnings that are scheduled for deletion in Workstream 6; for now
-  # analyze only mobile/lib, the surface that actually ships.
-  for d in "$FACADE_DIR" "$INTERFACE_DIR" "$WEB_DIR"; do
+  # Analyze each package. Mobile's example/ and test/ dirs were deleted
+  # in WS6 (the migrated example app + integration tests live in the
+  # facade package), so mobile is now lib-only and can be analyzed in
+  # full like the other three packages.
+  for d in "$FACADE_DIR" "$INTERFACE_DIR" "$WEB_DIR" "$MOBILE_DIR"; do
     echo ""
     echo "── $(basename "$d") analyze"
     (cd "$d" && dart analyze) || failed=1
   done
-  echo ""
-  echo "── mapbox_maps_flutter_mobile analyze (lib only)"
-  (cd "$MOBILE_DIR" && dart analyze lib) || failed=1
 
   # Format check mirrors `make format`'s target list exactly, so this
   # gate stays aligned with the canonical formatter invocation. Paths
