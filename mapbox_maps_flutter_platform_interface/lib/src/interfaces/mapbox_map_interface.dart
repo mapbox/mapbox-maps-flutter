@@ -62,6 +62,7 @@ abstract interface class MapboxMapPlatformInterface
   ProjectionPlatformInterface get projection;
 
   /// Provides access to recording and replaying API calls on the map.
+  @experimental
   MapRecorderPlatformInterface get mapRecorder;
 
   // ===== Performance statistics =====

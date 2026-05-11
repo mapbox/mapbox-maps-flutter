@@ -79,6 +79,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   late final AnnotationManager annotations;
 
   @override
+  @experimental
   MapRecorderPlatformInterface get mapRecorder => _mapRecorderMessenger;
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
