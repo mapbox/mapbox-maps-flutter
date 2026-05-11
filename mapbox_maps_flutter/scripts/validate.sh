@@ -195,9 +195,8 @@ stage_static() {
       --output=none \
       --language-version=3.10 \
       packages/mapbox_maps_flutter_mobile/lib \
-      packages/mapbox_maps_flutter_mobile/example/lib \
-      packages/mapbox_maps_flutter_mobile/example/integration_test \
       packages/mapbox_maps_flutter/lib \
+      packages/mapbox_maps_flutter/example/integration_test \
       packages/mapbox_maps_flutter_platform_interface/lib \
       packages/mapbox_maps_flutter_web/lib
   ) || failed=1

@@ -399,10 +399,10 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
     } else if (value is Point) {
-      buffer.putUint8(153);
+      buffer.putUint8(152);
       writeValue(buffer, value.toJson());
     } else if (value is Feature) {
-      buffer.putUint8(154);
+      buffer.putUint8(153);
       writeValue(buffer, value.toJson());
     } else if (value is MbxEdgeInsets) {
       buffer.putUint8(154);

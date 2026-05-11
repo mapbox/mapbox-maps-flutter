@@ -1,16 +1,17 @@
+// ignore_for_file: experimental_member_use
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Gestures settings', (WidgetTester tester) async {
+  testWidgets('Gestures settings', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -84,7 +85,7 @@ void main() {
     }
   });
 
-  testWidgets('RecognizeTapEvent', (WidgetTester tester) async {
+  testWidgets('RecognizeTapEvent', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -104,7 +105,9 @@ void main() {
     expect(tapContext.point.coordinates.lng, closeTo(0.01, 1e-4));
   });
 
-  testWidgets('RecognizeLongTapEvent', (WidgetTester tester) async {
+  testWidgets('RecognizeLongTapEvent', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

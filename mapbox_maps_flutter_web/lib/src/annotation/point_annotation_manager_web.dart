@@ -1,8 +1,9 @@
 // This file is generated.
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
-/// Web stub: GL JS has annotation-like primitives, wiring is post-WS4
-/// web-parity work. Every method throws [UnimplementedError].
+/// Web stub. Methods that mutate the map throw [UnimplementedError];
+/// the interaction streams are empty broadcast streams so listener
+/// registration succeeds with a Cancelable that never fires.
 class UnsupportedPointAnnotationManagerWeb
     implements PointAnnotationManagerPlatformInterface {
   UnsupportedPointAnnotationManagerWeb(this.id);
@@ -15,20 +16,16 @@ class UnsupportedPointAnnotationManagerWeb
   );
 
   @override
-  Cancelable tapEvents({required Function(PointAnnotation) onTap}) =>
-      _unimplemented('tapEvents');
+  Stream<PointAnnotationInteractionContext> get tapInteractionStream =>
+      Stream<PointAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
-  Cancelable longPressEvents({
-    required Function(PointAnnotation) onLongPress,
-  }) => _unimplemented('longPressEvents');
+  Stream<PointAnnotationInteractionContext> get longPressInteractionStream =>
+      Stream<PointAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
-  Cancelable dragEvents({
-    Function(PointAnnotation)? onBegin,
-    Function(PointAnnotation)? onChanged,
-    Function(PointAnnotation)? onEnd,
-  }) => _unimplemented('dragEvents');
+  Stream<PointAnnotationInteractionContext> get dragInteractionStream =>
+      Stream<PointAnnotationInteractionContext>.empty().asBroadcastStream();
 
   @override
   Future<List<PointAnnotation>> getAnnotations() =>

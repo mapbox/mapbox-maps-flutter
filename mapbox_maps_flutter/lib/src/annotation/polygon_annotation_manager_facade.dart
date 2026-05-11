@@ -14,20 +14,46 @@ final class PolygonAnnotationManager
   );
 
   /// Registers tap event callbacks for the annotations managed by this manager.
-  Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) =>
-      impl.tapEvents(onTap: onTap);
+  ///
+  /// Note: Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+  Cancelable tapEvents({required Function(PolygonAnnotation) onTap}) => impl
+      .tapInteractionStream
+      .listen((data) => onTap(data.annotation))
+      .asCancelable();
 
   /// Registers long press event callbacks for the annotations managed by this manager.
+  ///
+  /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
   Cancelable longPressEvents({
     required Function(PolygonAnnotation) onLongPress,
-  }) => impl.longPressEvents(onLongPress: onLongPress);
+  }) => impl.longPressInteractionStream
+      .listen((data) => onLongPress(data.annotation))
+      .asCancelable();
 
   /// Registers drag event callbacks for the annotations managed by this manager.
+  ///
+  /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
+  /// - [onChanged]: Triggered continuously as the annotation is being dragged.
+  /// - [onEnd]: Triggered when the drag gesture ends.
+  ///
+  /// This method returns a [Cancelable] object that can be used to cancel
+  /// the drag event listener when it's no longer needed.
   Cancelable dragEvents({
     Function(PolygonAnnotation)? onBegin,
     Function(PolygonAnnotation)? onChanged,
     Function(PolygonAnnotation)? onEnd,
-  }) => impl.dragEvents(onBegin: onBegin, onChanged: onChanged, onEnd: onEnd);
+  }) => impl.dragInteractionStream.listen((data) {
+    switch (data.gestureState) {
+      case GestureState.started when onBegin != null:
+        onBegin(data.annotation);
+      case GestureState.changed when onChanged != null:
+        onChanged(data.annotation);
+      case GestureState.ended when onEnd != null:
+        onEnd(data.annotation);
+      default:
+        break;
+    }
+  }).asCancelable();
 
   /// Get all annotations of manager.
   Future<List<PolygonAnnotation>> getAnnotations() => impl.getAnnotations();

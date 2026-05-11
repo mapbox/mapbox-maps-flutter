@@ -51,6 +51,19 @@ Future<MapboxMap> main({
             key: const ValueKey("mapWidget"),
             viewport: viewport,
             onMapCreated: (MapboxMap mapboxMap) {
+              mapboxMap.onMapTapListener = (MapContentGestureContext context) {
+                events.mapInteractions.add(context);
+                if (!events.onMapTapListener.isCompleted) {
+                  events.onMapTapListener.complete();
+                }
+              };
+              mapboxMap.onMapLongTapListener =
+                  (MapContentGestureContext context) {
+                    events.mapInteractions.add(context);
+                    if (!events.onMapLongTapListener.isCompleted) {
+                      events.onMapLongTapListener.complete();
+                    }
+                  };
               completer.complete(mapboxMap);
             },
             onMapLoadedListener: (MapLoadedEventData data) {

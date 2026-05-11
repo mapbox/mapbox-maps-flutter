@@ -1,20 +1,19 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Position;
-import 'package:mapbox_maps_example/utils.dart' show MapboxStyles;
 
-import '../empty_map_widget.dart' as app;
+import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Basic snapshot', (WidgetTester tester) async {
+  testWidgets('Basic snapshot', skip: kIsWeb, (WidgetTester tester) async {
     app.runEmpty();
     await tester.pumpAndSettle();
 
@@ -40,7 +39,9 @@ void main() {
     await snapshotter.dispose();
   });
 
-  testWidgets('Snapshotter style loaded', (WidgetTester tester) async {
+  testWidgets('Snapshotter style loaded', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     app.runEmpty();
     await tester.pumpAndSettle();
 
@@ -66,7 +67,9 @@ void main() {
     await snapshotter.dispose();
   });
 
-  testWidgets('Snapshotter runtime configuration', (WidgetTester tester) async {
+  testWidgets('Snapshotter runtime configuration', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     app.runEmpty();
     await tester.pumpAndSettle();
 
@@ -128,7 +131,9 @@ void main() {
     await snapshotter.dispose();
   });
 
-  testWidgets('Snapshotter cancel and clear', (WidgetTester tester) async {
+  testWidgets('Snapshotter cancel and clear', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     app.runEmpty();
     await tester.pumpAndSettle();
 

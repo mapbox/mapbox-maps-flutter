@@ -1,16 +1,18 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Polygon, Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('CameraViewportState test', (WidgetTester tester) async {
+  testWidgets('CameraViewportState test', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final cameraViewport = CameraViewportState(
       center: Point(coordinates: Position(5, 6)),
       zoom: 16.35,
@@ -38,7 +40,9 @@ void main() {
     expect(camera.pitch, moreOrLessEquals(cameraViewport.pitch!.toDouble()));
   });
 
-  testWidgets('StyleDefaultViewportState test', (WidgetTester tester) async {
+  testWidgets('StyleDefaultViewportState test', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final styleDefaultCamera = CameraOptions(
       center: Point(coordinates: Position(80, 20)),
       zoom: 12.5,
@@ -94,7 +98,9 @@ void main() {
     );
   });
 
-  testWidgets('OverviewViewportState test', (WidgetTester tester) async {
+  testWidgets('OverviewViewportState test', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final overviewViewport = OverviewViewportState(
       geometry: Polygon.fromPoints(
         points: [
@@ -129,7 +135,9 @@ void main() {
     expect(camera.pitch, moreOrLessEquals(overviewViewport.pitch!.toDouble()));
   });
 
-  testWidgets('IdleViewportState test', (WidgetTester tester) async {
+  testWidgets('IdleViewportState test', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final idleViewport = IdleViewportState();
     final mapFuture = app.main(viewport: idleViewport);
     await tester.pumpAndSettle();
@@ -138,7 +146,9 @@ void main() {
     // no-op viewport state, camera should not change
   });
 
-  testWidgets('FollowPuckViewportState test', (WidgetTester tester) async {
+  testWidgets('FollowPuckViewportState test', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final followPuckViewport = FollowPuckViewportState(
       zoom: 16.0,
       bearing: FollowPuckViewportStateBearingConstant(30.0),

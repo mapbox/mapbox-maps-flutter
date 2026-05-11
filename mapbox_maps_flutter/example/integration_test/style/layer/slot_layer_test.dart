@@ -18,14 +18,15 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-
-    await mapboxMap.style.addLayer(SlotLayer(
+    await mapboxMap.style.addLayer(
+      SlotLayer(
         id: 'layer',
         visibility: Visibility.NONE,
         minZoom: 1.0,
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
-        ));
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as SlotLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -33,26 +34,38 @@ void main() {
     expect(layer.visibility, Visibility.NONE);
   });
 
-testWidgets('Add SlotLayer with expressions', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('Add SlotLayer with expressions', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-
-    await mapboxMap.style.addLayer(SlotLayer(
+    await mapboxMap.style.addLayer(
+      SlotLayer(
         id: 'layer',
         visibilityExpression: ['string', 'none'],
-        filter: ["==", ["get", "type"], "Feature"],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
         minZoom: 1.0,
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
-        ));
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as SlotLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.filter, ["==", ["get", "type"], "Feature"]);
+    expect(layer.filter, [
+      "==",
+      ["get", "type"],
+      "Feature",
+    ]);
   });
 }
+
 // End of generated file.

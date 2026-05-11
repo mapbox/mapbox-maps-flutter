@@ -19,10 +19,6 @@
     "reason": "Deprecated legacy debug API dropped in v3. Use MapboxMap.setDebugOptions instead."
   },
   {
-    "changeDescription": "MapboxMap: Method \"dispatch\" removed",
-    "reason": "Internal-only synthetic gesture dispatcher used for testing; not a real customer-facing API. Mobile keeps it on the Pigeon HostApi for native test infrastructure; the federated facade no longer surfaces it. Tests should use the flutter_driver gesture API instead."
-  },
-  {
     "changeDescription": "iOS platform removed",
     "reason": "Mobile implementation is now consolidated in the endorsed package, mapbox_maps_flutter_mobile."
   },

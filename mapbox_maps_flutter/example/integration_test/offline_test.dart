@@ -1,11 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'empty_map_widget.dart' as app;
-import 'package:mapbox_maps_example/utils.dart';
-import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_examples/utils.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:turf/turf.dart' show Position;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +34,9 @@ void main() {
     await MapboxMapsOptions.clearData();
   });
 
-  testWidgets("test downloading style pack", (widgetTester) async {
+  testWidgets("test downloading style pack", skip: kIsWeb, (
+    widgetTester,
+  ) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
     final offlineManager = await OfflineManager.create();
@@ -69,7 +70,9 @@ void main() {
     );
   });
 
-  testWidgets("test downloading tile region", (widgetTester) async {
+  testWidgets("test downloading tile region", skip: kIsWeb, (
+    widgetTester,
+  ) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
 

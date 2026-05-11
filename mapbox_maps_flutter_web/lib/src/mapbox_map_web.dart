@@ -324,6 +324,10 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   @override
   Future<int> getPrefetchZoomDelta() => throw _ni('getPrefetchZoomDelta');
 
+  @override
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      throw _ni('dispatch');
+
   // ===== Snapshotter / glyphs =====
 
   @override
