@@ -6,7 +6,7 @@ final _TileStoreInstanceManager _tileStoreInstanceManager =
 /// [TileStore] manages downloads and storage for requests to tile-related API endpoints, enforcing a disk usage
 /// quota: tiles available on disk may be deleted to make room for a new download. This interface can be used by an
 /// app developer to set the disk quota. The rest of TileStore API is intended for native SDK consumption only.
-final class TileStore {
+final class TileStore implements TileStorePlatformInterface {
   final int _suffix = _suffixesRegistry.getSuffix();
   String get _messageChannel => "tilestore/${_suffix.toString()}";
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
@@ -88,6 +88,7 @@ final class TileStore {
   ///     will fail until excess regions are deleted. This limit is subject
   ///     to change. Please contact Mapbox if you require a higher limit.
   ///     Additional charges may apply.
+  @override
   Future<TileRegion> loadTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
@@ -96,7 +97,7 @@ final class TileStore {
     if (progressListener != null) {
       await _api.addTileRegionLoadProgressListener(id);
       final eventChannel = EventChannel(
-        "com.mapbox.maps.flutter/${_messageChannel}/tile-region-${id}",
+        "com.mapbox.maps.flutter/$_messageChannel/tile-region-$id",
       );
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionLoadProgress.decode(event));
@@ -119,6 +120,7 @@ final class TileStore {
   /// provided in the region load options.
   ///
   /// Estimating a tile region does not mutate existing tile regions on the tile store.
+  @override
   Future<TileRegionEstimateResult> estimateTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
@@ -128,7 +130,7 @@ final class TileStore {
     if (progressListener != null) {
       await _api.addTileRegionEstimateProgressListener(id);
       final eventChannel = EventChannel(
-        "com.mapbox.maps.flutter/${_messageChannel}/tile-region-estimate-${id}",
+        "com.mapbox.maps.flutter/$_messageChannel/tile-region-estimate-$id",
       );
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionEstimateProgress.decode(event));
@@ -138,6 +140,7 @@ final class TileStore {
   }
 
   /// Fetch the array of the existing tile regions.
+  @override
   Future<List<TileRegion>> allTileRegions() {
     return _api.allTileRegions().then((value) => value.nonNulls.toList());
   }
@@ -145,6 +148,7 @@ final class TileStore {
   /// Returns a tile region given its id.
   ///
   /// -@param id: The tile region id.
+  @override
   Future<TileRegion> tileRegion(String id) {
     return _api.tileRegion(id);
   }
@@ -154,6 +158,7 @@ final class TileStore {
   ///
   /// @param id: The tile region identifier.
   /// @param descriptors: The array of [TilesetDescriptorOptions].
+  @override
   Future<bool> tileRegionContainsDescriptor(
     String id,
     List<TilesetDescriptorOptions> options,
@@ -165,6 +170,7 @@ final class TileStore {
   ///
   /// The region's associated metadata that a user previously set for this region.
   /// @param id: The tile region id.
+  @override
   Future<Map<String, Object>> tileRegionMetadata(String id) {
     return _api.tileRegionMetadata(id).then((value) => Map.from(value));
   }
@@ -172,6 +178,7 @@ final class TileStore {
   /// On successful tile region removal, this will complete with the removed tile region.
   /// Otherwise, this will complete with an error.
   /// @param id: The tile region id.
+  @override
   Future<TileRegion> removeRegion(String id) {
     return _api.removeRegion(id);
   }
@@ -179,6 +186,7 @@ final class TileStore {
   /// Sets the maximum amount of bytes [TileStore] can use to store files.
   /// If the new value causes the quota to be exceed, request will fail and data will be evicted to enforce the quota.
   /// Accepts a (positive) number of bytes, or null for resetting to the default value.
+  @override
   void setDiskQuota(int? quota, {TileDataDomain? domain}) {
     _api.setOptionForKey(
       _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.DISK_QUOTA),
@@ -189,6 +197,7 @@ final class TileStore {
 
   /// Sets the base URL to use for requests to the Mapbox API. Defaults to "https://api.mapbox.com".
   /// Accepts a string, or null for resetting to the default value.
+  @override
   void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) {
     _api.setOptionForKey(
       _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.MAPBOX_API_URL),
@@ -214,6 +223,7 @@ final class TileStore {
   /// - {y}: The y coordinate of the Map tile to be loaded.
   /// - {z_min}: The zoom range minimum of the Map tile to be loaded.
   /// - {z_max}: The zoom range maximum of the Map tile to be loaded.
+  @override
   void setTileUrlTemplate(String? template, {TileDataDomain? domain}) {
     _api.setOptionForKey(
       _PredefinedTileStoreOptionsKey(
