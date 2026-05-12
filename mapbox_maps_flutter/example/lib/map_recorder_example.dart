@@ -40,7 +40,7 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
     }
 
     try {
-      await mapboxMap!.mapRecorder.startRecording(
+      await mapboxMap!.recorder.startRecording(
         timeWindow: const Duration(seconds: 60),
         loggingEnabled: true,
         compressed: true,
@@ -82,7 +82,7 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
     if (mapboxMap == null) return;
 
     try {
-      final sequence = await mapboxMap!.mapRecorder.stopRecording();
+      final sequence = await mapboxMap!.recorder.stopRecording();
       if (mounted) {
         setState(() {
           state = RecorderState.idle;
@@ -121,7 +121,7 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
 
     try {
       // Replay twice at 2x speed
-      await mapboxMap!.mapRecorder.replay(
+      await mapboxMap!.recorder.replay(
         recordedSequence!,
         playbackCount: 2,
         playbackSpeedMultiplier: 2.0,
@@ -156,8 +156,8 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
     if (mapboxMap == null) return;
 
     try {
-      await mapboxMap!.mapRecorder.togglePause();
-      final playbackState = await mapboxMap!.mapRecorder.getState();
+      await mapboxMap!.recorder.togglePause();
+      final playbackState = await mapboxMap!.recorder.getState();
 
       if (mounted) {
         setState(() {

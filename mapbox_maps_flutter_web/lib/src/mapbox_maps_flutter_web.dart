@@ -1,3 +1,9 @@
+// AndroidPlatformViewHostingMode is @experimental on platform_interface;
+// web buildView has to accept it for signature compat but ignores it.
+// ignore_for_file: experimental_member_use
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -21,7 +27,14 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     ViewportTransition? viewportTransition,
     void Function(bool)? viewportTransitionCompletion,
     void Function(MapEvent)? onMapEvent,
+    MapOptions? mapOptions,
+    bool? textureView,
+    AndroidPlatformViewHostingMode androidHostingMode =
+        AndroidPlatformViewHostingMode.VD,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
+    // mapOptions / textureView / androidHostingMode / gestureRecognizers
+    // are mobile-platform-view tuning knobs and are ignored on web.
     return MapWebWidget(
       onMapCreated: onMapCreated,
       onMapEvent: onMapEvent,

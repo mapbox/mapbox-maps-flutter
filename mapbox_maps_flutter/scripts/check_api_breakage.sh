@@ -70,8 +70,17 @@ if [ ! -f "$ALLOWED_CHANGES_FILE" ]; then
   exit 1
 fi
 
-# Run dart-apitool and save JSON report
-TEMP_JSON=$(mktemp /tmp/mapbox_maps_flutter_apitool_report_XXXXXX.json)
+# Run dart-apitool and save JSON report.
+#
+# `mktemp <prefix>XXXXXX.<ext>` works on GNU but BSD mktemp (macOS)
+# treats the trailing `.json` literally and tries to create that
+# fixed name, colliding on re-run. Prefer `mktemp -t` which both
+# accept, then append `.json` ourselves so dart-apitool's JSON
+# reporter is happy with the extension.
+TEMP_JSON_BASE=$(mktemp -t mapbox_maps_flutter_apitool_report) || \
+  TEMP_JSON_BASE=$(mktemp)
+TEMP_JSON="${TEMP_JSON_BASE}.json"
+mv "$TEMP_JSON_BASE" "$TEMP_JSON"
 set +e
 dart-apitool diff \
   --old pub://$PACKAGE_NAME/$PACKAGE_VERSION \

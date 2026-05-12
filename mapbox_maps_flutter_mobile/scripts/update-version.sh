@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# TODO: relocate to scripts/release/ at the monorepo root and integrate
+# with the existing release tooling (see scripts/release/*.py). Tracked
+# as a follow-up.
+
 # Check if argument is provided
 if [ $# -eq 0 ]; then
     echo "Usage: $0 <input>"
@@ -25,3 +29,6 @@ sed -i '' "s/\(s\.version *= *\)\'[^\']*\'/\1\'$VERSION\'/" "$PODSPEC_FILE"
 
 PACKAGE_INFO_FILE="$SCRIPT_DIR/../lib/src/package_info.dart"
 sed -i '' "s/^const String mapboxPluginVersion = .*/const String mapboxPluginVersion = '$VERSION';/" "$PACKAGE_INFO_FILE"
+
+FACADE_BARREL_FILE="$SCRIPT_DIR/../../mapbox_maps_flutter/lib/mapbox_maps_flutter.dart"
+sed -i '' "s/^const String mapboxPluginVersion = .*/const String mapboxPluginVersion = '$VERSION';/" "$FACADE_BARREL_FILE"

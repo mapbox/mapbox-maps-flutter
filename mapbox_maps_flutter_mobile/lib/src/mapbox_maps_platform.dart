@@ -1,3 +1,7 @@
+// AndroidPlatformViewHostingMode is @experimental on the platform_interface
+// surface; mobile branches on it to pick the correct platform-view path.
+// ignore_for_file: experimental_member_use
+
 part of mapbox_maps_flutter_mobile;
 
 typedef OnPlatformViewCreatedCallback = void Function(int);

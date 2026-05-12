@@ -1,3 +1,7 @@
+// AndroidPlatformViewHostingMode is @experimental; mobile threads it
+// through buildView as a routine plumbing param.
+// ignore_for_file: experimental_member_use
+
 part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
@@ -12,9 +16,18 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
     ViewportTransition? viewportTransition,
     void Function(bool)? viewportTransitionCompletion,
     void Function(MapEvent)? onMapEvent,
+    MapOptions? mapOptions,
+    bool? textureView,
+    AndroidPlatformViewHostingMode androidHostingMode =
+        AndroidPlatformViewHostingMode.VD,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
     return MapWidget(
       styleUri: styleUri,
+      mapOptions: mapOptions,
+      textureView: textureView ?? true,
+      androidHostingMode: androidHostingMode,
+      gestureRecognizers: gestureRecognizers,
       onMapCreated: onMapCreated,
       viewport: viewport,
       viewportTransition: viewportTransition,
