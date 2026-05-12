@@ -12,14 +12,17 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 ///
 /// <strong>Warning:</strong> Please note that you are responsible for getting permission to use the map data,
 /// and for ensuring your use adheres to the relevant terms of use.
-/// ```
 class MapWidget extends StatelessWidget {
   final MapboxMapsFlutterPlatform _platform;
 
-  MapWidget({super.key}) : _platform = MapboxMapsFlutterPlatform.instance;
+  /// Called when the map is created and ready for interaction.
+  final MapCreatedCallback? onMapCreated;
+
+  MapWidget({super.key, this.onMapCreated})
+    : _platform = MapboxMapsFlutterPlatform.instance;
 
   @override
   Widget build(BuildContext context) {
-    return _platform.buildView();
+    return _platform.buildView(onMapCreated: onMapCreated);
   }
 }

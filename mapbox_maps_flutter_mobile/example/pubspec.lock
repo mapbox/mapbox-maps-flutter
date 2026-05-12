@@ -319,7 +319,7 @@ packages:
     source: path
     version: "3.0.0-beta.1"
   mapbox_maps_flutter_platform_interface:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "../../mapbox_maps_flutter_platform_interface"
       relative: true

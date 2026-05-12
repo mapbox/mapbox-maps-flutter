@@ -100,7 +100,7 @@ class MapWidget extends StatefulWidget {
   final String styleUri;
 
   /// Invoked when a new Map is created and return a MapboxMap instance to handle the Map.
-  final MapCreatedCallback? onMapCreated;
+  final void Function(MapboxMap)? onMapCreated;
 
   /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.
   final OnStyleLoadedListener? onStyleLoadedListener;

@@ -86,9 +86,11 @@ if [ -z "$UNAPPROVED" ]; then
   exit 0
 fi
 
+UNAPPROVED_COUNT=$(echo "$UNAPPROVED" | wc -l | tr -d ' ')
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "❌ Found breaking changes NOT in allow list:"
+echo "❌ Found $UNAPPROVED_COUNT breaking change(s) NOT in allow list:"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "$UNAPPROVED" | sed 's/^/  /'

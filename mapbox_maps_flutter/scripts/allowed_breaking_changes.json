@@ -85,5 +85,241 @@
   {
     "changeDescription": "Function \"convertToValidMap\" removed",
     "reason": "turf utils are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"ConstrainMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ViewportMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"NorthOrientation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GlyphsRasterizationMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleProjectionName\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"OrnamentPosition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScrollMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"PuckBearing\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ModelScaleMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ModelElevationReference\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"DistanceUnits\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GestureState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileStoreUsageMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"NetworkRestriction\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileDataDomain\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ResponseErrorReason\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScreenCoordinate\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MbxEdgeInsets\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CoordinateBounds\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CoordinateBoundsZoom\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraBoundsOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraBounds\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapAnimationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"Size\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScreenBox\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GlyphsRasterizationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileCoverOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleObjectInfo\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleProjection\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LayerPosition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ImportPosition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TransitionOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GesturesSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationPuck2D\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationPuck3D\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationPuck\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationComponentSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScaleBarSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CompassSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"AttributionSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LogoSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IndoorSelectorSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapContentGestureContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CanonicalTileID\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapSnapshotOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StylePackLoadOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StylePack\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StylePackLoadProgress\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TilesetDescriptorOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionLoadOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegion\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionEstimateResult\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionEstimateOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionLoadProgress\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionEstimateProgress\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileCacheBudgetInMegabytes\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileCacheBudgetInTiles\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
   }
 ]

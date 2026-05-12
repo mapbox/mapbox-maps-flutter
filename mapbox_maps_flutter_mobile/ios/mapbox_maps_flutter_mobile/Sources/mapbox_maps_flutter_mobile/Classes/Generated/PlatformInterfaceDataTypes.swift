@@ -21,6 +21,180 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Describes whether to constrain the map in both axes or only vertically e.g. while panning.
+enum ConstrainMode: Int {
+  /// No constrains.
+  case nONE = 0
+  /// Constrain to height only
+  case hEIGHTONLY = 1
+  /// Constrain both width and height axes.
+  case wIDTHANDHEIGHT = 2
+}
+
+/// Satisfies embedding platforms that requires the viewport coordinate systems to be set according to its standards.
+enum ViewportMode: Int {
+  /// Default viewport
+  case dEFAULT = 0
+  /// Viewport flipped on the y-axis.
+  case fLIPPEDY = 1
+}
+
+/// Describes the map orientation.
+enum NorthOrientation: Int {
+  /// Default, map oriented upwards
+  case uPWARDS = 0
+  /// Map oriented rightwards
+  case rIGHTWARDS = 1
+  /// Map oriented downwards
+  case dOWNWARDS = 2
+  /// Map oriented leftwards
+  case lEFTWARDS = 3
+}
+
+/// Describes glyphs rasterization modes.
+enum GlyphsRasterizationMode: Int {
+  /// No glyphs are rasterized locally. All glyphs are loaded from the server.
+  case nOGLYPHSRASTERIZEDLOCALLY = 0
+  /// Ideographs are rasterized locally, and they are not loaded from the server.
+  case iDEOGRAPHSRASTERIZEDLOCALLY = 1
+  /// All glyphs are rasterized locally. No glyphs are loaded from the server.
+  case aLLGLYPHSRASTERIZEDLOCALLY = 2
+}
+
+/// The style projection name.
+enum StyleProjectionName: Int {
+  case mercator = 0
+  case globe = 1
+}
+
+/// Defines the position of an ornament (logo, compass, scale bar, attribution) on the map.
+enum OrnamentPosition: Int {
+  case tOPLEFT = 0
+  case tOPRIGHT = 1
+  case bOTTOMRIGHT = 2
+  case bOTTOMLEFT = 3
+}
+
+/// Configures the directions in which the map is allowed to move during a scroll gesture.
+/// Default value: "horizontal-and-vertical".
+enum ScrollMode: Int {
+  /// The map may only move horizontally.
+  case hORIZONTAL = 0
+  /// The map may only move vertically.
+  case vERTICAL = 1
+  /// The map may move both horizontally and vertically.
+  case hORIZONTALANDVERTICAL = 2
+}
+
+/// The enum controls how the puck is oriented.
+/// Default value: "heading".
+enum PuckBearing: Int {
+  /// Orients the puck to match the direction in which the device is facing.
+  case hEADING = 0
+  /// Orients the puck to match the direction in which the device is moving.
+  case cOURSE = 1
+}
+
+/// Defines scaling mode. Only applies to location-indicator type layers.
+/// Default value: "map".
+enum ModelScaleMode: Int {
+  /// Model is scaled so that it's always the same size relative to other map features.
+  case mAP = 0
+  /// Model is scaled so that it's always the same size on the screen.
+  case vIEWPORT = 1
+}
+
+/// Selects the base of the model.
+/// Default value: "ground".
+enum ModelElevationReference: Int {
+  /// Elevated rendering is enabled relative to the sea level.
+  case sEA = 0
+  /// Elevated rendering is enabled relative to the ground's height below them.
+  case gROUND = 1
+}
+
+/// Supported distance unit types.
+/// Default value: "metric".
+enum DistanceUnits: Int {
+  /// Metric units using meters and kilometers.
+  case mETRIC = 0
+  /// Imperial units using feet and miles.
+  case iMPERIAL = 1
+  /// Nautical units using fathoms and nautical miles.
+  case nAUTICAL = 2
+}
+
+/// Enumeration of gesture states.
+enum GestureState: Int {
+  /// Gesture has started.
+  case started = 0
+  /// Gesture is in progress.
+  case changed = 1
+  /// Gesture has ended.
+  case ended = 2
+}
+
+/// Describes tile store usage modes.
+enum TileStoreUsageMode: Int {
+  /// Tile store usage is disabled.
+  ///
+  /// The implementation skips checking tile store when requesting a tile.
+  case dISABLED = 0
+  /// Tile store enabled for accessing loaded tile packs.
+  ///
+  /// The implementation first checks tile store when requesting a tile.
+  /// If a tile pack is already loaded, the tile will be extracted and returned.
+  /// Otherwise, the implementation falls back to requesting the individual tile
+  /// and storing it in the disk cache.
+  case rEADONLY = 1
+  /// Tile store enabled for accessing local tile packs and for loading new tile packs from server.
+  ///
+  /// All tile requests are converted to tile pack requests, i.e. the tile pack
+  /// that includes the requested tile will be loaded, and the tile extracted from it.
+  case rEADANDUPDATE = 2
+}
+
+/// Classify network types based on cost.
+enum NetworkRestriction: Int {
+  /// Allow access to all network types.
+  case nONE = 0
+  /// Forbid network access to expensive networks, such as cellular.
+  case dISALLOWEXPENSIVE = 1
+  /// Forbid access to all network types.
+  case dISALLOWALL = 2
+}
+
+/// Describes the tiles data domain.
+enum TileDataDomain: Int {
+  /// Data for Maps.
+  case mAPS = 0
+  /// Data for Navigation.
+  case nAVIGATION = 1
+  /// Data for Search.
+  case sEARCH = 2
+  /// Data for ADAS.
+  case aDAS = 3
+}
+
+/// Describes the reason for an offline request response error.
+/// Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
+enum ResponseErrorReason: Int {
+  /// No error occurred during the resource request.
+  case sUCCESS = 0
+  /// The resource is not found.
+  case nOTFOUND = 1
+  /// The server error.
+  case sERVER = 2
+  /// The connection error.
+  case cONNECTION = 3
+  /// The error happened because of a rate limit.
+  case rATELIMIT = 4
+  /// The resource cannot be loaded because the device is in offline mode.
+  case iNOFFLINEMODE = 5
+  /// Other reason.
+  case oTHER = 6
+}
+
 /// Describes the coordinate on the screen, measured from top to bottom and from left to right.
 /// Note: the `map` uses screen coordinate units measured in `logical pixels`.
 ///
@@ -186,6 +360,1717 @@ struct CameraState {
       zoom,
       bearing,
       pitch,
+    ]
+  }
+}
+
+/// Coordinate bounds representation.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct CoordinateBounds {
+  /// Coordinate at the southwest corner.
+  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
+  var southwest: Point
+  /// Coordinate at the northeast corner.
+  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
+  var northeast: Point
+  /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
+  /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
+  var infiniteBounds: Bool
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CoordinateBounds? {
+    let southwest = pigeonVar_list[0] as! Point
+    let northeast = pigeonVar_list[1] as! Point
+    let infiniteBounds = pigeonVar_list[2] as! Bool
+
+    return CoordinateBounds(
+      southwest: southwest,
+      northeast: northeast,
+      infiniteBounds: infiniteBounds
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      southwest,
+      northeast,
+      infiniteBounds,
+    ]
+  }
+}
+
+/// A coordinate bounds and zoom.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct CoordinateBoundsZoom {
+  /// The latitude and longitude bounds.
+  var bounds: CoordinateBounds
+  /// Zoom.
+  var zoom: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CoordinateBoundsZoom? {
+    let bounds = pigeonVar_list[0] as! CoordinateBounds
+    let zoom = pigeonVar_list[1] as! Double
+
+    return CoordinateBoundsZoom(
+      bounds: bounds,
+      zoom: zoom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      bounds,
+      zoom,
+    ]
+  }
+}
+
+/// Holds options to be used for setting `camera bounds`.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct CameraBoundsOptions {
+  /// The latitude and longitude bounds to which the camera center are constrained.
+  var bounds: CoordinateBounds? = nil
+  /// The maximum zoom level, in Mapbox zoom levels 0-25.5.
+  var maxZoom: Double? = nil
+  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
+  var minZoom: Double? = nil
+  /// The maximum allowed pitch value in degrees.
+  var maxPitch: Double? = nil
+  /// The minimum allowed pitch value in degrees.
+  var minPitch: Double? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CameraBoundsOptions? {
+    let bounds: CoordinateBounds? = nilOrValue(pigeonVar_list[0])
+    let maxZoom: Double? = nilOrValue(pigeonVar_list[1])
+    let minZoom: Double? = nilOrValue(pigeonVar_list[2])
+    let maxPitch: Double? = nilOrValue(pigeonVar_list[3])
+    let minPitch: Double? = nilOrValue(pigeonVar_list[4])
+
+    return CameraBoundsOptions(
+      bounds: bounds,
+      maxZoom: maxZoom,
+      minZoom: minZoom,
+      maxPitch: maxPitch,
+      minPitch: minPitch
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      bounds,
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch,
+    ]
+  }
+}
+
+/// Holds information about `camera bounds`.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct CameraBounds {
+  /// The latitude and longitude bounds to which the camera center are constrained.
+  var bounds: CoordinateBounds
+  /// The maximum zoom level, in Mapbox zoom levels 0-25.5.
+  var maxZoom: Double
+  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
+  var minZoom: Double
+  /// The maximum allowed pitch value in degrees.
+  var maxPitch: Double
+  /// The minimum allowed pitch value in degrees.
+  var minPitch: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CameraBounds? {
+    let bounds = pigeonVar_list[0] as! CoordinateBounds
+    let maxZoom = pigeonVar_list[1] as! Double
+    let minZoom = pigeonVar_list[2] as! Double
+    let maxPitch = pigeonVar_list[3] as! Double
+    let minPitch = pigeonVar_list[4] as! Double
+
+    return CameraBounds(
+      bounds: bounds,
+      maxZoom: maxZoom,
+      minZoom: minZoom,
+      maxPitch: maxPitch,
+      minPitch: minPitch
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      bounds,
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch,
+    ]
+  }
+}
+
+/// Options for camera animations.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MapAnimationOptions {
+  /// The duration of the animation in milliseconds.
+  /// If not set explicitly default duration will be taken 300ms
+  var duration: Int64? = nil
+  /// The amount of time, in milliseconds, to delay starting the animation after animation start.
+  /// If not set explicitly default startDelay will be taken 0ms. This only works for Android.
+  var startDelay: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MapAnimationOptions? {
+    let duration: Int64? = nilOrValue(pigeonVar_list[0])
+    let startDelay: Int64? = nilOrValue(pigeonVar_list[1])
+
+    return MapAnimationOptions(
+      duration: duration,
+      startDelay: startDelay
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      duration,
+      startDelay,
+    ]
+  }
+}
+
+/// Size type.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct Size {
+  /// Width of the size.
+  var width: Double
+  /// Height of the size.
+  var height: Double
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> Size? {
+    let width = pigeonVar_list[0] as! Double
+    let height = pigeonVar_list[1] as! Double
+
+    return Size(
+      width: width,
+      height: height
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      width,
+      height,
+    ]
+  }
+}
+
+/// A rectangular area as measured in the map's coordinate system.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ScreenBox {
+  /// The screen coordinate close to the top left corner of the screen.
+  var min: ScreenCoordinate
+  /// The screen coordinate close to the bottom right corner of the screen.
+  var max: ScreenCoordinate
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ScreenBox? {
+    let min = pigeonVar_list[0] as! ScreenCoordinate
+    let max = pigeonVar_list[1] as! ScreenCoordinate
+
+    return ScreenBox(
+      min: min,
+      max: max
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      min,
+      max,
+    ]
+  }
+}
+
+/// Describes the glyphs rasterization option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct GlyphsRasterizationOptions {
+  /// Glyphs rasterization mode for client-side text rendering.
+  var rasterizationMode: GlyphsRasterizationMode
+  /// Font family to use as font fallback for client-side text renderings.
+  var fontFamily: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GlyphsRasterizationOptions? {
+    let rasterizationMode = pigeonVar_list[0] as! GlyphsRasterizationMode
+    let fontFamily: String? = nilOrValue(pigeonVar_list[1])
+
+    return GlyphsRasterizationOptions(
+      rasterizationMode: rasterizationMode,
+      fontFamily: fontFamily
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      rasterizationMode,
+      fontFamily,
+    ]
+  }
+}
+
+/// Various options needed for tile cover.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileCoverOptions {
+  /// Tile size of the source. Defaults to 512.
+  var tileSize: Int64? = nil
+  /// Min zoom defined in the source between range [0, 22].
+  var minZoom: Int64? = nil
+  /// Max zoom defined in the source between range [0, 22].
+  var maxZoom: Int64? = nil
+  /// Whether to round zoom values when calculating tilecover.
+  var roundZoom: Bool? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileCoverOptions? {
+    let tileSize: Int64? = nilOrValue(pigeonVar_list[0])
+    let minZoom: Int64? = nilOrValue(pigeonVar_list[1])
+    let maxZoom: Int64? = nilOrValue(pigeonVar_list[2])
+    let roundZoom: Bool? = nilOrValue(pigeonVar_list[3])
+
+    return TileCoverOptions(
+      tileSize: tileSize,
+      minZoom: minZoom,
+      maxZoom: maxZoom,
+      roundZoom: roundZoom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      tileSize,
+      minZoom,
+      maxZoom,
+      roundZoom,
+    ]
+  }
+}
+
+/// The information about style object (source or layer).
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StyleObjectInfo {
+  /// The object's identifier.
+  var id: String
+  /// The object's type.
+  var type: String
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StyleObjectInfo? {
+    let id = pigeonVar_list[0] as! String
+    let type = pigeonVar_list[1] as! String
+
+    return StyleObjectInfo(
+      id: id,
+      type: type
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      type,
+    ]
+  }
+}
+
+/// The style projection.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StyleProjection {
+  var name: StyleProjectionName
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StyleProjection? {
+    let name = pigeonVar_list[0] as! StyleProjectionName
+
+    return StyleProjection(
+      name: name
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      name
+    ]
+  }
+}
+
+/// Specifies position of a layer that is added via addStyleLayer method.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LayerPosition {
+  /// Layer should be positioned above specified layer id.
+  var above: String? = nil
+  /// Layer should be positioned below specified layer id.
+  var below: String? = nil
+  /// Layer should be positioned at specified index in a layers stack.
+  var at: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> LayerPosition? {
+    let above: String? = nilOrValue(pigeonVar_list[0])
+    let below: String? = nilOrValue(pigeonVar_list[1])
+    let at: Int64? = nilOrValue(pigeonVar_list[2])
+
+    return LayerPosition(
+      above: above,
+      below: below,
+      at: at
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      above,
+      below,
+      at,
+    ]
+  }
+}
+
+/// Specifies the position at which an import will be added when using `Style.addImport`.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ImportPosition {
+  /// Import should be positioned above the specified import id.
+  var above: String? = nil
+  /// Import should be positioned below the specified import id.
+  var below: String? = nil
+  /// Import should be positioned at the specified index in the imports stack.
+  var at: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ImportPosition? {
+    let above: String? = nilOrValue(pigeonVar_list[0])
+    let below: String? = nilOrValue(pigeonVar_list[1])
+    let at: Int64? = nilOrValue(pigeonVar_list[2])
+
+    return ImportPosition(
+      above: above,
+      below: below,
+      at: at
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      above,
+      below,
+      at,
+    ]
+  }
+}
+
+/// Defines global transition options that are used when properties are changed without specific transition options.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TransitionOptions {
+  /// Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`.
+  var duration: Int64? = nil
+  /// Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`.
+  var delay: Int64? = nil
+  /// Whether the fade in/out symbol placement transition is enabled. Defaults to `true`.
+  var enablePlacementTransitions: Bool? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TransitionOptions? {
+    let duration: Int64? = nilOrValue(pigeonVar_list[0])
+    let delay: Int64? = nilOrValue(pigeonVar_list[1])
+    let enablePlacementTransitions: Bool? = nilOrValue(pigeonVar_list[2])
+
+    return TransitionOptions(
+      duration: duration,
+      delay: delay,
+      enablePlacementTransitions: enablePlacementTransitions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      duration,
+      delay,
+      enablePlacementTransitions,
+    ]
+  }
+}
+
+/// Gesture configuration allows to control the user touch interaction.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct GesturesSettings {
+  /// Whether the rotate gesture is enabled.
+  var rotateEnabled: Bool? = nil
+  /// Whether the pinch to zoom gesture is enabled.
+  var pinchToZoomEnabled: Bool? = nil
+  /// Whether the single-touch scroll gesture is enabled.
+  var scrollEnabled: Bool? = nil
+  /// Whether rotation is enabled for the pinch to zoom gesture.
+  var simultaneousRotateAndPinchToZoomEnabled: Bool? = nil
+  /// Whether the pitch gesture is enabled.
+  var pitchEnabled: Bool? = nil
+  /// Configures the directions in which the map is allowed to move during a scroll gesture.
+  var scrollMode: ScrollMode? = nil
+  /// Whether double tapping the map with one touch results in a zoom-in animation.
+  var doubleTapToZoomInEnabled: Bool? = nil
+  /// Whether single tapping the map with two touches results in a zoom-out animation.
+  var doubleTouchToZoomOutEnabled: Bool? = nil
+  /// Whether the quick zoom gesture is enabled.
+  var quickZoomEnabled: Bool? = nil
+  /// By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead.
+  var focalPoint: ScreenCoordinate? = nil
+  /// Whether a deceleration animation following a pinch-to-zoom gesture is enabled.
+  var pinchToZoomDecelerationEnabled: Bool? = nil
+  /// Whether a deceleration animation following a rotate gesture is enabled.
+  var rotateDecelerationEnabled: Bool? = nil
+  /// Whether a deceleration animation following a scroll gesture is enabled.
+  var scrollDecelerationEnabled: Bool? = nil
+  /// Whether rotate threshold increases when pinching to zoom.
+  var increaseRotateThresholdWhenPinchingToZoom: Bool? = nil
+  /// Whether pinch to zoom threshold increases when rotating.
+  var increasePinchToZoomThresholdWhenRotating: Bool? = nil
+  /// The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture.
+  var zoomAnimationAmount: Double? = nil
+  /// Whether pan is enabled for the pinch gesture.
+  var pinchPanEnabled: Bool? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GesturesSettings? {
+    let rotateEnabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let pinchToZoomEnabled: Bool? = nilOrValue(pigeonVar_list[1])
+    let scrollEnabled: Bool? = nilOrValue(pigeonVar_list[2])
+    let simultaneousRotateAndPinchToZoomEnabled: Bool? = nilOrValue(pigeonVar_list[3])
+    let pitchEnabled: Bool? = nilOrValue(pigeonVar_list[4])
+    let scrollMode: ScrollMode? = nilOrValue(pigeonVar_list[5])
+    let doubleTapToZoomInEnabled: Bool? = nilOrValue(pigeonVar_list[6])
+    let doubleTouchToZoomOutEnabled: Bool? = nilOrValue(pigeonVar_list[7])
+    let quickZoomEnabled: Bool? = nilOrValue(pigeonVar_list[8])
+    let focalPoint: ScreenCoordinate? = nilOrValue(pigeonVar_list[9])
+    let pinchToZoomDecelerationEnabled: Bool? = nilOrValue(pigeonVar_list[10])
+    let rotateDecelerationEnabled: Bool? = nilOrValue(pigeonVar_list[11])
+    let scrollDecelerationEnabled: Bool? = nilOrValue(pigeonVar_list[12])
+    let increaseRotateThresholdWhenPinchingToZoom: Bool? = nilOrValue(pigeonVar_list[13])
+    let increasePinchToZoomThresholdWhenRotating: Bool? = nilOrValue(pigeonVar_list[14])
+    let zoomAnimationAmount: Double? = nilOrValue(pigeonVar_list[15])
+    let pinchPanEnabled: Bool? = nilOrValue(pigeonVar_list[16])
+
+    return GesturesSettings(
+      rotateEnabled: rotateEnabled,
+      pinchToZoomEnabled: pinchToZoomEnabled,
+      scrollEnabled: scrollEnabled,
+      simultaneousRotateAndPinchToZoomEnabled: simultaneousRotateAndPinchToZoomEnabled,
+      pitchEnabled: pitchEnabled,
+      scrollMode: scrollMode,
+      doubleTapToZoomInEnabled: doubleTapToZoomInEnabled,
+      doubleTouchToZoomOutEnabled: doubleTouchToZoomOutEnabled,
+      quickZoomEnabled: quickZoomEnabled,
+      focalPoint: focalPoint,
+      pinchToZoomDecelerationEnabled: pinchToZoomDecelerationEnabled,
+      rotateDecelerationEnabled: rotateDecelerationEnabled,
+      scrollDecelerationEnabled: scrollDecelerationEnabled,
+      increaseRotateThresholdWhenPinchingToZoom: increaseRotateThresholdWhenPinchingToZoom,
+      increasePinchToZoomThresholdWhenRotating: increasePinchToZoomThresholdWhenRotating,
+      zoomAnimationAmount: zoomAnimationAmount,
+      pinchPanEnabled: pinchPanEnabled
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      rotateEnabled,
+      pinchToZoomEnabled,
+      scrollEnabled,
+      simultaneousRotateAndPinchToZoomEnabled,
+      pitchEnabled,
+      scrollMode,
+      doubleTapToZoomInEnabled,
+      doubleTouchToZoomOutEnabled,
+      quickZoomEnabled,
+      focalPoint,
+      pinchToZoomDecelerationEnabled,
+      rotateDecelerationEnabled,
+      scrollDecelerationEnabled,
+      increaseRotateThresholdWhenPinchingToZoom,
+      increasePinchToZoomThresholdWhenRotating,
+      zoomAnimationAmount,
+      pinchPanEnabled,
+    ]
+  }
+}
+
+/// 2D location puck configuration.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LocationPuck2D {
+  /// Name of image in sprite to use as the top of the location indicator.
+  var topImage: FlutterStandardTypedData? = nil
+  /// Name of image in sprite to use as the middle of the location indicator.
+  var bearingImage: FlutterStandardTypedData? = nil
+  /// Name of image in sprite to use as the background of the location indicator.
+  var shadowImage: FlutterStandardTypedData? = nil
+  /// The scale expression of the images. If defined, it will be applied to all the three images.
+  var scaleExpression: String? = nil
+  /// The opacity of the entire location puck.
+  /// Default value: 1. Value range: [0, 1]
+  var opacity: Double? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck2D? {
+    let topImage: FlutterStandardTypedData? = nilOrValue(pigeonVar_list[0])
+    let bearingImage: FlutterStandardTypedData? = nilOrValue(pigeonVar_list[1])
+    let shadowImage: FlutterStandardTypedData? = nilOrValue(pigeonVar_list[2])
+    let scaleExpression: String? = nilOrValue(pigeonVar_list[3])
+    let opacity: Double? = nilOrValue(pigeonVar_list[4])
+
+    return LocationPuck2D(
+      topImage: topImage,
+      bearingImage: bearingImage,
+      shadowImage: shadowImage,
+      scaleExpression: scaleExpression,
+      opacity: opacity
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      topImage,
+      bearingImage,
+      shadowImage,
+      scaleExpression,
+      opacity,
+    ]
+  }
+}
+
+/// 3D location puck configuration.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LocationPuck3D {
+  /// An URL for the model file in gltf format.
+  var modelUri: String? = nil
+  /// The position of the model.
+  var position: [Double?]? = nil
+  /// The opacity of the model.
+  var modelOpacity: Double? = nil
+  /// The scale of the model.
+  var modelScale: [Double?]? = nil
+  /// The scale expression of the model.
+  var modelScaleExpression: String? = nil
+  /// The translation of the model [lon, lat, z].
+  var modelTranslation: [Double?]? = nil
+  /// The rotation of the model.
+  var modelRotation: [Double?]? = nil
+  /// Enable/Disable shadow casting for the 3D location puck.
+  var modelCastShadows: Bool? = nil
+  /// Enable/Disable shadow receiving for the 3D location puck.
+  var modelReceiveShadows: Bool? = nil
+  /// Defines scaling mode. Only applies to location-indicator type layers.
+  var modelScaleMode: ModelScaleMode? = nil
+  /// Strength of the emission.
+  var modelEmissiveStrength: Double? = nil
+  /// The emissive strength expression of the model.
+  var modelEmissiveStrengthExpression: String? = nil
+  /// Selects the base of the model.
+  var modelElevationReference: ModelElevationReference? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck3D? {
+    let modelUri: String? = nilOrValue(pigeonVar_list[0])
+    let position: [Double?]? = nilOrValue(pigeonVar_list[1])
+    let modelOpacity: Double? = nilOrValue(pigeonVar_list[2])
+    let modelScale: [Double?]? = nilOrValue(pigeonVar_list[3])
+    let modelScaleExpression: String? = nilOrValue(pigeonVar_list[4])
+    let modelTranslation: [Double?]? = nilOrValue(pigeonVar_list[5])
+    let modelRotation: [Double?]? = nilOrValue(pigeonVar_list[6])
+    let modelCastShadows: Bool? = nilOrValue(pigeonVar_list[7])
+    let modelReceiveShadows: Bool? = nilOrValue(pigeonVar_list[8])
+    let modelScaleMode: ModelScaleMode? = nilOrValue(pigeonVar_list[9])
+    let modelEmissiveStrength: Double? = nilOrValue(pigeonVar_list[10])
+    let modelEmissiveStrengthExpression: String? = nilOrValue(pigeonVar_list[11])
+    let modelElevationReference: ModelElevationReference? = nilOrValue(pigeonVar_list[12])
+
+    return LocationPuck3D(
+      modelUri: modelUri,
+      position: position,
+      modelOpacity: modelOpacity,
+      modelScale: modelScale,
+      modelScaleExpression: modelScaleExpression,
+      modelTranslation: modelTranslation,
+      modelRotation: modelRotation,
+      modelCastShadows: modelCastShadows,
+      modelReceiveShadows: modelReceiveShadows,
+      modelScaleMode: modelScaleMode,
+      modelEmissiveStrength: modelEmissiveStrength,
+      modelEmissiveStrengthExpression: modelEmissiveStrengthExpression,
+      modelElevationReference: modelElevationReference
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      modelUri,
+      position,
+      modelOpacity,
+      modelScale,
+      modelScaleExpression,
+      modelTranslation,
+      modelRotation,
+      modelCastShadows,
+      modelReceiveShadows,
+      modelScaleMode,
+      modelEmissiveStrength,
+      modelEmissiveStrengthExpression,
+      modelElevationReference,
+    ]
+  }
+}
+
+/// Defines what the customised look of the location puck.
+/// Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LocationPuck {
+  var locationPuck2D: LocationPuck2D? = nil
+  var locationPuck3D: LocationPuck3D? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck? {
+    let locationPuck2D: LocationPuck2D? = nilOrValue(pigeonVar_list[0])
+    let locationPuck3D: LocationPuck3D? = nilOrValue(pigeonVar_list[1])
+
+    return LocationPuck(
+      locationPuck2D: locationPuck2D,
+      locationPuck3D: locationPuck3D
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      locationPuck2D,
+      locationPuck3D,
+    ]
+  }
+}
+
+/// Shows a location puck on the map.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LocationComponentSettings {
+  /// Whether the user location is visible on the map.
+  var enabled: Bool? = nil
+  /// Whether the location puck is pulsing on the map. Works for 2D location puck only.
+  var pulsingEnabled: Bool? = nil
+  /// The color of the pulsing circle. Works for 2D location puck only.
+  var pulsingColor: Int64? = nil
+  /// The maximum radius of the pulsing circle. Works for 2D location puck only.
+  var pulsingMaxRadius: Double? = nil
+  /// Whether show accuracy ring with location puck. Works for 2D location puck only.
+  var showAccuracyRing: Bool? = nil
+  /// The color of the accuracy ring. Works for 2D location puck only.
+  var accuracyRingColor: Int64? = nil
+  /// The color of the accuracy ring border. Works for 2D location puck only.
+  var accuracyRingBorderColor: Int64? = nil
+  /// Sets the id of the layer that's added above to when placing the component on the map.
+  var layerAbove: String? = nil
+  /// Sets the id of the layer that's added below to when placing the component on the map.
+  var layerBelow: String? = nil
+  /// Whether the puck rotates to track the bearing source.
+  var puckBearingEnabled: Bool? = nil
+  /// The enum controls how the puck is oriented.
+  var puckBearing: PuckBearing? = nil
+  /// The slot this layer is assigned to.
+  var slot: String? = nil
+  /// Defines what the customised look of the location puck.
+  var locationPuck: LocationPuck? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> LocationComponentSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let pulsingEnabled: Bool? = nilOrValue(pigeonVar_list[1])
+    let pulsingColor: Int64? = nilOrValue(pigeonVar_list[2])
+    let pulsingMaxRadius: Double? = nilOrValue(pigeonVar_list[3])
+    let showAccuracyRing: Bool? = nilOrValue(pigeonVar_list[4])
+    let accuracyRingColor: Int64? = nilOrValue(pigeonVar_list[5])
+    let accuracyRingBorderColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let layerAbove: String? = nilOrValue(pigeonVar_list[7])
+    let layerBelow: String? = nilOrValue(pigeonVar_list[8])
+    let puckBearingEnabled: Bool? = nilOrValue(pigeonVar_list[9])
+    let puckBearing: PuckBearing? = nilOrValue(pigeonVar_list[10])
+    let slot: String? = nilOrValue(pigeonVar_list[11])
+    let locationPuck: LocationPuck? = nilOrValue(pigeonVar_list[12])
+
+    return LocationComponentSettings(
+      enabled: enabled,
+      pulsingEnabled: pulsingEnabled,
+      pulsingColor: pulsingColor,
+      pulsingMaxRadius: pulsingMaxRadius,
+      showAccuracyRing: showAccuracyRing,
+      accuracyRingColor: accuracyRingColor,
+      accuracyRingBorderColor: accuracyRingBorderColor,
+      layerAbove: layerAbove,
+      layerBelow: layerBelow,
+      puckBearingEnabled: puckBearingEnabled,
+      puckBearing: puckBearing,
+      slot: slot,
+      locationPuck: locationPuck
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      pulsingEnabled,
+      pulsingColor,
+      pulsingMaxRadius,
+      showAccuracyRing,
+      accuracyRingColor,
+      accuracyRingBorderColor,
+      layerAbove,
+      layerBelow,
+      puckBearingEnabled,
+      puckBearing,
+      slot,
+      locationPuck,
+    ]
+  }
+}
+
+/// Shows the scale bar on the map.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ScaleBarSettings {
+  /// Whether the scale is visible on the map.
+  var enabled: Bool? = nil
+  /// Defines where the scale bar is positioned on the map.
+  var position: OrnamentPosition? = nil
+  var marginLeft: Double? = nil
+  var marginTop: Double? = nil
+  var marginRight: Double? = nil
+  var marginBottom: Double? = nil
+  var textColor: Int64? = nil
+  var primaryColor: Int64? = nil
+  var secondaryColor: Int64? = nil
+  var borderWidth: Double? = nil
+  var height: Double? = nil
+  var textBarMargin: Double? = nil
+  var textBorderWidth: Double? = nil
+  var textSize: Double? = nil
+  var isMetricUnits: Bool? = nil
+  var distanceUnits: DistanceUnits? = nil
+  var refreshInterval: Int64? = nil
+  var showTextBorder: Bool? = nil
+  var ratio: Double? = nil
+  var useContinuousRendering: Bool? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ScaleBarSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let position: OrnamentPosition? = nilOrValue(pigeonVar_list[1])
+    let marginLeft: Double? = nilOrValue(pigeonVar_list[2])
+    let marginTop: Double? = nilOrValue(pigeonVar_list[3])
+    let marginRight: Double? = nilOrValue(pigeonVar_list[4])
+    let marginBottom: Double? = nilOrValue(pigeonVar_list[5])
+    let textColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let primaryColor: Int64? = nilOrValue(pigeonVar_list[7])
+    let secondaryColor: Int64? = nilOrValue(pigeonVar_list[8])
+    let borderWidth: Double? = nilOrValue(pigeonVar_list[9])
+    let height: Double? = nilOrValue(pigeonVar_list[10])
+    let textBarMargin: Double? = nilOrValue(pigeonVar_list[11])
+    let textBorderWidth: Double? = nilOrValue(pigeonVar_list[12])
+    let textSize: Double? = nilOrValue(pigeonVar_list[13])
+    let isMetricUnits: Bool? = nilOrValue(pigeonVar_list[14])
+    let distanceUnits: DistanceUnits? = nilOrValue(pigeonVar_list[15])
+    let refreshInterval: Int64? = nilOrValue(pigeonVar_list[16])
+    let showTextBorder: Bool? = nilOrValue(pigeonVar_list[17])
+    let ratio: Double? = nilOrValue(pigeonVar_list[18])
+    let useContinuousRendering: Bool? = nilOrValue(pigeonVar_list[19])
+
+    return ScaleBarSettings(
+      enabled: enabled,
+      position: position,
+      marginLeft: marginLeft,
+      marginTop: marginTop,
+      marginRight: marginRight,
+      marginBottom: marginBottom,
+      textColor: textColor,
+      primaryColor: primaryColor,
+      secondaryColor: secondaryColor,
+      borderWidth: borderWidth,
+      height: height,
+      textBarMargin: textBarMargin,
+      textBorderWidth: textBorderWidth,
+      textSize: textSize,
+      isMetricUnits: isMetricUnits,
+      distanceUnits: distanceUnits,
+      refreshInterval: refreshInterval,
+      showTextBorder: showTextBorder,
+      ratio: ratio,
+      useContinuousRendering: useContinuousRendering
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      textColor,
+      primaryColor,
+      secondaryColor,
+      borderWidth,
+      height,
+      textBarMargin,
+      textBorderWidth,
+      textSize,
+      isMetricUnits,
+      distanceUnits,
+      refreshInterval,
+      showTextBorder,
+      ratio,
+      useContinuousRendering,
+    ]
+  }
+}
+
+/// Shows the compass on the map.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct CompassSettings {
+  var enabled: Bool? = nil
+  var position: OrnamentPosition? = nil
+  var marginLeft: Double? = nil
+  var marginTop: Double? = nil
+  var marginRight: Double? = nil
+  var marginBottom: Double? = nil
+  var opacity: Double? = nil
+  var rotation: Double? = nil
+  var visibility: Bool? = nil
+  var fadeWhenFacingNorth: Bool? = nil
+  var clickable: Bool? = nil
+  /// The compass image, the visual representation of the compass.
+  var image: FlutterStandardTypedData? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CompassSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let position: OrnamentPosition? = nilOrValue(pigeonVar_list[1])
+    let marginLeft: Double? = nilOrValue(pigeonVar_list[2])
+    let marginTop: Double? = nilOrValue(pigeonVar_list[3])
+    let marginRight: Double? = nilOrValue(pigeonVar_list[4])
+    let marginBottom: Double? = nilOrValue(pigeonVar_list[5])
+    let opacity: Double? = nilOrValue(pigeonVar_list[6])
+    let rotation: Double? = nilOrValue(pigeonVar_list[7])
+    let visibility: Bool? = nilOrValue(pigeonVar_list[8])
+    let fadeWhenFacingNorth: Bool? = nilOrValue(pigeonVar_list[9])
+    let clickable: Bool? = nilOrValue(pigeonVar_list[10])
+    let image: FlutterStandardTypedData? = nilOrValue(pigeonVar_list[11])
+
+    return CompassSettings(
+      enabled: enabled,
+      position: position,
+      marginLeft: marginLeft,
+      marginTop: marginTop,
+      marginRight: marginRight,
+      marginBottom: marginBottom,
+      opacity: opacity,
+      rotation: rotation,
+      visibility: visibility,
+      fadeWhenFacingNorth: fadeWhenFacingNorth,
+      clickable: clickable,
+      image: image
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      opacity,
+      rotation,
+      visibility,
+      fadeWhenFacingNorth,
+      clickable,
+      image,
+    ]
+  }
+}
+
+/// Shows the attribution icon on the map.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct AttributionSettings {
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  var enabled: Bool? = nil
+  var iconColor: Int64? = nil
+  var position: OrnamentPosition? = nil
+  var marginLeft: Double? = nil
+  var marginTop: Double? = nil
+  var marginRight: Double? = nil
+  var marginBottom: Double? = nil
+  var clickable: Bool? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> AttributionSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let iconColor: Int64? = nilOrValue(pigeonVar_list[1])
+    let position: OrnamentPosition? = nilOrValue(pigeonVar_list[2])
+    let marginLeft: Double? = nilOrValue(pigeonVar_list[3])
+    let marginTop: Double? = nilOrValue(pigeonVar_list[4])
+    let marginRight: Double? = nilOrValue(pigeonVar_list[5])
+    let marginBottom: Double? = nilOrValue(pigeonVar_list[6])
+    let clickable: Bool? = nilOrValue(pigeonVar_list[7])
+
+    return AttributionSettings(
+      enabled: enabled,
+      iconColor: iconColor,
+      position: position,
+      marginLeft: marginLeft,
+      marginTop: marginTop,
+      marginRight: marginRight,
+      marginBottom: marginBottom,
+      clickable: clickable
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      iconColor,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      clickable,
+    ]
+  }
+}
+
+/// Shows the Mapbox logo on the map.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LogoSettings {
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  var enabled: Bool? = nil
+  var position: OrnamentPosition? = nil
+  var marginLeft: Double? = nil
+  var marginTop: Double? = nil
+  var marginRight: Double? = nil
+  var marginBottom: Double? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> LogoSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let position: OrnamentPosition? = nilOrValue(pigeonVar_list[1])
+    let marginLeft: Double? = nilOrValue(pigeonVar_list[2])
+    let marginTop: Double? = nilOrValue(pigeonVar_list[3])
+    let marginRight: Double? = nilOrValue(pigeonVar_list[4])
+    let marginBottom: Double? = nilOrValue(pigeonVar_list[5])
+
+    return LogoSettings(
+      enabled: enabled,
+      position: position,
+      marginLeft: marginLeft,
+      marginTop: marginTop,
+      marginRight: marginRight,
+      marginBottom: marginBottom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ]
+  }
+}
+
+/// Settings for the indoor floor selector.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct IndoorSelectorSettings {
+  var enabled: Bool? = nil
+  var position: OrnamentPosition? = nil
+  var marginLeft: Double? = nil
+  var marginTop: Double? = nil
+  var marginRight: Double? = nil
+  var marginBottom: Double? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> IndoorSelectorSettings? {
+    let enabled: Bool? = nilOrValue(pigeonVar_list[0])
+    let position: OrnamentPosition? = nilOrValue(pigeonVar_list[1])
+    let marginLeft: Double? = nilOrValue(pigeonVar_list[2])
+    let marginTop: Double? = nilOrValue(pigeonVar_list[3])
+    let marginRight: Double? = nilOrValue(pigeonVar_list[4])
+    let marginBottom: Double? = nilOrValue(pigeonVar_list[5])
+
+    return IndoorSelectorSettings(
+      enabled: enabled,
+      position: position,
+      marginLeft: marginLeft,
+      marginTop: marginTop,
+      marginRight: marginRight,
+      marginBottom: marginBottom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ]
+  }
+}
+
+/// A structure that defines additional information about map content gesture.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MapContentGestureContext {
+  /// The location of gesture in Map view bounds.
+  var touchPosition: ScreenCoordinate
+  /// Geographical coordinate of the map gesture.
+  var point: Point
+  /// The state of the gesture.
+  var gestureState: GestureState
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MapContentGestureContext? {
+    let touchPosition = pigeonVar_list[0] as! ScreenCoordinate
+    let point = pigeonVar_list[1] as! Point
+    let gestureState = pigeonVar_list[2] as! GestureState
+
+    return MapContentGestureContext(
+      touchPosition: touchPosition,
+      point: point,
+      gestureState: gestureState
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      touchPosition,
+      point,
+      gestureState,
+    ]
+  }
+}
+
+/// Represents a tile coordinate.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct CanonicalTileID {
+  /// The z value of the coordinate (zoom-level).
+  var z: Int64
+  /// The x value of the coordinate.
+  var x: Int64
+  /// The y value of the coordinate.
+  var y: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CanonicalTileID? {
+    let z = pigeonVar_list[0] as! Int64
+    let x = pigeonVar_list[1] as! Int64
+    let y = pigeonVar_list[2] as! Int64
+
+    return CanonicalTileID(
+      z: z,
+      x: x,
+      y: y
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      z,
+      x,
+      y,
+    ]
+  }
+}
+
+/// Set of options for taking map snapshot with `map snapshotter`.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MapSnapshotOptions {
+  /// Dimensions of the snapshot in `logical pixels`.
+  var size: Size
+  /// Ratio between the number of device-independent and screen pixels.
+  var pixelRatio: Double
+  /// Glyphs rasterization options to use for client-side text rendering.
+  /// By default, `GlyphsRasterizationOptions` will use `NoGlyphsRasterizedLocally` mode.
+  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
+  /// Flag that determines if the logo should be shown on the snapshot.
+  var showsLogo: Bool? = nil
+  /// Flag that determines if attribution should be shown on the snapshot.
+  var showsAttribution: Bool? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MapSnapshotOptions? {
+    let size = pigeonVar_list[0] as! Size
+    let pixelRatio = pigeonVar_list[1] as! Double
+    let glyphsRasterizationOptions: GlyphsRasterizationOptions? = nilOrValue(pigeonVar_list[2])
+    let showsLogo: Bool? = nilOrValue(pigeonVar_list[3])
+    let showsAttribution: Bool? = nilOrValue(pigeonVar_list[4])
+
+    return MapSnapshotOptions(
+      size: size,
+      pixelRatio: pixelRatio,
+      glyphsRasterizationOptions: glyphsRasterizationOptions,
+      showsLogo: showsLogo,
+      showsAttribution: showsAttribution
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      size,
+      pixelRatio,
+      glyphsRasterizationOptions,
+      showsLogo,
+      showsAttribution,
+    ]
+  }
+}
+
+/// Describes the style package load option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StylePackLoadOptions {
+  /// Specifies glyphs rasterization mode.
+  ///
+  /// If provided, updates the style package's glyphs rasterization mode,
+  /// which defines which glyphs will be loaded from the server.
+  ///
+  /// By default, ideographs are rasterized locally and other glyphs are loaded
+  /// from network (i.e. `IdeographsRasterizedLocally` value is used).
+  var glyphsRasterizationMode: GlyphsRasterizationMode? = nil
+  /// A custom Mapbox value associated with this style package for storing metadata.
+  ///
+  /// If provided, the custom value will be stored alongside the style package.
+  /// Previous values will be replaced with the new value.
+  var metadata: [String?: Any?]? = nil
+  /// Accepts expired data when loading style resources.
+  ///
+  /// Set to true to accept expired responses. Set to false to ensure that data
+  /// for a style is up-to-date.
+  var acceptExpired: Bool
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StylePackLoadOptions? {
+    let glyphsRasterizationMode: GlyphsRasterizationMode? = nilOrValue(pigeonVar_list[0])
+    let metadata: [String?: Any?]? = nilOrValue(pigeonVar_list[1])
+    let acceptExpired = pigeonVar_list[2] as! Bool
+
+    return StylePackLoadOptions(
+      glyphsRasterizationMode: glyphsRasterizationMode,
+      metadata: metadata,
+      acceptExpired: acceptExpired
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      glyphsRasterizationMode,
+      metadata,
+      acceptExpired,
+    ]
+  }
+}
+
+/// The `style pack` represents a stored style package.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StylePack {
+  /// The style associated with the style package.
+  var styleURI: String
+  /// The glyphs rasterization mode of the style package.
+  ///
+  /// It defines which glyphs will be loaded from the server.
+  var glyphsRasterizationMode: GlyphsRasterizationMode
+  /// The number of resources that are known to be required for this style package.
+  var requiredResourceCount: Int64
+  /// The number of resources that have been fully downloaded and are ready for
+  /// offline access.
+  var completedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources that have been fully downloaded.
+  var completedResourceSize: Int64
+  /// The earliest point in time when any of the style package resources gets expired.
+  ///
+  /// Uninitialized for incomplete style packages or for complete style packages with
+  /// all immutable resources.
+  var expires: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StylePack? {
+    let styleURI = pigeonVar_list[0] as! String
+    let glyphsRasterizationMode = pigeonVar_list[1] as! GlyphsRasterizationMode
+    let requiredResourceCount = pigeonVar_list[2] as! Int64
+    let completedResourceCount = pigeonVar_list[3] as! Int64
+    let completedResourceSize = pigeonVar_list[4] as! Int64
+    let expires: Int64? = nilOrValue(pigeonVar_list[5])
+
+    return StylePack(
+      styleURI: styleURI,
+      glyphsRasterizationMode: glyphsRasterizationMode,
+      requiredResourceCount: requiredResourceCount,
+      completedResourceCount: completedResourceCount,
+      completedResourceSize: completedResourceSize,
+      expires: expires
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      styleURI,
+      glyphsRasterizationMode,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    ]
+  }
+}
+
+/// A `style pack load` progress includes information about the number of resources
+/// that have completed downloading and the total number of resources that are required.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StylePackLoadProgress {
+  /// The number of resources that are ready for offline access.
+  var completedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources that are ready for offline access.
+  var completedResourceSize: Int64
+  /// The number of resources that have failed to download due to an error.
+  var erroredResourceCount: Int64
+  /// The number of resources that are known to be required for this style package.
+  var requiredResourceCount: Int64
+  /// The number of resources that have been fully downloaded from the network.
+  var loadedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources that have been fully downloaded
+  /// from the network.
+  var loadedResourceSize: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StylePackLoadProgress? {
+    let completedResourceCount = pigeonVar_list[0] as! Int64
+    let completedResourceSize = pigeonVar_list[1] as! Int64
+    let erroredResourceCount = pigeonVar_list[2] as! Int64
+    let requiredResourceCount = pigeonVar_list[3] as! Int64
+    let loadedResourceCount = pigeonVar_list[4] as! Int64
+    let loadedResourceSize = pigeonVar_list[5] as! Int64
+
+    return StylePackLoadProgress(
+      completedResourceCount: completedResourceCount,
+      completedResourceSize: completedResourceSize,
+      erroredResourceCount: erroredResourceCount,
+      requiredResourceCount: requiredResourceCount,
+      loadedResourceCount: loadedResourceCount,
+      loadedResourceSize: loadedResourceSize
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    ]
+  }
+}
+
+/// Describes the tileset descriptor option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TilesetDescriptorOptions {
+  /// The style associated with the tileset descriptor.
+  var styleURI: String
+  /// Minimum zoom level for the tile package.
+  var minZoom: Int64
+  /// Maximum zoom level for the tile package.
+  var maxZoom: Int64
+  /// Pixel ratio to be accounted for when downloading raster tiles.
+  var pixelRatio: Double? = nil
+  /// The tilesets associated with the tileset descriptor.
+  var tilesets: [String?]? = nil
+  /// Style package load options, associated with the tileset descriptor.
+  var stylePackOptions: StylePackLoadOptions? = nil
+  /// Extra tileset descriptor options.
+  var extraOptions: [String?: Any?]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TilesetDescriptorOptions? {
+    let styleURI = pigeonVar_list[0] as! String
+    let minZoom = pigeonVar_list[1] as! Int64
+    let maxZoom = pigeonVar_list[2] as! Int64
+    let pixelRatio: Double? = nilOrValue(pigeonVar_list[3])
+    let tilesets: [String?]? = nilOrValue(pigeonVar_list[4])
+    let stylePackOptions: StylePackLoadOptions? = nilOrValue(pigeonVar_list[5])
+    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[6])
+
+    return TilesetDescriptorOptions(
+      styleURI: styleURI,
+      minZoom: minZoom,
+      maxZoom: maxZoom,
+      pixelRatio: pixelRatio,
+      tilesets: tilesets,
+      stylePackOptions: stylePackOptions,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      styleURI,
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      tilesets,
+      stylePackOptions,
+      extraOptions,
+    ]
+  }
+}
+
+/// Describes the tile region load option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionLoadOptions {
+  /// The tile region's associated geometry.
+  var geometry: [String?: Any?]? = nil
+  /// The tile region's tileset descriptors.
+  var descriptorsOptions: [TilesetDescriptorOptions?]? = nil
+  /// A custom Mapbox Value associated with this tile region for storing metadata.
+  var metadata: [String?: Any?]? = nil
+  /// Accepts expired data when loading tiles.
+  var acceptExpired: Bool
+  /// Controls which networks may be used to load the tile.
+  var networkRestriction: NetworkRestriction
+  /// Starts loading the tile region at the given location.
+  var startLocation: Point? = nil
+  /// Limits the download speed of the tile region.
+  var averageBytesPerSecond: Int64? = nil
+  /// Extra tile region load options.
+  var extraOptions: [String?: Any?]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionLoadOptions? {
+    let geometry: [String?: Any?]? = nilOrValue(pigeonVar_list[0])
+    let descriptorsOptions: [TilesetDescriptorOptions?]? = nilOrValue(pigeonVar_list[1])
+    let metadata: [String?: Any?]? = nilOrValue(pigeonVar_list[2])
+    let acceptExpired = pigeonVar_list[3] as! Bool
+    let networkRestriction = pigeonVar_list[4] as! NetworkRestriction
+    let startLocation: Point? = nilOrValue(pigeonVar_list[5])
+    let averageBytesPerSecond: Int64? = nilOrValue(pigeonVar_list[6])
+    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[7])
+
+    return TileRegionLoadOptions(
+      geometry: geometry,
+      descriptorsOptions: descriptorsOptions,
+      metadata: metadata,
+      acceptExpired: acceptExpired,
+      networkRestriction: networkRestriction,
+      startLocation: startLocation,
+      averageBytesPerSecond: averageBytesPerSecond,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      geometry,
+      descriptorsOptions,
+      metadata,
+      acceptExpired,
+      networkRestriction,
+      startLocation,
+      averageBytesPerSecond,
+      extraOptions,
+    ]
+  }
+}
+
+/// TileRegion represents an identifiable geographic tile region with metadata.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegion {
+  /// The id of the tile region.
+  var id: String
+  /// The number of resources that are known to be required for this tile region.
+  var requiredResourceCount: Int64
+  /// The number of resources that have been fully downloaded and are ready for
+  /// offline access.
+  var completedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources that have been fully downloaded.
+  var completedResourceSize: Int64
+  /// The earliest point in time when any of the region resources gets expired.
+  var expires: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileRegion? {
+    let id = pigeonVar_list[0] as! String
+    let requiredResourceCount = pigeonVar_list[1] as! Int64
+    let completedResourceCount = pigeonVar_list[2] as! Int64
+    let completedResourceSize = pigeonVar_list[3] as! Int64
+    let expires: Int64? = nilOrValue(pigeonVar_list[4])
+
+    return TileRegion(
+      id: id,
+      requiredResourceCount: requiredResourceCount,
+      completedResourceCount: completedResourceCount,
+      completedResourceSize: completedResourceSize,
+      expires: expires
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    ]
+  }
+}
+
+/// The result of tile region estimation.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionEstimateResult {
+  /// Error margin of the estimate at 99.9% confidence, value between 0 and 1.
+  var errorMargin: Double
+  /// Estimated number of bytes to transfer from the network.
+  var transferSize: Int64
+  /// Estimated number of bytes required to store the tile region on disk.
+  var storageSize: Int64
+  /// Reserved for future use.
+  var extraOptions: [String?: Any?]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateResult? {
+    let errorMargin = pigeonVar_list[0] as! Double
+    let transferSize = pigeonVar_list[1] as! Int64
+    let storageSize = pigeonVar_list[2] as! Int64
+    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[3])
+
+    return TileRegionEstimateResult(
+      errorMargin: errorMargin,
+      transferSize: transferSize,
+      storageSize: storageSize,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      errorMargin,
+      transferSize,
+      storageSize,
+      extraOptions,
+    ]
+  }
+}
+
+/// Holds options for the tile region estimation operation.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionEstimateOptions {
+  /// Accepted error margin.
+  var errorMargin: Double
+  /// Precise estimation timeout in seconds. A value of 0 means no timeout.
+  var preciseEstimationTimeout: Double
+  /// Overall operation timeout in seconds. A value of 0 means no timeout.
+  var timeout: Double
+  /// Reserved for future use.
+  var extraOptions: [String?: Any?]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateOptions? {
+    let errorMargin = pigeonVar_list[0] as! Double
+    let preciseEstimationTimeout = pigeonVar_list[1] as! Double
+    let timeout = pigeonVar_list[2] as! Double
+    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[3])
+
+    return TileRegionEstimateOptions(
+      errorMargin: errorMargin,
+      preciseEstimationTimeout: preciseEstimationTimeout,
+      timeout: timeout,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      errorMargin,
+      preciseEstimationTimeout,
+      timeout,
+      extraOptions,
+    ]
+  }
+}
+
+/// A tile region's load progress includes counts of the number of resources that
+/// have completed downloading and the total number of resources that are required.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionLoadProgress {
+  /// The number of resources that are ready for offline access.
+  var completedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources that are ready for offline access.
+  var completedResourceSize: Int64
+  /// The number of resources that have failed to download due to an error.
+  var erroredResourceCount: Int64
+  /// The number of resources that are known to be required for this tile region.
+  var requiredResourceCount: Int64
+  /// The number of resources ready for offline use that have been downloaded from the network.
+  var loadedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources that have been downloaded from the network.
+  var loadedResourceSize: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionLoadProgress? {
+    let completedResourceCount = pigeonVar_list[0] as! Int64
+    let completedResourceSize = pigeonVar_list[1] as! Int64
+    let erroredResourceCount = pigeonVar_list[2] as! Int64
+    let requiredResourceCount = pigeonVar_list[3] as! Int64
+    let loadedResourceCount = pigeonVar_list[4] as! Int64
+    let loadedResourceSize = pigeonVar_list[5] as! Int64
+
+    return TileRegionLoadProgress(
+      completedResourceCount: completedResourceCount,
+      completedResourceSize: completedResourceSize,
+      erroredResourceCount: erroredResourceCount,
+      requiredResourceCount: requiredResourceCount,
+      loadedResourceCount: loadedResourceCount,
+      loadedResourceSize: loadedResourceSize
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    ]
+  }
+}
+
+/// A tile region's estimate progress includes counts of the number of resources that
+/// have been estimated and the total number of resources, as well as a partial result.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionEstimateProgress {
+  /// The number of resources that are known to be required for this tile region.
+  var requiredResourceCount: Int64
+  /// The number of resources that are ready for offline access.
+  var completedResourceCount: Int64
+  /// The number of resources that have failed to download due to an error.
+  var erroredResourceCount: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateProgress? {
+    let requiredResourceCount = pigeonVar_list[0] as! Int64
+    let completedResourceCount = pigeonVar_list[1] as! Int64
+    let erroredResourceCount = pigeonVar_list[2] as! Int64
+
+    return TileRegionEstimateProgress(
+      requiredResourceCount: requiredResourceCount,
+      completedResourceCount: completedResourceCount,
+      erroredResourceCount: erroredResourceCount
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      requiredResourceCount,
+      completedResourceCount,
+      erroredResourceCount,
+    ]
+  }
+}
+
+/// Map memory budget in megabytes.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileCacheBudgetInMegabytes {
+  var size: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileCacheBudgetInMegabytes? {
+    let size = pigeonVar_list[0] as! Int64
+
+    return TileCacheBudgetInMegabytes(
+      size: size
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      size
+    ]
+  }
+}
+
+/// Map memory budget in tiles.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileCacheBudgetInTiles {
+  var size: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TileCacheBudgetInTiles? {
+    let size = pigeonVar_list[0] as! Int64
+
+    return TileCacheBudgetInTiles(
+      size: size
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      size
     ]
   }
 }

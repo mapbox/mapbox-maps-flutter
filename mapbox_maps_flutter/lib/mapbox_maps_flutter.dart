@@ -4,3 +4,4 @@ export 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 
 export 'src/map_widget.dart';
 export 'src/mapbox_options.dart';
+export 'src/mapbox_map.dart';

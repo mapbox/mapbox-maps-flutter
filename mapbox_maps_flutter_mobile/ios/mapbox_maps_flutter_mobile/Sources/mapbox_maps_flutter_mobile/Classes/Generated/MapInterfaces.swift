@@ -70,16 +70,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Describes glyphs rasterization modes.
-enum GlyphsRasterizationMode: Int {
-  /// No glyphs are rasterized locally. All glyphs are loaded from the server.
-  case nOGLYPHSRASTERIZEDLOCALLY = 0
-  /// Ideographs are rasterized locally, and they are not loaded from the server.
-  case iDEOGRAPHSRASTERIZEDLOCALLY = 1
-  /// All glyphs are rasterized locally. No glyphs are loaded from the server.
-  case aLLGLYPHSRASTERIZEDLOCALLY = 2
-}
-
 /// Describes the map context mode.
 /// We can make some optimizations if we know that the drawing context is not shared with other code.
 enum ContextMode: Int {
@@ -90,36 +80,6 @@ enum ContextMode: Int {
   /// Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
   /// state set from a previous render pass.
   case sHARED = 1
-}
-
-/// Describes whether to constrain the map in both axes or only vertically e.g. while panning.
-enum ConstrainMode: Int {
-  /// No constrains.
-  case nONE = 0
-  /// Constrain to height only
-  case hEIGHTONLY = 1
-  /// Constrain both width and height axes.
-  case wIDTHANDHEIGHT = 2
-}
-
-/// Satisfies embedding platforms that requires the viewport coordinate systems to be set according to its standards.
-enum ViewportMode: Int {
-  /// Default viewport
-  case dEFAULT = 0
-  /// Viewport flipped on the y-axis.
-  case fLIPPEDY = 1
-}
-
-/// Describes the map orientation.
-enum NorthOrientation: Int {
-  /// Default, map oriented upwards
-  case uPWARDS = 0
-  /// Map oriented rightwards
-  case rIGHTWARDS = 1
-  /// Map oriented downwards
-  case dOWNWARDS = 2
-  /// Map oriented leftwards
-  case lEFTWARDS = 3
 }
 
 enum _MapWidgetDebugOptions: Int {
@@ -241,59 +201,12 @@ enum StylePackErrorType: Int {
   case oTHER = 3
 }
 
-/// Describes the reason for an offline request response error.
-enum ResponseErrorReason: Int {
-  /// No error occurred during the resource request.
-  case sUCCESS = 0
-  /// The resource is not found.
-  case nOTFOUND = 1
-  /// The server error.
-  case sERVER = 2
-  /// The connection error.
-  case cONNECTION = 3
-  /// The error happened because of a rate limit.
-  case rATELIMIT = 4
-  /// The resource cannot be loaded because the device is in offline mode.
-  case iNOFFLINEMODE = 5
-  /// Other reason.
-  case oTHER = 6
-}
-
 /// Describes the download state of a region.
 enum OfflineRegionDownloadState: Int {
   /// Indicates downloading is inactive.
   case iNACTIVE = 0
   /// Indicates downloading is active.
   case aCTIVE = 1
-}
-
-/// Describes tile store usage modes.
-enum TileStoreUsageMode: Int {
-  /// Tile store usage is disabled.
-  ///
-  /// The implementation skips checking tile store when requesting a tile.
-  case dISABLED = 0
-  /// Tile store enabled for accessing loaded tile packs.
-  ///
-  /// The implementation first checks tile store when requesting a tile.
-  /// If a tile pack is already loaded, the tile will be extracted and returned. Otherwise, the implementation
-  /// falls back to requesting the individual tile and storing it in the disk cache.
-  case rEADONLY = 1
-  /// Tile store enabled for accessing local tile packs and for loading new tile packs from server.
-  ///
-  /// All tile requests are converted to tile pack requests, i.e.
-  /// the tile pack that includes the request tile will be loaded, and the tile extracted
-  /// from it. In this mode, no individual tile requests will be made.
-  ///
-  /// This mode can be useful if the map trajectory is predefined and the user cannot pan
-  /// freely (e.g. navigation use cases), so that there is a good chance tile packs are already loaded
-  /// in the vicinity of the user.
-  ///
-  /// If users can pan freely, this mode is not recommended. Otherwise, panning
-  /// will download tile packs instead of using individual tiles. Note that this means that we could first
-  /// download an individual tile, and then a tile pack that also includes this tile. The individual tile in
-  /// the disk cache won’t be used as long as the up-to-date tile pack exists in the cache.
-  case rEADANDUPDATE = 2
 }
 
 /// Describes the kind of a style property value.
@@ -306,11 +219,6 @@ enum StylePropertyValueKind: Int {
   case eXPRESSION = 2
   /// Property value is a style [transition](https://docs.mapbox.com/mapbox-gl-js/style-spec/#transition).
   case tRANSITION = 3
-}
-
-enum StyleProjectionName: Int {
-  case mercator = 0
-  case globe = 1
 }
 
 /// Whether extruded geometries are lit relative to the map or viewport.
@@ -400,238 +308,6 @@ enum _MapEvent: Int {
   case resourceRequest = 13
 }
 
-/// Describes the glyphs rasterization option values.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct GlyphsRasterizationOptions {
-  /// Glyphs rasterization mode for client-side text rendering.
-  var rasterizationMode: GlyphsRasterizationMode
-  /// Font family to use as font fallback for client-side text renderings.
-  ///
-  /// Note: `GlyphsRasterizationMode` has precedence over font family. If `AllGlyphsRasterizedLocally`
-  /// or `IdeographsRasterizedLocally` is set, local glyphs will be generated based on the provided font family. If no
-  /// font family is provided, the map will fall back to use the system default font. The mechanisms of choosing the
-  /// default font are varied in platforms:
-  /// - For darwin(iOS/macOS) platform, the default font family is created from the <a href="https://developer.apple.com/documentation/uikit/uifont/1619027-systemfontofsize?language=objc">systemFont</a>.
-  ///   If provided fonts are not supported on darwin platform, the map will fall back to use the first available font from the global fallback list.
-  /// - For Android platform: the default font <a href="https://developer.android.com/reference/android/graphics/Typeface#DEFAULT">Typeface.DEFAULT</a> will be used.
-  ///
-  /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
-  ///
-  var fontFamily: String? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> GlyphsRasterizationOptions? {
-    let rasterizationMode = pigeonVar_list[0] as! GlyphsRasterizationMode
-    let fontFamily: String? = nilOrValue(pigeonVar_list[1])
-
-    return GlyphsRasterizationOptions(
-      rasterizationMode: rasterizationMode,
-      fontFamily: fontFamily
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      rasterizationMode,
-      fontFamily,
-    ]
-  }
-}
-
-/// Various options needed for tile cover.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct TileCoverOptions {
-  /// Tile size of the source. Defaults to 512.
-  var tileSize: Int64? = nil
-  /// Min zoom defined in the source between range [0, 22].
-  /// if not provided or is out of range, defaults to 0.
-  var minZoom: Int64? = nil
-  /// Max zoom defined in the source between range [0, 22].
-  /// Should be greater than or equal to minZoom.
-  /// If not provided or is out of range, defaults to 22.
-  var maxZoom: Int64? = nil
-  /// Whether to round zoom values when calculating tilecover.
-  /// Set this to true for raster and raster-dem sources.
-  /// If not specified, defaults to false.
-  var roundZoom: Bool? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> TileCoverOptions? {
-    let tileSize: Int64? = nilOrValue(pigeonVar_list[0])
-    let minZoom: Int64? = nilOrValue(pigeonVar_list[1])
-    let maxZoom: Int64? = nilOrValue(pigeonVar_list[2])
-    let roundZoom: Bool? = nilOrValue(pigeonVar_list[3])
-
-    return TileCoverOptions(
-      tileSize: tileSize,
-      minZoom: minZoom,
-      maxZoom: maxZoom,
-      roundZoom: roundZoom
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      tileSize,
-      minZoom,
-      maxZoom,
-      roundZoom,
-    ]
-  }
-}
-
-/// Holds options to be used for setting `camera bounds`.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CameraBoundsOptions {
-  /// The latitude and longitude bounds to which the camera center are constrained.
-  var bounds: CoordinateBounds? = nil
-  /// The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area.
-  var maxZoom: Double? = nil
-  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
-  var minZoom: Double? = nil
-  /// The maximum allowed pitch value in degrees.
-  var maxPitch: Double? = nil
-  /// The minimum allowed pitch value in degrees.
-  var minPitch: Double? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CameraBoundsOptions? {
-    let bounds: CoordinateBounds? = nilOrValue(pigeonVar_list[0])
-    let maxZoom: Double? = nilOrValue(pigeonVar_list[1])
-    let minZoom: Double? = nilOrValue(pigeonVar_list[2])
-    let maxPitch: Double? = nilOrValue(pigeonVar_list[3])
-    let minPitch: Double? = nilOrValue(pigeonVar_list[4])
-
-    return CameraBoundsOptions(
-      bounds: bounds,
-      maxZoom: maxZoom,
-      minZoom: minZoom,
-      maxPitch: maxPitch,
-      minPitch: minPitch
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      bounds,
-      maxZoom,
-      minZoom,
-      maxPitch,
-      minPitch,
-    ]
-  }
-}
-
-/// Holds information about `camera bounds`.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CameraBounds {
-  /// The latitude and longitude bounds to which the camera center are constrained.
-  var bounds: CoordinateBounds
-  /// The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area.
-  var maxZoom: Double
-  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
-  var minZoom: Double
-  /// The maximum allowed pitch value in degrees.
-  var maxPitch: Double
-  /// The minimum allowed pitch value in degrees.
-  var minPitch: Double
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CameraBounds? {
-    let bounds = pigeonVar_list[0] as! CoordinateBounds
-    let maxZoom = pigeonVar_list[1] as! Double
-    let minZoom = pigeonVar_list[2] as! Double
-    let maxPitch = pigeonVar_list[3] as! Double
-    let minPitch = pigeonVar_list[4] as! Double
-
-    return CameraBounds(
-      bounds: bounds,
-      maxZoom: maxZoom,
-      minZoom: minZoom,
-      maxPitch: maxPitch,
-      minPitch: minPitch
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      bounds,
-      maxZoom,
-      minZoom,
-      maxPitch,
-      minPitch,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapAnimationOptions {
-  /// The duration of the animation in milliseconds.
-  /// If not set explicitly default duration will be taken 300ms
-  var duration: Int64? = nil
-  /// The amount of time, in milliseconds, to delay starting the animation after animation start.
-  /// If not set explicitly default startDelay will be taken 0ms. This only works for Android.
-  var startDelay: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapAnimationOptions? {
-    let duration: Int64? = nilOrValue(pigeonVar_list[0])
-    let startDelay: Int64? = nilOrValue(pigeonVar_list[1])
-
-    return MapAnimationOptions(
-      duration: duration,
-      startDelay: startDelay
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      duration,
-      startDelay,
-    ]
-  }
-}
-
-/// A rectangular area as measured on a two-dimensional map projection.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CoordinateBounds {
-  /// Coordinate at the southwest corner.
-  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  var southwest: Point
-  /// Coordinate at the northeast corner.
-  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  var northeast: Point
-  /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
-  /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
-  var infiniteBounds: Bool
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CoordinateBounds? {
-    let southwest = pigeonVar_list[0] as! Point
-    let northeast = pigeonVar_list[1] as! Point
-    let infiniteBounds = pigeonVar_list[2] as! Bool
-
-    return CoordinateBounds(
-      southwest: southwest,
-      northeast: northeast,
-      infiniteBounds: infiniteBounds
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      southwest,
-      northeast,
-      infiniteBounds,
-    ]
-  }
-}
-
 /// Options for enabling debugging features in a map.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -650,50 +326,6 @@ struct MapDebugOptions {
   func toList() -> [Any?] {
     return [
       data
-    ]
-  }
-}
-
-/// Map memory budget in megabytes.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct TileCacheBudgetInMegabytes {
-  var size: Int64
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> TileCacheBudgetInMegabytes? {
-    let size = pigeonVar_list[0] as! Int64
-
-    return TileCacheBudgetInMegabytes(
-      size: size
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      size
-    ]
-  }
-}
-
-/// Map memory budget in tiles.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct TileCacheBudgetInTiles {
-  var size: Int64
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> TileCacheBudgetInTiles? {
-    let size = pigeonVar_list[0] as! Int64
-
-    return TileCacheBudgetInTiles(
-      size: size
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      size
     ]
   }
 }
@@ -761,91 +393,6 @@ struct MapOptions {
       size,
       pixelRatio,
       glyphsRasterizationOptions,
-    ]
-  }
-}
-
-/// Describes the coordinate box on the screen, measured in `logical pixels`
-/// from top to bottom and from left to right.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct ScreenBox {
-  /// The screen coordinate close to the top left corner of the screen.
-  var min: ScreenCoordinate
-  /// The screen coordinate close to the bottom right corner of the screen.
-  var max: ScreenCoordinate
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> ScreenBox? {
-    let min = pigeonVar_list[0] as! ScreenCoordinate
-    let max = pigeonVar_list[1] as! ScreenCoordinate
-
-    return ScreenBox(
-      min: min,
-      max: max
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      min,
-      max,
-    ]
-  }
-}
-
-/// A coordinate bounds and zoom.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CoordinateBoundsZoom {
-  /// The latitude and longitude bounds.
-  var bounds: CoordinateBounds
-  /// Zoom.
-  var zoom: Double
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CoordinateBoundsZoom? {
-    let bounds = pigeonVar_list[0] as! CoordinateBounds
-    let zoom = pigeonVar_list[1] as! Double
-
-    return CoordinateBoundsZoom(
-      bounds: bounds,
-      zoom: zoom
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      bounds,
-      zoom,
-    ]
-  }
-}
-
-/// Size type.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct Size {
-  /// Width of the size.
-  var width: Double
-  /// Height of the size.
-  var height: Double
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> Size? {
-    let width = pigeonVar_list[0] as! Double
-    let height = pigeonVar_list[1] as! Double
-
-    return Size(
-      width: width,
-      height: height
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      width,
-      height,
     ]
   }
 }
@@ -930,72 +477,6 @@ struct FeatureExtensionValue {
     return [
       value,
       featureCollection,
-    ]
-  }
-}
-
-/// Specifies position of a layer that is added via addStyleLayer method.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct LayerPosition {
-  /// Layer should be positioned above specified layer id.
-  var above: String? = nil
-  /// Layer should be positioned below specified layer id.
-  var below: String? = nil
-  /// Layer should be positioned at specified index in a layers stack.
-  var at: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> LayerPosition? {
-    let above: String? = nilOrValue(pigeonVar_list[0])
-    let below: String? = nilOrValue(pigeonVar_list[1])
-    let at: Int64? = nilOrValue(pigeonVar_list[2])
-
-    return LayerPosition(
-      above: above,
-      below: below,
-      at: at
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      above,
-      below,
-      at,
-    ]
-  }
-}
-
-/// Specifies the position at which an import will be added when using `Style.addImport`
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct ImportPosition {
-  /// Import should be positioned above the specified import id.
-  var above: String? = nil
-  /// Import should be positioned below the specified import id.
-  var below: String? = nil
-  /// Import should be positioned at the specified index in the imports stack.
-  var at: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> ImportPosition? {
-    let above: String? = nilOrValue(pigeonVar_list[0])
-    let below: String? = nilOrValue(pigeonVar_list[1])
-    let at: Int64? = nilOrValue(pigeonVar_list[2])
-
-    return ImportPosition(
-      above: above,
-      below: below,
-      at: at
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      above,
-      below,
-      at,
     ]
   }
 }
@@ -1436,54 +917,6 @@ struct MercatorCoordinate {
   }
 }
 
-/// The information about style object (source or layer).
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct StyleObjectInfo {
-  /// The object's identifier.
-  var id: String
-  /// The object's type.
-  var type: String
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> StyleObjectInfo? {
-    let id = pigeonVar_list[0] as! String
-    let type = pigeonVar_list[1] as! String
-
-    return StyleObjectInfo(
-      id: id,
-      type: type
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      id,
-      type,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct StyleProjection {
-  var name: StyleProjectionName
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> StyleProjection? {
-    let name = pigeonVar_list[0] as! StyleProjectionName
-
-    return StyleProjection(
-      name: name
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      name
-    ]
-  }
-}
-
 /// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
 ///
 /// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
@@ -1769,76 +1202,6 @@ struct ImageContent {
   }
 }
 
-/// The `transition options` controls timing for the interpolation between a transitionable style
-/// property's previous value and new value. These can be used to define the style default property
-/// transition behavior. Also, any transitionable style property may also have its own `-transition`
-/// property that defines specific transition timing for that specific layer property, overriding
-/// the global transition values.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct TransitionOptions {
-  /// Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`.
-  var duration: Int64? = nil
-  /// Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`.
-  var delay: Int64? = nil
-  /// Whether the fade in/out symbol placement transition is enabled. Defaults to `true`.
-  var enablePlacementTransitions: Bool? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> TransitionOptions? {
-    let duration: Int64? = nilOrValue(pigeonVar_list[0])
-    let delay: Int64? = nilOrValue(pigeonVar_list[1])
-    let enablePlacementTransitions: Bool? = nilOrValue(pigeonVar_list[2])
-
-    return TransitionOptions(
-      duration: duration,
-      delay: delay,
-      enablePlacementTransitions: enablePlacementTransitions
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      duration,
-      delay,
-      enablePlacementTransitions,
-    ]
-  }
-}
-
-/// Represents a tile coordinate.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CanonicalTileID {
-  /// The z value of the coordinate (zoom-level).
-  var z: Int64
-  /// The x value of the coordinate.
-  var x: Int64
-  /// The y value of the coordinate.
-  var y: Int64
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CanonicalTileID? {
-    let z = pigeonVar_list[0] as! Int64
-    let x = pigeonVar_list[1] as! Int64
-    let y = pigeonVar_list[2] as! Int64
-
-    return CanonicalTileID(
-      z: z,
-      x: x,
-      y: y
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      z,
-      x,
-      y,
-    ]
-  }
-}
-
 /// Holds a style property value with meta data.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -1873,121 +1236,121 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return GlyphsRasterizationMode(rawValue: enumResultAsInt)
+        return ConstrainMode(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ContextMode(rawValue: enumResultAsInt)
+        return ViewportMode(rawValue: enumResultAsInt)
       }
       return nil
     case 131:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ConstrainMode(rawValue: enumResultAsInt)
+        return NorthOrientation(rawValue: enumResultAsInt)
       }
       return nil
     case 132:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ViewportMode(rawValue: enumResultAsInt)
+        return GlyphsRasterizationMode(rawValue: enumResultAsInt)
       }
       return nil
     case 133:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return NorthOrientation(rawValue: enumResultAsInt)
+        return StyleProjectionName(rawValue: enumResultAsInt)
       }
       return nil
     case 134:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _MapWidgetDebugOptions(rawValue: enumResultAsInt)
+        return ContextMode(rawValue: enumResultAsInt)
       }
       return nil
     case 135:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return MapDebugOptionsData(rawValue: enumResultAsInt)
+        return _MapWidgetDebugOptions(rawValue: enumResultAsInt)
       }
       return nil
     case 136:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ViewAnnotationAnchor(rawValue: enumResultAsInt)
+        return MapDebugOptionsData(rawValue: enumResultAsInt)
       }
       return nil
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _InteractionType(rawValue: enumResultAsInt)
+        return ViewAnnotationAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return GestureState(rawValue: enumResultAsInt)
+        return _InteractionType(rawValue: enumResultAsInt)
       }
       return nil
     case 139:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return Type(rawValue: enumResultAsInt)
+        return GestureState(rawValue: enumResultAsInt)
       }
       return nil
     case 140:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return FillExtrusionBaseAlignment(rawValue: enumResultAsInt)
+        return Type(rawValue: enumResultAsInt)
       }
       return nil
     case 141:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return FillExtrusionHeightAlignment(rawValue: enumResultAsInt)
+        return FillExtrusionBaseAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 142:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return BackgroundPitchAlignment(rawValue: enumResultAsInt)
+        return FillExtrusionHeightAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 143:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StylePackErrorType(rawValue: enumResultAsInt)
+        return BackgroundPitchAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 144:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ResponseErrorReason(rawValue: enumResultAsInt)
+        return StylePackErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 145:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return OfflineRegionDownloadState(rawValue: enumResultAsInt)
+        return ResponseErrorReason(rawValue: enumResultAsInt)
       }
       return nil
     case 146:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TileStoreUsageMode(rawValue: enumResultAsInt)
+        return OfflineRegionDownloadState(rawValue: enumResultAsInt)
       }
       return nil
     case 147:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StylePropertyValueKind(rawValue: enumResultAsInt)
+        return TileStoreUsageMode(rawValue: enumResultAsInt)
       }
       return nil
     case 148:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StyleProjectionName(rawValue: enumResultAsInt)
+        return StylePropertyValueKind(rawValue: enumResultAsInt)
       }
       return nil
     case 149:
@@ -2045,9 +1408,9 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 161:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 162:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+      return CoordinateBounds.fromList(self.readValue() as! [Any?])
     case 163:
-      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
     case 164:
       return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
     case 165:
@@ -2055,75 +1418,75 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 166:
       return MapAnimationOptions.fromList(self.readValue() as! [Any?])
     case 167:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 168:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 169:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 170:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 171:
-      return MapOptions.fromList(self.readValue() as! [Any?])
-    case 172:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 173:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
-    case 174:
       return Size.fromList(self.readValue() as! [Any?])
-    case 175:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 176:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 177:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 178:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 179:
-      return ImportPosition.fromList(self.readValue() as! [Any?])
-    case 180:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 181:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 182:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 183:
-      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
-    case 184:
-      return FeatureState.fromList(self.readValue() as! [Any?])
-    case 185:
-      return _Interaction.fromList(self.readValue() as! [Any?])
-    case 186:
-      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
-    case 187:
-      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
-    case 188:
-      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
-    case 189:
-      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
-    case 190:
-      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 191:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 192:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 193:
+    case 168:
+      return ScreenBox.fromList(self.readValue() as! [Any?])
+    case 169:
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+    case 170:
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+    case 171:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 194:
+    case 172:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 195:
-      return FlatLight.fromList(self.readValue() as! [Any?])
-    case 196:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 197:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 198:
-      return MbxImage.fromList(self.readValue() as! [Any?])
-    case 199:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 200:
-      return ImageContent.fromList(self.readValue() as! [Any?])
-    case 201:
+    case 173:
+      return LayerPosition.fromList(self.readValue() as! [Any?])
+    case 174:
+      return ImportPosition.fromList(self.readValue() as! [Any?])
+    case 175:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
+    case 176:
+      return MapDebugOptions.fromList(self.readValue() as! [Any?])
+    case 177:
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+    case 178:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 179:
+      return MapOptions.fromList(self.readValue() as! [Any?])
+    case 180:
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+    case 181:
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+    case 182:
+      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
+    case 183:
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+    case 184:
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+    case 185:
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
+    case 186:
+      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
+    case 187:
+      return FeatureState.fromList(self.readValue() as! [Any?])
+    case 188:
+      return _Interaction.fromList(self.readValue() as! [Any?])
+    case 189:
+      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
+    case 190:
+      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
+    case 191:
+      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
+    case 192:
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+    case 193:
+      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+    case 194:
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+    case 195:
+      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
+    case 196:
+      return FlatLight.fromList(self.readValue() as! [Any?])
+    case 197:
+      return DirectionalLight.fromList(self.readValue() as! [Any?])
+    case 198:
+      return AmbientLight.fromList(self.readValue() as! [Any?])
+    case 199:
+      return MbxImage.fromList(self.readValue() as! [Any?])
+    case 200:
+      return ImageStretches.fromList(self.readValue() as! [Any?])
+    case 201:
+      return ImageContent.fromList(self.readValue() as! [Any?])
     case 202:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
     case 203:
@@ -2136,64 +1499,64 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
 
 private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? GlyphsRasterizationMode {
+    if let value = value as? ConstrainMode {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ContextMode {
+    } else if let value = value as? ViewportMode {
       super.writeByte(130)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ConstrainMode {
+    } else if let value = value as? NorthOrientation {
       super.writeByte(131)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ViewportMode {
+    } else if let value = value as? GlyphsRasterizationMode {
       super.writeByte(132)
       super.writeValue(value.rawValue)
-    } else if let value = value as? NorthOrientation {
+    } else if let value = value as? StyleProjectionName {
       super.writeByte(133)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _MapWidgetDebugOptions {
+    } else if let value = value as? ContextMode {
       super.writeByte(134)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MapDebugOptionsData {
+    } else if let value = value as? _MapWidgetDebugOptions {
       super.writeByte(135)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ViewAnnotationAnchor {
+    } else if let value = value as? MapDebugOptionsData {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _InteractionType {
+    } else if let value = value as? ViewAnnotationAnchor {
       super.writeByte(137)
       super.writeValue(value.rawValue)
-    } else if let value = value as? GestureState {
+    } else if let value = value as? _InteractionType {
       super.writeByte(138)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Type {
+    } else if let value = value as? GestureState {
       super.writeByte(139)
       super.writeValue(value.rawValue)
-    } else if let value = value as? FillExtrusionBaseAlignment {
+    } else if let value = value as? Type {
       super.writeByte(140)
       super.writeValue(value.rawValue)
-    } else if let value = value as? FillExtrusionHeightAlignment {
+    } else if let value = value as? FillExtrusionBaseAlignment {
       super.writeByte(141)
       super.writeValue(value.rawValue)
-    } else if let value = value as? BackgroundPitchAlignment {
+    } else if let value = value as? FillExtrusionHeightAlignment {
       super.writeByte(142)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePackErrorType {
+    } else if let value = value as? BackgroundPitchAlignment {
       super.writeByte(143)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ResponseErrorReason {
+    } else if let value = value as? StylePackErrorType {
       super.writeByte(144)
       super.writeValue(value.rawValue)
-    } else if let value = value as? OfflineRegionDownloadState {
+    } else if let value = value as? ResponseErrorReason {
       super.writeByte(145)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileStoreUsageMode {
+    } else if let value = value as? OfflineRegionDownloadState {
       super.writeByte(146)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePropertyValueKind {
+    } else if let value = value as? TileStoreUsageMode {
       super.writeByte(147)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StyleProjectionName {
+    } else if let value = value as? StylePropertyValueKind {
       super.writeByte(148)
       super.writeValue(value.rawValue)
     } else if let value = value as? Anchor {
@@ -2235,10 +1598,10 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ScreenCoordinate {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? CoordinateBounds {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? CoordinateBoundsZoom {
       super.writeByte(163)
       super.writeValue(value.toList())
     } else if let value = value as? CameraBoundsOptions {
@@ -2250,109 +1613,109 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapAnimationOptions {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
+    } else if let value = value as? Size {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
+    } else if let value = value as? ScreenBox {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? StyleProjection {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
+    } else if let value = value as? LayerPosition {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ImportPosition {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? MapDebugOptions {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? ImportPosition {
+    } else if let value = value as? MapOptions {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? FeatureExtensionValue {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeatureId {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureState {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? _Interaction {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? _InteractionPigeon {
+    } else if let value = value as? FeaturesetFeatureId {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? FeatureState {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? _Interaction {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? _InteractionPigeon {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? FlatLight {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? AmbientLight {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? MbxImage {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? ImageStretches {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? ImageContent {
       super.writeByte(201)
       super.writeValue(value.toList())
     } else if let value = value as? CanonicalTileID {

@@ -123,7 +123,7 @@ final class TileStore {
     String id,
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,
-    OnTileRegionEstimateProgressListenter? progressListener,
+    OnTileRegionEstimateProgressListener? progressListener,
   ) async {
     if (progressListener != null) {
       await _api.addTileRegionEstimateProgressListener(id);

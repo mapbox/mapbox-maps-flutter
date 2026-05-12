@@ -21,65 +21,6 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 
-/** Enumeration of gesture states. */
-enum class GestureState(val raw: Int) {
-  /** Gesture has started. */
-  STARTED(0),
-  /** Gesture is in progress. */
-  CHANGED(1),
-  /** Gesture has ended. */
-  ENDED(2);
-
-  companion object {
-    fun ofRaw(raw: Int): GestureState? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
- * A structure that defines additional information about map content gesture.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class MapContentGestureContext(
-  /** The location of gesture in Map view bounds. */
-  val touchPosition: ScreenCoordinate,
-  /** Geographical coordinate of the map gesture. */
-  val point: Point,
-  /** The state of the gesture. */
-  val gestureState: GestureState
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapContentGestureContext {
-      val touchPosition = pigeonVar_list[0] as ScreenCoordinate
-      val point = pigeonVar_list[1] as Point
-      val gestureState = pigeonVar_list[2] as GestureState
-      return MapContentGestureContext(touchPosition, point, gestureState)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      touchPosition,
-      point,
-      gestureState,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapContentGestureContext) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return touchPosition == other.touchPosition &&
-      point == other.point &&
-      gestureState == other.gestureState
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
 /**
  * Generated class from Pigeon that represents data sent in messages.
  * This class should not be extended by any user class outside of the generated file.

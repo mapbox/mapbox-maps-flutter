@@ -69,50 +69,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Set of options for taking map snapshot with `map snapshotter`.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapSnapshotOptions {
-  /// Dimensions of the snapshot in `logical pixels`.
-  var size: Size
-  /// Ratio between the number device-independent and screen pixels.
-  var pixelRatio: Double
-  /// Glyphs rasterization options to use for client-side text rendering.
-  /// By default, `GlyphsRasterizationOptions` will use `NoGlyphsRasterizedLocally` mode.
-  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
-  /// Flag that determines if the logo should be shown on the snapshot.
-  var showsLogo: Bool? = nil
-  /// Flag that determines if attribution should be shown on the snapshot.
-  var showsAttribution: Bool? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapSnapshotOptions? {
-    let size = pigeonVar_list[0] as! Size
-    let pixelRatio = pigeonVar_list[1] as! Double
-    let glyphsRasterizationOptions: GlyphsRasterizationOptions? = nilOrValue(pigeonVar_list[2])
-    let showsLogo: Bool? = nilOrValue(pigeonVar_list[3])
-    let showsAttribution: Bool? = nilOrValue(pigeonVar_list[4])
-
-    return MapSnapshotOptions(
-      size: size,
-      pixelRatio: pixelRatio,
-      glyphsRasterizationOptions: glyphsRasterizationOptions,
-      showsLogo: showsLogo,
-      showsAttribution: showsAttribution
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      size,
-      pixelRatio,
-      glyphsRasterizationOptions,
-      showsLogo,
-      showsAttribution,
-    ]
-  }
-}
-
 private class SnapshotterMessengerPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {

@@ -1,4 +1,5 @@
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:turf/turf.dart' show Position;
 import 'package:test/test.dart';
 
