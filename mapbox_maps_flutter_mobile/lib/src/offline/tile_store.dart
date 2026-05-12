@@ -187,8 +187,8 @@ final class TileStore implements TileStorePlatformInterface {
   /// If the new value causes the quota to be exceed, request will fail and data will be evicted to enforce the quota.
   /// Accepts a (positive) number of bytes, or null for resetting to the default value.
   @override
-  void setDiskQuota(int? quota, {TileDataDomain? domain}) {
-    _api.setOptionForKey(
+  Future<void> setDiskQuota(int? quota, {TileDataDomain? domain}) async {
+    await _api.setOptionForKey(
       _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.DISK_QUOTA),
       domain,
       quota,
@@ -198,8 +198,8 @@ final class TileStore implements TileStorePlatformInterface {
   /// Sets the base URL to use for requests to the Mapbox API. Defaults to "https://api.mapbox.com".
   /// Accepts a string, or null for resetting to the default value.
   @override
-  void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) {
-    _api.setOptionForKey(
+  Future<void> setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) async {
+    await _api.setOptionForKey(
       _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.MAPBOX_API_URL),
       domain,
       url,
@@ -224,8 +224,11 @@ final class TileStore implements TileStorePlatformInterface {
   /// - {z_min}: The zoom range minimum of the Map tile to be loaded.
   /// - {z_max}: The zoom range maximum of the Map tile to be loaded.
   @override
-  void setTileUrlTemplate(String? template, {TileDataDomain? domain}) {
-    _api.setOptionForKey(
+  Future<void> setTileUrlTemplate(
+    String? template, {
+    TileDataDomain? domain,
+  }) async {
+    await _api.setOptionForKey(
       _PredefinedTileStoreOptionsKey(
         key: _TileStoreOptionsKey.TILE_URL_TEMPLATE,
       ),

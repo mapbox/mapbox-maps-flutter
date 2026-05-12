@@ -103,21 +103,24 @@ class MockTileStorePlatformInterface implements TileStorePlatformInterface {
   }
 
   @override
-  void setDiskQuota(int? quota, {TileDataDomain? domain}) {
+  Future<void> setDiskQuota(int? quota, {TileDataDomain? domain}) async {
     setDiskQuotaCallCount++;
     lastQuota = quota;
     lastDomain = domain;
   }
 
   @override
-  void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) {
+  Future<void> setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) async {
     setMapboxAPIUrlCallCount++;
     lastUrl = url;
     lastDomain = domain;
   }
 
   @override
-  void setTileUrlTemplate(String? template, {TileDataDomain? domain}) {
+  Future<void> setTileUrlTemplate(
+    String? template, {
+    TileDataDomain? domain,
+  }) async {
     setTileUrlTemplateCallCount++;
     lastTemplate = template;
     lastDomain = domain;
@@ -223,23 +226,23 @@ void main() {
       expect(result.id, 'test-region');
     });
 
-    test('setDiskQuota delegates to interface', () {
-      tileStore.setDiskQuota(500);
+    test('setDiskQuota delegates to interface', () async {
+      await tileStore.setDiskQuota(500);
 
       expect(mockImpl.setDiskQuotaCallCount, 1);
       expect(mockImpl.lastQuota, 500);
     });
 
-    test('setMapboxAPIUrl delegates to interface', () {
+    test('setMapboxAPIUrl delegates to interface', () async {
       final url = Uri.parse('https://api.mapbox.com');
-      tileStore.setMapboxAPIUrl(url);
+      await tileStore.setMapboxAPIUrl(url);
 
       expect(mockImpl.setMapboxAPIUrlCallCount, 1);
       expect(mockImpl.lastUrl, url);
     });
 
-    test('setTileUrlTemplate delegates to interface', () {
-      tileStore.setTileUrlTemplate('https://example.com/{z}/{x}/{y}');
+    test('setTileUrlTemplate delegates to interface', () async {
+      await tileStore.setTileUrlTemplate('https://example.com/{z}/{x}/{y}');
 
       expect(mockImpl.setTileUrlTemplateCallCount, 1);
       expect(mockImpl.lastTemplate, 'https://example.com/{z}/{x}/{y}');

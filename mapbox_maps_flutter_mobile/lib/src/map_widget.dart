@@ -45,7 +45,8 @@ class MapWidget extends StatefulWidget {
     super.key,
     this.mapOptions,
     @Deprecated(
-        'Use [viewport] to specify the camera position and behavior of the map')
+      'Use [viewport] to specify the camera position and behavior of the map',
+    )
     this.cameraOptions,
     // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
     // As a workaround default is true.
@@ -67,8 +68,7 @@ class MapWidget extends StatefulWidget {
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
-    @Deprecated('Use [MapboxMap.addInteraction] instead')
-    this.onTapListener,
+    @Deprecated('Use [MapboxMap.addInteraction] instead') this.onTapListener,
     @Deprecated('Use [MapboxMap.addInteraction] instead')
     this.onLongTapListener,
     this.onScrollListener,
@@ -82,7 +82,8 @@ class MapWidget extends StatefulWidget {
 
   /// The Initial Camera options when creating a MapWidget.
   @Deprecated(
-      'This will be removed in future major version, use [viewport] instead')
+    'This will be removed in future major version, use [viewport] instead',
+  )
   final CameraOptions? cameraOptions;
 
   /// Flag indicating to use a TextureView as render surface for the MapWidget.

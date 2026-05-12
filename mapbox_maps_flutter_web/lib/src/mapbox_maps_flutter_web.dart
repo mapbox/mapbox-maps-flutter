@@ -120,5 +120,19 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
 
   @override
   OfflineSwitchPlatformInterface get offlineSwitch =>
-      throw UnsupportedError('offlineSwitch is not supported on web.');
+      throw UnsupportedError(
+    'Offline functionalities are not supported on web.',
+  );
+
+  @override
+  Future<OfflineManagerPlatformInterface> createOfflineManager() =>
+      throw UnsupportedError(
+        'Offline functionalities are not supported on web.',
+      );
+
+  @override
+  Future<TileStorePlatformInterface> createTileStore({Uri? filePath}) =>
+      throw UnsupportedError(
+        'Offline functionalities are not supported on web.',
+      );
 }

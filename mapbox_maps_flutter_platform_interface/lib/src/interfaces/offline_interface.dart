@@ -60,13 +60,13 @@ abstract interface class TileStorePlatformInterface {
   Future<TileRegion> removeRegion(String id);
 
   /// Sets the maximum disk quota.
-  void setDiskQuota(int? quota, {TileDataDomain? domain});
+  Future<void> setDiskQuota(int? quota, {TileDataDomain? domain});
 
   /// Sets the Mapbox API base URL.
-  void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain});
+  Future<void> setMapboxAPIUrl(Uri? url, {TileDataDomain? domain});
 
   /// Sets a tile URL template.
-  void setTileUrlTemplate(String? template, {TileDataDomain? domain});
+  Future<void> setTileUrlTemplate(String? template, {TileDataDomain? domain});
 }
 
 /// Abstract interface for controlling the Mapbox network stack connectivity.

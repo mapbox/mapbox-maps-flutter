@@ -500,8 +500,8 @@ void main() {
   group('MapboxMap', () {
     // ===== Sub-interfaces =====
 
-    test('style returns a Style wrapping the platform interface', () {
-      expect(mapboxMap.style, isA<Style>());
+    test('style returns a StyleManager wrapping the platform interface', () {
+      expect(mapboxMap.style, isA<StyleManager>());
     });
 
     test('gestures returns a GesturesSettingsManager', () {

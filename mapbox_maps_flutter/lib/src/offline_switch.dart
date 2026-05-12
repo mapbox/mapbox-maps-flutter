@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 /// Controls the Mapbox network stack connectivity.
+///
+/// {@macro supported_platforms_mobile}
 class OfflineSwitch {
   final OfflineSwitchPlatformInterface _impl;
 

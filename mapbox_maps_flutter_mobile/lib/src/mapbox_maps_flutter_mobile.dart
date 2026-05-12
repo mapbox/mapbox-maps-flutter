@@ -91,4 +91,14 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
 
   @override
   OfflineSwitchPlatformInterface get offlineSwitch => OfflineSwitch.shared;
+
+  @override
+  Future<OfflineManagerPlatformInterface> createOfflineManager() =>
+      OfflineManager.create();
+
+  @override
+  Future<TileStorePlatformInterface> createTileStore({Uri? filePath}) =>
+      filePath != null
+      ? TileStore.createAt(filePath)
+      : TileStore.createDefault();
 }
