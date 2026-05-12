@@ -37,62 +37,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
 private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
-
-/**
- * Set of options for taking map snapshot with `map snapshotter`.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class MapSnapshotOptions(
-  /** Dimensions of the snapshot in `logical pixels`. */
-  val size: Size,
-  /** Ratio between the number device-independent and screen pixels. */
-  val pixelRatio: Double,
-  /**
-   * Glyphs rasterization options to use for client-side text rendering.
-   * By default, `GlyphsRasterizationOptions` will use `NoGlyphsRasterizedLocally` mode.
-   */
-  val glyphsRasterizationOptions: GlyphsRasterizationOptions? = null,
-  /** Flag that determines if the logo should be shown on the snapshot. */
-  val showsLogo: Boolean? = null,
-  /** Flag that determines if attribution should be shown on the snapshot. */
-  val showsAttribution: Boolean? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapSnapshotOptions {
-      val size = pigeonVar_list[0] as Size
-      val pixelRatio = pigeonVar_list[1] as Double
-      val glyphsRasterizationOptions = pigeonVar_list[2] as GlyphsRasterizationOptions?
-      val showsLogo = pigeonVar_list[3] as Boolean?
-      val showsAttribution = pigeonVar_list[4] as Boolean?
-      return MapSnapshotOptions(size, pixelRatio, glyphsRasterizationOptions, showsLogo, showsAttribution)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      size,
-      pixelRatio,
-      glyphsRasterizationOptions,
-      showsLogo,
-      showsAttribution,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapSnapshotOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return size == other.size &&
-      pixelRatio == other.pixelRatio &&
-      glyphsRasterizationOptions == other.glyphsRasterizationOptions &&
-      showsLogo == other.showsLogo &&
-      showsAttribution == other.showsAttribution
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
 private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {

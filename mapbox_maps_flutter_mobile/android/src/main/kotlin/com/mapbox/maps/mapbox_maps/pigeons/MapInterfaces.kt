@@ -76,22 +76,6 @@ private fun deepEqualsMapInterfaces(a: Any?, b: Any?): Boolean {
   return a == b
 }
 
-/** Describes glyphs rasterization modes. */
-enum class GlyphsRasterizationMode(val raw: Int) {
-  /** No glyphs are rasterized locally. All glyphs are loaded from the server. */
-  NO_GLYPHS_RASTERIZED_LOCALLY(0),
-  /** Ideographs are rasterized locally, and they are not loaded from the server. */
-  IDEOGRAPHS_RASTERIZED_LOCALLY(1),
-  /** All glyphs are rasterized locally. No glyphs are loaded from the server. */
-  ALL_GLYPHS_RASTERIZED_LOCALLY(2);
-
-  companion object {
-    fun ofRaw(raw: Int): GlyphsRasterizationMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /**
  * Describes the map context mode.
  * We can make some optimizations if we know that the drawing context is not shared with other code.
@@ -111,54 +95,6 @@ enum class ContextMode(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): ContextMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Describes whether to constrain the map in both axes or only vertically e.g. while panning. */
-enum class ConstrainMode(val raw: Int) {
-  /** No constrains. */
-  NONE(0),
-  /** Constrain to height only */
-  HEIGHT_ONLY(1),
-  /** Constrain both width and height axes. */
-  WIDTH_AND_HEIGHT(2);
-
-  companion object {
-    fun ofRaw(raw: Int): ConstrainMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Satisfies embedding platforms that requires the viewport coordinate systems to be set according to its standards. */
-enum class ViewportMode(val raw: Int) {
-  /** Default viewport */
-  DEFAULT(0),
-  /** Viewport flipped on the y-axis. */
-  FLIPPED_Y(1);
-
-  companion object {
-    fun ofRaw(raw: Int): ViewportMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Describes the map orientation. */
-enum class NorthOrientation(val raw: Int) {
-  /** Default, map oriented upwards */
-  UPWARDS(0),
-  /** Map oriented rightwards */
-  RIGHTWARDS(1),
-  /** Map oriented downwards */
-  DOWNWARDS(2),
-  /** Map oriented leftwards */
-  LEFTWARDS(3);
-
-  companion object {
-    fun ofRaw(raw: Int): NorthOrientation? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -345,30 +281,6 @@ enum class StylePackErrorType(val raw: Int) {
   }
 }
 
-/** Describes the reason for an offline request response error. */
-enum class ResponseErrorReason(val raw: Int) {
-  /** No error occurred during the resource request. */
-  SUCCESS(0),
-  /** The resource is not found. */
-  NOT_FOUND(1),
-  /** The server error. */
-  SERVER(2),
-  /** The connection error. */
-  CONNECTION(3),
-  /** The error happened because of a rate limit. */
-  RATE_LIMIT(4),
-  /** The resource cannot be loaded because the device is in offline mode. */
-  IN_OFFLINE_MODE(5),
-  /** Other reason. */
-  OTHER(6);
-
-  companion object {
-    fun ofRaw(raw: Int): ResponseErrorReason? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Describes the download state of a region. */
 enum class OfflineRegionDownloadState(val raw: Int) {
   /** Indicates downloading is inactive. */
@@ -378,47 +290,6 @@ enum class OfflineRegionDownloadState(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): OfflineRegionDownloadState? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Describes tile store usage modes. */
-enum class TileStoreUsageMode(val raw: Int) {
-  /**
-   * Tile store usage is disabled.
-   *
-   * The implementation skips checking tile store when requesting a tile.
-   */
-  DISABLED(0),
-  /**
-   * Tile store enabled for accessing loaded tile packs.
-   *
-   * The implementation first checks tile store when requesting a tile.
-   * If a tile pack is already loaded, the tile will be extracted and returned. Otherwise, the implementation
-   * falls back to requesting the individual tile and storing it in the disk cache.
-   */
-  READ_ONLY(1),
-  /**
-   * Tile store enabled for accessing local tile packs and for loading new tile packs from server.
-   *
-   * All tile requests are converted to tile pack requests, i.e.
-   * the tile pack that includes the request tile will be loaded, and the tile extracted
-   * from it. In this mode, no individual tile requests will be made.
-   *
-   * This mode can be useful if the map trajectory is predefined and the user cannot pan
-   * freely (e.g. navigation use cases), so that there is a good chance tile packs are already loaded
-   * in the vicinity of the user.
-   *
-   * If users can pan freely, this mode is not recommended. Otherwise, panning
-   * will download tile packs instead of using individual tiles. Note that this means that we could first
-   * download an individual tile, and then a tile pack that also includes this tile. The individual tile in
-   * the disk cache won’t be used as long as the up-to-date tile pack exists in the cache.
-   */
-  READ_AND_UPDATE(2);
-
-  companion object {
-    fun ofRaw(raw: Int): TileStoreUsageMode? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -437,17 +308,6 @@ enum class StylePropertyValueKind(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): StylePropertyValueKind? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-enum class StyleProjectionName(val raw: Int) {
-  MERCATOR(0),
-  GLOBE(1);
-
-  companion object {
-    fun ofRaw(raw: Int): StyleProjectionName? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -583,314 +443,6 @@ enum class _MapEvent(val raw: Int) {
 }
 
 /**
- * Describes the glyphs rasterization option values.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class GlyphsRasterizationOptions(
-  /** Glyphs rasterization mode for client-side text rendering. */
-  val rasterizationMode: GlyphsRasterizationMode,
-  /**
-   * Font family to use as font fallback for client-side text renderings.
-   *
-   * Note: `GlyphsRasterizationMode` has precedence over font family. If `AllGlyphsRasterizedLocally`
-   * or `IdeographsRasterizedLocally` is set, local glyphs will be generated based on the provided font family. If no
-   * font family is provided, the map will fall back to use the system default font. The mechanisms of choosing the
-   * default font are varied in platforms:
-   * - For darwin(iOS/macOS) platform, the default font family is created from the <a href="https://developer.apple.com/documentation/uikit/uifont/1619027-systemfontofsize?language=objc">systemFont</a>.
-   *   If provided fonts are not supported on darwin platform, the map will fall back to use the first available font from the global fallback list.
-   * - For Android platform: the default font <a href="https://developer.android.com/reference/android/graphics/Typeface#DEFAULT">Typeface.DEFAULT</a> will be used.
-   *
-   * Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
-   *
-   */
-  val fontFamily: String? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): GlyphsRasterizationOptions {
-      val rasterizationMode = pigeonVar_list[0] as GlyphsRasterizationMode
-      val fontFamily = pigeonVar_list[1] as String?
-      return GlyphsRasterizationOptions(rasterizationMode, fontFamily)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      rasterizationMode,
-      fontFamily,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is GlyphsRasterizationOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return rasterizationMode == other.rasterizationMode &&
-      fontFamily == other.fontFamily
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Various options needed for tile cover.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class TileCoverOptions(
-  /** Tile size of the source. Defaults to 512. */
-  val tileSize: Long? = null,
-  /**
-   * Min zoom defined in the source between range [0, 22].
-   * if not provided or is out of range, defaults to 0.
-   */
-  val minZoom: Long? = null,
-  /**
-   * Max zoom defined in the source between range [0, 22].
-   * Should be greater than or equal to minZoom.
-   * If not provided or is out of range, defaults to 22.
-   */
-  val maxZoom: Long? = null,
-  /**
-   * Whether to round zoom values when calculating tilecover.
-   * Set this to true for raster and raster-dem sources.
-   * If not specified, defaults to false.
-   */
-  val roundZoom: Boolean? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): TileCoverOptions {
-      val tileSize = pigeonVar_list[0] as Long?
-      val minZoom = pigeonVar_list[1] as Long?
-      val maxZoom = pigeonVar_list[2] as Long?
-      val roundZoom = pigeonVar_list[3] as Boolean?
-      return TileCoverOptions(tileSize, minZoom, maxZoom, roundZoom)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      tileSize,
-      minZoom,
-      maxZoom,
-      roundZoom,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is TileCoverOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return tileSize == other.tileSize &&
-      minZoom == other.minZoom &&
-      maxZoom == other.maxZoom &&
-      roundZoom == other.roundZoom
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Holds options to be used for setting `camera bounds`.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class CameraBoundsOptions(
-  /** The latitude and longitude bounds to which the camera center are constrained. */
-  val bounds: CoordinateBounds? = null,
-  /** The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area. */
-  val maxZoom: Double? = null,
-  /** The minimum zoom level, in Mapbox zoom levels 0-25.5. */
-  val minZoom: Double? = null,
-  /** The maximum allowed pitch value in degrees. */
-  val maxPitch: Double? = null,
-  /** The minimum allowed pitch value in degrees. */
-  val minPitch: Double? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): CameraBoundsOptions {
-      val bounds = pigeonVar_list[0] as CoordinateBounds?
-      val maxZoom = pigeonVar_list[1] as Double?
-      val minZoom = pigeonVar_list[2] as Double?
-      val maxPitch = pigeonVar_list[3] as Double?
-      val minPitch = pigeonVar_list[4] as Double?
-      return CameraBoundsOptions(bounds, maxZoom, minZoom, maxPitch, minPitch)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      bounds,
-      maxZoom,
-      minZoom,
-      maxPitch,
-      minPitch,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is CameraBoundsOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return bounds == other.bounds &&
-      maxZoom == other.maxZoom &&
-      minZoom == other.minZoom &&
-      maxPitch == other.maxPitch &&
-      minPitch == other.minPitch
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Holds information about `camera bounds`.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class CameraBounds(
-  /** The latitude and longitude bounds to which the camera center are constrained. */
-  val bounds: CoordinateBounds,
-  /** The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area. */
-  val maxZoom: Double,
-  /** The minimum zoom level, in Mapbox zoom levels 0-25.5. */
-  val minZoom: Double,
-  /** The maximum allowed pitch value in degrees. */
-  val maxPitch: Double,
-  /** The minimum allowed pitch value in degrees. */
-  val minPitch: Double
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): CameraBounds {
-      val bounds = pigeonVar_list[0] as CoordinateBounds
-      val maxZoom = pigeonVar_list[1] as Double
-      val minZoom = pigeonVar_list[2] as Double
-      val maxPitch = pigeonVar_list[3] as Double
-      val minPitch = pigeonVar_list[4] as Double
-      return CameraBounds(bounds, maxZoom, minZoom, maxPitch, minPitch)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      bounds,
-      maxZoom,
-      minZoom,
-      maxPitch,
-      minPitch,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is CameraBounds) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return bounds == other.bounds &&
-      maxZoom == other.maxZoom &&
-      minZoom == other.minZoom &&
-      maxPitch == other.maxPitch &&
-      minPitch == other.minPitch
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class MapAnimationOptions(
-  /**
-   * The duration of the animation in milliseconds.
-   * If not set explicitly default duration will be taken 300ms
-   */
-  val duration: Long? = null,
-  /**
-   * The amount of time, in milliseconds, to delay starting the animation after animation start.
-   * If not set explicitly default startDelay will be taken 0ms. This only works for Android.
-   */
-  val startDelay: Long? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MapAnimationOptions {
-      val duration = pigeonVar_list[0] as Long?
-      val startDelay = pigeonVar_list[1] as Long?
-      return MapAnimationOptions(duration, startDelay)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      duration,
-      startDelay,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MapAnimationOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return duration == other.duration &&
-      startDelay == other.startDelay
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * A rectangular area as measured on a two-dimensional map projection.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class CoordinateBounds(
-  /**
-   * Coordinate at the southwest corner.
-   * Note: setting this field with invalid values (infinite, NaN) will crash the application.
-   */
-  val southwest: Point,
-  /**
-   * Coordinate at the northeast corner.
-   * Note: setting this field with invalid values (infinite, NaN) will crash the application.
-   */
-  val northeast: Point,
-  /**
-   * If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
-   * Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
-   */
-  val infiniteBounds: Boolean
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): CoordinateBounds {
-      val southwest = pigeonVar_list[0] as Point
-      val northeast = pigeonVar_list[1] as Point
-      val infiniteBounds = pigeonVar_list[2] as Boolean
-      return CoordinateBounds(southwest, northeast, infiniteBounds)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      southwest,
-      northeast,
-      infiniteBounds,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is CoordinateBounds) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return southwest == other.southwest &&
-      northeast == other.northeast &&
-      infiniteBounds == other.infiniteBounds
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
  * Options for enabling debugging features in a map.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -917,70 +469,6 @@ data class MapDebugOptions(
       return true
     }
     return data == other.data
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Map memory budget in megabytes.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class TileCacheBudgetInMegabytes(
-  val size: Long
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): TileCacheBudgetInMegabytes {
-      val size = pigeonVar_list[0] as Long
-      return TileCacheBudgetInMegabytes(size)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      size,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is TileCacheBudgetInMegabytes) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return size == other.size
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Map memory budget in tiles.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class TileCacheBudgetInTiles(
-  val size: Long
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): TileCacheBudgetInTiles {
-      val size = pigeonVar_list[0] as Long
-      return TileCacheBudgetInTiles(size)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      size,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is TileCacheBudgetInTiles) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return size == other.size
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1070,121 +558,6 @@ data class MapOptions(
       size == other.size &&
       pixelRatio == other.pixelRatio &&
       glyphsRasterizationOptions == other.glyphsRasterizationOptions
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Describes the coordinate box on the screen, measured in `logical pixels`
- * from top to bottom and from left to right.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class ScreenBox(
-  /** The screen coordinate close to the top left corner of the screen. */
-  val min: ScreenCoordinate,
-  /** The screen coordinate close to the bottom right corner of the screen. */
-  val max: ScreenCoordinate
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): ScreenBox {
-      val min = pigeonVar_list[0] as ScreenCoordinate
-      val max = pigeonVar_list[1] as ScreenCoordinate
-      return ScreenBox(min, max)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      min,
-      max,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is ScreenBox) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return min == other.min &&
-      max == other.max
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * A coordinate bounds and zoom.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class CoordinateBoundsZoom(
-  /** The latitude and longitude bounds. */
-  val bounds: CoordinateBounds,
-  /** Zoom. */
-  val zoom: Double
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): CoordinateBoundsZoom {
-      val bounds = pigeonVar_list[0] as CoordinateBounds
-      val zoom = pigeonVar_list[1] as Double
-      return CoordinateBoundsZoom(bounds, zoom)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      bounds,
-      zoom,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is CoordinateBoundsZoom) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return bounds == other.bounds &&
-      zoom == other.zoom
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Size type.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class Size(
-  /** Width of the size. */
-  val width: Double,
-  /** Height of the size. */
-  val height: Double
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): Size {
-      val width = pigeonVar_list[0] as Double
-      val height = pigeonVar_list[1] as Double
-      return Size(width, height)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      width,
-      height,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is Size) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return width == other.width &&
-      height == other.height
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1299,92 +672,6 @@ data class FeatureExtensionValue(
     }
     return value == other.value &&
       deepEqualsMapInterfaces(featureCollection, other.featureCollection)
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Specifies position of a layer that is added via addStyleLayer method.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class LayerPosition(
-  /** Layer should be positioned above specified layer id. */
-  val above: String? = null,
-  /** Layer should be positioned below specified layer id. */
-  val below: String? = null,
-  /** Layer should be positioned at specified index in a layers stack. */
-  val at: Long? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): LayerPosition {
-      val above = pigeonVar_list[0] as String?
-      val below = pigeonVar_list[1] as String?
-      val at = pigeonVar_list[2] as Long?
-      return LayerPosition(above, below, at)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      above,
-      below,
-      at,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is LayerPosition) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return above == other.above &&
-      below == other.below &&
-      at == other.at
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Specifies the position at which an import will be added when using `Style.addImport`
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class ImportPosition(
-  /** Import should be positioned above the specified import id. */
-  val above: String? = null,
-  /** Import should be positioned below the specified import id. */
-  val below: String? = null,
-  /** Import should be positioned at the specified index in the imports stack. */
-  val at: Long? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): ImportPosition {
-      val above = pigeonVar_list[0] as String?
-      val below = pigeonVar_list[1] as String?
-      val at = pigeonVar_list[2] as Long?
-      return ImportPosition(above, below, at)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      above,
-      below,
-      at,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is ImportPosition) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return above == other.above &&
-      below == other.below &&
-      at == other.at
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1963,72 +1250,6 @@ data class MercatorCoordinate(
 }
 
 /**
- * The information about style object (source or layer).
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class StyleObjectInfo(
-  /** The object's identifier. */
-  val id: String,
-  /** The object's type. */
-  val type: String
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): StyleObjectInfo {
-      val id = pigeonVar_list[0] as String
-      val type = pigeonVar_list[1] as String
-      return StyleObjectInfo(id, type)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      id,
-      type,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is StyleObjectInfo) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return id == other.id &&
-      type == other.type
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class StyleProjection(
-  val name: StyleProjectionName
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): StyleProjection {
-      val name = pigeonVar_list[0] as StyleProjectionName
-      return StyleProjection(name)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      name,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is StyleProjection) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return name == other.name
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
  * A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
  *
  * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
@@ -2376,96 +1597,6 @@ data class ImageContent(
 }
 
 /**
- * The `transition options` controls timing for the interpolation between a transitionable style
- * property's previous value and new value. These can be used to define the style default property
- * transition behavior. Also, any transitionable style property may also have its own `-transition`
- * property that defines specific transition timing for that specific layer property, overriding
- * the global transition values.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class TransitionOptions(
-  /** Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`. */
-  val duration: Long? = null,
-  /** Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`. */
-  val delay: Long? = null,
-  /** Whether the fade in/out symbol placement transition is enabled. Defaults to `true`. */
-  val enablePlacementTransitions: Boolean? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): TransitionOptions {
-      val duration = pigeonVar_list[0] as Long?
-      val delay = pigeonVar_list[1] as Long?
-      val enablePlacementTransitions = pigeonVar_list[2] as Boolean?
-      return TransitionOptions(duration, delay, enablePlacementTransitions)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      duration,
-      delay,
-      enablePlacementTransitions,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is TransitionOptions) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return duration == other.duration &&
-      delay == other.delay &&
-      enablePlacementTransitions == other.enablePlacementTransitions
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * Represents a tile coordinate.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class CanonicalTileID(
-  /** The z value of the coordinate (zoom-level). */
-  val z: Long,
-  /** The x value of the coordinate. */
-  val x: Long,
-  /** The y value of the coordinate. */
-  val y: Long
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): CanonicalTileID {
-      val z = pigeonVar_list[0] as Long
-      val x = pigeonVar_list[1] as Long
-      val y = pigeonVar_list[2] as Long
-      return CanonicalTileID(z, x, y)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      z,
-      x,
-      y,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is CanonicalTileID) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return z == other.z &&
-      x == other.x &&
-      y == other.y
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
  * Holds a style property value with meta data.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -2507,102 +1638,102 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          GlyphsRasterizationMode.ofRaw(it.toInt())
+          ConstrainMode.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ContextMode.ofRaw(it.toInt())
+          ViewportMode.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ConstrainMode.ofRaw(it.toInt())
+          NorthOrientation.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ViewportMode.ofRaw(it.toInt())
+          GlyphsRasterizationMode.ofRaw(it.toInt())
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          NorthOrientation.ofRaw(it.toInt())
+          StyleProjectionName.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _MapWidgetDebugOptions.ofRaw(it.toInt())
+          ContextMode.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          MapDebugOptionsData.ofRaw(it.toInt())
+          _MapWidgetDebugOptions.ofRaw(it.toInt())
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ViewAnnotationAnchor.ofRaw(it.toInt())
+          MapDebugOptionsData.ofRaw(it.toInt())
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _InteractionType.ofRaw(it.toInt())
+          ViewAnnotationAnchor.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          GestureState.ofRaw(it.toInt())
+          _InteractionType.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Type.ofRaw(it.toInt())
+          GestureState.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionBaseAlignment.ofRaw(it.toInt())
+          Type.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionHeightAlignment.ofRaw(it.toInt())
+          FillExtrusionBaseAlignment.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          BackgroundPitchAlignment.ofRaw(it.toInt())
+          FillExtrusionHeightAlignment.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePackErrorType.ofRaw(it.toInt())
+          BackgroundPitchAlignment.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ResponseErrorReason.ofRaw(it.toInt())
+          StylePackErrorType.ofRaw(it.toInt())
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          OfflineRegionDownloadState.ofRaw(it.toInt())
+          ResponseErrorReason.ofRaw(it.toInt())
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileStoreUsageMode.ofRaw(it.toInt())
+          OfflineRegionDownloadState.ofRaw(it.toInt())
         }
       }
       147.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePropertyValueKind.ofRaw(it.toInt())
+          TileStoreUsageMode.ofRaw(it.toInt())
         }
       }
       148.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StyleProjectionName.ofRaw(it.toInt())
+          StylePropertyValueKind.ofRaw(it.toInt())
         }
       }
       149.toByte() -> {
@@ -2672,12 +1803,12 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          CoordinateBounds.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          CoordinateBoundsZoom.fromList(it)
         }
       }
       164.toByte() -> {
@@ -2697,177 +1828,177 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
+          Size.fromList(it)
         }
       }
       168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
+          LayerPosition.fromList(it)
         }
       }
       174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          ImportPosition.fromList(it)
         }
       }
       175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          TransitionOptions.fromList(it)
         }
       }
       176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          MapDebugOptions.fromList(it)
         }
       }
       177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImportPosition.fromList(it)
+          MapOptions.fromList(it)
         }
       }
       180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          FeatureExtensionValue.fromList(it)
         }
       }
       183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeatureId.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureState.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _Interaction.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _InteractionPigeon.fromList(it)
+          FeaturesetFeatureId.fromList(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetDescriptor.fromList(it)
+          FeatureState.fromList(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeature.fromList(it)
+          _Interaction.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+          _InteractionPigeon.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          DirectionalLight.fromList(it)
         }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          AmbientLight.fromList(it)
         }
       }
       199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       202.toByte() -> {
@@ -2885,83 +2016,83 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is GlyphsRasterizationMode -> {
+      is ConstrainMode -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is ContextMode -> {
+      is ViewportMode -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is ConstrainMode -> {
+      is NorthOrientation -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is ViewportMode -> {
+      is GlyphsRasterizationMode -> {
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is NorthOrientation -> {
+      is StyleProjectionName -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is _MapWidgetDebugOptions -> {
+      is ContextMode -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is MapDebugOptionsData -> {
+      is _MapWidgetDebugOptions -> {
         stream.write(135)
         writeValue(stream, value.raw)
       }
-      is ViewAnnotationAnchor -> {
+      is MapDebugOptionsData -> {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is _InteractionType -> {
+      is ViewAnnotationAnchor -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is GestureState -> {
+      is _InteractionType -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is Type -> {
+      is GestureState -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionBaseAlignment -> {
+      is Type -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionHeightAlignment -> {
+      is FillExtrusionBaseAlignment -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is BackgroundPitchAlignment -> {
+      is FillExtrusionHeightAlignment -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is StylePackErrorType -> {
+      is BackgroundPitchAlignment -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is ResponseErrorReason -> {
+      is StylePackErrorType -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is OfflineRegionDownloadState -> {
+      is ResponseErrorReason -> {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is TileStoreUsageMode -> {
+      is OfflineRegionDownloadState -> {
         stream.write(146)
         writeValue(stream, value.raw)
       }
-      is StylePropertyValueKind -> {
+      is TileStoreUsageMode -> {
         stream.write(147)
         writeValue(stream, value.raw)
       }
-      is StyleProjectionName -> {
+      is StylePropertyValueKind -> {
         stream.write(148)
         writeValue(stream, value.raw)
       }
@@ -3017,11 +2148,11 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationOptions -> {
+      is CoordinateBounds -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is CoordinateBoundsZoom -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
@@ -3037,143 +2168,143 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is CoordinateBounds -> {
+      is Size -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is MapDebugOptions -> {
+      is ScreenBox -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
+      is TileCoverOptions -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is MapOptions -> {
+      is StyleObjectInfo -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is StyleProjection -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is CoordinateBoundsZoom -> {
+      is LayerPosition -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is ImportPosition -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is TransitionOptions -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is MapDebugOptions -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is FeatureExtensionValue -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is LayerPosition -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is ImportPosition -> {
+      is MapOptions -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is RenderedQueryOptions -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is SourceQueryOptions -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is FeatureExtensionValue -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeatureId -> {
+      is QueriedRenderedFeature -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is FeatureState -> {
+      is QueriedSourceFeature -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is _Interaction -> {
+      is QueriedFeature -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is _InteractionPigeon -> {
+      is FeaturesetFeatureId -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is FeaturesetDescriptor -> {
+      is FeatureState -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeature -> {
+      is _Interaction -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is _InteractionPigeon -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is FeaturesetDescriptor -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is FeaturesetFeature -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is MapContentGestureContext -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is _RenderedQueryGeometry -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is ProjectedMeters -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is MercatorCoordinate -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is FlatLight -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is DirectionalLight -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is AmbientLight -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is MbxImage -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is ImageStretches -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is ImageContent -> {
         stream.write(201)
         writeValue(stream, value.toList())
       }

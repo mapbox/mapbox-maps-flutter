@@ -6,6 +6,319 @@ package com.mapbox.maps.mapbox_maps.pigeons
 
 import com.mapbox.geojson.Point
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
+private fun deepEqualsPlatformInterfaceDataTypes(a: Any?, b: Any?): Boolean {
+  if (a is ByteArray && b is ByteArray) {
+    return a.contentEquals(b)
+  }
+  if (a is IntArray && b is IntArray) {
+    return a.contentEquals(b)
+  }
+  if (a is LongArray && b is LongArray) {
+    return a.contentEquals(b)
+  }
+  if (a is DoubleArray && b is DoubleArray) {
+    return a.contentEquals(b)
+  }
+  if (a is Array<*> && b is Array<*>) {
+    return a.size == b.size &&
+      a.indices.all { deepEqualsPlatformInterfaceDataTypes(a[it], b[it]) }
+  }
+  if (a is Map<*, *> && b is Map<*, *>) {
+    return a.size == b.size && a.keys.all {
+      (b as Map<Any?, Any?>).containsKey(it) &&
+        deepEqualsPlatformInterfaceDataTypes(a[it], b[it])
+    }
+  }
+  return a == b
+}
+
+/** Describes whether to constrain the map in both axes or only vertically e.g. while panning. */
+enum class ConstrainMode(val raw: Int) {
+  /** No constrains. */
+  NONE(0),
+  /** Constrain to height only */
+  HEIGHT_ONLY(1),
+  /** Constrain both width and height axes. */
+  WIDTH_AND_HEIGHT(2);
+
+  companion object {
+    fun ofRaw(raw: Int): ConstrainMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Satisfies embedding platforms that requires the viewport coordinate systems to be set according to its standards. */
+enum class ViewportMode(val raw: Int) {
+  /** Default viewport */
+  DEFAULT(0),
+  /** Viewport flipped on the y-axis. */
+  FLIPPED_Y(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ViewportMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Describes the map orientation. */
+enum class NorthOrientation(val raw: Int) {
+  /** Default, map oriented upwards */
+  UPWARDS(0),
+  /** Map oriented rightwards */
+  RIGHTWARDS(1),
+  /** Map oriented downwards */
+  DOWNWARDS(2),
+  /** Map oriented leftwards */
+  LEFTWARDS(3);
+
+  companion object {
+    fun ofRaw(raw: Int): NorthOrientation? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Describes glyphs rasterization modes. */
+enum class GlyphsRasterizationMode(val raw: Int) {
+  /** No glyphs are rasterized locally. All glyphs are loaded from the server. */
+  NO_GLYPHS_RASTERIZED_LOCALLY(0),
+  /** Ideographs are rasterized locally, and they are not loaded from the server. */
+  IDEOGRAPHS_RASTERIZED_LOCALLY(1),
+  /** All glyphs are rasterized locally. No glyphs are loaded from the server. */
+  ALL_GLYPHS_RASTERIZED_LOCALLY(2);
+
+  companion object {
+    fun ofRaw(raw: Int): GlyphsRasterizationMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** The style projection name. */
+enum class StyleProjectionName(val raw: Int) {
+  MERCATOR(0),
+  GLOBE(1);
+
+  companion object {
+    fun ofRaw(raw: Int): StyleProjectionName? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Defines the position of an ornament (logo, compass, scale bar, attribution) on the map. */
+enum class OrnamentPosition(val raw: Int) {
+  TOP_LEFT(0),
+  TOP_RIGHT(1),
+  BOTTOM_RIGHT(2),
+  BOTTOM_LEFT(3);
+
+  companion object {
+    fun ofRaw(raw: Int): OrnamentPosition? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Configures the directions in which the map is allowed to move during a scroll gesture.
+ * Default value: "horizontal-and-vertical".
+ */
+enum class ScrollMode(val raw: Int) {
+  /** The map may only move horizontally. */
+  HORIZONTAL(0),
+  /** The map may only move vertically. */
+  VERTICAL(1),
+  /** The map may move both horizontally and vertically. */
+  HORIZONTAL_AND_VERTICAL(2);
+
+  companion object {
+    fun ofRaw(raw: Int): ScrollMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * The enum controls how the puck is oriented.
+ * Default value: "heading".
+ */
+enum class PuckBearing(val raw: Int) {
+  /** Orients the puck to match the direction in which the device is facing. */
+  HEADING(0),
+  /** Orients the puck to match the direction in which the device is moving. */
+  COURSE(1);
+
+  companion object {
+    fun ofRaw(raw: Int): PuckBearing? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Defines scaling mode. Only applies to location-indicator type layers.
+ * Default value: "map".
+ */
+enum class ModelScaleMode(val raw: Int) {
+  /** Model is scaled so that it's always the same size relative to other map features. */
+  MAP(0),
+  /** Model is scaled so that it's always the same size on the screen. */
+  VIEWPORT(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ModelScaleMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Selects the base of the model.
+ * Default value: "ground".
+ */
+enum class ModelElevationReference(val raw: Int) {
+  /** Elevated rendering is enabled relative to the sea level. */
+  SEA(0),
+  /** Elevated rendering is enabled relative to the ground's height below them. */
+  GROUND(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ModelElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Supported distance unit types.
+ * Default value: "metric".
+ */
+enum class DistanceUnits(val raw: Int) {
+  /** Metric units using meters and kilometers. */
+  METRIC(0),
+  /** Imperial units using feet and miles. */
+  IMPERIAL(1),
+  /** Nautical units using fathoms and nautical miles. */
+  NAUTICAL(2);
+
+  companion object {
+    fun ofRaw(raw: Int): DistanceUnits? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Enumeration of gesture states. */
+enum class GestureState(val raw: Int) {
+  /** Gesture has started. */
+  STARTED(0),
+  /** Gesture is in progress. */
+  CHANGED(1),
+  /** Gesture has ended. */
+  ENDED(2);
+
+  companion object {
+    fun ofRaw(raw: Int): GestureState? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Describes tile store usage modes. */
+enum class TileStoreUsageMode(val raw: Int) {
+  /**
+   * Tile store usage is disabled.
+   *
+   * The implementation skips checking tile store when requesting a tile.
+   */
+  DISABLED(0),
+  /**
+   * Tile store enabled for accessing loaded tile packs.
+   *
+   * The implementation first checks tile store when requesting a tile.
+   * If a tile pack is already loaded, the tile will be extracted and returned.
+   * Otherwise, the implementation falls back to requesting the individual tile
+   * and storing it in the disk cache.
+   */
+  READ_ONLY(1),
+  /**
+   * Tile store enabled for accessing local tile packs and for loading new tile packs from server.
+   *
+   * All tile requests are converted to tile pack requests, i.e. the tile pack
+   * that includes the requested tile will be loaded, and the tile extracted from it.
+   */
+  READ_AND_UPDATE(2);
+
+  companion object {
+    fun ofRaw(raw: Int): TileStoreUsageMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Classify network types based on cost. */
+enum class NetworkRestriction(val raw: Int) {
+  /** Allow access to all network types. */
+  NONE(0),
+  /** Forbid network access to expensive networks, such as cellular. */
+  DISALLOW_EXPENSIVE(1),
+  /** Forbid access to all network types. */
+  DISALLOW_ALL(2);
+
+  companion object {
+    fun ofRaw(raw: Int): NetworkRestriction? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Describes the tiles data domain. */
+enum class TileDataDomain(val raw: Int) {
+  /** Data for Maps. */
+  MAPS(0),
+  /** Data for Navigation. */
+  NAVIGATION(1),
+  /** Data for Search. */
+  SEARCH(2),
+  /** Data for ADAS. */
+  ADAS(3);
+
+  companion object {
+    fun ofRaw(raw: Int): TileDataDomain? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
+ * Describes the reason for an offline request response error.
+ * Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
+ */
+enum class ResponseErrorReason(val raw: Int) {
+  /** No error occurred during the resource request. */
+  SUCCESS(0),
+  /** The resource is not found. */
+  NOT_FOUND(1),
+  /** The server error. */
+  SERVER(2),
+  /** The connection error. */
+  CONNECTION(3),
+  /** The error happened because of a rate limit. */
+  RATE_LIMIT(4),
+  /** The resource cannot be loaded because the device is in offline mode. */
+  IN_OFFLINE_MODE(5),
+  /** Other reason. */
+  OTHER(6);
+
+  companion object {
+    fun ofRaw(raw: Int): ResponseErrorReason? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
 
 /**
  * Describes the coordinate on the screen, measured from top to bottom and from left to right.
@@ -221,6 +534,2137 @@ data class CameraState(
       zoom == other.zoom &&
       bearing == other.bearing &&
       pitch == other.pitch
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Coordinate bounds representation.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class CoordinateBounds(
+  /**
+   * Coordinate at the southwest corner.
+   * Note: setting this field with invalid values (infinite, NaN) will crash the application.
+   */
+  val southwest: Point,
+  /**
+   * Coordinate at the northeast corner.
+   * Note: setting this field with invalid values (infinite, NaN) will crash the application.
+   */
+  val northeast: Point,
+  /**
+   * If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
+   * Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
+   */
+  val infiniteBounds: Boolean
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CoordinateBounds {
+      val southwest = pigeonVar_list[0] as Point
+      val northeast = pigeonVar_list[1] as Point
+      val infiniteBounds = pigeonVar_list[2] as Boolean
+      return CoordinateBounds(southwest, northeast, infiniteBounds)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      southwest,
+      northeast,
+      infiniteBounds,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CoordinateBounds) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return southwest == other.southwest &&
+      northeast == other.northeast &&
+      infiniteBounds == other.infiniteBounds
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A coordinate bounds and zoom.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class CoordinateBoundsZoom(
+  /** The latitude and longitude bounds. */
+  val bounds: CoordinateBounds,
+  /** Zoom. */
+  val zoom: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CoordinateBoundsZoom {
+      val bounds = pigeonVar_list[0] as CoordinateBounds
+      val zoom = pigeonVar_list[1] as Double
+      return CoordinateBoundsZoom(bounds, zoom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      bounds,
+      zoom,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CoordinateBoundsZoom) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return bounds == other.bounds &&
+      zoom == other.zoom
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Holds options to be used for setting `camera bounds`.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class CameraBoundsOptions(
+  /** The latitude and longitude bounds to which the camera center are constrained. */
+  val bounds: CoordinateBounds? = null,
+  /** The maximum zoom level, in Mapbox zoom levels 0-25.5. */
+  val maxZoom: Double? = null,
+  /** The minimum zoom level, in Mapbox zoom levels 0-25.5. */
+  val minZoom: Double? = null,
+  /** The maximum allowed pitch value in degrees. */
+  val maxPitch: Double? = null,
+  /** The minimum allowed pitch value in degrees. */
+  val minPitch: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CameraBoundsOptions {
+      val bounds = pigeonVar_list[0] as CoordinateBounds?
+      val maxZoom = pigeonVar_list[1] as Double?
+      val minZoom = pigeonVar_list[2] as Double?
+      val maxPitch = pigeonVar_list[3] as Double?
+      val minPitch = pigeonVar_list[4] as Double?
+      return CameraBoundsOptions(bounds, maxZoom, minZoom, maxPitch, minPitch)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      bounds,
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CameraBoundsOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return bounds == other.bounds &&
+      maxZoom == other.maxZoom &&
+      minZoom == other.minZoom &&
+      maxPitch == other.maxPitch &&
+      minPitch == other.minPitch
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Holds information about `camera bounds`.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class CameraBounds(
+  /** The latitude and longitude bounds to which the camera center are constrained. */
+  val bounds: CoordinateBounds,
+  /** The maximum zoom level, in Mapbox zoom levels 0-25.5. */
+  val maxZoom: Double,
+  /** The minimum zoom level, in Mapbox zoom levels 0-25.5. */
+  val minZoom: Double,
+  /** The maximum allowed pitch value in degrees. */
+  val maxPitch: Double,
+  /** The minimum allowed pitch value in degrees. */
+  val minPitch: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CameraBounds {
+      val bounds = pigeonVar_list[0] as CoordinateBounds
+      val maxZoom = pigeonVar_list[1] as Double
+      val minZoom = pigeonVar_list[2] as Double
+      val maxPitch = pigeonVar_list[3] as Double
+      val minPitch = pigeonVar_list[4] as Double
+      return CameraBounds(bounds, maxZoom, minZoom, maxPitch, minPitch)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      bounds,
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CameraBounds) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return bounds == other.bounds &&
+      maxZoom == other.maxZoom &&
+      minZoom == other.minZoom &&
+      maxPitch == other.maxPitch &&
+      minPitch == other.minPitch
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Options for camera animations.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class MapAnimationOptions(
+  /**
+   * The duration of the animation in milliseconds.
+   * If not set explicitly default duration will be taken 300ms
+   */
+  val duration: Long? = null,
+  /**
+   * The amount of time, in milliseconds, to delay starting the animation after animation start.
+   * If not set explicitly default startDelay will be taken 0ms. This only works for Android.
+   */
+  val startDelay: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MapAnimationOptions {
+      val duration = pigeonVar_list[0] as Long?
+      val startDelay = pigeonVar_list[1] as Long?
+      return MapAnimationOptions(duration, startDelay)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      duration,
+      startDelay,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MapAnimationOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return duration == other.duration &&
+      startDelay == other.startDelay
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Size type.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class Size(
+  /** Width of the size. */
+  val width: Double,
+  /** Height of the size. */
+  val height: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): Size {
+      val width = pigeonVar_list[0] as Double
+      val height = pigeonVar_list[1] as Double
+      return Size(width, height)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      width,
+      height,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is Size) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return width == other.width &&
+      height == other.height
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A rectangular area as measured in the map's coordinate system.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ScreenBox(
+  /** The screen coordinate close to the top left corner of the screen. */
+  val min: ScreenCoordinate,
+  /** The screen coordinate close to the bottom right corner of the screen. */
+  val max: ScreenCoordinate
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ScreenBox {
+      val min = pigeonVar_list[0] as ScreenCoordinate
+      val max = pigeonVar_list[1] as ScreenCoordinate
+      return ScreenBox(min, max)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      min,
+      max,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ScreenBox) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return min == other.min &&
+      max == other.max
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the glyphs rasterization option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class GlyphsRasterizationOptions(
+  /** Glyphs rasterization mode for client-side text rendering. */
+  val rasterizationMode: GlyphsRasterizationMode,
+  /** Font family to use as font fallback for client-side text renderings. */
+  val fontFamily: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GlyphsRasterizationOptions {
+      val rasterizationMode = pigeonVar_list[0] as GlyphsRasterizationMode
+      val fontFamily = pigeonVar_list[1] as String?
+      return GlyphsRasterizationOptions(rasterizationMode, fontFamily)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      rasterizationMode,
+      fontFamily,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is GlyphsRasterizationOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return rasterizationMode == other.rasterizationMode &&
+      fontFamily == other.fontFamily
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Various options needed for tile cover.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileCoverOptions(
+  /** Tile size of the source. Defaults to 512. */
+  val tileSize: Long? = null,
+  /** Min zoom defined in the source between range [0, 22]. */
+  val minZoom: Long? = null,
+  /** Max zoom defined in the source between range [0, 22]. */
+  val maxZoom: Long? = null,
+  /** Whether to round zoom values when calculating tilecover. */
+  val roundZoom: Boolean? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileCoverOptions {
+      val tileSize = pigeonVar_list[0] as Long?
+      val minZoom = pigeonVar_list[1] as Long?
+      val maxZoom = pigeonVar_list[2] as Long?
+      val roundZoom = pigeonVar_list[3] as Boolean?
+      return TileCoverOptions(tileSize, minZoom, maxZoom, roundZoom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      tileSize,
+      minZoom,
+      maxZoom,
+      roundZoom,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileCoverOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return tileSize == other.tileSize &&
+      minZoom == other.minZoom &&
+      maxZoom == other.maxZoom &&
+      roundZoom == other.roundZoom
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * The information about style object (source or layer).
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StyleObjectInfo(
+  /** The object's identifier. */
+  val id: String,
+  /** The object's type. */
+  val type: String
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StyleObjectInfo {
+      val id = pigeonVar_list[0] as String
+      val type = pigeonVar_list[1] as String
+      return StyleObjectInfo(id, type)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      type,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StyleObjectInfo) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return id == other.id &&
+      type == other.type
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * The style projection.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StyleProjection(
+  val name: StyleProjectionName
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StyleProjection {
+      val name = pigeonVar_list[0] as StyleProjectionName
+      return StyleProjection(name)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      name,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StyleProjection) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return name == other.name
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Specifies position of a layer that is added via addStyleLayer method.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LayerPosition(
+  /** Layer should be positioned above specified layer id. */
+  val above: String? = null,
+  /** Layer should be positioned below specified layer id. */
+  val below: String? = null,
+  /** Layer should be positioned at specified index in a layers stack. */
+  val at: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): LayerPosition {
+      val above = pigeonVar_list[0] as String?
+      val below = pigeonVar_list[1] as String?
+      val at = pigeonVar_list[2] as Long?
+      return LayerPosition(above, below, at)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      above,
+      below,
+      at,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is LayerPosition) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return above == other.above &&
+      below == other.below &&
+      at == other.at
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Specifies the position at which an import will be added when using `Style.addImport`.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ImportPosition(
+  /** Import should be positioned above the specified import id. */
+  val above: String? = null,
+  /** Import should be positioned below the specified import id. */
+  val below: String? = null,
+  /** Import should be positioned at the specified index in the imports stack. */
+  val at: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ImportPosition {
+      val above = pigeonVar_list[0] as String?
+      val below = pigeonVar_list[1] as String?
+      val at = pigeonVar_list[2] as Long?
+      return ImportPosition(above, below, at)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      above,
+      below,
+      at,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ImportPosition) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return above == other.above &&
+      below == other.below &&
+      at == other.at
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Defines global transition options that are used when properties are changed without specific transition options.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TransitionOptions(
+  /** Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`. */
+  val duration: Long? = null,
+  /** Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`. */
+  val delay: Long? = null,
+  /** Whether the fade in/out symbol placement transition is enabled. Defaults to `true`. */
+  val enablePlacementTransitions: Boolean? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TransitionOptions {
+      val duration = pigeonVar_list[0] as Long?
+      val delay = pigeonVar_list[1] as Long?
+      val enablePlacementTransitions = pigeonVar_list[2] as Boolean?
+      return TransitionOptions(duration, delay, enablePlacementTransitions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      duration,
+      delay,
+      enablePlacementTransitions,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TransitionOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return duration == other.duration &&
+      delay == other.delay &&
+      enablePlacementTransitions == other.enablePlacementTransitions
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Gesture configuration allows to control the user touch interaction.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class GesturesSettings(
+  /** Whether the rotate gesture is enabled. */
+  val rotateEnabled: Boolean? = null,
+  /** Whether the pinch to zoom gesture is enabled. */
+  val pinchToZoomEnabled: Boolean? = null,
+  /** Whether the single-touch scroll gesture is enabled. */
+  val scrollEnabled: Boolean? = null,
+  /** Whether rotation is enabled for the pinch to zoom gesture. */
+  val simultaneousRotateAndPinchToZoomEnabled: Boolean? = null,
+  /** Whether the pitch gesture is enabled. */
+  val pitchEnabled: Boolean? = null,
+  /** Configures the directions in which the map is allowed to move during a scroll gesture. */
+  val scrollMode: ScrollMode? = null,
+  /** Whether double tapping the map with one touch results in a zoom-in animation. */
+  val doubleTapToZoomInEnabled: Boolean? = null,
+  /** Whether single tapping the map with two touches results in a zoom-out animation. */
+  val doubleTouchToZoomOutEnabled: Boolean? = null,
+  /** Whether the quick zoom gesture is enabled. */
+  val quickZoomEnabled: Boolean? = null,
+  /** By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead. */
+  val focalPoint: ScreenCoordinate? = null,
+  /** Whether a deceleration animation following a pinch-to-zoom gesture is enabled. */
+  val pinchToZoomDecelerationEnabled: Boolean? = null,
+  /** Whether a deceleration animation following a rotate gesture is enabled. */
+  val rotateDecelerationEnabled: Boolean? = null,
+  /** Whether a deceleration animation following a scroll gesture is enabled. */
+  val scrollDecelerationEnabled: Boolean? = null,
+  /** Whether rotate threshold increases when pinching to zoom. */
+  val increaseRotateThresholdWhenPinchingToZoom: Boolean? = null,
+  /** Whether pinch to zoom threshold increases when rotating. */
+  val increasePinchToZoomThresholdWhenRotating: Boolean? = null,
+  /** The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. */
+  val zoomAnimationAmount: Double? = null,
+  /** Whether pan is enabled for the pinch gesture. */
+  val pinchPanEnabled: Boolean? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GesturesSettings {
+      val rotateEnabled = pigeonVar_list[0] as Boolean?
+      val pinchToZoomEnabled = pigeonVar_list[1] as Boolean?
+      val scrollEnabled = pigeonVar_list[2] as Boolean?
+      val simultaneousRotateAndPinchToZoomEnabled = pigeonVar_list[3] as Boolean?
+      val pitchEnabled = pigeonVar_list[4] as Boolean?
+      val scrollMode = pigeonVar_list[5] as ScrollMode?
+      val doubleTapToZoomInEnabled = pigeonVar_list[6] as Boolean?
+      val doubleTouchToZoomOutEnabled = pigeonVar_list[7] as Boolean?
+      val quickZoomEnabled = pigeonVar_list[8] as Boolean?
+      val focalPoint = pigeonVar_list[9] as ScreenCoordinate?
+      val pinchToZoomDecelerationEnabled = pigeonVar_list[10] as Boolean?
+      val rotateDecelerationEnabled = pigeonVar_list[11] as Boolean?
+      val scrollDecelerationEnabled = pigeonVar_list[12] as Boolean?
+      val increaseRotateThresholdWhenPinchingToZoom = pigeonVar_list[13] as Boolean?
+      val increasePinchToZoomThresholdWhenRotating = pigeonVar_list[14] as Boolean?
+      val zoomAnimationAmount = pigeonVar_list[15] as Double?
+      val pinchPanEnabled = pigeonVar_list[16] as Boolean?
+      return GesturesSettings(rotateEnabled, pinchToZoomEnabled, scrollEnabled, simultaneousRotateAndPinchToZoomEnabled, pitchEnabled, scrollMode, doubleTapToZoomInEnabled, doubleTouchToZoomOutEnabled, quickZoomEnabled, focalPoint, pinchToZoomDecelerationEnabled, rotateDecelerationEnabled, scrollDecelerationEnabled, increaseRotateThresholdWhenPinchingToZoom, increasePinchToZoomThresholdWhenRotating, zoomAnimationAmount, pinchPanEnabled)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      rotateEnabled,
+      pinchToZoomEnabled,
+      scrollEnabled,
+      simultaneousRotateAndPinchToZoomEnabled,
+      pitchEnabled,
+      scrollMode,
+      doubleTapToZoomInEnabled,
+      doubleTouchToZoomOutEnabled,
+      quickZoomEnabled,
+      focalPoint,
+      pinchToZoomDecelerationEnabled,
+      rotateDecelerationEnabled,
+      scrollDecelerationEnabled,
+      increaseRotateThresholdWhenPinchingToZoom,
+      increasePinchToZoomThresholdWhenRotating,
+      zoomAnimationAmount,
+      pinchPanEnabled,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is GesturesSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return rotateEnabled == other.rotateEnabled &&
+      pinchToZoomEnabled == other.pinchToZoomEnabled &&
+      scrollEnabled == other.scrollEnabled &&
+      simultaneousRotateAndPinchToZoomEnabled == other.simultaneousRotateAndPinchToZoomEnabled &&
+      pitchEnabled == other.pitchEnabled &&
+      scrollMode == other.scrollMode &&
+      doubleTapToZoomInEnabled == other.doubleTapToZoomInEnabled &&
+      doubleTouchToZoomOutEnabled == other.doubleTouchToZoomOutEnabled &&
+      quickZoomEnabled == other.quickZoomEnabled &&
+      focalPoint == other.focalPoint &&
+      pinchToZoomDecelerationEnabled == other.pinchToZoomDecelerationEnabled &&
+      rotateDecelerationEnabled == other.rotateDecelerationEnabled &&
+      scrollDecelerationEnabled == other.scrollDecelerationEnabled &&
+      increaseRotateThresholdWhenPinchingToZoom == other.increaseRotateThresholdWhenPinchingToZoom &&
+      increasePinchToZoomThresholdWhenRotating == other.increasePinchToZoomThresholdWhenRotating &&
+      zoomAnimationAmount == other.zoomAnimationAmount &&
+      pinchPanEnabled == other.pinchPanEnabled
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * 2D location puck configuration.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LocationPuck2D(
+  /** Name of image in sprite to use as the top of the location indicator. */
+  val topImage: ByteArray? = null,
+  /** Name of image in sprite to use as the middle of the location indicator. */
+  val bearingImage: ByteArray? = null,
+  /** Name of image in sprite to use as the background of the location indicator. */
+  val shadowImage: ByteArray? = null,
+  /** The scale expression of the images. If defined, it will be applied to all the three images. */
+  val scaleExpression: String? = null,
+  /**
+   * The opacity of the entire location puck.
+   * Default value: 1. Value range: [0, 1]
+   */
+  val opacity: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): LocationPuck2D {
+      val topImage = pigeonVar_list[0] as ByteArray?
+      val bearingImage = pigeonVar_list[1] as ByteArray?
+      val shadowImage = pigeonVar_list[2] as ByteArray?
+      val scaleExpression = pigeonVar_list[3] as String?
+      val opacity = pigeonVar_list[4] as Double?
+      return LocationPuck2D(topImage, bearingImage, shadowImage, scaleExpression, opacity)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      topImage,
+      bearingImage,
+      shadowImage,
+      scaleExpression,
+      opacity,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is LocationPuck2D) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return topImage == other.topImage &&
+      bearingImage == other.bearingImage &&
+      shadowImage == other.shadowImage &&
+      scaleExpression == other.scaleExpression &&
+      opacity == other.opacity
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * 3D location puck configuration.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LocationPuck3D(
+  /** An URL for the model file in gltf format. */
+  val modelUri: String? = null,
+  /** The position of the model. */
+  val position: List<Double?>? = null,
+  /** The opacity of the model. */
+  val modelOpacity: Double? = null,
+  /** The scale of the model. */
+  val modelScale: List<Double?>? = null,
+  /** The scale expression of the model. */
+  val modelScaleExpression: String? = null,
+  /** The translation of the model [lon, lat, z]. */
+  val modelTranslation: List<Double?>? = null,
+  /** The rotation of the model. */
+  val modelRotation: List<Double?>? = null,
+  /** Enable/Disable shadow casting for the 3D location puck. */
+  val modelCastShadows: Boolean? = null,
+  /** Enable/Disable shadow receiving for the 3D location puck. */
+  val modelReceiveShadows: Boolean? = null,
+  /** Defines scaling mode. Only applies to location-indicator type layers. */
+  val modelScaleMode: ModelScaleMode? = null,
+  /** Strength of the emission. */
+  val modelEmissiveStrength: Double? = null,
+  /** The emissive strength expression of the model. */
+  val modelEmissiveStrengthExpression: String? = null,
+  /** Selects the base of the model. */
+  val modelElevationReference: ModelElevationReference? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): LocationPuck3D {
+      val modelUri = pigeonVar_list[0] as String?
+      val position = pigeonVar_list[1] as List<Double?>?
+      val modelOpacity = pigeonVar_list[2] as Double?
+      val modelScale = pigeonVar_list[3] as List<Double?>?
+      val modelScaleExpression = pigeonVar_list[4] as String?
+      val modelTranslation = pigeonVar_list[5] as List<Double?>?
+      val modelRotation = pigeonVar_list[6] as List<Double?>?
+      val modelCastShadows = pigeonVar_list[7] as Boolean?
+      val modelReceiveShadows = pigeonVar_list[8] as Boolean?
+      val modelScaleMode = pigeonVar_list[9] as ModelScaleMode?
+      val modelEmissiveStrength = pigeonVar_list[10] as Double?
+      val modelEmissiveStrengthExpression = pigeonVar_list[11] as String?
+      val modelElevationReference = pigeonVar_list[12] as ModelElevationReference?
+      return LocationPuck3D(modelUri, position, modelOpacity, modelScale, modelScaleExpression, modelTranslation, modelRotation, modelCastShadows, modelReceiveShadows, modelScaleMode, modelEmissiveStrength, modelEmissiveStrengthExpression, modelElevationReference)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      modelUri,
+      position,
+      modelOpacity,
+      modelScale,
+      modelScaleExpression,
+      modelTranslation,
+      modelRotation,
+      modelCastShadows,
+      modelReceiveShadows,
+      modelScaleMode,
+      modelEmissiveStrength,
+      modelEmissiveStrengthExpression,
+      modelElevationReference,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is LocationPuck3D) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return modelUri == other.modelUri &&
+      deepEqualsPlatformInterfaceDataTypes(position, other.position) &&
+      modelOpacity == other.modelOpacity &&
+      deepEqualsPlatformInterfaceDataTypes(modelScale, other.modelScale) &&
+      modelScaleExpression == other.modelScaleExpression &&
+      deepEqualsPlatformInterfaceDataTypes(modelTranslation, other.modelTranslation) &&
+      deepEqualsPlatformInterfaceDataTypes(modelRotation, other.modelRotation) &&
+      modelCastShadows == other.modelCastShadows &&
+      modelReceiveShadows == other.modelReceiveShadows &&
+      modelScaleMode == other.modelScaleMode &&
+      modelEmissiveStrength == other.modelEmissiveStrength &&
+      modelEmissiveStrengthExpression == other.modelEmissiveStrengthExpression &&
+      modelElevationReference == other.modelElevationReference
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Defines what the customised look of the location puck.
+ * Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LocationPuck(
+  val locationPuck2D: LocationPuck2D? = null,
+  val locationPuck3D: LocationPuck3D? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): LocationPuck {
+      val locationPuck2D = pigeonVar_list[0] as LocationPuck2D?
+      val locationPuck3D = pigeonVar_list[1] as LocationPuck3D?
+      return LocationPuck(locationPuck2D, locationPuck3D)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      locationPuck2D,
+      locationPuck3D,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is LocationPuck) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return locationPuck2D == other.locationPuck2D &&
+      locationPuck3D == other.locationPuck3D
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Shows a location puck on the map.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LocationComponentSettings(
+  /** Whether the user location is visible on the map. */
+  val enabled: Boolean? = null,
+  /** Whether the location puck is pulsing on the map. Works for 2D location puck only. */
+  val pulsingEnabled: Boolean? = null,
+  /** The color of the pulsing circle. Works for 2D location puck only. */
+  val pulsingColor: Long? = null,
+  /** The maximum radius of the pulsing circle. Works for 2D location puck only. */
+  val pulsingMaxRadius: Double? = null,
+  /** Whether show accuracy ring with location puck. Works for 2D location puck only. */
+  val showAccuracyRing: Boolean? = null,
+  /** The color of the accuracy ring. Works for 2D location puck only. */
+  val accuracyRingColor: Long? = null,
+  /** The color of the accuracy ring border. Works for 2D location puck only. */
+  val accuracyRingBorderColor: Long? = null,
+  /** Sets the id of the layer that's added above to when placing the component on the map. */
+  val layerAbove: String? = null,
+  /** Sets the id of the layer that's added below to when placing the component on the map. */
+  val layerBelow: String? = null,
+  /** Whether the puck rotates to track the bearing source. */
+  val puckBearingEnabled: Boolean? = null,
+  /** The enum controls how the puck is oriented. */
+  val puckBearing: PuckBearing? = null,
+  /** The slot this layer is assigned to. */
+  val slot: String? = null,
+  /** Defines what the customised look of the location puck. */
+  val locationPuck: LocationPuck? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): LocationComponentSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val pulsingEnabled = pigeonVar_list[1] as Boolean?
+      val pulsingColor = pigeonVar_list[2] as Long?
+      val pulsingMaxRadius = pigeonVar_list[3] as Double?
+      val showAccuracyRing = pigeonVar_list[4] as Boolean?
+      val accuracyRingColor = pigeonVar_list[5] as Long?
+      val accuracyRingBorderColor = pigeonVar_list[6] as Long?
+      val layerAbove = pigeonVar_list[7] as String?
+      val layerBelow = pigeonVar_list[8] as String?
+      val puckBearingEnabled = pigeonVar_list[9] as Boolean?
+      val puckBearing = pigeonVar_list[10] as PuckBearing?
+      val slot = pigeonVar_list[11] as String?
+      val locationPuck = pigeonVar_list[12] as LocationPuck?
+      return LocationComponentSettings(enabled, pulsingEnabled, pulsingColor, pulsingMaxRadius, showAccuracyRing, accuracyRingColor, accuracyRingBorderColor, layerAbove, layerBelow, puckBearingEnabled, puckBearing, slot, locationPuck)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      pulsingEnabled,
+      pulsingColor,
+      pulsingMaxRadius,
+      showAccuracyRing,
+      accuracyRingColor,
+      accuracyRingBorderColor,
+      layerAbove,
+      layerBelow,
+      puckBearingEnabled,
+      puckBearing,
+      slot,
+      locationPuck,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is LocationComponentSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      pulsingEnabled == other.pulsingEnabled &&
+      pulsingColor == other.pulsingColor &&
+      pulsingMaxRadius == other.pulsingMaxRadius &&
+      showAccuracyRing == other.showAccuracyRing &&
+      accuracyRingColor == other.accuracyRingColor &&
+      accuracyRingBorderColor == other.accuracyRingBorderColor &&
+      layerAbove == other.layerAbove &&
+      layerBelow == other.layerBelow &&
+      puckBearingEnabled == other.puckBearingEnabled &&
+      puckBearing == other.puckBearing &&
+      slot == other.slot &&
+      locationPuck == other.locationPuck
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Shows the scale bar on the map.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class ScaleBarSettings(
+  /** Whether the scale is visible on the map. */
+  val enabled: Boolean? = null,
+  /** Defines where the scale bar is positioned on the map. */
+  val position: OrnamentPosition? = null,
+  val marginLeft: Double? = null,
+  val marginTop: Double? = null,
+  val marginRight: Double? = null,
+  val marginBottom: Double? = null,
+  val textColor: Long? = null,
+  val primaryColor: Long? = null,
+  val secondaryColor: Long? = null,
+  val borderWidth: Double? = null,
+  val height: Double? = null,
+  val textBarMargin: Double? = null,
+  val textBorderWidth: Double? = null,
+  val textSize: Double? = null,
+  val isMetricUnits: Boolean? = null,
+  val distanceUnits: DistanceUnits? = null,
+  val refreshInterval: Long? = null,
+  val showTextBorder: Boolean? = null,
+  val ratio: Double? = null,
+  val useContinuousRendering: Boolean? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ScaleBarSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val position = pigeonVar_list[1] as OrnamentPosition?
+      val marginLeft = pigeonVar_list[2] as Double?
+      val marginTop = pigeonVar_list[3] as Double?
+      val marginRight = pigeonVar_list[4] as Double?
+      val marginBottom = pigeonVar_list[5] as Double?
+      val textColor = pigeonVar_list[6] as Long?
+      val primaryColor = pigeonVar_list[7] as Long?
+      val secondaryColor = pigeonVar_list[8] as Long?
+      val borderWidth = pigeonVar_list[9] as Double?
+      val height = pigeonVar_list[10] as Double?
+      val textBarMargin = pigeonVar_list[11] as Double?
+      val textBorderWidth = pigeonVar_list[12] as Double?
+      val textSize = pigeonVar_list[13] as Double?
+      val isMetricUnits = pigeonVar_list[14] as Boolean?
+      val distanceUnits = pigeonVar_list[15] as DistanceUnits?
+      val refreshInterval = pigeonVar_list[16] as Long?
+      val showTextBorder = pigeonVar_list[17] as Boolean?
+      val ratio = pigeonVar_list[18] as Double?
+      val useContinuousRendering = pigeonVar_list[19] as Boolean?
+      return ScaleBarSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom, textColor, primaryColor, secondaryColor, borderWidth, height, textBarMargin, textBorderWidth, textSize, isMetricUnits, distanceUnits, refreshInterval, showTextBorder, ratio, useContinuousRendering)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      textColor,
+      primaryColor,
+      secondaryColor,
+      borderWidth,
+      height,
+      textBarMargin,
+      textBorderWidth,
+      textSize,
+      isMetricUnits,
+      distanceUnits,
+      refreshInterval,
+      showTextBorder,
+      ratio,
+      useContinuousRendering,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ScaleBarSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      position == other.position &&
+      marginLeft == other.marginLeft &&
+      marginTop == other.marginTop &&
+      marginRight == other.marginRight &&
+      marginBottom == other.marginBottom &&
+      textColor == other.textColor &&
+      primaryColor == other.primaryColor &&
+      secondaryColor == other.secondaryColor &&
+      borderWidth == other.borderWidth &&
+      height == other.height &&
+      textBarMargin == other.textBarMargin &&
+      textBorderWidth == other.textBorderWidth &&
+      textSize == other.textSize &&
+      isMetricUnits == other.isMetricUnits &&
+      distanceUnits == other.distanceUnits &&
+      refreshInterval == other.refreshInterval &&
+      showTextBorder == other.showTextBorder &&
+      ratio == other.ratio &&
+      useContinuousRendering == other.useContinuousRendering
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Shows the compass on the map.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class CompassSettings(
+  val enabled: Boolean? = null,
+  val position: OrnamentPosition? = null,
+  val marginLeft: Double? = null,
+  val marginTop: Double? = null,
+  val marginRight: Double? = null,
+  val marginBottom: Double? = null,
+  val opacity: Double? = null,
+  val rotation: Double? = null,
+  val visibility: Boolean? = null,
+  val fadeWhenFacingNorth: Boolean? = null,
+  val clickable: Boolean? = null,
+  /** The compass image, the visual representation of the compass. */
+  val image: ByteArray? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CompassSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val position = pigeonVar_list[1] as OrnamentPosition?
+      val marginLeft = pigeonVar_list[2] as Double?
+      val marginTop = pigeonVar_list[3] as Double?
+      val marginRight = pigeonVar_list[4] as Double?
+      val marginBottom = pigeonVar_list[5] as Double?
+      val opacity = pigeonVar_list[6] as Double?
+      val rotation = pigeonVar_list[7] as Double?
+      val visibility = pigeonVar_list[8] as Boolean?
+      val fadeWhenFacingNorth = pigeonVar_list[9] as Boolean?
+      val clickable = pigeonVar_list[10] as Boolean?
+      val image = pigeonVar_list[11] as ByteArray?
+      return CompassSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom, opacity, rotation, visibility, fadeWhenFacingNorth, clickable, image)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      opacity,
+      rotation,
+      visibility,
+      fadeWhenFacingNorth,
+      clickable,
+      image,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CompassSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      position == other.position &&
+      marginLeft == other.marginLeft &&
+      marginTop == other.marginTop &&
+      marginRight == other.marginRight &&
+      marginBottom == other.marginBottom &&
+      opacity == other.opacity &&
+      rotation == other.rotation &&
+      visibility == other.visibility &&
+      fadeWhenFacingNorth == other.fadeWhenFacingNorth &&
+      clickable == other.clickable &&
+      image == other.image
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Shows the attribution icon on the map.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class AttributionSettings(
+  /** Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property. */
+  val enabled: Boolean? = null,
+  val iconColor: Long? = null,
+  val position: OrnamentPosition? = null,
+  val marginLeft: Double? = null,
+  val marginTop: Double? = null,
+  val marginRight: Double? = null,
+  val marginBottom: Double? = null,
+  val clickable: Boolean? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): AttributionSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val iconColor = pigeonVar_list[1] as Long?
+      val position = pigeonVar_list[2] as OrnamentPosition?
+      val marginLeft = pigeonVar_list[3] as Double?
+      val marginTop = pigeonVar_list[4] as Double?
+      val marginRight = pigeonVar_list[5] as Double?
+      val marginBottom = pigeonVar_list[6] as Double?
+      val clickable = pigeonVar_list[7] as Boolean?
+      return AttributionSettings(enabled, iconColor, position, marginLeft, marginTop, marginRight, marginBottom, clickable)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      iconColor,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      clickable,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is AttributionSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      iconColor == other.iconColor &&
+      position == other.position &&
+      marginLeft == other.marginLeft &&
+      marginTop == other.marginTop &&
+      marginRight == other.marginRight &&
+      marginBottom == other.marginBottom &&
+      clickable == other.clickable
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Shows the Mapbox logo on the map.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LogoSettings(
+  /** Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property. */
+  val enabled: Boolean? = null,
+  val position: OrnamentPosition? = null,
+  val marginLeft: Double? = null,
+  val marginTop: Double? = null,
+  val marginRight: Double? = null,
+  val marginBottom: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): LogoSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val position = pigeonVar_list[1] as OrnamentPosition?
+      val marginLeft = pigeonVar_list[2] as Double?
+      val marginTop = pigeonVar_list[3] as Double?
+      val marginRight = pigeonVar_list[4] as Double?
+      val marginBottom = pigeonVar_list[5] as Double?
+      return LogoSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is LogoSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      position == other.position &&
+      marginLeft == other.marginLeft &&
+      marginTop == other.marginTop &&
+      marginRight == other.marginRight &&
+      marginBottom == other.marginBottom
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Settings for the indoor floor selector.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IndoorSelectorSettings(
+  val enabled: Boolean? = null,
+  val position: OrnamentPosition? = null,
+  val marginLeft: Double? = null,
+  val marginTop: Double? = null,
+  val marginRight: Double? = null,
+  val marginBottom: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IndoorSelectorSettings {
+      val enabled = pigeonVar_list[0] as Boolean?
+      val position = pigeonVar_list[1] as OrnamentPosition?
+      val marginLeft = pigeonVar_list[2] as Double?
+      val marginTop = pigeonVar_list[3] as Double?
+      val marginRight = pigeonVar_list[4] as Double?
+      val marginBottom = pigeonVar_list[5] as Double?
+      return IndoorSelectorSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is IndoorSelectorSettings) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return enabled == other.enabled &&
+      position == other.position &&
+      marginLeft == other.marginLeft &&
+      marginTop == other.marginTop &&
+      marginRight == other.marginRight &&
+      marginBottom == other.marginBottom
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A structure that defines additional information about map content gesture.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class MapContentGestureContext(
+  /** The location of gesture in Map view bounds. */
+  val touchPosition: ScreenCoordinate,
+  /** Geographical coordinate of the map gesture. */
+  val point: Point,
+  /** The state of the gesture. */
+  val gestureState: GestureState
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MapContentGestureContext {
+      val touchPosition = pigeonVar_list[0] as ScreenCoordinate
+      val point = pigeonVar_list[1] as Point
+      val gestureState = pigeonVar_list[2] as GestureState
+      return MapContentGestureContext(touchPosition, point, gestureState)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      touchPosition,
+      point,
+      gestureState,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MapContentGestureContext) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return touchPosition == other.touchPosition &&
+      point == other.point &&
+      gestureState == other.gestureState
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Represents a tile coordinate.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class CanonicalTileID(
+  /** The z value of the coordinate (zoom-level). */
+  val z: Long,
+  /** The x value of the coordinate. */
+  val x: Long,
+  /** The y value of the coordinate. */
+  val y: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CanonicalTileID {
+      val z = pigeonVar_list[0] as Long
+      val x = pigeonVar_list[1] as Long
+      val y = pigeonVar_list[2] as Long
+      return CanonicalTileID(z, x, y)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      z,
+      x,
+      y,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CanonicalTileID) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return z == other.z &&
+      x == other.x &&
+      y == other.y
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Set of options for taking map snapshot with `map snapshotter`.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class MapSnapshotOptions(
+  /** Dimensions of the snapshot in `logical pixels`. */
+  val size: Size,
+  /** Ratio between the number of device-independent and screen pixels. */
+  val pixelRatio: Double,
+  /**
+   * Glyphs rasterization options to use for client-side text rendering.
+   * By default, `GlyphsRasterizationOptions` will use `NoGlyphsRasterizedLocally` mode.
+   */
+  val glyphsRasterizationOptions: GlyphsRasterizationOptions? = null,
+  /** Flag that determines if the logo should be shown on the snapshot. */
+  val showsLogo: Boolean? = null,
+  /** Flag that determines if attribution should be shown on the snapshot. */
+  val showsAttribution: Boolean? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MapSnapshotOptions {
+      val size = pigeonVar_list[0] as Size
+      val pixelRatio = pigeonVar_list[1] as Double
+      val glyphsRasterizationOptions = pigeonVar_list[2] as GlyphsRasterizationOptions?
+      val showsLogo = pigeonVar_list[3] as Boolean?
+      val showsAttribution = pigeonVar_list[4] as Boolean?
+      return MapSnapshotOptions(size, pixelRatio, glyphsRasterizationOptions, showsLogo, showsAttribution)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      size,
+      pixelRatio,
+      glyphsRasterizationOptions,
+      showsLogo,
+      showsAttribution,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MapSnapshotOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return size == other.size &&
+      pixelRatio == other.pixelRatio &&
+      glyphsRasterizationOptions == other.glyphsRasterizationOptions &&
+      showsLogo == other.showsLogo &&
+      showsAttribution == other.showsAttribution
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the style package load option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StylePackLoadOptions(
+  /**
+   * Specifies glyphs rasterization mode.
+   *
+   * If provided, updates the style package's glyphs rasterization mode,
+   * which defines which glyphs will be loaded from the server.
+   *
+   * By default, ideographs are rasterized locally and other glyphs are loaded
+   * from network (i.e. `IdeographsRasterizedLocally` value is used).
+   */
+  val glyphsRasterizationMode: GlyphsRasterizationMode? = null,
+  /**
+   * A custom Mapbox value associated with this style package for storing metadata.
+   *
+   * If provided, the custom value will be stored alongside the style package.
+   * Previous values will be replaced with the new value.
+   */
+  val metadata: Map<String?, Any?>? = null,
+  /**
+   * Accepts expired data when loading style resources.
+   *
+   * Set to true to accept expired responses. Set to false to ensure that data
+   * for a style is up-to-date.
+   */
+  val acceptExpired: Boolean
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StylePackLoadOptions {
+      val glyphsRasterizationMode = pigeonVar_list[0] as GlyphsRasterizationMode?
+      val metadata = pigeonVar_list[1] as Map<String?, Any?>?
+      val acceptExpired = pigeonVar_list[2] as Boolean
+      return StylePackLoadOptions(glyphsRasterizationMode, metadata, acceptExpired)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      glyphsRasterizationMode,
+      metadata,
+      acceptExpired,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StylePackLoadOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return glyphsRasterizationMode == other.glyphsRasterizationMode &&
+      deepEqualsPlatformInterfaceDataTypes(metadata, other.metadata) &&
+      acceptExpired == other.acceptExpired
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * The `style pack` represents a stored style package.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StylePack(
+  /** The style associated with the style package. */
+  val styleURI: String,
+  /**
+   * The glyphs rasterization mode of the style package.
+   *
+   * It defines which glyphs will be loaded from the server.
+   */
+  val glyphsRasterizationMode: GlyphsRasterizationMode,
+  /** The number of resources that are known to be required for this style package. */
+  val requiredResourceCount: Long,
+  /**
+   * The number of resources that have been fully downloaded and are ready for
+   * offline access.
+   */
+  val completedResourceCount: Long,
+  /** The cumulative size, in bytes, of all resources that have been fully downloaded. */
+  val completedResourceSize: Long,
+  /**
+   * The earliest point in time when any of the style package resources gets expired.
+   *
+   * Uninitialized for incomplete style packages or for complete style packages with
+   * all immutable resources.
+   */
+  val expires: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StylePack {
+      val styleURI = pigeonVar_list[0] as String
+      val glyphsRasterizationMode = pigeonVar_list[1] as GlyphsRasterizationMode
+      val requiredResourceCount = pigeonVar_list[2] as Long
+      val completedResourceCount = pigeonVar_list[3] as Long
+      val completedResourceSize = pigeonVar_list[4] as Long
+      val expires = pigeonVar_list[5] as Long?
+      return StylePack(styleURI, glyphsRasterizationMode, requiredResourceCount, completedResourceCount, completedResourceSize, expires)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      styleURI,
+      glyphsRasterizationMode,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StylePack) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return styleURI == other.styleURI &&
+      glyphsRasterizationMode == other.glyphsRasterizationMode &&
+      requiredResourceCount == other.requiredResourceCount &&
+      completedResourceCount == other.completedResourceCount &&
+      completedResourceSize == other.completedResourceSize &&
+      expires == other.expires
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A `style pack load` progress includes information about the number of resources
+ * that have completed downloading and the total number of resources that are required.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StylePackLoadProgress(
+  /** The number of resources that are ready for offline access. */
+  val completedResourceCount: Long,
+  /** The cumulative size, in bytes, of all resources that are ready for offline access. */
+  val completedResourceSize: Long,
+  /** The number of resources that have failed to download due to an error. */
+  val erroredResourceCount: Long,
+  /** The number of resources that are known to be required for this style package. */
+  val requiredResourceCount: Long,
+  /** The number of resources that have been fully downloaded from the network. */
+  val loadedResourceCount: Long,
+  /**
+   * The cumulative size, in bytes, of all resources that have been fully downloaded
+   * from the network.
+   */
+  val loadedResourceSize: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StylePackLoadProgress {
+      val completedResourceCount = pigeonVar_list[0] as Long
+      val completedResourceSize = pigeonVar_list[1] as Long
+      val erroredResourceCount = pigeonVar_list[2] as Long
+      val requiredResourceCount = pigeonVar_list[3] as Long
+      val loadedResourceCount = pigeonVar_list[4] as Long
+      val loadedResourceSize = pigeonVar_list[5] as Long
+      return StylePackLoadProgress(completedResourceCount, completedResourceSize, erroredResourceCount, requiredResourceCount, loadedResourceCount, loadedResourceSize)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StylePackLoadProgress) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return completedResourceCount == other.completedResourceCount &&
+      completedResourceSize == other.completedResourceSize &&
+      erroredResourceCount == other.erroredResourceCount &&
+      requiredResourceCount == other.requiredResourceCount &&
+      loadedResourceCount == other.loadedResourceCount &&
+      loadedResourceSize == other.loadedResourceSize
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the tileset descriptor option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TilesetDescriptorOptions(
+  /** The style associated with the tileset descriptor. */
+  val styleURI: String,
+  /** Minimum zoom level for the tile package. */
+  val minZoom: Long,
+  /** Maximum zoom level for the tile package. */
+  val maxZoom: Long,
+  /** Pixel ratio to be accounted for when downloading raster tiles. */
+  val pixelRatio: Double? = null,
+  /** The tilesets associated with the tileset descriptor. */
+  val tilesets: List<String?>? = null,
+  /** Style package load options, associated with the tileset descriptor. */
+  val stylePackOptions: StylePackLoadOptions? = null,
+  /** Extra tileset descriptor options. */
+  val extraOptions: Map<String?, Any?>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TilesetDescriptorOptions {
+      val styleURI = pigeonVar_list[0] as String
+      val minZoom = pigeonVar_list[1] as Long
+      val maxZoom = pigeonVar_list[2] as Long
+      val pixelRatio = pigeonVar_list[3] as Double?
+      val tilesets = pigeonVar_list[4] as List<String?>?
+      val stylePackOptions = pigeonVar_list[5] as StylePackLoadOptions?
+      val extraOptions = pigeonVar_list[6] as Map<String?, Any?>?
+      return TilesetDescriptorOptions(styleURI, minZoom, maxZoom, pixelRatio, tilesets, stylePackOptions, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      styleURI,
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      tilesets,
+      stylePackOptions,
+      extraOptions,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TilesetDescriptorOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return styleURI == other.styleURI &&
+      minZoom == other.minZoom &&
+      maxZoom == other.maxZoom &&
+      pixelRatio == other.pixelRatio &&
+      deepEqualsPlatformInterfaceDataTypes(tilesets, other.tilesets) &&
+      stylePackOptions == other.stylePackOptions &&
+      deepEqualsPlatformInterfaceDataTypes(extraOptions, other.extraOptions)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Describes the tile region load option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionLoadOptions(
+  /** The tile region's associated geometry. */
+  val geometry: Map<String?, Any?>? = null,
+  /** The tile region's tileset descriptors. */
+  val descriptorsOptions: List<TilesetDescriptorOptions?>? = null,
+  /** A custom Mapbox Value associated with this tile region for storing metadata. */
+  val metadata: Map<String?, Any?>? = null,
+  /** Accepts expired data when loading tiles. */
+  val acceptExpired: Boolean,
+  /** Controls which networks may be used to load the tile. */
+  val networkRestriction: NetworkRestriction,
+  /** Starts loading the tile region at the given location. */
+  val startLocation: Point? = null,
+  /** Limits the download speed of the tile region. */
+  val averageBytesPerSecond: Long? = null,
+  /** Extra tile region load options. */
+  val extraOptions: Map<String?, Any?>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileRegionLoadOptions {
+      val geometry = pigeonVar_list[0] as Map<String?, Any?>?
+      val descriptorsOptions = pigeonVar_list[1] as List<TilesetDescriptorOptions?>?
+      val metadata = pigeonVar_list[2] as Map<String?, Any?>?
+      val acceptExpired = pigeonVar_list[3] as Boolean
+      val networkRestriction = pigeonVar_list[4] as NetworkRestriction
+      val startLocation = pigeonVar_list[5] as Point?
+      val averageBytesPerSecond = pigeonVar_list[6] as Long?
+      val extraOptions = pigeonVar_list[7] as Map<String?, Any?>?
+      return TileRegionLoadOptions(geometry, descriptorsOptions, metadata, acceptExpired, networkRestriction, startLocation, averageBytesPerSecond, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      geometry,
+      descriptorsOptions,
+      metadata,
+      acceptExpired,
+      networkRestriction,
+      startLocation,
+      averageBytesPerSecond,
+      extraOptions,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileRegionLoadOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(geometry, other.geometry) &&
+      deepEqualsPlatformInterfaceDataTypes(descriptorsOptions, other.descriptorsOptions) &&
+      deepEqualsPlatformInterfaceDataTypes(metadata, other.metadata) &&
+      acceptExpired == other.acceptExpired &&
+      networkRestriction == other.networkRestriction &&
+      startLocation == other.startLocation &&
+      averageBytesPerSecond == other.averageBytesPerSecond &&
+      deepEqualsPlatformInterfaceDataTypes(extraOptions, other.extraOptions)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * TileRegion represents an identifiable geographic tile region with metadata.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegion(
+  /** The id of the tile region. */
+  val id: String,
+  /** The number of resources that are known to be required for this tile region. */
+  val requiredResourceCount: Long,
+  /**
+   * The number of resources that have been fully downloaded and are ready for
+   * offline access.
+   */
+  val completedResourceCount: Long,
+  /** The cumulative size, in bytes, of all resources that have been fully downloaded. */
+  val completedResourceSize: Long,
+  /** The earliest point in time when any of the region resources gets expired. */
+  val expires: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileRegion {
+      val id = pigeonVar_list[0] as String
+      val requiredResourceCount = pigeonVar_list[1] as Long
+      val completedResourceCount = pigeonVar_list[2] as Long
+      val completedResourceSize = pigeonVar_list[3] as Long
+      val expires = pigeonVar_list[4] as Long?
+      return TileRegion(id, requiredResourceCount, completedResourceCount, completedResourceSize, expires)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileRegion) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return id == other.id &&
+      requiredResourceCount == other.requiredResourceCount &&
+      completedResourceCount == other.completedResourceCount &&
+      completedResourceSize == other.completedResourceSize &&
+      expires == other.expires
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * The result of tile region estimation.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionEstimateResult(
+  /** Error margin of the estimate at 99.9% confidence, value between 0 and 1. */
+  val errorMargin: Double,
+  /** Estimated number of bytes to transfer from the network. */
+  val transferSize: Long,
+  /** Estimated number of bytes required to store the tile region on disk. */
+  val storageSize: Long,
+  /** Reserved for future use. */
+  val extraOptions: Map<String?, Any?>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileRegionEstimateResult {
+      val errorMargin = pigeonVar_list[0] as Double
+      val transferSize = pigeonVar_list[1] as Long
+      val storageSize = pigeonVar_list[2] as Long
+      val extraOptions = pigeonVar_list[3] as Map<String?, Any?>?
+      return TileRegionEstimateResult(errorMargin, transferSize, storageSize, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      errorMargin,
+      transferSize,
+      storageSize,
+      extraOptions,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileRegionEstimateResult) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return errorMargin == other.errorMargin &&
+      transferSize == other.transferSize &&
+      storageSize == other.storageSize &&
+      deepEqualsPlatformInterfaceDataTypes(extraOptions, other.extraOptions)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Holds options for the tile region estimation operation.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionEstimateOptions(
+  /** Accepted error margin. */
+  val errorMargin: Double,
+  /** Precise estimation timeout in seconds. A value of 0 means no timeout. */
+  val preciseEstimationTimeout: Double,
+  /** Overall operation timeout in seconds. A value of 0 means no timeout. */
+  val timeout: Double,
+  /** Reserved for future use. */
+  val extraOptions: Map<String?, Any?>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileRegionEstimateOptions {
+      val errorMargin = pigeonVar_list[0] as Double
+      val preciseEstimationTimeout = pigeonVar_list[1] as Double
+      val timeout = pigeonVar_list[2] as Double
+      val extraOptions = pigeonVar_list[3] as Map<String?, Any?>?
+      return TileRegionEstimateOptions(errorMargin, preciseEstimationTimeout, timeout, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      errorMargin,
+      preciseEstimationTimeout,
+      timeout,
+      extraOptions,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileRegionEstimateOptions) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return errorMargin == other.errorMargin &&
+      preciseEstimationTimeout == other.preciseEstimationTimeout &&
+      timeout == other.timeout &&
+      deepEqualsPlatformInterfaceDataTypes(extraOptions, other.extraOptions)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A tile region's load progress includes counts of the number of resources that
+ * have completed downloading and the total number of resources that are required.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionLoadProgress(
+  /** The number of resources that are ready for offline access. */
+  val completedResourceCount: Long,
+  /** The cumulative size, in bytes, of all resources that are ready for offline access. */
+  val completedResourceSize: Long,
+  /** The number of resources that have failed to download due to an error. */
+  val erroredResourceCount: Long,
+  /** The number of resources that are known to be required for this tile region. */
+  val requiredResourceCount: Long,
+  /** The number of resources ready for offline use that have been downloaded from the network. */
+  val loadedResourceCount: Long,
+  /** The cumulative size, in bytes, of all resources that have been downloaded from the network. */
+  val loadedResourceSize: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileRegionLoadProgress {
+      val completedResourceCount = pigeonVar_list[0] as Long
+      val completedResourceSize = pigeonVar_list[1] as Long
+      val erroredResourceCount = pigeonVar_list[2] as Long
+      val requiredResourceCount = pigeonVar_list[3] as Long
+      val loadedResourceCount = pigeonVar_list[4] as Long
+      val loadedResourceSize = pigeonVar_list[5] as Long
+      return TileRegionLoadProgress(completedResourceCount, completedResourceSize, erroredResourceCount, requiredResourceCount, loadedResourceCount, loadedResourceSize)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileRegionLoadProgress) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return completedResourceCount == other.completedResourceCount &&
+      completedResourceSize == other.completedResourceSize &&
+      erroredResourceCount == other.erroredResourceCount &&
+      requiredResourceCount == other.requiredResourceCount &&
+      loadedResourceCount == other.loadedResourceCount &&
+      loadedResourceSize == other.loadedResourceSize
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * A tile region's estimate progress includes counts of the number of resources that
+ * have been estimated and the total number of resources, as well as a partial result.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionEstimateProgress(
+  /** The number of resources that are known to be required for this tile region. */
+  val requiredResourceCount: Long,
+  /** The number of resources that are ready for offline access. */
+  val completedResourceCount: Long,
+  /** The number of resources that have failed to download due to an error. */
+  val erroredResourceCount: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileRegionEstimateProgress {
+      val requiredResourceCount = pigeonVar_list[0] as Long
+      val completedResourceCount = pigeonVar_list[1] as Long
+      val erroredResourceCount = pigeonVar_list[2] as Long
+      return TileRegionEstimateProgress(requiredResourceCount, completedResourceCount, erroredResourceCount)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      requiredResourceCount,
+      completedResourceCount,
+      erroredResourceCount,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileRegionEstimateProgress) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return requiredResourceCount == other.requiredResourceCount &&
+      completedResourceCount == other.completedResourceCount &&
+      erroredResourceCount == other.erroredResourceCount
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Map memory budget in megabytes.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileCacheBudgetInMegabytes(
+  val size: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileCacheBudgetInMegabytes {
+      val size = pigeonVar_list[0] as Long
+      return TileCacheBudgetInMegabytes(size)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      size,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileCacheBudgetInMegabytes) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return size == other.size
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Map memory budget in tiles.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileCacheBudgetInTiles(
+  val size: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TileCacheBudgetInTiles {
+      val size = pigeonVar_list[0] as Long
+      return TileCacheBudgetInTiles(size)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      size,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is TileCacheBudgetInTiles) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return size == other.size
   }
 
   override fun hashCode(): Int = toList().hashCode()

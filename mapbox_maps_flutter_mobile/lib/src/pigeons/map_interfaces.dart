@@ -44,18 +44,6 @@ bool _deepEquals(Object? a, Object? b) {
   return a == b;
 }
 
-/// Describes glyphs rasterization modes.
-enum GlyphsRasterizationMode {
-  /// No glyphs are rasterized locally. All glyphs are loaded from the server.
-  NO_GLYPHS_RASTERIZED_LOCALLY,
-
-  /// Ideographs are rasterized locally, and they are not loaded from the server.
-  IDEOGRAPHS_RASTERIZED_LOCALLY,
-
-  /// All glyphs are rasterized locally. No glyphs are loaded from the server.
-  ALL_GLYPHS_RASTERIZED_LOCALLY,
-}
-
 /// Describes the map context mode.
 /// We can make some optimizations if we know that the drawing context is not shared with other code.
 enum ContextMode {
@@ -67,42 +55,6 @@ enum ContextMode {
   /// Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL
   /// state set from a previous render pass.
   SHARED,
-}
-
-/// Describes whether to constrain the map in both axes or only vertically e.g. while panning.
-enum ConstrainMode {
-  /// No constrains.
-  NONE,
-
-  /// Constrain to height only
-  HEIGHT_ONLY,
-
-  /// Constrain both width and height axes.
-  WIDTH_AND_HEIGHT,
-}
-
-/// Satisfies embedding platforms that requires the viewport coordinate systems to be set according to its standards.
-enum ViewportMode {
-  /// Default viewport
-  DEFAULT,
-
-  /// Viewport flipped on the y-axis.
-  FLIPPED_Y,
-}
-
-/// Describes the map orientation.
-enum NorthOrientation {
-  /// Default, map oriented upwards
-  UPWARDS,
-
-  /// Map oriented rightwards
-  RIGHTWARDS,
-
-  /// Map oriented downwards
-  DOWNWARDS,
-
-  /// Map oriented leftwards
-  LEFTWARDS,
 }
 
 enum _MapWidgetDebugOptions {
@@ -244,30 +196,6 @@ enum StylePackErrorType {
   OTHER,
 }
 
-/// Describes the reason for an offline request response error.
-enum ResponseErrorReason {
-  /// No error occurred during the resource request.
-  SUCCESS,
-
-  /// The resource is not found.
-  NOT_FOUND,
-
-  /// The server error.
-  SERVER,
-
-  /// The connection error.
-  CONNECTION,
-
-  /// The error happened because of a rate limit.
-  RATE_LIMIT,
-
-  /// The resource cannot be loaded because the device is in offline mode.
-  IN_OFFLINE_MODE,
-
-  /// Other reason.
-  OTHER,
-}
-
 /// Describes the download state of a region.
 enum OfflineRegionDownloadState {
   /// Indicates downloading is inactive.
@@ -275,37 +203,6 @@ enum OfflineRegionDownloadState {
 
   /// Indicates downloading is active.
   ACTIVE,
-}
-
-/// Describes tile store usage modes.
-enum TileStoreUsageMode {
-  /// Tile store usage is disabled.
-  ///
-  /// The implementation skips checking tile store when requesting a tile.
-  DISABLED,
-
-  /// Tile store enabled for accessing loaded tile packs.
-  ///
-  /// The implementation first checks tile store when requesting a tile.
-  /// If a tile pack is already loaded, the tile will be extracted and returned. Otherwise, the implementation
-  /// falls back to requesting the individual tile and storing it in the disk cache.
-  READ_ONLY,
-
-  /// Tile store enabled for accessing local tile packs and for loading new tile packs from server.
-  ///
-  /// All tile requests are converted to tile pack requests, i.e.
-  /// the tile pack that includes the request tile will be loaded, and the tile extracted
-  /// from it. In this mode, no individual tile requests will be made.
-  ///
-  /// This mode can be useful if the map trajectory is predefined and the user cannot pan
-  /// freely (e.g. navigation use cases), so that there is a good chance tile packs are already loaded
-  /// in the vicinity of the user.
-  ///
-  /// If users can pan freely, this mode is not recommended. Otherwise, panning
-  /// will download tile packs instead of using individual tiles. Note that this means that we could first
-  /// download an individual tile, and then a tile pack that also includes this tile. The individual tile in
-  /// the disk cache won’t be used as long as the up-to-date tile pack exists in the cache.
-  READ_AND_UPDATE,
 }
 
 /// Describes the kind of a style property value.
@@ -322,8 +219,6 @@ enum StylePropertyValueKind {
   /// Property value is a style [transition](https://docs.mapbox.com/mapbox-gl-js/style-spec/#transition).
   TRANSITION,
 }
-
-enum StyleProjectionName { mercator, globe }
 
 /// Whether extruded geometries are lit relative to the map or viewport.
 enum Anchor {
@@ -429,354 +324,6 @@ enum _MapEvent {
   resourceRequest,
 }
 
-/// Describes the glyphs rasterization option values.
-class GlyphsRasterizationOptions {
-  GlyphsRasterizationOptions({
-    required this.rasterizationMode,
-    this.fontFamily,
-  });
-
-  /// Glyphs rasterization mode for client-side text rendering.
-  GlyphsRasterizationMode rasterizationMode;
-
-  /// Font family to use as font fallback for client-side text renderings.
-  ///
-  /// Note: `GlyphsRasterizationMode` has precedence over font family. If `AllGlyphsRasterizedLocally`
-  /// or `IdeographsRasterizedLocally` is set, local glyphs will be generated based on the provided font family. If no
-  /// font family is provided, the map will fall back to use the system default font. The mechanisms of choosing the
-  /// default font are varied in platforms:
-  /// - For darwin(iOS/macOS) platform, the default font family is created from the <a href="https://developer.apple.com/documentation/uikit/uifont/1619027-systemfontofsize?language=objc">systemFont</a>.
-  ///   If provided fonts are not supported on darwin platform, the map will fall back to use the first available font from the global fallback list.
-  /// - For Android platform: the default font <a href="https://developer.android.com/reference/android/graphics/Typeface#DEFAULT">Typeface.DEFAULT</a> will be used.
-  ///
-  /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
-  ///
-  String? fontFamily;
-
-  List<Object?> _toList() {
-    return <Object?>[rasterizationMode, fontFamily];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static GlyphsRasterizationOptions decode(Object result) {
-    result as List<Object?>;
-    return GlyphsRasterizationOptions(
-      rasterizationMode: result[0]! as GlyphsRasterizationMode,
-      fontFamily: result[1] as String?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! GlyphsRasterizationOptions ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return rasterizationMode == other.rasterizationMode &&
-        fontFamily == other.fontFamily;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Various options needed for tile cover.
-class TileCoverOptions {
-  TileCoverOptions({this.tileSize, this.minZoom, this.maxZoom, this.roundZoom});
-
-  /// Tile size of the source. Defaults to 512.
-  int? tileSize;
-
-  /// Min zoom defined in the source between range [0, 22].
-  /// if not provided or is out of range, defaults to 0.
-  int? minZoom;
-
-  /// Max zoom defined in the source between range [0, 22].
-  /// Should be greater than or equal to minZoom.
-  /// If not provided or is out of range, defaults to 22.
-  int? maxZoom;
-
-  /// Whether to round zoom values when calculating tilecover.
-  /// Set this to true for raster and raster-dem sources.
-  /// If not specified, defaults to false.
-  bool? roundZoom;
-
-  List<Object?> _toList() {
-    return <Object?>[tileSize, minZoom, maxZoom, roundZoom];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static TileCoverOptions decode(Object result) {
-    result as List<Object?>;
-    return TileCoverOptions(
-      tileSize: result[0] as int?,
-      minZoom: result[1] as int?,
-      maxZoom: result[2] as int?,
-      roundZoom: result[3] as bool?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! TileCoverOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return tileSize == other.tileSize &&
-        minZoom == other.minZoom &&
-        maxZoom == other.maxZoom &&
-        roundZoom == other.roundZoom;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Holds options to be used for setting `camera bounds`.
-class CameraBoundsOptions {
-  CameraBoundsOptions({
-    this.bounds,
-    this.maxZoom,
-    this.minZoom,
-    this.maxPitch,
-    this.minPitch,
-  });
-
-  /// The latitude and longitude bounds to which the camera center are constrained.
-  CoordinateBounds? bounds;
-
-  /// The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area.
-  double? maxZoom;
-
-  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
-  double? minZoom;
-
-  /// The maximum allowed pitch value in degrees.
-  double? maxPitch;
-
-  /// The minimum allowed pitch value in degrees.
-  double? minPitch;
-
-  List<Object?> _toList() {
-    return <Object?>[bounds, maxZoom, minZoom, maxPitch, minPitch];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CameraBoundsOptions decode(Object result) {
-    result as List<Object?>;
-    return CameraBoundsOptions(
-      bounds: result[0] as CoordinateBounds?,
-      maxZoom: result[1] as double?,
-      minZoom: result[2] as double?,
-      maxPitch: result[3] as double?,
-      minPitch: result[4] as double?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CameraBoundsOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return bounds == other.bounds &&
-        maxZoom == other.maxZoom &&
-        minZoom == other.minZoom &&
-        maxPitch == other.maxPitch &&
-        minPitch == other.minPitch;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Holds information about `camera bounds`.
-class CameraBounds {
-  CameraBounds({
-    required this.bounds,
-    required this.maxZoom,
-    required this.minZoom,
-    required this.maxPitch,
-    required this.minPitch,
-  });
-
-  /// The latitude and longitude bounds to which the camera center are constrained.
-  CoordinateBounds bounds;
-
-  /// The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area.
-  double maxZoom;
-
-  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
-  double minZoom;
-
-  /// The maximum allowed pitch value in degrees.
-  double maxPitch;
-
-  /// The minimum allowed pitch value in degrees.
-  double minPitch;
-
-  List<Object?> _toList() {
-    return <Object?>[bounds, maxZoom, minZoom, maxPitch, minPitch];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CameraBounds decode(Object result) {
-    result as List<Object?>;
-    return CameraBounds(
-      bounds: result[0]! as CoordinateBounds,
-      maxZoom: result[1]! as double,
-      minZoom: result[2]! as double,
-      maxPitch: result[3]! as double,
-      minPitch: result[4]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CameraBounds || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return bounds == other.bounds &&
-        maxZoom == other.maxZoom &&
-        minZoom == other.minZoom &&
-        maxPitch == other.maxPitch &&
-        minPitch == other.minPitch;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class MapAnimationOptions {
-  MapAnimationOptions({this.duration, this.startDelay});
-
-  /// The duration of the animation in milliseconds.
-  /// If not set explicitly default duration will be taken 300ms
-  int? duration;
-
-  /// The amount of time, in milliseconds, to delay starting the animation after animation start.
-  /// If not set explicitly default startDelay will be taken 0ms. This only works for Android.
-  int? startDelay;
-
-  List<Object?> _toList() {
-    return <Object?>[duration, startDelay];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MapAnimationOptions decode(Object result) {
-    result as List<Object?>;
-    return MapAnimationOptions(
-      duration: result[0] as int?,
-      startDelay: result[1] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MapAnimationOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return duration == other.duration && startDelay == other.startDelay;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A rectangular area as measured on a two-dimensional map projection.
-class CoordinateBounds {
-  CoordinateBounds({
-    required this.southwest,
-    required this.northeast,
-    required this.infiniteBounds,
-  });
-
-  /// Coordinate at the southwest corner.
-  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  Point southwest;
-
-  /// Coordinate at the northeast corner.
-  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  Point northeast;
-
-  /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
-  /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
-  bool infiniteBounds;
-
-  List<Object?> _toList() {
-    return <Object?>[southwest, northeast, infiniteBounds];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CoordinateBounds decode(Object result) {
-    result as List<Object?>;
-    return CoordinateBounds(
-      southwest: result[0]! as Point,
-      northeast: result[1]! as Point,
-      infiniteBounds: result[2]! as bool,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CoordinateBounds || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return southwest == other.southwest &&
-        northeast == other.northeast &&
-        infiniteBounds == other.infiniteBounds;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// Options for enabling debugging features in a map.
 @Deprecated("Use 'MapWidgetDebugOptions' instead")
 class MapDebugOptions {
@@ -807,79 +354,6 @@ class MapDebugOptions {
       return true;
     }
     return data == other.data;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Map memory budget in megabytes.
-class TileCacheBudgetInMegabytes {
-  TileCacheBudgetInMegabytes({required this.size});
-
-  int size;
-
-  List<Object?> _toList() {
-    return <Object?>[size];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static TileCacheBudgetInMegabytes decode(Object result) {
-    result as List<Object?>;
-    return TileCacheBudgetInMegabytes(size: result[0]! as int);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! TileCacheBudgetInMegabytes ||
-        other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return size == other.size;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Map memory budget in tiles.
-class TileCacheBudgetInTiles {
-  TileCacheBudgetInTiles({required this.size});
-
-  int size;
-
-  List<Object?> _toList() {
-    return <Object?>[size];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static TileCacheBudgetInTiles decode(Object result) {
-    result as List<Object?>;
-    return TileCacheBudgetInTiles(size: result[0]! as int);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! TileCacheBudgetInTiles || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return size == other.size;
   }
 
   @override
@@ -981,133 +455,6 @@ class MapOptions {
         size == other.size &&
         pixelRatio == other.pixelRatio &&
         glyphsRasterizationOptions == other.glyphsRasterizationOptions;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Describes the coordinate box on the screen, measured in `logical pixels`
-/// from top to bottom and from left to right.
-class ScreenBox {
-  ScreenBox({required this.min, required this.max});
-
-  /// The screen coordinate close to the top left corner of the screen.
-  ScreenCoordinate min;
-
-  /// The screen coordinate close to the bottom right corner of the screen.
-  ScreenCoordinate max;
-
-  List<Object?> _toList() {
-    return <Object?>[min, max];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static ScreenBox decode(Object result) {
-    result as List<Object?>;
-    return ScreenBox(
-      min: result[0]! as ScreenCoordinate,
-      max: result[1]! as ScreenCoordinate,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! ScreenBox || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return min == other.min && max == other.max;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// A coordinate bounds and zoom.
-class CoordinateBoundsZoom {
-  CoordinateBoundsZoom({required this.bounds, required this.zoom});
-
-  /// The latitude and longitude bounds.
-  CoordinateBounds bounds;
-
-  /// Zoom.
-  double zoom;
-
-  List<Object?> _toList() {
-    return <Object?>[bounds, zoom];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CoordinateBoundsZoom decode(Object result) {
-    result as List<Object?>;
-    return CoordinateBoundsZoom(
-      bounds: result[0]! as CoordinateBounds,
-      zoom: result[1]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CoordinateBoundsZoom || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return bounds == other.bounds && zoom == other.zoom;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Size type.
-class Size {
-  Size({required this.width, required this.height});
-
-  /// Width of the size.
-  double width;
-
-  /// Height of the size.
-  double height;
-
-  List<Object?> _toList() {
-    return <Object?>[width, height];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static Size decode(Object result) {
-    result as List<Object?>;
-    return Size(width: result[0]! as double, height: result[1]! as double);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! Size || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return width == other.width && height == other.height;
   }
 
   @override
@@ -1243,100 +590,6 @@ class FeatureExtensionValue {
     }
     return value == other.value &&
         _deepEquals(featureCollection, other.featureCollection);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Specifies position of a layer that is added via addStyleLayer method.
-class LayerPosition {
-  LayerPosition({this.above, this.below, this.at});
-
-  /// Layer should be positioned above specified layer id.
-  String? above;
-
-  /// Layer should be positioned below specified layer id.
-  String? below;
-
-  /// Layer should be positioned at specified index in a layers stack.
-  int? at;
-
-  List<Object?> _toList() {
-    return <Object?>[above, below, at];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static LayerPosition decode(Object result) {
-    result as List<Object?>;
-    return LayerPosition(
-      above: result[0] as String?,
-      below: result[1] as String?,
-      at: result[2] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! LayerPosition || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return above == other.above && below == other.below && at == other.at;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Specifies the position at which an import will be added when using `Style.addImport`
-class ImportPosition {
-  ImportPosition({this.above, this.below, this.at});
-
-  /// Import should be positioned above the specified import id.
-  String? above;
-
-  /// Import should be positioned below the specified import id.
-  String? below;
-
-  /// Import should be positioned at the specified index in the imports stack.
-  int? at;
-
-  List<Object?> _toList() {
-    return <Object?>[above, below, at];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static ImportPosition decode(Object result) {
-    result as List<Object?>;
-    return ImportPosition(
-      above: result[0] as String?,
-      below: result[1] as String?,
-      at: result[2] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! ImportPosition || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return above == other.above && below == other.below && at == other.at;
   }
 
   @override
@@ -2001,84 +1254,6 @@ class MercatorCoordinate {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// The information about style object (source or layer).
-class StyleObjectInfo {
-  StyleObjectInfo({required this.id, required this.type});
-
-  /// The object's identifier.
-  String id;
-
-  /// The object's type.
-  String type;
-
-  List<Object?> _toList() {
-    return <Object?>[id, type];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static StyleObjectInfo decode(Object result) {
-    result as List<Object?>;
-    return StyleObjectInfo(
-      id: result[0]! as String,
-      type: result[1]! as String,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! StyleObjectInfo || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return id == other.id && type == other.type;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-class StyleProjection {
-  StyleProjection({required this.name});
-
-  StyleProjectionName name;
-
-  List<Object?> _toList() {
-    return <Object?>[name];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static StyleProjection decode(Object result) {
-    result as List<Object?>;
-    return StyleProjection(name: result[0]! as StyleProjectionName);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! StyleProjection || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return name == other.name;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
 ///
 /// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
@@ -2518,110 +1693,6 @@ class ImageContent {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// The `transition options` controls timing for the interpolation between a transitionable style
-/// property's previous value and new value. These can be used to define the style default property
-/// transition behavior. Also, any transitionable style property may also have its own `-transition`
-/// property that defines specific transition timing for that specific layer property, overriding
-/// the global transition values.
-class TransitionOptions {
-  TransitionOptions({
-    this.duration,
-    this.delay,
-    this.enablePlacementTransitions,
-  });
-
-  /// Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`.
-  int? duration;
-
-  /// Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`.
-  int? delay;
-
-  /// Whether the fade in/out symbol placement transition is enabled. Defaults to `true`.
-  bool? enablePlacementTransitions;
-
-  List<Object?> _toList() {
-    return <Object?>[duration, delay, enablePlacementTransitions];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static TransitionOptions decode(Object result) {
-    result as List<Object?>;
-    return TransitionOptions(
-      duration: result[0] as int?,
-      delay: result[1] as int?,
-      enablePlacementTransitions: result[2] as bool?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! TransitionOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return duration == other.duration &&
-        delay == other.delay &&
-        enablePlacementTransitions == other.enablePlacementTransitions;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Represents a tile coordinate.
-class CanonicalTileID {
-  CanonicalTileID({required this.z, required this.x, required this.y});
-
-  /// The z value of the coordinate (zoom-level).
-  int z;
-
-  /// The x value of the coordinate.
-  int x;
-
-  /// The y value of the coordinate.
-  int y;
-
-  List<Object?> _toList() {
-    return <Object?>[z, x, y];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CanonicalTileID decode(Object result) {
-    result as List<Object?>;
-    return CanonicalTileID(
-      z: result[0]! as int,
-      x: result[1]! as int,
-      y: result[2]! as int,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CanonicalTileID || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return z == other.z && x == other.x && y == other.y;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// Holds a style property value with meta data.
 class StylePropertyValue {
   StylePropertyValue({this.value, required this.kind});
@@ -2672,64 +1743,64 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is GlyphsRasterizationMode) {
+    } else if (value is ConstrainMode) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is ContextMode) {
+    } else if (value is ViewportMode) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is ConstrainMode) {
+    } else if (value is NorthOrientation) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    } else if (value is ViewportMode) {
+    } else if (value is GlyphsRasterizationMode) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    } else if (value is NorthOrientation) {
+    } else if (value is StyleProjectionName) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    } else if (value is _MapWidgetDebugOptions) {
+    } else if (value is ContextMode) {
       buffer.putUint8(134);
       writeValue(buffer, value.index);
-    } else if (value is MapDebugOptionsData) {
+    } else if (value is _MapWidgetDebugOptions) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    } else if (value is ViewAnnotationAnchor) {
+    } else if (value is MapDebugOptionsData) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is _InteractionType) {
+    } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is GestureState) {
+    } else if (value is _InteractionType) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is Type) {
+    } else if (value is GestureState) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is FillExtrusionBaseAlignment) {
+    } else if (value is Type) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is FillExtrusionHeightAlignment) {
+    } else if (value is FillExtrusionBaseAlignment) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is BackgroundPitchAlignment) {
+    } else if (value is FillExtrusionHeightAlignment) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is StylePackErrorType) {
+    } else if (value is BackgroundPitchAlignment) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is ResponseErrorReason) {
+    } else if (value is StylePackErrorType) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is OfflineRegionDownloadState) {
+    } else if (value is ResponseErrorReason) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is TileStoreUsageMode) {
+    } else if (value is OfflineRegionDownloadState) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is StylePropertyValueKind) {
+    } else if (value is TileStoreUsageMode) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is StyleProjectionName) {
+    } else if (value is StylePropertyValueKind) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
     } else if (value is Anchor) {
@@ -2771,10 +1842,10 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is ScreenCoordinate) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is CoordinateBoundsZoom) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
     } else if (value is CameraBoundsOptions) {
@@ -2786,109 +1857,109 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is MapAnimationOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is Size) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
+    } else if (value is LayerPosition) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ImportPosition) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is ImportPosition) {
+    } else if (value is MapOptions) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is FeatureExtensionValue) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeatureId) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureState) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is _Interaction) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is _InteractionPigeon) {
+    } else if (value is FeaturesetFeatureId) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetDescriptor) {
+    } else if (value is FeatureState) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeature) {
+    } else if (value is _Interaction) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is _InteractionPigeon) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is FlatLight) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is MbxImage) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is ImageContent) {
       buffer.putUint8(201);
       writeValue(buffer, value.encode());
     } else if (value is CanonicalTileID) {
@@ -2907,66 +1978,66 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : GlyphsRasterizationMode.values[value];
+        return value == null ? null : ConstrainMode.values[value];
       case 130:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ContextMode.values[value];
+        return value == null ? null : ViewportMode.values[value];
       case 131:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ConstrainMode.values[value];
+        return value == null ? null : NorthOrientation.values[value];
       case 132:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ViewportMode.values[value];
+        return value == null ? null : GlyphsRasterizationMode.values[value];
       case 133:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NorthOrientation.values[value];
+        return value == null ? null : StyleProjectionName.values[value];
       case 134:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _MapWidgetDebugOptions.values[value];
+        return value == null ? null : ContextMode.values[value];
       case 135:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : MapDebugOptionsData.values[value];
+        return value == null ? null : _MapWidgetDebugOptions.values[value];
       case 136:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ViewAnnotationAnchor.values[value];
+        return value == null ? null : MapDebugOptionsData.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _InteractionType.values[value];
+        return value == null ? null : ViewAnnotationAnchor.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : GestureState.values[value];
+        return value == null ? null : _InteractionType.values[value];
       case 139:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Type.values[value];
+        return value == null ? null : GestureState.values[value];
       case 140:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : FillExtrusionBaseAlignment.values[value];
+        return value == null ? null : Type.values[value];
       case 141:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : FillExtrusionBaseAlignment.values[value];
+      case 142:
         final int? value = readValue(buffer) as int?;
         return value == null
             ? null
             : FillExtrusionHeightAlignment.values[value];
-      case 142:
-        final int? value = readValue(buffer) as int?;
-        return value == null ? null : BackgroundPitchAlignment.values[value];
       case 143:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePackErrorType.values[value];
+        return value == null ? null : BackgroundPitchAlignment.values[value];
       case 144:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ResponseErrorReason.values[value];
+        return value == null ? null : StylePackErrorType.values[value];
       case 145:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : OfflineRegionDownloadState.values[value];
+        return value == null ? null : ResponseErrorReason.values[value];
       case 146:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileStoreUsageMode.values[value];
+        return value == null ? null : OfflineRegionDownloadState.values[value];
       case 147:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePropertyValueKind.values[value];
+        return value == null ? null : TileStoreUsageMode.values[value];
       case 148:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StyleProjectionName.values[value];
+        return value == null ? null : StylePropertyValueKind.values[value];
       case 149:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : Anchor.values[value];
@@ -3001,9 +2072,9 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 161:
         return ScreenCoordinate.decode(readValue(buffer)!);
       case 162:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+        return CoordinateBounds.decode(readValue(buffer)!);
       case 163:
-        return TileCoverOptions.decode(readValue(buffer)!);
+        return CoordinateBoundsZoom.decode(readValue(buffer)!);
       case 164:
         return CameraBoundsOptions.decode(readValue(buffer)!);
       case 165:
@@ -3011,75 +2082,75 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 166:
         return MapAnimationOptions.decode(readValue(buffer)!);
       case 167:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 168:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 169:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 170:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 171:
-        return MapOptions.decode(readValue(buffer)!);
-      case 172:
-        return ScreenBox.decode(readValue(buffer)!);
-      case 173:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 174:
         return Size.decode(readValue(buffer)!);
-      case 175:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 176:
-        return SourceQueryOptions.decode(readValue(buffer)!);
-      case 177:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 178:
-        return LayerPosition.decode(readValue(buffer)!);
-      case 179:
-        return ImportPosition.decode(readValue(buffer)!);
-      case 180:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 181:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 182:
-        return QueriedFeature.decode(readValue(buffer)!);
-      case 183:
-        return FeaturesetFeatureId.decode(readValue(buffer)!);
-      case 184:
-        return FeatureState.decode(readValue(buffer)!);
-      case 185:
-        return _Interaction.decode(readValue(buffer)!);
-      case 186:
-        return _InteractionPigeon.decode(readValue(buffer)!);
-      case 187:
-        return FeaturesetDescriptor.decode(readValue(buffer)!);
-      case 188:
-        return FeaturesetFeature.decode(readValue(buffer)!);
-      case 189:
-        return MapContentGestureContext.decode(readValue(buffer)!);
-      case 190:
-        return _RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 191:
-        return ProjectedMeters.decode(readValue(buffer)!);
-      case 192:
-        return MercatorCoordinate.decode(readValue(buffer)!);
-      case 193:
+      case 168:
+        return ScreenBox.decode(readValue(buffer)!);
+      case 169:
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+      case 170:
+        return TileCoverOptions.decode(readValue(buffer)!);
+      case 171:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 194:
+      case 172:
         return StyleProjection.decode(readValue(buffer)!);
-      case 195:
-        return FlatLight.decode(readValue(buffer)!);
-      case 196:
-        return DirectionalLight.decode(readValue(buffer)!);
-      case 197:
-        return AmbientLight.decode(readValue(buffer)!);
-      case 198:
-        return MbxImage.decode(readValue(buffer)!);
-      case 199:
-        return ImageStretches.decode(readValue(buffer)!);
-      case 200:
-        return ImageContent.decode(readValue(buffer)!);
-      case 201:
+      case 173:
+        return LayerPosition.decode(readValue(buffer)!);
+      case 174:
+        return ImportPosition.decode(readValue(buffer)!);
+      case 175:
         return TransitionOptions.decode(readValue(buffer)!);
+      case 176:
+        return MapDebugOptions.decode(readValue(buffer)!);
+      case 177:
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+      case 178:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 179:
+        return MapOptions.decode(readValue(buffer)!);
+      case 180:
+        return RenderedQueryOptions.decode(readValue(buffer)!);
+      case 181:
+        return SourceQueryOptions.decode(readValue(buffer)!);
+      case 182:
+        return FeatureExtensionValue.decode(readValue(buffer)!);
+      case 183:
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
+      case 184:
+        return QueriedSourceFeature.decode(readValue(buffer)!);
+      case 185:
+        return QueriedFeature.decode(readValue(buffer)!);
+      case 186:
+        return FeaturesetFeatureId.decode(readValue(buffer)!);
+      case 187:
+        return FeatureState.decode(readValue(buffer)!);
+      case 188:
+        return _Interaction.decode(readValue(buffer)!);
+      case 189:
+        return _InteractionPigeon.decode(readValue(buffer)!);
+      case 190:
+        return FeaturesetDescriptor.decode(readValue(buffer)!);
+      case 191:
+        return FeaturesetFeature.decode(readValue(buffer)!);
+      case 192:
+        return MapContentGestureContext.decode(readValue(buffer)!);
+      case 193:
+        return _RenderedQueryGeometry.decode(readValue(buffer)!);
+      case 194:
+        return ProjectedMeters.decode(readValue(buffer)!);
+      case 195:
+        return MercatorCoordinate.decode(readValue(buffer)!);
+      case 196:
+        return FlatLight.decode(readValue(buffer)!);
+      case 197:
+        return DirectionalLight.decode(readValue(buffer)!);
+      case 198:
+        return AmbientLight.decode(readValue(buffer)!);
+      case 199:
+        return MbxImage.decode(readValue(buffer)!);
+      case 200:
+        return ImageStretches.decode(readValue(buffer)!);
+      case 201:
+        return ImageContent.decode(readValue(buffer)!);
       case 202:
         return CanonicalTileID.decode(readValue(buffer)!);
       case 203:

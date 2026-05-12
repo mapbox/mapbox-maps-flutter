@@ -2,3 +2,10 @@ include: package:flutter_lints/flutter.yaml
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+
+analyzer:
+  errors:
+    # Pigeon-generated files define utility functions (e.g. _createConnectionError)
+    # that are only used in files with API classes. Data-only generated files
+    # have these utilities but no callers, triggering this warning.
+    unused_element: ignore

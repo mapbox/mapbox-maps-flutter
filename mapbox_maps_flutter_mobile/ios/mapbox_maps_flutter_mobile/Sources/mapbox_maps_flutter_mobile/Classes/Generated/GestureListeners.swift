@@ -43,49 +43,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Enumeration of gesture states.
-enum GestureState: Int {
-  /// Gesture has started.
-  case started = 0
-  /// Gesture is in progress.
-  case changed = 1
-  /// Gesture has ended.
-  case ended = 2
-}
-
-/// A structure that defines additional information about map content gesture.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MapContentGestureContext {
-  /// The location of gesture in Map view bounds.
-  var touchPosition: ScreenCoordinate
-  /// Geographical coordinate of the map gesture.
-  var point: Point
-  /// The state of the gesture.
-  var gestureState: GestureState
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MapContentGestureContext? {
-    let touchPosition = pigeonVar_list[0] as! ScreenCoordinate
-    let point = pigeonVar_list[1] as! Point
-    let gestureState = pigeonVar_list[2] as! GestureState
-
-    return MapContentGestureContext(
-      touchPosition: touchPosition,
-      point: point,
-      gestureState: gestureState
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      touchPosition,
-      point,
-      gestureState,
-    ]
-  }
-}
-
 /// Generated class from Pigeon that represents data sent in messages.
 /// This protocol should not be extended by any user class outside of the generated file.
 protocol AnnotationInteractionContext {

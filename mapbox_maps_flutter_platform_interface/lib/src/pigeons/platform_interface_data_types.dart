@@ -3,6 +3,223 @@
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
 import 'package:turf/turf.dart';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
+
+bool _deepEquals(Object? a, Object? b) {
+  if (a is List && b is List) {
+    return a.length == b.length &&
+        a.indexed.every(
+          ((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]),
+        );
+  }
+  if (a is Map && b is Map) {
+    final Iterable<Object?> keys = (a as Map<Object?, Object?>).keys;
+    return a.length == b.length &&
+        keys.every(
+          (Object? key) =>
+              (b as Map<Object?, Object?>).containsKey(key) &&
+              _deepEquals(a[key], b[key]),
+        );
+  }
+  return a == b;
+}
+
+/// Describes whether to constrain the map in both axes or only vertically e.g. while panning.
+enum ConstrainMode {
+  /// No constrains.
+  NONE,
+
+  /// Constrain to height only
+  HEIGHT_ONLY,
+
+  /// Constrain both width and height axes.
+  WIDTH_AND_HEIGHT,
+}
+
+/// Satisfies embedding platforms that requires the viewport coordinate systems to be set according to its standards.
+enum ViewportMode {
+  /// Default viewport
+  DEFAULT,
+
+  /// Viewport flipped on the y-axis.
+  FLIPPED_Y,
+}
+
+/// Describes the map orientation.
+enum NorthOrientation {
+  /// Default, map oriented upwards
+  UPWARDS,
+
+  /// Map oriented rightwards
+  RIGHTWARDS,
+
+  /// Map oriented downwards
+  DOWNWARDS,
+
+  /// Map oriented leftwards
+  LEFTWARDS,
+}
+
+/// Describes glyphs rasterization modes.
+enum GlyphsRasterizationMode {
+  /// No glyphs are rasterized locally. All glyphs are loaded from the server.
+  NO_GLYPHS_RASTERIZED_LOCALLY,
+
+  /// Ideographs are rasterized locally, and they are not loaded from the server.
+  IDEOGRAPHS_RASTERIZED_LOCALLY,
+
+  /// All glyphs are rasterized locally. No glyphs are loaded from the server.
+  ALL_GLYPHS_RASTERIZED_LOCALLY,
+}
+
+/// The style projection name.
+enum StyleProjectionName { mercator, globe }
+
+/// Defines the position of an ornament (logo, compass, scale bar, attribution) on the map.
+enum OrnamentPosition { TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT }
+
+/// Configures the directions in which the map is allowed to move during a scroll gesture.
+/// Default value: "horizontal-and-vertical".
+enum ScrollMode {
+  /// The map may only move horizontally.
+  HORIZONTAL,
+
+  /// The map may only move vertically.
+  VERTICAL,
+
+  /// The map may move both horizontally and vertically.
+  HORIZONTAL_AND_VERTICAL,
+}
+
+/// The enum controls how the puck is oriented.
+/// Default value: "heading".
+enum PuckBearing {
+  /// Orients the puck to match the direction in which the device is facing.
+  HEADING,
+
+  /// Orients the puck to match the direction in which the device is moving.
+  COURSE,
+}
+
+/// Defines scaling mode. Only applies to location-indicator type layers.
+/// Default value: "map".
+enum ModelScaleMode {
+  /// Model is scaled so that it's always the same size relative to other map features.
+  MAP,
+
+  /// Model is scaled so that it's always the same size on the screen.
+  VIEWPORT,
+}
+
+/// Selects the base of the model.
+/// Default value: "ground".
+enum ModelElevationReference {
+  /// Elevated rendering is enabled relative to the sea level.
+  SEA,
+
+  /// Elevated rendering is enabled relative to the ground's height below them.
+  GROUND,
+}
+
+/// Supported distance unit types.
+/// Default value: "metric".
+enum DistanceUnits {
+  /// Metric units using meters and kilometers.
+  METRIC,
+
+  /// Imperial units using feet and miles.
+  IMPERIAL,
+
+  /// Nautical units using fathoms and nautical miles.
+  NAUTICAL,
+}
+
+/// Enumeration of gesture states.
+enum GestureState {
+  /// Gesture has started.
+  started,
+
+  /// Gesture is in progress.
+  changed,
+
+  /// Gesture has ended.
+  ended,
+}
+
+/// Describes tile store usage modes.
+enum TileStoreUsageMode {
+  /// Tile store usage is disabled.
+  ///
+  /// The implementation skips checking tile store when requesting a tile.
+  DISABLED,
+
+  /// Tile store enabled for accessing loaded tile packs.
+  ///
+  /// The implementation first checks tile store when requesting a tile.
+  /// If a tile pack is already loaded, the tile will be extracted and returned.
+  /// Otherwise, the implementation falls back to requesting the individual tile
+  /// and storing it in the disk cache.
+  READ_ONLY,
+
+  /// Tile store enabled for accessing local tile packs and for loading new tile packs from server.
+  ///
+  /// All tile requests are converted to tile pack requests, i.e. the tile pack
+  /// that includes the requested tile will be loaded, and the tile extracted from it.
+  READ_AND_UPDATE,
+}
+
+/// Classify network types based on cost.
+enum NetworkRestriction {
+  /// Allow access to all network types.
+  NONE,
+
+  /// Forbid network access to expensive networks, such as cellular.
+  DISALLOW_EXPENSIVE,
+
+  /// Forbid access to all network types.
+  DISALLOW_ALL,
+}
+
+/// Describes the tiles data domain.
+enum TileDataDomain {
+  /// Data for Maps.
+  MAPS,
+
+  /// Data for Navigation.
+  NAVIGATION,
+
+  /// Data for Search.
+  SEARCH,
+
+  /// Data for ADAS.
+  ADAS,
+}
+
+/// Describes the reason for an offline request response error.
+/// Also generated in native (Swift/Kotlin) pigeon output for MapInterfaces.
+enum ResponseErrorReason {
+  /// No error occurred during the resource request.
+  SUCCESS,
+
+  /// The resource is not found.
+  NOT_FOUND,
+
+  /// The server error.
+  SERVER,
+
+  /// The connection error.
+  CONNECTION,
+
+  /// The error happened because of a rate limit.
+  RATE_LIMIT,
+
+  /// The resource cannot be loaded because the device is in offline mode.
+  IN_OFFLINE_MODE,
+
+  /// Other reason.
+  OTHER,
+}
 
 /// Describes the coordinate on the screen, measured from top to bottom and from left to right.
 /// Note: the `map` uses screen coordinate units measured in `logical pixels`.
@@ -244,6 +461,2711 @@ class CameraState {
         zoom == other.zoom &&
         bearing == other.bearing &&
         pitch == other.pitch;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Coordinate bounds representation.
+class CoordinateBounds {
+  CoordinateBounds({
+    required this.southwest,
+    required this.northeast,
+    required this.infiniteBounds,
+  });
+
+  /// Coordinate at the southwest corner.
+  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
+  Point southwest;
+
+  /// Coordinate at the northeast corner.
+  /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
+  Point northeast;
+
+  /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
+  /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
+  bool infiniteBounds;
+
+  List<Object?> _toList() {
+    return <Object?>[southwest, northeast, infiniteBounds];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CoordinateBounds decode(Object result) {
+    result as List<Object?>;
+    return CoordinateBounds(
+      southwest: result[0]! as Point,
+      northeast: result[1]! as Point,
+      infiniteBounds: result[2]! as bool,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CoordinateBounds || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return southwest == other.southwest &&
+        northeast == other.northeast &&
+        infiniteBounds == other.infiniteBounds;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A coordinate bounds and zoom.
+class CoordinateBoundsZoom {
+  CoordinateBoundsZoom({required this.bounds, required this.zoom});
+
+  /// The latitude and longitude bounds.
+  CoordinateBounds bounds;
+
+  /// Zoom.
+  double zoom;
+
+  List<Object?> _toList() {
+    return <Object?>[bounds, zoom];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CoordinateBoundsZoom decode(Object result) {
+    result as List<Object?>;
+    return CoordinateBoundsZoom(
+      bounds: result[0]! as CoordinateBounds,
+      zoom: result[1]! as double,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CoordinateBoundsZoom || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return bounds == other.bounds && zoom == other.zoom;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Holds options to be used for setting `camera bounds`.
+class CameraBoundsOptions {
+  CameraBoundsOptions({
+    this.bounds,
+    this.maxZoom,
+    this.minZoom,
+    this.maxPitch,
+    this.minPitch,
+  });
+
+  /// The latitude and longitude bounds to which the camera center are constrained.
+  CoordinateBounds? bounds;
+
+  /// The maximum zoom level, in Mapbox zoom levels 0-25.5.
+  double? maxZoom;
+
+  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
+  double? minZoom;
+
+  /// The maximum allowed pitch value in degrees.
+  double? maxPitch;
+
+  /// The minimum allowed pitch value in degrees.
+  double? minPitch;
+
+  List<Object?> _toList() {
+    return <Object?>[bounds, maxZoom, minZoom, maxPitch, minPitch];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CameraBoundsOptions decode(Object result) {
+    result as List<Object?>;
+    return CameraBoundsOptions(
+      bounds: result[0] as CoordinateBounds?,
+      maxZoom: result[1] as double?,
+      minZoom: result[2] as double?,
+      maxPitch: result[3] as double?,
+      minPitch: result[4] as double?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CameraBoundsOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return bounds == other.bounds &&
+        maxZoom == other.maxZoom &&
+        minZoom == other.minZoom &&
+        maxPitch == other.maxPitch &&
+        minPitch == other.minPitch;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Holds information about `camera bounds`.
+class CameraBounds {
+  CameraBounds({
+    required this.bounds,
+    required this.maxZoom,
+    required this.minZoom,
+    required this.maxPitch,
+    required this.minPitch,
+  });
+
+  /// The latitude and longitude bounds to which the camera center are constrained.
+  CoordinateBounds bounds;
+
+  /// The maximum zoom level, in Mapbox zoom levels 0-25.5.
+  double maxZoom;
+
+  /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
+  double minZoom;
+
+  /// The maximum allowed pitch value in degrees.
+  double maxPitch;
+
+  /// The minimum allowed pitch value in degrees.
+  double minPitch;
+
+  List<Object?> _toList() {
+    return <Object?>[bounds, maxZoom, minZoom, maxPitch, minPitch];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CameraBounds decode(Object result) {
+    result as List<Object?>;
+    return CameraBounds(
+      bounds: result[0]! as CoordinateBounds,
+      maxZoom: result[1]! as double,
+      minZoom: result[2]! as double,
+      maxPitch: result[3]! as double,
+      minPitch: result[4]! as double,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CameraBounds || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return bounds == other.bounds &&
+        maxZoom == other.maxZoom &&
+        minZoom == other.minZoom &&
+        maxPitch == other.maxPitch &&
+        minPitch == other.minPitch;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Options for camera animations.
+class MapAnimationOptions {
+  MapAnimationOptions({this.duration, this.startDelay});
+
+  /// The duration of the animation in milliseconds.
+  /// If not set explicitly default duration will be taken 300ms
+  int? duration;
+
+  /// The amount of time, in milliseconds, to delay starting the animation after animation start.
+  /// If not set explicitly default startDelay will be taken 0ms. This only works for Android.
+  int? startDelay;
+
+  List<Object?> _toList() {
+    return <Object?>[duration, startDelay];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static MapAnimationOptions decode(Object result) {
+    result as List<Object?>;
+    return MapAnimationOptions(
+      duration: result[0] as int?,
+      startDelay: result[1] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! MapAnimationOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return duration == other.duration && startDelay == other.startDelay;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Size type.
+class Size {
+  Size({required this.width, required this.height});
+
+  /// Width of the size.
+  double width;
+
+  /// Height of the size.
+  double height;
+
+  List<Object?> _toList() {
+    return <Object?>[width, height];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static Size decode(Object result) {
+    result as List<Object?>;
+    return Size(width: result[0]! as double, height: result[1]! as double);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! Size || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return width == other.width && height == other.height;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A rectangular area as measured in the map's coordinate system.
+class ScreenBox {
+  ScreenBox({required this.min, required this.max});
+
+  /// The screen coordinate close to the top left corner of the screen.
+  ScreenCoordinate min;
+
+  /// The screen coordinate close to the bottom right corner of the screen.
+  ScreenCoordinate max;
+
+  List<Object?> _toList() {
+    return <Object?>[min, max];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ScreenBox decode(Object result) {
+    result as List<Object?>;
+    return ScreenBox(
+      min: result[0]! as ScreenCoordinate,
+      max: result[1]! as ScreenCoordinate,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ScreenBox || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return min == other.min && max == other.max;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Describes the glyphs rasterization option values.
+class GlyphsRasterizationOptions {
+  GlyphsRasterizationOptions({
+    required this.rasterizationMode,
+    this.fontFamily,
+  });
+
+  /// Glyphs rasterization mode for client-side text rendering.
+  GlyphsRasterizationMode rasterizationMode;
+
+  /// Font family to use as font fallback for client-side text renderings.
+  String? fontFamily;
+
+  List<Object?> _toList() {
+    return <Object?>[rasterizationMode, fontFamily];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GlyphsRasterizationOptions decode(Object result) {
+    result as List<Object?>;
+    return GlyphsRasterizationOptions(
+      rasterizationMode: result[0]! as GlyphsRasterizationMode,
+      fontFamily: result[1] as String?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GlyphsRasterizationOptions ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return rasterizationMode == other.rasterizationMode &&
+        fontFamily == other.fontFamily;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Various options needed for tile cover.
+class TileCoverOptions {
+  TileCoverOptions({this.tileSize, this.minZoom, this.maxZoom, this.roundZoom});
+
+  /// Tile size of the source. Defaults to 512.
+  int? tileSize;
+
+  /// Min zoom defined in the source between range [0, 22].
+  int? minZoom;
+
+  /// Max zoom defined in the source between range [0, 22].
+  int? maxZoom;
+
+  /// Whether to round zoom values when calculating tilecover.
+  bool? roundZoom;
+
+  List<Object?> _toList() {
+    return <Object?>[tileSize, minZoom, maxZoom, roundZoom];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileCoverOptions decode(Object result) {
+    result as List<Object?>;
+    return TileCoverOptions(
+      tileSize: result[0] as int?,
+      minZoom: result[1] as int?,
+      maxZoom: result[2] as int?,
+      roundZoom: result[3] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileCoverOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return tileSize == other.tileSize &&
+        minZoom == other.minZoom &&
+        maxZoom == other.maxZoom &&
+        roundZoom == other.roundZoom;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// The information about style object (source or layer).
+class StyleObjectInfo {
+  StyleObjectInfo({required this.id, required this.type});
+
+  /// The object's identifier.
+  String id;
+
+  /// The object's type.
+  String type;
+
+  List<Object?> _toList() {
+    return <Object?>[id, type];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static StyleObjectInfo decode(Object result) {
+    result as List<Object?>;
+    return StyleObjectInfo(
+      id: result[0]! as String,
+      type: result[1]! as String,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! StyleObjectInfo || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return id == other.id && type == other.type;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// The style projection.
+class StyleProjection {
+  StyleProjection({required this.name});
+
+  StyleProjectionName name;
+
+  List<Object?> _toList() {
+    return <Object?>[name];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static StyleProjection decode(Object result) {
+    result as List<Object?>;
+    return StyleProjection(name: result[0]! as StyleProjectionName);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! StyleProjection || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return name == other.name;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Specifies position of a layer that is added via addStyleLayer method.
+class LayerPosition {
+  LayerPosition({this.above, this.below, this.at});
+
+  /// Layer should be positioned above specified layer id.
+  String? above;
+
+  /// Layer should be positioned below specified layer id.
+  String? below;
+
+  /// Layer should be positioned at specified index in a layers stack.
+  int? at;
+
+  List<Object?> _toList() {
+    return <Object?>[above, below, at];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static LayerPosition decode(Object result) {
+    result as List<Object?>;
+    return LayerPosition(
+      above: result[0] as String?,
+      below: result[1] as String?,
+      at: result[2] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! LayerPosition || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return above == other.above && below == other.below && at == other.at;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Specifies the position at which an import will be added when using `Style.addImport`.
+class ImportPosition {
+  ImportPosition({this.above, this.below, this.at});
+
+  /// Import should be positioned above the specified import id.
+  String? above;
+
+  /// Import should be positioned below the specified import id.
+  String? below;
+
+  /// Import should be positioned at the specified index in the imports stack.
+  int? at;
+
+  List<Object?> _toList() {
+    return <Object?>[above, below, at];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ImportPosition decode(Object result) {
+    result as List<Object?>;
+    return ImportPosition(
+      above: result[0] as String?,
+      below: result[1] as String?,
+      at: result[2] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ImportPosition || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return above == other.above && below == other.below && at == other.at;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Defines global transition options that are used when properties are changed without specific transition options.
+class TransitionOptions {
+  TransitionOptions({
+    this.duration,
+    this.delay,
+    this.enablePlacementTransitions,
+  });
+
+  /// Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`.
+  int? duration;
+
+  /// Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`.
+  int? delay;
+
+  /// Whether the fade in/out symbol placement transition is enabled. Defaults to `true`.
+  bool? enablePlacementTransitions;
+
+  List<Object?> _toList() {
+    return <Object?>[duration, delay, enablePlacementTransitions];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TransitionOptions decode(Object result) {
+    result as List<Object?>;
+    return TransitionOptions(
+      duration: result[0] as int?,
+      delay: result[1] as int?,
+      enablePlacementTransitions: result[2] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TransitionOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return duration == other.duration &&
+        delay == other.delay &&
+        enablePlacementTransitions == other.enablePlacementTransitions;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Gesture configuration allows to control the user touch interaction.
+class GesturesSettings {
+  GesturesSettings({
+    this.rotateEnabled,
+    this.pinchToZoomEnabled,
+    this.scrollEnabled,
+    this.simultaneousRotateAndPinchToZoomEnabled,
+    this.pitchEnabled,
+    this.scrollMode,
+    this.doubleTapToZoomInEnabled,
+    this.doubleTouchToZoomOutEnabled,
+    this.quickZoomEnabled,
+    this.focalPoint,
+    this.pinchToZoomDecelerationEnabled,
+    this.rotateDecelerationEnabled,
+    this.scrollDecelerationEnabled,
+    this.increaseRotateThresholdWhenPinchingToZoom,
+    this.increasePinchToZoomThresholdWhenRotating,
+    this.zoomAnimationAmount,
+    this.pinchPanEnabled,
+  });
+
+  /// Whether the rotate gesture is enabled.
+  bool? rotateEnabled;
+
+  /// Whether the pinch to zoom gesture is enabled.
+  bool? pinchToZoomEnabled;
+
+  /// Whether the single-touch scroll gesture is enabled.
+  bool? scrollEnabled;
+
+  /// Whether rotation is enabled for the pinch to zoom gesture.
+  bool? simultaneousRotateAndPinchToZoomEnabled;
+
+  /// Whether the pitch gesture is enabled.
+  bool? pitchEnabled;
+
+  /// Configures the directions in which the map is allowed to move during a scroll gesture.
+  ScrollMode? scrollMode;
+
+  /// Whether double tapping the map with one touch results in a zoom-in animation.
+  bool? doubleTapToZoomInEnabled;
+
+  /// Whether single tapping the map with two touches results in a zoom-out animation.
+  bool? doubleTouchToZoomOutEnabled;
+
+  /// Whether the quick zoom gesture is enabled.
+  bool? quickZoomEnabled;
+
+  /// By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead.
+  ScreenCoordinate? focalPoint;
+
+  /// Whether a deceleration animation following a pinch-to-zoom gesture is enabled.
+  bool? pinchToZoomDecelerationEnabled;
+
+  /// Whether a deceleration animation following a rotate gesture is enabled.
+  bool? rotateDecelerationEnabled;
+
+  /// Whether a deceleration animation following a scroll gesture is enabled.
+  bool? scrollDecelerationEnabled;
+
+  /// Whether rotate threshold increases when pinching to zoom.
+  bool? increaseRotateThresholdWhenPinchingToZoom;
+
+  /// Whether pinch to zoom threshold increases when rotating.
+  bool? increasePinchToZoomThresholdWhenRotating;
+
+  /// The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture.
+  double? zoomAnimationAmount;
+
+  /// Whether pan is enabled for the pinch gesture.
+  bool? pinchPanEnabled;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      rotateEnabled,
+      pinchToZoomEnabled,
+      scrollEnabled,
+      simultaneousRotateAndPinchToZoomEnabled,
+      pitchEnabled,
+      scrollMode,
+      doubleTapToZoomInEnabled,
+      doubleTouchToZoomOutEnabled,
+      quickZoomEnabled,
+      focalPoint,
+      pinchToZoomDecelerationEnabled,
+      rotateDecelerationEnabled,
+      scrollDecelerationEnabled,
+      increaseRotateThresholdWhenPinchingToZoom,
+      increasePinchToZoomThresholdWhenRotating,
+      zoomAnimationAmount,
+      pinchPanEnabled,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GesturesSettings decode(Object result) {
+    result as List<Object?>;
+    return GesturesSettings(
+      rotateEnabled: result[0] as bool?,
+      pinchToZoomEnabled: result[1] as bool?,
+      scrollEnabled: result[2] as bool?,
+      simultaneousRotateAndPinchToZoomEnabled: result[3] as bool?,
+      pitchEnabled: result[4] as bool?,
+      scrollMode: result[5] as ScrollMode?,
+      doubleTapToZoomInEnabled: result[6] as bool?,
+      doubleTouchToZoomOutEnabled: result[7] as bool?,
+      quickZoomEnabled: result[8] as bool?,
+      focalPoint: result[9] as ScreenCoordinate?,
+      pinchToZoomDecelerationEnabled: result[10] as bool?,
+      rotateDecelerationEnabled: result[11] as bool?,
+      scrollDecelerationEnabled: result[12] as bool?,
+      increaseRotateThresholdWhenPinchingToZoom: result[13] as bool?,
+      increasePinchToZoomThresholdWhenRotating: result[14] as bool?,
+      zoomAnimationAmount: result[15] as double?,
+      pinchPanEnabled: result[16] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GesturesSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return rotateEnabled == other.rotateEnabled &&
+        pinchToZoomEnabled == other.pinchToZoomEnabled &&
+        scrollEnabled == other.scrollEnabled &&
+        simultaneousRotateAndPinchToZoomEnabled ==
+            other.simultaneousRotateAndPinchToZoomEnabled &&
+        pitchEnabled == other.pitchEnabled &&
+        scrollMode == other.scrollMode &&
+        doubleTapToZoomInEnabled == other.doubleTapToZoomInEnabled &&
+        doubleTouchToZoomOutEnabled == other.doubleTouchToZoomOutEnabled &&
+        quickZoomEnabled == other.quickZoomEnabled &&
+        focalPoint == other.focalPoint &&
+        pinchToZoomDecelerationEnabled ==
+            other.pinchToZoomDecelerationEnabled &&
+        rotateDecelerationEnabled == other.rotateDecelerationEnabled &&
+        scrollDecelerationEnabled == other.scrollDecelerationEnabled &&
+        increaseRotateThresholdWhenPinchingToZoom ==
+            other.increaseRotateThresholdWhenPinchingToZoom &&
+        increasePinchToZoomThresholdWhenRotating ==
+            other.increasePinchToZoomThresholdWhenRotating &&
+        zoomAnimationAmount == other.zoomAnimationAmount &&
+        pinchPanEnabled == other.pinchPanEnabled;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// 2D location puck configuration.
+class LocationPuck2D {
+  LocationPuck2D({
+    this.topImage,
+    this.bearingImage,
+    this.shadowImage,
+    this.scaleExpression,
+    this.opacity,
+  });
+
+  /// Name of image in sprite to use as the top of the location indicator.
+  Uint8List? topImage;
+
+  /// Name of image in sprite to use as the middle of the location indicator.
+  Uint8List? bearingImage;
+
+  /// Name of image in sprite to use as the background of the location indicator.
+  Uint8List? shadowImage;
+
+  /// The scale expression of the images. If defined, it will be applied to all the three images.
+  String? scaleExpression;
+
+  /// The opacity of the entire location puck.
+  /// Default value: 1. Value range: [0, 1]
+  double? opacity;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      topImage,
+      bearingImage,
+      shadowImage,
+      scaleExpression,
+      opacity,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static LocationPuck2D decode(Object result) {
+    result as List<Object?>;
+    return LocationPuck2D(
+      topImage: result[0] as Uint8List?,
+      bearingImage: result[1] as Uint8List?,
+      shadowImage: result[2] as Uint8List?,
+      scaleExpression: result[3] as String?,
+      opacity: result[4] as double?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! LocationPuck2D || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return topImage == other.topImage &&
+        bearingImage == other.bearingImage &&
+        shadowImage == other.shadowImage &&
+        scaleExpression == other.scaleExpression &&
+        opacity == other.opacity;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// 3D location puck configuration.
+class LocationPuck3D {
+  LocationPuck3D({
+    this.modelUri,
+    this.position,
+    this.modelOpacity,
+    this.modelScale,
+    this.modelScaleExpression,
+    this.modelTranslation,
+    this.modelRotation,
+    this.modelCastShadows,
+    this.modelReceiveShadows,
+    this.modelScaleMode,
+    this.modelEmissiveStrength,
+    this.modelEmissiveStrengthExpression,
+    this.modelElevationReference,
+  });
+
+  /// An URL for the model file in gltf format.
+  String? modelUri;
+
+  /// The position of the model.
+  List<double?>? position;
+
+  /// The opacity of the model.
+  double? modelOpacity;
+
+  /// The scale of the model.
+  List<double?>? modelScale;
+
+  /// The scale expression of the model.
+  String? modelScaleExpression;
+
+  /// The translation of the model [lon, lat, z].
+  List<double?>? modelTranslation;
+
+  /// The rotation of the model.
+  List<double?>? modelRotation;
+
+  /// Enable/Disable shadow casting for the 3D location puck.
+  bool? modelCastShadows;
+
+  /// Enable/Disable shadow receiving for the 3D location puck.
+  bool? modelReceiveShadows;
+
+  /// Defines scaling mode. Only applies to location-indicator type layers.
+  ModelScaleMode? modelScaleMode;
+
+  /// Strength of the emission.
+  double? modelEmissiveStrength;
+
+  /// The emissive strength expression of the model.
+  String? modelEmissiveStrengthExpression;
+
+  /// Selects the base of the model.
+  ModelElevationReference? modelElevationReference;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      modelUri,
+      position,
+      modelOpacity,
+      modelScale,
+      modelScaleExpression,
+      modelTranslation,
+      modelRotation,
+      modelCastShadows,
+      modelReceiveShadows,
+      modelScaleMode,
+      modelEmissiveStrength,
+      modelEmissiveStrengthExpression,
+      modelElevationReference,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static LocationPuck3D decode(Object result) {
+    result as List<Object?>;
+    return LocationPuck3D(
+      modelUri: result[0] as String?,
+      position: (result[1] as List<Object?>?)?.cast<double?>(),
+      modelOpacity: result[2] as double?,
+      modelScale: (result[3] as List<Object?>?)?.cast<double?>(),
+      modelScaleExpression: result[4] as String?,
+      modelTranslation: (result[5] as List<Object?>?)?.cast<double?>(),
+      modelRotation: (result[6] as List<Object?>?)?.cast<double?>(),
+      modelCastShadows: result[7] as bool?,
+      modelReceiveShadows: result[8] as bool?,
+      modelScaleMode: result[9] as ModelScaleMode?,
+      modelEmissiveStrength: result[10] as double?,
+      modelEmissiveStrengthExpression: result[11] as String?,
+      modelElevationReference: result[12] as ModelElevationReference?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! LocationPuck3D || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return modelUri == other.modelUri &&
+        _deepEquals(position, other.position) &&
+        modelOpacity == other.modelOpacity &&
+        _deepEquals(modelScale, other.modelScale) &&
+        modelScaleExpression == other.modelScaleExpression &&
+        _deepEquals(modelTranslation, other.modelTranslation) &&
+        _deepEquals(modelRotation, other.modelRotation) &&
+        modelCastShadows == other.modelCastShadows &&
+        modelReceiveShadows == other.modelReceiveShadows &&
+        modelScaleMode == other.modelScaleMode &&
+        modelEmissiveStrength == other.modelEmissiveStrength &&
+        modelEmissiveStrengthExpression ==
+            other.modelEmissiveStrengthExpression &&
+        modelElevationReference == other.modelElevationReference;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Defines what the customised look of the location puck.
+/// Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
+class LocationPuck {
+  LocationPuck({this.locationPuck2D, this.locationPuck3D});
+
+  LocationPuck2D? locationPuck2D;
+
+  LocationPuck3D? locationPuck3D;
+
+  List<Object?> _toList() {
+    return <Object?>[locationPuck2D, locationPuck3D];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static LocationPuck decode(Object result) {
+    result as List<Object?>;
+    return LocationPuck(
+      locationPuck2D: result[0] as LocationPuck2D?,
+      locationPuck3D: result[1] as LocationPuck3D?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! LocationPuck || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return locationPuck2D == other.locationPuck2D &&
+        locationPuck3D == other.locationPuck3D;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Shows a location puck on the map.
+class LocationComponentSettings {
+  LocationComponentSettings({
+    this.enabled,
+    this.pulsingEnabled,
+    this.pulsingColor,
+    this.pulsingMaxRadius,
+    this.showAccuracyRing,
+    this.accuracyRingColor,
+    this.accuracyRingBorderColor,
+    this.layerAbove,
+    this.layerBelow,
+    this.puckBearingEnabled,
+    this.puckBearing,
+    this.slot,
+    this.locationPuck,
+  });
+
+  /// Whether the user location is visible on the map.
+  bool? enabled;
+
+  /// Whether the location puck is pulsing on the map. Works for 2D location puck only.
+  bool? pulsingEnabled;
+
+  /// The color of the pulsing circle. Works for 2D location puck only.
+  int? pulsingColor;
+
+  /// The maximum radius of the pulsing circle. Works for 2D location puck only.
+  double? pulsingMaxRadius;
+
+  /// Whether show accuracy ring with location puck. Works for 2D location puck only.
+  bool? showAccuracyRing;
+
+  /// The color of the accuracy ring. Works for 2D location puck only.
+  int? accuracyRingColor;
+
+  /// The color of the accuracy ring border. Works for 2D location puck only.
+  int? accuracyRingBorderColor;
+
+  /// Sets the id of the layer that's added above to when placing the component on the map.
+  String? layerAbove;
+
+  /// Sets the id of the layer that's added below to when placing the component on the map.
+  String? layerBelow;
+
+  /// Whether the puck rotates to track the bearing source.
+  bool? puckBearingEnabled;
+
+  /// The enum controls how the puck is oriented.
+  PuckBearing? puckBearing;
+
+  /// The slot this layer is assigned to.
+  String? slot;
+
+  /// Defines what the customised look of the location puck.
+  LocationPuck? locationPuck;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      pulsingEnabled,
+      pulsingColor,
+      pulsingMaxRadius,
+      showAccuracyRing,
+      accuracyRingColor,
+      accuracyRingBorderColor,
+      layerAbove,
+      layerBelow,
+      puckBearingEnabled,
+      puckBearing,
+      slot,
+      locationPuck,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static LocationComponentSettings decode(Object result) {
+    result as List<Object?>;
+    return LocationComponentSettings(
+      enabled: result[0] as bool?,
+      pulsingEnabled: result[1] as bool?,
+      pulsingColor: result[2] as int?,
+      pulsingMaxRadius: result[3] as double?,
+      showAccuracyRing: result[4] as bool?,
+      accuracyRingColor: result[5] as int?,
+      accuracyRingBorderColor: result[6] as int?,
+      layerAbove: result[7] as String?,
+      layerBelow: result[8] as String?,
+      puckBearingEnabled: result[9] as bool?,
+      puckBearing: result[10] as PuckBearing?,
+      slot: result[11] as String?,
+      locationPuck: result[12] as LocationPuck?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! LocationComponentSettings ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        pulsingEnabled == other.pulsingEnabled &&
+        pulsingColor == other.pulsingColor &&
+        pulsingMaxRadius == other.pulsingMaxRadius &&
+        showAccuracyRing == other.showAccuracyRing &&
+        accuracyRingColor == other.accuracyRingColor &&
+        accuracyRingBorderColor == other.accuracyRingBorderColor &&
+        layerAbove == other.layerAbove &&
+        layerBelow == other.layerBelow &&
+        puckBearingEnabled == other.puckBearingEnabled &&
+        puckBearing == other.puckBearing &&
+        slot == other.slot &&
+        locationPuck == other.locationPuck;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Shows the scale bar on the map.
+class ScaleBarSettings {
+  ScaleBarSettings({
+    this.enabled,
+    this.position,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+    this.textColor,
+    this.primaryColor,
+    this.secondaryColor,
+    this.borderWidth,
+    this.height,
+    this.textBarMargin,
+    this.textBorderWidth,
+    this.textSize,
+    this.isMetricUnits,
+    this.distanceUnits,
+    this.refreshInterval,
+    this.showTextBorder,
+    this.ratio,
+    this.useContinuousRendering,
+  });
+
+  /// Whether the scale is visible on the map.
+  bool? enabled;
+
+  /// Defines where the scale bar is positioned on the map.
+  OrnamentPosition? position;
+
+  double? marginLeft;
+
+  double? marginTop;
+
+  double? marginRight;
+
+  double? marginBottom;
+
+  int? textColor;
+
+  int? primaryColor;
+
+  int? secondaryColor;
+
+  double? borderWidth;
+
+  double? height;
+
+  double? textBarMargin;
+
+  double? textBorderWidth;
+
+  double? textSize;
+
+  bool? isMetricUnits;
+
+  DistanceUnits? distanceUnits;
+
+  int? refreshInterval;
+
+  bool? showTextBorder;
+
+  double? ratio;
+
+  bool? useContinuousRendering;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      textColor,
+      primaryColor,
+      secondaryColor,
+      borderWidth,
+      height,
+      textBarMargin,
+      textBorderWidth,
+      textSize,
+      isMetricUnits,
+      distanceUnits,
+      refreshInterval,
+      showTextBorder,
+      ratio,
+      useContinuousRendering,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ScaleBarSettings decode(Object result) {
+    result as List<Object?>;
+    return ScaleBarSettings(
+      enabled: result[0] as bool?,
+      position: result[1] as OrnamentPosition?,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+      textColor: result[6] as int?,
+      primaryColor: result[7] as int?,
+      secondaryColor: result[8] as int?,
+      borderWidth: result[9] as double?,
+      height: result[10] as double?,
+      textBarMargin: result[11] as double?,
+      textBorderWidth: result[12] as double?,
+      textSize: result[13] as double?,
+      isMetricUnits: result[14] as bool?,
+      distanceUnits: result[15] as DistanceUnits?,
+      refreshInterval: result[16] as int?,
+      showTextBorder: result[17] as bool?,
+      ratio: result[18] as double?,
+      useContinuousRendering: result[19] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ScaleBarSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        position == other.position &&
+        marginLeft == other.marginLeft &&
+        marginTop == other.marginTop &&
+        marginRight == other.marginRight &&
+        marginBottom == other.marginBottom &&
+        textColor == other.textColor &&
+        primaryColor == other.primaryColor &&
+        secondaryColor == other.secondaryColor &&
+        borderWidth == other.borderWidth &&
+        height == other.height &&
+        textBarMargin == other.textBarMargin &&
+        textBorderWidth == other.textBorderWidth &&
+        textSize == other.textSize &&
+        isMetricUnits == other.isMetricUnits &&
+        distanceUnits == other.distanceUnits &&
+        refreshInterval == other.refreshInterval &&
+        showTextBorder == other.showTextBorder &&
+        ratio == other.ratio &&
+        useContinuousRendering == other.useContinuousRendering;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Shows the compass on the map.
+class CompassSettings {
+  CompassSettings({
+    this.enabled,
+    this.position,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+    this.opacity,
+    this.rotation,
+    this.visibility,
+    this.fadeWhenFacingNorth,
+    this.clickable,
+    this.image,
+  });
+
+  bool? enabled;
+
+  OrnamentPosition? position;
+
+  double? marginLeft;
+
+  double? marginTop;
+
+  double? marginRight;
+
+  double? marginBottom;
+
+  double? opacity;
+
+  double? rotation;
+
+  bool? visibility;
+
+  bool? fadeWhenFacingNorth;
+
+  bool? clickable;
+
+  /// The compass image, the visual representation of the compass.
+  Uint8List? image;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      opacity,
+      rotation,
+      visibility,
+      fadeWhenFacingNorth,
+      clickable,
+      image,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CompassSettings decode(Object result) {
+    result as List<Object?>;
+    return CompassSettings(
+      enabled: result[0] as bool?,
+      position: result[1] as OrnamentPosition?,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+      opacity: result[6] as double?,
+      rotation: result[7] as double?,
+      visibility: result[8] as bool?,
+      fadeWhenFacingNorth: result[9] as bool?,
+      clickable: result[10] as bool?,
+      image: result[11] as Uint8List?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CompassSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        position == other.position &&
+        marginLeft == other.marginLeft &&
+        marginTop == other.marginTop &&
+        marginRight == other.marginRight &&
+        marginBottom == other.marginBottom &&
+        opacity == other.opacity &&
+        rotation == other.rotation &&
+        visibility == other.visibility &&
+        fadeWhenFacingNorth == other.fadeWhenFacingNorth &&
+        clickable == other.clickable &&
+        image == other.image;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Shows the attribution icon on the map.
+class AttributionSettings {
+  AttributionSettings({
+    this.enabled,
+    this.iconColor,
+    this.position,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+    this.clickable,
+  });
+
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  bool? enabled;
+
+  int? iconColor;
+
+  OrnamentPosition? position;
+
+  double? marginLeft;
+
+  double? marginTop;
+
+  double? marginRight;
+
+  double? marginBottom;
+
+  bool? clickable;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      iconColor,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      clickable,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static AttributionSettings decode(Object result) {
+    result as List<Object?>;
+    return AttributionSettings(
+      enabled: result[0] as bool?,
+      iconColor: result[1] as int?,
+      position: result[2] as OrnamentPosition?,
+      marginLeft: result[3] as double?,
+      marginTop: result[4] as double?,
+      marginRight: result[5] as double?,
+      marginBottom: result[6] as double?,
+      clickable: result[7] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! AttributionSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        iconColor == other.iconColor &&
+        position == other.position &&
+        marginLeft == other.marginLeft &&
+        marginTop == other.marginTop &&
+        marginRight == other.marginRight &&
+        marginBottom == other.marginBottom &&
+        clickable == other.clickable;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Shows the Mapbox logo on the map.
+class LogoSettings {
+  LogoSettings({
+    this.enabled,
+    this.position,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+  });
+
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  bool? enabled;
+
+  OrnamentPosition? position;
+
+  double? marginLeft;
+
+  double? marginTop;
+
+  double? marginRight;
+
+  double? marginBottom;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static LogoSettings decode(Object result) {
+    result as List<Object?>;
+    return LogoSettings(
+      enabled: result[0] as bool?,
+      position: result[1] as OrnamentPosition?,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! LogoSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        position == other.position &&
+        marginLeft == other.marginLeft &&
+        marginTop == other.marginTop &&
+        marginRight == other.marginRight &&
+        marginBottom == other.marginBottom;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Settings for the indoor floor selector.
+class IndoorSelectorSettings {
+  IndoorSelectorSettings({
+    this.enabled,
+    this.position,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+  });
+
+  bool? enabled;
+
+  OrnamentPosition? position;
+
+  double? marginLeft;
+
+  double? marginTop;
+
+  double? marginRight;
+
+  double? marginBottom;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      enabled,
+      position,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static IndoorSelectorSettings decode(Object result) {
+    result as List<Object?>;
+    return IndoorSelectorSettings(
+      enabled: result[0] as bool?,
+      position: result[1] as OrnamentPosition?,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! IndoorSelectorSettings || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return enabled == other.enabled &&
+        position == other.position &&
+        marginLeft == other.marginLeft &&
+        marginTop == other.marginTop &&
+        marginRight == other.marginRight &&
+        marginBottom == other.marginBottom;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A structure that defines additional information about map content gesture.
+class MapContentGestureContext {
+  MapContentGestureContext({
+    required this.touchPosition,
+    required this.point,
+    required this.gestureState,
+  });
+
+  /// The location of gesture in Map view bounds.
+  ScreenCoordinate touchPosition;
+
+  /// Geographical coordinate of the map gesture.
+  Point point;
+
+  /// The state of the gesture.
+  GestureState gestureState;
+
+  List<Object?> _toList() {
+    return <Object?>[touchPosition, point, gestureState];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static MapContentGestureContext decode(Object result) {
+    result as List<Object?>;
+    return MapContentGestureContext(
+      touchPosition: result[0]! as ScreenCoordinate,
+      point: result[1]! as Point,
+      gestureState: result[2]! as GestureState,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! MapContentGestureContext ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return touchPosition == other.touchPosition &&
+        point == other.point &&
+        gestureState == other.gestureState;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Represents a tile coordinate.
+class CanonicalTileID {
+  CanonicalTileID({required this.z, required this.x, required this.y});
+
+  /// The z value of the coordinate (zoom-level).
+  int z;
+
+  /// The x value of the coordinate.
+  int x;
+
+  /// The y value of the coordinate.
+  int y;
+
+  List<Object?> _toList() {
+    return <Object?>[z, x, y];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CanonicalTileID decode(Object result) {
+    result as List<Object?>;
+    return CanonicalTileID(
+      z: result[0]! as int,
+      x: result[1]! as int,
+      y: result[2]! as int,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CanonicalTileID || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return z == other.z && x == other.x && y == other.y;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Set of options for taking map snapshot with `map snapshotter`.
+class MapSnapshotOptions {
+  MapSnapshotOptions({
+    required this.size,
+    required this.pixelRatio,
+    this.glyphsRasterizationOptions,
+    this.showsLogo,
+    this.showsAttribution,
+  });
+
+  /// Dimensions of the snapshot in `logical pixels`.
+  Size size;
+
+  /// Ratio between the number of device-independent and screen pixels.
+  double pixelRatio;
+
+  /// Glyphs rasterization options to use for client-side text rendering.
+  /// By default, `GlyphsRasterizationOptions` will use `NoGlyphsRasterizedLocally` mode.
+  GlyphsRasterizationOptions? glyphsRasterizationOptions;
+
+  /// Flag that determines if the logo should be shown on the snapshot.
+  bool? showsLogo;
+
+  /// Flag that determines if attribution should be shown on the snapshot.
+  bool? showsAttribution;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      size,
+      pixelRatio,
+      glyphsRasterizationOptions,
+      showsLogo,
+      showsAttribution,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static MapSnapshotOptions decode(Object result) {
+    result as List<Object?>;
+    return MapSnapshotOptions(
+      size: result[0]! as Size,
+      pixelRatio: result[1]! as double,
+      glyphsRasterizationOptions: result[2] as GlyphsRasterizationOptions?,
+      showsLogo: result[3] as bool?,
+      showsAttribution: result[4] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! MapSnapshotOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return size == other.size &&
+        pixelRatio == other.pixelRatio &&
+        glyphsRasterizationOptions == other.glyphsRasterizationOptions &&
+        showsLogo == other.showsLogo &&
+        showsAttribution == other.showsAttribution;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Describes the style package load option values.
+class StylePackLoadOptions {
+  StylePackLoadOptions({
+    this.glyphsRasterizationMode,
+    this.metadata,
+    required this.acceptExpired,
+  });
+
+  /// Specifies glyphs rasterization mode.
+  ///
+  /// If provided, updates the style package's glyphs rasterization mode,
+  /// which defines which glyphs will be loaded from the server.
+  ///
+  /// By default, ideographs are rasterized locally and other glyphs are loaded
+  /// from network (i.e. `IdeographsRasterizedLocally` value is used).
+  GlyphsRasterizationMode? glyphsRasterizationMode;
+
+  /// A custom Mapbox value associated with this style package for storing metadata.
+  ///
+  /// If provided, the custom value will be stored alongside the style package.
+  /// Previous values will be replaced with the new value.
+  Map<String?, Object?>? metadata;
+
+  /// Accepts expired data when loading style resources.
+  ///
+  /// Set to true to accept expired responses. Set to false to ensure that data
+  /// for a style is up-to-date.
+  bool acceptExpired;
+
+  List<Object?> _toList() {
+    return <Object?>[glyphsRasterizationMode, metadata, acceptExpired];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static StylePackLoadOptions decode(Object result) {
+    result as List<Object?>;
+    return StylePackLoadOptions(
+      glyphsRasterizationMode: result[0] as GlyphsRasterizationMode?,
+      metadata: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      acceptExpired: result[2]! as bool,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! StylePackLoadOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return glyphsRasterizationMode == other.glyphsRasterizationMode &&
+        _deepEquals(metadata, other.metadata) &&
+        acceptExpired == other.acceptExpired;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// The `style pack` represents a stored style package.
+class StylePack {
+  StylePack({
+    required this.styleURI,
+    required this.glyphsRasterizationMode,
+    required this.requiredResourceCount,
+    required this.completedResourceCount,
+    required this.completedResourceSize,
+    this.expires,
+  });
+
+  /// The style associated with the style package.
+  String styleURI;
+
+  /// The glyphs rasterization mode of the style package.
+  ///
+  /// It defines which glyphs will be loaded from the server.
+  GlyphsRasterizationMode glyphsRasterizationMode;
+
+  /// The number of resources that are known to be required for this style package.
+  int requiredResourceCount;
+
+  /// The number of resources that have been fully downloaded and are ready for
+  /// offline access.
+  int completedResourceCount;
+
+  /// The cumulative size, in bytes, of all resources that have been fully downloaded.
+  int completedResourceSize;
+
+  /// The earliest point in time when any of the style package resources gets expired.
+  ///
+  /// Uninitialized for incomplete style packages or for complete style packages with
+  /// all immutable resources.
+  int? expires;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      styleURI,
+      glyphsRasterizationMode,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static StylePack decode(Object result) {
+    result as List<Object?>;
+    return StylePack(
+      styleURI: result[0]! as String,
+      glyphsRasterizationMode: result[1]! as GlyphsRasterizationMode,
+      requiredResourceCount: result[2]! as int,
+      completedResourceCount: result[3]! as int,
+      completedResourceSize: result[4]! as int,
+      expires: result[5] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! StylePack || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return styleURI == other.styleURI &&
+        glyphsRasterizationMode == other.glyphsRasterizationMode &&
+        requiredResourceCount == other.requiredResourceCount &&
+        completedResourceCount == other.completedResourceCount &&
+        completedResourceSize == other.completedResourceSize &&
+        expires == other.expires;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A `style pack load` progress includes information about the number of resources
+/// that have completed downloading and the total number of resources that are required.
+class StylePackLoadProgress {
+  StylePackLoadProgress({
+    required this.completedResourceCount,
+    required this.completedResourceSize,
+    required this.erroredResourceCount,
+    required this.requiredResourceCount,
+    required this.loadedResourceCount,
+    required this.loadedResourceSize,
+  });
+
+  /// The number of resources that are ready for offline access.
+  int completedResourceCount;
+
+  /// The cumulative size, in bytes, of all resources that are ready for offline access.
+  int completedResourceSize;
+
+  /// The number of resources that have failed to download due to an error.
+  int erroredResourceCount;
+
+  /// The number of resources that are known to be required for this style package.
+  int requiredResourceCount;
+
+  /// The number of resources that have been fully downloaded from the network.
+  int loadedResourceCount;
+
+  /// The cumulative size, in bytes, of all resources that have been fully downloaded
+  /// from the network.
+  int loadedResourceSize;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static StylePackLoadProgress decode(Object result) {
+    result as List<Object?>;
+    return StylePackLoadProgress(
+      completedResourceCount: result[0]! as int,
+      completedResourceSize: result[1]! as int,
+      erroredResourceCount: result[2]! as int,
+      requiredResourceCount: result[3]! as int,
+      loadedResourceCount: result[4]! as int,
+      loadedResourceSize: result[5]! as int,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! StylePackLoadProgress || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return completedResourceCount == other.completedResourceCount &&
+        completedResourceSize == other.completedResourceSize &&
+        erroredResourceCount == other.erroredResourceCount &&
+        requiredResourceCount == other.requiredResourceCount &&
+        loadedResourceCount == other.loadedResourceCount &&
+        loadedResourceSize == other.loadedResourceSize;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Describes the tileset descriptor option values.
+class TilesetDescriptorOptions {
+  TilesetDescriptorOptions({
+    required this.styleURI,
+    required this.minZoom,
+    required this.maxZoom,
+    this.pixelRatio,
+    this.tilesets,
+    this.stylePackOptions,
+    this.extraOptions,
+  });
+
+  /// The style associated with the tileset descriptor.
+  String styleURI;
+
+  /// Minimum zoom level for the tile package.
+  int minZoom;
+
+  /// Maximum zoom level for the tile package.
+  int maxZoom;
+
+  /// Pixel ratio to be accounted for when downloading raster tiles.
+  double? pixelRatio;
+
+  /// The tilesets associated with the tileset descriptor.
+  List<String?>? tilesets;
+
+  /// Style package load options, associated with the tileset descriptor.
+  StylePackLoadOptions? stylePackOptions;
+
+  /// Extra tileset descriptor options.
+  Map<String?, Object?>? extraOptions;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      styleURI,
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      tilesets,
+      stylePackOptions,
+      extraOptions,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TilesetDescriptorOptions decode(Object result) {
+    result as List<Object?>;
+    return TilesetDescriptorOptions(
+      styleURI: result[0]! as String,
+      minZoom: result[1]! as int,
+      maxZoom: result[2]! as int,
+      pixelRatio: result[3] as double?,
+      tilesets: (result[4] as List<Object?>?)?.cast<String?>(),
+      stylePackOptions: result[5] as StylePackLoadOptions?,
+      extraOptions: (result[6] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TilesetDescriptorOptions ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return styleURI == other.styleURI &&
+        minZoom == other.minZoom &&
+        maxZoom == other.maxZoom &&
+        pixelRatio == other.pixelRatio &&
+        _deepEquals(tilesets, other.tilesets) &&
+        stylePackOptions == other.stylePackOptions &&
+        _deepEquals(extraOptions, other.extraOptions);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Describes the tile region load option values.
+class TileRegionLoadOptions {
+  TileRegionLoadOptions({
+    this.geometry,
+    this.descriptorsOptions,
+    this.metadata,
+    required this.acceptExpired,
+    required this.networkRestriction,
+    this.startLocation,
+    this.averageBytesPerSecond,
+    this.extraOptions,
+  });
+
+  /// The tile region's associated geometry.
+  Map<String?, Object?>? geometry;
+
+  /// The tile region's tileset descriptors.
+  List<TilesetDescriptorOptions?>? descriptorsOptions;
+
+  /// A custom Mapbox Value associated with this tile region for storing metadata.
+  Map<String?, Object?>? metadata;
+
+  /// Accepts expired data when loading tiles.
+  bool acceptExpired;
+
+  /// Controls which networks may be used to load the tile.
+  NetworkRestriction networkRestriction;
+
+  /// Starts loading the tile region at the given location.
+  Point? startLocation;
+
+  /// Limits the download speed of the tile region.
+  int? averageBytesPerSecond;
+
+  /// Extra tile region load options.
+  Map<String?, Object?>? extraOptions;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      geometry,
+      descriptorsOptions,
+      metadata,
+      acceptExpired,
+      networkRestriction,
+      startLocation,
+      averageBytesPerSecond,
+      extraOptions,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileRegionLoadOptions decode(Object result) {
+    result as List<Object?>;
+    return TileRegionLoadOptions(
+      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      descriptorsOptions: (result[1] as List<Object?>?)
+          ?.cast<TilesetDescriptorOptions?>(),
+      metadata: (result[2] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      acceptExpired: result[3]! as bool,
+      networkRestriction: result[4]! as NetworkRestriction,
+      startLocation: result[5] as Point?,
+      averageBytesPerSecond: result[6] as int?,
+      extraOptions: (result[7] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileRegionLoadOptions || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(geometry, other.geometry) &&
+        _deepEquals(descriptorsOptions, other.descriptorsOptions) &&
+        _deepEquals(metadata, other.metadata) &&
+        acceptExpired == other.acceptExpired &&
+        networkRestriction == other.networkRestriction &&
+        startLocation == other.startLocation &&
+        averageBytesPerSecond == other.averageBytesPerSecond &&
+        _deepEquals(extraOptions, other.extraOptions);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// TileRegion represents an identifiable geographic tile region with metadata.
+class TileRegion {
+  TileRegion({
+    required this.id,
+    required this.requiredResourceCount,
+    required this.completedResourceCount,
+    required this.completedResourceSize,
+    this.expires,
+  });
+
+  /// The id of the tile region.
+  String id;
+
+  /// The number of resources that are known to be required for this tile region.
+  int requiredResourceCount;
+
+  /// The number of resources that have been fully downloaded and are ready for
+  /// offline access.
+  int completedResourceCount;
+
+  /// The cumulative size, in bytes, of all resources that have been fully downloaded.
+  int completedResourceSize;
+
+  /// The earliest point in time when any of the region resources gets expired.
+  int? expires;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      id,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileRegion decode(Object result) {
+    result as List<Object?>;
+    return TileRegion(
+      id: result[0]! as String,
+      requiredResourceCount: result[1]! as int,
+      completedResourceCount: result[2]! as int,
+      completedResourceSize: result[3]! as int,
+      expires: result[4] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileRegion || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return id == other.id &&
+        requiredResourceCount == other.requiredResourceCount &&
+        completedResourceCount == other.completedResourceCount &&
+        completedResourceSize == other.completedResourceSize &&
+        expires == other.expires;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// The result of tile region estimation.
+class TileRegionEstimateResult {
+  TileRegionEstimateResult({
+    required this.errorMargin,
+    required this.transferSize,
+    required this.storageSize,
+    this.extraOptions,
+  });
+
+  /// Error margin of the estimate at 99.9% confidence, value between 0 and 1.
+  double errorMargin;
+
+  /// Estimated number of bytes to transfer from the network.
+  int transferSize;
+
+  /// Estimated number of bytes required to store the tile region on disk.
+  int storageSize;
+
+  /// Reserved for future use.
+  Map<String?, Object?>? extraOptions;
+
+  List<Object?> _toList() {
+    return <Object?>[errorMargin, transferSize, storageSize, extraOptions];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileRegionEstimateResult decode(Object result) {
+    result as List<Object?>;
+    return TileRegionEstimateResult(
+      errorMargin: result[0]! as double,
+      transferSize: result[1]! as int,
+      storageSize: result[2]! as int,
+      extraOptions: (result[3] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileRegionEstimateResult ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return errorMargin == other.errorMargin &&
+        transferSize == other.transferSize &&
+        storageSize == other.storageSize &&
+        _deepEquals(extraOptions, other.extraOptions);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Holds options for the tile region estimation operation.
+class TileRegionEstimateOptions {
+  TileRegionEstimateOptions({
+    required this.errorMargin,
+    required this.preciseEstimationTimeout,
+    required this.timeout,
+    this.extraOptions,
+  });
+
+  /// Accepted error margin.
+  double errorMargin;
+
+  /// Precise estimation timeout in seconds. A value of 0 means no timeout.
+  double preciseEstimationTimeout;
+
+  /// Overall operation timeout in seconds. A value of 0 means no timeout.
+  double timeout;
+
+  /// Reserved for future use.
+  Map<String?, Object?>? extraOptions;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      errorMargin,
+      preciseEstimationTimeout,
+      timeout,
+      extraOptions,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileRegionEstimateOptions decode(Object result) {
+    result as List<Object?>;
+    return TileRegionEstimateOptions(
+      errorMargin: result[0]! as double,
+      preciseEstimationTimeout: result[1]! as double,
+      timeout: result[2]! as double,
+      extraOptions: (result[3] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileRegionEstimateOptions ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return errorMargin == other.errorMargin &&
+        preciseEstimationTimeout == other.preciseEstimationTimeout &&
+        timeout == other.timeout &&
+        _deepEquals(extraOptions, other.extraOptions);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A tile region's load progress includes counts of the number of resources that
+/// have completed downloading and the total number of resources that are required.
+class TileRegionLoadProgress {
+  TileRegionLoadProgress({
+    required this.completedResourceCount,
+    required this.completedResourceSize,
+    required this.erroredResourceCount,
+    required this.requiredResourceCount,
+    required this.loadedResourceCount,
+    required this.loadedResourceSize,
+  });
+
+  /// The number of resources that are ready for offline access.
+  int completedResourceCount;
+
+  /// The cumulative size, in bytes, of all resources that are ready for offline access.
+  int completedResourceSize;
+
+  /// The number of resources that have failed to download due to an error.
+  int erroredResourceCount;
+
+  /// The number of resources that are known to be required for this tile region.
+  int requiredResourceCount;
+
+  /// The number of resources ready for offline use that have been downloaded from the network.
+  int loadedResourceCount;
+
+  /// The cumulative size, in bytes, of all resources that have been downloaded from the network.
+  int loadedResourceSize;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileRegionLoadProgress decode(Object result) {
+    result as List<Object?>;
+    return TileRegionLoadProgress(
+      completedResourceCount: result[0]! as int,
+      completedResourceSize: result[1]! as int,
+      erroredResourceCount: result[2]! as int,
+      requiredResourceCount: result[3]! as int,
+      loadedResourceCount: result[4]! as int,
+      loadedResourceSize: result[5]! as int,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileRegionLoadProgress || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return completedResourceCount == other.completedResourceCount &&
+        completedResourceSize == other.completedResourceSize &&
+        erroredResourceCount == other.erroredResourceCount &&
+        requiredResourceCount == other.requiredResourceCount &&
+        loadedResourceCount == other.loadedResourceCount &&
+        loadedResourceSize == other.loadedResourceSize;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// A tile region's estimate progress includes counts of the number of resources that
+/// have been estimated and the total number of resources, as well as a partial result.
+class TileRegionEstimateProgress {
+  TileRegionEstimateProgress({
+    required this.requiredResourceCount,
+    required this.completedResourceCount,
+    required this.erroredResourceCount,
+  });
+
+  /// The number of resources that are known to be required for this tile region.
+  int requiredResourceCount;
+
+  /// The number of resources that are ready for offline access.
+  int completedResourceCount;
+
+  /// The number of resources that have failed to download due to an error.
+  int erroredResourceCount;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      requiredResourceCount,
+      completedResourceCount,
+      erroredResourceCount,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileRegionEstimateProgress decode(Object result) {
+    result as List<Object?>;
+    return TileRegionEstimateProgress(
+      requiredResourceCount: result[0]! as int,
+      completedResourceCount: result[1]! as int,
+      erroredResourceCount: result[2]! as int,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileRegionEstimateProgress ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return requiredResourceCount == other.requiredResourceCount &&
+        completedResourceCount == other.completedResourceCount &&
+        erroredResourceCount == other.erroredResourceCount;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Map memory budget in megabytes.
+class TileCacheBudgetInMegabytes {
+  TileCacheBudgetInMegabytes({required this.size});
+
+  int size;
+
+  List<Object?> _toList() {
+    return <Object?>[size];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileCacheBudgetInMegabytes decode(Object result) {
+    result as List<Object?>;
+    return TileCacheBudgetInMegabytes(size: result[0]! as int);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileCacheBudgetInMegabytes ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return size == other.size;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Map memory budget in tiles.
+class TileCacheBudgetInTiles {
+  TileCacheBudgetInTiles({required this.size});
+
+  int size;
+
+  List<Object?> _toList() {
+    return <Object?>[size];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TileCacheBudgetInTiles decode(Object result) {
+    result as List<Object?>;
+    return TileCacheBudgetInTiles(size: result[0]! as int);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TileCacheBudgetInTiles || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return size == other.size;
   }
 
   @override
