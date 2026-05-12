@@ -116,10 +116,10 @@ Add the following key/value pair to the `Runner/Info.plist`. In the value field,
 ```
 
 ### Add a map
-Import `mapbox_maps_flutter` library and add a simple map:
+Import `mapbox_maps_flutter_mobile` library and add a simple map:
 ```
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 void main() {
   runApp(MaterialApp(home: MapWidget()));

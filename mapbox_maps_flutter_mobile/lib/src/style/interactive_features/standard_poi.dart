@@ -1,5 +1,5 @@
 // This file is generated.
-part of '../../../mapbox_maps_flutter.dart';
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// A point of interest.
 ///

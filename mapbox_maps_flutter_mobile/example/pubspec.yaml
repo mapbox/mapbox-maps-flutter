@@ -15,9 +15,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  mapbox_maps_flutter:
+  mapbox_maps_flutter_mobile:
     # When depending on this package from a real application you should use:
-    # mapbox_maps_flutter: ^x.y.z
+    # mapbox_maps_flutter_mobile: ^x.y.z
     path: ../
 
   cupertino_icons: ^1.0.2

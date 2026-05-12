@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Instance that allows connecting or disconnecting the Mapbox stack to the network.
 final class OfflineSwitch {

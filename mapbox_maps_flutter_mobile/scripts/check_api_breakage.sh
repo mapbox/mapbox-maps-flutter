@@ -22,8 +22,8 @@ if ! command -v jq &> /dev/null; then
   exit 1
 fi
 
-# Get the current stable version of mapbox_maps_flutter on pub.dev
-PACKAGE_NAME="mapbox_maps_flutter"
+# Get the current stable version of mapbox_maps_flutter_mobile on pub.dev
+PACKAGE_NAME="mapbox_maps_flutter_mobile"
 PACKAGE_VERSION=$(curl -s "https://pub.dev/api/packages/$PACKAGE_NAME" | jq -r .latest.version)
 
 if [ -z "$PACKAGE_VERSION" ] || [ "$PACKAGE_VERSION" = "null" ]; then
@@ -31,7 +31,7 @@ if [ -z "$PACKAGE_VERSION" ] || [ "$PACKAGE_VERSION" = "null" ]; then
   exit 1
 fi
 
-echo "Current stable version of mapbox_maps_flutter: $PACKAGE_VERSION"
+echo "Current stable version of mapbox_maps_flutter_mobile: $PACKAGE_VERSION"
 
 # Get the path of local mapbox-maps-flutter
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Returns back the passed value casted to the desired type
 /// or null if typecasting fails
