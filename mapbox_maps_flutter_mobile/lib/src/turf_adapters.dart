@@ -36,7 +36,7 @@ final class Polygon extends turf.Polygon {
   }
 
   Polygon.fromPoints({turf.BBox? bbox, required List<List<Point>> points})
-      : super.fromPoints(bbox: bbox, points: points);
+    : super.fromPoints(bbox: bbox, points: points);
 }
 
 final class LineString extends turf.LineString {
@@ -57,16 +57,17 @@ final class LineString extends turf.LineString {
   }
 
   LineString.fromPoints({turf.BBox? bbox, required List<Point> points})
-      : super.fromPoints(bbox: bbox, points: points);
+    : super.fromPoints(bbox: bbox, points: points);
 }
 
 final class Feature extends turf.Feature {
-  Feature(
-      {super.bbox,
-      required super.id,
-      super.properties,
-      required super.geometry,
-      super.fields});
+  Feature({
+    super.bbox,
+    required super.id,
+    super.properties,
+    required super.geometry,
+    super.fields,
+  });
 
   Object encode() {
     return [toJson()];
@@ -85,11 +86,12 @@ final class Feature extends turf.Feature {
   factory Feature.fromJson(Map<String, dynamic> json) {
     final feature = turf.Feature.fromJson(json);
     return Feature(
-        bbox: feature.bbox,
-        id: feature.id,
-        properties: feature.properties,
-        geometry: feature.geometry,
-        fields: feature.fields);
+      bbox: feature.bbox,
+      id: feature.id,
+      properties: feature.properties,
+      geometry: feature.geometry,
+      fields: feature.fields,
+    );
   }
 }
 
@@ -97,7 +99,8 @@ Map<String, dynamic> convertToValidMap(Map<Object?, Object?> input) {
   return input.map((key, value) {
     if (key is! String) {
       throw Exception(
-          "Invalid key type. Expected String but got ${key.runtimeType}");
+        "Invalid key type. Expected String but got ${key.runtimeType}",
+      );
     }
     if (value is Map<Object?, Object?>) {
       // Recursively convert nested maps

@@ -11,8 +11,11 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-List<Object?> wrapResponse(
-    {Object? result, PlatformException? error, bool empty = false}) {
+List<Object?> wrapResponse({
+  Object? result,
+  PlatformException? error,
+  bool empty = false,
+}) {
   if (empty) {
     return <Object?>[];
   }
@@ -25,15 +28,18 @@ List<Object?> wrapResponse(
 bool _deepEquals(Object? a, Object? b) {
   if (a is List && b is List) {
     return a.length == b.length &&
-        a.indexed
-            .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+        a.indexed.every(
+          ((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]),
+        );
   }
   if (a is Map && b is Map) {
     final Iterable<Object?> keys = (a as Map<Object?, Object?>).keys;
     return a.length == b.length &&
-        keys.every((Object? key) =>
-            (b as Map<Object?, Object?>).containsKey(key) &&
-            _deepEquals(a[key], b[key]));
+        keys.every(
+          (Object? key) =>
+              (b as Map<Object?, Object?>).containsKey(key) &&
+              _deepEquals(a[key], b[key]),
+        );
   }
   return a == b;
 }
@@ -194,11 +200,7 @@ enum _InteractionType {
 }
 
 /// Type information of the variant's content
-enum Type {
-  SCREEN_BOX,
-  SCREEN_COORDINATE,
-  LIST,
-}
+enum Type { SCREEN_BOX, SCREEN_COORDINATE, LIST }
 
 /// Controls the behavior of fill extrusion base over terrain
 enum FillExtrusionBaseAlignment {
@@ -321,10 +323,7 @@ enum StylePropertyValueKind {
   TRANSITION,
 }
 
-enum StyleProjectionName {
-  mercator,
-  globe,
-}
+enum StyleProjectionName { mercator, globe }
 
 /// Whether extruded geometries are lit relative to the map or viewport.
 enum Anchor {
@@ -455,10 +454,7 @@ class GlyphsRasterizationOptions {
   String? fontFamily;
 
   List<Object?> _toList() {
-    return <Object?>[
-      rasterizationMode,
-      fontFamily,
-    ];
+    return <Object?>[rasterizationMode, fontFamily];
   }
 
   Object encode() {
@@ -494,12 +490,7 @@ class GlyphsRasterizationOptions {
 
 /// Various options needed for tile cover.
 class TileCoverOptions {
-  TileCoverOptions({
-    this.tileSize,
-    this.minZoom,
-    this.maxZoom,
-    this.roundZoom,
-  });
+  TileCoverOptions({this.tileSize, this.minZoom, this.maxZoom, this.roundZoom});
 
   /// Tile size of the source. Defaults to 512.
   int? tileSize;
@@ -519,12 +510,7 @@ class TileCoverOptions {
   bool? roundZoom;
 
   List<Object?> _toList() {
-    return <Object?>[
-      tileSize,
-      minZoom,
-      maxZoom,
-      roundZoom,
-    ];
+    return <Object?>[tileSize, minZoom, maxZoom, roundZoom];
   }
 
   Object encode() {
@@ -561,230 +547,6 @@ class TileCoverOptions {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// The distance on each side between rectangles, when one is contained into other.
-///
-/// All fields' values are in `logical pixel` units.
-class MbxEdgeInsets {
-  MbxEdgeInsets({
-    required this.top,
-    required this.left,
-    required this.bottom,
-    required this.right,
-  });
-
-  /// Padding from the top.
-  double top;
-
-  /// Padding from the left.
-  double left;
-
-  /// Padding from the bottom.
-  double bottom;
-
-  /// Padding from the right.
-  double right;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      top,
-      left,
-      bottom,
-      right,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static MbxEdgeInsets decode(Object result) {
-    result as List<Object?>;
-    return MbxEdgeInsets(
-      top: result[0]! as double,
-      left: result[1]! as double,
-      bottom: result[2]! as double,
-      right: result[3]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MbxEdgeInsets || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return top == other.top &&
-        left == other.left &&
-        bottom == other.bottom &&
-        right == other.right;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Various options for describing the viewpoint of a camera. All fields are
-/// optional.
-///
-/// Anchor and center points are mutually exclusive, with preference for the
-/// center point when both are set.
-class CameraOptions {
-  CameraOptions({
-    this.center,
-    this.padding,
-    this.anchor,
-    this.zoom,
-    this.bearing,
-    this.pitch,
-  });
-
-  /// Coordinate at the center of the camera.
-  Point? center;
-
-  /// Padding around the interior of the view that affects the frame of
-  /// reference for `center`.
-  MbxEdgeInsets? padding;
-
-  /// Point of reference for `zoom` and `angle`, assuming an origin at the
-  /// top-left corner of the view.
-  ScreenCoordinate? anchor;
-
-  /// Zero-based zoom level. Constrained to the minimum and maximum zoom
-  /// levels.
-  double? zoom;
-
-  /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  double? bearing;
-
-  /// Pitch toward the horizon measured in degrees.
-  double? pitch;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      center,
-      padding,
-      anchor,
-      zoom,
-      bearing,
-      pitch,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CameraOptions decode(Object result) {
-    result as List<Object?>;
-    return CameraOptions(
-      center: result[0] as Point?,
-      padding: result[1] as MbxEdgeInsets?,
-      anchor: result[2] as ScreenCoordinate?,
-      zoom: result[3] as double?,
-      bearing: result[4] as double?,
-      pitch: result[5] as double?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CameraOptions || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return center == other.center &&
-        padding == other.padding &&
-        anchor == other.anchor &&
-        zoom == other.zoom &&
-        bearing == other.bearing &&
-        pitch == other.pitch;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// Describes the viewpoint of a camera.
-class CameraState {
-  CameraState({
-    required this.center,
-    required this.padding,
-    required this.zoom,
-    required this.bearing,
-    required this.pitch,
-  });
-
-  /// Coordinate at the center of the camera.
-  Point center;
-
-  /// Padding around the interior of the view that affects the frame of
-  /// reference for `center`.
-  MbxEdgeInsets padding;
-
-  /// Zero-based zoom level. Constrained to the minimum and maximum zoom
-  /// levels.
-  double zoom;
-
-  /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  double bearing;
-
-  /// Pitch toward the horizon measured in degrees.
-  double pitch;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      center,
-      padding,
-      zoom,
-      bearing,
-      pitch,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static CameraState decode(Object result) {
-    result as List<Object?>;
-    return CameraState(
-      center: result[0]! as Point,
-      padding: result[1]! as MbxEdgeInsets,
-      zoom: result[2]! as double,
-      bearing: result[3]! as double,
-      pitch: result[4]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! CameraState || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return center == other.center &&
-        padding == other.padding &&
-        zoom == other.zoom &&
-        bearing == other.bearing &&
-        pitch == other.pitch;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// Holds options to be used for setting `camera bounds`.
 class CameraBoundsOptions {
   CameraBoundsOptions({
@@ -811,13 +573,7 @@ class CameraBoundsOptions {
   double? minPitch;
 
   List<Object?> _toList() {
-    return <Object?>[
-      bounds,
-      maxZoom,
-      minZoom,
-      maxPitch,
-      minPitch,
-    ];
+    return <Object?>[bounds, maxZoom, minZoom, maxPitch, minPitch];
   }
 
   Object encode() {
@@ -882,13 +638,7 @@ class CameraBounds {
   double minPitch;
 
   List<Object?> _toList() {
-    return <Object?>[
-      bounds,
-      maxZoom,
-      minZoom,
-      maxPitch,
-      minPitch,
-    ];
+    return <Object?>[bounds, maxZoom, minZoom, maxPitch, minPitch];
   }
 
   Object encode() {
@@ -928,10 +678,7 @@ class CameraBounds {
 }
 
 class MapAnimationOptions {
-  MapAnimationOptions({
-    this.duration,
-    this.startDelay,
-  });
+  MapAnimationOptions({this.duration, this.startDelay});
 
   /// The duration of the animation in milliseconds.
   /// If not set explicitly default duration will be taken 300ms
@@ -942,10 +689,7 @@ class MapAnimationOptions {
   int? startDelay;
 
   List<Object?> _toList() {
-    return <Object?>[
-      duration,
-      startDelay,
-    ];
+    return <Object?>[duration, startDelay];
   }
 
   Object encode() {
@@ -998,11 +742,7 @@ class CoordinateBounds {
   bool infiniteBounds;
 
   List<Object?> _toList() {
-    return <Object?>[
-      southwest,
-      northeast,
-      infiniteBounds,
-    ];
+    return <Object?>[southwest, northeast, infiniteBounds];
   }
 
   Object encode() {
@@ -1040,16 +780,12 @@ class CoordinateBounds {
 /// Options for enabling debugging features in a map.
 @Deprecated("Use 'MapWidgetDebugOptions' instead")
 class MapDebugOptions {
-  MapDebugOptions({
-    required this.data,
-  });
+  MapDebugOptions({required this.data});
 
   MapDebugOptionsData data;
 
   List<Object?> _toList() {
-    return <Object?>[
-      data,
-    ];
+    return <Object?>[data];
   }
 
   Object encode() {
@@ -1058,9 +794,7 @@ class MapDebugOptions {
 
   static MapDebugOptions decode(Object result) {
     result as List<Object?>;
-    return MapDebugOptions(
-      data: result[0]! as MapDebugOptionsData,
-    );
+    return MapDebugOptions(data: result[0]! as MapDebugOptionsData);
   }
 
   @override
@@ -1082,16 +816,12 @@ class MapDebugOptions {
 
 /// Map memory budget in megabytes.
 class TileCacheBudgetInMegabytes {
-  TileCacheBudgetInMegabytes({
-    required this.size,
-  });
+  TileCacheBudgetInMegabytes({required this.size});
 
   int size;
 
   List<Object?> _toList() {
-    return <Object?>[
-      size,
-    ];
+    return <Object?>[size];
   }
 
   Object encode() {
@@ -1100,9 +830,7 @@ class TileCacheBudgetInMegabytes {
 
   static TileCacheBudgetInMegabytes decode(Object result) {
     result as List<Object?>;
-    return TileCacheBudgetInMegabytes(
-      size: result[0]! as int,
-    );
+    return TileCacheBudgetInMegabytes(size: result[0]! as int);
   }
 
   @override
@@ -1125,16 +853,12 @@ class TileCacheBudgetInMegabytes {
 
 /// Map memory budget in tiles.
 class TileCacheBudgetInTiles {
-  TileCacheBudgetInTiles({
-    required this.size,
-  });
+  TileCacheBudgetInTiles({required this.size});
 
   int size;
 
   List<Object?> _toList() {
-    return <Object?>[
-      size,
-    ];
+    return <Object?>[size];
   }
 
   Object encode() {
@@ -1143,9 +867,7 @@ class TileCacheBudgetInTiles {
 
   static TileCacheBudgetInTiles decode(Object result) {
     result as List<Object?>;
-    return TileCacheBudgetInTiles(
-      size: result[0]! as int,
-    );
+    return TileCacheBudgetInTiles(size: result[0]! as int);
   }
 
   @override
@@ -1266,63 +988,10 @@ class MapOptions {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// Describes the coordinate on the screen, measured from top to bottom and from left to right.
-/// Note: the `map` uses screen coordinate units measured in `logical pixels`.
-class ScreenCoordinate {
-  ScreenCoordinate({
-    required this.x,
-    required this.y,
-  });
-
-  /// A value representing the x position of this coordinate.
-  double x;
-
-  /// A value representing the y position of this coordinate.
-  double y;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      x,
-      y,
-    ];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static ScreenCoordinate decode(Object result) {
-    result as List<Object?>;
-    return ScreenCoordinate(
-      x: result[0]! as double,
-      y: result[1]! as double,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! ScreenCoordinate || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return x == other.x && y == other.y;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
 /// Describes the coordinate box on the screen, measured in `logical pixels`
 /// from top to bottom and from left to right.
 class ScreenBox {
-  ScreenBox({
-    required this.min,
-    required this.max,
-  });
+  ScreenBox({required this.min, required this.max});
 
   /// The screen coordinate close to the top left corner of the screen.
   ScreenCoordinate min;
@@ -1331,10 +1000,7 @@ class ScreenBox {
   ScreenCoordinate max;
 
   List<Object?> _toList() {
-    return <Object?>[
-      min,
-      max,
-    ];
+    return <Object?>[min, max];
   }
 
   Object encode() {
@@ -1368,10 +1034,7 @@ class ScreenBox {
 
 /// A coordinate bounds and zoom.
 class CoordinateBoundsZoom {
-  CoordinateBoundsZoom({
-    required this.bounds,
-    required this.zoom,
-  });
+  CoordinateBoundsZoom({required this.bounds, required this.zoom});
 
   /// The latitude and longitude bounds.
   CoordinateBounds bounds;
@@ -1380,10 +1043,7 @@ class CoordinateBoundsZoom {
   double zoom;
 
   List<Object?> _toList() {
-    return <Object?>[
-      bounds,
-      zoom,
-    ];
+    return <Object?>[bounds, zoom];
   }
 
   Object encode() {
@@ -1417,10 +1077,7 @@ class CoordinateBoundsZoom {
 
 /// Size type.
 class Size {
-  Size({
-    required this.width,
-    required this.height,
-  });
+  Size({required this.width, required this.height});
 
   /// Width of the size.
   double width;
@@ -1429,10 +1086,7 @@ class Size {
   double height;
 
   List<Object?> _toList() {
-    return <Object?>[
-      width,
-      height,
-    ];
+    return <Object?>[width, height];
   }
 
   Object encode() {
@@ -1441,10 +1095,7 @@ class Size {
 
   static Size decode(Object result) {
     result as List<Object?>;
-    return Size(
-      width: result[0]! as double,
-      height: result[1]! as double,
-    );
+    return Size(width: result[0]! as double, height: result[1]! as double);
   }
 
   @override
@@ -1466,10 +1117,7 @@ class Size {
 
 /// Options for querying rendered features.
 class RenderedQueryOptions {
-  RenderedQueryOptions({
-    this.layerIds,
-    this.filter,
-  });
+  RenderedQueryOptions({this.layerIds, this.filter});
 
   /// Layer IDs to include in the query.
   List<String?>? layerIds;
@@ -1478,10 +1126,7 @@ class RenderedQueryOptions {
   String? filter;
 
   List<Object?> _toList() {
-    return <Object?>[
-      layerIds,
-      filter,
-    ];
+    return <Object?>[layerIds, filter];
   }
 
   Object encode() {
@@ -1515,10 +1160,7 @@ class RenderedQueryOptions {
 
 /// Options for querying source features.
 class SourceQueryOptions {
-  SourceQueryOptions({
-    this.sourceLayerIds,
-    required this.filter,
-  });
+  SourceQueryOptions({this.sourceLayerIds, required this.filter});
 
   /// Source layer IDs to include in the query.
   List<String?>? sourceLayerIds;
@@ -1527,10 +1169,7 @@ class SourceQueryOptions {
   String filter;
 
   List<Object?> _toList() {
-    return <Object?>[
-      sourceLayerIds,
-      filter,
-    ];
+    return <Object?>[sourceLayerIds, filter];
   }
 
   Object encode() {
@@ -1565,10 +1204,7 @@ class SourceQueryOptions {
 
 /// A value or a collection of a feature extension.
 class FeatureExtensionValue {
-  FeatureExtensionValue({
-    this.value,
-    this.featureCollection,
-  });
+  FeatureExtensionValue({this.value, this.featureCollection});
 
   /// An optional value of a feature extension
   String? value;
@@ -1577,10 +1213,7 @@ class FeatureExtensionValue {
   List<Map<String?, Object?>?>? featureCollection;
 
   List<Object?> _toList() {
-    return <Object?>[
-      value,
-      featureCollection,
-    ];
+    return <Object?>[value, featureCollection];
   }
 
   Object encode() {
@@ -1592,8 +1225,9 @@ class FeatureExtensionValue {
     return FeatureExtensionValue(
       value: result[0] as String?,
       featureCollection: (result[1] as List<Object?>?)?.map((e) {
-        return Map<Object?, Object?>.from(e as Map<dynamic, dynamic>)
-            .cast<String?, Object?>();
+        return Map<Object?, Object?>.from(
+          e as Map<dynamic, dynamic>,
+        ).cast<String?, Object?>();
       }).toList(),
     );
   }
@@ -1618,11 +1252,7 @@ class FeatureExtensionValue {
 
 /// Specifies position of a layer that is added via addStyleLayer method.
 class LayerPosition {
-  LayerPosition({
-    this.above,
-    this.below,
-    this.at,
-  });
+  LayerPosition({this.above, this.below, this.at});
 
   /// Layer should be positioned above specified layer id.
   String? above;
@@ -1634,11 +1264,7 @@ class LayerPosition {
   int? at;
 
   List<Object?> _toList() {
-    return <Object?>[
-      above,
-      below,
-      at,
-    ];
+    return <Object?>[above, below, at];
   }
 
   Object encode() {
@@ -1673,11 +1299,7 @@ class LayerPosition {
 
 /// Specifies the position at which an import will be added when using `Style.addImport`
 class ImportPosition {
-  ImportPosition({
-    this.above,
-    this.below,
-    this.at,
-  });
+  ImportPosition({this.above, this.below, this.at});
 
   /// Import should be positioned above the specified import id.
   String? above;
@@ -1689,11 +1311,7 @@ class ImportPosition {
   int? at;
 
   List<Object?> _toList() {
-    return <Object?>[
-      above,
-      below,
-      at,
-    ];
+    return <Object?>[above, below, at];
   }
 
   Object encode() {
@@ -1729,10 +1347,7 @@ class ImportPosition {
 /// Represents query result that is returned in QueryRenderedFeaturesCallback.
 /// @see `queryRenderedFeatures`
 class QueriedRenderedFeature {
-  QueriedRenderedFeature({
-    required this.queriedFeature,
-    required this.layers,
-  });
+  QueriedRenderedFeature({required this.queriedFeature, required this.layers});
 
   /// Feature returned by the query.
   QueriedFeature queriedFeature;
@@ -1743,10 +1358,7 @@ class QueriedRenderedFeature {
   List<String?> layers;
 
   List<Object?> _toList() {
-    return <Object?>[
-      queriedFeature,
-      layers,
-    ];
+    return <Object?>[queriedFeature, layers];
   }
 
   Object encode() {
@@ -1782,17 +1394,13 @@ class QueriedRenderedFeature {
 /// Represents query result that is returned in QuerySourceFeaturesCallback.
 /// @see `querySourceFeatures`
 class QueriedSourceFeature {
-  QueriedSourceFeature({
-    required this.queriedFeature,
-  });
+  QueriedSourceFeature({required this.queriedFeature});
 
   /// Feature returned by the query.
   QueriedFeature queriedFeature;
 
   List<Object?> _toList() {
-    return <Object?>[
-      queriedFeature,
-    ];
+    return <Object?>[queriedFeature];
   }
 
   Object encode() {
@@ -1801,9 +1409,7 @@ class QueriedSourceFeature {
 
   static QueriedSourceFeature decode(Object result) {
     result as List<Object?>;
-    return QueriedSourceFeature(
-      queriedFeature: result[0]! as QueriedFeature,
-    );
+    return QueriedSourceFeature(queriedFeature: result[0]! as QueriedFeature);
   }
 
   @override
@@ -1848,12 +1454,7 @@ class QueriedFeature {
   String state;
 
   List<Object?> _toList() {
-    return <Object?>[
-      feature,
-      source,
-      sourceLayer,
-      state,
-    ];
+    return <Object?>[feature, source, sourceLayer, state];
   }
 
   Object encode() {
@@ -1900,10 +1501,7 @@ class QueriedFeature {
 /// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
 /// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
 class FeaturesetFeatureId {
-  FeaturesetFeatureId({
-    required this.id,
-    this.namespace,
-  });
+  FeaturesetFeatureId({required this.id, this.namespace});
 
   /// A feature id coming from the feature itself.exp
   String id;
@@ -1912,10 +1510,7 @@ class FeaturesetFeatureId {
   String? namespace;
 
   List<Object?> _toList() {
-    return <Object?>[
-      id,
-      namespace,
-    ];
+    return <Object?>[id, namespace];
   }
 
   Object encode() {
@@ -1949,16 +1544,12 @@ class FeaturesetFeatureId {
 
 /// Wraps a FeatureState map
 class FeatureState {
-  FeatureState({
-    required this.map,
-  });
+  FeatureState({required this.map});
 
   Map<String, Object?> map;
 
   List<Object?> _toList() {
-    return <Object?>[
-      map,
-    ];
+    return <Object?>[map];
   }
 
   Object encode() {
@@ -2146,11 +1737,7 @@ class _InteractionPigeon {
 ///
 /// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
 class FeaturesetDescriptor {
-  FeaturesetDescriptor({
-    this.featuresetId,
-    this.importId,
-    this.layerId,
-  });
+  FeaturesetDescriptor({this.featuresetId, this.importId, this.layerId});
 
   /// An optional unique identifier for the featureset within the style.
   /// This id is used to reference a specific featureset.
@@ -2173,11 +1760,7 @@ class FeaturesetDescriptor {
   String? layerId;
 
   List<Object?> _toList() {
-    return <Object?>[
-      featuresetId,
-      importId,
-      layerId,
-    ];
+    return <Object?>[featuresetId, importId, layerId];
   }
 
   Object encode() {
@@ -2248,13 +1831,7 @@ class FeaturesetFeature {
   Map<String, Object?> state;
 
   List<Object?> _toList() {
-    return <Object?>[
-      id,
-      featureset,
-      geometry,
-      properties,
-      state,
-    ];
+    return <Object?>[id, featureset, geometry, properties, state];
   }
 
   Object encode() {
@@ -2267,8 +1844,8 @@ class FeaturesetFeature {
       id: result[0] as FeaturesetFeatureId?,
       featureset: result[1]! as FeaturesetDescriptor,
       geometry: (result[2] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
-      properties:
-          (result[3] as Map<Object?, Object?>?)!.cast<String, Object?>(),
+      properties: (result[3] as Map<Object?, Object?>?)!
+          .cast<String, Object?>(),
       state: (result[4] as Map<Object?, Object?>?)!.cast<String, Object?>(),
     );
   }
@@ -2296,10 +1873,7 @@ class FeaturesetFeature {
 
 /// Geometry for querying rendered features.
 class _RenderedQueryGeometry {
-  _RenderedQueryGeometry({
-    required this.value,
-    required this.type,
-  });
+  _RenderedQueryGeometry({required this.value, required this.type});
 
   /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
   String value;
@@ -2307,10 +1881,7 @@ class _RenderedQueryGeometry {
   Type type;
 
   List<Object?> _toList() {
-    return <Object?>[
-      value,
-      type,
-    ];
+    return <Object?>[value, type];
   }
 
   Object encode() {
@@ -2349,10 +1920,7 @@ class _RenderedQueryGeometry {
 /// of 6,378,137 meters. Coordinates are determined as distances, in meters, on the surface
 /// of that sphere.
 class ProjectedMeters {
-  ProjectedMeters({
-    required this.northing,
-    required this.easting,
-  });
+  ProjectedMeters({required this.northing, required this.easting});
 
   /// Projected meters in north direction.
   double northing;
@@ -2361,10 +1929,7 @@ class ProjectedMeters {
   double easting;
 
   List<Object?> _toList() {
-    return <Object?>[
-      northing,
-      easting,
-    ];
+    return <Object?>[northing, easting];
   }
 
   Object encode() {
@@ -2398,10 +1963,7 @@ class ProjectedMeters {
 
 /// Describes a point on the map in Mercator projection.
 class MercatorCoordinate {
-  MercatorCoordinate({
-    required this.x,
-    required this.y,
-  });
+  MercatorCoordinate({required this.x, required this.y});
 
   /// A value representing the x position of this coordinate.
   double x;
@@ -2410,10 +1972,7 @@ class MercatorCoordinate {
   double y;
 
   List<Object?> _toList() {
-    return <Object?>[
-      x,
-      y,
-    ];
+    return <Object?>[x, y];
   }
 
   Object encode() {
@@ -2422,10 +1981,7 @@ class MercatorCoordinate {
 
   static MercatorCoordinate decode(Object result) {
     result as List<Object?>;
-    return MercatorCoordinate(
-      x: result[0]! as double,
-      y: result[1]! as double,
-    );
+    return MercatorCoordinate(x: result[0]! as double, y: result[1]! as double);
   }
 
   @override
@@ -2447,10 +2003,7 @@ class MercatorCoordinate {
 
 /// The information about style object (source or layer).
 class StyleObjectInfo {
-  StyleObjectInfo({
-    required this.id,
-    required this.type,
-  });
+  StyleObjectInfo({required this.id, required this.type});
 
   /// The object's identifier.
   String id;
@@ -2459,10 +2012,7 @@ class StyleObjectInfo {
   String type;
 
   List<Object?> _toList() {
-    return <Object?>[
-      id,
-      type,
-    ];
+    return <Object?>[id, type];
   }
 
   Object encode() {
@@ -2495,16 +2045,12 @@ class StyleObjectInfo {
 }
 
 class StyleProjection {
-  StyleProjection({
-    required this.name,
-  });
+  StyleProjection({required this.name});
 
   StyleProjectionName name;
 
   List<Object?> _toList() {
-    return <Object?>[
-      name,
-    ];
+    return <Object?>[name];
   }
 
   Object encode() {
@@ -2513,9 +2059,7 @@ class StyleProjection {
 
   static StyleProjection decode(Object result) {
     result as List<Object?>;
-    return StyleProjection(
-      name: result[0]! as StyleProjectionName,
-    );
+    return StyleProjection(name: result[0]! as StyleProjectionName);
   }
 
   @override
@@ -2819,11 +2363,7 @@ class AmbientLight {
 
 /// Image type.
 class MbxImage {
-  MbxImage({
-    required this.width,
-    required this.height,
-    required this.data,
-  });
+  MbxImage({required this.width, required this.height, required this.data});
 
   /// The width of the image, in screen pixels.
   int width;
@@ -2839,11 +2379,7 @@ class MbxImage {
   Uint8List data;
 
   List<Object?> _toList() {
-    return <Object?>[
-      width,
-      height,
-      data,
-    ];
+    return <Object?>[width, height, data];
   }
 
   Object encode() {
@@ -2880,10 +2416,7 @@ class MbxImage {
 
 /// Describes the image stretch areas.
 class ImageStretches {
-  ImageStretches({
-    required this.first,
-    required this.second,
-  });
+  ImageStretches({required this.first, required this.second});
 
   /// The first stretchable part in screen pixel units.
   double first;
@@ -2892,10 +2425,7 @@ class ImageStretches {
   double second;
 
   List<Object?> _toList() {
-    return <Object?>[
-      first,
-      second,
-    ];
+    return <Object?>[first, second];
   }
 
   Object encode() {
@@ -2951,12 +2481,7 @@ class ImageContent {
   double bottom;
 
   List<Object?> _toList() {
-    return <Object?>[
-      left,
-      top,
-      right,
-      bottom,
-    ];
+    return <Object?>[left, top, right, bottom];
   }
 
   Object encode() {
@@ -3015,11 +2540,7 @@ class TransitionOptions {
   bool? enablePlacementTransitions;
 
   List<Object?> _toList() {
-    return <Object?>[
-      duration,
-      delay,
-      enablePlacementTransitions,
-    ];
+    return <Object?>[duration, delay, enablePlacementTransitions];
   }
 
   Object encode() {
@@ -3056,11 +2577,7 @@ class TransitionOptions {
 
 /// Represents a tile coordinate.
 class CanonicalTileID {
-  CanonicalTileID({
-    required this.z,
-    required this.x,
-    required this.y,
-  });
+  CanonicalTileID({required this.z, required this.x, required this.y});
 
   /// The z value of the coordinate (zoom-level).
   int z;
@@ -3072,11 +2589,7 @@ class CanonicalTileID {
   int y;
 
   List<Object?> _toList() {
-    return <Object?>[
-      z,
-      x,
-      y,
-    ];
+    return <Object?>[z, x, y];
   }
 
   Object encode() {
@@ -3111,10 +2624,7 @@ class CanonicalTileID {
 
 /// Holds a style property value with meta data.
 class StylePropertyValue {
-  StylePropertyValue({
-    this.value,
-    required this.kind,
-  });
+  StylePropertyValue({this.value, required this.kind});
 
   /// The property value.
   Object? value;
@@ -3123,10 +2633,7 @@ class StylePropertyValue {
   StylePropertyValueKind kind;
 
   List<Object?> _toList() {
-    return <Object?>[
-      value,
-      kind,
-    ];
+    return <Object?>[value, kind];
   }
 
   Object encode() {
@@ -3252,46 +2759,46 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is Feature) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
+    } else if (value is CameraState) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is CameraBoundsOptions) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
+    } else if (value is CameraBounds) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is MapAnimationOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is MapOptions) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
     } else if (value is ScreenBox) {
@@ -3486,33 +2993,33 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 157:
         return Feature.decode(readValue(buffer)!);
       case 158:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 159:
-        return TileCoverOptions.decode(readValue(buffer)!);
-      case 160:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 161:
+      case 159:
         return CameraOptions.decode(readValue(buffer)!);
-      case 162:
+      case 160:
         return CameraState.decode(readValue(buffer)!);
-      case 163:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 164:
-        return CameraBounds.decode(readValue(buffer)!);
-      case 165:
-        return MapAnimationOptions.decode(readValue(buffer)!);
-      case 166:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 167:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 168:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 169:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 170:
-        return MapOptions.decode(readValue(buffer)!);
-      case 171:
+      case 161:
         return ScreenCoordinate.decode(readValue(buffer)!);
+      case 162:
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+      case 163:
+        return TileCoverOptions.decode(readValue(buffer)!);
+      case 164:
+        return CameraBoundsOptions.decode(readValue(buffer)!);
+      case 165:
+        return CameraBounds.decode(readValue(buffer)!);
+      case 166:
+        return MapAnimationOptions.decode(readValue(buffer)!);
+      case 167:
+        return CoordinateBounds.decode(readValue(buffer)!);
+      case 168:
+        return MapDebugOptions.decode(readValue(buffer)!);
+      case 169:
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+      case 170:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 171:
+        return MapOptions.decode(readValue(buffer)!);
       case 172:
         return ScreenBox.decode(readValue(buffer)!);
       case 173:
@@ -3588,11 +3095,13 @@ class _AnimationManager {
   /// Constructor for [_AnimationManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _AnimationManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _AnimationManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -3600,18 +3109,21 @@ class _AnimationManager {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<void> easeTo(CameraOptions cameraOptions,
-      MapAnimationOptions? mapAnimationOptions) async {
+  Future<void> easeTo(
+    CameraOptions cameraOptions,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.easeTo$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[cameraOptions, mapAnimationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[cameraOptions, mapAnimationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3627,18 +3139,21 @@ class _AnimationManager {
     }
   }
 
-  Future<void> flyTo(CameraOptions cameraOptions,
-      MapAnimationOptions? mapAnimationOptions) async {
+  Future<void> flyTo(
+    CameraOptions cameraOptions,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.flyTo$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[cameraOptions, mapAnimationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[cameraOptions, mapAnimationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3655,17 +3170,20 @@ class _AnimationManager {
   }
 
   Future<void> pitchBy(
-      double pitch, MapAnimationOptions? mapAnimationOptions) async {
+    double pitch,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.pitchBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[pitch, mapAnimationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[pitch, mapAnimationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3681,18 +3199,22 @@ class _AnimationManager {
     }
   }
 
-  Future<void> scaleBy(double amount, ScreenCoordinate? screenCoordinate,
-      MapAnimationOptions? mapAnimationOptions) async {
+  Future<void> scaleBy(
+    double amount,
+    ScreenCoordinate? screenCoordinate,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.scaleBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[amount, screenCoordinate, mapAnimationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[amount, screenCoordinate, mapAnimationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3708,18 +3230,21 @@ class _AnimationManager {
     }
   }
 
-  Future<void> moveBy(ScreenCoordinate screenCoordinate,
-      MapAnimationOptions? mapAnimationOptions) async {
+  Future<void> moveBy(
+    ScreenCoordinate screenCoordinate,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.moveBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[screenCoordinate, mapAnimationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[screenCoordinate, mapAnimationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3735,18 +3260,22 @@ class _AnimationManager {
     }
   }
 
-  Future<void> rotateBy(ScreenCoordinate first, ScreenCoordinate second,
-      MapAnimationOptions? mapAnimationOptions) async {
+  Future<void> rotateBy(
+    ScreenCoordinate first,
+    ScreenCoordinate second,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.rotateBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[first, second, mapAnimationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[first, second, mapAnimationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3767,10 +3296,10 @@ class _AnimationManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.cancelCameraAnimation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -3793,11 +3322,13 @@ class _CameraManager {
   /// Constructor for [_CameraManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _CameraManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _CameraManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -3816,21 +3347,23 @@ class _CameraManager {
   /// @param offset The center of the given bounds relative to map center in screen points.
   /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinatesPadding(
-      List<Point> coordinates,
-      CameraOptions camera,
-      MbxEdgeInsets? coordinatesPadding,
-      double? maxZoom,
-      ScreenCoordinate? offset) async {
+    List<Point> coordinates,
+    CameraOptions camera,
+    MbxEdgeInsets? coordinatesPadding,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-        <Object?>[coordinates, camera, coordinatesPadding, maxZoom, offset]);
+      <Object?>[coordinates, camera, coordinatesPadding, maxZoom, offset],
+    );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3861,22 +3394,24 @@ class _CameraManager {
   /// @param offset The center of the given bounds relative to map center in screen points.
   /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinateBounds(
-      CoordinateBounds bounds,
-      MbxEdgeInsets? padding,
-      double? bearing,
-      double? pitch,
-      double? maxZoom,
-      ScreenCoordinate? offset) async {
+    CoordinateBounds bounds,
+    MbxEdgeInsets? padding,
+    double? bearing,
+    double? pitch,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinateBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[bounds, padding, bearing, pitch, maxZoom, offset],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[bounds, padding, bearing, pitch, maxZoom, offset]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3905,18 +3440,23 @@ class _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  Future<CameraOptions> cameraForCoordinates(List<Point> coordinates,
-      MbxEdgeInsets? padding, double? bearing, double? pitch) async {
+  Future<CameraOptions> cameraForCoordinates(
+    List<Point> coordinates,
+    MbxEdgeInsets? padding,
+    double? bearing,
+    double? pitch,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinates$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinates, padding, bearing, pitch],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinates, padding, bearing, pitch]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3951,17 +3491,21 @@ class _CameraManager {
   ///
   /// @return The `camera options` object with the zoom level adjusted to fit `coordinates` into the `box`.
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
-      List<Point> coordinates, CameraOptions camera, ScreenBox box) async {
+    List<Point> coordinates,
+    CameraOptions camera,
+    ScreenBox box,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesCameraOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinates, camera, box],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinates, camera, box]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3990,18 +3534,23 @@ class _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  Future<CameraOptions> cameraForGeometry(Map<String?, Object?> geometry,
-      MbxEdgeInsets padding, double? bearing, double? pitch) async {
+  Future<CameraOptions> cameraForGeometry(
+    Map<String?, Object?> geometry,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForGeometry$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[geometry, padding, bearing, pitch],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[geometry, padding, bearing, pitch]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4032,17 +3581,19 @@ class _CameraManager {
   /// @return The `coordinate bounds` object representing a given `camera`.
   ///
   Future<CoordinateBounds> coordinateBoundsForCamera(
-      CameraOptions camera) async {
+    CameraOptions camera,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[camera],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[camera]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4072,17 +3623,19 @@ class _CameraManager {
   /// @return The `coordinate bounds` object representing a given `camera`.
   ///
   Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
-      CameraOptions camera) async {
+    CameraOptions camera,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCameraUnwrapped$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[camera],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[camera]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4113,17 +3666,19 @@ class _CameraManager {
   /// @return The object representing `coordinate bounds` and `zoom` for a given `camera`.
   ///
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
-      CameraOptions camera) async {
+    CameraOptions camera,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[camera],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[camera]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4153,17 +3708,19 @@ class _CameraManager {
   /// @return The object representing `coordinate bounds` and `zoom` for a given `camera`.
   ///
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
-      CameraOptions camera) async {
+    CameraOptions camera,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCameraUnwrapped$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[camera],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[camera]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4198,12 +3755,13 @@ class _CameraManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelForCoordinate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinate],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinate]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4238,12 +3796,13 @@ class _CameraManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateForPixel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[pixel],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[pixel]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4274,17 +3833,19 @@ class _CameraManager {
   ///
   /// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
-      List<Point> coordinates) async {
+    List<Point> coordinates,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelsForCoordinates$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinates],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinates]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4316,17 +3877,19 @@ class _CameraManager {
   ///
   /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
   Future<List<Point>> coordinatesForPixels(
-      List<ScreenCoordinate?> pixels) async {
+    List<ScreenCoordinate?> pixels,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinatesForPixels$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[pixels],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[pixels]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4358,12 +3921,13 @@ class _CameraManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[cameraOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[cameraOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4387,10 +3951,10 @@ class _CameraManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getCameraState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4425,12 +3989,13 @@ class _CameraManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4453,10 +4018,10 @@ class _CameraManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4483,39 +4048,49 @@ abstract class _InteractionsListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       MapInterfaces_PigeonCodec();
 
-  void onInteraction(FeaturesetFeature? feature,
-      MapContentGestureContext context, String interactionID);
+  void onInteraction(
+    FeaturesetFeature? feature,
+    MapContentGestureContext context,
+    String interactionID,
+  );
 
   static void setUp(
     _InteractionsListener? api, {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final FeaturesetFeature? arg_feature =
               (args[0] as FeaturesetFeature?);
           final MapContentGestureContext? arg_context =
               (args[1] as MapContentGestureContext?);
-          assert(arg_context != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
+          assert(
+            arg_context != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.',
+          );
           final String? arg_interactionID = (args[2] as String?);
-          assert(arg_interactionID != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null String.');
+          assert(
+            arg_interactionID != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null String.',
+          );
           try {
             api.onInteraction(arg_feature, arg_context!, arg_interactionID!);
             return wrapResponse(empty: true);
@@ -4523,7 +4098,8 @@ abstract class _InteractionsListener {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -4537,11 +4113,13 @@ class _MapInterface {
   /// Constructor for [_MapInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _MapInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _MapInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -4554,12 +4132,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleURI],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleURI]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4580,12 +4159,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleJson$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleJson],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleJson]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4606,10 +4186,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.clearData$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4627,18 +4207,20 @@ class _MapInterface {
   }
 
   Future<void> setTileCacheBudget(
-      TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
-      TileCacheBudgetInTiles? tileCacheBudgetInTiles) async {
+    TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
+    TileCacheBudgetInTiles? tileCacheBudgetInTiles,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setTileCacheBudget$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[tileCacheBudgetInMegabytes, tileCacheBudgetInTiles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[tileCacheBudgetInMegabytes, tileCacheBudgetInTiles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4662,10 +4244,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4693,10 +4275,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.triggerRepaint$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4723,12 +4305,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setGestureInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[inProgress],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[inProgress]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4752,10 +4335,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isGestureInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4780,17 +4363,20 @@ class _MapInterface {
   /// For internal use only.
   /// Dispatch a map gesture event for testing purposes.
   Future<void> dispatch(
-      String gesture, ScreenCoordinate screenCoordinate) async {
+    String gesture,
+    ScreenCoordinate screenCoordinate,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[gesture, screenCoordinate],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[gesture, screenCoordinate]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4816,12 +4402,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setUserAnimationInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[inProgress],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[inProgress]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4845,10 +4432,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isUserAnimationInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4880,12 +4467,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setPrefetchZoomDelta$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[delta],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[delta]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4909,10 +4497,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getPrefetchZoomDelta$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -4940,12 +4528,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setNorthOrientation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[orientation],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[orientation]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4967,12 +4556,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setConstrainMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[mode],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[mode]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4994,12 +4584,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setViewportMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[mode],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[mode]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5023,10 +4614,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getMapOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -5053,10 +4644,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -5080,17 +4671,19 @@ class _MapInterface {
   }
 
   Future<void> setDebugOptions(
-      List<_MapWidgetDebugOptions> debugOptions) async {
+    List<_MapWidgetDebugOptions> debugOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[debugOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[debugOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5115,10 +4708,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -5152,12 +4745,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[debugOptions, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[debugOptions, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5180,17 +4774,20 @@ class _MapInterface {
   /// @param completion The `query features completion` called when the query completes.
   /// @return A list of `QueriedRenderedFeature` objects representing the query results.
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
-      _RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
+    _RenderedQueryGeometry geometry,
+    RenderedQueryOptions options,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[geometry, options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[geometry, options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5224,19 +4821,21 @@ class _MapInterface {
   /// If omitted, the full viewport is queried.
   /// @param filter An additional filter for features.
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
-      FeaturesetDescriptor featureset,
-      _RenderedQueryGeometry? geometry,
-      String? filter) async {
+    FeaturesetDescriptor featureset,
+    _RenderedQueryGeometry? geometry,
+    String? filter,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[featureset, geometry, filter],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[featureset, geometry, filter]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5264,17 +4863,20 @@ class _MapInterface {
   /// @param options The `source query options` for querying source features.
   /// @param completion The `query features completion` called when the query completes.
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
-      String sourceId, SourceQueryOptions options) async {
+    String sourceId,
+    SourceQueryOptions options,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5307,18 +4909,23 @@ class _MapInterface {
   /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
-  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(String sourceIdentifier,
-      Map<String?, Object?> cluster, int? limit, int? offset) async {
+  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+    int? limit,
+    int? offset,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterLeaves$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceIdentifier, cluster, limit, offset],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[sourceIdentifier, cluster, limit, offset]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5349,17 +4956,20 @@ class _MapInterface {
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
-      String sourceIdentifier, Map<String?, Object?> cluster) async {
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterChildren$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceIdentifier, cluster],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceIdentifier, cluster]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5390,17 +5000,20 @@ class _MapInterface {
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
-      String sourceIdentifier, Map<String?, Object?> cluster) async {
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterExpansionZoom$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceIdentifier, cluster],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceIdentifier, cluster]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5434,18 +5047,23 @@ class _MapInterface {
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be updated.
   /// @param state The `state` object with properties to update with their respective new values.
-  Future<void> setFeatureState(String sourceId, String? sourceLayerId,
-      String featureId, String state) async {
+  Future<void> setFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String state,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, sourceLayerId, featureId, state],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[sourceId, sourceLayerId, featureId, state]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5469,19 +5087,21 @@ class _MapInterface {
   /// @param featureId Identifier of the feature whose state should be updated.
   /// @param state Map of entries to update with their respective new values
   Future<void> setFeatureStateForFeaturesetDescriptor(
-      FeaturesetDescriptor featureset,
-      FeaturesetFeatureId featureId,
-      Map<String, Object?> state) async {
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    Map<String, Object?> state,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[featureset, featureId, state],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[featureset, featureId, state]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5505,17 +5125,20 @@ class _MapInterface {
   /// @param feature The feature to update.
   /// @param state Map of entries to update with their respective new values
   Future<void> setFeatureStateForFeaturesetFeature(
-      FeaturesetFeature feature, Map<String, Object?> state) async {
+    FeaturesetFeature feature,
+    Map<String, Object?> state,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[feature, state],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[feature, state]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5542,17 +5165,21 @@ class _MapInterface {
   ///
   /// @return A String representing the Feature's state map.
   Future<String> getFeatureState(
-      String sourceId, String? sourceLayerId, String featureId) async {
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, sourceLayerId, featureId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, sourceLayerId, featureId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5580,17 +5207,20 @@ class _MapInterface {
   ///
   /// @return  The Feature's state map or an empty map if the feature could not be found.
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
-      FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) async {
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[featureset, featureId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[featureset, featureId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5618,17 +5248,19 @@ class _MapInterface {
   ///
   /// @return  The Feature's state map or an empty map if the feature could not be found.
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
-      FeaturesetFeature feature) async {
+    FeaturesetFeature feature,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[feature],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[feature]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5662,18 +5294,23 @@ class _MapInterface {
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be removed.
   /// @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
-  Future<void> removeFeatureState(String sourceId, String? sourceLayerId,
-      String featureId, String? stateKey) async {
+  Future<void> removeFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String? stateKey,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, sourceLayerId, featureId, stateKey],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[sourceId, sourceLayerId, featureId, stateKey]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5696,19 +5333,21 @@ class _MapInterface {
   /// @param featureId Identifier of the feature whose state should be removed.
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   Future<void> removeFeatureStateForFeaturesetDescriptor(
-      FeaturesetDescriptor featureset,
-      FeaturesetFeatureId featureId,
-      String? stateKey) async {
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    String? stateKey,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[featureset, featureId, stateKey],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[featureset, featureId, stateKey]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5730,17 +5369,20 @@ class _MapInterface {
   /// @param feature An interactive feature to update.
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   Future<void> removeFeatureStateForFeaturesetFeature(
-      FeaturesetFeature feature, String? stateKey) async {
+    FeaturesetFeature feature,
+    String? stateKey,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[feature, stateKey],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[feature, stateKey]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5763,17 +5405,19 @@ class _MapInterface {
   ///
   /// @param featureset A featureset descriptor
   Future<void> resetFeatureStatesForFeatureset(
-      FeaturesetDescriptor featureset) async {
+    FeaturesetDescriptor featureset,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[featureset],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[featureset]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5795,10 +5439,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -5825,12 +5469,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getElevation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinate],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinate]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5852,12 +5497,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5891,12 +5537,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5921,10 +5568,10 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.styleGlyphURL$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -5955,12 +5602,13 @@ class _MapInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setStyleGlyphURL$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[glyphURL],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[glyphURL]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5982,11 +5630,13 @@ class Projection {
   /// Constructor for [Projection].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  Projection(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  Projection({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -6002,17 +5652,20 @@ class Projection {
   ///
   /// @return Returns the distance measured in meters.
   Future<double> getMetersPerPixelAtLatitude(
-      double latitude, double zoom) async {
+    double latitude,
+    double zoom,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.getMetersPerPixelAtLatitude$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[latitude, zoom],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[latitude, zoom]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6044,12 +5697,13 @@ class Projection {
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.projectedMetersForCoordinate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinate],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinate]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6078,17 +5732,19 @@ class Projection {
   ///
   /// @return Returns a longitude-latitude pair.
   Future<Point> coordinateForProjectedMeters(
-      ProjectedMeters projectedMeters) async {
+    ProjectedMeters projectedMeters,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[projectedMeters],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[projectedMeters]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6123,12 +5779,13 @@ class Projection {
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.project$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinate, zoomScale],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinate, zoomScale]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6158,17 +5815,20 @@ class Projection {
   ///
   /// @return Returns a coordinate.
   Future<Point> unproject(
-      MercatorCoordinate coordinate, double zoomScale) async {
+    MercatorCoordinate coordinate,
+    double zoomScale,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.unproject$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinate, zoomScale],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinate, zoomScale]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6194,11 +5854,13 @@ class _MapboxOptions {
   /// Constructor for [_MapboxOptions].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _MapboxOptions(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _MapboxOptions({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -6211,10 +5873,10 @@ class _MapboxOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.getAccessToken$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6241,12 +5903,13 @@ class _MapboxOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.setAccessToken$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[token],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[token]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6267,11 +5930,13 @@ class _MapboxMapsOptions {
   /// Constructor for [_MapboxMapsOptions].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _MapboxMapsOptions(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _MapboxMapsOptions({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -6284,10 +5949,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getBaseUrl$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6314,12 +5979,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setBaseUrl$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[url],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[url]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6340,10 +6006,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getDataPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6370,12 +6036,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setDataPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[path],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[path]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6396,10 +6063,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getAssetPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6426,12 +6093,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setAssetPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[path],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[path]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6452,12 +6120,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[flutterAssetUri],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[flutterAssetUri]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6478,10 +6147,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6508,12 +6177,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setTileStoreUsageMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[mode],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[mode]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6534,10 +6204,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getWorldview$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6559,12 +6229,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setWorldview$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[worldview],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[worldview]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6585,10 +6256,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getLanguage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6610,12 +6281,13 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setLanguage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[language],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[language]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6636,10 +6308,10 @@ class _MapboxMapsOptions {
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.clearData$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6663,9 +6335,10 @@ class Settings {
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   Settings({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    : pigeonVar_binaryMessenger = binaryMessenger,
+      pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+          ? '.$messageChannelSuffix'
+          : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -6682,12 +6355,13 @@ class Settings {
         'dev.flutter.pigeon.mapbox_maps_flutter.Settings.set$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[key, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[key, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6713,12 +6387,13 @@ class Settings {
         'dev.flutter.pigeon.mapbox_maps_flutter.Settings.get$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[key],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[key]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6745,11 +6420,13 @@ class StyleManager {
   /// Constructor for [StyleManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  StyleManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  StyleManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -6765,10 +6442,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6801,12 +6478,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[uri],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[uri]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6830,10 +6508,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6863,12 +6541,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[json],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[json]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6899,10 +6578,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleDefaultCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6937,10 +6616,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTransition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6978,12 +6657,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, json, config, importPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[importId, json, config, importPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7015,12 +6695,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, uri, config, importPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[importId, uri, config, importPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7052,12 +6733,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, json, config],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId, json, config]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7089,12 +6771,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, uri, config],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId, uri, config]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7115,17 +6798,20 @@ class StyleManager {
   ///  @param importId Identifier of import to move.
   ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
   Future<void> moveStyleImport(
-      String importId, ImportPosition? importPosition) async {
+    String importId,
+    ImportPosition? importPosition,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, importPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId, importPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7147,10 +6833,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7181,12 +6867,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7212,12 +6899,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7244,17 +6932,19 @@ class StyleManager {
   ///
   /// Returns the style import configuration or a string describing an error if the operation was not successful.
   Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
-      String importId) async {
+    String importId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7283,17 +6973,20 @@ class StyleManager {
   ///
   /// Returns the style import configuration or a string describing an error if the operation was not successful.
   Future<StylePropertyValue> getStyleImportConfigProperty(
-      String importId, String config) async {
+    String importId,
+    String config,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, config],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId, config]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7320,17 +7013,20 @@ class StyleManager {
   /// @param importId Identifier of the style import.
   /// @param configs A map of style import configurations.
   Future<void> setStyleImportConfigProperties(
-      String importId, Map<String, Object> configs) async {
+    String importId,
+    Map<String, Object> configs,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, configs],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId, configs]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7352,17 +7048,21 @@ class StyleManager {
   /// @param config The style import config name.
   /// @param value The style import config value.
   Future<void> setStyleImportConfigProperty(
-      String importId, String config, Object value) async {
+    String importId,
+    String config,
+    Object value,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[importId, config, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[importId, config, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7388,12 +7088,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTransition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[transitionOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[transitionOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7418,17 +7119,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> addStyleLayer(
-      String properties, LayerPosition? layerPosition) async {
+    String properties,
+    LayerPosition? layerPosition,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[properties, layerPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[properties, layerPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7460,17 +7164,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> addPersistentStyleLayer(
-      String properties, LayerPosition? layerPosition) async {
+    String properties,
+    LayerPosition? layerPosition,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addPersistentStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[properties, layerPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[properties, layerPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7495,12 +7202,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLayerPersistent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7531,12 +7239,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7560,17 +7269,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> moveStyleLayer(
-      String layerId, LayerPosition? layerPosition) async {
+    String layerId,
+    LayerPosition? layerPosition,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId, layerPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId, layerPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7596,12 +7308,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleLayerExists$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7630,10 +7343,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7662,17 +7375,20 @@ class StyleManager {
   /// @param property The style layer property name.
   /// @return The `style property value`.
   Future<StylePropertyValue> getStyleLayerProperty(
-      String layerId, String property) async {
+    String layerId,
+    String property,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId, property],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId, property]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7701,17 +7417,21 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLayerProperty(
-      String layerId, String property, Object value) async {
+    String layerId,
+    String property,
+    Object value,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId, property, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId, property, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7735,12 +7455,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7771,17 +7492,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLayerProperties(
-      String layerId, String properties) async {
+    String layerId,
+    String properties,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[layerId, properties],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[layerId, properties]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7808,12 +7532,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleSource$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, properties],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, properties]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7835,17 +7560,20 @@ class StyleManager {
   /// @param property The style source property name.
   /// @return The value of a `property` in the source with a `sourceId`.
   Future<StylePropertyValue> getStyleSourceProperty(
-      String sourceId, String property) async {
+    String sourceId,
+    String property,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, property],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, property]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7877,17 +7605,21 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleSourceProperty(
-      String sourceId, String property, Object value) async {
+    String sourceId,
+    String property,
+    Object value,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, property, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, property, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7913,12 +7645,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7950,17 +7683,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleSourceProperties(
-      String sourceId, String properties) async {
+    String sourceId,
+    String properties,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, properties],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, properties]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8002,17 +7738,21 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addGeoJSONSourceFeatures(
-      String sourceId, String dataId, List<Feature> features) async {
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, dataId, features],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, dataId, features]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8054,17 +7794,21 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> updateGeoJSONSourceFeatures(
-      String sourceId, String dataId, List<Feature> features) async {
+    String sourceId,
+    String dataId,
+    List<Feature> features,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, dataId, features],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, dataId, features]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8106,17 +7850,21 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> removeGeoJSONSourceFeatures(
-      String sourceId, String dataId, List<String> featureIds) async {
+    String sourceId,
+    String dataId,
+    List<String> featureIds,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, dataId, featureIds],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, dataId, featureIds]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8139,17 +7887,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> updateStyleImageSourceImage(
-      String sourceId, MbxImage image) async {
+    String sourceId,
+    MbxImage image,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImageSourceImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, image],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, image]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8173,12 +7924,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleSource$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8204,12 +7956,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleSourceExists$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8238,10 +7991,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8270,10 +8023,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8304,12 +8057,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLight$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[flatLight],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[flatLight]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8330,17 +8084,20 @@ class StyleManager {
   /// @param ambientLight The ambient light source.
   /// @param directionalLight The directional light source.
   Future<void> setLights(
-      AmbientLight ambientLight, DirectionalLight directionalLight) async {
+    AmbientLight ambientLight,
+    DirectionalLight directionalLight,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLights$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[ambientLight, directionalLight],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[ambientLight, directionalLight]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8362,17 +8119,20 @@ class StyleManager {
   /// @param id The unique identifier of the style light in lights list.
   /// @return The style light property value.
   Future<StylePropertyValue> getStyleLightProperty(
-      String id, String property) async {
+    String id,
+    String property,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLightProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id, property],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id, property]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8401,17 +8161,21 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLightProperty(
-      String id, String property, Object value) async {
+    String id,
+    String property,
+    Object value,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLightProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id, property, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id, property, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8437,12 +8201,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrain$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[properties],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[properties]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8467,12 +8232,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTerrainProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[property],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[property]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8504,12 +8270,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrainProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[property, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[property, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8535,12 +8302,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[imageId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[imageId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8578,23 +8346,25 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addStyleImage(
-      String imageId,
-      double scale,
-      MbxImage image,
-      bool sdf,
-      List<ImageStretches?> stretchX,
-      List<ImageStretches?> stretchY,
-      ImageContent? content) async {
+    String imageId,
+    double scale,
+    MbxImage image,
+    bool sdf,
+    List<ImageStretches?> stretchX,
+    List<ImageStretches?> stretchY,
+    ImageContent? content,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-        <Object?>[imageId, scale, image, sdf, stretchX, stretchY, content]);
+      <Object?>[imageId, scale, image, sdf, stretchX, stretchY, content],
+    );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8620,12 +8390,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[imageId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[imageId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8651,12 +8422,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.hasStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[imageId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[imageId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8691,12 +8463,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[modelId, modelUri],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[modelId, modelUri]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8722,12 +8495,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[modelId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[modelId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8755,17 +8529,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> invalidateStyleCustomGeometrySourceTile(
-      String sourceId, CanonicalTileID tileId) async {
+    String sourceId,
+    CanonicalTileID tileId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceTile$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, tileId],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, tileId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8788,17 +8565,20 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> invalidateStyleCustomGeometrySourceRegion(
-      String sourceId, CoordinateBounds bounds) async {
+    String sourceId,
+    CoordinateBounds bounds,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[sourceId, bounds],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[sourceId, bounds]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8826,10 +8606,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLoaded$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8859,10 +8639,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getProjection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8887,12 +8667,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[projection],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[projection]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8917,12 +8698,13 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.localizeLabels$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[locale, layerIds],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[locale, layerIds]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8946,10 +8728,10 @@ class StyleManager {
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

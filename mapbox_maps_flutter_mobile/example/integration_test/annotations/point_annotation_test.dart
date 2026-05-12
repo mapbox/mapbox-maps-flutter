@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import '../empty_map_widget.dart' as app;
 
 void main() {
@@ -15,8 +16,9 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
     var geometry = Point(coordinates: Position(1.0, 2.0));
-    final ByteData bytes =
-        await rootBundle.load('assets/symbols/custom-icon.png');
+    final ByteData bytes = await rootBundle.load(
+      'assets/symbols/custom-icon.png',
+    );
     final Uint8List imageData = bytes.buffer.asUint8List();
 
     var pointAnnotationOptions = PointAnnotationOptions(
@@ -107,14 +109,15 @@ void main() {
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
     var geometry = Point(coordinates: Position(1.0, 2.0));
 
-    var pointAnnotationOptions = PointAnnotationOptions(
-      geometry: geometry,
-    );
+    var pointAnnotationOptions = PointAnnotationOptions(geometry: geometry);
     final annotation = await manager.create(pointAnnotationOptions);
     var point = annotation.geometry;
     var newPoint = Point(
-        coordinates:
-            Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+      coordinates: Position(
+        point.coordinates.lng + 1.0,
+        point.coordinates.lat + 1.0,
+      ),
+    );
     annotation.geometry = newPoint;
     await manager.update(annotation);
     await manager.delete(annotation);
@@ -136,9 +139,7 @@ void main() {
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
     var geometry = Point(coordinates: Position(1.0, 2.0));
 
-    var pointAnnotationOptions = PointAnnotationOptions(
-      geometry: geometry,
-    );
+    var pointAnnotationOptions = PointAnnotationOptions(geometry: geometry);
 
     // Create 10 annotations
     var createdAnnotations = <PointAnnotation>[];
@@ -170,4 +171,5 @@ void main() {
     expect(allAnnotations.length, equals(0));
   });
 }
+
 // End of generated file.

@@ -30,8 +30,9 @@ final class Snapshotter {
   final int _suffix = _suffixesRegistry.getSuffix();
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
     try {
-      _snapshotterInstanceManager
-          .tearDownSnapshotterForSuffix(suffix.toString());
+      _snapshotterInstanceManager.tearDownSnapshotterForSuffix(
+        suffix.toString(),
+      );
       _suffixesRegistry.releaseSuffix(suffix);
     } catch (e) {
       print("Error: Failed to dispose snapshotter, error: $e");
@@ -45,8 +46,9 @@ final class Snapshotter {
     this.onStyleDataLoadedListener,
     this.onStyleImageMissingListener,
   }) {
-    _snapshotterMessenger =
-        _SnapshotterMessenger(messageChannelSuffix: _suffix.toString());
+    _snapshotterMessenger = _SnapshotterMessenger(
+      messageChannelSuffix: _suffix.toString(),
+    );
     style = StyleManager(messageChannelSuffix: _suffix.toString());
     _mapEvents = _MapEvents(channelSuffix: _suffix.toString());
   }
@@ -61,11 +63,12 @@ final class Snapshotter {
     OnStyleImageMissingListener? onStyleImageMissingListener,
   }) async {
     final snapshotter = Snapshotter._(
-        options: options,
-        onStyleLoadedListener: onStyleLoadedListener,
-        onMapLoadErrorListener: onMapLoadErrorListener,
-        onStyleDataLoadedListener: onStyleDataLoadedListener,
-        onStyleImageMissingListener: onStyleImageMissingListener);
+      options: options,
+      onStyleLoadedListener: onStyleLoadedListener,
+      onMapLoadErrorListener: onMapLoadErrorListener,
+      onStyleDataLoadedListener: onStyleDataLoadedListener,
+      onStyleImageMissingListener: onStyleImageMissingListener,
+    );
 
     snapshotter._mapEvents._onStyleLoadedListener = onStyleLoadedListener;
     snapshotter._mapEvents._onMapLoadErrorListener = onMapLoadErrorListener;
@@ -75,12 +78,16 @@ final class Snapshotter {
         onStyleImageMissingListener;
 
     await _snapshotterInstanceManager.setupSnapshotterForSuffix(
-        snapshotter._suffix.toString(),
-        snapshotter._mapEvents.eventTypes.map((e) => e.index).toList(),
-        options);
+      snapshotter._suffix.toString(),
+      snapshotter._mapEvents.eventTypes.map((e) => e.index).toList(),
+      options,
+    );
 
-    Snapshotter._finalizer
-        .attach(snapshotter, snapshotter._suffix, detach: snapshotter);
+    Snapshotter._finalizer.attach(
+      snapshotter,
+      snapshotter._suffix,
+      detach: snapshotter,
+    );
     return snapshotter;
   }
 
@@ -88,8 +95,9 @@ final class Snapshotter {
   /// The instance should not be used after calling this method.
   Future<void> dispose() async {
     _finalizer.detach(this);
-    await _snapshotterInstanceManager
-        .tearDownSnapshotterForSuffix(_suffix.toString());
+    await _snapshotterInstanceManager.tearDownSnapshotterForSuffix(
+      _suffix.toString(),
+    );
     _suffixesRegistry.releaseSuffix(_suffix);
   }
 
@@ -120,16 +128,17 @@ final class Snapshotter {
       _snapshotterMessenger.coordinateBounds(camera);
 
   /// Calculates a `CameraOptions` to fit a list of coordinates.
-  Future<CameraOptions> camera(
-          {required List<Point> coordinates,
-          MbxEdgeInsets? padding,
-          double? bearing,
-          double? pitch}) =>
-      _snapshotterMessenger.camera(
-          coordinates: coordinates,
-          padding: padding,
-          bearing: bearing,
-          pitch: pitch);
+  Future<CameraOptions> camera({
+    required List<Point> coordinates,
+    MbxEdgeInsets? padding,
+    double? bearing,
+    double? pitch,
+  }) => _snapshotterMessenger.camera(
+    coordinates: coordinates,
+    padding: padding,
+    bearing: bearing,
+    pitch: pitch,
+  );
 
   /// Returns array of tile identifiers that cover current map camera.
   Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>

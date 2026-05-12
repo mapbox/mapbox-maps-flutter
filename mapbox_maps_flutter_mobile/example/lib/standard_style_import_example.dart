@@ -1,7 +1,9 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class StandardStyleImportExample extends StatefulWidget implements Example {
@@ -32,57 +34,63 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
     mapboxMap.style;
 
     // Load a style fragment from a JSON file and add it to the map
-    var styleJson =
-        await rootBundle.loadString("assets/fragment_realestate_NY.json");
+    var styleJson = await rootBundle.loadString(
+      "assets/fragment_realestate_NY.json",
+    );
     mapboxMap.style.addStyleImportFromJSON("real-estate-fragment", styleJson);
 
     // When the map is ready, add a tap interaction to show a snackbar with the name of the place that was tapped
-    mapboxMap
-        .addInteraction(TapInteraction(StandardPlaceLabels(), (feature, _) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Tapped place: ${feature.name}")),
-      );
-    }));
+    mapboxMap.addInteraction(
+      TapInteraction(StandardPlaceLabels(), (feature, _) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Tapped place: ${feature.name}")),
+        );
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              heroTag: 'landmarkIcons',
-              onPressed: _changeLandmarkIconsSetting,
-              child: Icon(Icons.camera_alt_outlined),
-            ),
-            SizedBox(height: 16),
-            FloatingActionButton(
-              heroTag: 'light',
-              onPressed: _changeLightSetting,
-              child: Icon(Icons.wb_sunny),
-            ),
-            SizedBox(height: 16),
-            FloatingActionButton(
-              heroTag: 'labels',
-              onPressed: _changeLabelsSetting,
-              child: Icon(Icons.label),
-            ),
-          ],
-        ),
-        body: Stack(children: [
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'landmarkIcons',
+            onPressed: _changeLandmarkIconsSetting,
+            child: Icon(Icons.camera_alt_outlined),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'light',
+            onPressed: _changeLightSetting,
+            child: Icon(Icons.wb_sunny),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'labels',
+            onPressed: _changeLabelsSetting,
+            child: Icon(Icons.label),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
           MapWidget(
             key: ValueKey("mapWidget"),
             cameraOptions: CameraOptions(
-                center: Point(coordinates: Position(-73.99, 40.72)),
-                zoom: 11,
-                pitch: 45),
+              center: Point(coordinates: Position(-73.99, 40.72)),
+              zoom: 11,
+              pitch: 45,
+            ),
             styleUri: MapboxStyles.STANDARD,
             textureView: true,
             onMapCreated: _onMapCreated,
             onStyleLoadedListener: _onStyleLoaded,
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 
   _onStyleLoaded(StyleLoadedEventData styleLoadedEventData) {
@@ -98,19 +106,18 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
       lineWidth: 8,
     );
 
-    final line = LineString(coordinates: [
-      Position(-73.91912400100642, 40.913503418907936),
-      Position(-73.9615887363045, 40.82943110786286),
-      Position(-74.01409059085539, 40.75461056309348),
-      Position(-74.02798814058939, 40.69522028220487),
-      Position(-74.05655532615407, 40.65188756398558),
-      Position(-74.13916853846217, 40.64339339389301),
-    ]);
-
-    final lineSource = GeoJsonSource(
-      id: 'line-layer',
-      data: json.encode(line),
+    final line = LineString(
+      coordinates: [
+        Position(-73.91912400100642, 40.913503418907936),
+        Position(-73.9615887363045, 40.82943110786286),
+        Position(-74.01409059085539, 40.75461056309348),
+        Position(-74.02798814058939, 40.69522028220487),
+        Position(-74.05655532615407, 40.65188756398558),
+        Position(-74.13916853846217, 40.64339339389301),
+      ],
     );
+
+    final lineSource = GeoJsonSource(id: 'line-layer', data: json.encode(line));
 
     mapboxMap?.style.addSource(lineSource);
     mapboxMap?.style.addLayer(lineLayer);

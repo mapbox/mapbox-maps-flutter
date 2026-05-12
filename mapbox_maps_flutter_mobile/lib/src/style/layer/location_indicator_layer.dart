@@ -11,6 +11,7 @@ class LocationIndicatorLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     double? this.accuracyRadius,
     List<Object>? this.accuracyRadiusExpression,
     int? this.accuracyRadiusBorderColor,
@@ -46,13 +47,14 @@ class LocationIndicatorLayer extends Layer {
     double? this.topImageSize,
     List<Object>? this.topImageSizeExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "location-indicator";
@@ -194,8 +196,10 @@ class LocationIndicatorLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     var paint = {};
@@ -209,8 +213,8 @@ class LocationIndicatorLayer extends Layer {
       paint["accuracy-radius-border-color"] =
           accuracyRadiusBorderColorExpression;
     } else if (accuracyRadiusBorderColor != null) {
-      paint["accuracy-radius-border-color"] =
-          accuracyRadiusBorderColor?.toRGBA();
+      paint["accuracy-radius-border-color"] = accuracyRadiusBorderColor
+          ?.toRGBA();
     }
 
     if (accuracyRadiusColorExpression != null) {
@@ -340,65 +344,82 @@ class LocationIndicatorLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
       accuracyRadius: _optionalCast(map["paint"]["accuracy-radius"]),
-      accuracyRadiusExpression:
-          _optionalCastList(map["paint"]["accuracy-radius"]),
+      accuracyRadiusExpression: _optionalCastList(
+        map["paint"]["accuracy-radius"],
+      ),
       accuracyRadiusBorderColor:
           (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
-      accuracyRadiusBorderColorExpression:
-          _optionalCastList(map["paint"]["accuracy-radius-border-color"]),
-      accuracyRadiusColor:
-          (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
-      accuracyRadiusColorExpression:
-          _optionalCastList(map["paint"]["accuracy-radius-color"]),
+      accuracyRadiusBorderColorExpression: _optionalCastList(
+        map["paint"]["accuracy-radius-border-color"],
+      ),
+      accuracyRadiusColor: (map["paint"]["accuracy-radius-color"] as List?)
+          ?.toRGBAInt(),
+      accuracyRadiusColorExpression: _optionalCastList(
+        map["paint"]["accuracy-radius-color"],
+      ),
       bearing: _optionalCast(map["paint"]["bearing"]),
       bearingExpression: _optionalCastList(map["paint"]["bearing"]),
       bearingImage: _optionalCast(map["paint"]["bearing-image"]),
       bearingImageExpression: _optionalCastList(map["paint"]["bearing-image"]),
       bearingImageSize: _optionalCast(map["paint"]["bearing-image-size"]),
-      bearingImageSizeExpression:
-          _optionalCastList(map["paint"]["bearing-image-size"]),
-      emphasisCircleColor:
-          (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
-      emphasisCircleColorExpression:
-          _optionalCastList(map["paint"]["emphasis-circle-color"]),
+      bearingImageSizeExpression: _optionalCastList(
+        map["paint"]["bearing-image-size"],
+      ),
+      emphasisCircleColor: (map["paint"]["emphasis-circle-color"] as List?)
+          ?.toRGBAInt(),
+      emphasisCircleColorExpression: _optionalCastList(
+        map["paint"]["emphasis-circle-color"],
+      ),
       emphasisCircleGlowRange:
           (map["paint"]["emphasis-circle-glow-range"] as List?)
               ?.map<double?>((e) => e.toDouble())
               .toList(),
-      emphasisCircleGlowRangeExpression:
-          _optionalCastList(map["paint"]["emphasis-circle-glow-range"]),
-      emphasisCircleRadius:
-          _optionalCast(map["paint"]["emphasis-circle-radius"]),
-      emphasisCircleRadiusExpression:
-          _optionalCastList(map["paint"]["emphasis-circle-radius"]),
-      imagePitchDisplacement:
-          _optionalCast(map["paint"]["image-pitch-displacement"]),
-      imagePitchDisplacementExpression:
-          _optionalCastList(map["paint"]["image-pitch-displacement"]),
+      emphasisCircleGlowRangeExpression: _optionalCastList(
+        map["paint"]["emphasis-circle-glow-range"],
+      ),
+      emphasisCircleRadius: _optionalCast(
+        map["paint"]["emphasis-circle-radius"],
+      ),
+      emphasisCircleRadiusExpression: _optionalCastList(
+        map["paint"]["emphasis-circle-radius"],
+      ),
+      imagePitchDisplacement: _optionalCast(
+        map["paint"]["image-pitch-displacement"],
+      ),
+      imagePitchDisplacementExpression: _optionalCastList(
+        map["paint"]["image-pitch-displacement"],
+      ),
       location: (map["paint"]["location"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       locationExpression: _optionalCastList(map["paint"]["location"]),
-      locationIndicatorOpacity:
-          _optionalCast(map["paint"]["location-indicator-opacity"]),
-      locationIndicatorOpacityExpression:
-          _optionalCastList(map["paint"]["location-indicator-opacity"]),
-      perspectiveCompensation:
-          _optionalCast(map["paint"]["perspective-compensation"]),
-      perspectiveCompensationExpression:
-          _optionalCastList(map["paint"]["perspective-compensation"]),
+      locationIndicatorOpacity: _optionalCast(
+        map["paint"]["location-indicator-opacity"],
+      ),
+      locationIndicatorOpacityExpression: _optionalCastList(
+        map["paint"]["location-indicator-opacity"],
+      ),
+      perspectiveCompensation: _optionalCast(
+        map["paint"]["perspective-compensation"],
+      ),
+      perspectiveCompensationExpression: _optionalCastList(
+        map["paint"]["perspective-compensation"],
+      ),
       shadowImage: _optionalCast(map["paint"]["shadow-image"]),
       shadowImageExpression: _optionalCastList(map["paint"]["shadow-image"]),
       shadowImageSize: _optionalCast(map["paint"]["shadow-image-size"]),
-      shadowImageSizeExpression:
-          _optionalCastList(map["paint"]["shadow-image-size"]),
+      shadowImageSizeExpression: _optionalCastList(
+        map["paint"]["shadow-image-size"],
+      ),
       topImage: _optionalCast(map["paint"]["top-image"]),
       topImageExpression: _optionalCastList(map["paint"]["top-image"]),
       topImageSize: _optionalCast(map["paint"]["top-image-size"]),

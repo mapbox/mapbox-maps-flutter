@@ -131,12 +131,14 @@ class RasterSource extends Source {
   Future<Scheme?> get scheme async {
     return _style?.getStyleSourceProperty(id, "scheme").then((value) {
       if (value.value != null) {
-        return Scheme.values.firstWhere((e) => e
-            .toString()
-            .split('.')
-            .last
-            .toLowerCase()
-            .contains(value.value as String));
+        return Scheme.values.firstWhere(
+          (e) => e
+              .toString()
+              .split('.')
+              .last
+              .toLowerCase()
+              .contains(value.value as String),
+        );
       } else {
         return null;
       }
@@ -175,9 +177,9 @@ class RasterSource extends Source {
   /// When loading a map, if PrefetchZoomDelta is set to any number greater than 0, the map will first request a tile at zoom level lower than zoom - delta, but so that the zoom level is multiple of delta, in an attempt to display a full map at lower resolution as quick as possible. It will get clamped at the tile source minimum zoom.
   /// Default value: 4.
   Future<double?> get prefetchZoomDelta async {
-    return _style
-        ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "prefetch-zoom-delta").then((
+      value,
+    ) {
       if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
@@ -190,9 +192,9 @@ class RasterSource extends Source {
 
   /// This property defines a source-specific resource budget, either in tile units or in megabytes. Whenever the tile cache goes over the defined limit, the least recently used tile will be evicted from the in-memory cache. Note that the current implementation does not take into account resources allocated by the visible tiles.
   Future<TileCacheBudget?> get tileCacheBudget async {
-    return _style
-        ?.getStyleSourceProperty(id, "tile-cache-budget")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "tile-cache-budget").then((
+      value,
+    ) {
       if (value.value != null) {
         return TileCacheBudget.decode(value.value);
       } else {
@@ -209,12 +211,12 @@ class RasterSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "minimum-tile-update-interval")
         .then((value) {
-      if (value.value != null) {
-        return (value.value as num).toDouble();
-      } else {
-        return null;
-      }
-    });
+          if (value.value != null) {
+            return (value.value as num).toDouble();
+          } else {
+            return null;
+          }
+        });
   }
 
   double? _maxOverscaleFactorForParentTiles;
@@ -224,12 +226,12 @@ class RasterSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "max-overscale-factor-for-parent-tiles")
         .then((value) {
-      if (value.value != null) {
-        return (value.value as num).toDouble();
-      } else {
-        return null;
-      }
-    });
+          if (value.value != null) {
+            return (value.value as num).toDouble();
+          } else {
+            return null;
+          }
+        });
   }
 
   double? _tileRequestsDelay;
@@ -237,9 +239,9 @@ class RasterSource extends Source {
   /// For the tiled sources, this property sets the tile requests delay. The given delay comes in action only during an ongoing animation or gestures. It helps to avoid loading, parsing and rendering of the transient tiles and thus to improve the rendering performance, especially on low-end devices.
   /// Default value: 0.
   Future<double?> get tileRequestsDelay async {
-    return _style
-        ?.getStyleSourceProperty(id, "tile-requests-delay")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "tile-requests-delay").then((
+      value,
+    ) {
       if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
@@ -256,12 +258,12 @@ class RasterSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "tile-network-requests-delay")
         .then((value) {
-      if (value.value != null) {
-        return (value.value as num).toDouble();
-      } else {
-        return null;
-      }
-    });
+          if (value.value != null) {
+            return (value.value as num).toDouble();
+          } else {
+            return null;
+          }
+        });
   }
 
   @override

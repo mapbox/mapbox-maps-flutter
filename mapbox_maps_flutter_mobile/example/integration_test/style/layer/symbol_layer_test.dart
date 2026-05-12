@@ -4,6 +4,8 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
+
 import '../../empty_map_widget.dart' as app;
 
 void main() {
@@ -15,87 +17,90 @@ void main() {
     final mapboxMap = await mapFuture;
 
     final point = Point(coordinates: Position(-77.032667, 38.913175));
-    await mapboxMap.style
-        .addSource(GeoJsonSource(id: "source", data: json.encode(point)));
+    await mapboxMap.style.addSource(
+      GeoJsonSource(id: "source", data: json.encode(point)),
+    );
 
-    await mapboxMap.style.addLayer(SymbolLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      iconAllowOverlap: true,
-      iconAnchor: IconAnchor.CENTER,
-      iconIgnorePlacement: true,
-      iconImage: "abc",
-      iconKeepUpright: true,
-      iconOffset: [0.0, 1.0],
-      iconOptional: true,
-      iconPadding: 1.0,
-      iconPitchAlignment: IconPitchAlignment.MAP,
-      iconRotate: 1.0,
-      iconRotationAlignment: IconRotationAlignment.MAP,
-      iconSize: 1.0,
-      iconSizeScaleRange: [5.0, 5.0],
-      iconTextFit: IconTextFit.NONE,
-      iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
-      symbolAvoidEdges: true,
-      symbolElevationReference: SymbolElevationReference.SEA,
-      symbolPlacement: SymbolPlacement.POINT,
-      symbolSortKey: 1.0,
-      symbolSpacing: 1.0,
-      symbolZElevate: true,
-      symbolZOrder: SymbolZOrder.AUTO,
-      textAllowOverlap: true,
-      textAnchor: TextAnchor.CENTER,
-      textField: "abc",
-      textFont: ["a", "b", "c"],
-      textIgnorePlacement: true,
-      textJustify: TextJustify.AUTO,
-      textKeepUpright: true,
-      textLetterSpacing: 1.0,
-      textLineHeight: 1.0,
-      textMaxAngle: 1.0,
-      textMaxWidth: 1.0,
-      textOffset: [0.0, 1.0],
-      textOptional: true,
-      textPadding: 1.0,
-      textPitchAlignment: TextPitchAlignment.MAP,
-      textRadialOffset: 1.0,
-      textRotate: 1.0,
-      textRotationAlignment: TextRotationAlignment.MAP,
-      textSize: 1.0,
-      textSizeScaleRange: [5.0, 5.0],
-      textTransform: TextTransform.NONE,
-      textVariableAnchor: ["center", "left"],
-      textWritingMode: ["horizontal", "vertical"],
-      iconColor: Colors.red.value,
-      iconColorBrightnessMax: 1.0,
-      iconColorBrightnessMin: 1.0,
-      iconColorContrast: 1.0,
-      iconColorSaturation: 1.0,
-      iconEmissiveStrength: 1.0,
-      iconHaloBlur: 1.0,
-      iconHaloColor: Colors.red.value,
-      iconHaloWidth: 1.0,
-      iconImageCrossFade: 1.0,
-      iconOcclusionOpacity: 1.0,
-      iconOpacity: 1.0,
-      iconTranslate: [0.0, 1.0],
-      iconTranslateAnchor: IconTranslateAnchor.MAP,
-      occlusionOpacityMode: OcclusionOpacityMode.ANCHOR,
-      symbolZOffset: 1.0,
-      textColor: Colors.red.value,
-      textEmissiveStrength: 1.0,
-      textHaloBlur: 1.0,
-      textHaloColor: Colors.red.value,
-      textHaloWidth: 1.0,
-      textOcclusionOpacity: 1.0,
-      textOpacity: 1.0,
-      textTranslate: [0.0, 1.0],
-      textTranslateAnchor: TextTranslateAnchor.MAP,
-    ));
+    await mapboxMap.style.addLayer(
+      SymbolLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        iconAllowOverlap: true,
+        iconAnchor: IconAnchor.CENTER,
+        iconIgnorePlacement: true,
+        iconImage: "abc",
+        iconKeepUpright: true,
+        iconOffset: [0.0, 1.0],
+        iconOptional: true,
+        iconPadding: 1.0,
+        iconPitchAlignment: IconPitchAlignment.MAP,
+        iconRotate: 1.0,
+        iconRotationAlignment: IconRotationAlignment.MAP,
+        iconSize: 1.0,
+        iconSizeScaleRange: [5.0, 5.0],
+        iconTextFit: IconTextFit.NONE,
+        iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
+        symbolAvoidEdges: true,
+        symbolElevationReference: SymbolElevationReference.SEA,
+        symbolPlacement: SymbolPlacement.POINT,
+        symbolSortKey: 1.0,
+        symbolSpacing: 1.0,
+        symbolZElevate: true,
+        symbolZOrder: SymbolZOrder.AUTO,
+        textAllowOverlap: true,
+        textAnchor: TextAnchor.CENTER,
+        textField: "abc",
+        textFont: ["a", "b", "c"],
+        textIgnorePlacement: true,
+        textJustify: TextJustify.AUTO,
+        textKeepUpright: true,
+        textLetterSpacing: 1.0,
+        textLineHeight: 1.0,
+        textMaxAngle: 1.0,
+        textMaxWidth: 1.0,
+        textOffset: [0.0, 1.0],
+        textOptional: true,
+        textPadding: 1.0,
+        textPitchAlignment: TextPitchAlignment.MAP,
+        textRadialOffset: 1.0,
+        textRotate: 1.0,
+        textRotationAlignment: TextRotationAlignment.MAP,
+        textSize: 1.0,
+        textSizeScaleRange: [5.0, 5.0],
+        textTransform: TextTransform.NONE,
+        textVariableAnchor: ["center", "left"],
+        textWritingMode: ["horizontal", "vertical"],
+        iconColor: Colors.red.value,
+        iconColorBrightnessMax: 1.0,
+        iconColorBrightnessMin: 1.0,
+        iconColorContrast: 1.0,
+        iconColorSaturation: 1.0,
+        iconEmissiveStrength: 1.0,
+        iconHaloBlur: 1.0,
+        iconHaloColor: Colors.red.value,
+        iconHaloWidth: 1.0,
+        iconImageCrossFade: 1.0,
+        iconOcclusionOpacity: 1.0,
+        iconOpacity: 1.0,
+        iconTranslate: [0.0, 1.0],
+        iconTranslateAnchor: IconTranslateAnchor.MAP,
+        occlusionOpacityMode: OcclusionOpacityMode.ANCHOR,
+        symbolZOffset: 1.0,
+        textColor: Colors.red.value,
+        textEmissiveStrength: 1.0,
+        textHaloBlur: 1.0,
+        textHaloColor: Colors.red.value,
+        textHaloWidth: 1.0,
+        textOcclusionOpacity: 1.0,
+        textOpacity: 1.0,
+        textTranslate: [0.0, 1.0],
+        textTranslateAnchor: TextTranslateAnchor.MAP,
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as SymbolLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -180,122 +185,125 @@ void main() {
     final mapboxMap = await mapFuture;
 
     final point = Point(coordinates: Position(-77.032667, 38.913175));
-    await mapboxMap.style
-        .addSource(GeoJsonSource(id: "source", data: json.encode(point)));
+    await mapboxMap.style.addSource(
+      GeoJsonSource(id: "source", data: json.encode(point)),
+    );
 
-    await mapboxMap.style.addLayer(SymbolLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibilityExpression: ['string', 'none'],
-      filter: [
-        "==",
-        ["get", "type"],
-        "Feature"
-      ],
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      iconAllowOverlapExpression: ['==', true, true],
-      iconAnchorExpression: ['string', 'center'],
-      iconIgnorePlacementExpression: ['==', true, true],
-      iconImageExpression: ['image', "abc"],
-      iconKeepUprightExpression: ['==', true, true],
-      iconOffsetExpression: [
-        'literal',
-        [0.0, 1.0]
-      ],
-      iconOptionalExpression: ['==', true, true],
-      iconPaddingExpression: ['number', 1.0],
-      iconPitchAlignmentExpression: ['string', 'map'],
-      iconRotateExpression: ['number', 1.0],
-      iconRotationAlignmentExpression: ['string', 'map'],
-      iconSizeExpression: ['number', 1.0],
-      iconSizeScaleRangeExpression: [
-        'literal',
-        [5.0, 5.0]
-      ],
-      iconTextFitExpression: ['string', 'none'],
-      iconTextFitPaddingExpression: [
-        'literal',
-        [0.0, 1.0, 2.0, 3.0]
-      ],
-      symbolAvoidEdgesExpression: ['==', true, true],
-      symbolElevationReferenceExpression: ['string', 'sea'],
-      symbolPlacementExpression: ['string', 'point'],
-      symbolSortKeyExpression: ['number', 1.0],
-      symbolSpacingExpression: ['number', 1.0],
-      symbolZElevateExpression: ['==', true, true],
-      symbolZOrderExpression: ['string', 'auto'],
-      textAllowOverlapExpression: ['==', true, true],
-      textAnchorExpression: ['string', 'center'],
-      textFieldExpression: ['format', "abc", {}],
-      textFontExpression: [
-        'literal',
-        ["a", "b", "c"]
-      ],
-      textIgnorePlacementExpression: ['==', true, true],
-      textJustifyExpression: ['string', 'auto'],
-      textKeepUprightExpression: ['==', true, true],
-      textLetterSpacingExpression: ['number', 1.0],
-      textLineHeightExpression: ['number', 1.0],
-      textMaxAngleExpression: ['number', 1.0],
-      textMaxWidthExpression: ['number', 1.0],
-      textOffsetExpression: [
-        'literal',
-        [0.0, 1.0]
-      ],
-      textOptionalExpression: ['==', true, true],
-      textPaddingExpression: ['number', 1.0],
-      textPitchAlignmentExpression: ['string', 'map'],
-      textRadialOffsetExpression: ['number', 1.0],
-      textRotateExpression: ['number', 1.0],
-      textRotationAlignmentExpression: ['string', 'map'],
-      textSizeExpression: ['number', 1.0],
-      textSizeScaleRangeExpression: [
-        'literal',
-        [5.0, 5.0]
-      ],
-      textTransformExpression: ['string', 'none'],
-      textVariableAnchorExpression: [
-        'literal',
-        ["center", "left"]
-      ],
-      textWritingModeExpression: [
-        'literal',
-        ["horizontal", "vertical"]
-      ],
-      iconColorExpression: ['rgba', 255, 0, 0, 1],
-      iconColorBrightnessMaxExpression: ['number', 1.0],
-      iconColorBrightnessMinExpression: ['number', 1.0],
-      iconColorContrastExpression: ['number', 1.0],
-      iconColorSaturationExpression: ['number', 1.0],
-      iconEmissiveStrengthExpression: ['number', 1.0],
-      iconHaloBlurExpression: ['number', 1.0],
-      iconHaloColorExpression: ['rgba', 255, 0, 0, 1],
-      iconHaloWidthExpression: ['number', 1.0],
-      iconImageCrossFadeExpression: ['number', 1.0],
-      iconOcclusionOpacityExpression: ['number', 1.0],
-      iconOpacityExpression: ['number', 1.0],
-      iconTranslateExpression: [
-        'literal',
-        [0.0, 1.0]
-      ],
-      iconTranslateAnchorExpression: ['string', 'map'],
-      occlusionOpacityModeExpression: ['string', 'anchor'],
-      symbolZOffsetExpression: ['number', 1.0],
-      textColorExpression: ['rgba', 255, 0, 0, 1],
-      textEmissiveStrengthExpression: ['number', 1.0],
-      textHaloBlurExpression: ['number', 1.0],
-      textHaloColorExpression: ['rgba', 255, 0, 0, 1],
-      textHaloWidthExpression: ['number', 1.0],
-      textOcclusionOpacityExpression: ['number', 1.0],
-      textOpacityExpression: ['number', 1.0],
-      textTranslateExpression: [
-        'literal',
-        [0.0, 1.0]
-      ],
-      textTranslateAnchorExpression: ['string', 'map'],
-    ));
+    await mapboxMap.style.addLayer(
+      SymbolLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibilityExpression: ['string', 'none'],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        iconAllowOverlapExpression: ['==', true, true],
+        iconAnchorExpression: ['string', 'center'],
+        iconIgnorePlacementExpression: ['==', true, true],
+        iconImageExpression: ['image', "abc"],
+        iconKeepUprightExpression: ['==', true, true],
+        iconOffsetExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        iconOptionalExpression: ['==', true, true],
+        iconPaddingExpression: ['number', 1.0],
+        iconPitchAlignmentExpression: ['string', 'map'],
+        iconRotateExpression: ['number', 1.0],
+        iconRotationAlignmentExpression: ['string', 'map'],
+        iconSizeExpression: ['number', 1.0],
+        iconSizeScaleRangeExpression: [
+          'literal',
+          [5.0, 5.0],
+        ],
+        iconTextFitExpression: ['string', 'none'],
+        iconTextFitPaddingExpression: [
+          'literal',
+          [0.0, 1.0, 2.0, 3.0],
+        ],
+        symbolAvoidEdgesExpression: ['==', true, true],
+        symbolElevationReferenceExpression: ['string', 'sea'],
+        symbolPlacementExpression: ['string', 'point'],
+        symbolSortKeyExpression: ['number', 1.0],
+        symbolSpacingExpression: ['number', 1.0],
+        symbolZElevateExpression: ['==', true, true],
+        symbolZOrderExpression: ['string', 'auto'],
+        textAllowOverlapExpression: ['==', true, true],
+        textAnchorExpression: ['string', 'center'],
+        textFieldExpression: ['format', "abc", {}],
+        textFontExpression: [
+          'literal',
+          ["a", "b", "c"],
+        ],
+        textIgnorePlacementExpression: ['==', true, true],
+        textJustifyExpression: ['string', 'auto'],
+        textKeepUprightExpression: ['==', true, true],
+        textLetterSpacingExpression: ['number', 1.0],
+        textLineHeightExpression: ['number', 1.0],
+        textMaxAngleExpression: ['number', 1.0],
+        textMaxWidthExpression: ['number', 1.0],
+        textOffsetExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        textOptionalExpression: ['==', true, true],
+        textPaddingExpression: ['number', 1.0],
+        textPitchAlignmentExpression: ['string', 'map'],
+        textRadialOffsetExpression: ['number', 1.0],
+        textRotateExpression: ['number', 1.0],
+        textRotationAlignmentExpression: ['string', 'map'],
+        textSizeExpression: ['number', 1.0],
+        textSizeScaleRangeExpression: [
+          'literal',
+          [5.0, 5.0],
+        ],
+        textTransformExpression: ['string', 'none'],
+        textVariableAnchorExpression: [
+          'literal',
+          ["center", "left"],
+        ],
+        textWritingModeExpression: [
+          'literal',
+          ["horizontal", "vertical"],
+        ],
+        iconColorExpression: ['rgba', 255, 0, 0, 1],
+        iconColorBrightnessMaxExpression: ['number', 1.0],
+        iconColorBrightnessMinExpression: ['number', 1.0],
+        iconColorContrastExpression: ['number', 1.0],
+        iconColorSaturationExpression: ['number', 1.0],
+        iconEmissiveStrengthExpression: ['number', 1.0],
+        iconHaloBlurExpression: ['number', 1.0],
+        iconHaloColorExpression: ['rgba', 255, 0, 0, 1],
+        iconHaloWidthExpression: ['number', 1.0],
+        iconImageCrossFadeExpression: ['number', 1.0],
+        iconOcclusionOpacityExpression: ['number', 1.0],
+        iconOpacityExpression: ['number', 1.0],
+        iconTranslateExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        iconTranslateAnchorExpression: ['string', 'map'],
+        occlusionOpacityModeExpression: ['string', 'anchor'],
+        symbolZOffsetExpression: ['number', 1.0],
+        textColorExpression: ['rgba', 255, 0, 0, 1],
+        textEmissiveStrengthExpression: ['number', 1.0],
+        textHaloBlurExpression: ['number', 1.0],
+        textHaloColorExpression: ['rgba', 255, 0, 0, 1],
+        textHaloWidthExpression: ['number', 1.0],
+        textOcclusionOpacityExpression: ['number', 1.0],
+        textOpacityExpression: ['number', 1.0],
+        textTranslateExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        textTranslateAnchorExpression: ['string', 'map'],
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as SymbolLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -305,7 +313,7 @@ void main() {
     expect(layer.filter, [
       "==",
       ["get", "type"],
-      "Feature"
+      "Feature",
     ]);
     expect(layer.iconAllowOverlap, true);
     expect(layer.iconAnchor, IconAnchor.CENTER);
@@ -379,4 +387,5 @@ void main() {
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);
   });
 }
+
 // End of generated file.

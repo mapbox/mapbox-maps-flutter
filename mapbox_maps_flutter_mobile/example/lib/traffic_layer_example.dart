@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -19,8 +21,9 @@ class TrafficLayerExample extends StatefulWidget implements Example {
 
 class TrafficLayerExampleState extends State<TrafficLayerExample> {
   TrafficLayerExampleState();
-  final _sfAirport =
-      Point(coordinates: Position(-122.39470445734368, 37.7080221537549));
+  final _sfAirport = Point(
+    coordinates: Position(-122.39470445734368, 37.7080221537549),
+  );
   MapboxMap? mapboxMap;
   bool? _trafficLayerVisible = true;
 
@@ -44,10 +47,12 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
 
   Future<void> addTrafficLayer() async {
     // Add the vector source
-    await mapboxMap?.style.addSource(VectorSource(
-      id: 'traffic-source',
-      url: 'mapbox://mapbox.mapbox-traffic-v1',
-    ));
+    await mapboxMap?.style.addSource(
+      VectorSource(
+        id: 'traffic-source',
+        url: 'mapbox://mapbox.mapbox-traffic-v1',
+      ),
+    );
     // Add the traffic layer
     await mapboxMap?.style.addLayer(
       LineLayer(
@@ -66,35 +71,35 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
           14.0,
           ['*', 2.0, 1.3],
           20.0,
-          ['*', 10, 1.2]
+          ['*', 10, 1.2],
         ],
         lineColorExpression: [
           'case',
           [
             '==',
             'low',
-            ['get', 'congestion']
+            ['get', 'congestion'],
           ],
           '#39c66d',
           [
             '==',
             'moderate',
-            ['get', 'congestion']
+            ['get', 'congestion'],
           ],
           '#ff8c1a',
           [
             '==',
             'heavy',
-            ['get', 'congestion']
+            ['get', 'congestion'],
           ],
           '#ff0015',
           [
             '==',
             'severe',
-            ['get', 'congestion']
+            ['get', 'congestion'],
           ],
           '#981b25',
-          '#000000'
+          '#000000',
         ],
         lineOffsetExpression: [
           'interpolate',
@@ -103,7 +108,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
           14.0,
           ['*', 2, 1.0],
           20.0,
-          ['*', 18, 1.0]
+          ['*', 18, 1.0],
         ],
       ),
     );

@@ -30,11 +30,11 @@ extension on ViewportTransition {
 
 extension on DefaultViewportTransition {
   _ViewportTransitionStorage _toStorage() => _ViewportTransitionStorage(
-        type: _ViewportTransitionType.defaultTransition,
-        options: _DefaultViewportTransitionOptions(
-          maxDurationMs: maxDuration.inMilliseconds,
-        ),
-      );
+    type: _ViewportTransitionType.defaultTransition,
+    options: _DefaultViewportTransitionOptions(
+      maxDurationMs: maxDuration.inMilliseconds,
+    ),
+  );
 }
 
 extension on FlyViewportTransition {

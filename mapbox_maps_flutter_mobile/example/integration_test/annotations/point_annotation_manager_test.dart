@@ -5,21 +5,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
+
 import '../empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('PointAnnotationManager custom id and position',
-      (WidgetTester tester) async {
+  testWidgets('PointAnnotationManager custom id and position', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final dummyLayer = SymbolLayer(id: "dummyLayer", sourceId: 'sourceId');
     await mapboxMap.style.addLayer(dummyLayer);
     final id = "PointAnnotationManagerId";
-    final manager = await mapboxMap.annotations
-        .createPointAnnotationManager(id: id, below: 'dummyLayer');
+    final manager = await mapboxMap.annotations.createPointAnnotationManager(
+      id: id,
+      below: 'dummyLayer',
+    );
 
     expect(await mapboxMap.style.styleLayerExists(id), isTrue);
     expect(await mapboxMap.style.styleSourceExists(id), isTrue);
@@ -315,20 +320,22 @@ void main() {
     late EventChannel eventChannel;
 
     Future<void> setupMap(
-        WidgetTester tester, String eventChannelSuffix) async {
+      WidgetTester tester,
+      String eventChannelSuffix,
+    ) async {
       final mapFuture = app.main();
       await Future.delayed(
-          Duration(milliseconds: 100)); // Ensure app.main() is started
+        Duration(milliseconds: 100),
+      ); // Ensure app.main() is started
       await tester.pumpAndSettle();
       mapboxMap = await mapFuture;
       manager = await mapboxMap.annotations.createPointAnnotationManager();
 
       final geometry = Point(coordinates: Position(0, 0));
 
-      createdAnnotation = await manager.create(PointAnnotationOptions(
-        geometry: geometry,
-        isDraggable: true,
-      ));
+      createdAnnotation = await manager.create(
+        PointAnnotationOptions(geometry: geometry, isDraggable: true),
+      );
 
       eventChannel = EventChannel(
         "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/${eventChannelSuffix}",
@@ -336,8 +343,9 @@ void main() {
       );
     }
 
-    testWidgets('annotation tap events can be listened and canceled',
-        (tester) async {
+    testWidgets('annotation tap events can be listened and canceled', (
+      tester,
+    ) async {
       // Test tap event can be listened
       await setupMap(tester, 'tap');
 
@@ -347,15 +355,16 @@ void main() {
 
       IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
           .setMockStreamHandler(
-              eventChannel,
-              MockStreamHandler.inline(
-                onListen: (arguments, events) {
-                  eventSink = events;
-                },
-                onCancel: (arguments) {
-                  isCanceled = true;
-                },
-              ));
+            eventChannel,
+            MockStreamHandler.inline(
+              onListen: (arguments, events) {
+                eventSink = events;
+              },
+              onCancel: (arguments) {
+                isCanceled = true;
+              },
+            ),
+          );
 
       final token = manager.tapEvents(
         onTap: (annotation) {
@@ -368,27 +377,32 @@ void main() {
         },
       );
 
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
 
       await tapCompleter.future;
       expect(tapCompleter.isCompleted, isTrue);
       expect(isCanceled, isFalse);
 
       token.cancel();
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
       expect(isCanceled, isTrue);
 
       eventSink.endOfStream();
     });
 
-    testWidgets('annotation long press events can be listened and canceled',
-        (tester) async {
+    testWidgets('annotation long press events can be listened and canceled', (
+      tester,
+    ) async {
       await setupMap(tester, 'long_press');
 
       final longPressCompleter = Completer();
@@ -397,15 +411,16 @@ void main() {
 
       IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
           .setMockStreamHandler(
-              eventChannel,
-              MockStreamHandler.inline(
-                onListen: (arguments, events) {
-                  eventSink = events;
-                },
-                onCancel: (arguments) {
-                  isCanceled = true;
-                },
-              ));
+            eventChannel,
+            MockStreamHandler.inline(
+              onListen: (arguments, events) {
+                eventSink = events;
+              },
+              onCancel: (arguments) {
+                isCanceled = true;
+              },
+            ),
+          );
 
       final token = manager.longPressEvents(
         onLongPress: (annotation) {
@@ -418,27 +433,32 @@ void main() {
         },
       );
 
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
 
       await longPressCompleter.future;
       expect(longPressCompleter.isCompleted, isTrue);
       expect(isCanceled, isFalse);
 
       token.cancel();
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
       expect(isCanceled, isTrue);
 
       eventSink.endOfStream();
     });
 
-    testWidgets('annotation drag events can be listened and canceled',
-        (tester) async {
+    testWidgets('annotation drag events can be listened and canceled', (
+      tester,
+    ) async {
       await setupMap(tester, 'drag');
 
       final dragBegin = Completer();
@@ -449,15 +469,16 @@ void main() {
 
       IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
           .setMockStreamHandler(
-              eventChannel,
-              MockStreamHandler.inline(
-                onListen: (arguments, events) {
-                  eventSink = events;
-                },
-                onCancel: (arguments) {
-                  isCanceled = true;
-                },
-              ));
+            eventChannel,
+            MockStreamHandler.inline(
+              onListen: (arguments, events) {
+                eventSink = events;
+              },
+              onCancel: (arguments) {
+                isCanceled = true;
+              },
+            ),
+          );
 
       final token = manager.dragEvents(
         onBegin: (annotation) {
@@ -486,42 +507,57 @@ void main() {
         },
       );
 
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.started,
-      ));
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.changed,
-      ));
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.started,
+        ),
+      );
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.changed,
+        ),
+      );
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
 
       await Future.wait([dragBegin.future, dragChanged.future, dragEnd.future]);
-      expect(
-          [dragBegin.isCompleted, dragChanged.isCompleted, dragEnd.isCompleted],
-          everyElement(isTrue));
+      expect([
+        dragBegin.isCompleted,
+        dragChanged.isCompleted,
+        dragEnd.isCompleted,
+      ], everyElement(isTrue));
       expect(isCanceled, isFalse);
 
       token.cancel();
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.started,
-      ));
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.changed,
-      ));
-      eventSink.success(PointAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.started,
+        ),
+      );
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.changed,
+        ),
+      );
+      eventSink.success(
+        PointAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
       expect(isCanceled, isTrue);
 
       eventSink.endOfStream();
     });
   });
 }
+
 // End of generated file.

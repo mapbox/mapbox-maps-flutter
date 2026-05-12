@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import '../empty_map_widget.dart' as app;
 
 void main() {
@@ -12,16 +13,18 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
-    var geometry = Polygon(coordinates: [
-      [
-        Position(-3.363937, -10.733102),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
+    final manager = await mapboxMap.annotations
+        .createPolygonAnnotationManager();
+    var geometry = Polygon(
+      coordinates: [
+        [
+          Position(-3.363937, -10.733102),
+          Position(1.754703, -19.716317),
+          Position(-15.747196, -21.085074),
+          Position(-3.363937, -10.733102),
+        ],
+      ],
+    );
 
     var polygonAnnotationOptions = PolygonAnnotationOptions(
       geometry: geometry,
@@ -57,32 +60,33 @@ void main() {
     expect({'foo': 'bar'}, annotation.customData);
   });
 
-  testWidgets('update and delete PolygonAnnotation',
-      (WidgetTester tester) async {
+  testWidgets('update and delete PolygonAnnotation', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
-    var geometry = Polygon(coordinates: [
-      [
-        Position(-3.363937, -10.733102),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
-
-    var polygonAnnotationOptions = PolygonAnnotationOptions(
-      geometry: geometry,
+    final manager = await mapboxMap.annotations
+        .createPolygonAnnotationManager();
+    var geometry = Polygon(
+      coordinates: [
+        [
+          Position(-3.363937, -10.733102),
+          Position(1.754703, -19.716317),
+          Position(-15.747196, -21.085074),
+          Position(-3.363937, -10.733102),
+        ],
+      ],
     );
+
+    var polygonAnnotationOptions = PolygonAnnotationOptions(geometry: geometry);
     final annotation = await manager.create(polygonAnnotationOptions);
     var polygon = annotation.geometry;
     var newPolygon = Polygon(
-        coordinates: polygon.coordinates
-            .map((e) =>
-                e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList())
-            .toList());
+      coordinates: polygon.coordinates
+          .map((e) => e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList())
+          .toList(),
+    );
     annotation.geometry = newPolygon;
     await manager.update(annotation);
     await manager.delete(annotation);
@@ -101,20 +105,20 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
-    var geometry = Polygon(coordinates: [
-      [
-        Position(-3.363937, -10.733102),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
-
-    var polygonAnnotationOptions = PolygonAnnotationOptions(
-      geometry: geometry,
+    final manager = await mapboxMap.annotations
+        .createPolygonAnnotationManager();
+    var geometry = Polygon(
+      coordinates: [
+        [
+          Position(-3.363937, -10.733102),
+          Position(1.754703, -19.716317),
+          Position(-15.747196, -21.085074),
+          Position(-3.363937, -10.733102),
+        ],
+      ],
     );
+
+    var polygonAnnotationOptions = PolygonAnnotationOptions(geometry: geometry);
 
     // Create 10 annotations
     var createdAnnotations = <PolygonAnnotation>[];
@@ -146,4 +150,5 @@ void main() {
     expect(allAnnotations.length, equals(0));
   });
 }
+
 // End of generated file.

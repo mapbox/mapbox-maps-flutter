@@ -11,10 +11,15 @@ class MapboxHttpService {
   /// [binaryMessenger] is used for platform channel communication
   /// [channelSuffix] is used to create a unique channel identifier when multiple instances
   /// of the service are needed. This should match the suffix used on the platform side.
-  MapboxHttpService(
-      {required this.binaryMessenger, required this.channelSuffix}) {
-    _channel = MethodChannel('plugins.flutter.io.${channelSuffix.toString()}',
-        const StandardMethodCodec(), binaryMessenger);
+  MapboxHttpService({
+    required this.binaryMessenger,
+    required this.channelSuffix,
+  }) {
+    _channel = MethodChannel(
+      'plugins.flutter.io.${channelSuffix.toString()}',
+      const StandardMethodCodec(),
+      binaryMessenger,
+    );
   }
 
   /// Sets custom headers for all Mapbox HTTP requests

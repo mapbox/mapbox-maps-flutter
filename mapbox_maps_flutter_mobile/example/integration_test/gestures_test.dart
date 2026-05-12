@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -39,29 +41,45 @@ void main() {
     expect(updatedSettings.rotateEnabled, settings.rotateEnabled);
     expect(updatedSettings.pinchToZoomEnabled, settings.pinchToZoomEnabled);
     expect(updatedSettings.scrollEnabled, settings.scrollEnabled);
-    expect(updatedSettings.simultaneousRotateAndPinchToZoomEnabled,
-        settings.simultaneousRotateAndPinchToZoomEnabled);
+    expect(
+      updatedSettings.simultaneousRotateAndPinchToZoomEnabled,
+      settings.simultaneousRotateAndPinchToZoomEnabled,
+    );
     expect(updatedSettings.pitchEnabled, settings.pitchEnabled);
     expect(updatedSettings.scrollMode, settings.scrollMode);
-    expect(updatedSettings.doubleTapToZoomInEnabled,
-        settings.doubleTapToZoomInEnabled);
-    expect(updatedSettings.doubleTouchToZoomOutEnabled,
-        settings.doubleTouchToZoomOutEnabled);
+    expect(
+      updatedSettings.doubleTapToZoomInEnabled,
+      settings.doubleTapToZoomInEnabled,
+    );
+    expect(
+      updatedSettings.doubleTouchToZoomOutEnabled,
+      settings.doubleTouchToZoomOutEnabled,
+    );
     expect(updatedSettings.quickZoomEnabled, settings.quickZoomEnabled);
     expect(updatedSettings.focalPoint?.x, settings.focalPoint?.x);
     expect(updatedSettings.focalPoint?.y, settings.focalPoint?.y);
     expect(updatedSettings.pinchPanEnabled, settings.pinchPanEnabled);
     if (Platform.isAndroid) {
-      expect(updatedSettings.increaseRotateThresholdWhenPinchingToZoom,
-          settings.increaseRotateThresholdWhenPinchingToZoom);
-      expect(updatedSettings.increasePinchToZoomThresholdWhenRotating,
-          settings.increasePinchToZoomThresholdWhenRotating);
-      expect(updatedSettings.pinchToZoomDecelerationEnabled,
-          settings.pinchToZoomDecelerationEnabled);
-      expect(updatedSettings.rotateDecelerationEnabled,
-          settings.rotateDecelerationEnabled);
-      expect(updatedSettings.scrollDecelerationEnabled,
-          settings.scrollDecelerationEnabled);
+      expect(
+        updatedSettings.increaseRotateThresholdWhenPinchingToZoom,
+        settings.increaseRotateThresholdWhenPinchingToZoom,
+      );
+      expect(
+        updatedSettings.increasePinchToZoomThresholdWhenRotating,
+        settings.increasePinchToZoomThresholdWhenRotating,
+      );
+      expect(
+        updatedSettings.pinchToZoomDecelerationEnabled,
+        settings.pinchToZoomDecelerationEnabled,
+      );
+      expect(
+        updatedSettings.rotateDecelerationEnabled,
+        settings.rotateDecelerationEnabled,
+      );
+      expect(
+        updatedSettings.scrollDecelerationEnabled,
+        settings.scrollDecelerationEnabled,
+      );
       expect(updatedSettings.zoomAnimationAmount, settings.zoomAnimationAmount);
     }
   });
@@ -71,8 +89,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    var point = await mapboxMap
-        .pixelForCoordinate(Point(coordinates: Position(0.01, 0.01)));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0.01, 0.01)),
+    );
     mapboxMap.dispatch("click", point);
 
     await app.events.onMapTapListener.future;
@@ -90,8 +109,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    var point = await mapboxMap
-        .pixelForCoordinate(Point(coordinates: Position(-0.01, -0.01)));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(-0.01, -0.01)),
+    );
     mapboxMap.dispatch("longClick", point);
 
     await app.events.onMapLongTapListener.future;

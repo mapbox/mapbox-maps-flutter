@@ -13,6 +13,7 @@ class FillLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     bool? this.fillConstructBridgeGuardRail,
     List<Object>? this.fillConstructBridgeGuardRailExpression,
     FillElevationReference? this.fillElevationReference,
@@ -44,13 +45,14 @@ class FillLayer extends Layer {
     double? this.fillZOffset,
     List<Object>? this.fillZOffsetExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "fill";
@@ -192,8 +194,10 @@ class FillLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (fillConstructBridgeGuardRailExpression != null) {
@@ -209,8 +213,9 @@ class FillLayer extends Layer {
     }
 
     if (fillElevationReference != null) {
-      layout["fill-elevation-reference"] =
-          fillElevationReference?.name.toLowerCase().replaceAll("_", "-");
+      layout["fill-elevation-reference"] = fillElevationReference?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
     if (fillSortKeyExpression != null) {
       layout["fill-sort-key"] = fillSortKeyExpression;
@@ -230,8 +235,8 @@ class FillLayer extends Layer {
       paint["fill-bridge-guard-rail-color"] =
           fillBridgeGuardRailColorExpression;
     } else if (fillBridgeGuardRailColor != null) {
-      paint["fill-bridge-guard-rail-color"] =
-          fillBridgeGuardRailColor?.toRGBA();
+      paint["fill-bridge-guard-rail-color"] = fillBridgeGuardRailColor
+          ?.toRGBA();
     }
 
     if (fillColorExpression != null) {
@@ -279,8 +284,9 @@ class FillLayer extends Layer {
     if (fillTranslateAnchorExpression != null) {
       paint["fill-translate-anchor"] = fillTranslateAnchorExpression;
     } else if (fillTranslateAnchor != null) {
-      paint["fill-translate-anchor"] =
-          fillTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+      paint["fill-translate-anchor"] = fillTranslateAnchor?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (fillTunnelStructureColorExpression != null) {
@@ -338,68 +344,87 @@ class FillLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
-      fillConstructBridgeGuardRail:
-          _optionalCast(map["layout"]["fill-construct-bridge-guard-rail"]),
-      fillConstructBridgeGuardRailExpression:
-          _optionalCastList(map["layout"]["fill-construct-bridge-guard-rail"]),
+      fillConstructBridgeGuardRail: _optionalCast(
+        map["layout"]["fill-construct-bridge-guard-rail"],
+      ),
+      fillConstructBridgeGuardRailExpression: _optionalCastList(
+        map["layout"]["fill-construct-bridge-guard-rail"],
+      ),
       fillElevationReference: map["layout"]["fill-elevation-reference"] == null
           ? null
-          : FillElevationReference.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["fill-elevation-reference"])),
-      fillElevationReferenceExpression:
-          _optionalCastList(map["layout"]["fill-elevation-reference"]),
+          : FillElevationReference.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["fill-elevation-reference"]),
+            ),
+      fillElevationReferenceExpression: _optionalCastList(
+        map["layout"]["fill-elevation-reference"],
+      ),
       fillSortKey: _optionalCast(map["layout"]["fill-sort-key"]),
       fillSortKeyExpression: _optionalCastList(map["layout"]["fill-sort-key"]),
       fillAntialias: _optionalCast(map["paint"]["fill-antialias"]),
-      fillAntialiasExpression:
-          _optionalCastList(map["paint"]["fill-antialias"]),
+      fillAntialiasExpression: _optionalCastList(
+        map["paint"]["fill-antialias"],
+      ),
       fillBridgeGuardRailColor:
           (map["paint"]["fill-bridge-guard-rail-color"] as List?)?.toRGBAInt(),
-      fillBridgeGuardRailColorExpression:
-          _optionalCastList(map["paint"]["fill-bridge-guard-rail-color"]),
+      fillBridgeGuardRailColorExpression: _optionalCastList(
+        map["paint"]["fill-bridge-guard-rail-color"],
+      ),
       fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
       fillColorExpression: _optionalCastList(map["paint"]["fill-color"]),
-      fillEmissiveStrength:
-          _optionalCast(map["paint"]["fill-emissive-strength"]),
-      fillEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["fill-emissive-strength"]),
+      fillEmissiveStrength: _optionalCast(
+        map["paint"]["fill-emissive-strength"],
+      ),
+      fillEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["fill-emissive-strength"],
+      ),
       fillOpacity: _optionalCast(map["paint"]["fill-opacity"]),
       fillOpacityExpression: _optionalCastList(map["paint"]["fill-opacity"]),
-      fillOutlineColor:
-          (map["paint"]["fill-outline-color"] as List?)?.toRGBAInt(),
-      fillOutlineColorExpression:
-          _optionalCastList(map["paint"]["fill-outline-color"]),
+      fillOutlineColor: (map["paint"]["fill-outline-color"] as List?)
+          ?.toRGBAInt(),
+      fillOutlineColorExpression: _optionalCastList(
+        map["paint"]["fill-outline-color"],
+      ),
       fillPattern: _optionalCast(map["paint"]["fill-pattern"]),
       fillPatternExpression: _optionalCastList(map["paint"]["fill-pattern"]),
-      fillPatternCrossFade:
-          _optionalCast(map["paint"]["fill-pattern-cross-fade"]),
-      fillPatternCrossFadeExpression:
-          _optionalCastList(map["paint"]["fill-pattern-cross-fade"]),
+      fillPatternCrossFade: _optionalCast(
+        map["paint"]["fill-pattern-cross-fade"],
+      ),
+      fillPatternCrossFadeExpression: _optionalCastList(
+        map["paint"]["fill-pattern-cross-fade"],
+      ),
       fillTranslate: (map["paint"]["fill-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      fillTranslateExpression:
-          _optionalCastList(map["paint"]["fill-translate"]),
+      fillTranslateExpression: _optionalCastList(
+        map["paint"]["fill-translate"],
+      ),
       fillTranslateAnchor: map["paint"]["fill-translate-anchor"] == null
           ? null
-          : FillTranslateAnchor.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["fill-translate-anchor"])),
-      fillTranslateAnchorExpression:
-          _optionalCastList(map["paint"]["fill-translate-anchor"]),
+          : FillTranslateAnchor.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["fill-translate-anchor"]),
+            ),
+      fillTranslateAnchorExpression: _optionalCastList(
+        map["paint"]["fill-translate-anchor"],
+      ),
       fillTunnelStructureColor:
           (map["paint"]["fill-tunnel-structure-color"] as List?)?.toRGBAInt(),
-      fillTunnelStructureColorExpression:
-          _optionalCastList(map["paint"]["fill-tunnel-structure-color"]),
+      fillTunnelStructureColorExpression: _optionalCastList(
+        map["paint"]["fill-tunnel-structure-color"],
+      ),
       fillZOffset: _optionalCast(map["paint"]["fill-z-offset"]),
       fillZOffsetExpression: _optionalCastList(map["paint"]["fill-z-offset"]),
     );

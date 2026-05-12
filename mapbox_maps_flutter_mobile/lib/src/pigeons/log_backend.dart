@@ -58,28 +58,35 @@ abstract class LogWriterBackend {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final LoggingLevel? arg_level = (args[0] as LoggingLevel?);
-          assert(arg_level != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null LoggingLevel.');
+          assert(
+            arg_level != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null LoggingLevel.',
+          );
           final String? arg_message = (args[1] as String?);
-          assert(arg_message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null String.');
+          assert(
+            arg_message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null String.',
+          );
           try {
             api.writeLog(arg_level!, arg_message!);
             return wrapResponse(empty: true);
@@ -87,7 +94,8 @@ abstract class LogWriterBackend {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }

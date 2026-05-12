@@ -13,6 +13,7 @@ class HillshadeLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     int? this.hillshadeAccentColor,
     List<Object>? this.hillshadeAccentColorExpression,
     double? this.hillshadeEmissiveStrength,
@@ -28,13 +29,14 @@ class HillshadeLayer extends Layer {
     int? this.hillshadeShadowColor,
     List<Object>? this.hillshadeShadowColorExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "hillshade";
@@ -108,8 +110,10 @@ class HillshadeLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     var paint = {};
@@ -142,8 +146,9 @@ class HillshadeLayer extends Layer {
       paint["hillshade-illumination-anchor"] =
           hillshadeIlluminationAnchorExpression;
     } else if (hillshadeIlluminationAnchor != null) {
-      paint["hillshade-illumination-anchor"] =
-          hillshadeIlluminationAnchor?.name.toLowerCase().replaceAll("_", "-");
+      paint["hillshade-illumination-anchor"] = hillshadeIlluminationAnchor?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (hillshadeIlluminationDirectionExpression != null) {
@@ -203,45 +208,59 @@ class HillshadeLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
-      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
-      filter: _optionalCastList(map["filter"]),
-      hillshadeAccentColor:
-          (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
-      hillshadeAccentColorExpression:
-          _optionalCastList(map["paint"]["hillshade-accent-color"]),
-      hillshadeEmissiveStrength:
-          _optionalCast(map["paint"]["hillshade-emissive-strength"]),
-      hillshadeEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["hillshade-emissive-strength"]),
-      hillshadeExaggeration:
-          _optionalCast(map["paint"]["hillshade-exaggeration"]),
-      hillshadeExaggerationExpression:
-          _optionalCastList(map["paint"]["hillshade-exaggeration"]),
-      hillshadeHighlightColor:
-          (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
-      hillshadeHighlightColorExpression:
-          _optionalCastList(map["paint"]["hillshade-highlight-color"]),
-      hillshadeIlluminationAnchor:
-          map["paint"]["hillshade-illumination-anchor"] == null
-              ? null
-              : HillshadeIlluminationAnchor.values.firstWhere((e) => e.name
+          : Visibility.values.firstWhere(
+              (e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["paint"]["hillshade-illumination-anchor"])),
-      hillshadeIlluminationAnchorExpression:
-          _optionalCastList(map["paint"]["hillshade-illumination-anchor"]),
-      hillshadeIlluminationDirection:
-          _optionalCast(map["paint"]["hillshade-illumination-direction"]),
-      hillshadeIlluminationDirectionExpression:
-          _optionalCastList(map["paint"]["hillshade-illumination-direction"]),
-      hillshadeShadowColor:
-          (map["paint"]["hillshade-shadow-color"] as List?)?.toRGBAInt(),
-      hillshadeShadowColorExpression:
-          _optionalCastList(map["paint"]["hillshade-shadow-color"]),
+                  .contains(map["layout"]["visibility"]),
+            ),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      hillshadeAccentColor: (map["paint"]["hillshade-accent-color"] as List?)
+          ?.toRGBAInt(),
+      hillshadeAccentColorExpression: _optionalCastList(
+        map["paint"]["hillshade-accent-color"],
+      ),
+      hillshadeEmissiveStrength: _optionalCast(
+        map["paint"]["hillshade-emissive-strength"],
+      ),
+      hillshadeEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["hillshade-emissive-strength"],
+      ),
+      hillshadeExaggeration: _optionalCast(
+        map["paint"]["hillshade-exaggeration"],
+      ),
+      hillshadeExaggerationExpression: _optionalCastList(
+        map["paint"]["hillshade-exaggeration"],
+      ),
+      hillshadeHighlightColor:
+          (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
+      hillshadeHighlightColorExpression: _optionalCastList(
+        map["paint"]["hillshade-highlight-color"],
+      ),
+      hillshadeIlluminationAnchor:
+          map["paint"]["hillshade-illumination-anchor"] == null
+          ? null
+          : HillshadeIlluminationAnchor.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["hillshade-illumination-anchor"]),
+            ),
+      hillshadeIlluminationAnchorExpression: _optionalCastList(
+        map["paint"]["hillshade-illumination-anchor"],
+      ),
+      hillshadeIlluminationDirection: _optionalCast(
+        map["paint"]["hillshade-illumination-direction"],
+      ),
+      hillshadeIlluminationDirectionExpression: _optionalCastList(
+        map["paint"]["hillshade-illumination-direction"],
+      ),
+      hillshadeShadowColor: (map["paint"]["hillshade-shadow-color"] as List?)
+          ?.toRGBAInt(),
+      hillshadeShadowColorExpression: _optionalCastList(
+        map["paint"]["hillshade-shadow-color"],
+      ),
     );
   }
 }

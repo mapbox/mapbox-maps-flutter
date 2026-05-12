@@ -11,6 +11,7 @@ class SkyLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     int? this.skyAtmosphereColor,
     List<Object>? this.skyAtmosphereColorExpression,
     int? this.skyAtmosphereHaloColor,
@@ -30,13 +31,14 @@ class SkyLayer extends Layer {
     SkyType? this.skyType,
     List<Object>? this.skyTypeExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "sky";
@@ -120,8 +122,10 @@ class SkyLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     var paint = {};
@@ -217,47 +221,58 @@ class SkyLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
-      skyAtmosphereColor:
-          (map["paint"]["sky-atmosphere-color"] as List?)?.toRGBAInt(),
-      skyAtmosphereColorExpression:
-          _optionalCastList(map["paint"]["sky-atmosphere-color"]),
+      skyAtmosphereColor: (map["paint"]["sky-atmosphere-color"] as List?)
+          ?.toRGBAInt(),
+      skyAtmosphereColorExpression: _optionalCastList(
+        map["paint"]["sky-atmosphere-color"],
+      ),
       skyAtmosphereHaloColor:
           (map["paint"]["sky-atmosphere-halo-color"] as List?)?.toRGBAInt(),
-      skyAtmosphereHaloColorExpression:
-          _optionalCastList(map["paint"]["sky-atmosphere-halo-color"]),
+      skyAtmosphereHaloColorExpression: _optionalCastList(
+        map["paint"]["sky-atmosphere-halo-color"],
+      ),
       skyAtmosphereSun: (map["paint"]["sky-atmosphere-sun"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      skyAtmosphereSunExpression:
-          _optionalCastList(map["paint"]["sky-atmosphere-sun"]),
-      skyAtmosphereSunIntensity:
-          _optionalCast(map["paint"]["sky-atmosphere-sun-intensity"]),
-      skyAtmosphereSunIntensityExpression:
-          _optionalCastList(map["paint"]["sky-atmosphere-sun-intensity"]),
+      skyAtmosphereSunExpression: _optionalCastList(
+        map["paint"]["sky-atmosphere-sun"],
+      ),
+      skyAtmosphereSunIntensity: _optionalCast(
+        map["paint"]["sky-atmosphere-sun-intensity"],
+      ),
+      skyAtmosphereSunIntensityExpression: _optionalCastList(
+        map["paint"]["sky-atmosphere-sun-intensity"],
+      ),
       skyGradient: (map["paint"]["sky-gradient"] as List?)?.toRGBAInt(),
       skyGradientExpression: _optionalCastList(map["paint"]["sky-gradient"]),
       skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      skyGradientCenterExpression:
-          _optionalCastList(map["paint"]["sky-gradient-center"]),
+      skyGradientCenterExpression: _optionalCastList(
+        map["paint"]["sky-gradient-center"],
+      ),
       skyGradientRadius: _optionalCast(map["paint"]["sky-gradient-radius"]),
-      skyGradientRadiusExpression:
-          _optionalCastList(map["paint"]["sky-gradient-radius"]),
+      skyGradientRadiusExpression: _optionalCastList(
+        map["paint"]["sky-gradient-radius"],
+      ),
       skyOpacity: _optionalCast(map["paint"]["sky-opacity"]),
       skyOpacityExpression: _optionalCastList(map["paint"]["sky-opacity"]),
       skyType: map["paint"]["sky-type"] == null
           ? null
-          : SkyType.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["sky-type"])),
+          : SkyType.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["sky-type"]),
+            ),
       skyTypeExpression: _optionalCastList(map["paint"]["sky-type"]),
     );
   }

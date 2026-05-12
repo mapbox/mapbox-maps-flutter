@@ -3,14 +3,16 @@ part of mapbox_maps_flutter_mobile;
 
 /// The CircleAnnotationManager to add/update/delete CircleAnnotationAnnotations on the map.
 class CircleAnnotationManager extends BaseAnnotationManager {
-  CircleAnnotationManager._(
-      {required super.id,
-      required super.messenger,
-      required String channelSuffix})
-      : _annotationMessenger = _CircleAnnotationMessenger(
-            binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
-        _channelSuffix = channelSuffix,
-        super._();
+  CircleAnnotationManager._({
+    required super.id,
+    required super.messenger,
+    required String channelSuffix,
+  }) : _annotationMessenger = _CircleAnnotationMessenger(
+         binaryMessenger: messenger,
+         messageChannelSuffix: channelSuffix,
+       ),
+       _channelSuffix = channelSuffix,
+       super._();
 
   final _CircleAnnotationMessenger _annotationMessenger;
   final String _channelSuffix;
@@ -18,9 +20,12 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   @Deprecated('Use [tapEvents] instead.')
   void addOnCircleAnnotationClickListener(
-      OnCircleAnnotationClickListener listener) {
+    OnCircleAnnotationClickListener listener,
+  ) {
     OnCircleAnnotationClickListener._withCancelable(
-        tapEvents(onTap: listener.onCircleAnnotationClick), _channelSuffix);
+      tapEvents(onTap: listener.onCircleAnnotationClick),
+      _channelSuffix,
+    );
   }
 
   /// Registers tap event callbacks for the annotations managed by this manager.
@@ -36,10 +41,12 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Registers long press event callbacks for the annotations managed by this manager.
   ///
   /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
-  Cancelable longPressEvents(
-      {required Function(CircleAnnotation) onLongPress}) {
+  Cancelable longPressEvents({
+    required Function(CircleAnnotation) onLongPress,
+  }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/long_press")
+          instanceName: "$_channelSuffix/$id/long_press",
+        )
         .cast<CircleAnnotationInteractionContext>()
         .listen((data) => onLongPress(data.annotation))
         .asCancelable();
@@ -73,9 +80,8 @@ class CircleAnnotationManager extends BaseAnnotationManager {
     Function(CircleAnnotation)? onEnd,
   }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/drag")
-        .cast<CircleAnnotationInteractionContext>()
-        .listen((data) {
+      instanceName: "$_channelSuffix/$id/drag",
+    ).cast<CircleAnnotationInteractionContext>().listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
           onBegin(data.annotation);
@@ -99,8 +105,8 @@ class CircleAnnotationManager extends BaseAnnotationManager {
 
   /// Create multi annotations with the options.
   Future<List<CircleAnnotation?>> createMulti(
-          List<CircleAnnotationOptions> annotations) =>
-      _annotationMessenger.createMulti(id, annotations);
+    List<CircleAnnotationOptions> annotations,
+  ) => _annotationMessenger.createMulti(id, annotations);
 
   /// Update an added annotation with new properties.
   Future<void> update(CircleAnnotation annotation) =>
@@ -120,9 +126,11 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
   Future<void> setCircleElevationReference(
-          CircleElevationReference circleElevationReference) =>
-      _annotationMessenger.setCircleElevationReference(
-          id, circleElevationReference);
+    CircleElevationReference circleElevationReference,
+  ) => _annotationMessenger.setCircleElevationReference(
+    id,
+    circleElevationReference,
+  );
 
   /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
@@ -154,7 +162,9 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of circleEmissiveStrength is in intensity.
   Future<void> setCircleEmissiveStrength(double circleEmissiveStrength) =>
       _annotationMessenger.setCircleEmissiveStrength(
-          id, circleEmissiveStrength);
+        id,
+        circleEmissiveStrength,
+      );
 
   /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of circleEmissiveStrength is in intensity.
   Future<double?> getCircleEmissiveStrength() =>
@@ -170,8 +180,8 @@ class CircleAnnotationManager extends BaseAnnotationManager {
 
   /// Orientation of circle when map is pitched. Default value: "viewport".
   Future<void> setCirclePitchAlignment(
-          CirclePitchAlignment circlePitchAlignment) =>
-      _annotationMessenger.setCirclePitchAlignment(id, circlePitchAlignment);
+    CirclePitchAlignment circlePitchAlignment,
+  ) => _annotationMessenger.setCirclePitchAlignment(id, circlePitchAlignment);
 
   /// Orientation of circle when map is pitched. Default value: "viewport".
   Future<CirclePitchAlignment?> getCirclePitchAlignment() =>
@@ -226,11 +236,12 @@ class CircleAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `circle-translate`. Default value: "map".
   Future<void> setCircleTranslateAnchor(
-          CircleTranslateAnchor circleTranslateAnchor) =>
-      _annotationMessenger.setCircleTranslateAnchor(id, circleTranslateAnchor);
+    CircleTranslateAnchor circleTranslateAnchor,
+  ) => _annotationMessenger.setCircleTranslateAnchor(id, circleTranslateAnchor);
 
   /// Controls the frame of reference for `circle-translate`. Default value: "map".
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
       _annotationMessenger.getCircleTranslateAnchor(id);
 }
+
 // End of generated file.

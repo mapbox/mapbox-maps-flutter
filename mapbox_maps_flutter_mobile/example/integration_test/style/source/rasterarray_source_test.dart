@@ -13,18 +13,21 @@ void main() {
     final mapboxMap = await mapFuture;
     await app.events.onMapLoaded.future;
 
-    await mapboxMap.style.addSource(RasterArraySource(
-      id: "source",
-      tiles: ["a", "b", "c"],
-      bounds: [0.0, 1.0, 2.0, 3.0],
-      minzoom: 1.0,
-      maxzoom: 1.0,
-      tileSize: 1.0,
-      attribution: "abc",
-      volatile: true,
-      tileCacheBudget:
-          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
-    ));
+    await mapboxMap.style.addSource(
+      RasterArraySource(
+        id: "source",
+        tiles: ["a", "b", "c"],
+        bounds: [0.0, 1.0, 2.0, 3.0],
+        minzoom: 1.0,
+        maxzoom: 1.0,
+        tileSize: 1.0,
+        attribution: "abc",
+        volatile: true,
+        tileCacheBudget: TileCacheBudget.inMegabytes(
+          TileCacheBudgetInMegabytes(size: 3),
+        ),
+      ),
+    );
 
     var source = await mapboxMap.style.getSource('source') as RasterArraySource;
     expect(source.id, 'source');
@@ -50,10 +53,15 @@ void main() {
     expect(volatile, true);
 
     var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget?.size,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
-    expect(tileCacheBudget?.type,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
+    expect(
+      tileCacheBudget?.size,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+    );
+    expect(
+      tileCacheBudget?.type,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+    );
   });
 }
+
 // End of generated file.

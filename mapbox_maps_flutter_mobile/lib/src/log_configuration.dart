@@ -59,7 +59,10 @@ extension on LoggingLevel {
 final class _DebugLoggingBackend extends LogWriterBackend {
   @override
   void writeLog(LoggingLevel level, String message) {
-    developer.log(message,
-        level: level.asFlutterLoggingLevel.value, name: 'mapbox-maps-flutter');
+    developer.log(
+      message,
+      level: level.asFlutterLoggingLevel.value,
+      name: 'mapbox-maps-flutter',
+    );
   }
 }

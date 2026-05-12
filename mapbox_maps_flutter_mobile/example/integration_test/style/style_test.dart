@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import '../empty_map_widget.dart' as app;
 
 import '../utils/list_close_to_matcher.dart';
@@ -54,7 +55,10 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var transition = TransitionOptions(
-        delay: 100, duration: 200, enablePlacementTransitions: false);
+      delay: 100,
+      duration: 200,
+      enablePlacementTransitions: false,
+    );
     style.setStyleTransition(transition);
     var styleTransition = await style.getStyleTransition();
     expect(styleTransition.duration, 200);
@@ -79,7 +83,9 @@ void main() {
     await expectLater(style.styleLayerExists('custom'), completion(true));
     await expectLater(style.styleSourceExists('source'), completion(true));
     await expectLater(
-        style.isStyleLayerPersistent('custom'), completion(false));
+      style.isStyleLayerPersistent('custom'),
+      completion(false),
+    );
 
     // Remove source and layer
     style.removeStyleLayer('custom');
@@ -141,8 +147,10 @@ void main() {
     var color = await style.getStyleLayerProperty('custom', 'circle-color');
     expect(color.value, listCloseTo(Color(0xFFFF3300).toRGBAList(), 0.00001));
 
-    var styleLayerProperty =
-        await style.getStyleLayerProperty('custom', 'circle-radius');
+    var styleLayerProperty = await style.getStyleLayerProperty(
+      'custom',
+      'circle-radius',
+    );
     expect(styleLayerProperty.value, 20.0);
     await style.setStyleLayerProperty('custom', 'circle-radius', 1.0);
     await style.setStyleLayerProperty('custom', 'circle-color', 'red');
@@ -171,8 +179,13 @@ void main() {
     var formattedProperties =
         json.decode(styleLayerProperties) as Map<String, dynamic>;
     expect(formattedProperties['paint']['circle-radius'], 10);
-    expect(formattedProperties['paint']['circle-color'],
-        ['rgba', 255, 255, 255, 1]);
+    expect(formattedProperties['paint']['circle-color'], [
+      'rgba',
+      255,
+      255,
+      255,
+      1,
+    ]);
   });
 
   testWidgets('StyleSourceProperty', (WidgetTester tester) async {
@@ -184,17 +197,27 @@ void main() {
 
     // Add source and layer
     style.addStyleSource('source', source);
-    var styleSourceProperty =
-        await style.getStyleSourceProperty('source', 'type');
+    var styleSourceProperty = await style.getStyleSourceProperty(
+      'source',
+      'type',
+    );
     await expectLater(styleSourceProperty.value, 'geojson');
     await expectLater(
-        styleSourceProperty.kind, StylePropertyValueKind.CONSTANT);
-    var styleSourceAttributionProperty =
-        await style.getStyleSourceProperty('source', 'attribution');
-    await expectLater(styleSourceAttributionProperty.value,
-        '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
+      styleSourceProperty.kind,
+      StylePropertyValueKind.CONSTANT,
+    );
+    var styleSourceAttributionProperty = await style.getStyleSourceProperty(
+      'source',
+      'attribution',
+    );
     await expectLater(
-        styleSourceProperty.kind, StylePropertyValueKind.CONSTANT);
+      styleSourceAttributionProperty.value,
+      '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>',
+    );
+    await expectLater(
+      styleSourceProperty.kind,
+      StylePropertyValueKind.CONSTANT,
+    );
   });
 
   testWidgets('StyleSourceProperties', (WidgetTester tester) async {
@@ -206,8 +229,9 @@ void main() {
 
     // Add source and layer
     style.addStyleSource('source', source);
-    var styleSourcePropertiesString =
-        await style.getStyleSourceProperties('source');
+    var styleSourcePropertiesString = await style.getStyleSourceProperties(
+      'source',
+    );
     var styleSourceProperties =
         json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
 
@@ -218,20 +242,24 @@ void main() {
       expect(styleSourceProperties.length, 2);
     }
     expect(styleSourceProperties['type'], 'geojson');
-    expect(styleSourceProperties['attribution'],
-        '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
+    expect(
+      styleSourceProperties['attribution'],
+      '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>',
+    );
   });
 
   testWidgets('addAndRemoveGeoJSONSourceFeatures', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    var data = await rootBundle
-        .loadString('assets/from_crema_to_council_crest.geojson');
+    var data = await rootBundle.loadString(
+      'assets/from_crema_to_council_crest.geojson',
+    );
     var feature = Feature(
-        id: "addedFeature",
-        geometry: Point(coordinates: Position(1, 1)),
-        properties: {"test": "data"});
+      id: "addedFeature",
+      geometry: Point(coordinates: Position(1, 1)),
+      properties: {"test": "data"},
+    );
 
     // Reset map events
     app.events.resetOnSourceDataLoaded();
@@ -240,8 +268,9 @@ void main() {
     // Add GeoJSONSourceFeature
     await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
     await mapboxMap.style.addGeoJSONSourceFeatures("line", "dataID", [feature]);
-    await mapboxMap.style
-        .addLayer(CircleLayer(id: "circle_layer", sourceId: "line"));
+    await mapboxMap.style.addLayer(
+      CircleLayer(id: "circle_layer", sourceId: "line"),
+    );
 
     // Wait for map and source to finish
     await app.events.onSourceDataLoaded.future;
@@ -252,26 +281,34 @@ void main() {
 
     // Test added Features
     var returnedSourceFeatures = await mapboxMap.querySourceFeatures(
-        'line', SourceQueryOptions(filter: ''));
+      'line',
+      SourceQueryOptions(filter: ''),
+    );
     expect(returnedSourceFeatures.length, 1);
-    expect(returnedSourceFeatures.first?.queriedFeature.feature['id'],
-        "addedFeature");
-    expect(returnedSourceFeatures.first?.queriedFeature.feature['properties'],
-        {"test": "data"});
+    expect(
+      returnedSourceFeatures.first?.queriedFeature.feature['id'],
+      "addedFeature",
+    );
+    expect(returnedSourceFeatures.first?.queriedFeature.feature['properties'], {
+      "test": "data",
+    });
 
     // Reset map events
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
 
-    await mapboxMap.style
-        .removeGeoJSONSourceFeatures("line", "dataID", ["addedFeature"]);
+    await mapboxMap.style.removeGeoJSONSourceFeatures("line", "dataID", [
+      "addedFeature",
+    ]);
 
     // Wait for map and source to finish
     await app.events.onSourceDataLoaded.future;
     await app.events.onMapIdle.future;
 
     returnedSourceFeatures = await mapboxMap.querySourceFeatures(
-        'line', SourceQueryOptions(filter: ''));
+      'line',
+      SourceQueryOptions(filter: ''),
+    );
     expect(returnedSourceFeatures.length, 0);
   });
 
@@ -279,12 +316,14 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    var data = await rootBundle
-        .loadString('assets/from_crema_to_council_crest.geojson');
+    var data = await rootBundle.loadString(
+      'assets/from_crema_to_council_crest.geojson',
+    );
     var feature = Feature(
-        id: "addedFeature",
-        geometry: Point(coordinates: Position(1, 1)),
-        properties: {"test": "data"});
+      id: "addedFeature",
+      geometry: Point(coordinates: Position(1, 1)),
+      properties: {"test": "data"},
+    );
 
     // Reset map events
     app.events.resetOnSourceDataLoaded();
@@ -293,11 +332,13 @@ void main() {
     // Add and update GeoJSONSourceFeature
     await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
     await mapboxMap.style.addGeoJSONSourceFeatures("line", "dataID", [feature]);
-    await mapboxMap.style
-        .addLayer(CircleLayer(id: "circle_layer", sourceId: "line"));
+    await mapboxMap.style.addLayer(
+      CircleLayer(id: "circle_layer", sourceId: "line"),
+    );
     feature.properties = {"test": "newData"};
-    await mapboxMap.style
-        .updateGeoJSONSourceFeatures("line", "dataID", [feature]);
+    await mapboxMap.style.updateGeoJSONSourceFeatures("line", "dataID", [
+      feature,
+    ]);
 
     // Wait for map and source to finish
     await app.events.onSourceDataLoaded.future;
@@ -308,12 +349,17 @@ void main() {
 
     // Test query
     var returnedSourceFeatures = await mapboxMap.querySourceFeatures(
-        'line', SourceQueryOptions(filter: ''));
+      'line',
+      SourceQueryOptions(filter: ''),
+    );
     expect(returnedSourceFeatures.length, 1);
-    expect(returnedSourceFeatures.first?.queriedFeature.feature['id'],
-        "addedFeature");
-    expect(returnedSourceFeatures.first?.queriedFeature.feature['properties'],
-        {"test": "newData"});
+    expect(
+      returnedSourceFeatures.first?.queriedFeature.feature['id'],
+      "addedFeature",
+    );
+    expect(returnedSourceFeatures.first?.queriedFeature.feature['properties'], {
+      "test": "newData",
+    });
   });
 
   testWidgets('getStyleDefaultCamera', (WidgetTester tester) async {
@@ -341,14 +387,18 @@ void main() {
 
     await app.events.onMapLoaded.future;
 
-    await style.setLights(AmbientLight(id: "ambient-light-id"),
-        DirectionalLight(id: "directional-light-id"));
+    await style.setLights(
+      AmbientLight(id: "ambient-light-id"),
+      DirectionalLight(id: "directional-light-id"),
+    );
 
     await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
     await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
 
-    var intensity =
-        await style.getStyleLightProperty('directional-light-id', 'intensity');
+    var intensity = await style.getStyleLightProperty(
+      'directional-light-id',
+      'intensity',
+    );
     expect(intensity.value, isNotNull);
     expect(intensity.value, closeTo(0.4, 0.00001));
 
@@ -363,38 +413,50 @@ void main() {
     var style = mapboxMap.style;
 
     final flatLight = FlatLight(
-        id: "flat-light-id",
-        anchor: Anchor.MAP,
-        color: Colors.red.value,
-        colorTransition: TransitionOptions(duration: 300, delay: 200),
-        intensity: 3,
-        intensityTransition: TransitionOptions(duration: 100, delay: 50),
-        position: [1, 2, 3],
-        positionTransition: TransitionOptions(duration: 10, delay: 5));
+      id: "flat-light-id",
+      anchor: Anchor.MAP,
+      color: Colors.red.value,
+      colorTransition: TransitionOptions(duration: 300, delay: 200),
+      intensity: 3,
+      intensityTransition: TransitionOptions(duration: 100, delay: 50),
+      position: [1, 2, 3],
+      positionTransition: TransitionOptions(duration: 10, delay: 5),
+    );
     await style.setLight(flatLight);
 
-    expect((await style.getStyleLightProperty("flat-light-id", "color")).value,
-        listCloseTo(Colors.red.toRGBAList(), 0.0001));
     expect(
-        (await style.getStyleLightProperty("flat-light-id", "color-transition"))
-            .value,
-        flatLight.colorTransition?.toJSON());
+      (await style.getStyleLightProperty("flat-light-id", "color")).value,
+      listCloseTo(Colors.red.toRGBAList(), 0.0001),
+    );
     expect(
-        (await style.getStyleLightProperty("flat-light-id", "intensity")).value,
-        3);
+      (await style.getStyleLightProperty(
+        "flat-light-id",
+        "color-transition",
+      )).value,
+      flatLight.colorTransition?.toJSON(),
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "flat-light-id", "intensity-transition"))
-            .value,
-        flatLight.intensityTransition?.toJSON());
+      (await style.getStyleLightProperty("flat-light-id", "intensity")).value,
+      3,
+    );
     expect(
-        (await style.getStyleLightProperty("flat-light-id", "position")).value,
-        [1, 2, 3]);
+      (await style.getStyleLightProperty(
+        "flat-light-id",
+        "intensity-transition",
+      )).value,
+      flatLight.intensityTransition?.toJSON(),
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "flat-light-id", "position-transition"))
-            .value,
-        flatLight.positionTransition?.toJSON());
+      (await style.getStyleLightProperty("flat-light-id", "position")).value,
+      [1, 2, 3],
+    );
+    expect(
+      (await style.getStyleLightProperty(
+        "flat-light-id",
+        "position-transition",
+      )).value,
+      flatLight.positionTransition?.toJSON(),
+    );
   });
 
   testWidgets('3D Lights', (WidgetTester tester) async {
@@ -406,84 +468,115 @@ void main() {
     await app.events.onMapLoaded.future;
 
     final ambientLight = AmbientLight(
-        id: 'ambient-light-id',
-        color: Colors.blue.value,
-        colorTransition: TransitionOptions(duration: 300, delay: 200),
-        intensity: 3,
-        intensityTransition: TransitionOptions(duration: 100, delay: 50));
+      id: 'ambient-light-id',
+      color: Colors.blue.value,
+      colorTransition: TransitionOptions(duration: 300, delay: 200),
+      intensity: 3,
+      intensityTransition: TransitionOptions(duration: 100, delay: 50),
+    );
     final directionalLight = DirectionalLight(
-        id: 'directional-light-id',
-        castShadows: true,
-        color: Colors.blue.value,
-        colorTransition: TransitionOptions(duration: 300, delay: 200),
-        direction: [1, 2],
-        directionTransition: TransitionOptions(duration: 10, delay: 5),
-        intensity: 3,
-        intensityTransition: TransitionOptions(duration: 100, delay: 50),
-        shadowIntensity: 5,
-        shadowIntensityTransition: TransitionOptions(duration: 1, delay: 3));
+      id: 'directional-light-id',
+      castShadows: true,
+      color: Colors.blue.value,
+      colorTransition: TransitionOptions(duration: 300, delay: 200),
+      direction: [1, 2],
+      directionTransition: TransitionOptions(duration: 10, delay: 5),
+      intensity: 3,
+      intensityTransition: TransitionOptions(duration: 100, delay: 50),
+      shadowIntensity: 5,
+      shadowIntensityTransition: TransitionOptions(duration: 1, delay: 3),
+    );
     await style.setLights(ambientLight, directionalLight);
 
     expect(
-        (await style.getStyleLightProperty(
-                "directional-light-id", "cast-shadows"))
-            .value,
-        true);
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "cast-shadows",
+      )).value,
+      true,
+    );
     expect(
-        (await style.getStyleLightProperty("directional-light-id", "color"))
-            .value,
-        listCloseTo(Colors.blue.toRGBAList(), 0.0001));
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "color",
+      )).value,
+      listCloseTo(Colors.blue.toRGBAList(), 0.0001),
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "directional-light-id", "color-transition"))
-            .value,
-        directionalLight.colorTransition?.toJSON());
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "color-transition",
+      )).value,
+      directionalLight.colorTransition?.toJSON(),
+    );
     expect(
-        (await style.getStyleLightProperty("directional-light-id", "direction"))
-            .value,
-        [1, 2]);
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "direction",
+      )).value,
+      [1, 2],
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "directional-light-id", "direction-transition"))
-            .value,
-        directionalLight.directionTransition?.toJSON());
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "direction-transition",
+      )).value,
+      directionalLight.directionTransition?.toJSON(),
+    );
     expect(
-        (await style.getStyleLightProperty("directional-light-id", "intensity"))
-            .value,
-        3);
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "intensity",
+      )).value,
+      3,
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "directional-light-id", "intensity-transition"))
-            .value,
-        directionalLight.intensityTransition?.toJSON());
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "intensity-transition",
+      )).value,
+      directionalLight.intensityTransition?.toJSON(),
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "directional-light-id", "shadow-intensity"))
-            .value,
-        5);
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "shadow-intensity",
+      )).value,
+      5,
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "directional-light-id", "shadow-intensity-transition"))
-            .value,
-        directionalLight.shadowIntensityTransition?.toJSON());
+      (await style.getStyleLightProperty(
+        "directional-light-id",
+        "shadow-intensity-transition",
+      )).value,
+      directionalLight.shadowIntensityTransition?.toJSON(),
+    );
 
     expect(
-        (await style.getStyleLightProperty("ambient-light-id", "color")).value,
-        listCloseTo(Colors.blue.toRGBAList(), 0.0001));
+      (await style.getStyleLightProperty("ambient-light-id", "color")).value,
+      listCloseTo(Colors.blue.toRGBAList(), 0.0001),
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "ambient-light-id", "color-transition"))
-            .value,
-        ambientLight.colorTransition?.toJSON());
+      (await style.getStyleLightProperty(
+        "ambient-light-id",
+        "color-transition",
+      )).value,
+      ambientLight.colorTransition?.toJSON(),
+    );
     expect(
-        (await style.getStyleLightProperty("ambient-light-id", "intensity"))
-            .value,
-        3);
+      (await style.getStyleLightProperty(
+        "ambient-light-id",
+        "intensity",
+      )).value,
+      3,
+    );
     expect(
-        (await style.getStyleLightProperty(
-                "ambient-light-id", "intensity-transition"))
-            .value,
-        ambientLight.intensityTransition?.toJSON());
+      (await style.getStyleLightProperty(
+        "ambient-light-id",
+        "intensity-transition",
+      )).value,
+      ambientLight.intensityTransition?.toJSON(),
+    );
   });
 
   testWidgets('StyleTerrain', (WidgetTester tester) async {
@@ -505,8 +598,9 @@ void main() {
     expect(exaggeration.value, 3);
   });
 
-  testWidgets('invalidateStyleCustomGeometrySourceTile',
-      (WidgetTester tester) async {
+  testWidgets('invalidateStyleCustomGeometrySourceTile', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -514,11 +608,14 @@ void main() {
     var source = await rootBundle.loadString('assets/source.json');
     style.addStyleSource('source', source);
     await style.invalidateStyleCustomGeometrySourceTile(
-        'source', CanonicalTileID(z: 0, x: 1, y: 2));
+      'source',
+      CanonicalTileID(z: 0, x: 1, y: 2),
+    );
   });
 
-  testWidgets('invalidateStyleCustomGeometrySourceRegion',
-      (WidgetTester tester) async {
+  testWidgets('invalidateStyleCustomGeometrySourceRegion', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -526,19 +623,13 @@ void main() {
     var source = await rootBundle.loadString('assets/source.json');
     style.addStyleSource('source', source);
     await style.invalidateStyleCustomGeometrySourceRegion(
-        'source',
-        CoordinateBounds(
-            southwest: Point(
-                coordinates: Position(
-              1.0,
-              2.0,
-            )),
-            northeast: Point(
-                coordinates: Position(
-              3.0,
-              4.0,
-            )),
-            infiniteBounds: true));
+      'source',
+      CoordinateBounds(
+        southwest: Point(coordinates: Position(1.0, 2.0)),
+        northeast: Point(coordinates: Position(3.0, 4.0)),
+        infiniteBounds: true,
+      ),
+    );
   });
 
   testWidgets('handleImage', (WidgetTester tester) async {
@@ -549,11 +640,19 @@ void main() {
     var getImage = await style.getStyleImage('icon');
     expect(getImage, isNull);
 
-    final ByteData bytes =
-        await rootBundle.load('assets/symbols/custom-icon.png');
+    final ByteData bytes = await rootBundle.load(
+      'assets/symbols/custom-icon.png',
+    );
     final Uint8List list = bytes.buffer.asUint8List();
-    await style.addStyleImage('icon', 1.0,
-        MbxImage(width: 40, height: 40, data: list), true, [], [], null);
+    await style.addStyleImage(
+      'icon',
+      1.0,
+      MbxImage(width: 40, height: 40, data: list),
+      true,
+      [],
+      [],
+      null,
+    );
 
     getImage = await style.getStyleImage('icon');
     expect(getImage, isNotNull);
@@ -586,18 +685,19 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    var configs = {
-      "config1": true,
-      "config2": "string",
-      "config3": 1,
-    };
+    var configs = {"config1": true, "config2": "string", "config3": 1};
 
     var importPosition = ImportPosition(below: "basemap");
 
-    var styleImportJSON =
-        await rootBundle.loadString('assets/fragment_realestate_NY.json');
-    await style.addStyleImportFromJSON('style-import', styleImportJSON,
-        config: configs, importPosition: importPosition);
+    var styleImportJSON = await rootBundle.loadString(
+      'assets/fragment_realestate_NY.json',
+    );
+    await style.addStyleImportFromJSON(
+      'style-import',
+      styleImportJSON,
+      config: configs,
+      importPosition: importPosition,
+    );
     var styleImports = await style.getStyleImports();
 
     // As it is below the basemap, it should be the first one
@@ -607,9 +707,9 @@ void main() {
     expect(styleImports[1]?.type, "import");
     expect(styleImports.length, 2);
 
-    await mapboxMap.style
-        .getStyleImportConfigProperties("style-import")
-        .then((value) {
+    await mapboxMap.style.getStyleImportConfigProperties("style-import").then((
+      value,
+    ) {
       expect(value["config1"]?.value, configs["config1"]);
       expect(value["config2"]?.value, configs["config2"]);
       expect(value["config3"]?.value, configs["config3"]);
@@ -622,17 +722,17 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    var configs = {
-      "config1": true,
-      "config2": "string",
-      "config3": 1,
-    };
+    var configs = {"config1": true, "config2": "string", "config3": 1};
 
     var importPosition = ImportPosition(below: "basemap");
     var styleImportURI = 'mapbox://styles/mapbox/standard-satellite';
 
-    await style.addStyleImportFromURI('style-import-satellite', styleImportURI,
-        config: configs, importPosition: importPosition);
+    await style.addStyleImportFromURI(
+      'style-import-satellite',
+      styleImportURI,
+      config: configs,
+      importPosition: importPosition,
+    );
     var styleImports = await style.getStyleImports();
 
     // As it is below the basemap, it should be the first one
@@ -645,10 +745,10 @@ void main() {
     await mapboxMap.style
         .getStyleImportConfigProperties("style-import-satellite")
         .then((value) {
-      expect(value["config1"]?.value, configs["config1"]);
-      expect(value["config2"]?.value, configs["config2"]);
-      expect(value["config3"]?.value, configs["config3"]);
-    });
+          expect(value["config1"]?.value, configs["config1"]);
+          expect(value["config2"]?.value, configs["config2"]);
+          expect(value["config3"]?.value, configs["config3"]);
+        });
   });
 
   testWidgets('StyleUpdateJSON', (WidgetTester tester) async {
@@ -657,33 +757,32 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    var configs = {
-      "config1": true,
-      "config2": "string",
-      "config3": 1,
-    };
+    var configs = {"config1": true, "config2": "string", "config3": 1};
 
-    var configs2 = {
-      "config4": false,
-      "config5": "newString",
-      "config6": 1.5,
-    };
+    var configs2 = {"config4": false, "config5": "newString", "config6": 1.5};
 
     var styleImportURI = 'mapbox://styles/mapbox/standard-satellite';
-    var styleImportJSON =
-        await rootBundle.loadString('assets/fragment_realestate_NY.json');
-    await style.addStyleImportFromURI('style-import', styleImportURI,
-        config: configs);
-    await style.updateStyleImportWithJSON('style-import', styleImportJSON,
-        config: configs2);
+    var styleImportJSON = await rootBundle.loadString(
+      'assets/fragment_realestate_NY.json',
+    );
+    await style.addStyleImportFromURI(
+      'style-import',
+      styleImportURI,
+      config: configs,
+    );
+    await style.updateStyleImportWithJSON(
+      'style-import',
+      styleImportJSON,
+      config: configs2,
+    );
 
     var styleImports = await style.getStyleImports();
 
     expect(styleImports.length, 2);
 
-    await mapboxMap.style
-        .getStyleImportConfigProperties("style-import")
-        .then((value) {
+    await mapboxMap.style.getStyleImportConfigProperties("style-import").then((
+      value,
+    ) {
       expect(value["config1"]?.value, configs["config1"]);
       expect(value["config2"]?.value, configs["config2"]);
       expect(value["config3"]?.value, configs["config3"]);
@@ -699,25 +798,24 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    var configs = {
-      "config1": true,
-      "config2": "string",
-      "config3": 1,
-    };
+    var configs = {"config1": true, "config2": "string", "config3": 1};
 
-    var configs2 = {
-      "config4": false,
-      "config5": "newString",
-      "config6": 1.5,
-    };
+    var configs2 = {"config4": false, "config5": "newString", "config6": 1.5};
 
     var styleImportURI = 'mapbox://styles/mapbox/standard-satellite';
-    var styleImportJSON =
-        await rootBundle.loadString('assets/fragment_realestate_NY.json');
-    await style.addStyleImportFromJSON('style-import', styleImportJSON,
-        config: configs);
-    await style.updateStyleImportWithURI('style-import', styleImportURI,
-        config: configs2);
+    var styleImportJSON = await rootBundle.loadString(
+      'assets/fragment_realestate_NY.json',
+    );
+    await style.addStyleImportFromJSON(
+      'style-import',
+      styleImportJSON,
+      config: configs,
+    );
+    await style.updateStyleImportWithURI(
+      'style-import',
+      styleImportURI,
+      config: configs2,
+    );
 
     // map is fully rendered again with all the changes applied
     await app.events.onMapIdle.future;
@@ -725,9 +823,9 @@ void main() {
     var styleImports = await style.getStyleImports();
     expect(styleImports.length, 2);
 
-    await mapboxMap.style
-        .getStyleImportConfigProperties("style-import")
-        .then((value) {
+    await mapboxMap.style.getStyleImportConfigProperties("style-import").then((
+      value,
+    ) {
       expect(value["config1"]?.value, configs["config1"]);
       expect(value["config2"]?.value, configs["config2"]);
       expect(value["config3"]?.value, configs["config3"]);
@@ -744,8 +842,9 @@ void main() {
     var style = mapboxMap.style;
 
     var importPosition = ImportPosition(below: "basemap");
-    var styleImportJSON =
-        await rootBundle.loadString('assets/fragment_realestate_NY.json');
+    var styleImportJSON = await rootBundle.loadString(
+      'assets/fragment_realestate_NY.json',
+    );
     await style.addStyleImportFromJSON('style-import', styleImportJSON);
 
     var styleImports = await style.getStyleImports();
@@ -768,8 +867,9 @@ void main() {
     expect(styleImports.length, 2);
   });
 
-  testWidgets('Match expression with concat type mismatch',
-      (WidgetTester tester) async {
+  testWidgets('Match expression with concat type mismatch', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -784,10 +884,10 @@ void main() {
           "properties": {"testProperty": 123, "testProperty2": 456},
           "geometry": {
             "type": "Point",
-            "coordinates": [20, 60]
-          }
-        }
-      ]
+            "coordinates": [20, 60],
+          },
+        },
+      ],
     };
 
     var source = {"type": "geojson", "data": geoJsonData};
@@ -799,13 +899,13 @@ void main() {
       [
         "concat",
         ["get", "testProperty"],
-        ["get", "testProperty2"]
+        ["get", "testProperty2"],
       ],
       "123456",
       "red",
       "5234534",
       "green",
-      "yellow"
+      "yellow",
     ];
 
     // Create the layer without the expression
@@ -813,20 +913,23 @@ void main() {
       "id": "test-layer",
       "type": "circle",
       "source": "test-source",
-      "paint": {
-        "circle-radius": 10,
-      }
+      "paint": {"circle-radius": 10},
     };
     await style.addStyleLayer(json.encode(layer), null);
 
     // Then set the expression using setStyleLayerProperty
     // This now works on both iOS and Android after the fix
     await style.setStyleLayerProperty(
-        "test-layer", "circle-color", matchExpression);
+      "test-layer",
+      "circle-color",
+      matchExpression,
+    );
 
     // Verify that the expression was set correctly
-    var retrievedProperty =
-        await style.getStyleLayerProperty("test-layer", "circle-color");
+    var retrievedProperty = await style.getStyleLayerProperty(
+      "test-layer",
+      "circle-color",
+    );
 
     var retrievedExpression = retrievedProperty.value as List;
     expect(retrievedExpression[0], "match");

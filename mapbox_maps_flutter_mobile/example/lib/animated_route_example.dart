@@ -9,6 +9,8 @@ import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -26,8 +28,12 @@ class AnimatedRouteExample extends StatefulWidget implements Example {
 
 class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     with TickerProviderStateMixin {
-  final defaultEdgeInsets =
-      MbxEdgeInsets(top: 100, left: 100, bottom: 100, right: 100);
+  final defaultEdgeInsets = MbxEdgeInsets(
+    top: 100,
+    left: 100,
+    bottom: 100,
+    right: 100,
+  );
 
   late MapboxMap mapboxMap;
   PointAnnotationManager? pointAnnotationManager;
@@ -46,8 +52,8 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    this.pointAnnotationManager =
-        await mapboxMap.annotations.createPointAnnotationManager();
+    this.pointAnnotationManager = await mapboxMap.annotations
+        .createPointAnnotationManager();
 
     await _getPermission();
   }
@@ -61,90 +67,97 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     setLocationComponent();
     refreshTrackLocation();
     refreshCarAnnotations();
-    mapboxMap.style
-        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style.setStyleImportConfigProperty(
+      "basemap",
+      "theme",
+      "monochrome",
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    setState(() {
-                      trackLocation = !trackLocation;
-                      refreshTrackLocation();
-                    });
-                  },
-                  backgroundColor: trackLocation ? Colors.blue : Colors.grey,
-                  child: const Icon(FontAwesomeIcons.locationCrosshairs)),
-              const SizedBox(height: 10),
-              FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    setState(() {
-                      showAnnotations = !showAnnotations;
-                      refreshCarAnnotations();
-                      if (showAnnotations) {
-                        trackLocation = false;
-                        refreshTrackLocation();
-                      }
-                    });
-                  },
-                  backgroundColor: showAnnotations ? Colors.blue : Colors.grey,
-                  child: const Icon(CupertinoIcons.car_detailed)),
-            ],
-          ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                setState(() {
+                  trackLocation = !trackLocation;
+                  refreshTrackLocation();
+                });
+              },
+              backgroundColor: trackLocation ? Colors.blue : Colors.grey,
+              child: const Icon(FontAwesomeIcons.locationCrosshairs),
+            ),
+            const SizedBox(height: 10),
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                setState(() {
+                  showAnnotations = !showAnnotations;
+                  refreshCarAnnotations();
+                  if (showAnnotations) {
+                    trackLocation = false;
+                    refreshTrackLocation();
+                  }
+                });
+              },
+              backgroundColor: showAnnotations ? Colors.blue : Colors.grey,
+              child: const Icon(CupertinoIcons.car_detailed),
+            ),
+          ],
         ),
-        body: MapWidget(
-          key: const ValueKey("mapWidget"),
-          cameraOptions: CameraOptions(zoom: 3.0),
-          styleUri: MapboxStyles.STANDARD,
-          textureView: true,
-          onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoadedCallback,
-        ));
-  }
-
-  setLocationComponent() async {
-    await mapboxMap.location.updateSettings(
-      LocationComponentSettings(
-        enabled: true,
+      ),
+      body: MapWidget(
+        key: const ValueKey("mapWidget"),
+        cameraOptions: CameraOptions(zoom: 3.0),
+        styleUri: MapboxStyles.STANDARD,
+        textureView: true,
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoadedCallback,
       ),
     );
   }
 
-  void _addRouteLineLayerAndSource() async {
-    await mapboxMap.style.addLayer(LineLayer(
-      id: 'layer',
-      sourceId: 'source',
-      lineCap: LineCap.ROUND,
-      lineJoin: LineJoin.ROUND,
-      lineBlur: 1.0,
-      lineColor: Colors.deepOrangeAccent.value,
-      lineDasharray: [1.0, 2.0],
-      lineWidth: 5.0,
-      // draw layer with gradient
-      lineGradientExpression: [
-        "interpolate",
-        ["linear"],
-        ["line-progress"],
-        0.0,
-        ["rgb", 255, 0, 0],
-        0.4,
-        ["rgb", 0, 255, 0],
-        1.0,
-        ["rgb", 0, 0, 255]
-      ],
-    ));
+  setLocationComponent() async {
+    await mapboxMap.location.updateSettings(
+      LocationComponentSettings(enabled: true),
+    );
+  }
 
-    await mapboxMap.style
-        .addSource(GeoJsonSource(id: "source", lineMetrics: true));
+  void _addRouteLineLayerAndSource() async {
+    await mapboxMap.style.addLayer(
+      LineLayer(
+        id: 'layer',
+        sourceId: 'source',
+        lineCap: LineCap.ROUND,
+        lineJoin: LineJoin.ROUND,
+        lineBlur: 1.0,
+        lineColor: Colors.deepOrangeAccent.value,
+        lineDasharray: [1.0, 2.0],
+        lineWidth: 5.0,
+        // draw layer with gradient
+        lineGradientExpression: [
+          "interpolate",
+          ["linear"],
+          ["line-progress"],
+          0.0,
+          ["rgb", 255, 0, 0],
+          0.4,
+          ["rgb", 0, 255, 0],
+          1.0,
+          ["rgb", 0, 0, 255],
+        ],
+      ),
+    );
+
+    await mapboxMap.style.addSource(
+      GeoJsonSource(id: "source", lineMetrics: true),
+    );
   }
 
   refreshTrackLocation() async {
@@ -179,8 +192,9 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
         Point(coordinates: createRandomPositionAround(myCoordinate)),
       ];
 
-      final ByteData bytes =
-          await rootBundle.load('assets/symbols/custom-icon.png');
+      final ByteData bytes = await rootBundle.load(
+        'assets/symbols/custom-icon.png',
+      );
       final Uint8List imageData = bytes.buffer.asUint8List();
 
       for (Point coordinate in coordinates) {
@@ -191,10 +205,11 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
 
       // animate camera to view annotations + puck position
       final camera = await mapboxMap.cameraForCoordinates(
-          [...coordinates.map((e) => e), Point(coordinates: myCoordinate)],
-          defaultEdgeInsets,
-          null,
-          null);
+        [...coordinates.map((e) => e), Point(coordinates: myCoordinate)],
+        defaultEdgeInsets,
+        null,
+        null,
+      );
       mapboxMap.flyTo(camera, null);
     } else {
       pointAnnotationManager?.deleteAll();
@@ -203,12 +218,13 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
 
   setCameraPosition(Position position) {
     mapboxMap.flyTo(
-        CameraOptions(
-          center: Point(coordinates: position),
-          padding: defaultEdgeInsets,
-          zoom: 10,
-        ),
-        null);
+      CameraOptions(
+        center: Point(coordinates: position),
+        padding: defaultEdgeInsets,
+        zoom: 10,
+      ),
+      null,
+    );
   }
 
   void onPointAnnotationClick(PointAnnotation annotation) async {
@@ -222,7 +238,10 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     final end = annotation.geometry;
 
     final coordinates = await fetchRouteCoordinates(
-        start, end.coordinates, MapsDemo.ACCESS_TOKEN);
+      start,
+      end.coordinates,
+      MapsDemo.ACCESS_TOKEN,
+    );
 
     drawRouteLowLevel(coordinates);
   }
@@ -234,13 +253,17 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
 
     // animate layer to reveal it from start to end
     controller?.stop();
-    controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
     animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
       ..addListener(() async {
         // set the animated value of lineTrim and update the layer
-        mapboxMap.style.setStyleLayerProperty(
-            "layer", "line-trim-offset", [animation?.value, 1.0]);
+        mapboxMap.style.setStyleLayerProperty("layer", "line-trim-offset", [
+          animation?.value,
+          1.0,
+        ]);
       });
     controller?.forward();
   }

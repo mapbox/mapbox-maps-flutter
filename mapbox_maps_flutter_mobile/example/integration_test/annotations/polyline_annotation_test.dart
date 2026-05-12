@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import '../empty_map_widget.dart' as app;
 
 void main() {
@@ -12,10 +13,11 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
-    var geometry =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
+    var geometry = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry,
@@ -60,15 +62,17 @@ void main() {
     expect({'foo': 'bar'}, annotation.customData);
   });
 
-  testWidgets('update and delete PolylineAnnotation',
-      (WidgetTester tester) async {
+  testWidgets('update and delete PolylineAnnotation', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
-    var geometry =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
+    var geometry = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry,
@@ -76,9 +80,10 @@ void main() {
     final annotation = await manager.create(polylineAnnotationOptions);
     var lineString = annotation.geometry;
     var newlineString = LineString(
-        coordinates: lineString.coordinates
-            .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
-            .toList());
+      coordinates: lineString.coordinates
+          .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
+          .toList(),
+    );
     annotation.geometry = newlineString;
     await manager.update(annotation);
     await manager.delete(annotation);
@@ -97,10 +102,11 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
-    var geometry =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
+    var geometry = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry,
@@ -136,4 +142,5 @@ void main() {
     expect(allAnnotations.length, equals(0));
   });
 }
+
 // End of generated file.

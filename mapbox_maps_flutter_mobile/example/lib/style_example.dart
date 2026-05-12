@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -31,11 +32,13 @@ class StyleExampleState extends State<StyleExample> {
   }
 
   void _onStyleLoaded(StyleLoadedEventData styleLoadedEventData) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("onStyleLoaded"),
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 1),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("onStyleLoaded"),
+        backgroundColor: Theme.of(context).primaryColor,
+        duration: Duration(seconds: 1),
+      ),
+    );
     _addLayerAndSource();
   }
 
@@ -71,14 +74,22 @@ class StyleExampleState extends State<StyleExample> {
     });
     mapboxMap?.style.styleSourceExists("point_source").then((value) async {
       if (!value) {
-        final ByteData bytes =
-            await rootBundle.load('assets/symbols/custom-icon.png');
+        final ByteData bytes = await rootBundle.load(
+          'assets/symbols/custom-icon.png',
+        );
         final Uint8List list = bytes.buffer.asUint8List();
-        mapboxMap?.style.addStyleImage("icon", 1.0,
-            MbxImage(width: 40, height: 40, data: list), true, [], [], null);
+        mapboxMap?.style.addStyleImage(
+          "icon",
+          1.0,
+          MbxImage(width: 40, height: 40, data: list),
+          true,
+          [],
+          [],
+          null,
+        );
         var geometry = {
           "type": "Point",
-          "coordinates": [24.9384, 60.1699]
+          "coordinates": [24.9384, 60.1699],
         };
         var data = {"type": "Feature", "geometry": geometry};
         var source = {"type": "geojson", "data": data};
@@ -90,17 +101,19 @@ class StyleExampleState extends State<StyleExample> {
         var layer = {
           "id": "point_layer",
           "type": "symbol",
-          "source": "point_source"
+          "source": "point_source",
         };
         mapboxMap?.style.addStyleLayer(json.encode(layer), null);
         var properties = {
           "icon-image": "icon",
           "icon-opacity": 1.0,
           "icon-size": 1.0,
-          "icon-color": "blue"
+          "icon-color": "blue",
         };
-        mapboxMap?.style
-            .setStyleLayerProperties("point_layer", json.encode(properties));
+        mapboxMap?.style.setStyleLayerProperties(
+          "point_layer",
+          json.encode(properties),
+        );
       }
     });
   }
@@ -110,11 +123,14 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getStyleURI'),
       onPressed: () {
         mapboxMap?.style.getStyleURI().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Style URI: $value"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 1),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Style URI: $value"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 1),
+            ),
+          ),
+        );
       },
     );
   }
@@ -123,8 +139,9 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setStyleURI'),
       onPressed: () {
-        mapboxMap?.style
-            .setStyleURI(_styleStrings[styleIndex++ % _styleStrings.length]);
+        mapboxMap?.style.setStyleURI(
+          _styleStrings[styleIndex++ % _styleStrings.length],
+        );
       },
     );
   }
@@ -144,11 +161,14 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getStyleJSON'),
       onPressed: () {
         mapboxMap?.style.getStyleJSON().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Style JSON: $value"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 1),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Style JSON: $value"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 1),
+            ),
+          ),
+        );
       },
     );
   }
@@ -158,12 +178,16 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getStyleTransition'),
       onPressed: () {
         mapboxMap?.style.getStyleTransition().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "Style getStyleTransition, delay: ${value.delay}, duration: ${value.duration}, enablePlacementTransitions: ${value.enablePlacementTransitions}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 1),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Style getStyleTransition, delay: ${value.delay}, duration: ${value.duration}, enablePlacementTransitions: ${value.enablePlacementTransitions}",
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 1),
+            ),
+          ),
+        );
       },
     );
   }
@@ -172,15 +196,22 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setStyleTransition'),
       onPressed: () {
-        mapboxMap?.style.setStyleTransition(TransitionOptions(
-            delay: 100, duration: 200, enablePlacementTransitions: false));
+        mapboxMap?.style.setStyleTransition(
+          TransitionOptions(
+            delay: 100,
+            duration: 200,
+            enablePlacementTransitions: false,
+          ),
+        );
       },
     );
   }
 
   Widget _addStyleLayerAndSource() {
     return TextButton(
-        child: Text('addStyleLayerAndSource'), onPressed: _addLayerAndSource);
+      child: Text('addStyleLayerAndSource'),
+      onPressed: _addLayerAndSource,
+    );
   }
 
   Widget _addPersistentStyleLayer() {
@@ -207,12 +238,17 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('isStyleLayerPersistent'),
       onPressed: () {
-        mapboxMap?.style.isStyleLayerPersistent("custom").then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap?.style
+            .isStyleLayerPersistent("custom")
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("Style isStyleLayerPersistent, $value"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 1),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -233,8 +269,10 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('moveLayer'),
       onPressed: () {
-        mapboxMap?.style
-            .moveStyleLayer("custom", LayerPosition(below: "pitch-outline"));
+        mapboxMap?.style.moveStyleLayer(
+          "custom",
+          LayerPosition(below: "pitch-outline"),
+        );
       },
     );
   }
@@ -244,11 +282,14 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getStyleLayers'),
       onPressed: () {
         mapboxMap?.style.getStyleLayers().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("${value.map((e) => e?.id)}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 3),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("${value.map((e) => e?.id)}"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 3),
+            ),
+          ),
+        );
       },
     );
   }
@@ -258,11 +299,14 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getStyleSources'),
       onPressed: () {
         mapboxMap?.style.getStyleSources().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("${value.map((e) => e?.id)}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 3),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("${value.map((e) => e?.id)}"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 3),
+            ),
+          ),
+        );
       },
     );
   }
@@ -271,12 +315,17 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleLayerProperty'),
       onPressed: () {
-        mapboxMap?.style.getStyleLayerProperty("custom", "circle-radius").then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap?.style
+            .getStyleLayerProperty("custom", "circle-radius")
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("value: ${value.value}, kind: ${value.kind}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 1),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -295,12 +344,17 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleLayerProperties'),
       onPressed: () {
-        mapboxMap?.style.getStyleLayerProperties("custom").then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap?.style
+            .getStyleLayerProperties("custom")
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("value: $value"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 3),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -310,8 +364,10 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('setStyleLayerProperties'),
       onPressed: () {
         var properties = {"circle-radius": 10.0, "circle-color": "blue"};
-        mapboxMap?.style
-            .setStyleLayerProperties("custom", json.encode(properties));
+        mapboxMap?.style.setStyleLayerProperties(
+          "custom",
+          json.encode(properties),
+        );
       },
     );
   }
@@ -320,12 +376,17 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleSourceProperty'),
       onPressed: () {
-        mapboxMap?.style.getStyleSourceProperty("source", "type").then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap?.style
+            .getStyleSourceProperty("source", "type")
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("value: ${value.value}, kind: ${value.kind}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 3),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -336,11 +397,13 @@ class StyleExampleState extends State<StyleExample> {
       onPressed: () {
         mapboxMap?.style.getStyleSourceProperties("source").then((value) {
           var properties = (json.decode(value) as Map<String, dynamic>);
-          return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("$properties"),
-            backgroundColor: Theme.of(context).primaryColor,
-            duration: Duration(seconds: 3),
-          ));
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("$properties"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 3),
+            ),
+          );
         });
       },
     );
@@ -350,12 +413,15 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setStyleLightProperty'),
       onPressed: () {
-        DirectionalLight directionalLight =
-            DirectionalLight(id: "directional-light");
+        DirectionalLight directionalLight = DirectionalLight(
+          id: "directional-light",
+        );
         directionalLight.intensity = 0.5;
         directionalLight.direction = [210, 30];
-        directionalLight.directionTransition =
-            TransitionOptions(duration: 0, delay: 0);
+        directionalLight.directionTransition = TransitionOptions(
+          duration: 0,
+          delay: 0,
+        );
         directionalLight.castShadows = true;
         directionalLight.shadowIntensity = 1;
 
@@ -372,11 +438,13 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getStyleLightProperty'),
       onPressed: () async {
         var lights = await mapboxMap?.style.getStyleLights();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("lights: ${lights}"),
-          backgroundColor: Theme.of(context).primaryColor,
-          duration: Duration(seconds: 3),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("lights: ${lights}"),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 3),
+          ),
+        );
       },
     );
   }
@@ -386,12 +454,16 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getDefaultCamera'),
       onPressed: () {
         mapboxMap?.style.getStyleDefaultCamera().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "center: ${value.center?.coordinates.lat}, ${value.center?.coordinates.lng}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 3),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "center: ${value.center?.coordinates.lat}, ${value.center?.coordinates.lng}",
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 3),
+            ),
+          ),
+        );
       },
     );
   }
@@ -401,11 +473,13 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('isStyleLoaded'),
       onPressed: () {
         mapboxMap?.style.isStyleLoaded().then((value) {
-          return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("$value"),
-            backgroundColor: Theme.of(context).primaryColor,
-            duration: Duration(seconds: 1),
-          ));
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("$value"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 1),
+            ),
+          );
         });
       },
     );
@@ -416,12 +490,15 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('hasImageIcon'),
       onPressed: () {
         mapboxMap?.style.getStyleImage("icon").then((value) {
-          return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                "icon width: ${value?.width}, icon height: ${value?.height}"),
-            backgroundColor: Theme.of(context).primaryColor,
-            duration: Duration(seconds: 1),
-          ));
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "icon width: ${value?.width}, icon height: ${value?.height}",
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 1),
+            ),
+          );
         });
       },
     );
@@ -432,11 +509,14 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('getProjection'),
       onPressed: () {
         mapboxMap?.style.getProjection().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("getProjection: ${value?.name}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("getProjection: ${value?.name}"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
@@ -458,57 +538,53 @@ class StyleExampleState extends State<StyleExample> {
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        onMapCreated: _onMapCreated,
-        onStyleLoadedListener: _onStyleLoaded);
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+      onStyleLoadedListener: _onStyleLoaded,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _getStyleURI(),
-        _setStyleURI(),
-        _getStyleJSON(),
-        _setStyleJSON(),
-        _getStyleTransition(),
-        _setStyleTransition(),
-        _addStyleLayerAndSource(),
-        _addPersistentStyleLayer(),
-        _isStyleLayerPersistent(),
-        _removeLayerAndSource(),
-        _moveLayer(),
-        _getStyleLayers(),
-        _getStyleSources(),
-        _getStyleLayerProperty(),
-        _setStyleLayerProperty(),
-        _getStyleLayerProperties(),
-        _setStyleLayerProperties(),
-        _getStyleSourceProperty(),
-        _getStyleSourceProperties(),
-        _setStyleLightProperty(),
-        _getStyleLightProperty(),
-        _getDefaultCamera(),
-        _hasImageIcon(),
-        _isStyleLoaded(),
-        _getProjection(),
-        _setProjection(),
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _getStyleURI(),
+      _setStyleURI(),
+      _getStyleJSON(),
+      _setStyleJSON(),
+      _getStyleTransition(),
+      _setStyleTransition(),
+      _addStyleLayerAndSource(),
+      _addPersistentStyleLayer(),
+      _isStyleLayerPersistent(),
+      _removeLayerAndSource(),
+      _moveLayer(),
+      _getStyleLayers(),
+      _getStyleSources(),
+      _getStyleLayerProperty(),
+      _setStyleLayerProperty(),
+      _getStyleLayerProperties(),
+      _setStyleLayerProperties(),
+      _getStyleSourceProperty(),
+      _getStyleSourceProperties(),
+      _setStyleLightProperty(),
+      _getStyleLightProperty(),
+      _getDefaultCamera(),
+      _hasImageIcon(),
+      _isStyleLoaded(),
+      _getProjection(),
+      _setProjection(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

@@ -180,15 +180,16 @@ abstract class OnSnapshotStyleListener {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFinishLoadingStyle$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFinishLoadingStyle$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -200,18 +201,19 @@ abstract class OnSnapshotStyleListener {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFullyLoadStyle$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFullyLoadStyle$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -223,28 +225,33 @@ abstract class OnSnapshotStyleListener {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_message = (args[0] as String?);
-          assert(arg_message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle was null, expected non-null String.');
+          assert(
+            arg_message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle was null, expected non-null String.',
+          );
           try {
             api.onDidFailLoadingStyle(arg_message!);
             return wrapResponse(empty: true);
@@ -252,28 +259,33 @@ abstract class OnSnapshotStyleListener {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_imageId = (args[0] as String?);
-          assert(arg_imageId != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing was null, expected non-null String.');
+          assert(
+            arg_imageId != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing was null, expected non-null String.',
+          );
           try {
             api.onStyleImageMissing(arg_imageId!);
             return wrapResponse(empty: true);
@@ -281,7 +293,8 @@ abstract class OnSnapshotStyleListener {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -293,11 +306,13 @@ class _SnapshotterInstanceManager {
   /// Constructor for [_SnapshotterInstanceManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _SnapshotterInstanceManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _SnapshotterInstanceManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -306,17 +321,21 @@ class _SnapshotterInstanceManager {
   final String pigeonVar_messageChannelSuffix;
 
   Future<void> setupSnapshotterForSuffix(
-      String suffix, List<int> eventTypes, MapSnapshotOptions options) async {
+    String suffix,
+    List<int> eventTypes,
+    MapSnapshotOptions options,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.setupSnapshotterForSuffix$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[suffix, eventTypes, options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[suffix, eventTypes, options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -337,12 +356,13 @@ class _SnapshotterInstanceManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.tearDownSnapshotterForSuffix$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[suffix],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[suffix]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -363,11 +383,13 @@ class _SnapshotterMessenger {
   /// Constructor for [_SnapshotterMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _SnapshotterMessenger(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _SnapshotterMessenger({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -380,10 +402,10 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.getSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -410,12 +432,13 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.setSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[size],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[size]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -436,10 +459,10 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.getCameraState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -466,12 +489,13 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.setCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[cameraOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[cameraOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -492,10 +516,10 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.start$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -517,10 +541,10 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.cancel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -542,12 +566,13 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.coordinateBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[camera],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[camera]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -578,12 +603,13 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.camera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[coordinates, padding, bearing, pitch],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[coordinates, padding, bearing, pitch]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -609,12 +635,13 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.tileCover$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -641,10 +668,10 @@ class _SnapshotterMessenger {
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.clearData$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

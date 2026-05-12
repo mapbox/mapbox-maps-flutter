@@ -1,9 +1,11 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 class EditPolygonExample extends StatefulWidget implements Example {
   @override
@@ -32,8 +34,10 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
           .map((e) => Position(e.coordinates.lng, e.coordinates.lat))
           .toList() +
       [
-        Position(points.values.first.coordinates.lng,
-            points.values.first.coordinates.lat)
+        Position(
+          points.values.first.coordinates.lng,
+          points.values.first.coordinates.lat,
+        ),
       ];
 
   @override
@@ -41,7 +45,9 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
     return Scaffold(
       body: MapWidget(
         cameraOptions: CameraOptions(
-            center: Point(coordinates: Position(22.9556, 54.3800)), zoom: 3.5),
+          center: Point(coordinates: Position(22.9556, 54.3800)),
+          zoom: 3.5,
+        ),
         onMapCreated: _onMapCreated,
         onStyleLoadedListener: (data) async {
           _onStyleLoaded();
@@ -59,23 +65,33 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
 
     final cities = [City.helsinki, City.berlin, City.kyiv];
     for (var point in cities) {
-      final annotation = await circleManager.create(CircleAnnotationOptions(
-        geometry: point,
-        circleColor: Colors.indigo.value,
-        circleRadius: 8.0,
-        isDraggable: true,
-      ));
+      final annotation = await circleManager.create(
+        CircleAnnotationOptions(
+          geometry: point,
+          circleColor: Colors.indigo.value,
+          circleRadius: 8.0,
+          isDraggable: true,
+        ),
+      );
       points[annotation.id] = point;
     }
 
-    circleManager.dragEvents(onChanged: (annotation) async {
-      points[annotation.id] = annotation.geometry;
-      // Update source with new feature.
-      await mapboxMap.style
-          .updateGeoJSONSourceFeatures(_sourceId, "editable-polygon", [
-        Feature(id: _featureId, geometry: Polygon(coordinates: [coordinates]))
-      ]);
-    });
+    circleManager.dragEvents(
+      onChanged: (annotation) async {
+        points[annotation.id] = annotation.geometry;
+        // Update source with new feature.
+        await mapboxMap.style.updateGeoJSONSourceFeatures(
+          _sourceId,
+          "editable-polygon",
+          [
+            Feature(
+              id: _featureId,
+              geometry: Polygon(coordinates: [coordinates]),
+            ),
+          ],
+        );
+      },
+    );
 
     final geoJsonData = {
       "type": "FeatureCollection",
@@ -86,18 +102,21 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
           "geometry": {
             "type": "Polygon",
             "coordinates": [coordinates],
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
-    await mapboxMap.style
-        .addSource(GeoJsonSource(id: _sourceId, data: jsonEncode(geoJsonData)));
+    await mapboxMap.style.addSource(
+      GeoJsonSource(id: _sourceId, data: jsonEncode(geoJsonData)),
+    );
 
-    await mapboxMap.style.addLayer(FillLayer(
-      id: "city-fill-layer",
-      sourceId: _sourceId,
-      fillColor: Colors.pink.value,
-      fillOpacity: 0.3,
-    ));
+    await mapboxMap.style.addLayer(
+      FillLayer(
+        id: "city-fill-layer",
+        sourceId: _sourceId,
+        fillColor: Colors.pink.value,
+        fillOpacity: 0.3,
+      ),
+    );
   }
 }

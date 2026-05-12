@@ -40,14 +40,18 @@ final class _MapEvents {
     return listenersMap.values.toList();
   }
 
-  _MapEvents(
-      {BinaryMessenger? binaryMessenger, required String channelSuffix}) {
-    final pigeon_channelSuffix =
-        channelSuffix.length > 0 ? '.${channelSuffix}' : '';
+  _MapEvents({
+    BinaryMessenger? binaryMessenger,
+    required String channelSuffix,
+  }) {
+    final pigeon_channelSuffix = channelSuffix.length > 0
+        ? '.${channelSuffix}'
+        : '';
     _channel = MethodChannel(
-        'com.mapbox.maps.flutter.map_events${pigeon_channelSuffix}',
-        const StandardMethodCodec(),
-        binaryMessenger);
+      'com.mapbox.maps.flutter.map_events${pigeon_channelSuffix}',
+      const StandardMethodCodec(),
+      binaryMessenger,
+    );
     _channel.setMethodCallHandler(_handleMethodCall);
   }
 
@@ -60,7 +64,9 @@ final class _MapEvents {
 
     // let the native side know which events we are interested in
     _channel.invokeMethod(
-        "subscribeToEvents", newEventTypes.map((e) => e.index).toList());
+      "subscribeToEvents",
+      newEventTypes.map((e) => e.index).toList(),
+    );
 
     subscribedEventTypes = newEventTypes;
   }
@@ -78,7 +84,8 @@ final class _MapEvents {
       }
     } catch (error) {
       print(
-          "Handle method call ${call.method}, arguments: ${call.arguments} with error: $error");
+        "Handle method call ${call.method}, arguments: ${call.arguments} with error: $error",
+      );
     }
   }
 
@@ -86,60 +93,74 @@ final class _MapEvents {
     final eventType = _MapEvent.values[int.parse(call.method.split("#")[1])];
     switch (eventType) {
       case _MapEvent.styleLoaded:
-        _onStyleLoadedListener
-            ?.call(StyleLoadedEventData.fromJson(jsonDecode(call.arguments)));
+        _onStyleLoadedListener?.call(
+          StyleLoadedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.cameraChanged:
-        _onCameraChangeListener
-            ?.call(CameraChangedEventData.fromJson(jsonDecode(call.arguments)));
+        _onCameraChangeListener?.call(
+          CameraChangedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.mapIdle:
-        _onMapIdleListener
-            ?.call(MapIdleEventData.fromJson(jsonDecode(call.arguments)));
+        _onMapIdleListener?.call(
+          MapIdleEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.mapLoaded:
-        _onMapLoadedListener
-            ?.call(MapLoadedEventData.fromJson(jsonDecode(call.arguments)));
+        _onMapLoadedListener?.call(
+          MapLoadedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.mapLoadingError:
         _onMapLoadErrorListener?.call(
-            MapLoadingErrorEventData.fromJson(jsonDecode(call.arguments)));
+          MapLoadingErrorEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.renderFrameFinished:
         _onRenderFrameFinishedListener?.call(
-            RenderFrameFinishedEventData.fromJson(jsonDecode(call.arguments)));
+          RenderFrameFinishedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.renderFrameStarted:
         _onRenderFrameStartedListener?.call(
-            RenderFrameStartedEventData.fromJson(jsonDecode(call.arguments)));
+          RenderFrameStartedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.sourceAdded:
-        _onSourceAddedListener
-            ?.call(SourceAddedEventData.fromJson(jsonDecode(call.arguments)));
+        _onSourceAddedListener?.call(
+          SourceAddedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.sourceRemoved:
-        _onSourceRemovedListener
-            ?.call(SourceRemovedEventData.fromJson(jsonDecode(call.arguments)));
+        _onSourceRemovedListener?.call(
+          SourceRemovedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.sourceDataLoaded:
         _onSourceDataLoadedListener?.call(
-            SourceDataLoadedEventData.fromJson(jsonDecode(call.arguments)));
+          SourceDataLoadedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.styleDataLoaded:
         _onStyleDataLoadedListener?.call(
-            StyleDataLoadedEventData.fromJson(jsonDecode(call.arguments)));
+          StyleDataLoadedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.styleImageMissing:
         _onStyleImageMissingListener?.call(
-            StyleImageMissingEventData.fromJson(jsonDecode(call.arguments)));
+          StyleImageMissingEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.styleImageRemoveUnused:
         _onStyleImageUnusedListener?.call(
-            StyleImageUnusedEventData.fromJson(jsonDecode(call.arguments)));
+          StyleImageUnusedEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
       case _MapEvent.resourceRequest:
-        _onResourceRequestListener
-            ?.call(ResourceEventData.fromJson(jsonDecode(call.arguments)));
+        _onResourceRequestListener?.call(
+          ResourceEventData.fromJson(jsonDecode(call.arguments)),
+        );
         break;
     }
   }

@@ -4,12 +4,7 @@
 
 part of mapbox_maps_flutter_mobile;
 
-enum OrnamentPosition {
-  TOP_LEFT,
-  TOP_RIGHT,
-  BOTTOM_RIGHT,
-  BOTTOM_LEFT,
-}
+enum OrnamentPosition { TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT }
 
 /// Configures the directions in which the map is allowed to move during a scroll gesture.
 /// Default value: "horizontal-and-vertical".
@@ -453,20 +448,14 @@ class LocationPuck3D {
 
 /// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
 class LocationPuck {
-  LocationPuck({
-    this.locationPuck2D,
-    this.locationPuck3D,
-  });
+  LocationPuck({this.locationPuck2D, this.locationPuck3D});
 
   LocationPuck2D? locationPuck2D;
 
   LocationPuck3D? locationPuck3D;
 
   List<Object?> _toList() {
-    return <Object?>[
-      locationPuck2D,
-      locationPuck3D,
-    ];
+    return <Object?>[locationPuck2D, locationPuck3D];
   }
 
   Object encode() {
@@ -1350,11 +1339,13 @@ class GesturesSettingsInterface {
   /// Constructor for [GesturesSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  GesturesSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  GesturesSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1367,10 +1358,10 @@ class GesturesSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1397,12 +1388,13 @@ class GesturesSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1424,11 +1416,13 @@ class _LocationComponentSettingsInterface {
   /// Constructor for [_LocationComponentSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _LocationComponentSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _LocationComponentSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1441,10 +1435,10 @@ class _LocationComponentSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1467,17 +1461,20 @@ class _LocationComponentSettingsInterface {
   }
 
   Future<void> updateSettings(
-      LocationComponentSettings settings, bool useDefaultPuck2DIfNeeded) async {
+    LocationComponentSettings settings,
+    bool useDefaultPuck2DIfNeeded,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings, useDefaultPuck2DIfNeeded],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings, useDefaultPuck2DIfNeeded]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1499,11 +1496,13 @@ class ScaleBarSettingsInterface {
   /// Constructor for [ScaleBarSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  ScaleBarSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  ScaleBarSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1516,10 +1515,10 @@ class ScaleBarSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1546,12 +1545,13 @@ class ScaleBarSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1573,11 +1573,13 @@ class CompassSettingsInterface {
   /// Constructor for [CompassSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  CompassSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  CompassSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1590,10 +1592,10 @@ class CompassSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1620,12 +1622,13 @@ class CompassSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1647,11 +1650,13 @@ class AttributionSettingsInterface {
   /// Constructor for [AttributionSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  AttributionSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  AttributionSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1664,10 +1669,10 @@ class AttributionSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1694,12 +1699,13 @@ class AttributionSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1721,11 +1727,13 @@ class LogoSettingsInterface {
   /// Constructor for [LogoSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  LogoSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  LogoSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1738,10 +1746,10 @@ class LogoSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1768,12 +1776,13 @@ class LogoSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1795,11 +1804,13 @@ class IndoorSelectorSettingsInterface {
   /// Constructor for [IndoorSelectorSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  IndoorSelectorSettingsInterface(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  IndoorSelectorSettingsInterface({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1812,10 +1823,10 @@ class IndoorSelectorSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1842,12 +1853,13 @@ class IndoorSelectorSettingsInterface {
         'dev.flutter.pigeon.mapbox_maps_flutter.IndoorSelectorSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {

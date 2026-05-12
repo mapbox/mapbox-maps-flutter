@@ -11,16 +11,18 @@ class SlotLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     @Deprecated("This property has no effect on SlotLayer") String? sourceId,
     @Deprecated("This property has no effect on SlotLayer") String? sourceLayer,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "slot";
@@ -40,8 +42,10 @@ class SlotLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     var paint = {};
@@ -82,10 +86,12 @@ class SlotLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
     );

@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -110,8 +111,7 @@ class DebugOptionsListState extends State<DebugOptionsList> {
         ),
         Expanded(
           child: ListView(
-            children: this
-                .allOptions
+            children: this.allOptions
                 .map(
                   (e) => SwitchListTile(
                     title: Text(e.description),

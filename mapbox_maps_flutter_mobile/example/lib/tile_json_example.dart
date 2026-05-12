@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -25,7 +27,8 @@ class TileJsonExampleState extends State<TileJsonExample> {
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
-    await mapboxMap?.style.addSource(RasterSource(
+    await mapboxMap?.style.addSource(
+      RasterSource(
         id: "source",
         tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
         tileSize: 256,
@@ -33,20 +36,26 @@ class TileJsonExampleState extends State<TileJsonExample> {
         minzoom: 0,
         maxzoom: 18,
         bounds: [-180.0, -85.0, 180.0, 85.0],
-        attribution: "&copy; OpenStreetMap contributors, CC-BY-SA"));
-    await mapboxMap?.style
-        .addLayer(RasterLayer(id: "layer", sourceId: "source"));
+        attribution: "&copy; OpenStreetMap contributors, CC-BY-SA",
+      ),
+    );
+    await mapboxMap?.style.addLayer(
+      RasterLayer(id: "layer", sourceId: "source"),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapWidget(
-      key: ValueKey("mapWidget"),
-      cameraOptions: CameraOptions(
-          center: Point(coordinates: Position(-80.1263, 25.7845)), zoom: 12.0),
-      onMapCreated: _onMapCreated,
-      onStyleLoadedListener: _onStyleLoaded,
-    ));
+      body: MapWidget(
+        key: ValueKey("mapWidget"),
+        cameraOptions: CameraOptions(
+          center: Point(coordinates: Position(-80.1263, 25.7845)),
+          zoom: 12.0,
+        ),
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoaded,
+      ),
+    );
   }
 }

@@ -11,6 +11,7 @@ class BackgroundLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+
     int? this.backgroundColor,
     List<Object>? this.backgroundColorExpression,
     double? this.backgroundEmissiveStrength,
@@ -22,13 +23,14 @@ class BackgroundLayer extends Layer {
     BackgroundPitchAlignment? this.backgroundPitchAlignment,
     List<Object>? this.backgroundPitchAlignmentExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "background";
@@ -80,8 +82,10 @@ class BackgroundLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     var paint = {};
@@ -113,8 +117,9 @@ class BackgroundLayer extends Layer {
     if (backgroundPitchAlignmentExpression != null) {
       paint["background-pitch-alignment"] = backgroundPitchAlignmentExpression;
     } else if (backgroundPitchAlignment != null) {
-      paint["background-pitch-alignment"] =
-          backgroundPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
+      paint["background-pitch-alignment"] = backgroundPitchAlignment?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     var properties = {
@@ -154,34 +159,44 @@ class BackgroundLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
       backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
-      backgroundColorExpression:
-          _optionalCastList(map["paint"]["background-color"]),
-      backgroundEmissiveStrength:
-          _optionalCast(map["paint"]["background-emissive-strength"]),
-      backgroundEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["background-emissive-strength"]),
+      backgroundColorExpression: _optionalCastList(
+        map["paint"]["background-color"],
+      ),
+      backgroundEmissiveStrength: _optionalCast(
+        map["paint"]["background-emissive-strength"],
+      ),
+      backgroundEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["background-emissive-strength"],
+      ),
       backgroundOpacity: _optionalCast(map["paint"]["background-opacity"]),
-      backgroundOpacityExpression:
-          _optionalCastList(map["paint"]["background-opacity"]),
+      backgroundOpacityExpression: _optionalCastList(
+        map["paint"]["background-opacity"],
+      ),
       backgroundPattern: _optionalCast(map["paint"]["background-pattern"]),
-      backgroundPatternExpression:
-          _optionalCastList(map["paint"]["background-pattern"]),
+      backgroundPatternExpression: _optionalCastList(
+        map["paint"]["background-pattern"],
+      ),
       backgroundPitchAlignment:
           map["paint"]["background-pitch-alignment"] == null
-              ? null
-              : BackgroundPitchAlignment.values.firstWhere((e) => e.name
+          ? null
+          : BackgroundPitchAlignment.values.firstWhere(
+              (e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["paint"]["background-pitch-alignment"])),
-      backgroundPitchAlignmentExpression:
-          _optionalCastList(map["paint"]["background-pitch-alignment"]),
+                  .contains(map["paint"]["background-pitch-alignment"]),
+            ),
+      backgroundPitchAlignmentExpression: _optionalCastList(
+        map["paint"]["background-pitch-alignment"],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+
 import '../../empty_map_widget.dart' as app;
 
 void main() {
@@ -13,18 +14,20 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.style.addLayer(BackgroundLayer(
-      id: 'layer',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      backgroundColor: Colors.red.value,
-      backgroundEmissiveStrength: 1.0,
-      backgroundOpacity: 1.0,
-      backgroundPattern: "abc",
-      backgroundPitchAlignment: BackgroundPitchAlignment.MAP,
-    ));
+    await mapboxMap.style.addLayer(
+      BackgroundLayer(
+        id: 'layer',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        backgroundColor: Colors.red.value,
+        backgroundEmissiveStrength: 1.0,
+        backgroundOpacity: 1.0,
+        backgroundPattern: "abc",
+        backgroundPitchAlignment: BackgroundPitchAlignment.MAP,
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -37,29 +40,32 @@ void main() {
     expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
   });
 
-  testWidgets('Add BackgroundLayer with expressions',
-      (WidgetTester tester) async {
+  testWidgets('Add BackgroundLayer with expressions', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.style.addLayer(BackgroundLayer(
-      id: 'layer',
-      visibilityExpression: ['string', 'none'],
-      filter: [
-        "==",
-        ["get", "type"],
-        "Feature"
-      ],
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      backgroundColorExpression: ['rgba', 255, 0, 0, 1],
-      backgroundEmissiveStrengthExpression: ['number', 1.0],
-      backgroundOpacityExpression: ['number', 1.0],
-      backgroundPatternExpression: ['image', "abc"],
-      backgroundPitchAlignmentExpression: ['string', 'map'],
-    ));
+    await mapboxMap.style.addLayer(
+      BackgroundLayer(
+        id: 'layer',
+        visibilityExpression: ['string', 'none'],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        backgroundColorExpression: ['rgba', 255, 0, 0, 1],
+        backgroundEmissiveStrengthExpression: ['number', 1.0],
+        backgroundOpacityExpression: ['number', 1.0],
+        backgroundPatternExpression: ['image', "abc"],
+        backgroundPitchAlignmentExpression: ['string', 'map'],
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -68,7 +74,7 @@ void main() {
     expect(layer.filter, [
       "==",
       ["get", "type"],
-      "Feature"
+      "Feature",
     ]);
     expect(layer.backgroundColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.backgroundEmissiveStrength, 1.0);
@@ -77,4 +83,5 @@ void main() {
     expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
   });
 }
+
 // End of generated file.

@@ -31,11 +31,7 @@ enum TileDataDomain {
   ADAS,
 }
 
-enum _TileStoreOptionsKey {
-  DISK_QUOTA,
-  MAPBOX_API_URL,
-  TILE_URL_TEMPLATE,
-}
+enum _TileStoreOptionsKey { DISK_QUOTA, MAPBOX_API_URL, TILE_URL_TEMPLATE }
 
 /// Describes the style package load option values.
 class StylePackLoadOptions {
@@ -70,11 +66,7 @@ class StylePackLoadOptions {
   bool acceptExpired;
 
   List<Object?> _toList() {
-    return <Object?>[
-      glyphsRasterizationMode,
-      metadata,
-      acceptExpired,
-    ];
+    return <Object?>[glyphsRasterizationMode, metadata, acceptExpired];
   }
 
   Object encode() {
@@ -359,8 +351,8 @@ class TilesetDescriptorOptions {
       pixelRatio: result[3] as double?,
       tilesets: (result[4] as List<Object?>?)?.cast<String?>(),
       stylePackOptions: result[5] as StylePackLoadOptions?,
-      extraOptions:
-          (result[6] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      extraOptions: (result[6] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 
@@ -487,15 +479,15 @@ class TileRegionLoadOptions {
     result as List<Object?>;
     return TileRegionLoadOptions(
       geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
-      descriptorsOptions:
-          (result[1] as List<Object?>?)?.cast<TilesetDescriptorOptions?>(),
+      descriptorsOptions: (result[1] as List<Object?>?)
+          ?.cast<TilesetDescriptorOptions?>(),
       metadata: (result[2] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
       acceptExpired: result[3]! as bool,
       networkRestriction: result[4]! as NetworkRestriction,
       startLocation: result[5] as Point?,
       averageBytesPerSecond: result[6] as int?,
-      extraOptions:
-          (result[7] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      extraOptions: (result[7] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 
@@ -629,12 +621,7 @@ class TileRegionEstimateResult {
   Map<String?, Object?>? extraOptions;
 
   List<Object?> _toList() {
-    return <Object?>[
-      errorMargin,
-      transferSize,
-      storageSize,
-      extraOptions,
-    ];
+    return <Object?>[errorMargin, transferSize, storageSize, extraOptions];
   }
 
   Object encode() {
@@ -647,8 +634,8 @@ class TileRegionEstimateResult {
       errorMargin: result[0]! as double,
       transferSize: result[1]! as int,
       storageSize: result[2]! as int,
-      extraOptions:
-          (result[3] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      extraOptions: (result[3] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 
@@ -717,8 +704,8 @@ class TileRegionEstimateOptions {
       errorMargin: result[0]! as double,
       preciseEstimationTimeout: result[1]! as double,
       timeout: result[2]! as double,
-      extraOptions:
-          (result[3] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      extraOptions: (result[3] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 
@@ -1086,11 +1073,13 @@ class _OfflineManager {
   /// Constructor for [_OfflineManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _OfflineManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _OfflineManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1099,17 +1088,20 @@ class _OfflineManager {
   final String pigeonVar_messageChannelSuffix;
 
   Future<StylePack> loadStylePack(
-      String styleURI, StylePackLoadOptions loadOptions) async {
+    String styleURI,
+    StylePackLoadOptions loadOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.loadStylePack$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleURI, loadOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleURI, loadOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1135,12 +1127,13 @@ class _OfflineManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.removeStylePack$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleURI],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleURI]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1166,12 +1159,13 @@ class _OfflineManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleURI],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleURI]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1192,12 +1186,13 @@ class _OfflineManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePack$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleURI],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleURI]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1223,12 +1218,13 @@ class _OfflineManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePackMetadata$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleURI],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[styleURI]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1255,10 +1251,10 @@ class _OfflineManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.allStylePacks$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1285,11 +1281,13 @@ class _TileStore {
   /// Constructor for [_TileStore].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _TileStore(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _TileStore({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1298,17 +1296,20 @@ class _TileStore {
   final String pigeonVar_messageChannelSuffix;
 
   Future<TileRegion> loadTileRegion(
-      String id, TileRegionLoadOptions loadOptions) async {
+    String id,
+    TileRegionLoadOptions loadOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.loadTileRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id, loadOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id, loadOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1334,12 +1335,13 @@ class _TileStore {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionLoadProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1356,19 +1358,21 @@ class _TileStore {
   }
 
   Future<TileRegionEstimateResult> estimateTileRegion(
-      String id,
-      TileRegionLoadOptions loadOptions,
-      TileRegionEstimateOptions? estimateOptions) async {
+    String id,
+    TileRegionLoadOptions loadOptions,
+    TileRegionEstimateOptions? estimateOptions,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.estimateTileRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id, loadOptions, estimateOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id, loadOptions, estimateOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1394,12 +1398,13 @@ class _TileStore {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionEstimateProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1420,12 +1425,13 @@ class _TileStore {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionMetadata$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1448,17 +1454,20 @@ class _TileStore {
   }
 
   Future<bool> tileRegionContainsDescriptor(
-      String id, List<TilesetDescriptorOptions> options) async {
+    String id,
+    List<TilesetDescriptorOptions> options,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionContainsDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id, options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id, options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1484,10 +1493,10 @@ class _TileStore {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.allTileRegions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -1514,12 +1523,13 @@ class _TileStore {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1545,12 +1555,13 @@ class _TileStore {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.removeRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[id],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[id]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1572,17 +1583,21 @@ class _TileStore {
   }
 
   Future<void> setOptionForKey(
-      _KeyedTileStoreOptions key, TileDataDomain? domain, Object? value) async {
+    _KeyedTileStoreOptions key,
+    TileDataDomain? domain,
+    Object? value,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[key, domain, value],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[key, domain, value]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1603,11 +1618,13 @@ class _OfflineMapInstanceManager {
   /// Constructor for [_OfflineMapInstanceManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _OfflineMapInstanceManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _OfflineMapInstanceManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1620,12 +1637,13 @@ class _OfflineMapInstanceManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineMapInstanceManager.setupOfflineManager$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[channelSuffix],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[channelSuffix]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1646,12 +1664,13 @@ class _OfflineMapInstanceManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineMapInstanceManager.tearDownOfflineManager$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[channelSuffix],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[channelSuffix]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1672,11 +1691,13 @@ class _TileStoreInstanceManager {
   /// Constructor for [_TileStoreInstanceManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _TileStoreInstanceManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _TileStoreInstanceManager({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1689,12 +1710,13 @@ class _TileStoreInstanceManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.setupTileStore$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[channelSuffix, filePath],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[channelSuffix, filePath]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1715,12 +1737,13 @@ class _TileStoreInstanceManager {
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.tearDownTileStore$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[channelSuffix],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[channelSuffix]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1742,11 +1765,13 @@ class _OfflineSwitch {
   /// Constructor for [_OfflineSwitch].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _OfflineSwitch(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _OfflineSwitch({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -1763,12 +1788,13 @@ class _OfflineSwitch {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.setMapboxStackConnected$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[connected],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[connected]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -1792,10 +1818,10 @@ class _OfflineSwitch {
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.isMapboxStackConnected$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

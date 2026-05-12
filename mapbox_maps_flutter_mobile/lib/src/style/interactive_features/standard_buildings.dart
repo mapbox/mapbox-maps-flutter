@@ -31,7 +31,7 @@ extension StandardBuildingsFeature
 /// A featureset of StandardBuildings features.
 class StandardBuildings extends FeaturesetDescriptor {
   StandardBuildings({String importId = "basemap"})
-      : super(featuresetId: "buildings", importId: importId);
+    : super(featuresetId: "buildings", importId: importId);
 }
 
 /// Represents available states for StandardBuildings features in the Standard style.
@@ -44,15 +44,9 @@ class StandardBuildingsState extends FeatureState {
 
   @override
   Map<String, Object?> get map {
-    return {
-      "highlight": highlight,
-      "select": select,
-    };
+    return {"highlight": highlight, "select": select};
   }
 
   StandardBuildingsState({this.highlight, this.select})
-      : super(map: {
-          "highlight": highlight,
-          "select": select,
-        });
+    : super(map: {"highlight": highlight, "select": select});
 }

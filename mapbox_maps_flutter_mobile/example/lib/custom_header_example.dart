@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
@@ -50,18 +51,17 @@ class CustomHeaderExampleState extends State<CustomHeaderExample> {
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[],
-    );
+    listViewChildren.addAll(<Widget>[]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
+          ),
         ),
       ],
     );

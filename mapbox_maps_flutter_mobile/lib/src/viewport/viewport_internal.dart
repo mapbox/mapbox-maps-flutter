@@ -4,37 +4,19 @@
 
 part of mapbox_maps_flutter_mobile;
 
-enum _ViewportTransitionType {
-  defaultTransition,
-  fly,
-  easing,
-}
+enum _ViewportTransitionType { defaultTransition, fly, easing }
 
-enum _FollowPuckViewportStateBearing {
-  constant,
-  heading,
-  course,
-}
+enum _FollowPuckViewportStateBearing { constant, heading, course }
 
-enum _ViewportStateType {
-  idle,
-  overview,
-  followPuck,
-  styleDefault,
-  camera,
-}
+enum _ViewportStateType { idle, overview, followPuck, styleDefault, camera }
 
 class _DefaultViewportTransitionOptions {
-  _DefaultViewportTransitionOptions({
-    required this.maxDurationMs,
-  });
+  _DefaultViewportTransitionOptions({required this.maxDurationMs});
 
   int maxDurationMs;
 
   List<Object?> _toList() {
-    return <Object?>[
-      maxDurationMs,
-    ];
+    return <Object?>[maxDurationMs];
   }
 
   Object encode() {
@@ -43,9 +25,7 @@ class _DefaultViewportTransitionOptions {
 
   static _DefaultViewportTransitionOptions decode(Object result) {
     result as List<Object?>;
-    return _DefaultViewportTransitionOptions(
-      maxDurationMs: result[0]! as int,
-    );
+    return _DefaultViewportTransitionOptions(maxDurationMs: result[0]! as int);
   }
 
   @override
@@ -67,16 +47,12 @@ class _DefaultViewportTransitionOptions {
 }
 
 class _FlyViewportTransitionOptions {
-  _FlyViewportTransitionOptions({
-    this.durationMs,
-  });
+  _FlyViewportTransitionOptions({this.durationMs});
 
   int? durationMs;
 
   List<Object?> _toList() {
-    return <Object?>[
-      durationMs,
-    ];
+    return <Object?>[durationMs];
   }
 
   Object encode() {
@@ -85,9 +61,7 @@ class _FlyViewportTransitionOptions {
 
   static _FlyViewportTransitionOptions decode(Object result) {
     result as List<Object?>;
-    return _FlyViewportTransitionOptions(
-      durationMs: result[0] as int?,
-    );
+    return _FlyViewportTransitionOptions(durationMs: result[0] as int?);
   }
 
   @override
@@ -128,13 +102,7 @@ class _EasingViewportTransitionOptions {
   double d;
 
   List<Object?> _toList() {
-    return <Object?>[
-      durationMs,
-      a,
-      b,
-      c,
-      d,
-    ];
+    return <Object?>[durationMs, a, b, c, d];
   }
 
   Object encode() {
@@ -175,20 +143,14 @@ class _EasingViewportTransitionOptions {
 }
 
 class _ViewportTransitionStorage {
-  _ViewportTransitionStorage({
-    required this.type,
-    this.options,
-  });
+  _ViewportTransitionStorage({required this.type, this.options});
 
   _ViewportTransitionType type;
 
   Object? options;
 
   List<Object?> _toList() {
-    return <Object?>[
-      type,
-      options,
-    ];
+    return <Object?>[type, options];
   }
 
   Object encode() {
@@ -325,13 +287,7 @@ class _FollowPuckViewportStateOptions {
   MbxEdgeInsets? padding;
 
   List<Object?> _toList() {
-    return <Object?>[
-      zoom,
-      bearingValue,
-      bearing,
-      pitch,
-      padding,
-    ];
+    return <Object?>[zoom, bearingValue, bearing, pitch, padding];
   }
 
   Object encode() {
@@ -372,20 +328,14 @@ class _FollowPuckViewportStateOptions {
 }
 
 class _ViewportStateStorage {
-  _ViewportStateStorage({
-    required this.type,
-    this.options,
-  });
+  _ViewportStateStorage({required this.type, this.options});
 
   _ViewportStateType type;
 
   Object? options;
 
   List<Object?> _toList() {
-    return <Object?>[
-      type,
-      options,
-    ];
+    return <Object?>[type, options];
   }
 
   Object encode() {
@@ -517,11 +467,13 @@ class _ViewportMessenger {
   /// Constructor for [_ViewportMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _ViewportMessenger(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _ViewportMessenger({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -529,18 +481,21 @@ class _ViewportMessenger {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<bool> transition(_ViewportStateStorage stateStorage,
-      _ViewportTransitionStorage? transitionStorage) async {
+  Future<bool> transition(
+    _ViewportStateStorage stateStorage,
+    _ViewportTransitionStorage? transitionStorage,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._ViewportMessenger.transition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[stateStorage, transitionStorage],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[stateStorage, transitionStorage]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {

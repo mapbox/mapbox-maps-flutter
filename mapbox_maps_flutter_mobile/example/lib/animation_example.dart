@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class AnimationExample extends StatefulWidget implements Example {
@@ -36,16 +38,14 @@ class AnimationExampleState extends State<AnimationExample> {
       child: Text('easeTo'),
       onPressed: () {
         mapboxMap?.easeTo(
-            CameraOptions(
-                center: Point(
-                    coordinates: Position(
-                  -0.11968,
-                  51.50325,
-                )),
-                zoom: 15,
-                bearing: 0,
-                pitch: 3),
-            MapAnimationOptions(duration: 2000, startDelay: 0));
+          CameraOptions(
+            center: Point(coordinates: Position(-0.11968, 51.50325)),
+            zoom: 15,
+            bearing: 0,
+            pitch: 3,
+          ),
+          MapAnimationOptions(duration: 2000, startDelay: 0),
+        );
       },
     );
   }
@@ -55,12 +55,14 @@ class AnimationExampleState extends State<AnimationExample> {
       child: Text('flyTo'),
       onPressed: () {
         mapboxMap?.flyTo(
-            CameraOptions(
-                anchor: ScreenCoordinate(x: 0, y: 0),
-                zoom: 17,
-                bearing: 180,
-                pitch: 30),
-            MapAnimationOptions(duration: 2000, startDelay: 0));
+          CameraOptions(
+            anchor: ScreenCoordinate(x: 0, y: 0),
+            zoom: 17,
+            bearing: 180,
+            pitch: 30,
+          ),
+          MapAnimationOptions(duration: 2000, startDelay: 0),
+        );
       },
     );
   }
@@ -69,8 +71,10 @@ class AnimationExampleState extends State<AnimationExample> {
     return TextButton(
       child: Text('moveBy'),
       onPressed: () {
-        mapboxMap?.moveBy(ScreenCoordinate(x: 500.0, y: 500.0),
-            MapAnimationOptions(duration: 2000, startDelay: 0));
+        mapboxMap?.moveBy(
+          ScreenCoordinate(x: 500.0, y: 500.0),
+          MapAnimationOptions(duration: 2000, startDelay: 0),
+        );
       },
     );
   }
@@ -80,9 +84,10 @@ class AnimationExampleState extends State<AnimationExample> {
       child: Text('rotateBy'),
       onPressed: () {
         mapboxMap?.rotateBy(
-            ScreenCoordinate(x: 0, y: 0),
-            ScreenCoordinate(x: 500.0, y: 500.0),
-            MapAnimationOptions(duration: 2000, startDelay: 0));
+          ScreenCoordinate(x: 0, y: 0),
+          ScreenCoordinate(x: 500.0, y: 500.0),
+          MapAnimationOptions(duration: 2000, startDelay: 0),
+        );
       },
     );
   }
@@ -91,8 +96,11 @@ class AnimationExampleState extends State<AnimationExample> {
     return TextButton(
       child: Text('scaleBy'),
       onPressed: () {
-        mapboxMap?.scaleBy(15.0, ScreenCoordinate(x: 10.0, y: 10.0),
-            MapAnimationOptions(duration: 2000, startDelay: 0));
+        mapboxMap?.scaleBy(
+          15.0,
+          ScreenCoordinate(x: 10.0, y: 10.0),
+          MapAnimationOptions(duration: 2000, startDelay: 0),
+        );
       },
     );
   }
@@ -102,7 +110,9 @@ class AnimationExampleState extends State<AnimationExample> {
       child: Text('pitchBy'),
       onPressed: () {
         mapboxMap?.pitchBy(
-            70.0, MapAnimationOptions(duration: 2000, startDelay: 0));
+          70.0,
+          MapAnimationOptions(duration: 2000, startDelay: 0),
+        );
       },
     );
   }
@@ -118,37 +128,34 @@ class AnimationExampleState extends State<AnimationExample> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _cancelCameraAnimation(),
-        _easeTo(),
-        _flyTo(),
-        _moveBy(),
-        _rotateBy(),
-        _scaleBy(),
-        _pitchBy(),
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _cancelCameraAnimation(),
+      _easeTo(),
+      _flyTo(),
+      _moveBy(),
+      _rotateBy(),
+      _scaleBy(),
+      _pitchBy(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

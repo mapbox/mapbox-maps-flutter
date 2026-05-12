@@ -13,11 +13,12 @@ extension Conversion on CameraState {
 
   static CameraState fromJson(Map<String, dynamic> json) {
     return CameraState(
-        center: Point.fromJson(json['center']),
-        padding: _MbxEdgeInsetsCodable.fromJson(json['padding']),
-        zoom: json['zoom'].toDouble(),
-        bearing: json['bearing'].toDouble(),
-        pitch: json['pitch'].toDouble());
+      center: Point.fromJson(json['center']),
+      padding: _MbxEdgeInsetsCodable.fromJson(json['padding']),
+      zoom: json['zoom'].toDouble(),
+      bearing: json['bearing'].toDouble(),
+      pitch: json['pitch'].toDouble(),
+    );
   }
 }
 
@@ -43,18 +44,12 @@ extension _MbxEdgeInsetsCodable on MbxEdgeInsets {
 
 extension ScreenBoxToJson on ScreenBox {
   dynamic toJson() {
-    return <String, dynamic>{
-      'min': min.toJson(),
-      'max': max.toJson(),
-    };
+    return <String, dynamic>{'min': min.toJson(), 'max': max.toJson()};
   }
 }
 
 extension ScreenCoordinateToJson on ScreenCoordinate {
   dynamic toJson() {
-    return <String, dynamic>{
-      'x': x,
-      'y': y,
-    };
+    return <String, dynamic>{'x': x, 'y': y};
   }
 }

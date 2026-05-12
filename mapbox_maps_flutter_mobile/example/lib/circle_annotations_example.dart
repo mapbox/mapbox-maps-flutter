@@ -1,6 +1,8 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class CircleAnnotationExample extends StatefulWidget implements Example {
@@ -27,47 +29,56 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.setCamera(CameraOptions(
-        center: Point(coordinates: Position(0, 0)), zoom: 1, pitch: 0));
+    mapboxMap.setCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 1,
+        pitch: 0,
+      ),
+    );
     mapboxMap.annotations.createCircleAnnotationManager().then((value) {
       circleAnnotationManager = value;
       createOneAnnotation();
 
       var options = <CircleAnnotationOptions>[];
       for (var i = 0; i < 2000; i++) {
-        options.add(CircleAnnotationOptions(
-          geometry: createRandomPoint(),
-          circleColor: createRandomColor(),
-          circleRadius: 8.0,
-          isDraggable: true,
-        ));
+        options.add(
+          CircleAnnotationOptions(
+            geometry: createRandomPoint(),
+            circleColor: createRandomColor(),
+            circleRadius: 8.0,
+            isDraggable: true,
+          ),
+        );
       }
       circleAnnotationManager?.createMulti(options).then((createdAnnotations) {
         annotations = createdAnnotations.whereType<CircleAnnotation>().toList();
       });
-      tapListener = circleAnnotationManager?.tapEvents(onTap: (annotation) {
-        // ignore: avoid_print
-        print("onAnnotationClick, id: ${annotation.id}");
-      });
-      circleAnnotationManager?.longPressEvents(onLongPress: (annotation) {
-        // ignore: avoid_print
-        print("onAnnotationLongPress, id: ${annotation.id}");
-      });
+      tapListener = circleAnnotationManager?.tapEvents(
+        onTap: (annotation) {
+          // ignore: avoid_print
+          print("onAnnotationClick, id: ${annotation.id}");
+        },
+      );
+      circleAnnotationManager?.longPressEvents(
+        onLongPress: (annotation) {
+          // ignore: avoid_print
+          print("onAnnotationLongPress, id: ${annotation.id}");
+        },
+      );
     });
   }
 
   void createOneAnnotation() {
     circleAnnotationManager
-        ?.create(CircleAnnotationOptions(
-          geometry: Point(
-              coordinates: Position(
-            0.381457,
-            6.687337,
-          )),
-          circleColor: Colors.yellow.value,
-          circleRadius: 12.0,
-          isDraggable: true,
-        ))
+        ?.create(
+          CircleAnnotationOptions(
+            geometry: Point(coordinates: Position(0.381457, 6.687337)),
+            circleColor: Colors.yellow.value,
+            circleRadius: 12.0,
+            isDraggable: true,
+          ),
+        )
         .then((value) => circleAnnotation = value);
     ;
   }
@@ -89,8 +100,11 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
         if (circleAnnotation != null) {
           var point = circleAnnotation!.geometry;
           var newPoint = Point(
-              coordinates: Position(
-                  point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+            coordinates: Position(
+              point.coordinates.lng + 1.0,
+              point.coordinates.lat + 1.0,
+            ),
+          );
           circleAnnotation?.geometry = newPoint;
           circleAnnotationManager?.update(circleAnnotation!);
         }
@@ -109,26 +123,30 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
 
   Widget _delete() {
     return TextButton(
-        child: Text('delete a circle annotation'),
-        onPressed: () async {
-          if (circleAnnotation != null) {
-            circleAnnotationManager?.delete(circleAnnotation!);
-            circleAnnotation = null;
-          }
-        });
+      child: Text('delete a circle annotation'),
+      onPressed: () async {
+        if (circleAnnotation != null) {
+          circleAnnotationManager?.delete(circleAnnotation!);
+          circleAnnotation = null;
+        }
+      },
+    );
   }
 
   Widget _deleteMulti() {
     return TextButton(
-        child: Text('delete 100 circle annotations'),
-        onPressed: () async {
-          if (annotations.isNotEmpty) {
-            final toDelete = annotations.take(100).toList();
-            await circleAnnotationManager?.deleteMulti(toDelete);
-            annotations.removeRange(
-                0, toDelete.length.clamp(0, annotations.length));
-          }
-        });
+      child: Text('delete 100 circle annotations'),
+      onPressed: () async {
+        if (annotations.isNotEmpty) {
+          final toDelete = annotations.take(100).toList();
+          await circleAnnotationManager?.deleteMulti(toDelete);
+          annotations.removeRange(
+            0,
+            toDelete.length.clamp(0, annotations.length),
+          );
+        }
+      },
+    );
   }
 
   Widget _deleteAll() {
@@ -162,61 +180,61 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _create(),
-        _update(),
-        _delete(),
-        _deleteMulti(),
-        _deleteAll(),
-        _stopTapListener()
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _create(),
+      _update(),
+      _delete(),
+      _deleteMulti(),
+      _deleteAll(),
+      _stopTapListener(),
+    ]);
 
     final colmn = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
 
     return Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  child: Icon(Icons.swap_horiz),
-                  heroTag: null,
-                  onPressed: () {
-                    mapboxMap?.style.setStyleURI(annotationStyles[
-                        ++styleIndex % annotationStyles.length]);
-                  }),
-              SizedBox(height: 10),
-              FloatingActionButton(
-                  child: Icon(Icons.clear),
-                  heroTag: null,
-                  onPressed: () {
-                    if (circleAnnotationManager != null) {
-                      mapboxMap?.annotations
-                          .removeAnnotationManager(circleAnnotationManager!);
-                      circleAnnotationManager = null;
-                    }
-                  }),
-            ],
-          ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              child: Icon(Icons.swap_horiz),
+              heroTag: null,
+              onPressed: () {
+                mapboxMap?.style.setStyleURI(
+                  annotationStyles[++styleIndex % annotationStyles.length],
+                );
+              },
+            ),
+            SizedBox(height: 10),
+            FloatingActionButton(
+              child: Icon(Icons.clear),
+              heroTag: null,
+              onPressed: () {
+                if (circleAnnotationManager != null) {
+                  mapboxMap?.annotations.removeAnnotationManager(
+                    circleAnnotationManager!,
+                  );
+                  circleAnnotationManager = null;
+                }
+              },
+            ),
+          ],
         ),
-        body: colmn);
+      ),
+      body: colmn,
+    );
   }
 }

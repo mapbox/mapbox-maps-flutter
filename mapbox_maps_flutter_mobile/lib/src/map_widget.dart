@@ -192,7 +192,8 @@ class MapWidget extends StatefulWidget {
   State createState() => _MapWidgetState();
 
   @Deprecated(
-      'Subscribe to onMapCreated to receive an instance of MapboxMap instead')
+    'Subscribe to onMapCreated to receive an instance of MapboxMap instead',
+  )
   MapboxMap? getMapboxMap() => null;
 }
 
@@ -218,9 +219,13 @@ class _MapWidgetState extends State<MapWidget> {
     };
     _events.subscribedEventTypes = _events.eventTypes;
 
-    return _mapboxMapsPlatform.buildView(widget.androidHostingMode,
-        creationParams, onPlatformViewCreated, widget.gestureRecognizers,
-        key: key);
+    return _mapboxMapsPlatform.buildView(
+      widget.androidHostingMode,
+      creationParams,
+      onPlatformViewCreated,
+      widget.gestureRecognizers,
+      key: key,
+    );
   }
 
   @override
@@ -239,8 +244,9 @@ class _MapWidgetState extends State<MapWidget> {
 
     LogConfiguration._setupDebugLoggingIfNeeded();
     _events = _MapEvents(
-        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-        channelSuffix: _suffix.toString());
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      channelSuffix: _suffix.toString(),
+    );
 
     _updateEventListeners();
     // Here we mark the state as needing an update to ensure
@@ -288,7 +294,9 @@ class _MapWidgetState extends State<MapWidget> {
     final completion = _viewportTransitionCompletion;
 
     final result = await mapboxMap._viewportMessenger.transition(
-        currentViewport._toStorage(), viewportAnimation?._toStorage());
+      currentViewport._toStorage(),
+      viewportAnimation?._toStorage(),
+    );
 
     if (_viewportTransitionCompletion == completion) {
       _viewportTransitionCompletion = null;
@@ -337,7 +345,9 @@ class _MapWidgetState extends State<MapWidget> {
     final size = key.currentContext?.size;
     if (size != null) {
       await _mapboxMapsPlatform.submitViewSizeHint(
-          width: size.width, height: size.height);
+        width: size.width,
+        height: size.height,
+      );
     }
 
     // The platform view is created, update the state if there were any requests.

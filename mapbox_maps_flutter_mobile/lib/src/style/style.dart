@@ -28,7 +28,7 @@ enum Visibility {
   VISIBLE,
 
   /// The layer is hidden.
-  NONE
+  NONE,
 }
 
 enum ModelType {
@@ -81,7 +81,7 @@ enum TileCacheBudgetType {
   TILES,
 
   /// A tile cache budget measured in megabyte units
-  MEGABYTES
+  MEGABYTES,
 }
 
 /// Defines a resource budget, either in tile units or in megabytes.
@@ -104,15 +104,16 @@ class TileCacheBudget {
 
   /// Decodes the TileCacheBudget from and object
   static TileCacheBudget? decode(Object? budget) {
-    var budgetObject =
-        Map<String, dynamic>.from(budget as Map<dynamic, dynamic>)
-            .cast<String, dynamic>();
+    var budgetObject = Map<String, dynamic>.from(
+      budget as Map<dynamic, dynamic>,
+    ).cast<String, dynamic>();
     var budgetType = budgetObject.keys.first;
     var budgetSize = budgetObject.values.first;
 
     if (budgetType == 'megabytes') {
       return TileCacheBudget.inMegabytes(
-          TileCacheBudgetInMegabytes(size: budgetSize));
+        TileCacheBudgetInMegabytes(size: budgetSize),
+      );
     } else if (budgetType == 'tiles') {
       return TileCacheBudget.inTiles(TileCacheBudgetInTiles(size: budgetSize));
     } else {
@@ -121,12 +122,12 @@ class TileCacheBudget {
   }
 
   TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes budget)
-      : type = TileCacheBudgetType.MEGABYTES,
-        size = budget.size;
+    : type = TileCacheBudgetType.MEGABYTES,
+      size = budget.size;
 
   TileCacheBudget.inTiles(TileCacheBudgetInTiles budget)
-      : type = TileCacheBudgetType.TILES,
-        size = budget.size;
+    : type = TileCacheBudgetType.TILES,
+      size = budget.size;
 
   TileCacheBudget(this.type, this.size);
 }
@@ -211,14 +212,15 @@ abstract class Layer {
 
   Future<String> _encode();
 
-  Layer(
-      {required String this.id,
-      Visibility? this.visibility,
-      List<Object>? this.visibilityExpression,
-      List<Object>? this.filter,
-      double? this.maxZoom,
-      double? this.minZoom,
-      String? this.slot});
+  Layer({
+    required String this.id,
+    Visibility? this.visibility,
+    List<Object>? this.visibilityExpression,
+    List<Object>? this.filter,
+    double? this.maxZoom,
+    double? this.minZoom,
+    String? this.slot,
+  });
 }
 
 /// Super class for all different types of sources.

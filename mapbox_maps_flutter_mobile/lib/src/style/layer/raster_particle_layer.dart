@@ -14,6 +14,7 @@ class RasterParticleLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     String? this.rasterParticleArrayBand,
     List<Object>? this.rasterParticleArrayBandExpression,
     int? this.rasterParticleColor,
@@ -29,13 +30,14 @@ class RasterParticleLayer extends Layer {
     double? this.rasterParticleSpeedFactor,
     List<Object>? this.rasterParticleSpeedFactorExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "raster-particle";
@@ -119,8 +121,10 @@ class RasterParticleLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     var paint = {};
@@ -214,39 +218,53 @@ class RasterParticleLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
-      rasterParticleArrayBand:
-          _optionalCast(map["paint"]["raster-particle-array-band"]),
-      rasterParticleArrayBandExpression:
-          _optionalCastList(map["paint"]["raster-particle-array-band"]),
-      rasterParticleColor:
-          (map["paint"]["raster-particle-color"] as List?)?.toRGBAInt(),
-      rasterParticleColorExpression:
-          _optionalCastList(map["paint"]["raster-particle-color"]),
+      rasterParticleArrayBand: _optionalCast(
+        map["paint"]["raster-particle-array-band"],
+      ),
+      rasterParticleArrayBandExpression: _optionalCastList(
+        map["paint"]["raster-particle-array-band"],
+      ),
+      rasterParticleColor: (map["paint"]["raster-particle-color"] as List?)
+          ?.toRGBAInt(),
+      rasterParticleColorExpression: _optionalCastList(
+        map["paint"]["raster-particle-color"],
+      ),
       rasterParticleCount: _optionalCast(map["paint"]["raster-particle-count"]),
-      rasterParticleCountExpression:
-          _optionalCastList(map["paint"]["raster-particle-count"]),
-      rasterParticleFadeOpacityFactor:
-          _optionalCast(map["paint"]["raster-particle-fade-opacity-factor"]),
+      rasterParticleCountExpression: _optionalCastList(
+        map["paint"]["raster-particle-count"],
+      ),
+      rasterParticleFadeOpacityFactor: _optionalCast(
+        map["paint"]["raster-particle-fade-opacity-factor"],
+      ),
       rasterParticleFadeOpacityFactorExpression: _optionalCastList(
-          map["paint"]["raster-particle-fade-opacity-factor"]),
-      rasterParticleMaxSpeed:
-          _optionalCast(map["paint"]["raster-particle-max-speed"]),
-      rasterParticleMaxSpeedExpression:
-          _optionalCastList(map["paint"]["raster-particle-max-speed"]),
-      rasterParticleResetRateFactor:
-          _optionalCast(map["paint"]["raster-particle-reset-rate-factor"]),
-      rasterParticleResetRateFactorExpression:
-          _optionalCastList(map["paint"]["raster-particle-reset-rate-factor"]),
-      rasterParticleSpeedFactor:
-          _optionalCast(map["paint"]["raster-particle-speed-factor"]),
-      rasterParticleSpeedFactorExpression:
-          _optionalCastList(map["paint"]["raster-particle-speed-factor"]),
+        map["paint"]["raster-particle-fade-opacity-factor"],
+      ),
+      rasterParticleMaxSpeed: _optionalCast(
+        map["paint"]["raster-particle-max-speed"],
+      ),
+      rasterParticleMaxSpeedExpression: _optionalCastList(
+        map["paint"]["raster-particle-max-speed"],
+      ),
+      rasterParticleResetRateFactor: _optionalCast(
+        map["paint"]["raster-particle-reset-rate-factor"],
+      ),
+      rasterParticleResetRateFactorExpression: _optionalCastList(
+        map["paint"]["raster-particle-reset-rate-factor"],
+      ),
+      rasterParticleSpeedFactor: _optionalCast(
+        map["paint"]["raster-particle-speed-factor"],
+      ),
+      rasterParticleSpeedFactorExpression: _optionalCastList(
+        map["paint"]["raster-particle-speed-factor"],
+      ),
     );
   }
 }

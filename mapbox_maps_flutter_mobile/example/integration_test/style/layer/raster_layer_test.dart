@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+
 import '../../empty_map_widget.dart' as app;
 
 void main() {
@@ -13,35 +14,42 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.style
-        .addSource(RasterSource(id: "source", tileSize: 256, tiles: [
-      "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
-          "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
-          "&transparent=true&width=256&height=256&layers=Natural2015"
-    ]));
+    await mapboxMap.style.addSource(
+      RasterSource(
+        id: "source",
+        tileSize: 256,
+        tiles: [
+          "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
+              "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
+              "&transparent=true&width=256&height=256&layers=Natural2015",
+        ],
+      ),
+    );
 
-    await mapboxMap.style.addLayer(RasterLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      rasterArrayBand: "abc",
-      rasterBrightnessMax: 1.0,
-      rasterBrightnessMin: 1.0,
-      rasterColor: Colors.red.value,
-      rasterColorMix: [0.0, 1.0, 2.0, 3.0],
-      rasterColorRange: [0.0, 1.0],
-      rasterContrast: 1.0,
-      rasterElevation: 1.0,
-      rasterEmissiveStrength: 1.0,
-      rasterFadeDuration: 1.0,
-      rasterHueRotate: 1.0,
-      rasterOpacity: 1.0,
-      rasterResampling: RasterResampling.LINEAR,
-      rasterSaturation: 1.0,
-    ));
+    await mapboxMap.style.addLayer(
+      RasterLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        rasterArrayBand: "abc",
+        rasterBrightnessMax: 1.0,
+        rasterBrightnessMin: 1.0,
+        rasterColor: Colors.red.value,
+        rasterColorMix: [0.0, 1.0, 2.0, 3.0],
+        rasterColorRange: [0.0, 1.0],
+        rasterContrast: 1.0,
+        rasterElevation: 1.0,
+        rasterEmissiveStrength: 1.0,
+        rasterFadeDuration: 1.0,
+        rasterHueRotate: 1.0,
+        rasterOpacity: 1.0,
+        rasterResampling: RasterResampling.LINEAR,
+        rasterSaturation: 1.0,
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as RasterLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -69,46 +77,53 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.style
-        .addSource(RasterSource(id: "source", tileSize: 256, tiles: [
-      "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
-          "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
-          "&transparent=true&width=256&height=256&layers=Natural2015"
-    ]));
+    await mapboxMap.style.addSource(
+      RasterSource(
+        id: "source",
+        tileSize: 256,
+        tiles: [
+          "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
+              "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
+              "&transparent=true&width=256&height=256&layers=Natural2015",
+        ],
+      ),
+    );
 
-    await mapboxMap.style.addLayer(RasterLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibilityExpression: ['string', 'none'],
-      filter: [
-        "==",
-        ["get", "type"],
-        "Feature"
-      ],
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      rasterArrayBandExpression: ['string', "abc"],
-      rasterBrightnessMaxExpression: ['number', 1.0],
-      rasterBrightnessMinExpression: ['number', 1.0],
-      rasterColorExpression: ['rgba', 255, 0, 0, 1],
-      rasterColorMixExpression: [
-        'literal',
-        [0.0, 1.0, 2.0, 3.0]
-      ],
-      rasterColorRangeExpression: [
-        'literal',
-        [0.0, 1.0]
-      ],
-      rasterContrastExpression: ['number', 1.0],
-      rasterElevationExpression: ['number', 1.0],
-      rasterEmissiveStrengthExpression: ['number', 1.0],
-      rasterFadeDurationExpression: ['number', 1.0],
-      rasterHueRotateExpression: ['number', 1.0],
-      rasterOpacityExpression: ['number', 1.0],
-      rasterResamplingExpression: ['string', 'linear'],
-      rasterSaturationExpression: ['number', 1.0],
-    ));
+    await mapboxMap.style.addLayer(
+      RasterLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibilityExpression: ['string', 'none'],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        rasterArrayBandExpression: ['string', "abc"],
+        rasterBrightnessMaxExpression: ['number', 1.0],
+        rasterBrightnessMinExpression: ['number', 1.0],
+        rasterColorExpression: ['rgba', 255, 0, 0, 1],
+        rasterColorMixExpression: [
+          'literal',
+          [0.0, 1.0, 2.0, 3.0],
+        ],
+        rasterColorRangeExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        rasterContrastExpression: ['number', 1.0],
+        rasterElevationExpression: ['number', 1.0],
+        rasterEmissiveStrengthExpression: ['number', 1.0],
+        rasterFadeDurationExpression: ['number', 1.0],
+        rasterHueRotateExpression: ['number', 1.0],
+        rasterOpacityExpression: ['number', 1.0],
+        rasterResamplingExpression: ['string', 'linear'],
+        rasterSaturationExpression: ['number', 1.0],
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as RasterLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -118,7 +133,7 @@ void main() {
     expect(layer.filter, [
       "==",
       ["get", "type"],
-      "Feature"
+      "Feature",
     ]);
     expect(layer.rasterArrayBand, "abc");
     expect(layer.rasterBrightnessMax, 1.0);
@@ -136,4 +151,5 @@ void main() {
     expect(layer.rasterSaturation, 1.0);
   });
 }
+
 // End of generated file.

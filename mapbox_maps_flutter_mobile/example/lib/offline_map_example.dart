@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -60,48 +61,55 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
 
   _downloadStylePack() async {
     final stylePackLoadOptions = StylePackLoadOptions(
-        glyphsRasterizationMode:
-            GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
-        metadata: {"tag": "test"},
-        acceptExpired: false);
-    _offlineManager?.loadStylePack(
-        MapboxStyles.STANDARD_SATELLITE, stylePackLoadOptions, (progress) {
-      final percentage =
-          progress.completedResourceCount / progress.requiredResourceCount;
-      if (!_stylePackProgress.isClosed) {
-        _stylePackProgress.sink.add(percentage);
-      }
-    }).then((value) {
-      _stylePackProgress.sink.add(1);
-      _stylePackProgress.sink.close();
-    });
+      glyphsRasterizationMode:
+          GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
+      metadata: {"tag": "test"},
+      acceptExpired: false,
+    );
+    _offlineManager
+        ?.loadStylePack(MapboxStyles.STANDARD_SATELLITE, stylePackLoadOptions, (
+          progress,
+        ) {
+          final percentage =
+              progress.completedResourceCount / progress.requiredResourceCount;
+          if (!_stylePackProgress.isClosed) {
+            _stylePackProgress.sink.add(percentage);
+          }
+        })
+        .then((value) {
+          _stylePackProgress.sink.add(1);
+          _stylePackProgress.sink.close();
+        });
   }
 
   _downloadTileRegion() async {
     final tileRegionLoadOptions = TileRegionLoadOptions(
-        geometry: City.helsinki.toJson(),
-        descriptorsOptions: [
-          // If you are using a raster tileset you may need to set a different pixelRatio.
-          // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.
-          TilesetDescriptorOptions(
-              styleURI: MapboxStyles.STANDARD_SATELLITE,
-              minZoom: 0,
-              maxZoom: 16)
-        ],
-        acceptExpired: true,
-        networkRestriction: NetworkRestriction.NONE);
+      geometry: City.helsinki.toJson(),
+      descriptorsOptions: [
+        // If you are using a raster tileset you may need to set a different pixelRatio.
+        // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.
+        TilesetDescriptorOptions(
+          styleURI: MapboxStyles.STANDARD_SATELLITE,
+          minZoom: 0,
+          maxZoom: 16,
+        ),
+      ],
+      acceptExpired: true,
+      networkRestriction: NetworkRestriction.NONE,
+    );
 
-    _tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions,
-        (progress) {
-      final percentage =
-          progress.completedResourceCount / progress.requiredResourceCount;
-      if (!_tileRegionLoadProgress.isClosed) {
-        _tileRegionLoadProgress.sink.add(percentage);
-      }
-    }).then((value) {
-      _tileRegionLoadProgress.sink.add(1);
-      _tileRegionLoadProgress.sink.close();
-    });
+    _tileStore
+        ?.loadTileRegion(_tileRegionId, tileRegionLoadOptions, (progress) {
+          final percentage =
+              progress.completedResourceCount / progress.requiredResourceCount;
+          if (!_tileRegionLoadProgress.isClosed) {
+            _tileRegionLoadProgress.sink.add(percentage);
+          }
+        })
+        .then((value) {
+          _tileRegionLoadProgress.sink.add(1);
+          _tileRegionLoadProgress.sink.close();
+        });
   }
 
   _initOfflineMap() async {
@@ -115,78 +123,84 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
   @override
   Widget build(BuildContext context) {
     String downloadButtonText = "Download Map";
-    final mapIsDownloaded = Future.wait(
-            [_tileRegionLoadProgress.sink.done, _stylePackProgress.sink.done])
-        .whenComplete(() async {
-      await OfflineSwitch.shared.setMapboxStackConnected(false);
-    });
+    final mapIsDownloaded =
+        Future.wait([
+          _tileRegionLoadProgress.sink.done,
+          _stylePackProgress.sink.done,
+        ]).whenComplete(() async {
+          await OfflineSwitch.shared.setMapboxStackConnected(false);
+        });
 
     return new Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
           child: FutureBuilder(
-              future: mapIsDownloaded,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return MapWidget(
-                    key: ValueKey("mapWidget"),
-                    styleUri: MapboxStyles.STANDARD_SATELLITE,
-                    cameraOptions:
-                        CameraOptions(center: City.helsinki, zoom: 12.0),
-                  );
-                } else {
-                  return TextButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          WidgetStateProperty.all<Color>(Colors.blue),
+            future: mapIsDownloaded,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return MapWidget(
+                  key: ValueKey("mapWidget"),
+                  styleUri: MapboxStyles.STANDARD_SATELLITE,
+                  cameraOptions: CameraOptions(
+                    center: City.helsinki,
+                    zoom: 12.0,
+                  ),
+                );
+              } else {
+                return TextButton(
+                  style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.all<Color>(
+                      Colors.blue,
                     ),
-                    onPressed: () async {
-                      await _initOfflineMap();
-                      await _downloadStylePack();
-                      await _downloadTileRegion();
-                    },
-                    child: Text(downloadButtonText),
-                  );
-                }
-              }),
+                  ),
+                  onPressed: () async {
+                    await _initOfflineMap();
+                    await _downloadStylePack();
+                    await _downloadTileRegion();
+                  },
+                  child: Text(downloadButtonText),
+                );
+              }
+            },
+          ),
         ),
         SizedBox(
-            height: 100,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StreamBuilder(
-                      stream: _stylePackProgress.stream,
-                      initialData: 0.0,
-                      builder: (context, snapshot) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text("Style pack ${snapshot.requireData}"),
-                            LinearProgressIndicator(
-                              value: snapshot.requireData,
-                            )
-                          ],
-                        );
-                      }),
-                  StreamBuilder(
-                      stream: _tileRegionLoadProgress.stream,
-                      initialData: 0.0,
-                      builder: (context, snapshot) {
-                        return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Tile region ${snapshot.requireData}"),
-                              LinearProgressIndicator(
-                                value: snapshot.requireData,
-                              )
-                            ]);
-                      }),
-                ],
-              ),
-            ))
+          height: 100,
+          child: Card(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StreamBuilder(
+                  stream: _stylePackProgress.stream,
+                  initialData: 0.0,
+                  builder: (context, snapshot) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Style pack ${snapshot.requireData}"),
+                        LinearProgressIndicator(value: snapshot.requireData),
+                      ],
+                    );
+                  },
+                ),
+                StreamBuilder(
+                  stream: _tileRegionLoadProgress.stream,
+                  initialData: 0.0,
+                  builder: (context, snapshot) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Tile region ${snapshot.requireData}"),
+                        LinearProgressIndicator(value: snapshot.requireData),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

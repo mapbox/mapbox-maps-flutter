@@ -1,6 +1,8 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:mapbox_maps_example/utils.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -25,8 +27,13 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.setCamera(CameraOptions(
-        center: Point(coordinates: Position(0, 0)), zoom: 1, pitch: 0));
+    mapboxMap.setCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 1,
+        pitch: 0,
+      ),
+    );
     mapboxMap.annotations.createPolylineAnnotationManager().then((value) {
       polylineAnnotationManager = value;
       createOneAnnotation();
@@ -36,23 +43,33 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
       }
 
       polylineAnnotationManager
-          ?.createMulti(positions
-              .map((e) => PolylineAnnotationOptions(
-                  geometry: LineString(coordinates: e),
-                  lineColor: createRandomColor()))
-              .toList())
+          ?.createMulti(
+            positions
+                .map(
+                  (e) => PolylineAnnotationOptions(
+                    geometry: LineString(coordinates: e),
+                    lineColor: createRandomColor(),
+                  ),
+                )
+                .toList(),
+          )
           .then((createdAnnotations) {
-        annotations =
-            createdAnnotations.whereType<PolylineAnnotation>().toList();
-      });
-      polylineAnnotationManager?.tapEvents(onTap: (annotation) {
-        // ignore: avoid_print
-        print("onAnnotationClick, id: ${annotation.id}");
-      });
-      polylineAnnotationManager?.longPressEvents(onLongPress: (annotation) {
-        // ignore: avoid_print
-        print("onAnnotationLongPress, id: ${annotation.id}");
-      });
+            annotations = createdAnnotations
+                .whereType<PolylineAnnotation>()
+                .toList();
+          });
+      polylineAnnotationManager?.tapEvents(
+        onTap: (annotation) {
+          // ignore: avoid_print
+          print("onAnnotationClick, id: ${annotation.id}");
+        },
+      );
+      polylineAnnotationManager?.longPressEvents(
+        onLongPress: (annotation) {
+          // ignore: avoid_print
+          print("onAnnotationLongPress, id: ${annotation.id}");
+        },
+      );
     });
   }
 
@@ -73,9 +90,10 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
         if (polylineAnnotation != null) {
           var lineString = polylineAnnotation!.geometry;
           var newlineString = LineString(
-              coordinates: lineString.coordinates
-                  .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
-                  .toList());
+            coordinates: lineString.coordinates
+                .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
+                .toList(),
+          );
           polylineAnnotation?.geometry = newlineString;
           polylineAnnotationManager?.update(polylineAnnotation!);
         }
@@ -94,19 +112,15 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
 
   void createOneAnnotation() {
     polylineAnnotationManager
-        ?.create(PolylineAnnotationOptions(
-            geometry: LineString(coordinates: [
-              Position(
-                1.0,
-                2.0,
-              ),
-              Position(
-                10.0,
-                20.0,
-              )
-            ]),
+        ?.create(
+          PolylineAnnotationOptions(
+            geometry: LineString(
+              coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+            ),
             lineColor: Colors.red.value,
-            lineWidth: 2))
+            lineWidth: 2,
+          ),
+        )
         .then((value) => polylineAnnotation = value);
   }
 
@@ -123,15 +137,18 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
 
   Widget _deleteMulti() {
     return TextButton(
-        child: Text('delete 50 polyline annotations'),
-        onPressed: () async {
-          if (annotations.isNotEmpty) {
-            final toDelete = annotations.take(50).toList();
-            await polylineAnnotationManager?.deleteMulti(toDelete);
-            annotations.removeRange(
-                0, toDelete.length.clamp(0, annotations.length));
-          }
-        });
+      child: Text('delete 50 polyline annotations'),
+      onPressed: () async {
+        if (annotations.isNotEmpty) {
+          final toDelete = annotations.take(50).toList();
+          await polylineAnnotationManager?.deleteMulti(toDelete);
+          annotations.removeRange(
+            0,
+            toDelete.length.clamp(0, annotations.length),
+          );
+        }
+      },
+    );
   }
 
   Widget _deleteAll() {
@@ -146,59 +163,67 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteMulti(), _deleteAll()],
-    );
+    listViewChildren.addAll(<Widget>[
+      _create(),
+      _update(),
+      _delete(),
+      _deleteMulti(),
+      _deleteAll(),
+    ]);
 
     final colmn = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
 
     return Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  child: Icon(Icons.swap_horiz),
-                  heroTag: null,
-                  onPressed: () {
-                    mapboxMap?.style.setStyleURI(annotationStyles[
-                        ++styleIndex % annotationStyles.length]);
-                  }),
-              SizedBox(height: 10),
-              FloatingActionButton(
-                  child: Icon(Icons.clear),
-                  heroTag: null,
-                  onPressed: () {
-                    if (polylineAnnotationManager != null) {
-                      mapboxMap?.annotations
-                          .removeAnnotationManager(polylineAnnotationManager!);
-                      polylineAnnotationManager = null;
-                    }
-                  }),
-            ],
-          ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              child: Icon(Icons.swap_horiz),
+              heroTag: null,
+              onPressed: () {
+                mapboxMap?.style.setStyleURI(
+                  annotationStyles[++styleIndex % annotationStyles.length],
+                );
+              },
+            ),
+            SizedBox(height: 10),
+            FloatingActionButton(
+              child: Icon(Icons.clear),
+              heroTag: null,
+              onPressed: () {
+                if (polylineAnnotationManager != null) {
+                  mapboxMap?.annotations.removeAnnotationManager(
+                    polylineAnnotationManager!,
+                  );
+                  polylineAnnotationManager = null;
+                }
+              },
+            ),
+          ],
         ),
-        body: colmn);
+      ),
+      body: colmn,
+    );
   }
 }

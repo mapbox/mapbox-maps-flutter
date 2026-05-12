@@ -22,9 +22,11 @@ extension WidgetViewportAnimation on State {
   ///
   /// See [ViewportState] and [ViewportTransition] documentation for more details.
   @experimental
-  void setStateWithViewportAnimation(VoidCallback fn,
-      {ViewportTransition? transition = const DefaultViewportTransition(),
-      void Function(bool)? completion}) {
+  void setStateWithViewportAnimation(
+    VoidCallback fn, {
+    ViewportTransition? transition = const DefaultViewportTransition(),
+    void Function(bool)? completion,
+  }) {
     _viewportTransition = transition;
     _viewportTransitionCompletion?.call(false);
     _viewportTransitionCompletion = completion;

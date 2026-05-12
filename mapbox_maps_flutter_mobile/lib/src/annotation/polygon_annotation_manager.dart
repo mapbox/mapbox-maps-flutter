@@ -3,14 +3,16 @@ part of mapbox_maps_flutter_mobile;
 
 /// The PolygonAnnotationManager to add/update/delete PolygonAnnotationAnnotations on the map.
 class PolygonAnnotationManager extends BaseAnnotationManager {
-  PolygonAnnotationManager._(
-      {required super.id,
-      required super.messenger,
-      required String channelSuffix})
-      : _annotationMessenger = _PolygonAnnotationMessenger(
-            binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
-        _channelSuffix = channelSuffix,
-        super._();
+  PolygonAnnotationManager._({
+    required super.id,
+    required super.messenger,
+    required String channelSuffix,
+  }) : _annotationMessenger = _PolygonAnnotationMessenger(
+         binaryMessenger: messenger,
+         messageChannelSuffix: channelSuffix,
+       ),
+       _channelSuffix = channelSuffix,
+       super._();
 
   final _PolygonAnnotationMessenger _annotationMessenger;
   final String _channelSuffix;
@@ -18,9 +20,12 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   @Deprecated('Use [tapEvents] instead.')
   void addOnPolygonAnnotationClickListener(
-      OnPolygonAnnotationClickListener listener) {
+    OnPolygonAnnotationClickListener listener,
+  ) {
     OnPolygonAnnotationClickListener._withCancelable(
-        tapEvents(onTap: listener.onPolygonAnnotationClick), _channelSuffix);
+      tapEvents(onTap: listener.onPolygonAnnotationClick),
+      _channelSuffix,
+    );
   }
 
   /// Registers tap event callbacks for the annotations managed by this manager.
@@ -36,10 +41,12 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Registers long press event callbacks for the annotations managed by this manager.
   ///
   /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
-  Cancelable longPressEvents(
-      {required Function(PolygonAnnotation) onLongPress}) {
+  Cancelable longPressEvents({
+    required Function(PolygonAnnotation) onLongPress,
+  }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/long_press")
+          instanceName: "$_channelSuffix/$id/long_press",
+        )
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) => onLongPress(data.annotation))
         .asCancelable();
@@ -73,9 +80,8 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
     Function(PolygonAnnotation)? onEnd,
   }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/drag")
-        .cast<PolygonAnnotationInteractionContext>()
-        .listen((data) {
+      instanceName: "$_channelSuffix/$id/drag",
+    ).cast<PolygonAnnotationInteractionContext>().listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
           onBegin(data.annotation);
@@ -99,8 +105,8 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Create multi annotations with the options.
   Future<List<PolygonAnnotation?>> createMulti(
-          List<PolygonAnnotationOptions> annotations) =>
-      _annotationMessenger.createMulti(id, annotations);
+    List<PolygonAnnotationOptions> annotations,
+  ) => _annotationMessenger.createMulti(id, annotations);
 
   /// Update an added annotation with new properties.
   Future<void> update(PolygonAnnotation annotation) =>
@@ -120,9 +126,11 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
   @experimental
   Future<void> setFillConstructBridgeGuardRail(
-          bool fillConstructBridgeGuardRail) =>
-      _annotationMessenger.setFillConstructBridgeGuardRail(
-          id, fillConstructBridgeGuardRail);
+    bool fillConstructBridgeGuardRail,
+  ) => _annotationMessenger.setFillConstructBridgeGuardRail(
+    id,
+    fillConstructBridgeGuardRail,
+  );
 
   /// Determines whether bridge guard rails are added for elevated roads. Default value: "true".
   @experimental
@@ -132,9 +140,11 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
   Future<void> setFillElevationReference(
-          FillElevationReference fillElevationReference) =>
-      _annotationMessenger.setFillElevationReference(
-          id, fillElevationReference);
+    FillElevationReference fillElevationReference,
+  ) => _annotationMessenger.setFillElevationReference(
+    id,
+    fillElevationReference,
+  );
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   @experimental
@@ -159,7 +169,9 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   @experimental
   Future<void> setFillBridgeGuardRailColor(int fillBridgeGuardRailColor) =>
       _annotationMessenger.setFillBridgeGuardRailColor(
-          id, fillBridgeGuardRailColor);
+        id,
+        fillBridgeGuardRailColor,
+      );
 
   /// The color of bridge guard rail. Default value: "rgba(241, 236, 225, 255)".
   @experimental
@@ -213,8 +225,8 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
   Future<void> setFillTranslateAnchor(
-          FillTranslateAnchor fillTranslateAnchor) =>
-      _annotationMessenger.setFillTranslateAnchor(id, fillTranslateAnchor);
+    FillTranslateAnchor fillTranslateAnchor,
+  ) => _annotationMessenger.setFillTranslateAnchor(id, fillTranslateAnchor);
 
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
   Future<FillTranslateAnchor?> getFillTranslateAnchor() =>
@@ -224,7 +236,9 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   @experimental
   Future<void> setFillTunnelStructureColor(int fillTunnelStructureColor) =>
       _annotationMessenger.setFillTunnelStructureColor(
-          id, fillTunnelStructureColor);
+        id,
+        fillTunnelStructureColor,
+      );
 
   /// The color of tunnel structures (tunnel entrance and tunnel walls). Default value: "rgba(241, 236, 225, 255)".
   @experimental
@@ -240,4 +254,5 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   @experimental
   Future<double?> getFillZOffset() => _annotationMessenger.getFillZOffset(id);
 }
+
 // End of generated file.

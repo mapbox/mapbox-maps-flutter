@@ -177,12 +177,13 @@ class GeoJsonSource extends Source {
   /// For more advanced use cases, in place of `operator`, you can use a custom reduce expression that references a special `["accumulated"]` value, e.g.:
   /// `{"sum": [["+", ["accumulated"], ["get", "sum"]], ["get", "scalerank"]]}`
   Future<Map<String, dynamic>?> get clusterProperties async {
-    return _style
-        ?.getStyleSourceProperty(id, "clusterProperties")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "clusterProperties").then((
+      value,
+    ) {
       if (value.value != null) {
-        return Map<String, dynamic>.from(value.value as Map<dynamic, dynamic>)
-            .cast<String, dynamic>();
+        return Map<String, dynamic>.from(
+          value.value as Map<dynamic, dynamic>,
+        ).cast<String, dynamic>();
       } else {
         return null;
       }
@@ -236,9 +237,9 @@ class GeoJsonSource extends Source {
   /// When loading a map, if PrefetchZoomDelta is set to any number greater than 0, the map will first request a tile at zoom level lower than zoom - delta, but so that the zoom level is multiple of delta, in an attempt to display a full map at lower resolution as quick as possible. It will get clamped at the tile source minimum zoom.
   /// Default value: 4.
   Future<double?> get prefetchZoomDelta async {
-    return _style
-        ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "prefetch-zoom-delta").then((
+      value,
+    ) {
       if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
@@ -251,9 +252,9 @@ class GeoJsonSource extends Source {
 
   /// This property defines a source-specific resource budget, either in tile units or in megabytes. Whenever the tile cache goes over the defined limit, the least recently used tile will be evicted from the in-memory cache. Note that the current implementation does not take into account resources allocated by the visible tiles.
   Future<TileCacheBudget?> get tileCacheBudget async {
-    return _style
-        ?.getStyleSourceProperty(id, "tile-cache-budget")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "tile-cache-budget").then((
+      value,
+    ) {
       if (value.value != null) {
         return TileCacheBudget.decode(value.value);
       } else {

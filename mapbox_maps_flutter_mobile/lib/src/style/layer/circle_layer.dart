@@ -13,6 +13,7 @@ class CircleLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     CircleElevationReference? this.circleElevationReference,
     List<Object>? this.circleElevationReferenceExpression,
     double? this.circleSortKey,
@@ -42,13 +43,14 @@ class CircleLayer extends Layer {
     CircleTranslateAnchor? this.circleTranslateAnchor,
     List<Object>? this.circleTranslateAnchorExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "circle";
@@ -178,8 +180,10 @@ class CircleLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (circleElevationReferenceExpression != null) {
@@ -187,8 +191,9 @@ class CircleLayer extends Layer {
     }
 
     if (circleElevationReference != null) {
-      layout["circle-elevation-reference"] =
-          circleElevationReference?.name.toLowerCase().replaceAll("_", "-");
+      layout["circle-elevation-reference"] = circleElevationReference?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
     if (circleSortKeyExpression != null) {
       layout["circle-sort-key"] = circleSortKeyExpression;
@@ -225,15 +230,17 @@ class CircleLayer extends Layer {
     if (circlePitchAlignmentExpression != null) {
       paint["circle-pitch-alignment"] = circlePitchAlignmentExpression;
     } else if (circlePitchAlignment != null) {
-      paint["circle-pitch-alignment"] =
-          circlePitchAlignment?.name.toLowerCase().replaceAll("_", "-");
+      paint["circle-pitch-alignment"] = circlePitchAlignment?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (circlePitchScaleExpression != null) {
       paint["circle-pitch-scale"] = circlePitchScaleExpression;
     } else if (circlePitchScale != null) {
-      paint["circle-pitch-scale"] =
-          circlePitchScale?.name.toLowerCase().replaceAll("_", "-");
+      paint["circle-pitch-scale"] = circlePitchScale?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (circleRadiusExpression != null) {
@@ -269,8 +276,9 @@ class CircleLayer extends Layer {
     if (circleTranslateAnchorExpression != null) {
       paint["circle-translate-anchor"] = circleTranslateAnchorExpression;
     } else if (circleTranslateAnchor != null) {
-      paint["circle-translate-anchor"] =
-          circleTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+      paint["circle-translate-anchor"] = circleTranslateAnchor?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     var properties = {
@@ -316,76 +324,98 @@ class CircleLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
       circleElevationReference:
           map["layout"]["circle-elevation-reference"] == null
-              ? null
-              : CircleElevationReference.values.firstWhere((e) => e.name
+          ? null
+          : CircleElevationReference.values.firstWhere(
+              (e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["layout"]["circle-elevation-reference"])),
-      circleElevationReferenceExpression:
-          _optionalCastList(map["layout"]["circle-elevation-reference"]),
+                  .contains(map["layout"]["circle-elevation-reference"]),
+            ),
+      circleElevationReferenceExpression: _optionalCastList(
+        map["layout"]["circle-elevation-reference"],
+      ),
       circleSortKey: _optionalCast(map["layout"]["circle-sort-key"]),
-      circleSortKeyExpression:
-          _optionalCastList(map["layout"]["circle-sort-key"]),
+      circleSortKeyExpression: _optionalCastList(
+        map["layout"]["circle-sort-key"],
+      ),
       circleBlur: _optionalCast(map["paint"]["circle-blur"]),
       circleBlurExpression: _optionalCastList(map["paint"]["circle-blur"]),
       circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
       circleColorExpression: _optionalCastList(map["paint"]["circle-color"]),
-      circleEmissiveStrength:
-          _optionalCast(map["paint"]["circle-emissive-strength"]),
-      circleEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["circle-emissive-strength"]),
+      circleEmissiveStrength: _optionalCast(
+        map["paint"]["circle-emissive-strength"],
+      ),
+      circleEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["circle-emissive-strength"],
+      ),
       circleOpacity: _optionalCast(map["paint"]["circle-opacity"]),
-      circleOpacityExpression:
-          _optionalCastList(map["paint"]["circle-opacity"]),
+      circleOpacityExpression: _optionalCastList(
+        map["paint"]["circle-opacity"],
+      ),
       circlePitchAlignment: map["paint"]["circle-pitch-alignment"] == null
           ? null
-          : CirclePitchAlignment.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["circle-pitch-alignment"])),
-      circlePitchAlignmentExpression:
-          _optionalCastList(map["paint"]["circle-pitch-alignment"]),
+          : CirclePitchAlignment.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["circle-pitch-alignment"]),
+            ),
+      circlePitchAlignmentExpression: _optionalCastList(
+        map["paint"]["circle-pitch-alignment"],
+      ),
       circlePitchScale: map["paint"]["circle-pitch-scale"] == null
           ? null
-          : CirclePitchScale.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["circle-pitch-scale"])),
-      circlePitchScaleExpression:
-          _optionalCastList(map["paint"]["circle-pitch-scale"]),
+          : CirclePitchScale.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["circle-pitch-scale"]),
+            ),
+      circlePitchScaleExpression: _optionalCastList(
+        map["paint"]["circle-pitch-scale"],
+      ),
       circleRadius: _optionalCast(map["paint"]["circle-radius"]),
       circleRadiusExpression: _optionalCastList(map["paint"]["circle-radius"]),
-      circleStrokeColor:
-          (map["paint"]["circle-stroke-color"] as List?)?.toRGBAInt(),
-      circleStrokeColorExpression:
-          _optionalCastList(map["paint"]["circle-stroke-color"]),
+      circleStrokeColor: (map["paint"]["circle-stroke-color"] as List?)
+          ?.toRGBAInt(),
+      circleStrokeColorExpression: _optionalCastList(
+        map["paint"]["circle-stroke-color"],
+      ),
       circleStrokeOpacity: _optionalCast(map["paint"]["circle-stroke-opacity"]),
-      circleStrokeOpacityExpression:
-          _optionalCastList(map["paint"]["circle-stroke-opacity"]),
+      circleStrokeOpacityExpression: _optionalCastList(
+        map["paint"]["circle-stroke-opacity"],
+      ),
       circleStrokeWidth: _optionalCast(map["paint"]["circle-stroke-width"]),
-      circleStrokeWidthExpression:
-          _optionalCastList(map["paint"]["circle-stroke-width"]),
+      circleStrokeWidthExpression: _optionalCastList(
+        map["paint"]["circle-stroke-width"],
+      ),
       circleTranslate: (map["paint"]["circle-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      circleTranslateExpression:
-          _optionalCastList(map["paint"]["circle-translate"]),
+      circleTranslateExpression: _optionalCastList(
+        map["paint"]["circle-translate"],
+      ),
       circleTranslateAnchor: map["paint"]["circle-translate-anchor"] == null
           ? null
-          : CircleTranslateAnchor.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["circle-translate-anchor"])),
-      circleTranslateAnchorExpression:
-          _optionalCastList(map["paint"]["circle-translate-anchor"]),
+          : CircleTranslateAnchor.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["circle-translate-anchor"]),
+            ),
+      circleTranslateAnchorExpression: _optionalCastList(
+        map["paint"]["circle-translate-anchor"],
+      ),
     );
   }
 }

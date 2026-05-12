@@ -13,6 +13,7 @@ class FillExtrusionLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     double? this.fillExtrusionEdgeRadius,
     List<Object>? this.fillExtrusionEdgeRadiusExpression,
     double? this.fillExtrusionAmbientOcclusionGroundAttenuation,
@@ -70,13 +71,14 @@ class FillExtrusionLayer extends Layer {
     double? this.fillExtrusionVerticalScale,
     List<Object>? this.fillExtrusionVerticalScaleExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "fill-extrusion";
@@ -344,8 +346,10 @@ class FillExtrusionLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (fillExtrusionEdgeRadiusExpression != null) {
@@ -406,8 +410,9 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-base-alignment"] =
           fillExtrusionBaseAlignmentExpression;
     } else if (fillExtrusionBaseAlignment != null) {
-      paint["fill-extrusion-base-alignment"] =
-          fillExtrusionBaseAlignment?.name.toLowerCase().replaceAll("_", "-");
+      paint["fill-extrusion-base-alignment"] = fillExtrusionBaseAlignment?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (fillExtrusionCastShadowsExpression != null) {
@@ -440,8 +445,8 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-flood-light-color"] =
           fillExtrusionFloodLightColorExpression;
     } else if (fillExtrusionFloodLightColor != null) {
-      paint["fill-extrusion-flood-light-color"] =
-          fillExtrusionFloodLightColor?.toRGBA();
+      paint["fill-extrusion-flood-light-color"] = fillExtrusionFloodLightColor
+          ?.toRGBA();
     }
 
     if (fillExtrusionFloodLightGroundAttenuationExpression != null) {
@@ -486,8 +491,10 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-height-alignment"] =
           fillExtrusionHeightAlignmentExpression;
     } else if (fillExtrusionHeightAlignment != null) {
-      paint["fill-extrusion-height-alignment"] =
-          fillExtrusionHeightAlignment?.name.toLowerCase().replaceAll("_", "-");
+      paint["fill-extrusion-height-alignment"] = fillExtrusionHeightAlignment
+          ?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (fillExtrusionLineWidthExpression != null) {
@@ -532,8 +539,10 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-translate-anchor"] =
           fillExtrusionTranslateAnchorExpression;
     } else if (fillExtrusionTranslateAnchor != null) {
-      paint["fill-extrusion-translate-anchor"] =
-          fillExtrusionTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+      paint["fill-extrusion-translate-anchor"] = fillExtrusionTranslateAnchor
+          ?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (fillExtrusionVerticalGradientExpression != null) {
@@ -593,141 +602,197 @@ class FillExtrusionLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
-      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
-      filter: _optionalCastList(map["filter"]),
-      fillExtrusionEdgeRadius:
-          _optionalCast(map["layout"]["fill-extrusion-edge-radius"]),
-      fillExtrusionEdgeRadiusExpression:
-          _optionalCastList(map["layout"]["fill-extrusion-edge-radius"]),
-      fillExtrusionAmbientOcclusionGroundAttenuation: _optionalCast(
-          map["paint"]["fill-extrusion-ambient-occlusion-ground-attenuation"]),
-      fillExtrusionAmbientOcclusionGroundAttenuationExpression:
-          _optionalCastList(map["paint"]
-              ["fill-extrusion-ambient-occlusion-ground-attenuation"]),
-      fillExtrusionAmbientOcclusionGroundRadius: _optionalCast(
-          map["paint"]["fill-extrusion-ambient-occlusion-ground-radius"]),
-      fillExtrusionAmbientOcclusionGroundRadiusExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-ambient-occlusion-ground-radius"]),
-      fillExtrusionAmbientOcclusionIntensity: _optionalCast(
-          map["paint"]["fill-extrusion-ambient-occlusion-intensity"]),
-      fillExtrusionAmbientOcclusionIntensityExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-ambient-occlusion-intensity"]),
-      fillExtrusionAmbientOcclusionRadius: _optionalCast(
-          map["paint"]["fill-extrusion-ambient-occlusion-radius"]),
-      fillExtrusionAmbientOcclusionRadiusExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-ambient-occlusion-radius"]),
-      fillExtrusionAmbientOcclusionWallRadius: _optionalCast(
-          map["paint"]["fill-extrusion-ambient-occlusion-wall-radius"]),
-      fillExtrusionAmbientOcclusionWallRadiusExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-ambient-occlusion-wall-radius"]),
-      fillExtrusionBase: _optionalCast(map["paint"]["fill-extrusion-base"]),
-      fillExtrusionBaseExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-base"]),
-      fillExtrusionBaseAlignment:
-          map["paint"]["fill-extrusion-base-alignment"] == null
-              ? null
-              : FillExtrusionBaseAlignment.values.firstWhere((e) => e.name
+          : Visibility.values.firstWhere(
+              (e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["paint"]["fill-extrusion-base-alignment"])),
-      fillExtrusionBaseAlignmentExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-base-alignment"]),
-      fillExtrusionCastShadows:
-          _optionalCast(map["paint"]["fill-extrusion-cast-shadows"]),
-      fillExtrusionCastShadowsExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-cast-shadows"]),
-      fillExtrusionColor:
-          (map["paint"]["fill-extrusion-color"] as List?)?.toRGBAInt(),
-      fillExtrusionColorExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-color"]),
-      fillExtrusionCutoffFadeRange:
-          _optionalCast(map["paint"]["fill-extrusion-cutoff-fade-range"]),
-      fillExtrusionCutoffFadeRangeExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-cutoff-fade-range"]),
-      fillExtrusionEmissiveStrength:
-          _optionalCast(map["paint"]["fill-extrusion-emissive-strength"]),
-      fillExtrusionEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-emissive-strength"]),
+                  .contains(map["layout"]["visibility"]),
+            ),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      fillExtrusionEdgeRadius: _optionalCast(
+        map["layout"]["fill-extrusion-edge-radius"],
+      ),
+      fillExtrusionEdgeRadiusExpression: _optionalCastList(
+        map["layout"]["fill-extrusion-edge-radius"],
+      ),
+      fillExtrusionAmbientOcclusionGroundAttenuation: _optionalCast(
+        map["paint"]["fill-extrusion-ambient-occlusion-ground-attenuation"],
+      ),
+      fillExtrusionAmbientOcclusionGroundAttenuationExpression:
+          _optionalCastList(
+            map["paint"]["fill-extrusion-ambient-occlusion-ground-attenuation"],
+          ),
+      fillExtrusionAmbientOcclusionGroundRadius: _optionalCast(
+        map["paint"]["fill-extrusion-ambient-occlusion-ground-radius"],
+      ),
+      fillExtrusionAmbientOcclusionGroundRadiusExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-ambient-occlusion-ground-radius"],
+      ),
+      fillExtrusionAmbientOcclusionIntensity: _optionalCast(
+        map["paint"]["fill-extrusion-ambient-occlusion-intensity"],
+      ),
+      fillExtrusionAmbientOcclusionIntensityExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-ambient-occlusion-intensity"],
+      ),
+      fillExtrusionAmbientOcclusionRadius: _optionalCast(
+        map["paint"]["fill-extrusion-ambient-occlusion-radius"],
+      ),
+      fillExtrusionAmbientOcclusionRadiusExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-ambient-occlusion-radius"],
+      ),
+      fillExtrusionAmbientOcclusionWallRadius: _optionalCast(
+        map["paint"]["fill-extrusion-ambient-occlusion-wall-radius"],
+      ),
+      fillExtrusionAmbientOcclusionWallRadiusExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-ambient-occlusion-wall-radius"],
+      ),
+      fillExtrusionBase: _optionalCast(map["paint"]["fill-extrusion-base"]),
+      fillExtrusionBaseExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-base"],
+      ),
+      fillExtrusionBaseAlignment:
+          map["paint"]["fill-extrusion-base-alignment"] == null
+          ? null
+          : FillExtrusionBaseAlignment.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["fill-extrusion-base-alignment"]),
+            ),
+      fillExtrusionBaseAlignmentExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-base-alignment"],
+      ),
+      fillExtrusionCastShadows: _optionalCast(
+        map["paint"]["fill-extrusion-cast-shadows"],
+      ),
+      fillExtrusionCastShadowsExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-cast-shadows"],
+      ),
+      fillExtrusionColor: (map["paint"]["fill-extrusion-color"] as List?)
+          ?.toRGBAInt(),
+      fillExtrusionColorExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-color"],
+      ),
+      fillExtrusionCutoffFadeRange: _optionalCast(
+        map["paint"]["fill-extrusion-cutoff-fade-range"],
+      ),
+      fillExtrusionCutoffFadeRangeExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-cutoff-fade-range"],
+      ),
+      fillExtrusionEmissiveStrength: _optionalCast(
+        map["paint"]["fill-extrusion-emissive-strength"],
+      ),
+      fillExtrusionEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-emissive-strength"],
+      ),
       fillExtrusionFloodLightColor:
           (map["paint"]["fill-extrusion-flood-light-color"] as List?)
               ?.toRGBAInt(),
-      fillExtrusionFloodLightColorExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-flood-light-color"]),
+      fillExtrusionFloodLightColorExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-flood-light-color"],
+      ),
       fillExtrusionFloodLightGroundAttenuation: _optionalCast(
-          map["paint"]["fill-extrusion-flood-light-ground-attenuation"]),
+        map["paint"]["fill-extrusion-flood-light-ground-attenuation"],
+      ),
       fillExtrusionFloodLightGroundAttenuationExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-flood-light-ground-attenuation"]),
+        map["paint"]["fill-extrusion-flood-light-ground-attenuation"],
+      ),
       fillExtrusionFloodLightGroundRadius: _optionalCast(
-          map["paint"]["fill-extrusion-flood-light-ground-radius"]),
+        map["paint"]["fill-extrusion-flood-light-ground-radius"],
+      ),
       fillExtrusionFloodLightGroundRadiusExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-flood-light-ground-radius"]),
-      fillExtrusionFloodLightIntensity:
-          _optionalCast(map["paint"]["fill-extrusion-flood-light-intensity"]),
+        map["paint"]["fill-extrusion-flood-light-ground-radius"],
+      ),
+      fillExtrusionFloodLightIntensity: _optionalCast(
+        map["paint"]["fill-extrusion-flood-light-intensity"],
+      ),
       fillExtrusionFloodLightIntensityExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-flood-light-intensity"]),
-      fillExtrusionFloodLightWallRadius:
-          _optionalCast(map["paint"]["fill-extrusion-flood-light-wall-radius"]),
+        map["paint"]["fill-extrusion-flood-light-intensity"],
+      ),
+      fillExtrusionFloodLightWallRadius: _optionalCast(
+        map["paint"]["fill-extrusion-flood-light-wall-radius"],
+      ),
       fillExtrusionFloodLightWallRadiusExpression: _optionalCastList(
-          map["paint"]["fill-extrusion-flood-light-wall-radius"]),
+        map["paint"]["fill-extrusion-flood-light-wall-radius"],
+      ),
       fillExtrusionHeight: _optionalCast(map["paint"]["fill-extrusion-height"]),
-      fillExtrusionHeightExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-height"]),
+      fillExtrusionHeightExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-height"],
+      ),
       fillExtrusionHeightAlignment:
           map["paint"]["fill-extrusion-height-alignment"] == null
-              ? null
-              : FillExtrusionHeightAlignment.values.firstWhere((e) => e.name
+          ? null
+          : FillExtrusionHeightAlignment.values.firstWhere(
+              (e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["paint"]["fill-extrusion-height-alignment"])),
-      fillExtrusionHeightAlignmentExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-height-alignment"]),
-      fillExtrusionLineWidth:
-          _optionalCast(map["paint"]["fill-extrusion-line-width"]),
-      fillExtrusionLineWidthExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-line-width"]),
-      fillExtrusionOpacity:
-          _optionalCast(map["paint"]["fill-extrusion-opacity"]),
-      fillExtrusionOpacityExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-opacity"]),
-      fillExtrusionPattern:
-          _optionalCast(map["paint"]["fill-extrusion-pattern"]),
-      fillExtrusionPatternExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-pattern"]),
-      fillExtrusionPatternCrossFade:
-          _optionalCast(map["paint"]["fill-extrusion-pattern-cross-fade"]),
-      fillExtrusionPatternCrossFadeExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-pattern-cross-fade"]),
-      fillExtrusionRoundedRoof:
-          _optionalCast(map["paint"]["fill-extrusion-rounded-roof"]),
-      fillExtrusionRoundedRoofExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-rounded-roof"]),
+                  .contains(map["paint"]["fill-extrusion-height-alignment"]),
+            ),
+      fillExtrusionHeightAlignmentExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-height-alignment"],
+      ),
+      fillExtrusionLineWidth: _optionalCast(
+        map["paint"]["fill-extrusion-line-width"],
+      ),
+      fillExtrusionLineWidthExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-line-width"],
+      ),
+      fillExtrusionOpacity: _optionalCast(
+        map["paint"]["fill-extrusion-opacity"],
+      ),
+      fillExtrusionOpacityExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-opacity"],
+      ),
+      fillExtrusionPattern: _optionalCast(
+        map["paint"]["fill-extrusion-pattern"],
+      ),
+      fillExtrusionPatternExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-pattern"],
+      ),
+      fillExtrusionPatternCrossFade: _optionalCast(
+        map["paint"]["fill-extrusion-pattern-cross-fade"],
+      ),
+      fillExtrusionPatternCrossFadeExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-pattern-cross-fade"],
+      ),
+      fillExtrusionRoundedRoof: _optionalCast(
+        map["paint"]["fill-extrusion-rounded-roof"],
+      ),
+      fillExtrusionRoundedRoofExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-rounded-roof"],
+      ),
       fillExtrusionTranslate:
           (map["paint"]["fill-extrusion-translate"] as List?)
               ?.map<double?>((e) => e.toDouble())
               .toList(),
-      fillExtrusionTranslateExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-translate"]),
+      fillExtrusionTranslateExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-translate"],
+      ),
       fillExtrusionTranslateAnchor:
           map["paint"]["fill-extrusion-translate-anchor"] == null
-              ? null
-              : FillExtrusionTranslateAnchor.values.firstWhere((e) => e.name
+          ? null
+          : FillExtrusionTranslateAnchor.values.firstWhere(
+              (e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["paint"]["fill-extrusion-translate-anchor"])),
-      fillExtrusionTranslateAnchorExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-translate-anchor"]),
-      fillExtrusionVerticalGradient:
-          _optionalCast(map["paint"]["fill-extrusion-vertical-gradient"]),
-      fillExtrusionVerticalGradientExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-vertical-gradient"]),
-      fillExtrusionVerticalScale:
-          _optionalCast(map["paint"]["fill-extrusion-vertical-scale"]),
-      fillExtrusionVerticalScaleExpression:
-          _optionalCastList(map["paint"]["fill-extrusion-vertical-scale"]),
+                  .contains(map["paint"]["fill-extrusion-translate-anchor"]),
+            ),
+      fillExtrusionTranslateAnchorExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-translate-anchor"],
+      ),
+      fillExtrusionVerticalGradient: _optionalCast(
+        map["paint"]["fill-extrusion-vertical-gradient"],
+      ),
+      fillExtrusionVerticalGradientExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-vertical-gradient"],
+      ),
+      fillExtrusionVerticalScale: _optionalCast(
+        map["paint"]["fill-extrusion-vertical-scale"],
+      ),
+      fillExtrusionVerticalScaleExpression: _optionalCastList(
+        map["paint"]["fill-extrusion-vertical-scale"],
+      ),
     );
   }
 }

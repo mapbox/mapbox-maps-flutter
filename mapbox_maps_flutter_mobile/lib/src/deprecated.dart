@@ -1,7 +1,8 @@
 part of '../mapbox_maps_flutter_mobile.dart';
 
 @Deprecated(
-    'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.')
+  'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.',
+)
 abstract class OnCircleAnnotationClickListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       CircleAnnotationMessenger_PigeonCodec();
@@ -28,7 +29,9 @@ abstract class OnCircleAnnotationClickListener {
   }
 
   static void _withCancelable(
-      Cancelable cancelable, String messageChannelSuffix) {
+    Cancelable cancelable,
+    String messageChannelSuffix,
+  ) {
     var channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
@@ -39,7 +42,8 @@ abstract class OnCircleAnnotationClickListener {
 }
 
 @Deprecated(
-    'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.')
+  'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.',
+)
 abstract class OnPointAnnotationClickListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       PointAnnotationMessenger_PigeonCodec();
@@ -66,7 +70,9 @@ abstract class OnPointAnnotationClickListener {
   }
 
   static void _withCancelable(
-      Cancelable cancelable, String messageChannelSuffix) {
+    Cancelable cancelable,
+    String messageChannelSuffix,
+  ) {
     var channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
@@ -77,7 +83,8 @@ abstract class OnPointAnnotationClickListener {
 }
 
 @Deprecated(
-    'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.')
+  'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.',
+)
 abstract class OnPolygonAnnotationClickListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       PolygonAnnotationMessenger_PigeonCodec();
@@ -104,7 +111,9 @@ abstract class OnPolygonAnnotationClickListener {
   }
 
   static void _withCancelable(
-      Cancelable cancelable, String messageChannelSuffix) {
+    Cancelable cancelable,
+    String messageChannelSuffix,
+  ) {
     var channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {
@@ -115,7 +124,8 @@ abstract class OnPolygonAnnotationClickListener {
 }
 
 @Deprecated(
-    'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.')
+  'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.',
+)
 abstract class OnPolylineAnnotationClickListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       PolylineAnnotationMessenger_PigeonCodec();
@@ -142,7 +152,9 @@ abstract class OnPolylineAnnotationClickListener {
   }
 
   static void _withCancelable(
-      Cancelable cancelable, String messageChannelSuffix) {
+    Cancelable cancelable,
+    String messageChannelSuffix,
+  ) {
     var channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick';
     if (messageChannelSuffix.isNotEmpty) {

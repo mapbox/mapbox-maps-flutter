@@ -5,21 +5,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
+
 import '../empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('PolylineAnnotationManager custom id and position',
-      (WidgetTester tester) async {
+  testWidgets('PolylineAnnotationManager custom id and position', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final dummyLayer = LineLayer(id: "dummyLayer", sourceId: 'sourceId');
     await mapboxMap.style.addLayer(dummyLayer);
     final id = "PolylineAnnotationManagerId";
-    final manager = await mapboxMap.annotations
-        .createPolylineAnnotationManager(id: id, below: 'dummyLayer');
+    final manager = await mapboxMap.annotations.createPolylineAnnotationManager(
+      id: id,
+      below: 'dummyLayer',
+    );
 
     expect(await mapboxMap.style.styleLayerExists(id), isTrue);
     expect(await mapboxMap.style.styleSourceExists(id), isTrue);
@@ -29,13 +34,14 @@ void main() {
     expect(layers.last?.id, dummyLayer.id);
   });
 
-  testWidgets('create PolylineAnnotation_manager ',
-      (WidgetTester tester) async {
+  testWidgets('create PolylineAnnotation_manager ', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
 
     await manager.setLineCap(LineCap.BUTT);
     var lineCap = await manager.getLineCap();
@@ -165,21 +171,24 @@ void main() {
     late EventChannel eventChannel;
 
     Future<void> setupMap(
-        WidgetTester tester, String eventChannelSuffix) async {
+      WidgetTester tester,
+      String eventChannelSuffix,
+    ) async {
       final mapFuture = app.main();
       await Future.delayed(
-          Duration(milliseconds: 100)); // Ensure app.main() is started
+        Duration(milliseconds: 100),
+      ); // Ensure app.main() is started
       await tester.pumpAndSettle();
       mapboxMap = await mapFuture;
       manager = await mapboxMap.annotations.createPolylineAnnotationManager();
 
-      final geometry =
-          LineString(coordinates: [Position(0, 0), Position(10.0, 20.0)]);
+      final geometry = LineString(
+        coordinates: [Position(0, 0), Position(10.0, 20.0)],
+      );
 
-      createdAnnotation = await manager.create(PolylineAnnotationOptions(
-        geometry: geometry,
-        isDraggable: true,
-      ));
+      createdAnnotation = await manager.create(
+        PolylineAnnotationOptions(geometry: geometry, isDraggable: true),
+      );
 
       eventChannel = EventChannel(
         "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents.0/${manager.id}/${eventChannelSuffix}",
@@ -187,8 +196,9 @@ void main() {
       );
     }
 
-    testWidgets('annotation tap events can be listened and canceled',
-        (tester) async {
+    testWidgets('annotation tap events can be listened and canceled', (
+      tester,
+    ) async {
       // Test tap event can be listened
       await setupMap(tester, 'tap');
 
@@ -198,15 +208,16 @@ void main() {
 
       IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
           .setMockStreamHandler(
-              eventChannel,
-              MockStreamHandler.inline(
-                onListen: (arguments, events) {
-                  eventSink = events;
-                },
-                onCancel: (arguments) {
-                  isCanceled = true;
-                },
-              ));
+            eventChannel,
+            MockStreamHandler.inline(
+              onListen: (arguments, events) {
+                eventSink = events;
+              },
+              onCancel: (arguments) {
+                isCanceled = true;
+              },
+            ),
+          );
 
       final token = manager.tapEvents(
         onTap: (annotation) {
@@ -219,27 +230,32 @@ void main() {
         },
       );
 
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
 
       await tapCompleter.future;
       expect(tapCompleter.isCompleted, isTrue);
       expect(isCanceled, isFalse);
 
       token.cancel();
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
       expect(isCanceled, isTrue);
 
       eventSink.endOfStream();
     });
 
-    testWidgets('annotation long press events can be listened and canceled',
-        (tester) async {
+    testWidgets('annotation long press events can be listened and canceled', (
+      tester,
+    ) async {
       await setupMap(tester, 'long_press');
 
       final longPressCompleter = Completer();
@@ -248,15 +264,16 @@ void main() {
 
       IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
           .setMockStreamHandler(
-              eventChannel,
-              MockStreamHandler.inline(
-                onListen: (arguments, events) {
-                  eventSink = events;
-                },
-                onCancel: (arguments) {
-                  isCanceled = true;
-                },
-              ));
+            eventChannel,
+            MockStreamHandler.inline(
+              onListen: (arguments, events) {
+                eventSink = events;
+              },
+              onCancel: (arguments) {
+                isCanceled = true;
+              },
+            ),
+          );
 
       final token = manager.longPressEvents(
         onLongPress: (annotation) {
@@ -269,27 +286,32 @@ void main() {
         },
       );
 
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
 
       await longPressCompleter.future;
       expect(longPressCompleter.isCompleted, isTrue);
       expect(isCanceled, isFalse);
 
       token.cancel();
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
       expect(isCanceled, isTrue);
 
       eventSink.endOfStream();
     });
 
-    testWidgets('annotation drag events can be listened and canceled',
-        (tester) async {
+    testWidgets('annotation drag events can be listened and canceled', (
+      tester,
+    ) async {
       await setupMap(tester, 'drag');
 
       final dragBegin = Completer();
@@ -300,15 +322,16 @@ void main() {
 
       IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
           .setMockStreamHandler(
-              eventChannel,
-              MockStreamHandler.inline(
-                onListen: (arguments, events) {
-                  eventSink = events;
-                },
-                onCancel: (arguments) {
-                  isCanceled = true;
-                },
-              ));
+            eventChannel,
+            MockStreamHandler.inline(
+              onListen: (arguments, events) {
+                eventSink = events;
+              },
+              onCancel: (arguments) {
+                isCanceled = true;
+              },
+            ),
+          );
 
       final token = manager.dragEvents(
         onBegin: (annotation) {
@@ -337,42 +360,57 @@ void main() {
         },
       );
 
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.started,
-      ));
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.changed,
-      ));
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.started,
+        ),
+      );
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.changed,
+        ),
+      );
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
 
       await Future.wait([dragBegin.future, dragChanged.future, dragEnd.future]);
-      expect(
-          [dragBegin.isCompleted, dragChanged.isCompleted, dragEnd.isCompleted],
-          everyElement(isTrue));
+      expect([
+        dragBegin.isCompleted,
+        dragChanged.isCompleted,
+        dragEnd.isCompleted,
+      ], everyElement(isTrue));
       expect(isCanceled, isFalse);
 
       token.cancel();
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.started,
-      ));
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.changed,
-      ));
-      eventSink.success(PolylineAnnotationInteractionContext(
-        annotation: createdAnnotation,
-        gestureState: GestureState.ended,
-      ));
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.started,
+        ),
+      );
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.changed,
+        ),
+      );
+      eventSink.success(
+        PolylineAnnotationInteractionContext(
+          annotation: createdAnnotation,
+          gestureState: GestureState.ended,
+        ),
+      );
       expect(isCanceled, isTrue);
 
       eventSink.endOfStream();
     });
   });
 }
+
 // End of generated file.

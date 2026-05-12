@@ -113,7 +113,7 @@ final class FollowPuckViewportState extends ViewportState {
     this.zoom = 16.35,
     this.bearing = const FollowPuckViewportStateBearingHeading(),
     this.pitch = 45,
-    this.padding
+    this.padding,
   }) : super();
 }
 

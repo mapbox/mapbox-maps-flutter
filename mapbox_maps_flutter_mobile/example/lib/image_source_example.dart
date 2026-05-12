@@ -1,8 +1,10 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -23,27 +25,39 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style
-        .setStyleImportConfigProperty("basemap", "lightPreset", "night");
-    mapboxMap.style
-        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style.setStyleImportConfigProperty(
+      "basemap",
+      "lightPreset",
+      "night",
+    );
+    mapboxMap.style.setStyleImportConfigProperty(
+      "basemap",
+      "theme",
+      "monochrome",
+    );
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
-    await mapboxMap?.style
-        .addSource(ImageSource(id: "image_source-id", coordinates: [
-      [-80.11725, 25.7836],
-      [-80.1397431334, 25.783548],
-      [-80.13964, 25.7680],
-      [-80.11725, 25.76795]
-    ]));
-    await mapboxMap?.style.addLayer(RasterLayer(
-      id: "image_layer-id",
-      sourceId: "image_source-id",
-      // `LightPreset`s are applied to all layers of the map.
-      // As `night` is applied we need to set `rasterEmissiveStrength` to color the image
-      rasterEmissiveStrength: 1.0,
-    ));
+    await mapboxMap?.style.addSource(
+      ImageSource(
+        id: "image_source-id",
+        coordinates: [
+          [-80.11725, 25.7836],
+          [-80.1397431334, 25.783548],
+          [-80.13964, 25.7680],
+          [-80.11725, 25.76795],
+        ],
+      ),
+    );
+    await mapboxMap?.style.addLayer(
+      RasterLayer(
+        id: "image_layer-id",
+        sourceId: "image_source-id",
+        // `LightPreset`s are applied to all layers of the map.
+        // As `night` is applied we need to set `rasterEmissiveStrength` to color the image
+        rasterEmissiveStrength: 1.0,
+      ),
+    );
     var imageSource =
         await mapboxMap?.style.getSource("image_source-id") as ImageSource;
     final ByteData bytes = await rootBundle.load('assets/miami_beach.png');
@@ -54,13 +68,16 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapWidget(
-      key: ValueKey("mapWidget"),
-      styleUri: MapboxStyles.STANDARD,
-      cameraOptions: CameraOptions(
-          center: Point(coordinates: Position(-80.1263, 25.7845)), zoom: 12.0),
-      onMapCreated: _onMapCreated,
-      onStyleLoadedListener: _onStyleLoaded,
-    ));
+      body: MapWidget(
+        key: ValueKey("mapWidget"),
+        styleUri: MapboxStyles.STANDARD,
+        cameraOptions: CameraOptions(
+          center: Point(coordinates: Position(-80.1263, 25.7845)),
+          zoom: 12.0,
+        ),
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoaded,
+      ),
+    );
   }
 }

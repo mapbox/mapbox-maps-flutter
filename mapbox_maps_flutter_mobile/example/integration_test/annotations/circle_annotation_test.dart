@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import '../empty_map_widget.dart' as app;
 
 void main() {
@@ -42,22 +43,24 @@ void main() {
     expect({'foo': 'bar'}, annotation.customData);
   });
 
-  testWidgets('update and delete CircleAnnotation',
-      (WidgetTester tester) async {
+  testWidgets('update and delete CircleAnnotation', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
     var geometry = Point(coordinates: Position(1.0, 2.0));
 
-    var circleAnnotationOptions = CircleAnnotationOptions(
-      geometry: geometry,
-    );
+    var circleAnnotationOptions = CircleAnnotationOptions(geometry: geometry);
     final annotation = await manager.create(circleAnnotationOptions);
     var point = annotation.geometry;
     var newPoint = Point(
-        coordinates:
-            Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+      coordinates: Position(
+        point.coordinates.lng + 1.0,
+        point.coordinates.lat + 1.0,
+      ),
+    );
     annotation.geometry = newPoint;
     await manager.update(annotation);
     await manager.delete(annotation);
@@ -79,9 +82,7 @@ void main() {
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
     var geometry = Point(coordinates: Position(1.0, 2.0));
 
-    var circleAnnotationOptions = CircleAnnotationOptions(
-      geometry: geometry,
-    );
+    var circleAnnotationOptions = CircleAnnotationOptions(geometry: geometry);
 
     // Create 10 annotations
     var createdAnnotations = <CircleAnnotation>[];
@@ -113,4 +114,5 @@ void main() {
     expect(allAnnotations.length, equals(0));
   });
 }
+
 // End of generated file.
