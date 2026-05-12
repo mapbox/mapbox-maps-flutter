@@ -4,7 +4,6 @@ import 'package:integration_test/integration_test.dart';
 import 'empty_map_widget.dart' as app;
 import 'package:mapbox_maps_flutter_examples/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
