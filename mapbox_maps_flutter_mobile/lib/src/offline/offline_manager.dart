@@ -4,7 +4,7 @@ final _OfflineMapInstanceManager _offlineMapInstanceManager =
     _OfflineMapInstanceManager();
 
 /// The [OfflineManager] provides a configuration interface and entrypoint for offline map functionality.
-final class OfflineManager {
+final class OfflineManager implements OfflineManagerPlatformInterface {
   final int _suffix = _suffixesRegistry.getSuffix();
   String get _messageChannel => "offline-manager/${_suffix.toString()}";
   late final _OfflineManager _api;
@@ -62,6 +62,7 @@ final class OfflineManager {
   /// will fail until excess regions are deleted. This limit is subject
   /// to change. Please contact Mapbox if you require a higher limit.
   /// Additional charges may apply.
+  @override
   Future<StylePack> loadStylePack(
     String styleURI,
     StylePackLoadOptions loadOptions,
@@ -86,6 +87,7 @@ final class OfflineManager {
   /// Removes a style package from the existing packages list. The actual
   /// resources eviction might be deferred. All pending loading operations for
   /// the style package with the given id will fail with Canceled error.
+  @override
   Future<StylePack> removeStylePack(String styleURI) async {
     return _api.removeStylePack(styleURI);
   }
@@ -93,6 +95,7 @@ final class OfflineManager {
   /// Returns a style package by its id.
   ///
   /// @param styleURI: The URI of the style package's associated style
+  @override
   Future<StylePack> stylePack(String styleURI) async {
     return _api.stylePack(styleURI);
   }
@@ -100,11 +103,13 @@ final class OfflineManager {
   /// Returns a style package's associated metadata.
   ///
   /// @param styleURI: The URI of the style package's associated style
+  @override
   Future<Map<String, Object>> stylePackMetadata(String styleURI) async {
     return _api.stylePackMetadata(styleURI).then((value) => Map.from(value));
   }
 
   /// Fetch an array of the existing style packages.
+  @override
   Future<List<StylePack>> allStylePacks() async {
     return _api.allStylePacks().then((value) => value.nonNulls.toList());
   }
