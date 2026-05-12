@@ -1,6 +1,9 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
+
 import 'example.dart';
 
 /// Example demonstrating custom vector icons with dynamic styling and interaction.
@@ -50,8 +53,10 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
     this.mapboxMap = mapboxMap;
 
     // Add tap interaction for the symbol layer
-    var tapInteraction = TapInteraction(FeaturesetDescriptor(layerId: "points"),
-        (feature, point) {
+    var tapInteraction = TapInteraction(FeaturesetDescriptor(layerId: "points"), (
+      feature,
+      point,
+    ) {
       final id = feature.id?.id;
       if (id == null) return;
 
@@ -61,23 +66,21 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
       });
 
       // Update icon size expression based on selection
-      mapboxMap.style.setStyleLayerProperty(
-        'points',
-        'icon-size',
+      mapboxMap.style.setStyleLayerProperty('points', 'icon-size', [
+        'case',
         [
-          'case',
-          [
-            '==',
-            ['id'],
-            selectedFlagId ?? ''
-          ],
-          2.0,
-          1.0
+          '==',
+          ['id'],
+          selectedFlagId ?? '',
         ],
-      );
+        2.0,
+        1.0,
+      ]);
     });
-    mapboxMap.addInteraction(tapInteraction,
-        interactionID: "tap_interaction_flags");
+    mapboxMap.addInteraction(
+      tapInteraction,
+      interactionID: "tap_interaction_flags",
+    );
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
@@ -95,7 +98,11 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
 
   /// Creates a feature with a flag at the specified location and color.
   Map<String, dynamic> _createFlagFeature(
-      String id, double longitude, double latitude, String color) {
+    String id,
+    double longitude,
+    double latitude,
+    String color,
+  ) {
     return {
       'type': 'Feature',
       'id': id, // Feature ID used for selection and icon size expression
@@ -103,9 +110,7 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
         'type': 'Point',
         'coordinates': [longitude, latitude],
       },
-      'properties': {
-        'flagColor': color,
-      },
+      'properties': {'flagColor': color},
     };
   }
 
@@ -122,10 +127,7 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
 
     // Add GeoJSON source with flag locations
     await mapboxMap?.style.addSource(
-      GeoJsonSource(
-        id: 'points',
-        data: json.encode(geojson),
-      ),
+      GeoJsonSource(id: 'points', data: json.encode(geojson)),
     );
 
     // Create symbol layer with parameterized icon
@@ -139,9 +141,9 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
         'flag',
         {
           'params': {
-            'flag_color': ['get', 'flagColor']
-          }
-        }
+            'flag_color': ['get', 'flagColor'],
+          },
+        },
       ],
     );
 

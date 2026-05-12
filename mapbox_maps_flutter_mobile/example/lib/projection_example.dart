@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class ProjectionExample extends StatefulWidget implements Example {
@@ -37,12 +39,17 @@ class ProjectionExampleState extends State<ProjectionExample> {
     return TextButton(
       child: Text('getMetersPerPixelAtLatitude'),
       onPressed: () {
-        mapboxMap?.projection.getMetersPerPixelAtLatitude(1.0, 16).then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap?.projection
+            .getMetersPerPixelAtLatitude(1.0, 16)
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("MetersPerPixel: $value"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -52,18 +59,18 @@ class ProjectionExampleState extends State<ProjectionExample> {
       child: Text('projectedMetersForCoordinate'),
       onPressed: () {
         mapboxMap?.projection
-            .projectedMetersForCoordinate(Point(
-                coordinates: Position(
-              1.0,
-              60,
-            )))
+            .projectedMetersForCoordinate(Point(coordinates: Position(1.0, 60)))
             .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "projectedMeters.easting: ${value.easting}, northing: ${value.northing}"),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      duration: Duration(seconds: 2),
-                    )));
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "projectedMeters.easting: ${value.easting}, northing: ${value.northing}",
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 2),
+                ),
+              ),
+            );
       },
     );
   }
@@ -74,14 +81,19 @@ class ProjectionExampleState extends State<ProjectionExample> {
       onPressed: () {
         mapboxMap?.projection
             .coordinateForProjectedMeters(
-                ProjectedMeters(northing: 1.0, easting: 1.0))
+              ProjectedMeters(northing: 1.0, easting: 1.0),
+            )
             .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "coordinates: ${value.coordinates.lat}, ${value.coordinates.lng}"),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      duration: Duration(seconds: 2),
-                    )));
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "coordinates: ${value.coordinates.lat}, ${value.coordinates.lng}",
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 2),
+                ),
+              ),
+            );
       },
     );
   }
@@ -93,12 +105,16 @@ class ProjectionExampleState extends State<ProjectionExample> {
         mapboxMap?.projection
             .unproject(MercatorCoordinate(x: 1.0, y: 1.0), 16)
             .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "coordinates: ${value.coordinates.lat}, ${value.coordinates.lng}"),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      duration: Duration(seconds: 2),
-                    )));
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "coordinates: ${value.coordinates.lat}, ${value.coordinates.lng}",
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 2),
+                ),
+              ),
+            );
       },
     );
   }
@@ -108,55 +124,50 @@ class ProjectionExampleState extends State<ProjectionExample> {
       child: Text('project'),
       onPressed: () {
         mapboxMap?.projection
-            .project(
-                Point(
-                    coordinates: Position(
-                  1.0,
-                  60,
-                )),
-                16)
-            .then((value) =>
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content:
-                      Text("mercatorCoordinate.x: ${value.x}, y: ${value.y}"),
+            .project(Point(coordinates: Position(1.0, 60)), 16)
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "mercatorCoordinate.x: ${value.x}, y: ${value.y}",
+                  ),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _getMetersPerPixelAtLatitude(),
-        _projectedMetersForCoordinate(),
-        _coordinateForProjectedMeters(),
-        _unproject(),
-        _project()
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _getMetersPerPixelAtLatitude(),
+      _projectedMetersForCoordinate(),
+      _coordinateForProjectedMeters(),
+      _unproject(),
+      _project(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

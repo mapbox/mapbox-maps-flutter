@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
@@ -46,8 +47,9 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('show location'),
       onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(enabled: true));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(enabled: true),
+        );
       },
     );
   }
@@ -56,8 +58,9 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('hide location'),
       onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(enabled: false));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(enabled: false),
+        );
       },
     );
   }
@@ -67,7 +70,8 @@ class LocationExampleState extends State<LocationExample> {
       child: Text('show location bearing'),
       onPressed: () {
         mapboxMap?.location.updateSettings(
-            LocationComponentSettings(puckBearingEnabled: true));
+          LocationComponentSettings(puckBearingEnabled: true),
+        );
       },
     );
   }
@@ -77,7 +81,8 @@ class LocationExampleState extends State<LocationExample> {
       child: Text('hide location bearing'),
       onPressed: () {
         mapboxMap?.location.updateSettings(
-            LocationComponentSettings(puckBearingEnabled: false));
+          LocationComponentSettings(puckBearingEnabled: false),
+        );
       },
     );
   }
@@ -86,8 +91,9 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('show pulsing'),
       onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(pulsingEnabled: true));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(pulsingEnabled: true),
+        );
       },
     );
   }
@@ -96,8 +102,9 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('hide pulsing'),
       onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(pulsingEnabled: false));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(pulsingEnabled: false),
+        );
       },
     );
   }
@@ -106,8 +113,9 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('show accuracy'),
       onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(showAccuracyRing: true));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(showAccuracyRing: true),
+        );
       },
     );
   }
@@ -116,8 +124,9 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('hide accuracy'),
       onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(showAccuracyRing: false));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(showAccuracyRing: false),
+        );
       },
     );
   }
@@ -128,8 +137,11 @@ class LocationExampleState extends State<LocationExample> {
       onPressed: () {
         _accuracyBorderColor++;
         _accuracyBorderColor %= colors.length;
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            accuracyRingBorderColor: colors[_accuracyBorderColor].value));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(
+            accuracyRingBorderColor: colors[_accuracyBorderColor].value,
+          ),
+        );
       },
     );
   }
@@ -140,8 +152,11 @@ class LocationExampleState extends State<LocationExample> {
       onPressed: () {
         _pulsingColor++;
         _pulsingColor %= colors.length;
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            accuracyRingColor: colors[_pulsingColor].value));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(
+            accuracyRingColor: colors[_pulsingColor].value,
+          ),
+        );
       },
     );
   }
@@ -152,8 +167,9 @@ class LocationExampleState extends State<LocationExample> {
       onPressed: () {
         _accuracyColor++;
         _accuracyColor %= colors.length;
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            pulsingColor: colors[_accuracyColor].value));
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(pulsingColor: colors[_accuracyColor].value),
+        );
       },
     );
   }
@@ -162,16 +178,23 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('switch to 2d puck'),
       onPressed: () async {
-        final ByteData bytes =
-            await rootBundle.load('assets/symbols/custom-icon.png');
+        final ByteData bytes = await rootBundle.load(
+          'assets/symbols/custom-icon.png',
+        );
         final Uint8List list = bytes.buffer.asUint8List();
 
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(
             enabled: true,
             puckBearingEnabled: true,
             locationPuck: LocationPuck(
-                locationPuck2D: DefaultLocationPuck2D(
-                    topImage: list, shadowImage: Uint8List.fromList([])))));
+              locationPuck2D: DefaultLocationPuck2D(
+                topImage: list,
+                shadowImage: Uint8List.fromList([]),
+              ),
+            ),
+          ),
+        );
       },
     );
   }
@@ -180,12 +203,17 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('switch to 3d puck with duck model'),
       onPressed: () {
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(
             locationPuck: LocationPuck(
-                locationPuck3D: LocationPuck3D(
-                    modelUri:
-                        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
-                    modelScale: [_puckScale, _puckScale, _puckScale]))));
+              locationPuck3D: LocationPuck3D(
+                modelUri:
+                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
+                modelScale: [_puckScale, _puckScale, _puckScale],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
@@ -194,11 +222,16 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('switch to 3d puck with car model'),
       onPressed: () {
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(
             locationPuck: LocationPuck(
-                locationPuck3D: LocationPuck3D(
-                    modelUri: "asset://assets/sportcar.glb",
-                    modelScale: [_puckScale, _puckScale, _puckScale]))));
+              locationPuck3D: LocationPuck3D(
+                modelUri: "asset://assets/sportcar.glb",
+                modelScale: [_puckScale, _puckScale, _puckScale],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
@@ -212,12 +245,17 @@ class LocationExampleState extends State<LocationExample> {
           _puckScale = 10.0;
         }
         print("Scale : $_puckScale");
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
+        mapboxMap?.location.updateSettings(
+          LocationComponentSettings(
             locationPuck: LocationPuck(
-                locationPuck3D: LocationPuck3D(
-                    modelUri:
-                        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
-                    modelScale: [_puckScale, _puckScale, _puckScale]))));
+              locationPuck3D: LocationPuck3D(
+                modelUri:
+                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
+                modelScale: [_puckScale, _puckScale, _puckScale],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
@@ -237,8 +275,10 @@ class LocationExampleState extends State<LocationExample> {
       child: Text('get settings'),
       onPressed: () {
         mapboxMap?.location.getSettings().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("""
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                """
                   Location settings : 
                     enabled : ${value.enabled}, 
                     puckBearingEnabled : ${value.puckBearingEnabled}
@@ -250,57 +290,57 @@ class LocationExampleState extends State<LocationExample> {
                     accuracy color :  ${value.accuracyRingColor}
                     accuracyRingBorderColor : ${value.accuracyRingBorderColor}
                     """
-                      .trim()),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+                    .trim(),
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _getPermission(),
-        _show(),
-        _hide(),
-        _switchLocationPuck2D(),
-        _switchLocationPuck3D_duck(),
-        _switchLocationPuck3D_car(),
-        _switchPuckScale(),
-        _showBearing(),
-        _hideBearing(),
-        _showAccuracy(),
-        _hideAccuracy(),
-        _showPulsing(),
-        _hidePulsing(),
-        _switchAccuracyColor(),
-        _switchPulsingColor(),
-        _switchAccuracyBorderColor(),
-        _getSettings(),
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _getPermission(),
+      _show(),
+      _hide(),
+      _switchLocationPuck2D(),
+      _switchLocationPuck3D_duck(),
+      _switchLocationPuck3D_car(),
+      _switchPuckScale(),
+      _showBearing(),
+      _hideBearing(),
+      _showAccuracy(),
+      _hideAccuracy(),
+      _showPulsing(),
+      _hidePulsing(),
+      _switchAccuracyColor(),
+      _switchPulsingColor(),
+      _switchAccuracyBorderColor(),
+      _getSettings(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

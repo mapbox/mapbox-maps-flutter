@@ -11,8 +11,9 @@ final class TileStore {
   String get _messageChannel => "tilestore/${_suffix.toString()}";
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
     try {
-      _tileStoreInstanceManager
-          .tearDownTileStore("tilestore/${suffix.toString()}");
+      _tileStoreInstanceManager.tearDownTileStore(
+        "tilestore/${suffix.toString()}",
+      );
       _suffixesRegistry.releaseSuffix(suffix);
     } catch (e) {}
   });
@@ -21,8 +22,9 @@ final class TileStore {
 
   TileStore._() {
     _api = _TileStore(
-        binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
-        messageChannelSuffix: _messageChannel);
+      binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+      messageChannelSuffix: _messageChannel,
+    );
   }
 
   /// Returns a shared [TileStore] at the given storage [filePath].
@@ -32,7 +34,9 @@ final class TileStore {
   static Future<TileStore> createAt(Uri filePath) async {
     final tileStore = TileStore._();
     await _tileStoreInstanceManager.setupTileStore(
-        tileStore._messageChannel, filePath.path);
+      tileStore._messageChannel,
+      filePath.path,
+    );
     _finalizer.attach(tileStore, tileStore._suffix, detach: tileStore);
     return tileStore;
   }
@@ -42,7 +46,9 @@ final class TileStore {
   static Future<TileStore> createDefault() async {
     final tileStore = TileStore._();
     await _tileStoreInstanceManager.setupTileStore(
-        tileStore._messageChannel, null);
+      tileStore._messageChannel,
+      null,
+    );
     _finalizer.attach(tileStore, tileStore._suffix, detach: tileStore);
     return tileStore;
   }
@@ -83,13 +89,15 @@ final class TileStore {
   ///     to change. Please contact Mapbox if you require a higher limit.
   ///     Additional charges may apply.
   Future<TileRegion> loadTileRegion(
-      String id,
-      TileRegionLoadOptions loadOptions,
-      OnTileRegionLoadProgressListener? progressListener) async {
+    String id,
+    TileRegionLoadOptions loadOptions,
+    OnTileRegionLoadProgressListener? progressListener,
+  ) async {
     if (progressListener != null) {
       await _api.addTileRegionLoadProgressListener(id);
       final eventChannel = EventChannel(
-          "com.mapbox.maps.flutter/${_messageChannel}/tile-region-${id}");
+        "com.mapbox.maps.flutter/${_messageChannel}/tile-region-${id}",
+      );
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionLoadProgress.decode(event));
       });
@@ -112,14 +120,16 @@ final class TileStore {
   ///
   /// Estimating a tile region does not mutate existing tile regions on the tile store.
   Future<TileRegionEstimateResult> estimateTileRegion(
-      String id,
-      TileRegionLoadOptions loadOptions,
-      TileRegionEstimateOptions? estimateOptions,
-      OnTileRegionEstimateProgressListenter? progressListener) async {
+    String id,
+    TileRegionLoadOptions loadOptions,
+    TileRegionEstimateOptions? estimateOptions,
+    OnTileRegionEstimateProgressListenter? progressListener,
+  ) async {
     if (progressListener != null) {
       await _api.addTileRegionEstimateProgressListener(id);
       final eventChannel = EventChannel(
-          "com.mapbox.maps.flutter/${_messageChannel}/tile-region-estimate-${id}");
+        "com.mapbox.maps.flutter/${_messageChannel}/tile-region-estimate-${id}",
+      );
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionEstimateProgress.decode(event));
       });
@@ -145,7 +155,9 @@ final class TileStore {
   /// @param id: The tile region identifier.
   /// @param descriptors: The array of [TilesetDescriptorOptions].
   Future<bool> tileRegionContainsDescriptor(
-      String id, List<TilesetDescriptorOptions> options) {
+    String id,
+    List<TilesetDescriptorOptions> options,
+  ) {
     return _api.tileRegionContainsDescriptor(id, options);
   }
 
@@ -169,19 +181,20 @@ final class TileStore {
   /// Accepts a (positive) number of bytes, or null for resetting to the default value.
   void setDiskQuota(int? quota, {TileDataDomain? domain}) {
     _api.setOptionForKey(
-        _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.DISK_QUOTA),
-        domain,
-        quota);
+      _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.DISK_QUOTA),
+      domain,
+      quota,
+    );
   }
 
   /// Sets the base URL to use for requests to the Mapbox API. Defaults to "https://api.mapbox.com".
   /// Accepts a string, or null for resetting to the default value.
   void setMapboxAPIUrl(Uri? url, {TileDataDomain? domain}) {
     _api.setOptionForKey(
-        _PredefinedTileStoreOptionsKey(
-            key: _TileStoreOptionsKey.MAPBOX_API_URL),
-        domain,
-        url);
+      _PredefinedTileStoreOptionsKey(key: _TileStoreOptionsKey.MAPBOX_API_URL),
+      domain,
+      url,
+    );
   }
 
   /// Sets the URL template for making tile requests. Defaults to the Mapbox API endpoints.
@@ -203,10 +216,12 @@ final class TileStore {
   /// - {z_max}: The zoom range maximum of the Map tile to be loaded.
   void setTileUrlTemplate(String? template, {TileDataDomain? domain}) {
     _api.setOptionForKey(
-        _PredefinedTileStoreOptionsKey(
-            key: _TileStoreOptionsKey.TILE_URL_TEMPLATE),
-        domain,
-        template);
+      _PredefinedTileStoreOptionsKey(
+        key: _TileStoreOptionsKey.TILE_URL_TEMPLATE,
+      ),
+      domain,
+      template,
+    );
   }
 
   /// Sets additional options for this [TileStore] that are specific to a data type.

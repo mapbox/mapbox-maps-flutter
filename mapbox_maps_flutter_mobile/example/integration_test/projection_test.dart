@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -11,8 +12,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;
-    var meters =
-        await mapboxMap.projection.getMetersPerPixelAtLatitude(1.0, 16.0);
+    var meters = await mapboxMap.projection.getMetersPerPixelAtLatitude(
+      1.0,
+      16.0,
+    );
     expect(meters.round(), 1);
   });
 
@@ -21,12 +24,8 @@ void main() {
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;
-    var projectedMeters =
-        await mapboxMap.projection.projectedMetersForCoordinate(Point(
-            coordinates: Position(
-      1.0,
-      60,
-    )));
+    var projectedMeters = await mapboxMap.projection
+        .projectedMetersForCoordinate(Point(coordinates: Position(1.0, 60)));
     expect(projectedMeters.easting.floor(), 111195);
     expect(projectedMeters.northing.floor(), 8390350);
   });
@@ -37,7 +36,8 @@ void main() {
 
     final mapboxMap = await mapFuture;
     final point = await mapboxMap.projection.coordinateForProjectedMeters(
-        ProjectedMeters(northing: 100000.0, easting: 100000.0));
+      ProjectedMeters(northing: 100000.0, easting: 100000.0),
+    );
     expect((point.coordinates.lng as double).floor(), 0);
     expect((point.coordinates.lat as double).floor(), 0);
   });
@@ -47,8 +47,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;
-    final point = await mapboxMap.projection
-        .unproject(MercatorCoordinate(x: 1.0, y: 1.0), 16);
+    final point = await mapboxMap.projection.unproject(
+      MercatorCoordinate(x: 1.0, y: 1.0),
+      16,
+    );
     expect((point.coordinates.lng as double).floor(), -180);
     expect((point.coordinates.lat as double).floor(), 85);
   });
@@ -59,12 +61,9 @@ void main() {
 
     final mapboxMap = await mapFuture;
     var mercatorCoordinate = await mapboxMap.projection.project(
-        Point(
-            coordinates: Position(
-          1.0,
-          60,
-        )),
-        16);
+      Point(coordinates: Position(1.0, 60)),
+      16,
+    );
     expect(mercatorCoordinate.x.floor(), 4118);
     expect(mercatorCoordinate.y.floor(), 2378);
   });

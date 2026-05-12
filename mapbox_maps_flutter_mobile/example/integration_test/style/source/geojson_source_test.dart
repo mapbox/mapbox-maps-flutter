@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import '../../empty_map_widget.dart' as app;
 
 void main() {
@@ -14,39 +15,42 @@ void main() {
     final mapboxMap = await mapFuture;
     await app.events.onMapLoaded.future;
 
-    await mapboxMap.style.addSource(GeoJsonSource(
-      id: "source",
-      data: json.encode(Point(coordinates: Position(-77.032667, 38.913175))),
-      maxzoom: 1.0,
-      attribution: "abc",
-      buffer: 1.0,
-      tolerance: 1.0,
-      cluster: true,
-      clusterRadius: 1.0,
-      clusterMaxZoom: 1.0,
-      clusterMinPoints: 1.0,
-      clusterProperties: {
-        "sum": [
-          [
-            "+",
+    await mapboxMap.style.addSource(
+      GeoJsonSource(
+        id: "source",
+        data: json.encode(Point(coordinates: Position(-77.032667, 38.913175))),
+        maxzoom: 1.0,
+        attribution: "abc",
+        buffer: 1.0,
+        tolerance: 1.0,
+        cluster: true,
+        clusterRadius: 1.0,
+        clusterMaxZoom: 1.0,
+        clusterMinPoints: 1.0,
+        clusterProperties: {
+          "sum": [
             [
-              "number",
-              ["accumulated"]
+              "+",
+              [
+                "number",
+                ["accumulated"],
+              ],
+              [
+                "number",
+                ["get", "sum"],
+              ],
             ],
-            [
-              "number",
-              ["get", "sum"]
-            ]
+            1.0,
           ],
-          1.0
-        ]
-      },
-      lineMetrics: true,
-      generateId: true,
-      prefetchZoomDelta: 1.0,
-      tileCacheBudget:
-          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
-    ));
+        },
+        lineMetrics: true,
+        generateId: true,
+        prefetchZoomDelta: 1.0,
+        tileCacheBudget: TileCacheBudget.inMegabytes(
+          TileCacheBudgetInMegabytes(size: 3),
+        ),
+      ),
+    );
 
     var source = await mapboxMap.style.getSource('source') as GeoJsonSource;
     expect(source.id, 'source');
@@ -81,15 +85,15 @@ void main() {
           "+",
           [
             "number",
-            ["accumulated"]
+            ["accumulated"],
           ],
           [
             "number",
-            ["get", "sum"]
-          ]
+            ["get", "sum"],
+          ],
         ],
-        1.0
-      ]
+        1.0,
+      ],
     });
 
     var lineMetrics = await source.lineMetrics;
@@ -102,10 +106,15 @@ void main() {
     expect(prefetchZoomDelta, 1.0);
 
     var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget?.size,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
-    expect(tileCacheBudget?.type,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
+    expect(
+      tileCacheBudget?.size,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+    );
+    expect(
+      tileCacheBudget?.type,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+    );
   });
 }
+
 // End of generated file.

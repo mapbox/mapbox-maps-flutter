@@ -1,6 +1,8 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class StandardStyleInteractionsExample extends StatefulWidget
@@ -34,30 +36,47 @@ class StandardStyleInteractionsState
     _updateMapStyle();
 
     /// When a POI feature in the Standard POI featureset is tapped hide the POI
-    var tapInteractionPOI = TapInteraction(StandardPOIs(), (feature, _) {
-      mapboxMap.setFeatureStateForFeaturesetFeature(
-          feature, StandardPOIsState(hide: true));
-      log("POI feature name: ${feature.name}");
+    var tapInteractionPOI = TapInteraction(
+      StandardPOIs(),
+      (feature, _) {
+        mapboxMap.setFeatureStateForFeaturesetFeature(
+          feature,
+          StandardPOIsState(hide: true),
+        );
+        log("POI feature name: ${feature.name}");
 
-      /// Not stopping propagation means that the tap event will be propagated to other interactions.
-    }, radius: 10, stopPropagation: false);
-    mapboxMap.addInteraction(tapInteractionPOI,
-        interactionID: "tap_interaction_poi");
+        /// Not stopping propagation means that the tap event will be propagated to other interactions.
+      },
+      radius: 10,
+      stopPropagation: false,
+    );
+    mapboxMap.addInteraction(
+      tapInteractionPOI,
+      interactionID: "tap_interaction_poi",
+    );
 
     /// When a building in the Standard Buildings featureset is tapped, set that building as highlighted to color it.
-    var tapInteractionBuildings =
-        TapInteraction(StandardBuildings(), (feature, _) {
+    var tapInteractionBuildings = TapInteraction(StandardBuildings(), (
+      feature,
+      _,
+    ) {
       mapboxMap.setFeatureStateForFeaturesetFeature(
-          feature, StandardBuildingsState(highlight: true));
+        feature,
+        StandardBuildingsState(highlight: true),
+      );
       log("Building group: ${feature.group}");
     });
     mapboxMap.addInteraction(tapInteractionBuildings);
 
     /// When a place label in the Standard Place Labels featureset is tapped, set that place label as selected.
-    var tapInteractionPlaceLabel =
-        TapInteraction(StandardPlaceLabels(), (feature, _) {
+    var tapInteractionPlaceLabel = TapInteraction(StandardPlaceLabels(), (
+      feature,
+      _,
+    ) {
       mapboxMap.setFeatureStateForFeaturesetFeature(
-          feature, StandardPlaceLabelsState(select: true));
+        feature,
+        StandardPlaceLabelsState(select: true),
+      );
       log("Place label: ${feature.name}");
     });
     mapboxMap.addInteraction(tapInteractionPlaceLabel);
@@ -65,7 +84,9 @@ class StandardStyleInteractionsState
     // When the map is long-tapped print the screen coordinates of the tap
     // and reset the state of all features in the Standard POIs, Buildings, and Place Labels featuresets.
     var longTapInteraction = LongTapInteraction.onMap((context) {
-      log("Long tap at: ${context.touchPosition.x}, ${context.touchPosition.y}");
+      log(
+        "Long tap at: ${context.touchPosition.x}, ${context.touchPosition.y}",
+      );
       mapboxMap.resetFeatureStatesForFeatureset(StandardPOIs());
       mapboxMap.resetFeatureStatesForFeatureset(StandardBuildings());
       mapboxMap.resetFeatureStatesForFeatureset(StandardPlaceLabels());
@@ -80,11 +101,7 @@ class StandardStyleInteractionsState
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            offset: Offset(0, 2),
-            blurRadius: 4,
-          ),
+          BoxShadow(color: Colors.black, offset: Offset(0, 2), blurRadius: 4),
         ],
       ),
       child: Column(
@@ -95,7 +112,9 @@ class StandardStyleInteractionsState
             value: buildingHighlightColor,
             items: [
               DropdownMenuItem(
-                  value: 'hsl(214, 94%, 59%)', child: Text('Blue')),
+                value: 'hsl(214, 94%, 59%)',
+                child: Text('Blue'),
+              ),
               DropdownMenuItem(value: 'yellow', child: Text('Yellow')),
               DropdownMenuItem(value: 'red', child: Text('Red')),
             ],
@@ -147,25 +166,29 @@ class StandardStyleInteractionsState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-      MapWidget(
-        key: ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(
-            center: Point(coordinates: Position(24.9453, 60.1718)),
-            bearing: 49.92,
-            zoom: 16.35,
-            pitch: 40),
-        styleUri: MapboxStyles.STANDARD,
-        textureView: true,
-        onMapCreated: _onMapCreated,
+      body: Stack(
+        children: [
+          MapWidget(
+            key: ValueKey("mapWidget"),
+            cameraOptions: CameraOptions(
+              center: Point(coordinates: Position(24.9453, 60.1718)),
+              bearing: 49.92,
+              zoom: 16.35,
+              pitch: 40,
+            ),
+            styleUri: MapboxStyles.STANDARD,
+            textureView: true,
+            onMapCreated: _onMapCreated,
+          ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            right: 10,
+            child: _buildDebugPanel(),
+          ),
+        ],
       ),
-      Positioned(
-        bottom: 10,
-        left: 10,
-        right: 10,
-        child: _buildDebugPanel(),
-      ),
-    ]));
+    );
   }
 
   void _updateMapStyle() {

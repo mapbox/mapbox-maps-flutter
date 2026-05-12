@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -67,12 +68,15 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
     return TextButton(
       child: Text('getSize'),
       onPressed: () {
-        mapboxMap?.getSize().then((value) =>
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap?.getSize().then(
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
               content: Text("width: ${value.width},height: ${value.height}"),
               backgroundColor: Theme.of(context).primaryColor,
               duration: Duration(seconds: 2),
-            )));
+            ),
+          ),
+        );
       },
     );
   }
@@ -91,7 +95,11 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('setFeatureState'),
       onPressed: () {
         mapboxMap?.setFeatureState(
-            'source', null, 'point', json.encode({'choose': true}));
+          'source',
+          null,
+          'point',
+          json.encode({'choose': true}),
+        );
       },
     );
   }
@@ -100,28 +108,36 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
     return TextButton(
       child: Text('getFeatureState'),
       onPressed: () {
-        mapboxMap?.getFeatureState('source', null, 'point').then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap
+            ?.getFeatureState('source', null, 'point')
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("FeatureState: ${value}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
 
   Widget _setGestureInProgress() {
     return TextButton(
-        child: Text('setGestureInProgress'),
-        onPressed: () {
-          mapboxMap?.setGestureInProgress(gestureInProgress);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      child: Text('setGestureInProgress'),
+      onPressed: () {
+        mapboxMap?.setGestureInProgress(gestureInProgress);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             content: Text("SetGestureInProgress : $gestureInProgress"),
             backgroundColor: Theme.of(context).primaryColor,
             duration: Duration(seconds: 2),
-          ));
-          gestureInProgress = !gestureInProgress;
-        });
+          ),
+        );
+        gestureInProgress = !gestureInProgress;
+      },
+    );
   }
 
   Widget _getGestureInProgress() {
@@ -129,27 +145,33 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('getGestureInProgress'),
       onPressed: () {
         mapboxMap?.isGestureInProgress().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("isGestureInProgress: ${value}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("isGestureInProgress: ${value}"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
 
   Widget _setUserAnimationInProgress() {
     return TextButton(
-        child: Text('setUserAnimationInProgress'),
-        onPressed: () {
-          mapboxMap?.setUserAnimationInProgress(userAnimationInProgress);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      child: Text('setUserAnimationInProgress'),
+      onPressed: () {
+        mapboxMap?.setUserAnimationInProgress(userAnimationInProgress);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             content: Text("SetGestureInProgress : $userAnimationInProgress"),
             backgroundColor: Theme.of(context).primaryColor,
             duration: Duration(seconds: 2),
-          ));
-          userAnimationInProgress = !userAnimationInProgress;
-        });
+          ),
+        );
+        userAnimationInProgress = !userAnimationInProgress;
+      },
+    );
   }
 
   Widget _getUserAnimationInProgress() {
@@ -157,26 +179,32 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('getUserAnimationInProgress'),
       onPressed: () {
         mapboxMap?.isUserAnimationInProgress().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("isUserAnimationInProgress: ${value}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("isUserAnimationInProgress: ${value}"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
 
   Widget _setPrefetchZoomDelta() {
     return TextButton(
-        child: Text('setPrefetchZoomDelta'),
-        onPressed: () {
-          mapboxMap?.setPrefetchZoomDelta(10);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      child: Text('setPrefetchZoomDelta'),
+      onPressed: () {
+        mapboxMap?.setPrefetchZoomDelta(10);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             content: Text("setPrefetchZoomDelta to 10"),
             backgroundColor: Theme.of(context).primaryColor,
             duration: Duration(seconds: 2),
-          ));
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget _getPrefetchZoomDelta() {
@@ -184,11 +212,14 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('getPrefetchZoomDelta'),
       onPressed: () {
         mapboxMap?.getPrefetchZoomDelta().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("getPrefetchZoomDelta: ${value}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("getPrefetchZoomDelta: ${value}"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
@@ -198,12 +229,16 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('getMapOptions'),
       onPressed: () {
         mapboxMap?.getMapOptions().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "Size: ${value.size?.width}-${value.size?.height}, constrainMode: ${value.constrainMode}, orientation: ${value.orientation}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Size: ${value.size?.width}-${value.size?.height}, constrainMode: ${value.constrainMode}, orientation: ${value.orientation}",
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
@@ -214,11 +249,13 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       onPressed: () async {
         String baseUrl = await MapboxMapsOptions.getBaseUrl();
         String accessToken = await MapboxOptions.getAccessToken();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("baseURL: ${baseUrl}, accessToken: ${accessToken}"),
-          backgroundColor: Theme.of(context).primaryColor,
-          duration: Duration(seconds: 2),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("baseURL: ${baseUrl}, accessToken: ${accessToken}"),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 2),
+          ),
+        );
       },
     );
   }
@@ -228,11 +265,14 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('reduceMemoryUse'),
       onPressed: () {
         mapboxMap?.reduceMemoryUse().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("reduceMemoryUse"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("reduceMemoryUse"),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
@@ -242,21 +282,29 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('queryRenderedFeatures'),
       onPressed: () {
         final screenBox = ScreenBox(
-            min: ScreenCoordinate(x: 0.0, y: 0.0),
-            max: ScreenCoordinate(x: 150.0, y: 510.0));
-        final renderedQueryGeometry =
-            RenderedQueryGeometry.fromScreenBox(screenBox);
+          min: ScreenCoordinate(x: 0.0, y: 0.0),
+          max: ScreenCoordinate(x: 150.0, y: 510.0),
+        );
+        final renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(
+          screenBox,
+        );
         mapboxMap
             ?.queryRenderedFeatures(
-                renderedQueryGeometry,
-                RenderedQueryOptions(
-                    layerIds: ['custom', 'points'], filter: null))
-            .then((value) =>
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              renderedQueryGeometry,
+              RenderedQueryOptions(
+                layerIds: ['custom', 'points'],
+                filter: null,
+              ),
+            )
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("queryRenderedFeatures size: ${value.length}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -267,57 +315,57 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       onPressed: () {
         mapboxMap
             ?.querySourceFeatures('source', SourceQueryOptions(filter: ''))
-            .then((value) =>
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text("queryRenderedFeatures size: ${value.length}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _queryRenderedFeatures(),
-        _querySourceFeatures(),
-        _getSize(),
-        _getMapOptions(),
-        _getResourceOptions(),
-        _reduceMemoryUse(),
-        _getGestureInProgress(),
-        _setGestureInProgress(),
-        _getUserAnimationInProgress(),
-        _setUserAnimationInProgress(),
-        _getPrefetchZoomDelta(),
-        _setPrefetchZoomDelta(),
-        _triggerRepaint(),
-        _setFeatureState(),
-        _getFeatureState()
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _queryRenderedFeatures(),
+      _querySourceFeatures(),
+      _getSize(),
+      _getMapOptions(),
+      _getResourceOptions(),
+      _reduceMemoryUse(),
+      _getGestureInProgress(),
+      _setGestureInProgress(),
+      _getUserAnimationInProgress(),
+      _setUserAnimationInProgress(),
+      _getPrefetchZoomDelta(),
+      _setPrefetchZoomDelta(),
+      _triggerRepaint(),
+      _setFeatureState(),
+      _getFeatureState(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

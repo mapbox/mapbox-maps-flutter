@@ -4,6 +4,8 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
+
 import '../../empty_map_widget.dart' as app;
 
 void main() {
@@ -14,50 +16,54 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    var line =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
-    await mapboxMap.style
-        .addSource(GeoJsonSource(id: "source", data: json.encode(line)));
+    var line = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
+    await mapboxMap.style.addSource(
+      GeoJsonSource(id: "source", data: json.encode(line)),
+    );
 
-    await mapboxMap.style.addLayer(LineLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      lineCap: LineCap.BUTT,
-      lineCrossSlope: 1.0,
-      lineElevationGroundScale: 1.0,
-      lineElevationReference: LineElevationReference.NONE,
-      lineJoin: LineJoin.BEVEL,
-      lineMiterLimit: 1.0,
-      lineRoundLimit: 1.0,
-      lineSortKey: 1.0,
-      lineWidthUnit: LineWidthUnit.PIXELS,
-      lineZOffset: 1.0,
-      lineBlur: 1.0,
-      lineBorderColor: Colors.red.value,
-      lineBorderWidth: 1.0,
-      lineColor: Colors.red.value,
-      lineCutoutFadeWidth: 1.0,
-      lineCutoutOpacity: 1.0,
-      lineDasharray: [1.0, 2.0],
-      lineDepthOcclusionFactor: 1.0,
-      lineEmissiveStrength: 1.0,
-      lineGapWidth: 1.0,
-      lineGradient: Colors.red.value,
-      lineOcclusionOpacity: 1.0,
-      lineOffset: 1.0,
-      lineOpacity: 1.0,
-      linePattern: "abc",
-      lineTranslate: [0.0, 1.0],
-      lineTranslateAnchor: LineTranslateAnchor.MAP,
-      lineTrimColor: Colors.red.value,
-      lineTrimFadeRange: [0.5, 0.5],
-      lineTrimOffset: [0.5, 0.5],
-      lineWidth: 1.0,
-    ));
+    await mapboxMap.style.addLayer(
+      LineLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        lineCap: LineCap.BUTT,
+        lineCrossSlope: 1.0,
+        lineElevationGroundScale: 1.0,
+        lineElevationReference: LineElevationReference.NONE,
+        lineJoin: LineJoin.BEVEL,
+        lineMiterLimit: 1.0,
+        lineRoundLimit: 1.0,
+        lineSortKey: 1.0,
+        lineWidthUnit: LineWidthUnit.PIXELS,
+        lineZOffset: 1.0,
+        lineBlur: 1.0,
+        lineBorderColor: Colors.red.value,
+        lineBorderWidth: 1.0,
+        lineColor: Colors.red.value,
+        lineCutoutFadeWidth: 1.0,
+        lineCutoutOpacity: 1.0,
+        lineDasharray: [1.0, 2.0],
+        lineDepthOcclusionFactor: 1.0,
+        lineEmissiveStrength: 1.0,
+        lineGapWidth: 1.0,
+        lineGradient: Colors.red.value,
+        lineOcclusionOpacity: 1.0,
+        lineOffset: 1.0,
+        lineOpacity: 1.0,
+        linePattern: "abc",
+        lineTranslate: [0.0, 1.0],
+        lineTranslateAnchor: LineTranslateAnchor.MAP,
+        lineTrimColor: Colors.red.value,
+        lineTrimFadeRange: [0.5, 0.5],
+        lineTrimOffset: [0.5, 0.5],
+        lineWidth: 1.0,
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as LineLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -102,67 +108,71 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    final line =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
-    await mapboxMap.style
-        .addSource(GeoJsonSource(id: "source", data: json.encode(line)));
+    final line = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
+    await mapboxMap.style.addSource(
+      GeoJsonSource(id: "source", data: json.encode(line)),
+    );
 
-    await mapboxMap.style.addLayer(LineLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibilityExpression: ['string', 'none'],
-      filter: [
-        "==",
-        ["get", "type"],
-        "Feature"
-      ],
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      lineCapExpression: ['string', 'butt'],
-      lineCrossSlopeExpression: ['number', 1.0],
-      lineElevationGroundScaleExpression: ['number', 1.0],
-      lineElevationReferenceExpression: ['string', 'none'],
-      lineJoinExpression: ['string', 'bevel'],
-      lineMiterLimitExpression: ['number', 1.0],
-      lineRoundLimitExpression: ['number', 1.0],
-      lineSortKeyExpression: ['number', 1.0],
-      lineWidthUnitExpression: ['string', 'pixels'],
-      lineZOffsetExpression: ['number', 1.0],
-      lineBlurExpression: ['number', 1.0],
-      lineBorderColorExpression: ['rgba', 255, 0, 0, 1],
-      lineBorderWidthExpression: ['number', 1.0],
-      lineColorExpression: ['rgba', 255, 0, 0, 1],
-      lineCutoutFadeWidthExpression: ['number', 1.0],
-      lineCutoutOpacityExpression: ['number', 1.0],
-      lineDasharrayExpression: [
-        'literal',
-        [1.0, 2.0]
-      ],
-      lineDepthOcclusionFactorExpression: ['number', 1.0],
-      lineEmissiveStrengthExpression: ['number', 1.0],
-      lineGapWidthExpression: ['number', 1.0],
-      lineGradientExpression: ['rgba', 255, 0, 0, 1],
-      lineOcclusionOpacityExpression: ['number', 1.0],
-      lineOffsetExpression: ['number', 1.0],
-      lineOpacityExpression: ['number', 1.0],
-      linePatternExpression: ['image', "abc"],
-      lineTranslateExpression: [
-        'literal',
-        [0.0, 1.0]
-      ],
-      lineTranslateAnchorExpression: ['string', 'map'],
-      lineTrimColorExpression: ['rgba', 255, 0, 0, 1],
-      lineTrimFadeRangeExpression: [
-        'literal',
-        [0.5, 0.5]
-      ],
-      lineTrimOffsetExpression: [
-        'literal',
-        [0.5, 0.5]
-      ],
-      lineWidthExpression: ['number', 1.0],
-    ));
+    await mapboxMap.style.addLayer(
+      LineLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibilityExpression: ['string', 'none'],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        lineCapExpression: ['string', 'butt'],
+        lineCrossSlopeExpression: ['number', 1.0],
+        lineElevationGroundScaleExpression: ['number', 1.0],
+        lineElevationReferenceExpression: ['string', 'none'],
+        lineJoinExpression: ['string', 'bevel'],
+        lineMiterLimitExpression: ['number', 1.0],
+        lineRoundLimitExpression: ['number', 1.0],
+        lineSortKeyExpression: ['number', 1.0],
+        lineWidthUnitExpression: ['string', 'pixels'],
+        lineZOffsetExpression: ['number', 1.0],
+        lineBlurExpression: ['number', 1.0],
+        lineBorderColorExpression: ['rgba', 255, 0, 0, 1],
+        lineBorderWidthExpression: ['number', 1.0],
+        lineColorExpression: ['rgba', 255, 0, 0, 1],
+        lineCutoutFadeWidthExpression: ['number', 1.0],
+        lineCutoutOpacityExpression: ['number', 1.0],
+        lineDasharrayExpression: [
+          'literal',
+          [1.0, 2.0],
+        ],
+        lineDepthOcclusionFactorExpression: ['number', 1.0],
+        lineEmissiveStrengthExpression: ['number', 1.0],
+        lineGapWidthExpression: ['number', 1.0],
+        lineGradientExpression: ['rgba', 255, 0, 0, 1],
+        lineOcclusionOpacityExpression: ['number', 1.0],
+        lineOffsetExpression: ['number', 1.0],
+        lineOpacityExpression: ['number', 1.0],
+        linePatternExpression: ['image', "abc"],
+        lineTranslateExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        lineTranslateAnchorExpression: ['string', 'map'],
+        lineTrimColorExpression: ['rgba', 255, 0, 0, 1],
+        lineTrimFadeRangeExpression: [
+          'literal',
+          [0.5, 0.5],
+        ],
+        lineTrimOffsetExpression: [
+          'literal',
+          [0.5, 0.5],
+        ],
+        lineWidthExpression: ['number', 1.0],
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as LineLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -172,7 +182,7 @@ void main() {
     expect(layer.filter, [
       "==",
       ["get", "type"],
-      "Feature"
+      "Feature",
     ]);
     expect(layer.lineCap, LineCap.BUTT);
     expect(layer.lineCrossSlope, 1.0);
@@ -207,4 +217,5 @@ void main() {
     expect(layer.lineWidth, 1.0);
   });
 }
+
 // End of generated file.

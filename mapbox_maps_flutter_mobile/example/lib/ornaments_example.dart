@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -31,56 +33,62 @@ class OrnamentsExampleState extends State<OrnamentsExample> {
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
 
-    mapboxMap.setCamera(CameraOptions(
-      center: Point(
-          coordinates: Position(
-        -0.11968,
-        51.50325,
-      )),
-      padding: null,
-      anchor: null,
-      zoom: 12,
-      bearing: 40,
-      pitch: null,
-    ));
+    mapboxMap.setCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(-0.11968, 51.50325)),
+        padding: null,
+        anchor: null,
+        zoom: 12,
+        bearing: 40,
+        pitch: null,
+      ),
+    );
 
     _updateOrnamentSettings();
   }
 
   void _updateOrnamentSettings() {
-    mapboxMap?.compass.updateSettings(CompassSettings(
-      position: compassPosition,
-      enabled: showOrnaments,
-      marginBottom: 10,
-      marginLeft: 10,
-      marginTop: 10,
-      marginRight: 10,
-    ));
+    mapboxMap?.compass.updateSettings(
+      CompassSettings(
+        position: compassPosition,
+        enabled: showOrnaments,
+        marginBottom: 10,
+        marginLeft: 10,
+        marginTop: 10,
+        marginRight: 10,
+      ),
+    );
 
-    mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(
-      position: scaleBarPosition,
-      enabled: showScaleBar,
-      marginBottom: 20,
-      marginLeft: 10,
-      marginTop: 10,
-      marginRight: 20,
-    ));
+    mapboxMap?.scaleBar.updateSettings(
+      ScaleBarSettings(
+        position: scaleBarPosition,
+        enabled: showScaleBar,
+        marginBottom: 20,
+        marginLeft: 10,
+        marginTop: 10,
+        marginRight: 20,
+      ),
+    );
 
-    mapboxMap?.logo.updateSettings(LogoSettings(
-      position: logoPosition,
-      marginBottom: 10,
-      marginLeft: 10,
-      marginTop: 30,
-      marginRight: 30,
-    ));
+    mapboxMap?.logo.updateSettings(
+      LogoSettings(
+        position: logoPosition,
+        marginBottom: 10,
+        marginLeft: 10,
+        marginTop: 30,
+        marginRight: 30,
+      ),
+    );
 
-    mapboxMap?.attribution.updateSettings(AttributionSettings(
-      position: attributionPosition,
-      marginBottom: 10,
-      marginLeft: 40,
-      marginTop: 40,
-      marginRight: 0,
-    ));
+    mapboxMap?.attribution.updateSettings(
+      AttributionSettings(
+        position: attributionPosition,
+        marginBottom: 10,
+        marginLeft: 40,
+        marginTop: 40,
+        marginRight: 0,
+      ),
+    );
   }
 
   @override
@@ -98,8 +106,10 @@ class OrnamentsExampleState extends State<OrnamentsExample> {
       child: Text('get compass settings'),
       onPressed: () {
         mapboxMap?.compass.getSettings().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("""
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                """
                   Ornaments settings : 
                     clickable : ${value.clickable}, 
                     enabled : ${value.enabled}
@@ -111,10 +121,13 @@ class OrnamentsExampleState extends State<OrnamentsExample> {
                     position :  ${value.position}
                     rotation : ${value.rotation}
                     """
-                      .trim()),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+                    .trim(),
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
@@ -248,32 +261,27 @@ class OrnamentsExampleState extends State<OrnamentsExample> {
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _getCompassSettings(),
-        _toggleOrnaments(),
-        _moveOrnaments(),
-        _toggleScaleBar(),
-        _moveScaleBar(),
-        _moveAttribution(),
-        _moveLogo(),
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _getCompassSettings(),
+      _toggleOrnaments(),
+      _moveOrnaments(),
+      _toggleScaleBar(),
+      _moveScaleBar(),
+      _moveAttribution(),
+      _moveLogo(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

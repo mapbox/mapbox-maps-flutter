@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -47,8 +49,9 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    var styleJson =
-        await rootBundle.loadString('assets/raster_array_layers.json');
+    var styleJson = await rootBundle.loadString(
+      'assets/raster_array_layers.json',
+    );
     var expectedValue = [
       RasterDataLayer("temperature", [
         "1659898800",
@@ -56,7 +59,7 @@ void main() {
         "1659906000",
         "1659909600",
         "1659913200",
-        "1659916800"
+        "1659916800",
       ]),
       RasterDataLayer("humidity", [
         "1659898800",
@@ -64,8 +67,8 @@ void main() {
         "1659906000",
         "1659909600",
         "1659913200",
-        "1659916800"
-      ])
+        "1659916800",
+      ]),
     ];
     app.events.resetOnStyleLoaded();
     mapboxMap.loadStyleJson(styleJson);
@@ -76,15 +79,18 @@ void main() {
     expect(styleJson, getStyleJson);
 
     // Test getStyleSourceProperty method
-    var rasterLayers =
-        await mapboxMap.style.getStyleSourceProperty("mapbox", "rasterLayers");
+    var rasterLayers = await mapboxMap.style.getStyleSourceProperty(
+      "mapbox",
+      "rasterLayers",
+    );
     final Map<Object?, Object?> dataMap =
         rasterLayers.value as Map<Object?, Object?>;
     List<RasterDataLayer> rasterDataLayers = [];
 
     dataMap.forEach((key, value) {
-      rasterDataLayers
-          .add(RasterDataLayer(key as String, (value as List).cast<String>()));
+      rasterDataLayers.add(
+        RasterDataLayer(key as String, (value as List).cast<String>()),
+      );
     });
     expect(rasterDataLayers.contains(expectedValue.first), true);
     expect(rasterDataLayers.contains(expectedValue.last), true);
@@ -123,15 +129,22 @@ void main() {
     await app.events.onMapLoaded.future;
 
     if (Platform.isIOS) {
-      final throwsPlatformException = throwsA(predicate(
-          (p) => p is PlatformException && p.message == 'Not available.'));
+      final throwsPlatformException = throwsA(
+        predicate(
+          (p) => p is PlatformException && p.message == 'Not available.',
+        ),
+      );
       expect(() async => await mapboxMap.getSize(), throwsPlatformException);
     } else {
       var size = await mapboxMap.getSize();
       expect(
-          size.width, closeTo(tester.binding.renderViews.first.size.width, 1));
-      expect(size.height,
-          closeTo(tester.binding.renderViews.first.size.height, 1));
+        size.width,
+        closeTo(tester.binding.renderViews.first.size.width, 1),
+      );
+      expect(
+        size.height,
+        closeTo(tester.binding.renderViews.first.size.height, 1),
+      );
     }
   });
 
@@ -234,7 +247,11 @@ void main() {
     await app.events.onMapIdle.future;
 
     await mapboxMap.setFeatureState(
-        'source', null, 'point', json.encode({'choose': true}));
+      'source',
+      null,
+      'point',
+      json.encode({'choose': true}),
+    );
     var featureState = await mapboxMap.getFeatureState('source', null, 'point');
     var stateMap = json.decode(featureState);
     expect(stateMap.length, 1);
@@ -254,8 +271,10 @@ void main() {
     expect(await MapboxMapsOptions.getBaseUrl(), 'https://api.mapbox.com');
     expect(await MapboxMapsOptions.getDataPath(), isNotNull);
     expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
-    expect(await MapboxMapsOptions.getTileStoreUsageMode(),
-        TileStoreUsageMode.READ_ONLY);
+    expect(
+      await MapboxMapsOptions.getTileStoreUsageMode(),
+      TileStoreUsageMode.READ_ONLY,
+    );
   });
 
   testWidgets('MapboxMapsOptions read and update', (WidgetTester tester) async {
@@ -290,8 +309,10 @@ void main() {
     expect(await MapboxOptions.getAccessToken(), token);
     expect(await MapboxMapsOptions.getBaseUrl(), baseUrl);
     expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
-    expect(await MapboxMapsOptions.getAssetPath(),
-        Platform.isAndroid ? "" : endsWith(assetPath));
+    expect(
+      await MapboxMapsOptions.getAssetPath(),
+      Platform.isAndroid ? "" : endsWith(assetPath),
+    );
     expect(await MapboxMapsOptions.getTileStoreUsageMode(), tileStoreUsageMode);
     expect(await MapboxMapsOptions.getLanguage(), language);
     expect(await MapboxMapsOptions.getWorldview(), worldview);
@@ -311,7 +332,9 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(coordinates: Position(-77.032667, 38.913175)), zoom: 10);
+      center: Point(coordinates: Position(-77.032667, 38.913175)),
+      zoom: 10,
+    );
 
     app.events.resetOnCameraChanged();
     mapboxMap.setCamera(options);
@@ -319,11 +342,19 @@ void main() {
 
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
-    final ByteData bytes =
-        await rootBundle.load('assets/symbols/custom-icon.png');
+    final ByteData bytes = await rootBundle.load(
+      'assets/symbols/custom-icon.png',
+    );
     final Uint8List list = bytes.buffer.asUint8List();
-    await style.addStyleImage('icon', 1.0,
-        MbxImage(width: 40, height: 40, data: list), true, [], [], null);
+    await style.addStyleImage(
+      'icon',
+      1.0,
+      MbxImage(width: 40, height: 40, data: list),
+      true,
+      [],
+      [],
+      null,
+    );
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
@@ -333,26 +364,32 @@ void main() {
     await app.events.onMapIdle.future;
 
     var screenBox = ScreenBox(
-        min: ScreenCoordinate(x: 0.0, y: 0.0),
-        max: ScreenCoordinate(x: 500.0, y: 1000.0));
+      min: ScreenCoordinate(x: 0.0, y: 0.0),
+      max: ScreenCoordinate(x: 500.0, y: 1000.0),
+    );
     var renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(screenBox);
-    var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
-        RenderedQueryOptions(layerIds: ['points'], filter: null));
+    var query = await mapboxMap.queryRenderedFeatures(
+      renderedQueryGeometry,
+      RenderedQueryOptions(layerIds: ['points'], filter: null),
+    );
     expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
 
     query = await mapboxMap.queryRenderedFeatures(
-        RenderedQueryGeometry.fromScreenCoordinate(
-            ScreenCoordinate(x: 0.0, y: 0.0)),
-        RenderedQueryOptions(layerIds: ['points'], filter: null));
+      RenderedQueryGeometry.fromScreenCoordinate(
+        ScreenCoordinate(x: 0.0, y: 0.0),
+      ),
+      RenderedQueryOptions(layerIds: ['points'], filter: null),
+    );
     expect(query.length, 0);
     query = await mapboxMap.queryRenderedFeatures(
-        RenderedQueryGeometry.fromList([
-          ScreenCoordinate(x: 0.0, y: 0.0),
-          ScreenCoordinate(x: 1.0, y: 1.0),
-        ]),
-        RenderedQueryOptions(layerIds: ['points'], filter: null));
+      RenderedQueryGeometry.fromList([
+        ScreenCoordinate(x: 0.0, y: 0.0),
+        ScreenCoordinate(x: 1.0, y: 1.0),
+      ]),
+      RenderedQueryOptions(layerIds: ['points'], filter: null),
+    );
     expect(query.length, 0);
   });
 
@@ -362,9 +399,10 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(coordinates: Position(-77.032667, 38.913175)),
-        zoom: 10,
-        pitch: 0);
+      center: Point(coordinates: Position(-77.032667, 38.913175)),
+      zoom: 10,
+      pitch: 0,
+    );
 
     await app.events.onMapLoaded.future;
 
@@ -383,7 +421,9 @@ void main() {
     await app.events.onMapIdle.future;
 
     var query = await mapboxMap.querySourceFeatures(
-        'source', SourceQueryOptions(filter: ''));
+      'source',
+      SourceQueryOptions(filter: ''),
+    );
     expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
@@ -394,14 +434,18 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
-    var source =
-        await rootBundle.loadString('assets/cluster/cluster_source.json');
-    var layer =
-        await rootBundle.loadString('assets/cluster/cluster_layer.json');
-    var clusterCountLayer =
-        await rootBundle.loadString('assets/cluster/cluster_count_layer.json');
-    var unclusteredLayer = await rootBundle
-        .loadString('assets/cluster/unclustered_point_layer.json');
+    var source = await rootBundle.loadString(
+      'assets/cluster/cluster_source.json',
+    );
+    var layer = await rootBundle.loadString(
+      'assets/cluster/cluster_layer.json',
+    );
+    var clusterCountLayer = await rootBundle.loadString(
+      'assets/cluster/cluster_count_layer.json',
+    );
+    var unclusteredLayer = await rootBundle.loadString(
+      'assets/cluster/unclustered_point_layer.json',
+    );
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
@@ -418,25 +462,33 @@ void main() {
         "point_count_abbreviated": "10",
         "cluster_id": 1249,
         "cluster": true,
-        "point_count": 10
+        "point_count": 10,
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-29.794921875, 59.220934076150456]
+        "coordinates": [-29.794921875, 59.220934076150456],
       },
-      "type": "Feature"
+      "type": "Feature",
     };
 
     var clusterLeaves = await mapboxMap.getGeoJsonClusterLeaves(
-        'earthquakes', feature, null, null);
+      'earthquakes',
+      feature,
+      null,
+      null,
+    );
     expect(clusterLeaves.featureCollection!.length, 10);
 
-    var clusterChildren =
-        await mapboxMap.getGeoJsonClusterChildren('earthquakes', feature);
+    var clusterChildren = await mapboxMap.getGeoJsonClusterChildren(
+      'earthquakes',
+      feature,
+    );
     expect(clusterChildren.featureCollection!.length, 2);
 
-    var clusterExpansionZoom =
-        await mapboxMap.getGeoJsonClusterExpansionZoom('earthquakes', feature);
+    var clusterExpansionZoom = await mapboxMap.getGeoJsonClusterExpansionZoom(
+      'earthquakes',
+      feature,
+    );
     expect(clusterExpansionZoom.value, '1');
   });
 

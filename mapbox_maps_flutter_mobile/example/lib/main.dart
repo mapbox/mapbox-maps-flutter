@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/animated_route_example.dart';
 import 'package:mapbox_maps_example/animation_example.dart';
@@ -89,11 +90,14 @@ class MapsDemo extends StatelessWidget {
   static const String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 
   void _pushPage(BuildContext context, Example page) async {
-    Navigator.of(context).push(MaterialPageRoute<void>(
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
         builder: (_) => Scaffold(
-              appBar: AppBar(title: Text(page.title)),
-              body: page,
-            )));
+          appBar: AppBar(title: Text(page.title)),
+          body: page,
+        ),
+      ),
+    );
   }
 
   @override
@@ -130,21 +134,27 @@ class MapsDemo extends StatelessWidget {
       child: SizedBox.expand(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            "Please pass in your access token with",
-            "--dart-define=ACCESS_TOKEN=ADD_YOUR_TOKEN_HERE",
-            "passed into flutter run or add it to args in vscode's launch.json",
-          ]
-              .map((text) => Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text(text,
+          children:
+              [
+                    "Please pass in your access token with",
+                    "--dart-define=ACCESS_TOKEN=ADD_YOUR_TOKEN_HERE",
+                    "passed into flutter run or add it to args in vscode's launch.json",
+                  ]
+                  .map(
+                    (text) => Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        text,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                  ))
-              .toList(),
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
         ),
       ),
     );

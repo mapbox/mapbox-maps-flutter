@@ -82,8 +82,8 @@ class EventTimeInterval {
   final DateTime end;
 
   EventTimeInterval.fromJson(Map<String, dynamic> json)
-      : begin = DateTime.fromMicrosecondsSinceEpoch(json['begin']),
-        end = DateTime.fromMicrosecondsSinceEpoch(json['end']);
+    : begin = DateTime.fromMicrosecondsSinceEpoch(json['begin']),
+      end = DateTime.fromMicrosecondsSinceEpoch(json['end']);
 
   @override
   String toString() {
@@ -100,8 +100,8 @@ class CameraChangedEventData {
   final CameraState cameraState;
 
   CameraChangedEventData.fromJson(Map<String, dynamic> json)
-      : timestamp = json['timestamp'],
-        cameraState = Conversion.fromJson(json['cameraState']);
+    : timestamp = json['timestamp'],
+      cameraState = Conversion.fromJson(json['cameraState']);
 }
 
 /// The class for map-idle event in Observer
@@ -110,7 +110,7 @@ class MapIdleEventData {
   final int timestamp;
 
   MapIdleEventData.fromJson(Map<String, dynamic> json)
-      : timestamp = json['timestamp'];
+    : timestamp = json['timestamp'];
 }
 
 /// The class for map-loaded event in Observer
@@ -120,7 +120,7 @@ class MapLoadedEventData {
   final EventTimeInterval timeInterval;
 
   MapLoadedEventData.fromJson(Map<String, dynamic> json)
-      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
+    : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// The class for map-loading-error event in Observer
@@ -141,12 +141,11 @@ class MapLoadingErrorEventData {
   final int timestamp;
 
   MapLoadingErrorEventData.fromJson(Map<String, dynamic> json)
-      : type = MapLoadErrorType.values[json['type']],
-        message = json['message'],
-        sourceId = json['sourceId'],
-        tileId =
-            json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
-        timestamp = json['timestamp'];
+    : type = MapLoadErrorType.values[json['type']],
+      message = json['message'],
+      sourceId = json['sourceId'],
+      tileId = json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
+      timestamp = json['timestamp'];
 }
 
 /// The class for render-frame-finished event in Observer
@@ -165,10 +164,10 @@ class RenderFrameFinishedEventData {
   final bool placementChanged;
 
   RenderFrameFinishedEventData.fromJson(Map<String, dynamic> json)
-      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
-        renderMode = RenderMode.values[json['renderMode']],
-        placementChanged = json['placementChanged'],
-        needsRepaint = json['needsRepaint'];
+    : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
+      renderMode = RenderMode.values[json['renderMode']],
+      placementChanged = json['placementChanged'],
+      needsRepaint = json['needsRepaint'];
 }
 
 /// Describes whether a map or frame has been fully rendered or not.
@@ -180,7 +179,7 @@ enum RenderMode {
   PARTIAL,
 
   /// The map is fully rendered.
-  FULL
+  FULL,
 }
 
 /// The class for render-frame-started event in Observer
@@ -189,7 +188,7 @@ class RenderFrameStartedEventData {
   final int timestamp;
 
   RenderFrameStartedEventData.fromJson(Map<String, dynamic> json)
-      : timestamp = json['timestamp'];
+    : timestamp = json['timestamp'];
 }
 
 ///The class for event in Observer
@@ -211,13 +210,13 @@ class ResourceEventData {
   final bool cancelled;
 
   ResourceEventData.fromJson(Map<String, dynamic> json)
-      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
-        dataSource = DataSourceType.values[json['source']],
-        request = Request.fromJson(json['request']),
-        response = json['response'] != null
-            ? Response.fromJson(json['response'])
-            : null,
-        cancelled = json['cancelled'];
+    : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
+      dataSource = DataSourceType.values[json['source']],
+      request = Request.fromJson(json['request']),
+      response = json['response'] != null
+          ? Response.fromJson(json['response'])
+          : null,
+      cancelled = json['cancelled'];
 }
 
 /// Describes data source of request for resource-request event.
@@ -248,8 +247,8 @@ class SourceAddedEventData {
   final String id;
 
   SourceAddedEventData.fromJson(Map<String, dynamic> json)
-      : id = json['sourceId'],
-        timestamp = json['timestamp'];
+    : id = json['sourceId'],
+      timestamp = json['timestamp'];
 }
 
 /// The class for source-data-loaded event in Observer
@@ -275,13 +274,12 @@ class SourceDataLoadedEventData {
   final EventTimeInterval timeInterval;
 
   SourceDataLoadedEventData.fromJson(Map<String, dynamic> json)
-      : id = json['sourceId'],
-        type = SourceDataType.values[json['type']],
-        loaded = json['loaded'],
-        tileID =
-            json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
-        dataId = json['dataId'],
-        timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
+    : id = json['sourceId'],
+      type = SourceDataType.values[json['type']],
+      loaded = json['loaded'],
+      tileID = json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
+      dataId = json['dataId'],
+      timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// The class for source-removed event in Observer
@@ -293,8 +291,8 @@ class SourceRemovedEventData {
   final String id;
 
   SourceRemovedEventData.fromJson(Map<String, dynamic> json)
-      : id = json['sourceId'],
-        timestamp = json['timestamp'];
+    : id = json['sourceId'],
+      timestamp = json['timestamp'];
 }
 
 /// The class for style-data-loaded event in Observer
@@ -306,8 +304,8 @@ class StyleDataLoadedEventData {
   final StyleDataType type;
 
   StyleDataLoadedEventData.fromJson(Map<String, dynamic> json)
-      : type = StyleDataType.values[json['type']],
-        timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
+    : type = StyleDataType.values[json['type']],
+      timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// The class for style-image-missing event in Observer
@@ -319,8 +317,8 @@ class StyleImageMissingEventData {
   final String id;
 
   StyleImageMissingEventData.fromJson(Map<String, dynamic> json)
-      : timestamp = json['timestamp'],
-        id = json['imageId'];
+    : timestamp = json['timestamp'],
+      id = json['imageId'];
 }
 
 /// The class for style-image-remove-unused event in Observer
@@ -332,8 +330,8 @@ class StyleImageUnusedEventData {
   final String id;
 
   StyleImageUnusedEventData.fromJson(Map<String, dynamic> json)
-      : timestamp = json['timestamp'],
-        id = json['imageId'];
+    : timestamp = json['timestamp'],
+      id = json['imageId'];
 }
 
 /// The class for style-loaded event in Observer
@@ -342,7 +340,7 @@ class StyleLoadedEventData {
   final EventTimeInterval timeInterval;
 
   StyleLoadedEventData.fromJson(Map<String, dynamic> json)
-      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
+    : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// Describes an error type while loading the map.
@@ -361,7 +359,7 @@ enum MapLoadErrorType {
   GLYPHS,
 
   /// An error related to tile.
-  TILE
+  TILE,
 }
 
 /// Defines what kind of style data has been loaded in a style-data-loaded event.
@@ -374,7 +372,7 @@ enum StyleDataType {
   SPRITE,
 
   /// The style data loaded event is associated with sources.
-  SOURCES
+  SOURCES,
 }
 
 /// Defines what kind of source data has been loaded in a source-data-loaded event.
@@ -384,7 +382,7 @@ enum SourceDataType {
   METADATA,
 
   /// The source data loaded event is associated with source tile.
-  TILE
+  TILE,
 }
 
 /// Defines the tile id in a source-data-loaded event.
@@ -399,9 +397,9 @@ class TileID {
   final int y;
 
   TileID.fromJson(Map<String, dynamic> json)
-      : x = json['x'],
-        y = json['y'],
-        z = json['z'];
+    : x = json['x'],
+      y = json['y'],
+      z = json['z'];
 
   dynamic toMap() => <String, dynamic>{'x': x, 'y': y, 'z': z};
 }
@@ -415,8 +413,8 @@ class Error {
   final String message;
 
   Error.fromJson(Map<String, dynamic> json)
-      : reason = ResponseErrorReason.values[json['reason']],
-        message = json['message'];
+    : reason = ResponseErrorReason.values[json['reason']],
+      message = json['message'];
 }
 
 /// The response data class that included in EventData
@@ -449,19 +447,19 @@ class Response {
   final Error? error;
 
   Response.fromJson(Map<String, dynamic> json)
-      : eTag = json['etag'],
-        mustRevalidate = json['mustRevalidate'],
-        noContent = json['noContent'],
-        modified = json['modified'] != null
-            ? DateTime.fromMicrosecondsSinceEpoch(json['modified'])
-            : null,
-        source = ResponseSourceType.values[json['source']],
-        notModified = json['notModified'],
-        expires = json['expires'] != null
-            ? DateTime.fromMicrosecondsSinceEpoch(json['expires'])
-            : null,
-        size = json['size'],
-        error = json['error'] != null ? Error.fromJson(json['error']) : null;
+    : eTag = json['etag'],
+      mustRevalidate = json['mustRevalidate'],
+      noContent = json['noContent'],
+      modified = json['modified'] != null
+          ? DateTime.fromMicrosecondsSinceEpoch(json['modified'])
+          : null,
+      source = ResponseSourceType.values[json['source']],
+      notModified = json['notModified'],
+      expires = json['expires'] != null
+          ? DateTime.fromMicrosecondsSinceEpoch(json['expires'])
+          : null,
+      size = json['size'],
+      error = json['error'] != null ? Error.fromJson(json['error']) : null;
 }
 
 /// Describes source data type for response in resource-request event.
@@ -486,7 +484,7 @@ enum RequestLoadingMethodType {
   NETWORK,
 
   /// The engine should try loading a resource from the cache.
-  CACHE
+  CACHE,
 }
 
 /// The request data class that included in EventData
@@ -504,14 +502,14 @@ class Request {
   final RequestPriority priority;
 
   Request.fromJson(Map<String, dynamic> json)
-      : loadingMethod = json['loadingMethod']
-            .cast<int>()
-            .map((e) => RequestLoadingMethodType.values[e])
-            .toList()
-            .cast<RequestLoadingMethodType>(),
-        url = json['url'],
-        kind = RequestType.values[json['resource']],
-        priority = RequestPriority.values[json['priority']];
+    : loadingMethod = json['loadingMethod']
+          .cast<int>()
+          .map((e) => RequestLoadingMethodType.values[e])
+          .toList()
+          .cast<RequestLoadingMethodType>(),
+      url = json['url'],
+      kind = RequestType.values[json['resource']],
+      priority = RequestPriority.values[json['priority']];
 }
 
 /// Describes type for request object.
@@ -542,7 +540,7 @@ enum RequestType {
   IMAGE,
 
   /// The resource type is a 3D model.
-  MODEL
+  MODEL,
 }
 
 /// Describes priority for request object.
@@ -552,5 +550,5 @@ enum RequestPriority {
   REGULAR,
 
   /// low priority.
-  LOW
+  LOW,
 }

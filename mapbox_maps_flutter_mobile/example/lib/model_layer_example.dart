@@ -1,7 +1,9 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class ModelLayerExample extends StatefulWidget implements Example {
@@ -26,14 +28,16 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
   @override
   Widget build(BuildContext context) {
     return MapWidget(
-        cameraOptions: CameraOptions(
-            center: Point(coordinates: centerPosition),
-            zoom: 17,
-            bearing: 15,
-            pitch: 55),
-        key: const ValueKey<String>('mapWidget'),
-        onMapCreated: _onMapCreated,
-        onStyleLoadedListener: _onStyleLoaded);
+      cameraOptions: CameraOptions(
+        center: Point(coordinates: centerPosition),
+        zoom: 17,
+        bearing: 15,
+        pitch: 55,
+      ),
+      key: const ValueKey<String>('mapWidget'),
+      onMapCreated: _onMapCreated,
+      onStyleLoadedListener: _onStyleLoaded,
+    );
   }
 
   _onMapCreated(MapboxMap mapboxMap) async {
@@ -62,14 +66,18 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
     // 2.) Add the two geojson sources to provide coordinates for the models
     var buggyModelLocation = Point(coordinates: buggyModelPosition);
     var carModelLocation = Point(coordinates: carModelPosition);
-    await mapboxMap?.style.addSource(GeoJsonSource(
-        id: "buggySourceId", data: json.encode(buggyModelLocation)));
     await mapboxMap?.style.addSource(
-        GeoJsonSource(id: "carSourceId", data: json.encode(carModelLocation)));
+      GeoJsonSource(id: "buggySourceId", data: json.encode(buggyModelLocation)),
+    );
+    await mapboxMap?.style.addSource(
+      GeoJsonSource(id: "carSourceId", data: json.encode(carModelLocation)),
+    );
 
     // 3.) Add the two model layers to the map, specifying the model id and geojson source id
-    var buggyModelLayer =
-        ModelLayer(id: "modelLayer-buggy", sourceId: "buggySourceId");
+    var buggyModelLayer = ModelLayer(
+      id: "modelLayer-buggy",
+      sourceId: "buggySourceId",
+    );
     buggyModelLayer.modelId = buggyModelId;
     buggyModelLayer.modelScale = [0.25, 0.25, 0.25];
     buggyModelLayer.modelRotation = [0, 0, 90];

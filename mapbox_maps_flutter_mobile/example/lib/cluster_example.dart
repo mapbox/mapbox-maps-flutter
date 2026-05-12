@@ -1,6 +1,8 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class StyleClustersExample extends StatefulWidget implements Example {
@@ -22,14 +24,15 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.setCamera(CameraOptions(
+    mapboxMap.setCamera(
+      CameraOptions(
         center: Point(
-            coordinates: Position(
-          -103.94925008414447,
-          10.867890040082585,
-        )),
+          coordinates: Position(-103.94925008414447, 10.867890040082585),
+        ),
         zoom: 1,
-        pitch: 0));
+        pitch: 0,
+      ),
+    );
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) async {
@@ -49,8 +52,9 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
   void _addLayerAndSource() async {
     mapboxMap?.style.styleSourceExists("earthquakes").then((value) async {
       if (!value) {
-        var source =
-            await rootBundle.loadString('assets/cluster/cluster_source.json');
+        var source = await rootBundle.loadString(
+          'assets/cluster/cluster_source.json',
+        );
         mapboxMap?.style.addStyleSource("earthquakes", source);
       }
     });
@@ -62,16 +66,19 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
         //   * Blue, 20px circles when point count is less than 100
         //   * Yellow, 30px circles when point count is between 100 and 750
         //   * Pink, 40px circles when point count is greater than or equal to 750
-        var layer =
-            await rootBundle.loadString('assets/cluster/cluster_layer.json');
+        var layer = await rootBundle.loadString(
+          'assets/cluster/cluster_layer.json',
+        );
         mapboxMap?.style.addStyleLayer(layer, null);
 
-        var clusterCountLayer = await rootBundle
-            .loadString('assets/cluster/cluster_count_layer.json');
+        var clusterCountLayer = await rootBundle.loadString(
+          'assets/cluster/cluster_count_layer.json',
+        );
         mapboxMap?.style.addStyleLayer(clusterCountLayer, null);
 
-        var unclusteredLayer = await rootBundle
-            .loadString('assets/cluster/unclustered_point_layer.json');
+        var unclusteredLayer = await rootBundle.loadString(
+          'assets/cluster/unclustered_point_layer.json',
+        );
         mapboxMap?.style.addStyleLayer(unclusteredLayer, null);
       }
     });
@@ -82,19 +89,26 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
       child: Text('queryRenderedFeatures'),
       onPressed: () {
         final screenBox = ScreenBox(
-            min: ScreenCoordinate(x: 0.0, y: 0.0),
-            max: ScreenCoordinate(x: 150.0, y: 510.0));
-        final renderedQueryGeometry =
-            RenderedQueryGeometry.fromScreenBox(screenBox);
+          min: ScreenCoordinate(x: 0.0, y: 0.0),
+          max: ScreenCoordinate(x: 150.0, y: 510.0),
+        );
+        final renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(
+          screenBox,
+        );
         mapboxMap
-            ?.queryRenderedFeatures(renderedQueryGeometry,
-                RenderedQueryOptions(layerIds: ['clusters'], filter: null))
-            .then((value) =>
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            ?.queryRenderedFeatures(
+              renderedQueryGeometry,
+              RenderedQueryOptions(layerIds: ['clusters'], filter: null),
+            )
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text('queryRenderedFeatures size: ${value.length}'),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -105,13 +119,13 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
       "point_count_abbreviated": "10",
       "cluster_id": 1249,
       "cluster": true,
-      "point_count": 10
+      "point_count": 10,
     },
     "geometry": {
       "type": "Point",
-      "coordinates": [-29.794921875, 59.220934076150456]
+      "coordinates": [-29.794921875, 59.220934076150456],
     },
-    "type": "Feature"
+    "type": "Feature",
   };
 
   Widget _getGeoJsonClusterLeaves() {
@@ -121,12 +135,16 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
         mapboxMap
             ?.getGeoJsonClusterLeaves('earthquakes', feature, null, null)
             .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'Value: ${value.value}, feature collection size: ${value.featureCollection?.length}'),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      duration: Duration(seconds: 2),
-                    )));
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Value: ${value.value}, feature collection size: ${value.featureCollection?.length}',
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 2),
+                ),
+              ),
+            );
       },
     );
   }
@@ -135,13 +153,19 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
     return TextButton(
       child: Text('getGeoJsonClusterChildren'),
       onPressed: () {
-        mapboxMap?.getGeoJsonClusterChildren('earthquakes', feature).then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap
+            ?.getGeoJsonClusterChildren('earthquakes', feature)
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text(
-                      'Value: ${value.value}, feature collection size: ${value.featureCollection?.length}'),
+                    'Value: ${value.value}, feature collection size: ${value.featureCollection?.length}',
+                  ),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -150,13 +174,19 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
     return TextButton(
       child: Text('getGeoJsonClusterExpansionZoom'),
       onPressed: () {
-        mapboxMap?.getGeoJsonClusterExpansionZoom('earthquakes', feature).then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        mapboxMap
+            ?.getGeoJsonClusterExpansionZoom('earthquakes', feature)
+            .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content: Text(
-                      'Value: ${value.value}, feature collection size: ${value.featureCollection?.length}'),
+                    'Value: ${value.value}, feature collection size: ${value.featureCollection?.length}',
+                  ),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
-                )));
+                ),
+              ),
+            );
       },
     );
   }
@@ -164,35 +194,31 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        onMapCreated: _onMapCreated,
-        onStyleLoadedListener: _onStyleLoadedCallback);
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+      onStyleLoadedListener: _onStyleLoadedCallback,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _queryRenderedFeatures(),
-        _getGeoJsonClusterLeaves(),
-        _getGeoJsonClusterChildren(),
-        _getGeoJsonClusterExpansionZoom()
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _queryRenderedFeatures(),
+      _getGeoJsonClusterLeaves(),
+      _getGeoJsonClusterChildren(),
+      _getGeoJsonClusterExpansionZoom(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

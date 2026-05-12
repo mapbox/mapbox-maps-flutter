@@ -10,10 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
-import 'package:turf/turf.dart' as turf;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-
-export 'package:turf/helpers.dart';
+import 'package:turf/turf.dart' as turf;
 
 part 'src/annotation/circle_annotation_manager.dart';
 part 'src/annotation/point_annotation_manager.dart';
@@ -68,7 +66,6 @@ part 'src/style/interactive_features/standard_poi.dart';
 part 'src/location_settings.dart';
 part 'src/snapshotter/snapshotter.dart';
 part 'src/log_configuration.dart';
-part 'src/turf_adapters.dart';
 part 'src/extensions.dart';
 part 'src/map_events.dart';
 part 'src/offline/offline_messenger.dart';
@@ -93,4 +90,5 @@ part 'src/http/http_service.dart';
 part 'src/cancelable.dart';
 part 'src/deprecated.dart';
 
+part 'src/turf_adapters.dart';
 part 'src/mapbox_maps_flutter_mobile.dart';

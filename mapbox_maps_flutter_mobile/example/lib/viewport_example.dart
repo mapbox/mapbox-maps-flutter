@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class ViewportExample extends StatefulWidget implements Example {
@@ -45,7 +47,8 @@ class _ViewportExampleState extends State<ViewportExample> {
             ),
             completion: (result) {
               print(
-                  'Animation complete with $result, currentCity ${currentCity.name}');
+                'Animation complete with $result, currentCity ${currentCity.name}',
+              );
               setState(() => _flying--);
             },
           );
@@ -57,9 +60,10 @@ class _ViewportExampleState extends State<ViewportExample> {
       body: MapWidget(
         key: ValueKey("mapWidget"),
         viewport: OverviewViewportState(
-            geometry: currentCity.bounds,
-            bearing: currentCity.bearing,
-            pitch: 60),
+          geometry: currentCity.bounds,
+          bearing: currentCity.bearing,
+          pitch: 60,
+        ),
       ),
     );
   }
@@ -73,30 +77,36 @@ final class City {
   const City(this.name, this.bounds, this.bearing, this.animationDuration);
 }
 
-final Polygon stockholm = Polygon.fromPoints(points: [
-  [
-    Point(coordinates: Position(17.773725938954442, 59.427645823035704)),
-    Point(coordinates: Position(17.773725938954442, 59.207635921479124)),
-    Point(coordinates: Position(18.3063918953996, 59.207635921479124)),
-    Point(coordinates: Position(18.3063918953996, 59.427645823035704)),
-    Point(coordinates: Position(17.773725938954442, 59.427645823035704)),
-  ]
-]);
-final Polygon tallinn = Polygon.fromPoints(points: [
-  [
-    Point(coordinates: Position(24.569541031443407, 59.44873684041832)),
-    Point(coordinates: Position(24.569541031443407, 59.33393207444456)),
-    Point(coordinates: Position(24.948704180931742, 59.33393207444456)),
-    Point(coordinates: Position(24.948704180931742, 59.44873684041832)),
-    Point(coordinates: Position(24.569541031443407, 59.44873684041832)),
-  ]
-]);
-final Polygon helsinki = Polygon.fromPoints(points: [
-  [
-    Point(coordinates: Position(24.7457836509098, 60.26117083900044)),
-    Point(coordinates: Position(24.7457836509098, 60.1615202856936)),
-    Point(coordinates: Position(25.111325674190937, 60.1615202856936)),
-    Point(coordinates: Position(25.111325674190937, 60.26117083900044)),
-    Point(coordinates: Position(24.7457836509098, 60.26117083900044)),
-  ]
-]);
+final Polygon stockholm = Polygon.fromPoints(
+  points: [
+    [
+      Point(coordinates: Position(17.773725938954442, 59.427645823035704)),
+      Point(coordinates: Position(17.773725938954442, 59.207635921479124)),
+      Point(coordinates: Position(18.3063918953996, 59.207635921479124)),
+      Point(coordinates: Position(18.3063918953996, 59.427645823035704)),
+      Point(coordinates: Position(17.773725938954442, 59.427645823035704)),
+    ],
+  ],
+);
+final Polygon tallinn = Polygon.fromPoints(
+  points: [
+    [
+      Point(coordinates: Position(24.569541031443407, 59.44873684041832)),
+      Point(coordinates: Position(24.569541031443407, 59.33393207444456)),
+      Point(coordinates: Position(24.948704180931742, 59.33393207444456)),
+      Point(coordinates: Position(24.948704180931742, 59.44873684041832)),
+      Point(coordinates: Position(24.569541031443407, 59.44873684041832)),
+    ],
+  ],
+);
+final Polygon helsinki = Polygon.fromPoints(
+  points: [
+    [
+      Point(coordinates: Position(24.7457836509098, 60.26117083900044)),
+      Point(coordinates: Position(24.7457836509098, 60.1615202856936)),
+      Point(coordinates: Position(25.111325674190937, 60.1615202856936)),
+      Point(coordinates: Position(25.111325674190937, 60.26117083900044)),
+      Point(coordinates: Position(24.7457836509098, 60.26117083900044)),
+    ],
+  ],
+);

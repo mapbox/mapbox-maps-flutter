@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+
 import '../../empty_map_widget.dart' as app;
 
 void main() {
@@ -13,24 +14,28 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.style.addSource(GeoJsonSource(
+    await mapboxMap.style.addSource(
+      GeoJsonSource(
         id: "source",
-        data:
-            "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"));
+        data: "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+      ),
+    );
 
-    await mapboxMap.style.addLayer(HeatmapLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      heatmapColor: Colors.red.value,
-      heatmapIntensity: 1.0,
-      heatmapOpacity: 1.0,
-      heatmapRadius: 1.0,
-      heatmapWeight: 1.0,
-    ));
+    await mapboxMap.style.addLayer(
+      HeatmapLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        heatmapColor: Colors.red.value,
+        heatmapIntensity: 1.0,
+        heatmapOpacity: 1.0,
+        heatmapRadius: 1.0,
+        heatmapWeight: 1.0,
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as HeatmapLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -49,29 +54,33 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.style.addSource(GeoJsonSource(
+    await mapboxMap.style.addSource(
+      GeoJsonSource(
         id: "source",
-        data:
-            "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"));
+        data: "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+      ),
+    );
 
-    await mapboxMap.style.addLayer(HeatmapLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibilityExpression: ['string', 'none'],
-      filter: [
-        "==",
-        ["get", "type"],
-        "Feature"
-      ],
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      slot: LayerSlot.BOTTOM,
-      heatmapColorExpression: ['rgba', 255, 0, 0, 1],
-      heatmapIntensityExpression: ['number', 1.0],
-      heatmapOpacityExpression: ['number', 1.0],
-      heatmapRadiusExpression: ['number', 1.0],
-      heatmapWeightExpression: ['number', 1.0],
-    ));
+    await mapboxMap.style.addLayer(
+      HeatmapLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibilityExpression: ['string', 'none'],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        heatmapColorExpression: ['rgba', 255, 0, 0, 1],
+        heatmapIntensityExpression: ['number', 1.0],
+        heatmapOpacityExpression: ['number', 1.0],
+        heatmapRadiusExpression: ['number', 1.0],
+        heatmapWeightExpression: ['number', 1.0],
+      ),
+    );
     var layer = await mapboxMap.style.getLayer('layer') as HeatmapLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -81,7 +90,7 @@ void main() {
     expect(layer.filter, [
       "==",
       ["get", "type"],
-      "Feature"
+      "Feature",
     ]);
     expect(layer.heatmapColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.heatmapIntensity, 1.0);
@@ -90,4 +99,5 @@ void main() {
     expect(layer.heatmapWeight, 1.0);
   });
 }
+
 // End of generated file.

@@ -13,18 +13,20 @@ class ClipLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     List<String?>? this.clipLayerScope,
     List<Object>? this.clipLayerScopeExpression,
     List<String?>? this.clipLayerTypes,
     List<Object>? this.clipLayerTypesExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "clip";
@@ -58,8 +60,10 @@ class ClipLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (clipLayerScopeExpression != null) {
@@ -120,22 +124,26 @@ class ClipLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
       clipLayerScope: (map["layout"]["clip-layer-scope"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
-      clipLayerScopeExpression:
-          _optionalCastList(map["layout"]["clip-layer-scope"]),
+      clipLayerScopeExpression: _optionalCastList(
+        map["layout"]["clip-layer-scope"],
+      ),
       clipLayerTypes: (map["layout"]["clip-layer-types"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
-      clipLayerTypesExpression:
-          _optionalCastList(map["layout"]["clip-layer-types"]),
+      clipLayerTypesExpression: _optionalCastList(
+        map["layout"]["clip-layer-types"],
+      ),
     );
   }
 }

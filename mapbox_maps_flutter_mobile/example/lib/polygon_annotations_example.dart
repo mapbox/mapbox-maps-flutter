@@ -1,6 +1,8 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -27,47 +29,63 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.setCamera(CameraOptions(
+    mapboxMap.setCamera(
+      CameraOptions(
         center: Point(coordinates: Position(-3.363937, -10.733102)),
         zoom: 1,
-        pitch: 0));
+        pitch: 0,
+      ),
+    );
     mapboxMap.annotations.createPolygonAnnotationManager().then((value) {
       polygonAnnotationManager = value;
       createOneAnnotation();
       var options = <PolygonAnnotationOptions>[];
       for (var i = 0; i < 2; i++) {
-        options.add(PolygonAnnotationOptions(
+        options.add(
+          PolygonAnnotationOptions(
             geometry: Polygon(coordinates: createRandomPositionsList()),
-            fillColor: createRandomColor()));
+            fillColor: createRandomColor(),
+          ),
+        );
       }
       polygonAnnotationManager?.createMulti(options).then((createdAnnotations) {
-        annotations =
-            createdAnnotations.whereType<PolygonAnnotation>().toList();
+        annotations = createdAnnotations
+            .whereType<PolygonAnnotation>()
+            .toList();
       });
-      polygonAnnotationManager?.tapEvents(onTap: (annotation) {
-        // ignore: avoid_print
-        print("onAnnotationClick, id: ${annotation.id}");
-      });
-      polygonAnnotationManager?.longPressEvents(onLongPress: (annotation) {
-        // ignore: avoid_print
-        print("onAnnotationLongPress, id: ${annotation.id}");
-      });
+      polygonAnnotationManager?.tapEvents(
+        onTap: (annotation) {
+          // ignore: avoid_print
+          print("onAnnotationClick, id: ${annotation.id}");
+        },
+      );
+      polygonAnnotationManager?.longPressEvents(
+        onLongPress: (annotation) {
+          // ignore: avoid_print
+          print("onAnnotationLongPress, id: ${annotation.id}");
+        },
+      );
     });
   }
 
   void createOneAnnotation() {
     polygonAnnotationManager
-        ?.create(PolygonAnnotationOptions(
-            geometry: Polygon(coordinates: [
-              [
-                Position(-3.363937, -10.733102),
-                Position(1.754703, -19.716317),
-                Position(-15.747196, -21.085074),
-                Position(-3.363937, -10.733102)
-              ]
-            ]),
+        ?.create(
+          PolygonAnnotationOptions(
+            geometry: Polygon(
+              coordinates: [
+                [
+                  Position(-3.363937, -10.733102),
+                  Position(1.754703, -19.716317),
+                  Position(-15.747196, -21.085074),
+                  Position(-3.363937, -10.733102),
+                ],
+              ],
+            ),
             fillColor: Colors.red.value,
-            fillOutlineColor: Colors.purple.value))
+            fillOutlineColor: Colors.purple.value,
+          ),
+        )
         .then((value) => polygonAnnotation = value);
   }
 
@@ -88,10 +106,13 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
         if (polygonAnnotation != null) {
           var polygon = polygonAnnotation!.geometry;
           var newPolygon = Polygon(
-              coordinates: polygon.coordinates
-                  .map((e) =>
-                      e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList())
-                  .toList());
+            coordinates: polygon.coordinates
+                .map(
+                  (e) =>
+                      e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList(),
+                )
+                .toList(),
+          );
           polygonAnnotation?.geometry = newPolygon;
           polygonAnnotationManager?.update(polygonAnnotation!);
         }
@@ -133,59 +154,66 @@ class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+      key: ValueKey("mapWidget"),
+      onMapCreated: _onMapCreated,
+    );
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
-    );
+    listViewChildren.addAll(<Widget>[
+      _create(),
+      _update(),
+      _delete(),
+      _deleteAll(),
+    ]);
 
     final colmn = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
 
     return Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  child: Icon(Icons.swap_horiz),
-                  heroTag: null,
-                  onPressed: () {
-                    mapboxMap?.style.setStyleURI(annotationStyles[
-                        ++styleIndex % annotationStyles.length]);
-                  }),
-              SizedBox(height: 10),
-              FloatingActionButton(
-                  child: Icon(Icons.clear),
-                  heroTag: null,
-                  onPressed: () {
-                    if (polygonAnnotationManager != null) {
-                      mapboxMap?.annotations
-                          .removeAnnotationManager(polygonAnnotationManager!);
-                      polygonAnnotationManager = null;
-                    }
-                  }),
-            ],
-          ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              child: Icon(Icons.swap_horiz),
+              heroTag: null,
+              onPressed: () {
+                mapboxMap?.style.setStyleURI(
+                  annotationStyles[++styleIndex % annotationStyles.length],
+                );
+              },
+            ),
+            SizedBox(height: 10),
+            FloatingActionButton(
+              child: Icon(Icons.clear),
+              heroTag: null,
+              onPressed: () {
+                if (polygonAnnotationManager != null) {
+                  mapboxMap?.annotations.removeAnnotationManager(
+                    polygonAnnotationManager!,
+                  );
+                  polygonAnnotationManager = null;
+                }
+              },
+            ),
+          ],
         ),
-        body: colmn);
+      ),
+      body: colmn,
+    );
   }
 }

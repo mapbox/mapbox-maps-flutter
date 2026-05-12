@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -25,10 +27,12 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     // Perform some map operations to record
-    await mapboxMap.setCamera(CameraOptions(
-      center: Point(coordinates: Position(-74.0060, 40.7128)),
-      zoom: 12.0,
-    ));
+    await mapboxMap.setCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(-74.0060, 40.7128)),
+        zoom: 12.0,
+      ),
+    );
     await tester.pumpAndSettle();
 
     // Give the recorder time to capture the camera change
@@ -71,10 +75,12 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     // Perform a camera movement
-    await mapboxMap.setCamera(CameraOptions(
-      center: Point(coordinates: Position(-73.581, 45.4588)),
-      zoom: 10.0,
-    ));
+    await mapboxMap.setCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(-73.581, 45.4588)),
+        zoom: 10.0,
+      ),
+    );
     await tester.pumpAndSettle();
 
     // Give the recorder time to capture the camera change
@@ -115,11 +121,14 @@ void main() {
 
     // Perform multiple camera operations to create a longer recording
     for (int i = 0; i < 5; i++) {
-      await mapboxMap.setCamera(CameraOptions(
-        center: Point(
-            coordinates: Position(-122.4194 + (i * 0.1), 37.7749 + (i * 0.05))),
-        zoom: 11.0 + (i * 0.2),
-      ));
+      await mapboxMap.setCamera(
+        CameraOptions(
+          center: Point(
+            coordinates: Position(-122.4194 + (i * 0.1), 37.7749 + (i * 0.05)),
+          ),
+          zoom: 11.0 + (i * 0.2),
+        ),
+      );
       await tester.pumpAndSettle();
       await Future.delayed(const Duration(milliseconds: 100));
     }
@@ -185,10 +194,9 @@ void main() {
     // Give recording a moment to initialize
     await Future.delayed(const Duration(milliseconds: 100));
 
-    await mapboxMap.setCamera(CameraOptions(
-      center: Point(coordinates: Position(0.0, 0.0)),
-      zoom: 5.0,
-    ));
+    await mapboxMap.setCamera(
+      CameraOptions(center: Point(coordinates: Position(0.0, 0.0)), zoom: 5.0),
+    );
     await tester.pumpAndSettle();
 
     // Give the recorder time to capture the camera change

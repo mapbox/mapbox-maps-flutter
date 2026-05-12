@@ -14,8 +14,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final compass = mapboxMap.compass;
-    final ByteData bytes =
-        await rootBundle.load('assets/symbols/custom-icon.png');
+    final ByteData bytes = await rootBundle.load(
+      'assets/symbols/custom-icon.png',
+    );
     final Uint8List iconData = bytes.buffer.asUint8List();
     var settings = CompassSettings(
       enabled: true,

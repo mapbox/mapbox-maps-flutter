@@ -13,24 +13,27 @@ void main() {
     final mapboxMap = await mapFuture;
     await app.events.onMapLoaded.future;
 
-    await mapboxMap.style.addSource(RasterSource(
-      id: "source",
-      tiles: ["a", "b", "c"],
-      bounds: [0.0, 1.0, 2.0, 3.0],
-      minzoom: 1.0,
-      maxzoom: 1.0,
-      tileSize: 1.0,
-      scheme: Scheme.XYZ,
-      attribution: "abc",
-      volatile: true,
-      prefetchZoomDelta: 1.0,
-      tileCacheBudget:
-          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
-      minimumTileUpdateInterval: 1.0,
-      maxOverscaleFactorForParentTiles: 1.0,
-      tileRequestsDelay: 1.0,
-      tileNetworkRequestsDelay: 1.0,
-    ));
+    await mapboxMap.style.addSource(
+      RasterSource(
+        id: "source",
+        tiles: ["a", "b", "c"],
+        bounds: [0.0, 1.0, 2.0, 3.0],
+        minzoom: 1.0,
+        maxzoom: 1.0,
+        tileSize: 1.0,
+        scheme: Scheme.XYZ,
+        attribution: "abc",
+        volatile: true,
+        prefetchZoomDelta: 1.0,
+        tileCacheBudget: TileCacheBudget.inMegabytes(
+          TileCacheBudgetInMegabytes(size: 3),
+        ),
+        minimumTileUpdateInterval: 1.0,
+        maxOverscaleFactorForParentTiles: 1.0,
+        tileRequestsDelay: 1.0,
+        tileNetworkRequestsDelay: 1.0,
+      ),
+    );
 
     var source = await mapboxMap.style.getSource('source') as RasterSource;
     expect(source.id, 'source');
@@ -62,10 +65,14 @@ void main() {
     expect(prefetchZoomDelta, 1.0);
 
     var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget?.size,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
-    expect(tileCacheBudget?.type,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
+    expect(
+      tileCacheBudget?.size,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+    );
+    expect(
+      tileCacheBudget?.type,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+    );
 
     var minimumTileUpdateInterval = await source.minimumTileUpdateInterval;
     expect(minimumTileUpdateInterval, 1.0);
@@ -81,4 +88,5 @@ void main() {
     expect(tileNetworkRequestsDelay, 1.0);
   });
 }
+
 // End of generated file.

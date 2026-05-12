@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -18,25 +20,23 @@ void main() {
     final mapboxMap = await mapFuture;
 
     var reference = CameraOptions(
-        center: Point(coordinates: Position(1.0, 2.0)),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: null,
-        zoom: 5,
-        bearing: 20,
-        pitch: 30);
-    var camera = await mapboxMap.cameraForCoordinatesPadding([
-      Point(
-          coordinates: Position(
-        1.0,
-        2.0,
-      )),
-      Point(
-          coordinates: Position(
-        3.0,
-        4.0,
-      ))
-    ], reference, MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10,
-        ScreenCoordinate(x: 5, y: 5));
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: null,
+      zoom: 5,
+      bearing: 20,
+      pitch: 30,
+    );
+    var camera = await mapboxMap.cameraForCoordinatesPadding(
+      [
+        Point(coordinates: Position(1.0, 2.0)),
+        Point(coordinates: Position(3.0, 4.0)),
+      ],
+      reference,
+      MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      10,
+      ScreenCoordinate(x: 5, y: 5),
+    );
 
     expect(camera.bearing, 20);
     expect(camera.pitch, closeTo(30, 0.1));
@@ -53,23 +53,17 @@ void main() {
     final mapboxMap = await mapFuture;
 
     var camera = await mapboxMap.cameraForCoordinateBounds(
-        CoordinateBounds(
-            southwest: Point(
-                coordinates: Position(
-              1.0,
-              2.0,
-            )),
-            northeast: Point(
-                coordinates: Position(
-              3.0,
-              4.0,
-            )),
-            infiniteBounds: true),
-        MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        10,
-        20,
-        10,
-        null);
+      CoordinateBounds(
+        southwest: Point(coordinates: Position(1.0, 2.0)),
+        northeast: Point(coordinates: Position(3.0, 4.0)),
+        infiniteBounds: true,
+      ),
+      MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      10,
+      20,
+      10,
+      null,
+    );
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
     expect(camera.zoom, lessThanOrEqualTo(10));
@@ -87,33 +81,24 @@ void main() {
     await app.events.onMapLoaded.future;
 
     var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: ScreenCoordinate(x: 1, y: 1),
+      zoom: 10,
+      bearing: 20,
+      pitch: 30,
+    );
     var camera = await mapboxMap.cameraForCoordinatesCameraOptions(
-        [
-          Point(
-              coordinates: Position(
-            1.0,
-            2.0,
-          )),
-          Point(
-              coordinates: Position(
-            3.0,
-            4.0,
-          ))
-        ],
-        option,
-        ScreenBox(
-            min: ScreenCoordinate(x: 0, y: 0),
-            max: ScreenCoordinate(x: 100, y: 100)));
+      [
+        Point(coordinates: Position(1.0, 2.0)),
+        Point(coordinates: Position(3.0, 4.0)),
+      ],
+      option,
+      ScreenBox(
+        min: ScreenCoordinate(x: 0, y: 0),
+        max: ScreenCoordinate(x: 100, y: 100),
+      ),
+    );
     expect(camera.bearing, 20);
     expect(camera.pitch, 30);
     final position = camera.center;
@@ -132,10 +117,15 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    var camera = await mapboxMap.cameraForGeometry({
-      "type": "Point",
-      "coordinates": [1, 2]
-    }, MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20);
+    var camera = await mapboxMap.cameraForGeometry(
+      {
+        "type": "Point",
+        "coordinates": [1, 2],
+      },
+      MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      10,
+      20,
+    );
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
     // TODO zoom might be different depending whether surface has changed the size
@@ -151,16 +141,13 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: ScreenCoordinate(x: 1, y: 1),
+      zoom: 10,
+      bearing: 20,
+      pitch: 30,
+    );
     var camera = await mapboxMap.coordinateBoundsForCamera(option);
     expect(camera.infiniteBounds, false);
     final northeast = camera.northeast;
@@ -171,22 +158,20 @@ void main() {
     expect((southwest.coordinates.lat as double).round(), 2);
   });
 
-  testWidgets('coordinateBoundsForCameraUnwrapped',
-      (WidgetTester tester) async {
+  testWidgets('coordinateBoundsForCameraUnwrapped', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: ScreenCoordinate(x: 1, y: 1),
+      zoom: 10,
+      bearing: 20,
+      pitch: 30,
+    );
     var camera = await mapboxMap.coordinateBoundsForCameraUnwrapped(option);
     expect(camera.infiniteBounds, false);
     final northeast = camera.northeast;
@@ -202,16 +187,13 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: ScreenCoordinate(x: 1, y: 1),
+      zoom: 10,
+      bearing: 20,
+      pitch: 30,
+    );
     var coordinate = await mapboxMap.coordinateBoundsZoomForCamera(option);
     expect(coordinate.zoom, 10);
     expect(coordinate.bounds.infiniteBounds, false);
@@ -222,24 +204,23 @@ void main() {
     expect((southwest.coordinates.lng as double).round(), 1);
     expect((southwest.coordinates.lat as double).round(), 2);
   });
-  testWidgets('coordinateBoundsZoomForCameraUnwrapped',
-      (WidgetTester tester) async {
+  testWidgets('coordinateBoundsZoomForCameraUnwrapped', (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
-    var coordinate =
-        await mapboxMap.coordinateBoundsZoomForCameraUnwrapped(option);
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: ScreenCoordinate(x: 1, y: 1),
+      zoom: 10,
+      bearing: 20,
+      pitch: 30,
+    );
+    var coordinate = await mapboxMap.coordinateBoundsZoomForCameraUnwrapped(
+      option,
+    );
     expect(coordinate.zoom, 10);
     expect(coordinate.bounds.infiniteBounds, false);
     final northeast = coordinate.bounds.northeast;
@@ -254,11 +235,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    var pixel = await mapboxMap.pixelForCoordinate(Point(
-        coordinates: Position(
-      1.0,
-      2.0,
-    )));
+    var pixel = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(1.0, 2.0)),
+    );
     expect(pixel.x, isNotNull);
     expect(pixel.y, isNotNull);
   });
@@ -268,16 +247,8 @@ void main() {
     final mapboxMap = await mapFuture;
 
     var pixels = await mapboxMap.pixelsForCoordinates([
-      Point(
-          coordinates: Position(
-        1.0,
-        2.0,
-      )),
-      Point(
-          coordinates: Position(
-        2.0,
-        3.0,
-      ))
+      Point(coordinates: Position(1.0, 2.0)),
+      Point(coordinates: Position(2.0, 3.0)),
     ]);
     expect(pixels.length, 2);
     expect(pixels.first!.x, isNotNull);
@@ -291,8 +262,9 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    final point =
-        await mapboxMap.coordinateForPixel(ScreenCoordinate(x: 100, y: 100));
+    final point = await mapboxMap.coordinateForPixel(
+      ScreenCoordinate(x: 100, y: 100),
+    );
     expect(point, isNotNull);
   });
   testWidgets('coordinatesForPixels', (WidgetTester tester) async {
@@ -300,8 +272,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    final coordinates = await mapboxMap.coordinatesForPixels(
-        [ScreenCoordinate(x: 100, y: 100), ScreenCoordinate(x: 200, y: 300)]);
+    final coordinates = await mapboxMap.coordinatesForPixels([
+      ScreenCoordinate(x: 100, y: 100),
+      ScreenCoordinate(x: 200, y: 300),
+    ]);
     expect(coordinates.length, 2);
   });
 
@@ -310,16 +284,13 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
+      center: Point(coordinates: Position(1.0, 2.0)),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: ScreenCoordinate(x: 1, y: 1),
+      zoom: 10,
+      bearing: 20,
+      pitch: 30,
+    );
     await mapboxMap.setCamera(option);
   });
 
@@ -344,23 +315,19 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await mapboxMap.setBounds(CameraBoundsOptions(
+    await mapboxMap.setBounds(
+      CameraBoundsOptions(
         bounds: CoordinateBounds(
-            southwest: Point(
-                coordinates: Position(
-              1.0,
-              2.0,
-            )),
-            northeast: Point(
-                coordinates: Position(
-              3.0,
-              4.0,
-            )),
-            infiniteBounds: true),
+          southwest: Point(coordinates: Position(1.0, 2.0)),
+          northeast: Point(coordinates: Position(3.0, 4.0)),
+          infiniteBounds: true,
+        ),
         maxZoom: 10,
         minZoom: 0,
         maxPitch: 10,
-        minPitch: 0));
+        minPitch: 0,
+      ),
+    );
   });
   testWidgets('getBounds', (WidgetTester tester) async {
     final mapFuture = app.main();

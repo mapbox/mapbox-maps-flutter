@@ -8,7 +8,8 @@ typedef void OnStyleLoadedListener(StyleLoadedEventData styleLoadedEventData);
 
 /// Definition for listener invoked whenever the camera position changes.
 typedef void OnCameraChangeListener(
-    CameraChangedEventData cameraChangedEventData);
+  CameraChangedEventData cameraChangedEventData,
+);
 
 /// Definition for listener invoked whenever the Map has entered the idle state.
 typedef void OnMapIdleListener(MapIdleEventData mapIdleEventData);
@@ -18,38 +19,46 @@ typedef void OnMapLoadedListener(MapLoadedEventData mapLoadedEventData);
 
 /// Definition for listener invoked whenever the map load errors out.
 typedef void OnMapLoadErrorListener(
-    MapLoadingErrorEventData mapLoadingErrorEventData);
+  MapLoadingErrorEventData mapLoadingErrorEventData,
+);
 
 /// Definition for listener invoked whenever the Map started rendering a frame.
 typedef void OnRenderFrameStartedListener(
-    RenderFrameStartedEventData renderFrameStartedEventData);
+  RenderFrameStartedEventData renderFrameStartedEventData,
+);
 
 /// Definition for listener invoked whenever the Map finished rendering a frame.
 typedef void OnRenderFrameFinishedListener(
-    RenderFrameFinishedEventData renderFrameFinishedEventData);
+  RenderFrameFinishedEventData renderFrameFinishedEventData,
+);
 
 /// Definition for listener invoked whenever a source is added.
 typedef void OnSourceAddedListener(SourceAddedEventData sourceAddedEventData);
 
 /// Definition for listener invoked when the requested source data has been loaded.
 typedef void OnSourceDataLoadedListener(
-    SourceDataLoadedEventData sourceDataLoadedEventData);
+  SourceDataLoadedEventData sourceDataLoadedEventData,
+);
 
 /// Definition for listener invoked whenever a source is removed.
 typedef void OnSourceRemovedListener(
-    SourceRemovedEventData sourceRemovedEventData);
+  SourceRemovedEventData sourceRemovedEventData,
+);
 
 /// Definition for listener invoked when the requested style data has been loaded.
 typedef void OnStyleDataLoadedListener(
-    StyleDataLoadedEventData styleDataLoadedEventData);
+  StyleDataLoadedEventData styleDataLoadedEventData,
+);
 
 /// Definition for listener invoked when the style has a missing image.
 typedef void OnStyleImageMissingListener(
-    StyleImageMissingEventData styleImageMissingEventData);
+  StyleImageMissingEventData styleImageMissingEventData,
+);
 
 /// Definition for listener invoked when an image added to the Style is no longer needed.
 typedef void OnStyleImageUnusedListener(
-    StyleImageUnusedEventData styleImageUnusedEventData);
+  StyleImageUnusedEventData styleImageUnusedEventData,
+);
 
 /// Definition for listener invoked when the map makes a resource request.
 typedef void OnResourceRequestListener(ResourceEventData resourceEventData);
@@ -74,15 +83,20 @@ typedef void OnTileRegionLoadProgressListener(TileRegionLoadProgress progress);
 
 // TileRegionEstimate load progress callback.
 typedef void OnTileRegionEstimateProgressListenter(
-    TileRegionEstimateProgress progress);
+  TileRegionEstimateProgress progress,
+);
 
 // General interaction callback called used to communicate across platforms
 typedef void OnInteraction<T extends FeaturesetFeature>(
-    T? feature, MapContentGestureContext context);
+  T? feature,
+  MapContentGestureContext context,
+);
 
 // Interaction callback for a specific featureset which returns a non-optional FeaturesetFeature.
 typedef void OnInteractionFeatureContext<T extends FeaturesetFeature>(
-    T feature, MapContentGestureContext context);
+  T feature,
+  MapContentGestureContext context,
+);
 
 // Interaction callback that just returns the MapContentGestureContext.
 typedef void OnInteractionContext(MapContentGestureContext context);

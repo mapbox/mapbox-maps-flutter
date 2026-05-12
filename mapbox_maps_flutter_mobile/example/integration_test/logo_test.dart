@@ -14,12 +14,13 @@ void main() {
     final mapboxMap = await mapFuture;
     final logo = mapboxMap.logo;
     var settings = LogoSettings(
-        enabled: false,
-        position: OrnamentPosition.BOTTOM_LEFT,
-        marginLeft: 1,
-        marginTop: 2,
-        marginRight: 3,
-        marginBottom: 4);
+      enabled: false,
+      position: OrnamentPosition.BOTTOM_LEFT,
+      marginLeft: 1,
+      marginTop: 2,
+      marginRight: 3,
+      marginBottom: 4,
+    );
     await logo.updateSettings(settings);
     var getSettings = await logo.getSettings();
     expect(getSettings.position, OrnamentPosition.BOTTOM_LEFT);

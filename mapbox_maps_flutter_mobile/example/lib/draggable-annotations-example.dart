@@ -1,7 +1,9 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'utils.dart';
 
@@ -44,17 +46,20 @@ class DraggableAnnotationExampleState
   }
 
   void _addPointAnnotation() async {
-    final pointAnnotationManager =
-        await _mapboxMap.annotations.createPointAnnotationManager();
-    final ByteData bytes =
-        await rootBundle.load('assets/symbols/custom-icon.png');
+    final pointAnnotationManager = await _mapboxMap.annotations
+        .createPointAnnotationManager();
+    final ByteData bytes = await rootBundle.load(
+      'assets/symbols/custom-icon.png',
+    );
     for (int i = 0; i < 100; i++) {
-      pointAnnotationManager.create(PointAnnotationOptions(
-        geometry: createRandomPoint(),
-        image: bytes.buffer.asUint8List(),
-        textField: "point $i",
-        isDraggable: true,
-      ));
+      pointAnnotationManager.create(
+        PointAnnotationOptions(
+          geometry: createRandomPoint(),
+          image: bytes.buffer.asUint8List(),
+          textField: "point $i",
+          isDraggable: true,
+        ),
+      );
     }
     pointAnnotationManager.dragEvents(
       onBegin: (annotation) {
@@ -64,15 +69,17 @@ class DraggableAnnotationExampleState
   }
 
   void _addCircleAnnotation() async {
-    final circleAnnotationManager =
-        await _mapboxMap.annotations.createCircleAnnotationManager();
+    final circleAnnotationManager = await _mapboxMap.annotations
+        .createCircleAnnotationManager();
     for (int i = 0; i < 100; i++) {
-      circleAnnotationManager.create(CircleAnnotationOptions(
-        geometry: createRandomPoint(),
-        circleRadius: 10.0,
-        circleColor: createRandomColor(),
-        isDraggable: true,
-      ));
+      circleAnnotationManager.create(
+        CircleAnnotationOptions(
+          geometry: createRandomPoint(),
+          circleRadius: 10.0,
+          circleColor: createRandomColor(),
+          isDraggable: true,
+        ),
+      );
     }
     circleAnnotationManager.dragEvents(
       onBegin: (annotation) {
@@ -82,18 +89,19 @@ class DraggableAnnotationExampleState
   }
 
   void _addPolylineAnnotation() async {
-    final polylineAnnotationManager =
-        await _mapboxMap.annotations.createPolylineAnnotationManager();
+    final polylineAnnotationManager = await _mapboxMap.annotations
+        .createPolylineAnnotationManager();
     for (int i = 0; i < 100; i++) {
-      polylineAnnotationManager.create(PolylineAnnotationOptions(
-        geometry: LineString.fromPoints(points: [
-          createRandomPoint(),
-          createRandomPoint(),
-        ]),
-        lineWidth: 5.0,
-        lineColor: createRandomColor(),
-        isDraggable: true,
-      ));
+      polylineAnnotationManager.create(
+        PolylineAnnotationOptions(
+          geometry: LineString.fromPoints(
+            points: [createRandomPoint(), createRandomPoint()],
+          ),
+          lineWidth: 5.0,
+          lineColor: createRandomColor(),
+          isDraggable: true,
+        ),
+      );
     }
     polylineAnnotationManager.dragEvents(
       onBegin: (annotation) {
@@ -103,20 +111,25 @@ class DraggableAnnotationExampleState
   }
 
   void _addPolygonAnnotation() async {
-    final polygonAnnotationManager =
-        await _mapboxMap.annotations.createPolygonAnnotationManager();
-    polygonAnnotationManager.create(PolygonAnnotationOptions(
-        geometry: Polygon(coordinates: [
-          [
-            Position(24.941024, 60.173324), // Helsinki
-            Position(13.404954, 52.520008), // Berlin
-            Position(30.523333, 50.450001), // Kyiv
-            Position(24.941024, 60.173324) // Back to Helsinki
-          ]
-        ]),
+    final polygonAnnotationManager = await _mapboxMap.annotations
+        .createPolygonAnnotationManager();
+    polygonAnnotationManager.create(
+      PolygonAnnotationOptions(
+        geometry: Polygon(
+          coordinates: [
+            [
+              Position(24.941024, 60.173324), // Helsinki
+              Position(13.404954, 52.520008), // Berlin
+              Position(30.523333, 50.450001), // Kyiv
+              Position(24.941024, 60.173324), // Back to Helsinki
+            ],
+          ],
+        ),
         fillColor: Colors.blue.value,
         fillOutlineColor: Colors.green.value,
-        isDraggable: true));
+        isDraggable: true,
+      ),
+    );
     polygonAnnotationManager.dragEvents(
       onBegin: (annotation) {
         print("polygon: ${annotation.id} Drag started");

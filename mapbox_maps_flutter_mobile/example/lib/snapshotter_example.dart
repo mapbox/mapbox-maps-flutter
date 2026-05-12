@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
@@ -36,14 +37,21 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
 
     _snapshotter = await Snapshotter.create(
       options: MapSnapshotOptions(
-          size: Size(width: 400, height: 400),
-          pixelRatio: MediaQuery.of(context).devicePixelRatio),
+        size: Size(width: 400, height: 400),
+        pixelRatio: MediaQuery.of(context).devicePixelRatio,
+      ),
     );
     await _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
-    await _snapshotter?.style
-        .setStyleImportConfigProperty("basemap", "theme", "faded");
-    await _snapshotter?.style
-        .setStyleImportConfigProperty("basemap", "lightPreset", "night");
+    await _snapshotter?.style.setStyleImportConfigProperty(
+      "basemap",
+      "theme",
+      "faded",
+    );
+    await _snapshotter?.style.setStyleImportConfigProperty(
+      "basemap",
+      "lightPreset",
+      "night",
+    );
   }
 
   _onMapIdle(MapIdleEventData data) async {
@@ -56,7 +64,8 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
         _snapshotKey.currentContext!.findRenderObject() as RenderBox;
     if (snapshotBox.hasSize) {
       _snapshotter?.setSize(
-          Size(width: snapshotBox.size.width, height: snapshotBox.size.height));
+        Size(width: snapshotBox.size.width, height: snapshotBox.size.height),
+      );
     }
 
     final cameraState = await mapboxMap!.getCameraState();
@@ -84,15 +93,11 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(child: mapWidget),
-          SizedBox(
-            height: 12,
-            child: ColoredBox(
-              color: Colors.amber,
-            ),
-          ),
+          SizedBox(height: 12, child: ColoredBox(color: Colors.amber)),
           Expanded(
-              key: _snapshotKey,
-              child: snapshotImage ?? ColoredBox(color: Colors.grey)),
+            key: _snapshotKey,
+            child: snapshotImage ?? ColoredBox(color: Colors.grey),
+          ),
         ],
       ),
     );

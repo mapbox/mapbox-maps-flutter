@@ -3,14 +3,16 @@ part of mapbox_maps_flutter_mobile;
 
 /// The PolylineAnnotationManager to add/update/delete PolylineAnnotationAnnotations on the map.
 class PolylineAnnotationManager extends BaseAnnotationManager {
-  PolylineAnnotationManager._(
-      {required super.id,
-      required super.messenger,
-      required String channelSuffix})
-      : _annotationMessenger = _PolylineAnnotationMessenger(
-            binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
-        _channelSuffix = channelSuffix,
-        super._();
+  PolylineAnnotationManager._({
+    required super.id,
+    required super.messenger,
+    required String channelSuffix,
+  }) : _annotationMessenger = _PolylineAnnotationMessenger(
+         binaryMessenger: messenger,
+         messageChannelSuffix: channelSuffix,
+       ),
+       _channelSuffix = channelSuffix,
+       super._();
 
   final _PolylineAnnotationMessenger _annotationMessenger;
   final String _channelSuffix;
@@ -18,9 +20,12 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   @Deprecated('Use [tapEvents] instead.')
   void addOnPolylineAnnotationClickListener(
-      OnPolylineAnnotationClickListener listener) {
+    OnPolylineAnnotationClickListener listener,
+  ) {
     OnPolylineAnnotationClickListener._withCancelable(
-        tapEvents(onTap: listener.onPolylineAnnotationClick), _channelSuffix);
+      tapEvents(onTap: listener.onPolylineAnnotationClick),
+      _channelSuffix,
+    );
   }
 
   /// Registers tap event callbacks for the annotations managed by this manager.
@@ -36,10 +41,12 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Registers long press event callbacks for the annotations managed by this manager.
   ///
   /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
-  Cancelable longPressEvents(
-      {required Function(PolylineAnnotation) onLongPress}) {
+  Cancelable longPressEvents({
+    required Function(PolylineAnnotation) onLongPress,
+  }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/long_press")
+          instanceName: "$_channelSuffix/$id/long_press",
+        )
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) => onLongPress(data.annotation))
         .asCancelable();
@@ -73,9 +80,8 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
     Function(PolylineAnnotation)? onEnd,
   }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/drag")
-        .cast<PolylineAnnotationInteractionContext>()
-        .listen((data) {
+      instanceName: "$_channelSuffix/$id/drag",
+    ).cast<PolylineAnnotationInteractionContext>().listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
           onBegin(data.annotation);
@@ -99,8 +105,8 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
 
   /// Create multi annotations with the options.
   Future<List<PolylineAnnotation?>> createMulti(
-          List<PolylineAnnotationOptions> annotations) =>
-      _annotationMessenger.createMulti(id, annotations);
+    List<PolylineAnnotationOptions> annotations,
+  ) => _annotationMessenger.createMulti(id, annotations);
 
   /// Update an added annotation with new properties.
   Future<void> update(PolylineAnnotation annotation) =>
@@ -137,7 +143,9 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration. Default value: 0. Value range: [0, 1]
   Future<void> setLineElevationGroundScale(double lineElevationGroundScale) =>
       _annotationMessenger.setLineElevationGroundScale(
-          id, lineElevationGroundScale);
+        id,
+        lineElevationGroundScale,
+      );
 
   /// Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration. Default value: 0. Value range: [0, 1]
   Future<double?> getLineElevationGroundScale() =>
@@ -145,9 +153,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
 
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   Future<void> setLineElevationReference(
-          LineElevationReference lineElevationReference) =>
-      _annotationMessenger.setLineElevationReference(
-          id, lineElevationReference);
+    LineElevationReference lineElevationReference,
+  ) => _annotationMessenger.setLineElevationReference(
+    id,
+    lineElevationReference,
+  );
 
   /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
   Future<LineElevationReference?> getLineElevationReference() =>
@@ -261,7 +271,9 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<void> setLineDepthOcclusionFactor(double lineDepthOcclusionFactor) =>
       _annotationMessenger.setLineDepthOcclusionFactor(
-          id, lineDepthOcclusionFactor);
+        id,
+        lineDepthOcclusionFactor,
+      );
 
   /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<double?> getLineDepthOcclusionFactor() =>
@@ -321,8 +333,8 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `line-translate`. Default value: "map".
   Future<void> setLineTranslateAnchor(
-          LineTranslateAnchor lineTranslateAnchor) =>
-      _annotationMessenger.setLineTranslateAnchor(id, lineTranslateAnchor);
+    LineTranslateAnchor lineTranslateAnchor,
+  ) => _annotationMessenger.setLineTranslateAnchor(id, lineTranslateAnchor);
 
   /// Controls the frame of reference for `line-translate`. Default value: "map".
   Future<LineTranslateAnchor?> getLineTranslateAnchor() =>
@@ -362,4 +374,5 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Stroke thickness. Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   Future<double?> getLineWidth() => _annotationMessenger.getLineWidth(id);
 }
+
 // End of generated file.

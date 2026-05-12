@@ -111,17 +111,17 @@ extension on ViewportState {
 
 extension on OverviewViewportState {
   _ViewportStateStorage _toStorage() => _ViewportStateStorage(
-        type: _ViewportStateType.overview,
-        options: _OverviewViewportStateOptions(
-          geometry: jsonEncode(geometry),
-          geometryPadding: geometryPadding._toMbxEdgeInsets,
-          bearing: bearing,
-          pitch: pitch,
-          maxZoom: maxZoom,
-          offset: offset?._toScreenCoordinate,
-          animationDurationMs: animationDuration.inMilliseconds,
-        ),
-      );
+    type: _ViewportStateType.overview,
+    options: _OverviewViewportStateOptions(
+      geometry: jsonEncode(geometry),
+      geometryPadding: geometryPadding._toMbxEdgeInsets,
+      bearing: bearing,
+      pitch: pitch,
+      maxZoom: maxZoom,
+      offset: offset?._toScreenCoordinate,
+      animationDurationMs: animationDuration.inMilliseconds,
+    ),
+  );
 }
 
 extension on FollowPuckViewportState {
@@ -142,30 +142,28 @@ extension on FollowPuckViewportState {
 
 extension on StyleDefaultViewportState {
   _ViewportStateStorage _toStorage() => _ViewportStateStorage(
-        type: _ViewportStateType.styleDefault,
-        options: null,
-      );
+    type: _ViewportStateType.styleDefault,
+    options: null,
+  );
 }
 
 extension on CameraViewportState {
   _ViewportStateStorage _toStorage() => _ViewportStateStorage(
-        type: _ViewportStateType.camera,
-        options: CameraOptions(
-          center: center,
-          padding: padding?._toMbxEdgeInsets,
-          anchor: anchor?._toScreenCoordinate,
-          zoom: zoom,
-          bearing: bearing,
-          pitch: pitch,
-        ),
-      );
+    type: _ViewportStateType.camera,
+    options: CameraOptions(
+      center: center,
+      padding: padding?._toMbxEdgeInsets,
+      anchor: anchor?._toScreenCoordinate,
+      zoom: zoom,
+      bearing: bearing,
+      pitch: pitch,
+    ),
+  );
 }
 
 extension on IdleViewportState {
-  _ViewportStateStorage _toStorage() => _ViewportStateStorage(
-        type: _ViewportStateType.idle,
-        options: null,
-      );
+  _ViewportStateStorage _toStorage() =>
+      _ViewportStateStorage(type: _ViewportStateType.idle, options: null);
 }
 
 extension on EdgeInsets {

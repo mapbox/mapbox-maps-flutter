@@ -1,16 +1,13 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 /// Represents the current state of the map recorder.
-enum RecorderState {
-  idle,
-  recording,
-  replaying,
-  replayingPaused,
-}
+enum RecorderState { idle, recording, replaying, replayingPaused }
 
 /// Example demonstrating the MapRecorder functionality.
 ///
@@ -76,9 +73,9 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error starting recording: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error starting recording: $e')));
         setState(() {
           state = RecorderState.idle;
         });
@@ -99,17 +96,18 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text('Recording stopped. ${sequence.length} bytes recorded.'),
+            content: Text(
+              'Recording stopped. ${sequence.length} bytes recorded.',
+            ),
             duration: const Duration(seconds: 2),
           ),
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error stopping recording: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error stopping recording: $e')));
         setState(() {
           state = RecorderState.idle;
         });
@@ -149,9 +147,9 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error during replay: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error during replay: $e')));
         setState(() {
           state = RecorderState.idle;
         });
@@ -176,16 +174,17 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                'Playback ${state == RecorderState.replayingPaused ? "paused" : "resumed"}'),
+              'Playback ${state == RecorderState.replayingPaused ? "paused" : "resumed"}',
+            ),
             duration: const Duration(seconds: 1),
           ),
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error toggling pause: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error toggling pause: $e')));
       }
     }
   }
@@ -263,7 +262,8 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: recordedSequence != null &&
+                        onPressed:
+                            recordedSequence != null &&
                                 state == RecorderState.idle
                             ? _replayRecording
                             : null,
@@ -278,7 +278,8 @@ class MapRecorderExampleState extends State<MapRecorderExample> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: state == RecorderState.replaying ||
+                        onPressed:
+                            state == RecorderState.replaying ||
                                 state == RecorderState.replayingPaused
                             ? _togglePause
                             : null,

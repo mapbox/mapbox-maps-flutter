@@ -13,6 +13,7 @@ class LineLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     LineCap? this.lineCap,
     List<Object>? this.lineCapExpression,
     double? this.lineCrossSlope,
@@ -78,13 +79,14 @@ class LineLayer extends Layer {
     double? this.lineWidth,
     List<Object>? this.lineWidthExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "line";
@@ -366,8 +368,10 @@ class LineLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (lineCapExpression != null) {
@@ -397,8 +401,9 @@ class LineLayer extends Layer {
     }
 
     if (lineElevationReference != null) {
-      layout["line-elevation-reference"] =
-          lineElevationReference?.name.toLowerCase().replaceAll("_", "-");
+      layout["line-elevation-reference"] = lineElevationReference?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
     if (lineJoinExpression != null) {
       layout["line-join"] = lineJoinExpression;
@@ -433,8 +438,10 @@ class LineLayer extends Layer {
     }
 
     if (lineWidthUnit != null) {
-      layout["line-width-unit"] =
-          lineWidthUnit?.name.toLowerCase().replaceAll("_", "-");
+      layout["line-width-unit"] = lineWidthUnit?.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
     if (lineZOffsetExpression != null) {
       layout["line-z-offset"] = lineZOffsetExpression;
@@ -549,8 +556,9 @@ class LineLayer extends Layer {
     if (lineTranslateAnchorExpression != null) {
       paint["line-translate-anchor"] = lineTranslateAnchorExpression;
     } else if (lineTranslateAnchor != null) {
-      paint["line-translate-anchor"] =
-          lineTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+      paint["line-translate-anchor"] = lineTranslateAnchor?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (lineTrimColorExpression != null) {
@@ -620,134 +628,172 @@ class LineLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
       lineCap: map["layout"]["line-cap"] == null
           ? null
-          : LineCap.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["line-cap"])),
+          : LineCap.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["line-cap"]),
+            ),
       lineCapExpression: _optionalCastList(map["layout"]["line-cap"]),
       lineCrossSlope: _optionalCast(map["layout"]["line-cross-slope"]),
-      lineCrossSlopeExpression:
-          _optionalCastList(map["layout"]["line-cross-slope"]),
-      lineElevationGroundScale:
-          _optionalCast(map["layout"]["line-elevation-ground-scale"]),
-      lineElevationGroundScaleExpression:
-          _optionalCastList(map["layout"]["line-elevation-ground-scale"]),
+      lineCrossSlopeExpression: _optionalCastList(
+        map["layout"]["line-cross-slope"],
+      ),
+      lineElevationGroundScale: _optionalCast(
+        map["layout"]["line-elevation-ground-scale"],
+      ),
+      lineElevationGroundScaleExpression: _optionalCastList(
+        map["layout"]["line-elevation-ground-scale"],
+      ),
       lineElevationReference: map["layout"]["line-elevation-reference"] == null
           ? null
-          : LineElevationReference.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["line-elevation-reference"])),
-      lineElevationReferenceExpression:
-          _optionalCastList(map["layout"]["line-elevation-reference"]),
+          : LineElevationReference.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["line-elevation-reference"]),
+            ),
+      lineElevationReferenceExpression: _optionalCastList(
+        map["layout"]["line-elevation-reference"],
+      ),
       lineJoin: map["layout"]["line-join"] == null
           ? null
-          : LineJoin.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["line-join"])),
+          : LineJoin.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["line-join"]),
+            ),
       lineJoinExpression: _optionalCastList(map["layout"]["line-join"]),
       lineMiterLimit: _optionalCast(map["layout"]["line-miter-limit"]),
-      lineMiterLimitExpression:
-          _optionalCastList(map["layout"]["line-miter-limit"]),
+      lineMiterLimitExpression: _optionalCastList(
+        map["layout"]["line-miter-limit"],
+      ),
       lineRoundLimit: _optionalCast(map["layout"]["line-round-limit"]),
-      lineRoundLimitExpression:
-          _optionalCastList(map["layout"]["line-round-limit"]),
+      lineRoundLimitExpression: _optionalCastList(
+        map["layout"]["line-round-limit"],
+      ),
       lineSortKey: _optionalCast(map["layout"]["line-sort-key"]),
       lineSortKeyExpression: _optionalCastList(map["layout"]["line-sort-key"]),
       lineWidthUnit: map["layout"]["line-width-unit"] == null
           ? null
-          : LineWidthUnit.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["line-width-unit"])),
-      lineWidthUnitExpression:
-          _optionalCastList(map["layout"]["line-width-unit"]),
+          : LineWidthUnit.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["line-width-unit"]),
+            ),
+      lineWidthUnitExpression: _optionalCastList(
+        map["layout"]["line-width-unit"],
+      ),
       lineZOffset: _optionalCast(map["layout"]["line-z-offset"]),
       lineZOffsetExpression: _optionalCastList(map["layout"]["line-z-offset"]),
       lineBlur: _optionalCast(map["paint"]["line-blur"]),
       lineBlurExpression: _optionalCastList(map["paint"]["line-blur"]),
-      lineBorderColor:
-          (map["paint"]["line-border-color"] as List?)?.toRGBAInt(),
-      lineBorderColorExpression:
-          _optionalCastList(map["paint"]["line-border-color"]),
+      lineBorderColor: (map["paint"]["line-border-color"] as List?)
+          ?.toRGBAInt(),
+      lineBorderColorExpression: _optionalCastList(
+        map["paint"]["line-border-color"],
+      ),
       lineBorderWidth: _optionalCast(map["paint"]["line-border-width"]),
-      lineBorderWidthExpression:
-          _optionalCastList(map["paint"]["line-border-width"]),
+      lineBorderWidthExpression: _optionalCastList(
+        map["paint"]["line-border-width"],
+      ),
       lineColor: (map["paint"]["line-color"] as List?)?.toRGBAInt(),
       lineColorExpression: _optionalCastList(map["paint"]["line-color"]),
-      lineCutoutFadeWidth:
-          _optionalCast(map["paint"]["line-cutout-fade-width"]),
-      lineCutoutFadeWidthExpression:
-          _optionalCastList(map["paint"]["line-cutout-fade-width"]),
+      lineCutoutFadeWidth: _optionalCast(
+        map["paint"]["line-cutout-fade-width"],
+      ),
+      lineCutoutFadeWidthExpression: _optionalCastList(
+        map["paint"]["line-cutout-fade-width"],
+      ),
       lineCutoutOpacity: _optionalCast(map["paint"]["line-cutout-opacity"]),
-      lineCutoutOpacityExpression:
-          _optionalCastList(map["paint"]["line-cutout-opacity"]),
+      lineCutoutOpacityExpression: _optionalCastList(
+        map["paint"]["line-cutout-opacity"],
+      ),
       lineDasharray: (map["paint"]["line-dasharray"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineDasharrayExpression:
-          _optionalCastList(map["paint"]["line-dasharray"]),
-      lineDepthOcclusionFactor:
-          _optionalCast(map["paint"]["line-depth-occlusion-factor"]),
-      lineDepthOcclusionFactorExpression:
-          _optionalCastList(map["paint"]["line-depth-occlusion-factor"]),
-      lineEmissiveStrength:
-          _optionalCast(map["paint"]["line-emissive-strength"]),
-      lineEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["line-emissive-strength"]),
+      lineDasharrayExpression: _optionalCastList(
+        map["paint"]["line-dasharray"],
+      ),
+      lineDepthOcclusionFactor: _optionalCast(
+        map["paint"]["line-depth-occlusion-factor"],
+      ),
+      lineDepthOcclusionFactorExpression: _optionalCastList(
+        map["paint"]["line-depth-occlusion-factor"],
+      ),
+      lineEmissiveStrength: _optionalCast(
+        map["paint"]["line-emissive-strength"],
+      ),
+      lineEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["line-emissive-strength"],
+      ),
       lineGapWidth: _optionalCast(map["paint"]["line-gap-width"]),
       lineGapWidthExpression: _optionalCastList(map["paint"]["line-gap-width"]),
       lineGradient: (map["paint"]["line-gradient"] as List?)?.toRGBAInt(),
       lineGradientExpression: _optionalCastList(map["paint"]["line-gradient"]),
-      lineOcclusionOpacity:
-          _optionalCast(map["paint"]["line-occlusion-opacity"]),
-      lineOcclusionOpacityExpression:
-          _optionalCastList(map["paint"]["line-occlusion-opacity"]),
+      lineOcclusionOpacity: _optionalCast(
+        map["paint"]["line-occlusion-opacity"],
+      ),
+      lineOcclusionOpacityExpression: _optionalCastList(
+        map["paint"]["line-occlusion-opacity"],
+      ),
       lineOffset: _optionalCast(map["paint"]["line-offset"]),
       lineOffsetExpression: _optionalCastList(map["paint"]["line-offset"]),
       lineOpacity: _optionalCast(map["paint"]["line-opacity"]),
       lineOpacityExpression: _optionalCastList(map["paint"]["line-opacity"]),
       linePattern: _optionalCast(map["paint"]["line-pattern"]),
       linePatternExpression: _optionalCastList(map["paint"]["line-pattern"]),
-      linePatternCrossFade:
-          _optionalCast(map["paint"]["line-pattern-cross-fade"]),
-      linePatternCrossFadeExpression:
-          _optionalCastList(map["paint"]["line-pattern-cross-fade"]),
+      linePatternCrossFade: _optionalCast(
+        map["paint"]["line-pattern-cross-fade"],
+      ),
+      linePatternCrossFadeExpression: _optionalCastList(
+        map["paint"]["line-pattern-cross-fade"],
+      ),
       lineTranslate: (map["paint"]["line-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineTranslateExpression:
-          _optionalCastList(map["paint"]["line-translate"]),
+      lineTranslateExpression: _optionalCastList(
+        map["paint"]["line-translate"],
+      ),
       lineTranslateAnchor: map["paint"]["line-translate-anchor"] == null
           ? null
-          : LineTranslateAnchor.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["line-translate-anchor"])),
-      lineTranslateAnchorExpression:
-          _optionalCastList(map["paint"]["line-translate-anchor"]),
+          : LineTranslateAnchor.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["line-translate-anchor"]),
+            ),
+      lineTranslateAnchorExpression: _optionalCastList(
+        map["paint"]["line-translate-anchor"],
+      ),
       lineTrimColor: (map["paint"]["line-trim-color"] as List?)?.toRGBAInt(),
-      lineTrimColorExpression:
-          _optionalCastList(map["paint"]["line-trim-color"]),
+      lineTrimColorExpression: _optionalCastList(
+        map["paint"]["line-trim-color"],
+      ),
       lineTrimFadeRange: (map["paint"]["line-trim-fade-range"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineTrimFadeRangeExpression:
-          _optionalCastList(map["paint"]["line-trim-fade-range"]),
+      lineTrimFadeRangeExpression: _optionalCastList(
+        map["paint"]["line-trim-fade-range"],
+      ),
       lineTrimOffset: (map["paint"]["line-trim-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineTrimOffsetExpression:
-          _optionalCastList(map["paint"]["line-trim-offset"]),
+      lineTrimOffsetExpression: _optionalCastList(
+        map["paint"]["line-trim-offset"],
+      ),
       lineWidth: _optionalCast(map["paint"]["line-width"]),
       lineWidthExpression: _optionalCastList(map["paint"]["line-width"]),
     );

@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 import 'example.dart';
 
@@ -20,35 +22,51 @@ class VectorTileSourceExampleState extends State<VectorTileSourceExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style
-        .setStyleImportConfigProperty("basemap", "lightPreset", "day");
-    mapboxMap.style
-        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style.setStyleImportConfigProperty(
+      "basemap",
+      "lightPreset",
+      "day",
+    );
+    mapboxMap.style.setStyleImportConfigProperty(
+      "basemap",
+      "theme",
+      "monochrome",
+    );
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) async {
-    await mapboxMap?.style.addSource(VectorSource(
-        id: "terrain-data", url: "mapbox://mapbox.mapbox-terrain-v2"));
-    await mapboxMap?.style.addLayer(LineLayer(
+    await mapboxMap?.style.addSource(
+      VectorSource(
+        id: "terrain-data",
+        url: "mapbox://mapbox.mapbox-terrain-v2",
+      ),
+    );
+    await mapboxMap?.style.addLayer(
+      LineLayer(
         id: "terrain-data",
         sourceId: "terrain-data",
         sourceLayer: "contour",
         lineJoin: LineJoin.ROUND,
         lineCap: LineCap.ROUND,
         lineColor: Colors.red.value,
-        lineWidth: 1.9));
+        lineWidth: 1.9,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapWidget(
-            key: ValueKey("mapWidget"),
-            styleUri: MapboxStyles.STANDARD,
-            cameraOptions: CameraOptions(
-                center: Point(coordinates: Position(-122.447303, 37.753574)),
-                zoom: 13.0),
-            onMapCreated: _onMapCreated,
-            onStyleLoadedListener: _onStyleLoadedCallback));
+      body: MapWidget(
+        key: ValueKey("mapWidget"),
+        styleUri: MapboxStyles.STANDARD,
+        cameraOptions: CameraOptions(
+          center: Point(coordinates: Position(-122.447303, 37.753574)),
+          zoom: 13.0,
+        ),
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoadedCallback,
+      ),
+    );
   }
 }

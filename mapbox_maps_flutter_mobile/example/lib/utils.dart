@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
-import 'package:turf/src/polyline.dart';
+import 'package:turf/turf.dart' show Position, Polyline;
 
 extension City on Point {
   static var helsinki = Point(coordinates: Position(24.945831, 60.192059));
@@ -20,8 +20,10 @@ Point createRandomPoint() {
 
 Position createRandomPosition() {
   var random = Random();
-  return Position(random.nextDouble() * -360.0 + 180.0,
-      random.nextDouble() * -180.0 + 90.0);
+  return Position(
+    random.nextDouble() * -360.0 + 180.0,
+    random.nextDouble() * -180.0 + 90.0,
+  );
 }
 
 List<Position> createRandomPositionList() {
@@ -50,8 +52,11 @@ List<List<Position>> createRandomPositionsList() {
 int createRandomColor() {
   var random = Random();
   return Color.fromARGB(
-          255, random.nextInt(255), random.nextInt(255), random.nextInt(255))
-      .value;
+    255,
+    random.nextInt(255),
+    random.nextInt(255),
+    random.nextInt(255),
+  ).value;
 }
 
 final annotationStyles = [
@@ -59,7 +64,7 @@ final annotationStyles = [
   MapboxStyles.OUTDOORS,
   MapboxStyles.LIGHT,
   MapboxStyles.DARK,
-  MapboxStyles.SATELLITE_STREETS
+  MapboxStyles.SATELLITE_STREETS,
 ];
 
 const MAPBOX_DIRECTIONS_ENDPOINT =
@@ -67,13 +72,16 @@ const MAPBOX_DIRECTIONS_ENDPOINT =
 
 Position createRandomPositionAround(Position myPosition) {
   var random = Random();
-  return Position(myPosition.lng + random.nextDouble() / 10,
-      myPosition.lat + random.nextDouble() / 10);
+  return Position(
+    myPosition.lng + random.nextDouble() / 10,
+    myPosition.lat + random.nextDouble() / 10,
+  );
 }
 
 extension AnnotationCreation on PointAnnotationManager {
   addAnnotation(Uint8List imageData, Point position, {String textField = ""}) {
-    return create(PointAnnotationOptions(
+    return create(
+      PointAnnotationOptions(
         geometry: position,
         textField: textField,
         textOffset: [0.0, -2.0],
@@ -81,7 +89,9 @@ extension AnnotationCreation on PointAnnotationManager {
         iconSize: 1.3,
         iconOffset: [0.0, -5.0],
         symbolSortKey: 10,
-        image: imageData));
+        image: imageData,
+      ),
+    );
   }
 }
 
@@ -104,22 +114,30 @@ extension PuckPosition on StyleManager {
 extension PolylineCreation on PolylineAnnotationManager {
   addAnnotation(List<Position> coordinates) {
     return PolylineAnnotationOptions(
-        geometry: LineString(coordinates: coordinates),
-        lineColor: Colors.red.value,
-        lineWidth: 2);
+      geometry: LineString(coordinates: coordinates),
+      lineColor: Colors.red.value,
+      lineWidth: 2,
+    );
   }
 }
 
 Future<List<Position>> fetchRouteCoordinates(
-    Position start, Position end, String accessToken) async {
+  Position start,
+  Position end,
+  String accessToken,
+) async {
   final response = await fetchDirectionRoute(start, end, accessToken);
   Map<String, dynamic> route = jsonDecode(response.body);
   return Polyline.decode(route['routes'][0]['geometry']);
 }
 
 Future<http.Response> fetchDirectionRoute(
-    Position start, Position end, String accessToken) async {
+  Position start,
+  Position end,
+  String accessToken,
+) async {
   final uri = Uri.parse(
-      "$MAPBOX_DIRECTIONS_ENDPOINT${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&access_token=$accessToken");
+    "$MAPBOX_DIRECTIONS_ENDPOINT${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&access_token=$accessToken",
+  );
   return http.get(uri);
 }

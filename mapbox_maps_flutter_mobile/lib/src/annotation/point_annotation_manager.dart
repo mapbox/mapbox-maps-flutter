@@ -3,14 +3,16 @@ part of mapbox_maps_flutter_mobile;
 
 /// The PointAnnotationManager to add/update/delete PointAnnotationAnnotations on the map.
 class PointAnnotationManager extends BaseAnnotationManager {
-  PointAnnotationManager._(
-      {required super.id,
-      required super.messenger,
-      required String channelSuffix})
-      : _annotationMessenger = _PointAnnotationMessenger(
-            binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
-        _channelSuffix = channelSuffix,
-        super._();
+  PointAnnotationManager._({
+    required super.id,
+    required super.messenger,
+    required String channelSuffix,
+  }) : _annotationMessenger = _PointAnnotationMessenger(
+         binaryMessenger: messenger,
+         messageChannelSuffix: channelSuffix,
+       ),
+       _channelSuffix = channelSuffix,
+       super._();
 
   final _PointAnnotationMessenger _annotationMessenger;
   final String _channelSuffix;
@@ -18,9 +20,12 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   @Deprecated('Use [tapEvents] instead.')
   void addOnPointAnnotationClickListener(
-      OnPointAnnotationClickListener listener) {
+    OnPointAnnotationClickListener listener,
+  ) {
     OnPointAnnotationClickListener._withCancelable(
-        tapEvents(onTap: listener.onPointAnnotationClick), _channelSuffix);
+      tapEvents(onTap: listener.onPointAnnotationClick),
+      _channelSuffix,
+    );
   }
 
   /// Registers tap event callbacks for the annotations managed by this manager.
@@ -38,7 +43,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Note: This event will be triggered simultaneously with the [dragEvents] `onBegin` if the annotation is draggable.
   Cancelable longPressEvents({required Function(PointAnnotation) onLongPress}) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/long_press")
+          instanceName: "$_channelSuffix/$id/long_press",
+        )
         .cast<PointAnnotationInteractionContext>()
         .listen((data) => onLongPress(data.annotation))
         .asCancelable();
@@ -72,9 +78,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
     Function(PointAnnotation)? onEnd,
   }) {
     return _annotationInteractionEvents(
-            instanceName: "$_channelSuffix/$id/drag")
-        .cast<PointAnnotationInteractionContext>()
-        .listen((data) {
+      instanceName: "$_channelSuffix/$id/drag",
+    ).cast<PointAnnotationInteractionContext>().listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
           onBegin(data.annotation);
@@ -98,8 +103,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Create multi annotations with the options.
   Future<List<PointAnnotation?>> createMulti(
-          List<PointAnnotationOptions> annotations) =>
-      _annotationMessenger.createMulti(id, annotations);
+    List<PointAnnotationOptions> annotations,
+  ) => _annotationMessenger.createMulti(id, annotations);
 
   /// Update an added annotation with new properties.
   Future<void> update(PointAnnotation annotation) =>
@@ -193,8 +198,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons. Default value: "auto".
   Future<void> setIconRotationAlignment(
-          IconRotationAlignment iconRotationAlignment) =>
-      _annotationMessenger.setIconRotationAlignment(id, iconRotationAlignment);
+    IconRotationAlignment iconRotationAlignment,
+  ) => _annotationMessenger.setIconRotationAlignment(id, iconRotationAlignment);
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons. Default value: "auto".
   Future<IconRotationAlignment?> getIconRotationAlignment() =>
@@ -244,9 +249,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Selects the base of symbol-elevation. Default value: "ground".
   @experimental
   Future<void> setSymbolElevationReference(
-          SymbolElevationReference symbolElevationReference) =>
-      _annotationMessenger.setSymbolElevationReference(
-          id, symbolElevationReference);
+    SymbolElevationReference symbolElevationReference,
+  ) => _annotationMessenger.setSymbolElevationReference(
+    id,
+    symbolElevationReference,
+  );
 
   /// Selects the base of symbol-elevation. Default value: "ground".
   @experimental
@@ -423,8 +430,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text. Default value: "auto".
   Future<void> setTextRotationAlignment(
-          TextRotationAlignment textRotationAlignment) =>
-      _annotationMessenger.setTextRotationAlignment(id, textRotationAlignment);
+    TextRotationAlignment textRotationAlignment,
+  ) => _annotationMessenger.setTextRotationAlignment(id, textRotationAlignment);
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text. Default value: "auto".
   Future<TextRotationAlignment?> getTextRotationAlignment() =>
@@ -465,7 +472,9 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Increase or reduce the brightness of the symbols. The value is the maximum brightness. Default value: 1. Value range: [0, 1]
   Future<void> setIconColorBrightnessMax(double iconColorBrightnessMax) =>
       _annotationMessenger.setIconColorBrightnessMax(
-          id, iconColorBrightnessMax);
+        id,
+        iconColorBrightnessMax,
+      );
 
   /// Increase or reduce the brightness of the symbols. The value is the maximum brightness. Default value: 1. Value range: [0, 1]
   Future<double?> getIconColorBrightnessMax() =>
@@ -474,7 +483,9 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Increase or reduce the brightness of the symbols. The value is the minimum brightness. Default value: 0. Value range: [0, 1]
   Future<void> setIconColorBrightnessMin(double iconColorBrightnessMin) =>
       _annotationMessenger.setIconColorBrightnessMin(
-          id, iconColorBrightnessMin);
+        id,
+        iconColorBrightnessMin,
+      );
 
   /// Increase or reduce the brightness of the symbols. The value is the minimum brightness. Default value: 0. Value range: [0, 1]
   Future<double?> getIconColorBrightnessMin() =>
@@ -559,8 +570,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
   Future<void> setIconTranslateAnchor(
-          IconTranslateAnchor iconTranslateAnchor) =>
-      _annotationMessenger.setIconTranslateAnchor(id, iconTranslateAnchor);
+    IconTranslateAnchor iconTranslateAnchor,
+  ) => _annotationMessenger.setIconTranslateAnchor(id, iconTranslateAnchor);
 
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
   Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
@@ -568,8 +579,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Specify how opacity in case of being occluded should be applied Default value: "anchor".
   Future<void> setOcclusionOpacityMode(
-          OcclusionOpacityMode occlusionOpacityMode) =>
-      _annotationMessenger.setOcclusionOpacityMode(id, occlusionOpacityMode);
+    OcclusionOpacityMode occlusionOpacityMode,
+  ) => _annotationMessenger.setOcclusionOpacityMode(id, occlusionOpacityMode);
 
   /// Specify how opacity in case of being occluded should be applied Default value: "anchor".
   Future<OcclusionOpacityMode?> getOcclusionOpacityMode() =>
@@ -647,11 +658,12 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `text-translate`. Default value: "map".
   Future<void> setTextTranslateAnchor(
-          TextTranslateAnchor textTranslateAnchor) =>
-      _annotationMessenger.setTextTranslateAnchor(id, textTranslateAnchor);
+    TextTranslateAnchor textTranslateAnchor,
+  ) => _annotationMessenger.setTextTranslateAnchor(id, textTranslateAnchor);
 
   /// Controls the frame of reference for `text-translate`. Default value: "map".
   Future<TextTranslateAnchor?> getTextTranslateAnchor() =>
       _annotationMessenger.getTextTranslateAnchor(id);
 }
+
 // End of generated file.

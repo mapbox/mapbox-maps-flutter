@@ -13,6 +13,7 @@ class ModelLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+
     bool? this.modelAllowDensityReduction,
     List<Object>? this.modelAllowDensityReductionExpression,
     String? this.modelId,
@@ -50,13 +51,14 @@ class ModelLayer extends Layer {
     ModelType? this.modelType,
     List<Object>? this.modelTypeExpression,
   }) : super(
-            id: id,
-            visibility: visibility,
-            visibilityExpression: visibilityExpression,
-            filter: filter,
-            maxZoom: maxZoom,
-            minZoom: minZoom,
-            slot: slot);
+         id: id,
+         visibility: visibility,
+         visibilityExpression: visibilityExpression,
+         filter: filter,
+         maxZoom: maxZoom,
+         minZoom: minZoom,
+         slot: slot,
+       );
 
   @override
   String getType() => "model";
@@ -220,8 +222,10 @@ class ModelLayer extends Layer {
       layout["visibility"] = visibilityExpression!;
     }
     if (visibility != null) {
-      layout["visibility"] =
-          visibility!.name.toLowerCase().replaceAll("_", "-");
+      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (modelAllowDensityReductionExpression != null) {
@@ -237,8 +241,9 @@ class ModelLayer extends Layer {
     }
 
     if (modelId != null) {
-      layout["model-id"] =
-          await MapboxMapsOptions._getFlutterAssetPath(modelId);
+      layout["model-id"] = await MapboxMapsOptions._getFlutterAssetPath(
+        modelId,
+      );
     }
     var paint = {};
     if (modelAmbientOcclusionIntensityExpression != null) {
@@ -276,8 +281,9 @@ class ModelLayer extends Layer {
     if (modelElevationReferenceExpression != null) {
       paint["model-elevation-reference"] = modelElevationReferenceExpression;
     } else if (modelElevationReference != null) {
-      paint["model-elevation-reference"] =
-          modelElevationReference?.name.toLowerCase().replaceAll("_", "-");
+      paint["model-elevation-reference"] = modelElevationReference?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (modelEmissiveStrengthExpression != null) {
@@ -327,8 +333,10 @@ class ModelLayer extends Layer {
     if (modelScaleModeExpression != null) {
       paint["model-scale-mode"] = modelScaleModeExpression;
     } else if (modelScaleMode != null) {
-      paint["model-scale-mode"] =
-          modelScaleMode?.name.toLowerCase().replaceAll("_", "-");
+      paint["model-scale-mode"] = modelScaleMode?.name.toLowerCase().replaceAll(
+        "_",
+        "-",
+      );
     }
 
     if (modelTranslationExpression != null) {
@@ -386,89 +394,116 @@ class ModelLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["layout"]["visibility"])),
+          : Visibility.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["visibility"]),
+            ),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
-      modelAllowDensityReduction:
-          _optionalCast(map["layout"]["model-allow-density-reduction"]),
-      modelAllowDensityReductionExpression:
-          _optionalCastList(map["layout"]["model-allow-density-reduction"]),
+      modelAllowDensityReduction: _optionalCast(
+        map["layout"]["model-allow-density-reduction"],
+      ),
+      modelAllowDensityReductionExpression: _optionalCastList(
+        map["layout"]["model-allow-density-reduction"],
+      ),
       modelId: _optionalCast(map["layout"]["model-id"]),
       modelIdExpression: _optionalCastList(map["layout"]["model-id"]),
-      modelAmbientOcclusionIntensity:
-          _optionalCast(map["paint"]["model-ambient-occlusion-intensity"]),
-      modelAmbientOcclusionIntensityExpression:
-          _optionalCastList(map["paint"]["model-ambient-occlusion-intensity"]),
+      modelAmbientOcclusionIntensity: _optionalCast(
+        map["paint"]["model-ambient-occlusion-intensity"],
+      ),
+      modelAmbientOcclusionIntensityExpression: _optionalCastList(
+        map["paint"]["model-ambient-occlusion-intensity"],
+      ),
       modelCastShadows: _optionalCast(map["paint"]["model-cast-shadows"]),
-      modelCastShadowsExpression:
-          _optionalCastList(map["paint"]["model-cast-shadows"]),
+      modelCastShadowsExpression: _optionalCastList(
+        map["paint"]["model-cast-shadows"],
+      ),
       modelColor: (map["paint"]["model-color"] as List?)?.toRGBAInt(),
       modelColorExpression: _optionalCastList(map["paint"]["model-color"]),
-      modelColorMixIntensity:
-          _optionalCast(map["paint"]["model-color-mix-intensity"]),
-      modelColorMixIntensityExpression:
-          _optionalCastList(map["paint"]["model-color-mix-intensity"]),
-      modelCutoffFadeRange:
-          _optionalCast(map["paint"]["model-cutoff-fade-range"]),
-      modelCutoffFadeRangeExpression:
-          _optionalCastList(map["paint"]["model-cutoff-fade-range"]),
+      modelColorMixIntensity: _optionalCast(
+        map["paint"]["model-color-mix-intensity"],
+      ),
+      modelColorMixIntensityExpression: _optionalCastList(
+        map["paint"]["model-color-mix-intensity"],
+      ),
+      modelCutoffFadeRange: _optionalCast(
+        map["paint"]["model-cutoff-fade-range"],
+      ),
+      modelCutoffFadeRangeExpression: _optionalCastList(
+        map["paint"]["model-cutoff-fade-range"],
+      ),
       modelElevationReference: map["paint"]["model-elevation-reference"] == null
           ? null
-          : ModelElevationReference.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["model-elevation-reference"])),
-      modelElevationReferenceExpression:
-          _optionalCastList(map["paint"]["model-elevation-reference"]),
-      modelEmissiveStrength:
-          _optionalCast(map["paint"]["model-emissive-strength"]),
-      modelEmissiveStrengthExpression:
-          _optionalCastList(map["paint"]["model-emissive-strength"]),
-      modelHeightBasedEmissiveStrengthMultiplier: (map["paint"]
-              ["model-height-based-emissive-strength-multiplier"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
+          : ModelElevationReference.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["model-elevation-reference"]),
+            ),
+      modelElevationReferenceExpression: _optionalCastList(
+        map["paint"]["model-elevation-reference"],
+      ),
+      modelEmissiveStrength: _optionalCast(
+        map["paint"]["model-emissive-strength"],
+      ),
+      modelEmissiveStrengthExpression: _optionalCastList(
+        map["paint"]["model-emissive-strength"],
+      ),
+      modelHeightBasedEmissiveStrengthMultiplier:
+          (map["paint"]["model-height-based-emissive-strength-multiplier"]
+                  as List?)
+              ?.map<double?>((e) => e.toDouble())
+              .toList(),
       modelHeightBasedEmissiveStrengthMultiplierExpression: _optionalCastList(
-          map["paint"]["model-height-based-emissive-strength-multiplier"]),
+        map["paint"]["model-height-based-emissive-strength-multiplier"],
+      ),
       modelOpacity: _optionalCast(map["paint"]["model-opacity"]),
       modelOpacityExpression: _optionalCastList(map["paint"]["model-opacity"]),
       modelReceiveShadows: _optionalCast(map["paint"]["model-receive-shadows"]),
-      modelReceiveShadowsExpression:
-          _optionalCastList(map["paint"]["model-receive-shadows"]),
+      modelReceiveShadowsExpression: _optionalCastList(
+        map["paint"]["model-receive-shadows"],
+      ),
       modelRotation: (map["paint"]["model-rotation"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      modelRotationExpression:
-          _optionalCastList(map["paint"]["model-rotation"]),
+      modelRotationExpression: _optionalCastList(
+        map["paint"]["model-rotation"],
+      ),
       modelRoughness: _optionalCast(map["paint"]["model-roughness"]),
-      modelRoughnessExpression:
-          _optionalCastList(map["paint"]["model-roughness"]),
+      modelRoughnessExpression: _optionalCastList(
+        map["paint"]["model-roughness"],
+      ),
       modelScale: (map["paint"]["model-scale"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       modelScaleExpression: _optionalCastList(map["paint"]["model-scale"]),
       modelScaleMode: map["paint"]["model-scale-mode"] == null
           ? null
-          : ModelScaleMode.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["model-scale-mode"])),
-      modelScaleModeExpression:
-          _optionalCastList(map["paint"]["model-scale-mode"]),
+          : ModelScaleMode.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["model-scale-mode"]),
+            ),
+      modelScaleModeExpression: _optionalCastList(
+        map["paint"]["model-scale-mode"],
+      ),
       modelTranslation: (map["paint"]["model-translation"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      modelTranslationExpression:
-          _optionalCastList(map["paint"]["model-translation"]),
+      modelTranslationExpression: _optionalCastList(
+        map["paint"]["model-translation"],
+      ),
       modelType: map["paint"]["model-type"] == null
           ? null
-          : ModelType.values.firstWhere((e) => e.name
-              .toLowerCase()
-              .replaceAll("_", "-")
-              .contains(map["paint"]["model-type"])),
+          : ModelType.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["model-type"]),
+            ),
       modelTypeExpression: _optionalCastList(map["paint"]["model-type"]),
     );
   }

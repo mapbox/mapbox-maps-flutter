@@ -1,9 +1,11 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 
 class SpinningGlobeExample extends StatefulWidget implements Example {
   @override
@@ -42,28 +44,30 @@ class SpinningGlobeExampleState extends State<SpinningGlobeExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: MapWidget(
-            onMapCreated: _onMapCreated,
-            onStyleLoadedListener: _onStyleLoaded,
-            onCameraChangeListener: (data) {
-              _spinGlobe(data.cameraState);
-            }),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 24),
-          child: FloatingActionButton(
-            onPressed: () async {
-              setState(() {
-                isSpinning = !isSpinning;
-                if (!isSpinning) {
-                  subscription.pause();
-                } else {
-                  subscription.resume();
-                }
-              });
-            },
-            child: Icon(isSpinning ? Icons.pause : Icons.play_arrow),
-          ),
-        ));
+      body: MapWidget(
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoaded,
+        onCameraChangeListener: (data) {
+          _spinGlobe(data.cameraState);
+        },
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: FloatingActionButton(
+          onPressed: () async {
+            setState(() {
+              isSpinning = !isSpinning;
+              if (!isSpinning) {
+                subscription.pause();
+              } else {
+                subscription.resume();
+              }
+            });
+          },
+          child: Icon(isSpinning ? Icons.pause : Icons.play_arrow),
+        ),
+      ),
+    );
   }
 
   void _spinGlobe(CameraState camera) {
@@ -74,15 +78,18 @@ class SpinningGlobeExampleState extends State<SpinningGlobeExample> {
     // Above zoom level 5, do not rotate.
     if (camera.zoom < maxSpinZoom && !cameras.isClosed || !cameras.isPaused) {
       // Rotate at intermediate speeds between zoom levels 3 and 5.
-      final speedFactor = (maxSpinZoom - max(slowSpinZoom, camera.zoom)) /
+      final speedFactor =
+          (maxSpinZoom - max(slowSpinZoom, camera.zoom)) /
           (maxSpinZoom - slowSpinZoom);
       final distancePerSecond = speedFactor * 360.0 / secondsPerRev;
 
       final newCamera = CameraOptions(
         center: Point(
-            coordinates: Position(
-                camera.center.coordinates.lng - distancePerSecond,
-                camera.center.coordinates.lat)),
+          coordinates: Position(
+            camera.center.coordinates.lng - distancePerSecond,
+            camera.center.coordinates.lat,
+          ),
+        ),
       );
 
       cameras.add(newCamera);

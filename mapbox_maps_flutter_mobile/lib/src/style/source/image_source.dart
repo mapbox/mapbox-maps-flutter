@@ -37,8 +37,11 @@ class ImageSource extends Source {
   Future<List<List<double?>?>?> get coordinates async {
     return _style?.getStyleSourceProperty(id, "coordinates").then((value) {
       if (value.value != null) {
-        return List<List<double>>.from((value.value as List<dynamic>)
-            .map((e) => List<double>.from(e as List<dynamic>)));
+        return List<List<double>>.from(
+          (value.value as List<dynamic>).map(
+            (e) => List<double>.from(e as List<dynamic>),
+          ),
+        );
       } else {
         return null;
       }
@@ -50,9 +53,9 @@ class ImageSource extends Source {
   /// When loading a map, if PrefetchZoomDelta is set to any number greater than 0, the map will first request a tile at zoom level lower than zoom - delta, but so that the zoom level is multiple of delta, in an attempt to display a full map at lower resolution as quick as possible. It will get clamped at the tile source minimum zoom.
   /// Default value: 4.
   Future<double?> get prefetchZoomDelta async {
-    return _style
-        ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "prefetch-zoom-delta").then((
+      value,
+    ) {
       if (value.value != null) {
         return (value.value as num).toDouble();
       } else {

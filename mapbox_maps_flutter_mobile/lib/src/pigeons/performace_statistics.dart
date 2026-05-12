@@ -34,10 +34,7 @@ class PerformanceStatisticsOptions {
   double samplingDurationMillis;
 
   List<Object?> _toList() {
-    return <Object?>[
-      samplerOptions,
-      samplingDurationMillis,
-    ];
+    return <Object?>[samplerOptions, samplingDurationMillis];
   }
 
   Object encode() {
@@ -47,8 +44,8 @@ class PerformanceStatisticsOptions {
   static PerformanceStatisticsOptions decode(Object result) {
     result as List<Object?>;
     return PerformanceStatisticsOptions(
-      samplerOptions:
-          (result[0] as List<Object?>?)!.cast<PerformanceSamplerOptions>(),
+      samplerOptions: (result[0] as List<Object?>?)!
+          .cast<PerformanceSamplerOptions>(),
       samplingDurationMillis: result[1]! as double,
     );
   }
@@ -73,10 +70,7 @@ class PerformanceStatisticsOptions {
 }
 
 class DurationStatistics {
-  DurationStatistics({
-    required this.maxMillis,
-    required this.medianMillis,
-  });
+  DurationStatistics({required this.maxMillis, required this.medianMillis});
 
   /// The largest measured duration over the sampling window.
   double maxMillis;
@@ -85,10 +79,7 @@ class DurationStatistics {
   double medianMillis;
 
   List<Object?> _toList() {
-    return <Object?>[
-      maxMillis,
-      medianMillis,
-    ];
+    return <Object?>[maxMillis, medianMillis];
   }
 
   Object encode() {
@@ -212,10 +203,7 @@ class GroupPerformanceStatistics {
   String name;
 
   List<Object?> _toList() {
-    return <Object?>[
-      durationMillis,
-      name,
-    ];
+    return <Object?>[durationMillis, name];
   }
 
   Object encode() {
@@ -284,10 +272,10 @@ class PerFrameRenderingStatistics {
   static PerFrameRenderingStatistics decode(Object result) {
     result as List<Object?>;
     return PerFrameRenderingStatistics(
-      topRenderGroups:
-          (result[0] as List<Object?>?)!.cast<GroupPerformanceStatistics>(),
-      topRenderLayers:
-          (result[1] as List<Object?>?)!.cast<GroupPerformanceStatistics>(),
+      topRenderGroups: (result[0] as List<Object?>?)!
+          .cast<GroupPerformanceStatistics>(),
+      topRenderLayers: (result[1] as List<Object?>?)!
+          .cast<GroupPerformanceStatistics>(),
       shadowMapDurationStatistics: result[2]! as DurationStatistics,
       uploadDurationStatistics: result[3]! as DurationStatistics,
     );
@@ -447,26 +435,31 @@ abstract class PerformanceStatisticsListener {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final PerformanceStatistics? arg_statistics =
               (args[0] as PerformanceStatistics?);
-          assert(arg_statistics != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null, expected non-null PerformanceStatistics.');
+          assert(
+            arg_statistics != null,
+            'Argument for dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected was null, expected non-null PerformanceStatistics.',
+          );
           try {
             api.onPerformanceStatisticsCollected(arg_statistics!);
             return wrapResponse(empty: true);
@@ -474,7 +467,8 @@ abstract class PerformanceStatisticsListener {
             return wrapResponse(error: e);
           } catch (e) {
             return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -486,11 +480,13 @@ class _PerformanceStatisticsApi {
   /// Constructor for [_PerformanceStatisticsApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _PerformanceStatisticsApi(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  _PerformanceStatisticsApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -499,17 +495,19 @@ class _PerformanceStatisticsApi {
   final String pigeonVar_messageChannelSuffix;
 
   Future<void> startPerformanceStatisticsCollection(
-      PerformanceStatisticsOptions options) async {
+    PerformanceStatisticsOptions options,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.startPerformanceStatisticsCollection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
     );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -530,10 +528,10 @@ class _PerformanceStatisticsApi {
         'dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.stopPerformanceStatisticsCollection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

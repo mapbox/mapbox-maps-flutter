@@ -1,3 +1,4 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
@@ -23,27 +24,35 @@ class GesturesExampleState extends State<GesturesExample> {
   MapboxMap? mapboxMap;
 
   _onTap(MapContentGestureContext context) {
-    print("OnTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
-        " state: ${context.gestureState}");
+    print(
+      "OnTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+          " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+          " state: ${context.gestureState}",
+    );
   }
 
   _onLongTap(MapContentGestureContext context) {
-    print("OnLongTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
-        " state: ${context.gestureState}");
+    print(
+      "OnLongTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+          " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+          " state: ${context.gestureState}",
+    );
   }
 
   _onMove(MapContentGestureContext context) {
-    print("OnMove coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
-        " state: ${context.gestureState}");
+    print(
+      "OnMove coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+          " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+          " state: ${context.gestureState}",
+    );
   }
 
   _onZoom(MapContentGestureContext context) {
-    print("OnZoom coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
-        " state: ${context.gestureState}");
+    print(
+      "OnZoom coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+          " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+          " state: ${context.gestureState}",
+    );
   }
 
   _onMapCreated(MapboxMap mapboxMap) {
@@ -65,8 +74,10 @@ class GesturesExampleState extends State<GesturesExample> {
       child: Text('get gesture settings'),
       onPressed: () {
         mapboxMap?.gestures.getSettings().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("""
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                """
                   Gesture settings : 
                     doubleTapToZoomInEnabled : ${value.doubleTapToZoomInEnabled}, 
                     doubleTouchToZoomOutEnabled : ${value.doubleTouchToZoomOutEnabled}
@@ -78,10 +89,13 @@ class GesturesExampleState extends State<GesturesExample> {
                     quickZoomEnabled :  ${value.quickZoomEnabled}
                     rotateEnabled : ${value.rotateEnabled}
                     """
-                      .trim()),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+                    .trim(),
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: Duration(seconds: 2),
+            ),
+          ),
+        );
       },
     );
   }
@@ -90,8 +104,9 @@ class GesturesExampleState extends State<GesturesExample> {
     return TextButton(
       child: Text('disable rotate'),
       onPressed: () {
-        mapboxMap?.gestures
-            .updateSettings(GesturesSettings(rotateEnabled: false));
+        mapboxMap?.gestures.updateSettings(
+          GesturesSettings(rotateEnabled: false),
+        );
       },
     );
   }
@@ -100,8 +115,9 @@ class GesturesExampleState extends State<GesturesExample> {
     return TextButton(
       child: Text('enable rotate'),
       onPressed: () {
-        mapboxMap?.gestures
-            .updateSettings(GesturesSettings(rotateEnabled: true));
+        mapboxMap?.gestures.updateSettings(
+          GesturesSettings(rotateEnabled: true),
+        );
       },
     );
   }
@@ -110,8 +126,9 @@ class GesturesExampleState extends State<GesturesExample> {
     return TextButton(
       child: Text('disable quick zoom'),
       onPressed: () {
-        mapboxMap?.gestures
-            .updateSettings(GesturesSettings(quickZoomEnabled: false));
+        mapboxMap?.gestures.updateSettings(
+          GesturesSettings(quickZoomEnabled: false),
+        );
       },
     );
   }
@@ -120,8 +137,9 @@ class GesturesExampleState extends State<GesturesExample> {
     return TextButton(
       child: Text('enable quick zoom'),
       onPressed: () {
-        mapboxMap?.gestures
-            .updateSettings(GesturesSettings(quickZoomEnabled: true));
+        mapboxMap?.gestures.updateSettings(
+          GesturesSettings(quickZoomEnabled: true),
+        );
       },
     );
   }
@@ -139,30 +157,25 @@ class GesturesExampleState extends State<GesturesExample> {
 
     final List<Widget> listViewChildren = <Widget>[];
 
-    listViewChildren.addAll(
-      <Widget>[
-        _getGestureSettings(),
-        _disableRotate(),
-        _enableRotate(),
-        _disableQuickZoom(),
-        _enableQuickZoom(),
-      ],
-    );
+    listViewChildren.addAll(<Widget>[
+      _getGestureSettings(),
+      _disableRotate(),
+      _enableRotate(),
+      _disableQuickZoom(),
+      _enableQuickZoom(),
+    ]);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 400,
+            child: mapWidget,
           ),
-        )
+        ),
+        Expanded(child: ListView(children: listViewChildren)),
       ],
     );
   }

@@ -37,7 +37,7 @@ extension StandardPlaceLabelsFeature
 /// A featureset of StandardPlaceLabels features.
 class StandardPlaceLabels extends FeaturesetDescriptor {
   StandardPlaceLabels({String importId = "basemap"})
-      : super(featuresetId: "place-labels", importId: importId);
+    : super(featuresetId: "place-labels", importId: importId);
 }
 
 /// Represents available states for StandardPlaceLabels features in the Standard style.
@@ -53,17 +53,9 @@ class StandardPlaceLabelsState extends FeatureState {
 
   @override
   Map<String, Object?> get map {
-    return {
-      "hide": hide,
-      "highlight": highlight,
-      "select": select,
-    };
+    return {"hide": hide, "highlight": highlight, "select": select};
   }
 
   StandardPlaceLabelsState({this.hide, this.highlight, this.select})
-      : super(map: {
-          "hide": hide,
-          "highlight": highlight,
-          "select": select,
-        });
+    : super(map: {"hide": hide, "highlight": highlight, "select": select});
 }

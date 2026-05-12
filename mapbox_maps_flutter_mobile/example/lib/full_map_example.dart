@@ -1,5 +1,7 @@
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:turf/turf.dart' show Position;
 import 'example.dart';
 
 class FullMapExample extends StatefulWidget implements Example {
@@ -20,16 +22,21 @@ class FullMapExampleState extends State<FullMapExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style
-        .setStyleImportConfigProperty("basemap", "theme", "monochrome");
+    mapboxMap.style.setStyleImportConfigProperty(
+      "basemap",
+      "theme",
+      "monochrome",
+    );
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Style loaded :), time: ${data.timeInterval}"),
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 1),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Style loaded :), time: ${data.timeInterval}"),
+        backgroundColor: Theme.of(context).primaryColor,
+        duration: Duration(seconds: 1),
+      ),
+    );
   }
 
   _onCameraChangeListener(CameraChangedEventData data) {
@@ -87,58 +94,63 @@ class FullMapExampleState extends State<FullMapExample> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  child: Icon(Icons.swap_horiz),
-                  heroTag: null,
-                  onPressed: () {
-                    setState(
-                      () => isLight = !isLight,
-                    );
-                    if (isLight) {
-                      mapboxMap?.style.setStyleImportConfigProperty(
-                          "basemap", "lightPreset", "day");
-                    } else {
-                      mapboxMap?.style.setStyleImportConfigProperty(
-                          "basemap", "lightPreset", "night");
-                    }
-                  }),
-              SizedBox(height: 10),
-            ],
-          ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              child: Icon(Icons.swap_horiz),
+              heroTag: null,
+              onPressed: () {
+                setState(() => isLight = !isLight);
+                if (isLight) {
+                  mapboxMap?.style.setStyleImportConfigProperty(
+                    "basemap",
+                    "lightPreset",
+                    "day",
+                  );
+                } else {
+                  mapboxMap?.style.setStyleImportConfigProperty(
+                    "basemap",
+                    "lightPreset",
+                    "night",
+                  );
+                }
+              },
+            ),
+            SizedBox(height: 10),
+          ],
         ),
-        body: MapWidget(
-          key: ValueKey("mapWidget"),
-          cameraOptions: CameraOptions(
-              center: Point(
-                  coordinates: Position(
-                6.0033416748046875,
-                43.70908256335716,
-              )),
-              zoom: 3.0),
-          styleUri: MapboxStyles.STANDARD,
-          textureView: true,
-          onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoadedCallback,
-          onCameraChangeListener: _onCameraChangeListener,
-          onMapIdleListener: _onMapIdleListener,
-          onMapLoadedListener: _onMapLoadedListener,
-          onMapLoadErrorListener: _onMapLoadingErrorListener,
-          onRenderFrameStartedListener: _onRenderFrameStartedListener,
-          onRenderFrameFinishedListener: _onRenderFrameFinishedListener,
-          onSourceAddedListener: _onSourceAddedListener,
-          onSourceDataLoadedListener: _onSourceDataLoadedListener,
-          onSourceRemovedListener: _onSourceRemovedListener,
-          onStyleDataLoadedListener: _onStyleDataLoadedListener,
-          onStyleImageMissingListener: _onStyleImageMissingListener,
-          onStyleImageUnusedListener: _onStyleImageUnusedListener,
-          onResourceRequestListener: _onResourceRequestListener,
-          onLongTapListener: (coordinate) {},
-        ));
+      ),
+      body: MapWidget(
+        key: ValueKey("mapWidget"),
+        cameraOptions: CameraOptions(
+          center: Point(
+            coordinates: Position(6.0033416748046875, 43.70908256335716),
+          ),
+          zoom: 3.0,
+        ),
+        styleUri: MapboxStyles.STANDARD,
+        textureView: true,
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoadedCallback,
+        onCameraChangeListener: _onCameraChangeListener,
+        onMapIdleListener: _onMapIdleListener,
+        onMapLoadedListener: _onMapLoadedListener,
+        onMapLoadErrorListener: _onMapLoadingErrorListener,
+        onRenderFrameStartedListener: _onRenderFrameStartedListener,
+        onRenderFrameFinishedListener: _onRenderFrameFinishedListener,
+        onSourceAddedListener: _onSourceAddedListener,
+        onSourceDataLoadedListener: _onSourceDataLoadedListener,
+        onSourceRemovedListener: _onSourceRemovedListener,
+        onStyleDataLoadedListener: _onStyleDataLoadedListener,
+        onStyleImageMissingListener: _onStyleImageMissingListener,
+        onStyleImageUnusedListener: _onStyleImageUnusedListener,
+        onResourceRequestListener: _onResourceRequestListener,
+        onLongTapListener: (coordinate) {},
+      ),
+    );
   }
 }
 

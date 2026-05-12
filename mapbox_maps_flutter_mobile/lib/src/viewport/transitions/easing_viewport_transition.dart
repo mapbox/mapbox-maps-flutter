@@ -58,7 +58,6 @@ final class EasingViewportTransition extends ViewportTransition {
   /// This constructor sets the [curve] to a linear curve (`Cubic(0, 0, 1, 1)`), resulting in a constant animation speed.
   ///
   /// - [duration]: The duration of the animation.
-  const EasingViewportTransition.linear({
-    required Duration duration,
-  }) : this(curve: const Cubic(0, 0, 1, 1), duration: duration);
+  const EasingViewportTransition.linear({required Duration duration})
+    : this(curve: const Cubic(0, 0, 1, 1), duration: duration);
 }

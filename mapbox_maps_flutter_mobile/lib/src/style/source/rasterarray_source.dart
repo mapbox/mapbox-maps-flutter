@@ -134,7 +134,9 @@ class RasterArraySource extends Source {
       if (value.value != null) {
         return (value.value as Map<Object?, Object?>).entries.map((entry) {
           return RasterDataLayer(
-              entry.key as String, (entry.value as List).cast<String>());
+            entry.key as String,
+            (entry.value as List).cast<String>(),
+          );
         }).toList();
       } else {
         return null;
@@ -160,9 +162,9 @@ class RasterArraySource extends Source {
 
   /// This property defines a source-specific resource budget, either in tile units or in megabytes. Whenever the tile cache goes over the defined limit, the least recently used tile will be evicted from the in-memory cache. Note that the current implementation does not take into account resources allocated by the visible tiles.
   Future<TileCacheBudget?> get tileCacheBudget async {
-    return _style
-        ?.getStyleSourceProperty(id, "tile-cache-budget")
-        .then((value) {
+    return _style?.getStyleSourceProperty(id, "tile-cache-budget").then((
+      value,
+    ) {
       if (value.value != null) {
         return TileCacheBudget.decode(value.value);
       } else {

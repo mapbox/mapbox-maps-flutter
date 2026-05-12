@@ -4,33 +4,39 @@ typedef OnPlatformViewCreatedCallback = void Function(int);
 
 class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
-      'plugins.flutter.io.${channelSuffix.toString()}',
-      const StandardMethodCodec(),
-      binaryMessenger);
+    'plugins.flutter.io.${channelSuffix.toString()}',
+    const StandardMethodCodec(),
+    binaryMessenger,
+  );
   final BinaryMessenger binaryMessenger;
   final int channelSuffix;
 
-  _MapboxMapsPlatform(
-      {required this.binaryMessenger, required this.channelSuffix}) {
+  _MapboxMapsPlatform({
+    required this.binaryMessenger,
+    required this.channelSuffix,
+  }) {
     _channel.setMethodCallHandler(_handleMethodCall);
   }
 
   _MapboxMapsPlatform.instance(int channelSuffix)
-      : this(
-            binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
-            channelSuffix: channelSuffix);
+    : this(
+        binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+        channelSuffix: channelSuffix,
+      );
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     print(
-        "Handle method call ${call.method}, arguments: ${call.arguments} not supported");
+      "Handle method call ${call.method}, arguments: ${call.arguments} not supported",
+    );
   }
 
   Widget buildView(
-      AndroidPlatformViewHostingMode androidHostingMode,
-      Map<String, dynamic> creationParams,
-      OnPlatformViewCreatedCallback onPlatformViewCreated,
-      Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-      {Key? key}) {
+    AndroidPlatformViewHostingMode androidHostingMode,
+    Map<String, dynamic> creationParams,
+    OnPlatformViewCreatedCallback onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers, {
+    Key? key,
+  }) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       switch (androidHostingMode) {
         case AndroidPlatformViewHostingMode.TLHC_VD:
@@ -41,20 +47,21 @@ class _MapboxMapsPlatform {
             viewType: "plugins.flutter.io/mapbox_maps",
             surfaceFactory: (context, controller) {
               return AndroidViewSurface(
-                  controller: controller as AndroidViewController,
-                  hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                  gestureRecognizers: gestureRecognizers ?? {});
+                controller: controller as AndroidViewController,
+                hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                gestureRecognizers: gestureRecognizers ?? {},
+              );
             },
             onCreatePlatformView: (params) {
               final AndroidViewController controller =
                   _androidViewControllerFactoryForMode(androidHostingMode)(
-                id: params.id,
-                viewType: 'plugins.flutter.io/mapbox_maps',
-                layoutDirection: TextDirection.ltr,
-                creationParams: creationParams,
-                creationParamsCodec: const MapInterfaces_PigeonCodec(),
-                onFocus: () => params.onFocusChanged(true),
-              );
+                    id: params.id,
+                    viewType: 'plugins.flutter.io/mapbox_maps',
+                    layoutDirection: TextDirection.ltr,
+                    creationParams: creationParams,
+                    creationParamsCodec: const MapInterfaces_PigeonCodec(),
+                    onFocus: () => params.onFocusChanged(true),
+                  );
               controller.addOnPlatformViewCreatedListener(
                 params.onPlatformViewCreated,
               );
@@ -87,18 +94,21 @@ class _MapboxMapsPlatform {
       );
     }
     return Text(
-        '$defaultTargetPlatform is not yet supported by the maps plugin');
+      '$defaultTargetPlatform is not yet supported by the maps plugin',
+    );
   }
 
-  AndroidViewController Function(
-          {required int id,
-          required String viewType,
-          required TextDirection layoutDirection,
-          dynamic creationParams,
-          MessageCodec<dynamic>? creationParamsCodec,
-          VoidCallback? onFocus})
-      _androidViewControllerFactoryForMode(
-          AndroidPlatformViewHostingMode hostingMode) {
+  AndroidViewController Function({
+    required int id,
+    required String viewType,
+    required TextDirection layoutDirection,
+    dynamic creationParams,
+    MessageCodec<dynamic>? creationParamsCodec,
+    VoidCallback? onFocus,
+  })
+  _androidViewControllerFactoryForMode(
+    AndroidPlatformViewHostingMode hostingMode,
+  ) {
     switch (hostingMode) {
       case AndroidPlatformViewHostingMode.TLHC_VD:
         return PlatformViewsService.initAndroidView;
@@ -111,13 +121,14 @@ class _MapboxMapsPlatform {
     }
   }
 
-  Future<void> submitViewSizeHint(
-      {required double width, required double height}) {
-    return _channel
-        .invokeMethod('mapView#submitViewSizeHint', <String, dynamic>{
-      'width': width,
-      'height': height,
-    });
+  Future<void> submitViewSizeHint({
+    required double width,
+    required double height,
+  }) {
+    return _channel.invokeMethod(
+      'mapView#submitViewSizeHint',
+      <String, dynamic>{'width': width, 'height': height},
+    );
   }
 
   void dispose() async {
@@ -130,15 +141,16 @@ class _MapboxMapsPlatform {
     _channel.setMethodCallHandler(null);
   }
 
-  Future<dynamic> createAnnotationManager(String type,
-      {String? id, String? belowLayerId}) async {
+  Future<dynamic> createAnnotationManager(
+    String type, {
+    String? id,
+    String? belowLayerId,
+  }) async {
     try {
-      return _channel
-          .invokeMethod('annotation#create_manager', <String, dynamic>{
-        'type': type,
-        'id': id,
-        'belowLayerId': belowLayerId,
-      });
+      return _channel.invokeMethod(
+        'annotation#create_manager',
+        <String, dynamic>{'type': type, 'id': id, 'belowLayerId': belowLayerId},
+      );
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
@@ -147,7 +159,9 @@ class _MapboxMapsPlatform {
   Future<void> removeAnnotationManager(String id) {
     try {
       return _channel.invokeMethod(
-          'annotation#remove_manager', <String, dynamic>{'id': id});
+        'annotation#remove_manager',
+        <String, dynamic>{'id': id},
+      );
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
@@ -162,20 +176,23 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> addInteractionsListeners(
-      _Interaction interaction, String interactionID) async {
+    _Interaction interaction,
+    String interactionID,
+  ) async {
     var interactionPigeon = _InteractionPigeon(
-        featuresetDescriptor:
-            interaction.featuresetDescriptor?.encode() as List<Object?>?,
-        stopPropagation: interaction.stopPropagation,
-        interactionType: interaction.interactionType.name,
-        identifier: interactionID,
-        radius: interaction.radius,
-        filter: interaction.filter);
+      featuresetDescriptor:
+          interaction.featuresetDescriptor?.encode() as List<Object?>?,
+      stopPropagation: interaction.stopPropagation,
+      interactionType: interaction.interactionType.name,
+      identifier: interactionID,
+      radius: interaction.radius,
+      filter: interaction.filter,
+    );
     try {
-      return _channel
-          .invokeMethod('interactions#add_interaction', <String, dynamic>{
-        'interaction': interactionPigeon.encode(),
-      });
+      return _channel.invokeMethod(
+        'interactions#add_interaction',
+        <String, dynamic>{'interaction': interactionPigeon.encode()},
+      );
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
@@ -183,8 +200,10 @@ class _MapboxMapsPlatform {
 
   Future<dynamic> removeInteractionsListeners(String interactionID) async {
     try {
-      return _channel.invokeMethod('interactions#remove_interaction',
-          <String, dynamic>{'identifier': interactionID});
+      return _channel.invokeMethod(
+        'interactions#remove_interaction',
+        <String, dynamic>{'identifier': interactionID},
+      );
     } on PlatformException catch (e) {
       return new Future.error(e);
     }

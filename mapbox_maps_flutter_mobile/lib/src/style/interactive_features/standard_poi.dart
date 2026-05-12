@@ -68,7 +68,7 @@ extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
 /// A featureset of StandardPOIs features.
 class StandardPOIs extends FeaturesetDescriptor {
   StandardPOIs({String importId = "basemap"})
-      : super(featuresetId: "poi", importId: importId);
+    : super(featuresetId: "poi", importId: importId);
 }
 
 /// Represents available states for StandardPOIs features in the Standard style.
@@ -78,13 +78,8 @@ class StandardPOIsState extends FeatureState {
 
   @override
   Map<String, Object?> get map {
-    return {
-      "hide": hide,
-    };
+    return {"hide": hide};
   }
 
-  StandardPOIsState({this.hide})
-      : super(map: {
-          "hide": hide,
-        });
+  StandardPOIsState({this.hide}) : super(map: {"hide": hide});
 }

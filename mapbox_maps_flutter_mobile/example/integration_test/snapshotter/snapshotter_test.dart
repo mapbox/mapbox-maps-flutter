@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:turf/turf.dart' show Position;
 import '../empty_map_widget.dart' as app;
 
 void main() {
@@ -18,8 +20,9 @@ void main() {
       size: Size(width: 96, height: 96),
       pixelRatio: 1.5,
       glyphsRasterizationOptions: GlyphsRasterizationOptions(
-          rasterizationMode:
-              GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY),
+        rasterizationMode:
+            GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY,
+      ),
       showsAttribution: false,
       showsLogo: false,
     );
@@ -96,14 +99,23 @@ void main() {
     expect(bounds, isNotNull);
 
     final camera = await snapshotter.camera(
-      coordinates: [cameraOptions.center!],
+      coordinates: [
+        Point(
+          bbox: cameraOptions.center!.bbox,
+          coordinates: cameraOptions.center!.coordinates,
+        ),
+      ],
       bearing: cameraOptions.bearing,
       pitch: cameraOptions.pitch,
     );
-    expect(camera.center?.coordinates.lat,
-        closeTo(cameraOptions.center!.coordinates.lat, 0.001));
-    expect(camera.center?.coordinates.lng,
-        closeTo(cameraOptions.center!.coordinates.lng, 0.001));
+    expect(
+      camera.center?.coordinates.lat,
+      closeTo(cameraOptions.center!.coordinates.lat, 0.001),
+    );
+    expect(
+      camera.center?.coordinates.lng,
+      closeTo(cameraOptions.center!.coordinates.lng, 0.001),
+    );
     expect(camera.bearing, closeTo(cameraOptions.bearing!, 0.001));
     expect(camera.pitch, closeTo(cameraOptions.pitch!, 0.001));
 
