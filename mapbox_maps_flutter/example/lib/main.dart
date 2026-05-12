@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart'
+    show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'ornaments_example.dart';
 import 'simple_map_page.dart';
 import 'spinning_globe_example.dart';
+import 'offline_map_example.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,13 +21,20 @@ class _Example {
   const _Example({required this.title, required this.builder});
 }
 
+final _isMobile =
+    !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);
+
 final _examples = [
-  _Example(title: 'Simple Map View', builder: (_) => const SimpleMapPage()),
+  _Example(title: 'Simple Map', builder: (_) => const SimpleMapPage()),
   _Example(title: 'Ornaments', builder: (_) => const OrnamentsExample()),
   _Example(
     title: 'Spinning Globe',
     builder: (_) => const SpinningGlobeExample(),
   ),
+  if (_isMobile)
+    _Example(title: 'Offline Map', builder: (_) => const OfflineMapExample()),
 ];
 
 class MyApp extends StatelessWidget {

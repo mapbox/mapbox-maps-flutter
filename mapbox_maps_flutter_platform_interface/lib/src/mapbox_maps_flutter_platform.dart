@@ -48,6 +48,11 @@ abstract base class MapboxMapsFlutterPlatform {
   MapboxOptionsPlatformInterface get mapboxOptions;
   MapboxMapsOptionsPlatformInterface get mapboxMapsOptions;
 
+  // ===== Offline Interfaces =====
+
+  Future<OfflineManagerPlatformInterface> createOfflineManager();
+  Future<TileStorePlatformInterface> createTileStore({Uri filePath});
+
   // ===== Widget =====
 
   /// Builds a platform-specific widget for displaying the map.

@@ -132,7 +132,8 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> moveStyleImport(String importId,
-      {ImportPosition? importPosition}) async {
+    ImportPosition? importPosition,
+  ) async {
     moveStyleImportCallCount++;
     lastImportId = importId;
     lastImportPosition = importPosition;
@@ -178,7 +179,8 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> moveStyleLayer(String layerId,
-      {LayerPosition? layerPosition}) async {
+    LayerPosition? layerPosition,
+  ) async {
     moveStyleLayerCallCount++;
     lastLayerId = layerId;
     lastLayerPosition = layerPosition;
@@ -299,11 +301,11 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
 void main() {
   late MockStylePlatformInterface mockImpl;
-  late Style style;
+  late StyleManager style;
 
   setUp(() {
     mockImpl = MockStylePlatformInterface();
-    style = Style(mockImpl);
+    style = StyleManager(mockImpl);
   });
 
   group('Style', () {
@@ -395,7 +397,7 @@ void main() {
     });
 
     test('moveStyleImport delegates to interface', () async {
-      await style.moveStyleImport('import-1');
+      await style.moveStyleImport('import-1', null);
 
       expect(mockImpl.moveStyleImportCallCount, 1);
       expect(mockImpl.lastImportId, 'import-1');
@@ -447,7 +449,7 @@ void main() {
     });
 
     test('moveStyleLayer delegates to interface', () async {
-      await style.moveStyleLayer('layer-1');
+      await style.moveStyleLayer('layer-1', null);
 
       expect(mockImpl.moveStyleLayerCallCount, 1);
       expect(mockImpl.lastLayerId, 'layer-1');
