@@ -20,7 +20,7 @@ echo "Updating MapboxMaps Flutter SDK version: $VERSION"
 PUBSPEC_FILE="$SCRIPT_DIR/../pubspec.yaml"
 sed -i '' "s/^version: .*/version: $VERSION/" "$PUBSPEC_FILE"
 
-PODSPEC_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter.podspec"
+PODSPEC_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter_mobile.podspec"
 sed -i '' "s/\(s\.version *= *\)\'[^\']*\'/\1\'$VERSION\'/" "$PODSPEC_FILE"
 
 PACKAGE_INFO_FILE="$SCRIPT_DIR/../lib/src/package_info.dart"

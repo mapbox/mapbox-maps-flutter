@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// MapRecorder provides functions to record and replay API calls of a [MapboxMap] instance.
 ///

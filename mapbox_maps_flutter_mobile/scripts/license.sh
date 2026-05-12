@@ -34,12 +34,12 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Get version and direct dependencies from mapbox_maps_flutter package specifically
-mapbox_root=$(echo "$deps" | jq '.packages[] | select(.kind == "root" and .name == "mapbox_maps_flutter")')
+# Get version and direct dependencies from mapbox_maps_flutter_mobile package specifically
+mapbox_root=$(echo "$deps" | jq '.packages[] | select(.kind == "root" and .name == "mapbox_maps_flutter_mobile")')
 sdk_version=$(echo "$mapbox_root" | jq -r '.version')
 direct_deps=$(echo "$mapbox_root" | jq -r '.directDependencies[]')
 
-# Filter packages to only include direct dependencies of mapbox_maps_flutter (excluding flutter SDK)
+# Filter packages to only include direct dependencies of mapbox_maps_flutter_mobile (excluding flutter SDK)
 # Convert direct_deps list to jq array filter
 deps_filter=$(echo "$direct_deps" | jq -R -s -c 'split("\n") | map(select(length > 0 and . != "flutter"))')
 package_info=$(echo "$deps" | jq -r --argjson deps "$deps_filter" '.packages[] | select(.name as $name | $deps | index($name)) | "\(.name) \(.version)"')

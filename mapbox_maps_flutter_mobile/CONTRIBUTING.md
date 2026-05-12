@@ -6,7 +6,7 @@ If you have a usage question about the Mapbox Maps SDK for Flutter, please visit
 
 If you'd like to contribute code:
 
-1. Please familiarize yourself with the [install process](https://pub.dev/packages/mapbox_maps_flutter/install), the [development process](DEVELOPING.md), and the contributor license agreement (CLA) at the bottom of this document. All contributions to the project must reflect its development standards and be offered under the terms of the CLA.
+1. Please familiarize yourself with the [install process](https://pub.dev/packages/mapbox_maps_flutter_mobile/install), the [development process](DEVELOPING.md), and the contributor license agreement (CLA) at the bottom of this document. All contributions to the project must reflect its development standards and be offered under the terms of the CLA.
 
 2. Ensure that existing [pull requests](https://github.com/mapbox/mapbox-maps-flutter/pulls) and [issues](https://github.com/mapbox/mapbox-maps-flutter/issues) don’t already cover your contribution or question. If your planned contribution involves significant changes to the SDK, consider opening a new issue to discuss your design before beginning work.
 

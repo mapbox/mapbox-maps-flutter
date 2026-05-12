@@ -117,8 +117,8 @@ if [ $# -eq 0 ]; then
 fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-PODSPEC_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter.podspec"
-PACKAGE_SWIFT_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter/Package.swift"
+PODSPEC_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter_mobile.podspec"
+PACKAGE_SWIFT_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile/Package.swift"
 BUILD_GRADLE_FILE="$SCRIPT_DIR/../android/build.gradle"
 
 # Parse version argument

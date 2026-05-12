@@ -1,7 +1,7 @@
 // This file is generated.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import '../../empty_map_widget.dart' as app;
 
 void main() {

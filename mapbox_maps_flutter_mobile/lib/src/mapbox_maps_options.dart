@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Class for Mapbox SDK settings management
 final class MapboxOptions {

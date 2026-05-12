@@ -1,4 +1,4 @@
-part of '../mapbox_maps_flutter.dart';
+part of '../mapbox_maps_flutter_mobile.dart';
 
 @Deprecated(
     'This is deprecated and will be removed in future releases. Use annotations [tapEvents] instead.')
