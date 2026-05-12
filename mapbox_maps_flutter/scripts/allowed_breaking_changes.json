@@ -973,5 +973,353 @@
   {
     "changeDescription": "PolylineAnnotationManager: Method \"addOnPolylineAnnotationClickListener\" removed",
     "reason": "Deprecated click-listener API dropped in v3. Use [PolylineAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Super Type \"ChangeNotifier\" removed",
+    "reason": "Vestigial supertype: v2.23 declared `MapboxMap extends ChangeNotifier` but had zero `notifyListeners()` call sites. Customer code observing it was already a silent no-op."
+  },
+  {
+    "changeDescription": "MapboxMap: Super Type \"Listenable\" removed",
+    "reason": "Inherited via ChangeNotifier; see ChangeNotifier removal reason."
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"Cancelable\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MapOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ContextMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"AndroidPlatformViewHostingMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"StylePropertyValue\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"StylePropertyValueKind\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MbxImage\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"FlatLight\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"Anchor\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"AmbientLight\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"DirectionalLight\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ImageStretches\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ImageContent\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ProjectedMeters\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MercatorCoordinate\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MapWidgetDebugOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"RenderedQueryOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"QueriedRenderedFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"QueriedFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"SourceQueryOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"QueriedSourceFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"FeatureExtensionValue\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceStatisticsOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceSamplerOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"DurationStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"CumulativeRenderingStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerFrameRenderingStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"GroupPerformanceStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"AnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"LoggingLevel\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"DefaultLocationPuck2D\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"TextVariableAnchor\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"TextWritingMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"Conversion\" removed",
+    "reason": "Relocated to packages/mapbox_maps_flutter/lib/src/camera_state_extensions.dart. Customer code calling `cameraState.toCameraOptions()` through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart` continues to compile; dart-apitool flags the class because the declared library URI changed."
+  },
+  {
+    "changeDescription": "Conversion: Method \"fromJson\" removed",
+    "reason": "Previously-unused `static CameraState fromJson(...)` dropped during the Conversion extension's relocation (no callers in any package at lift time)."
+  },
+  {
+    "changeDescription": "Interface \"ScreenBoxToJson\" removed",
+    "reason": "Pigeon-internal JSON-serialization helper kept in mapbox_maps_flutter_mobile/lib/src/extensions.dart and no longer reachable from the federated facade. No customer callers; serialization is now Pigeon-typed."
+  },
+  {
+    "changeDescription": "Interface \"ScreenCoordinateToJson\" removed",
+    "reason": "Pigeon-internal JSON-serialization helper kept in mapbox_maps_flutter_mobile/lib/src/extensions.dart and no longer reachable from the federated facade. No customer callers; serialization is now Pigeon-typed."
+  },
+  {
+    "changeDescription": "Interface \"LocationSettings\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"GesturesSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"LogoSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"CompassSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"ScaleBarSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"AttributionSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"IndoorSelectorSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"Feature\" removed",
+    "reason": "v2 was a thin `turf.Feature` wrapper with encode()/decode() helpers for Pigeon serialization. Constructor surface preserved via the re-exported `package:turf/turf.dart`; the encode/decode helpers were Pigeon-internal plumbing, not customer surface."
+  },
+  {
+    "changeDescription": "Interface \"StyleLayer\" removed",
+    "reason": "Renamed: `StyleLayer` -> `Layer`, `StyleSource` -> `Source`. Class shape preserved on the new names; customers update import names."
+  },
+  {
+    "changeDescription": "Interface \"StyleSource\" removed",
+    "reason": "Renamed: `StyleLayer` -> `Layer`, `StyleSource` -> `Source`. Class shape preserved on the new names; customers update import names."
+  },
+  {
+    "changeDescription": "GeoJsonSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "Source: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "ImageSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "RasterSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "RasterDemSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "VectorSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "Source: Field \"style\" added (required)",
+    "reason": "`Source` gained a required `style` field to resolve source references when sources are passed by value through `StyleManager.addSource`. Typed `Source` subclasses set this field automatically."
+  },
+  {
+    "changeDescription": "Interface \"Settings\" removed",
+    "reason": "Pigeon `@HostApi` for in-process key-value storage; mobile-internal in the federated layout. No federated facade equivalent; use `shared_preferences` for portable persistent storage."
+  },
+  {
+    "changeDescription": "Interface \"GestureListener\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to the mobile platform-channel transport; replaced by the typed `onMapTapListener` / `onMapLongTapListener` / `onMapScrollListener` / `onMapZoomListener` setter properties on `MapboxMap`."
+  },
+  {
+    "changeDescription": "Interface \"LogWriterBackend\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to mobile; replaced by the hand-written `OnLogListener` interface."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceStatisticsListener\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to mobile; replaced by the hand-written `OnPerformanceStatisticsListener` interface."
+  },
+  {
+    "changeDescription": "Interface \"OnSnapshotStyleListener\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to mobile; replaced by typed listener params on `MapboxMapsFlutterPlatform.createSnapshotter` (`onStyleLoadedListener`, `onMapLoadErrorListener`, `onStyleDataLoadedListener`, `onStyleImageMissingListener`)."
+  },
+  {
+    "changeDescription": "Interface \"Request\" removed",
+    "reason": "Renamed at the v2->v3 boundary for clarity, avoiding generic top-level names: `Request` -> `ResourceRequest`, `Response` -> `ResourceResponse`, `Error` -> `ResponseError`. New types live in `platform_interface/lib/src/events.dart`. Customers update the type name; field shape preserved."
+  },
+  {
+    "changeDescription": "Interface \"Response\" removed",
+    "reason": "Renamed at the v2->v3 boundary for clarity, avoiding generic top-level names: `Request` -> `ResourceRequest`, `Response` -> `ResourceResponse`, `Error` -> `ResponseError`. New types live in `platform_interface/lib/src/events.dart`. Customers update the type name; field shape preserved."
+  },
+  {
+    "changeDescription": "Interface \"Error\" removed",
+    "reason": "Renamed at the v2->v3 boundary for clarity, avoiding generic top-level names: `Request` -> `ResourceRequest`, `Response` -> `ResourceResponse`, `Error` -> `ResponseError`. New types live in `platform_interface/lib/src/events.dart`. Customers update the type name; field shape preserved."
+  },
+  {
+    "changeDescription": "Interface \"MapRecorderOptions\" removed",
+    "reason": "`MapRecorder` API uses named parameters (`timeWindow`, `loggingEnabled`, `compressed`; `playbackCount`, `playbackSpeedMultiplier`, `avoidPlaybackPauses`) instead of option struct types. Mobile constructs the Pigeon options at the wire boundary."
+  },
+  {
+    "changeDescription": "Interface \"MapPlayerOptions\" removed",
+    "reason": "`MapRecorder` API uses named parameters (`timeWindow`, `loggingEnabled`, `compressed`; `playbackCount`, `playbackSpeedMultiplier`, `avoidPlaybackPauses`) instead of option struct types. Mobile constructs the Pigeon options at the wire boundary."
+  },
+  {
+    "changeDescription": "Interface \"ViewAnnotationAnchor\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"StylePackErrorType\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"OfflineRegionDownloadState\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"HttpMethod\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"HttpRequestErrorType\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"DownloadErrorCode\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"DownloadState\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"TileRegionErrorType\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
   }
 ]

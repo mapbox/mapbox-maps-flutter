@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import 'android_platform_view_hosting_mode.dart';
 import 'events.dart'
     show
         MapEvent,
@@ -15,8 +18,10 @@ import 'interfaces/offline_interface.dart';
 import 'interfaces/snapshotter_interface.dart';
 import 'interfaces/viewport/viewport_state.dart';
 import 'interfaces/viewport/viewport_transition.dart';
-import 'pigeons/platform_interface_data_types.dart' show MapSnapshotOptions;
+import 'pigeons/platform_interface_data_types.dart'
+    show MapOptions, MapSnapshotOptions;
 
+export 'android_platform_view_hosting_mode.dart';
 export 'debug_options.dart';
 export 'events.dart';
 export 'interactive_features.dart';
@@ -97,6 +102,10 @@ abstract base class MapboxMapsFlutterPlatform {
   /// [styleUri] is the URI of the map style to load.
   /// [onMapCreated] is called once the underlying map view is ready, providing
   /// a [MapboxMapPlatformInterface] that callers use to interact with the map.
+  ///
+  /// [mapOptions], [textureView], [androidHostingMode] and [gestureRecognizers]
+  /// are forwarded to the platform implementation when supported. The web
+  /// implementation ignores them.
   Widget buildView({
     required String styleUri,
     PlatformMapCreatedCallback? onMapCreated,
@@ -104,6 +113,11 @@ abstract base class MapboxMapsFlutterPlatform {
     ViewportTransition? viewportTransition,
     void Function(bool)? viewportTransitionCompletion,
     void Function(MapEvent)? onMapEvent,
+    MapOptions? mapOptions,
+    bool? textureView,
+    AndroidPlatformViewHostingMode androidHostingMode =
+        AndroidPlatformViewHostingMode.VD,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   });
 }
 

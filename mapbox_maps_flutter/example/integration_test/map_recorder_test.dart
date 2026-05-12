@@ -23,7 +23,7 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.mapRecorder.startRecording(
+    await mapboxMap.recorder.startRecording(
       timeWindow: const Duration(seconds: 60),
       loggingEnabled: false,
       compressed: true,
@@ -41,7 +41,7 @@ void main() {
 
     await Future.delayed(const Duration(milliseconds: 100));
 
-    final sequence = await mapboxMap.mapRecorder.stopRecording();
+    final sequence = await mapboxMap.recorder.stopRecording();
 
     expect(sequence, isNotNull);
     expect(sequence, isA<Uint8List>());
@@ -54,7 +54,7 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    final state = await mapboxMap.mapRecorder.getState();
+    final state = await mapboxMap.recorder.getState();
     expect(state, 'stopped');
   });
 
@@ -64,7 +64,7 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.mapRecorder.startRecording(
+    await mapboxMap.recorder.startRecording(
       timeWindow: const Duration(seconds: 60),
       loggingEnabled: false,
       compressed: true,
@@ -82,17 +82,17 @@ void main() {
 
     await Future.delayed(const Duration(milliseconds: 100));
 
-    final sequence = await mapboxMap.mapRecorder.stopRecording();
+    final sequence = await mapboxMap.recorder.stopRecording();
     expect(sequence.length, greaterThan(0));
 
-    await mapboxMap.mapRecorder.replay(
+    await mapboxMap.recorder.replay(
       sequence,
       playbackCount: 1,
       playbackSpeedMultiplier: 1.0,
       avoidPlaybackPauses: false,
     );
 
-    final stateAfterReplay = await mapboxMap.mapRecorder.getState();
+    final stateAfterReplay = await mapboxMap.recorder.getState();
     expect(stateAfterReplay, 'stopped');
   });
 
@@ -102,7 +102,7 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.mapRecorder.startRecording(
+    await mapboxMap.recorder.startRecording(
       timeWindow: const Duration(seconds: 60),
       loggingEnabled: false,
       compressed: true,
@@ -123,10 +123,10 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 100));
     }
 
-    final sequence = await mapboxMap.mapRecorder.stopRecording();
+    final sequence = await mapboxMap.recorder.stopRecording();
     expect(sequence.length, greaterThan(0));
 
-    final replayFuture = mapboxMap.mapRecorder.replay(
+    final replayFuture = mapboxMap.recorder.replay(
       sequence,
       playbackCount: 3,
       playbackSpeedMultiplier: 0.3,
@@ -135,25 +135,25 @@ void main() {
 
     await Future.delayed(const Duration(milliseconds: 200));
 
-    final playingState = await mapboxMap.mapRecorder.getState();
+    final playingState = await mapboxMap.recorder.getState();
     expect(playingState, 'playing');
 
-    await mapboxMap.mapRecorder.togglePause();
+    await mapboxMap.recorder.togglePause();
 
     await Future.delayed(const Duration(milliseconds: 50));
 
-    final pausedState = await mapboxMap.mapRecorder.getState();
+    final pausedState = await mapboxMap.recorder.getState();
     expect(pausedState, 'paused');
 
-    await mapboxMap.mapRecorder.togglePause();
+    await mapboxMap.recorder.togglePause();
 
     await Future.delayed(const Duration(milliseconds: 50));
-    final resumedState = await mapboxMap.mapRecorder.getState();
+    final resumedState = await mapboxMap.recorder.getState();
     expect(resumedState, 'playing');
 
     await replayFuture;
 
-    final finalState = await mapboxMap.mapRecorder.getState();
+    final finalState = await mapboxMap.recorder.getState();
     expect(finalState, 'stopped');
   });
 
@@ -163,7 +163,7 @@ void main() {
 
     final mapboxMap = await mapFuture;
 
-    await mapboxMap.mapRecorder.startRecording(
+    await mapboxMap.recorder.startRecording(
       timeWindow: const Duration(seconds: 30),
       loggingEnabled: false,
       compressed: false,
@@ -178,10 +178,10 @@ void main() {
 
     await Future.delayed(const Duration(milliseconds: 100));
 
-    final sequence = await mapboxMap.mapRecorder.stopRecording();
+    final sequence = await mapboxMap.recorder.stopRecording();
     expect(sequence.length, greaterThan(0));
 
-    await mapboxMap.mapRecorder.replay(
+    await mapboxMap.recorder.replay(
       sequence,
       playbackCount: 1,
       playbackSpeedMultiplier: 2.0,

@@ -509,14 +509,26 @@ stage_mobile_sanity() {
 
 # ───── dispatch ─────────────────────────────────────────────────────────
 
-[[ "$RUN_STATIC" == "1"          ]] && run_stage "static"           stage_static
-[[ "$RUN_CODEGEN_DRIFT" == "1"   ]] && run_stage "codegen-drift"    stage_codegen_drift
-[[ "$RUN_UNIT_TESTS" == "1"      ]] && run_stage "unit-tests"       stage_unit_tests
-[[ "$RUN_API_BREAKAGE" == "1"    ]] && run_stage "api-breakage"     stage_api_breakage
-[[ "$RUN_ANDROID" == "1"         ]] && run_stage "android"          stage_android
-[[ "$RUN_IOS" == "1"             ]] && run_stage "ios"              stage_ios
-[[ "$RUN_CHROME" == "1"          ]] && run_stage "chrome"           stage_chrome
-[[ "$RUN_MOBILE_SANITY" == "1"   ]] && run_stage "mobile-sanity"    stage_mobile_sanity
+dispatch_stage() {
+  local flag="$1"
+  local name="$2"
+  local fn="$3"
+  if [[ "$flag" == "1" ]]; then
+    run_stage "$name" "$fn"
+  else
+    echo "─── skip $name — disabled by --skip-$name / --only"
+    SKIPPED_STAGES+=("$name (skipped via flag)")
+  fi
+}
+
+dispatch_stage "$RUN_STATIC"          "static"          stage_static
+dispatch_stage "$RUN_CODEGEN_DRIFT"   "codegen-drift"   stage_codegen_drift
+dispatch_stage "$RUN_UNIT_TESTS"      "unit-tests"      stage_unit_tests
+dispatch_stage "$RUN_API_BREAKAGE"    "api-breakage"    stage_api_breakage
+dispatch_stage "$RUN_ANDROID"         "android"         stage_android
+dispatch_stage "$RUN_IOS"             "ios"             stage_ios
+dispatch_stage "$RUN_CHROME"          "chrome"          stage_chrome
+dispatch_stage "$RUN_MOBILE_SANITY"   "mobile-sanity"   stage_mobile_sanity
 
 echo ""
 echo "═════════════════════════════════════════════════════════"

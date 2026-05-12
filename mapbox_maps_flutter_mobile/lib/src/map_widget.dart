@@ -1,34 +1,10 @@
+// AndroidPlatformViewHostingMode is @experimental on the platform_interface
+// surface; mobile uses it as the default hosting mode in its plumbing.
+// ignore_for_file: experimental_member_use
+
 part of mapbox_maps_flutter_mobile;
 
 final _SuffixesRegistry _suffixesRegistry = _SuffixesRegistry._instance();
-
-/// A mode for platform MapView to be hosted in Flutter on Android platform.
-///
-/// As per https://github.com/flutter/flutter/wiki/Android-Platform-Views#selecting-a-mode
-@experimental
-enum AndroidPlatformViewHostingMode {
-  /// Texture Layer Hybrid Composition with fallback to Virtual Display,
-  /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
-  ///
-  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
-  TLHC_VD,
-
-  /// Use Texture Layer Hybrid Composition hosting mode with fallback to Hybrid Composition,
-  /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
-  ///
-  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
-  TLHC_HC,
-
-  /// Always use Hybrid Composition hosting mode.
-  ///
-  /// https://github.com/flutter/flutter/wiki/Hybrid-Composition
-  HC,
-
-  /// Always use Virtual Display hosting mode.
-  ///
-  /// https://github.com/flutter/flutter/wiki/Virtual-Display
-  VD,
-}
 
 /// A MapWidget provides an embeddable map interface.
 /// You use this class to display map information and to manipulate the map contents from your application.

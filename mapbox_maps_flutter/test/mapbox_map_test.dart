@@ -908,7 +908,7 @@ void main() {
     });
 
     test('mapRecorder returns a MapRecorder', () {
-      expect(mapboxMap.mapRecorder, isA<MapRecorder>());
+      expect(mapboxMap.recorder, isA<MapRecorder>());
     });
 
     test('httpService returns a MapboxHttpService', () {

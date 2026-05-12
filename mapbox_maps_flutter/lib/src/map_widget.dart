@@ -1,4 +1,12 @@
+// AndroidPlatformViewHostingMode is @experimental but the facade widget
+// has surfaced it as a public param since v2; suppress the consumer-side
+// experimental_member_use here.
+// ignore_for_file: experimental_member_use
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 import 'mapbox_map.dart';
@@ -93,6 +101,37 @@ class MapWidget extends StatelessWidget {
   /// Invoked when map makes a request to load required resources.
   final OnResourceRequestListener? onResourceRequestListener;
 
+  /// Legacy v2 alias for [MapboxMap.onMapScrollListener]. When provided,
+  /// the listener is wired onto the map after creation and fires on map
+  /// scroll gestures.
+  @Deprecated('Use MapboxMap.onMapScrollListener inside onMapCreated instead.')
+  final OnMapScrollListener? onScrollListener;
+
+  /// Legacy v2 alias for [MapboxMap.onMapZoomListener]. When provided,
+  /// the listener is wired onto the map after creation and fires on map
+  /// zoom gestures.
+  @Deprecated('Use MapboxMap.onMapZoomListener inside onMapCreated instead.')
+  final OnMapZoomListener? onZoomListener;
+
+  /// Initial map options applied at native-map construction time. Mobile
+  /// only; ignored on web.
+  final MapOptions? mapOptions;
+
+  /// Whether to use a `TextureView` as the Android render surface. Has no
+  /// effect on iOS or web. Defaults to `true` to work around the
+  /// `SurfaceView` memory leak documented at
+  /// https://github.com/flutter/flutter/issues/118384.
+  final bool? textureView;
+
+  /// How the underlying Android `MapView` is hosted by Flutter. Has no
+  /// effect on iOS or web.
+  @experimental
+  final AndroidPlatformViewHostingMode androidHostingMode;
+
+  /// Gesture recognizers that should compete with the map for pointer
+  /// events. Used to integrate the map inside scrollables.
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+
   const MapWidget({
     super.key,
     this.styleUri = MapboxStyles.STANDARD,
@@ -113,6 +152,16 @@ class MapWidget extends StatelessWidget {
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
+    @Deprecated(
+      'Use MapboxMap.onMapScrollListener inside onMapCreated instead.',
+    )
+    this.onScrollListener,
+    @Deprecated('Use MapboxMap.onMapZoomListener inside onMapCreated instead.')
+    this.onZoomListener,
+    this.mapOptions,
+    this.textureView,
+    this.androidHostingMode = AndroidPlatformViewHostingMode.VD,
+    this.gestureRecognizers,
   });
 
   @override
@@ -136,10 +185,28 @@ class MapWidget extends StatelessWidget {
     ViewportTransition? transition,
     void Function(bool)? completion,
   ) {
+    final hasLegacyAliases = onScrollListener != null || onZoomListener != null;
     return MapboxMapsFlutterPlatform.instance.buildView(
       styleUri: styleUri,
-      onMapCreated: onMapCreated != null
-          ? (map) => onMapCreated!(MapboxMap(map))
+      mapOptions: mapOptions,
+      textureView: textureView,
+      androidHostingMode: androidHostingMode,
+      gestureRecognizers: gestureRecognizers,
+      onMapCreated: (onMapCreated != null || hasLegacyAliases)
+          ? (map) {
+              final mapboxMap = MapboxMap(map);
+              // ignore: deprecated_member_use_from_same_package
+              if (onScrollListener != null) {
+                // ignore: deprecated_member_use_from_same_package
+                mapboxMap.onMapScrollListener = onScrollListener;
+              }
+              // ignore: deprecated_member_use_from_same_package
+              if (onZoomListener != null) {
+                // ignore: deprecated_member_use_from_same_package
+                mapboxMap.onMapZoomListener = onZoomListener;
+              }
+              onMapCreated?.call(mapboxMap);
+            }
           : null,
       viewport: viewport,
       viewportTransition: transition,
