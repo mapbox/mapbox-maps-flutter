@@ -21,6 +21,7 @@ import 'gestures_test.dart' as gestures_test;
 import 'interactive_features_test.dart' as interactive_features_test;
 import 'location_test.dart' as location_test;
 import 'logo_test.dart' as logo_test;
+import 'interaction_test.dart' as interaction_test;
 import 'map_events_test.dart' as map_events_test;
 import 'map_interface_test.dart' as map_interface_test;
 import 'map_recorder_test.dart' as map_recorder_test;
@@ -65,6 +66,7 @@ void main() {
     MapboxOptions.setAccessToken(ACCESS_TOKEN);
   });
 
+  interaction_test.main();
   map_events_test.main();
   map_recorder_test.main();
   projection_test.main();

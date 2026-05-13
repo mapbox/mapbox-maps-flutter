@@ -299,7 +299,7 @@ packages:
     source: hosted
     version: "0.7.10"
   turf:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: turf
       sha256: "75347c45a5c1de805db7cb182286f05a3770e01546626c4dc292709d15cbe436"
@@ -339,7 +339,7 @@ packages:
     source: hosted
     version: "15.0.2"
   web:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: web
       sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"

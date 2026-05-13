@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show Point, Position;
@@ -21,9 +23,17 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
   Cancelable? tapListener;
   int styleIndex = 1;
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.onMapTapListener = (context) => print("on map tap");
+
+    mapboxMap.addInteraction(
+      TapInteraction.onMap((context) {
+        log(
+          "on map tap at point: ${context.touchPosition}, lngLat: ${context.point}",
+        );
+      }),
+    );
+
     mapboxMap.setCamera(
       CameraOptions(
         center: Point(coordinates: Position(0, 0)),

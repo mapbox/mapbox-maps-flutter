@@ -18,6 +18,8 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
+  web: ^1.0.0
+  turf: ^0.0.10
 
 flutter:
   uses-material-design: true

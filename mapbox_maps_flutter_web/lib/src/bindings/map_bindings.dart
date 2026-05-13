@@ -5,11 +5,40 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart';
 
+import 'interaction_bindings.dart';
 import 'viewport_bindings.dart';
+
+export 'interaction_bindings.dart';
 export 'viewport_bindings.dart';
 
 @JS()
 external String accessToken;
+
+// ===== Foundation =====
+
+/// JS plain object viewed as a key/value dictionary. Use [toDart] to
+/// convert into a Dart [Map].
+@JS()
+extension type JSDictionary<K, V>._(JSObject _) implements JSObject {
+  Map<K, V> toDart() => (dartify() as Map?)?.cast<K, V>() ?? <K, V>{};
+}
+
+/// GeoJSON geometry object. Same shape as [JSDictionary] but kept as a
+/// distinct nominal type so geometry-specific helpers can be added here.
+@JS()
+extension type JSGeometry._(JSObject _)
+    implements JSDictionary<String?, Object?> {}
+
+/// Identifier value — GL JS types feature/source ids as `string | number`.
+/// Numeric ids are treated as integers (the typical tile-feature shape).
+@JS()
+extension type JSIdentifier._(JSAny _) implements JSAny {
+  String toDart() {
+    if (isA<JSString>()) return (this as JSString).toDart;
+    if (isA<JSNumber>()) return (this as JSNumber).toDartInt.toString();
+    return '';
+  }
+}
 
 @JS()
 external void clearStorage(JSFunction callback);
@@ -24,6 +53,15 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
 extension type JSLngLat._(JSObject _) implements JSObject {
   external double get lng;
   external double get lat;
+}
+
+/// GL JS's `Point` (`@mapbox/point-geometry`). Pixel coordinate within the
+/// map container; satisfies `PointLike` wherever GL JS accepts one.
+@JS('Point')
+extension type JSScreenPoint._(JSObject _) implements JSObject {
+  external JSScreenPoint(double x, double y);
+  external double get x;
+  external double get y;
 }
 
 /// The root-level camera fields from a Mapbox style specification.
@@ -89,6 +127,14 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Cleans up all resources associated with this map instance:
   /// destroys the WebGL context, removes DOM elements, clears event listeners.
   external void remove();
+
+  /// Registers an interaction (gesture handler) under [id]. GL JS throws if
+  /// [id] is already registered.
+  external void addInteraction(String id, JSInteraction interaction);
+
+  /// Removes an interaction previously registered with [addInteraction].
+  /// No-op when [id] is unknown.
+  external void removeInteraction(String id);
 }
 
 // ===== Event names =====
