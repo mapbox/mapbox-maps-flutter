@@ -1,4 +1,5 @@
 import Flutter
+import MapboxCommon
 @_spi(Experimental) import MapboxMaps
 import UIKit
 
@@ -172,6 +173,20 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         HttpServiceFactory.setHttpServiceInterceptorForInterceptor(customInterceptor)
             customInterceptor.customHeaders = headers
         result(nil)
+
+        case "map#setMaxRequestsPerHost":
+            guard let arguments = methodCall.arguments as? [String: Any],
+                  let max = arguments["max"] as? Int
+            else {
+                result(FlutterError(
+                    code: "setMaxRequestsPerHost",
+                    message: "could not decode arguments",
+                    details: nil
+                ))
+                return
+            }
+            HttpServiceFactory.setMaxRequestsPerHostForMax(UInt8(clamping: max))
+            result(nil)
 
         default:
             result(FlutterMethodNotImplemented)
