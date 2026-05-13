@@ -399,23 +399,19 @@ run_integration_on_web() {
   fi
 
   echo ""
-  echo "  flutter drive -d web-server integration_test/all_test.dart"
-  # `-d web-server` is the canonical device for chromedriver-backed web
-  # integration tests: flutter_tools serves the app and lets chromedriver
-  # drive the one Chrome it launched. Using `-d chrome` instead causes
-  # flutter_tools to launch a second Chrome for itself; chromedriver then
-  # polls `window.$flutterDriver` in its own (blank) Chrome forever and
-  # never observes the extension that the test app publishes in
-  # flutter_tools' Chrome. Tests run in either mode; only `-d web-server`
-  # lets the driver handshake complete and the stage exit.
+  echo "  flutter drive -d chrome integration_test/all_test.dart"
+  # `-d chrome` is the canonical Flutter docs invocation for web driver
+  # tests. Flutter launches the Chrome that runs the app and chromedriver
+  # (started above) attaches to it via the standard WebDriver protocol.
+  # Crucially this device emits the test-framework reporter (`+N ~M`
+  # per-test progress with names) to stdout, which `-d web-server`
+  # suppresses.
   (
     cd "$example_dir" && \
     flutter drive \
       --driver=test_driver/integration_test.dart \
       --target=integration_test/all_test.dart \
-      -d web-server \
-      --browser-name=chrome \
-      --driver-port=4444 \
+      -d chrome \
       --no-web-resources-cdn \
       --dart-define=ACCESS_TOKEN="$MAPBOX_ACCESS_TOKEN"
   )

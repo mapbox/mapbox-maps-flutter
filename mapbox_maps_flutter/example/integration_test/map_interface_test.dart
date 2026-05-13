@@ -108,7 +108,7 @@ void main() {
     }
   });
 
-  testWidgets('clearData', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('clearData', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

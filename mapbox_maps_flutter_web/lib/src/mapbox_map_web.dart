@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:js_interop';
 import 'dart:typed_data';
 
@@ -294,7 +295,20 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   ) => throw _ni('setTileCacheBudget');
 
   @override
-  Future<void> clearData() => throw _ni('clearData');
+  Future<void> clearData() {
+    final completer = Completer<void>();
+
+    clearStorage(
+      ([JSAny? error]) {
+        if (error != null) {
+          completer.completeError(error);
+        } else {
+          completer.complete();
+        }
+      }.toJS,
+    );
+    return completer.future;
+  }
 
   @override
   Future<MapOptions> getMapOptions() => throw _ni('getMapOptions');
