@@ -2,6 +2,9 @@
 // web buildView has to accept it for signature compat but ignores it.
 // ignore_for_file: experimental_member_use
 
+import 'dart:async';
+import 'dart:js_interop';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -111,8 +114,20 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       throw UnimplementedError('setLanguage() is not implemented on web.');
 
   @override
-  Future<void> clearData() =>
-      throw UnimplementedError('clearData() is not implemented on web.');
+  Future<void> clearData() {
+    final completer = Completer<void>();
+
+    clearStorage(
+      ([JSAny? error]) {
+        if (error != null) {
+          completer.completeError(error);
+        } else {
+          completer.complete();
+        }
+      }.toJS,
+    );
+    return completer.future;
+  }
 
   @override
   MapboxMapsOptionsPlatformInterface get mapboxMapsOptions => this;

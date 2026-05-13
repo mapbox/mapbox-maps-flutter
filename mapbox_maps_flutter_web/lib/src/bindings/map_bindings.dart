@@ -12,6 +12,9 @@ export 'viewport_bindings.dart';
 external String accessToken;
 
 @JS()
+external void clearStorage(JSFunction callback);
+
+@JS()
 @anonymous
 extension type JSMapOptions._(JSObject _) implements JSObject {
   external factory JSMapOptions({required HTMLDivElement container});
