@@ -270,7 +270,9 @@ class MapboxMap extends ChangeNotifier {
       late final MapboxHttpService httpService = MapboxHttpService(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _mapboxMapsPlatform.channelSuffix);
+  @Deprecated('Use [MapboxMap.addInteraction] instead')
   OnMapTapListener? onMapTapListener;
+  @Deprecated('Use [MapboxMap.addInteraction] instead')
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
   OnMapZoomListener? onMapZoomListener;
@@ -840,11 +842,13 @@ class MapboxMap extends ChangeNotifier {
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
   }
 
+  @Deprecated('Use [MapboxMap.addInteraction] instead')
   void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
     this.onMapTapListener = onMapTapListener;
     _setupGestures();
   }
 
+  @Deprecated('Use [MapboxMap.addInteraction] instead')
   void setOnMapLongTapListener(OnMapLongTapListener? onMapLongTapListener) {
     this.onMapLongTapListener = onMapLongTapListener;
     _setupGestures();

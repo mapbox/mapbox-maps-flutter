@@ -1,3 +1,7 @@
+### main
+
+* Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
+
 ### 2.24.0-rc.1
 
 * Add `TileStore.setOptionForKey` to allow setting custom tile store options by arbitrary string key, in addition to the existing predefined options (`diskQuota`, `mapboxApiUrl`, `tileUrlTemplate`).
