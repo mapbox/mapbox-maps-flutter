@@ -4,7 +4,10 @@ import 'package:mapbox_maps_flutter_web/mapbox_maps_flutter_web.dart';
 
 const _accessTokenValue = String.fromEnvironment('ACCESS_TOKEN');
 
-void main({ViewportState? viewport}) {
+void main({
+  ViewportState? viewport,
+  PlatformMapCreatedCallback? onMapCreated,
+}) {
   accessToken = _accessTokenValue;
 
   runApp(
@@ -12,6 +15,7 @@ void main({ViewportState? viewport}) {
       home: Scaffold(
         body: MapWebWidget(
           viewport: viewport,
+          onMapCreated: onMapCreated,
         ),
       ),
     ),

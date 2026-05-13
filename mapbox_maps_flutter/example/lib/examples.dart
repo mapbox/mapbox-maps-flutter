@@ -13,6 +13,7 @@ import 'geojson_line_example.dart';
 import 'gestures_example.dart';
 import 'image_source_example.dart';
 import 'location_example.dart';
+import 'main.dart' show isMobile;
 import 'map_interface_example.dart';
 import 'map_recorder_example.dart';
 import 'model_layer_example.dart';
@@ -35,8 +36,6 @@ import 'traffic_route_line_example.dart';
 import 'vector_tile_source_example.dart';
 import 'viewport_example.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'
-    show kIsWeb, defaultTargetPlatform, TargetPlatform;
 
 final List<Example> examples = [
   Example(
@@ -63,7 +62,7 @@ final List<Example> examples = [
     subtitle: 'Display your map as an interactive, rotating globe.',
     builder: (_) => const SpinningGlobeExample(),
   ),
-  if (_isMobile)
+  if (isMobile)
     Example(
       leading: const Icon(Icons.wifi_off),
       title: 'Offline Map',
@@ -218,7 +217,7 @@ final List<Example> examples = [
     title: 'MapInterface',
     builder: (_) => const MapInterfaceExample(),
   ),
-  if (_isMobile) ...[
+  if (isMobile) ...[
     Example(
       leading: const Icon(Icons.construction),
       title: 'Map debug options',
@@ -260,8 +259,3 @@ class Example {
     required this.builder,
   });
 }
-
-final _isMobile =
-    !kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android);

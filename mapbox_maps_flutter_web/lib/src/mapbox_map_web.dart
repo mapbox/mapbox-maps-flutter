@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:async';
 import 'dart:js_interop';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show UniqueKey;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' show Point, Position;
 
 import 'bindings/map_bindings.dart';
+import 'interaction_handler.dart';
 import 'unsupported_sub_interfaces.dart';
 
 /// Web [MapboxMapPlatformInterface] implementation backed by Mapbox GL JS.
@@ -373,15 +376,35 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
 
   // ===== Interactions =====
 
+  late final _interactionHandler = InteractionHandler();
+
   @override
   void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
     TypedInteraction<T> interaction, {
     String? interactionID,
-  }) => throw _ni('addInteraction');
+  }) {
+    final id = interactionID ?? UniqueKey().toString();
+    final filter = interaction.filter;
+
+    final handler = ((JSInteractionEvent event) => _interactionHandler(
+      interaction,
+      event,
+    )).toJS;
+
+    _map.addInteraction(
+      id,
+      JSInteraction(
+        type: interaction.interactionType.jsInteractionType,
+        target: interaction.featuresetDescriptor?.jsTargetDescriptor,
+        filter: filter == null ? null : jsonDecode(filter).jsify() as JSObject?,
+        handler: handler,
+      ),
+    );
+  }
 
   @override
   void removeInteraction(String interactionID) =>
-      throw _ni('removeInteraction');
+      _map.removeInteraction(interactionID);
 
   // ===== Feature queries =====
 

@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_examples/main.dart';
 import 'package:turf/turf.dart' show Point, Position;
 
 class FullMapExample extends StatefulWidget {
@@ -13,14 +16,31 @@ class FullMapExampleState extends State<FullMapExample> {
   MapboxMap? mapboxMap;
   var isLight = true;
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.style.setStyleImportConfigProperty(
       "basemap",
       "theme",
       "monochrome",
     );
-    mapboxMap.onMapLongTapListener = (context) {};
+
+    mapboxMap.addInteraction(
+      TapInteraction.onMap((context) {
+        log(
+          "on map tap at point: ${context.touchPosition}, lngLat: ${context.point}",
+        );
+      }),
+    );
+
+    if (isMobile) {
+      mapboxMap.addInteraction(
+        LongTapInteraction.onMap((context) {
+          log(
+            "on map long tap at point: ${context.touchPosition}, lngLat: ${context.point}",
+          );
+        }),
+      );
+    }
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
@@ -34,55 +54,55 @@ class FullMapExampleState extends State<FullMapExample> {
   }
 
   _onCameraChangeListener(CameraChangedEventData data) {
-    print("CameraChangedEventData: ${data.debugInfo}");
+    log("CameraChangedEventData: ${data.debugInfo}");
   }
 
   _onResourceRequestListener(ResourceEventData data) {
-    print("ResourceEventData: time: ${data.timeInterval}");
+    log("ResourceEventData: time: ${data.timeInterval}");
   }
 
   _onMapIdleListener(MapIdleEventData data) {
-    print("MapIdleEventData: timestamp: ${data.timestamp}");
+    log("MapIdleEventData: timestamp: ${data.timestamp}");
   }
 
   _onMapLoadedListener(MapLoadedEventData data) {
-    print("MapLoadedEventData: time: ${data.timeInterval}");
+    log("MapLoadedEventData: time: ${data.timeInterval}");
   }
 
   _onMapLoadingErrorListener(MapLoadingErrorEventData data) {
-    print("MapLoadingErrorEventData: timestamp: ${data.timestamp}");
+    log("MapLoadingErrorEventData: timestamp: ${data.timestamp}");
   }
 
   _onRenderFrameStartedListener(RenderFrameStartedEventData data) {
-    print("RenderFrameStartedEventData: timestamp: ${data.timestamp}");
+    log("RenderFrameStartedEventData: timestamp: ${data.timestamp}");
   }
 
   _onRenderFrameFinishedListener(RenderFrameFinishedEventData data) {
-    print("RenderFrameFinishedEventData: time: ${data.timeInterval}");
+    log("RenderFrameFinishedEventData: time: ${data.timeInterval}");
   }
 
   _onSourceAddedListener(SourceAddedEventData data) {
-    print("SourceAddedEventData: timestamp: ${data.timestamp}");
+    log("SourceAddedEventData: timestamp: ${data.timestamp}");
   }
 
   _onSourceDataLoadedListener(SourceDataLoadedEventData data) {
-    print("SourceDataLoadedEventData: time: ${data.timeInterval}");
+    log("SourceDataLoadedEventData: time: ${data.timeInterval}");
   }
 
   _onSourceRemovedListener(SourceRemovedEventData data) {
-    print("SourceRemovedEventData: timestamp: ${data.timestamp}");
+    log("SourceRemovedEventData: timestamp: ${data.timestamp}");
   }
 
   _onStyleDataLoadedListener(StyleDataLoadedEventData data) {
-    print("StyleDataLoadedEventData: time: ${data.timeInterval}");
+    log("StyleDataLoadedEventData: time: ${data.timeInterval}");
   }
 
   _onStyleImageMissingListener(StyleImageMissingEventData data) {
-    print("StyleImageMissingEventData: timestamp: ${data.timestamp}");
+    log("StyleImageMissingEventData: timestamp: ${data.timestamp}");
   }
 
   _onStyleImageUnusedListener(StyleImageUnusedEventData data) {
-    print("StyleImageUnusedEventData: timestamp: ${data.timestamp}");
+    log("StyleImageUnusedEventData: timestamp: ${data.timestamp}");
   }
 
   @override

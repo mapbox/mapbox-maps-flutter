@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'main.dart' show isMobile;
 
 class GesturesExample extends StatefulWidget {
   const GesturesExample({super.key});
@@ -47,10 +48,13 @@ class GesturesExampleState extends State<GesturesExample> {
     );
   }
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.onMapTapListener = _onTap;
-    mapboxMap.onMapLongTapListener = _onLongTap;
+
+    mapboxMap.addInteraction(TapInteraction.onMap(_onTap));
+    if (isMobile) {
+      mapboxMap.addInteraction(LongTapInteraction.onMap(_onLongTap));
+    }
     mapboxMap.onMapScrollListener = _onMove;
     mapboxMap.onMapZoomListener = _onZoom;
   }

@@ -85,7 +85,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
                 });
               },
               backgroundColor: trackLocation ? Colors.blue : Colors.grey,
-              child: const Icon(FontAwesomeIcons.locationCrosshairs),
+              child: Icon(FontAwesomeIcons.locationCrosshairs.data),
             ),
             const SizedBox(height: 10),
             FloatingActionButton(
