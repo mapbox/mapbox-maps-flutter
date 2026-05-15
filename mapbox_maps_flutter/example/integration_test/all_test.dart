@@ -18,6 +18,7 @@ import 'attribution_test.dart' as attribution_test;
 import 'camera_test.dart' as camera_test;
 import 'compass_test.dart' as compass_test;
 import 'gestures_test.dart' as gestures_test;
+import 'http_service_test.dart' as http_service_test;
 import 'interactive_features_test.dart' as interactive_features_test;
 import 'location_test.dart' as location_test;
 import 'logo_test.dart' as logo_test;
@@ -89,6 +90,7 @@ void main() {
   compass_test.main();
   scale_bar_test.main();
   offline_test.main();
+  http_service_test.main();
   interactive_features_test.main();
   snapshotter_test.main();
   viewport_test.main();

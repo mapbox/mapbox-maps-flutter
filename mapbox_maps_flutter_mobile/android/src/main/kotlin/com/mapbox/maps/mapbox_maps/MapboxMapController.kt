@@ -352,6 +352,19 @@ class MapboxMapController(
           result.error("HEADER_ERROR", e.message, null)
         }
       }
+      "map#setMaxRequestsPerHost" -> {
+        try {
+          val max = call.argument<Int>("max")
+          if (max == null) {
+            result.error("INVALID_ARGUMENTS", "max cannot be null", null)
+          } else {
+            com.mapbox.common.HttpServiceFactory.setMaxRequestsPerHost(max.toByte())
+            result.success(null)
+          }
+        } catch (e: Exception) {
+          result.error("MAX_REQUESTS_PER_HOST_ERROR", e.message, null)
+        }
+      }
       else -> {
         result.notImplemented()
       }

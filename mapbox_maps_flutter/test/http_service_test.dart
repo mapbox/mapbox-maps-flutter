@@ -6,10 +6,19 @@ class MockMapboxHttpServicePlatformInterface
   Map<String, String>? lastHeaders;
   int setCustomHeadersCallCount = 0;
 
+  int? lastMax;
+  int setMaxRequestsPerHostCallCount = 0;
+
   @override
   Future<void> setCustomHeaders(Map<String, String> headers) async {
     setCustomHeadersCallCount++;
     lastHeaders = headers;
+  }
+
+  @override
+  Future<void> setMaxRequestsPerHost(int max) async {
+    setMaxRequestsPerHostCallCount++;
+    lastMax = max;
   }
 }
 
@@ -53,6 +62,21 @@ void main() {
       expect(passed['Authorization'], 'Bearer token');
       expect(passed['X-Custom-Header'], 'custom-value');
       expect(passed['Accept'], 'application/json');
+    });
+
+    test('setMaxRequestsPerHost delegates to interface', () async {
+      await httpService.setMaxRequestsPerHost(8);
+
+      expect(mockImpl.setMaxRequestsPerHostCallCount, 1);
+      expect(mockImpl.lastMax, 8);
+    });
+
+    test('setMaxRequestsPerHost can be called multiple times', () async {
+      await httpService.setMaxRequestsPerHost(2);
+      await httpService.setMaxRequestsPerHost(16);
+
+      expect(mockImpl.setMaxRequestsPerHostCallCount, 2);
+      expect(mockImpl.lastMax, 16);
     });
   });
 }
