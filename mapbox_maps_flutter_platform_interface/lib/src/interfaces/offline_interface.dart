@@ -67,6 +67,12 @@ abstract interface class TileStorePlatformInterface {
 
   /// Sets a tile URL template.
   Future<void> setTileUrlTemplate(String? template, {TileDataDomain? domain});
+
+  Future<void> setOptionForKey(
+    String key, {
+    TileDataDomain? domain,
+    Object? value,
+  });
 }
 
 /// Abstract interface for controlling the Mapbox network stack connectivity.
