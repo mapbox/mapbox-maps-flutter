@@ -387,6 +387,10 @@ class UnsupportedHttpServiceWeb implements MapboxHttpServicePlatformInterface {
   @override
   Future<void> setCustomHeaders(Map<String, String> headers) =>
       throw _unimplemented('setCustomHeaders', 'HttpService');
+
+  @override
+  Future<void> setMaxRequestsPerHost(int max) =>
+      throw _unimplemented('setMaxRequestsPerHost', 'HttpService');
 }
 
 class UnsupportedProjectionWeb implements ProjectionPlatformInterface {

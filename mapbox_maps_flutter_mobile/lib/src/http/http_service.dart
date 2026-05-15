@@ -46,4 +46,30 @@ class MapboxHttpService implements MapboxHttpServicePlatformInterface {
       );
     }
   }
+
+  /// Sets the maximum number of concurrent HTTP requests per host.
+  ///
+  /// [max] must be in the range 1..255.
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available
+  /// or if the operation fails.
+  @override
+  Future<void> setMaxRequestsPerHost(int max) async {
+    try {
+      await _channel.invokeMethod('map#setMaxRequestsPerHost', {'max': max});
+    } on MissingPluginException catch (e) {
+      throw PlatformException(
+        code: 'MISSING_IMPLEMENTATION',
+        message:
+            'Native implementation for setMaxRequestsPerHost is not available',
+        details: e.toString(),
+      );
+    } catch (e) {
+      throw PlatformException(
+        code: 'SET_MAX_REQUESTS_PER_HOST_FAILED',
+        message: 'Failed to set max requests per host',
+        details: e.toString(),
+      );
+    }
+  }
 }
