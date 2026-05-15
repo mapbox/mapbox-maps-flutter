@@ -20,10 +20,7 @@ void main() {
     final mapboxMap = await mapFuture;
 
     const id = 'test-tap-interaction';
-    mapboxMap.addInteraction(
-      TapInteraction.onMap((_) {}),
-      interactionID: id,
-    );
+    mapboxMap.addInteraction(TapInteraction.onMap((_) {}), interactionID: id);
     mapboxMap.removeInteraction(id);
   });
 }

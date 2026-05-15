@@ -242,7 +242,16 @@ final class TileStore implements TileStorePlatformInterface {
   /// @param key The configuration option that should be changed.
   /// @param domain The domain this setting should be applied for.
   /// @param value The value for the configuration option, or null if it should be reset.
-  void setOptionForKey(String key, {TileDataDomain? domain, Object? value}) {
-    _api.setOptionForKey(_CustomTileStoreOptionsKey(key: key), domain, value);
+  @override
+  Future<void> setOptionForKey(
+    String key, {
+    TileDataDomain? domain,
+    Object? value,
+  }) {
+    return _api.setOptionForKey(
+      _CustomTileStoreOptionsKey(key: key),
+      domain,
+      value,
+    );
   }
 }

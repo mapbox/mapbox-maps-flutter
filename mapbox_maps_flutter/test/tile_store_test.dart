@@ -12,6 +12,7 @@ class MockTileStorePlatformInterface implements TileStorePlatformInterface {
   int setDiskQuotaCallCount = 0;
   int setMapboxAPIUrlCallCount = 0;
   int setTileUrlTemplateCallCount = 0;
+  int setOptionForKeyCallCount = 0;
 
   String? lastId;
   TileRegionLoadOptions? lastLoadOptions;
@@ -23,7 +24,8 @@ class MockTileStorePlatformInterface implements TileStorePlatformInterface {
   TileDataDomain? lastDomain;
   Uri? lastUrl;
   String? lastTemplate;
-
+  String? lastOptionKey;
+  Object? lastOptionValue;
   final TileRegion _stubTileRegion = TileRegion(
     id: 'test-region',
     requiredResourceCount: 100,
@@ -124,6 +126,18 @@ class MockTileStorePlatformInterface implements TileStorePlatformInterface {
     setTileUrlTemplateCallCount++;
     lastTemplate = template;
     lastDomain = domain;
+  }
+
+  @override
+  Future<void> setOptionForKey(
+    String key, {
+    TileDataDomain? domain,
+    Object? value,
+  }) async {
+    setOptionForKeyCallCount++;
+    lastOptionKey = key;
+    lastDomain = domain;
+    lastOptionValue = value;
   }
 }
 
@@ -246,6 +260,14 @@ void main() {
 
       expect(mockImpl.setTileUrlTemplateCallCount, 1);
       expect(mockImpl.lastTemplate, 'https://example.com/{z}/{x}/{y}');
+    });
+
+    test('setOptionForKey delegates to interface', () async {
+      await tileStore.setOptionForKey('test-key', value: 'test-value');
+
+      expect(mockImpl.setOptionForKeyCallCount, 1);
+      expect(mockImpl.lastOptionKey, 'test-key');
+      expect(mockImpl.lastOptionValue, 'test-value');
     });
   });
 }

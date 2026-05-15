@@ -6,7 +6,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 /// app developer to set the disk quota. The rest of TileStore API is intended for native SDK consumption only.
 ///
 /// {@macro supported_platforms_mobile}
-class TileStore {
+final class TileStore {
   final TileStorePlatformInterface _impl;
 
   @internal
@@ -162,4 +162,15 @@ class TileStore {
   /// - {z_max}: The zoom range maximum of the Map tile to be loaded.
   Future<void> setTileUrlTemplate(String? template, {TileDataDomain? domain}) =>
       _impl.setTileUrlTemplate(template, domain: domain);
+
+  /// Sets additional options for this [TileStore] that are specific to a data type.
+  ///
+  /// @param key The configuration option that should be changed.
+  /// @param domain The domain this setting should be applied for.
+  /// @param value The value for the configuration option, or null if it should be reset.
+  Future<void> setOptionForKey(
+    String key, {
+    TileDataDomain? domain,
+    Object? value,
+  }) => _impl.setOptionForKey(key, domain: domain, value: value);
 }
