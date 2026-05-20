@@ -1,43 +1,31 @@
 import 'dart:js_interop';
 
-import '../bindings/map_bindings.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 import 'viewport_handler.dart';
 import 'viewport_utils.dart';
 
-class CameraHandler implements WebViewportStateHandler {
+import '../bindings/binding_adapters.dart';
+import '../bindings/map_bindings.dart';
+
+final class CameraHandler extends WebViewportStateHandler {
   final CameraViewportState state;
   CameraHandler(this.state);
 
   @override
-  Future<bool> apply(JSMap map, ViewportTransition? transition) async {
-    final center = pointToJSCenter(state.center);
-    final padding = edgeInsetsToJSPadding(state.padding);
-
-    if (transition == null) {
-      map.jumpTo(
-        JSCameraOptions(
-          center: center,
-          zoom: state.zoom,
-          bearing: state.bearing,
-          pitch: state.pitch,
-          padding: padding,
-        ),
-      );
-      return true;
-    }
-
-    animate(
+  Future<void> runApply(JSMap map, ViewportTransition? transition) async {
+    animateCamera(
       map,
-      center,
+      state.center?.toJSLngLat(),
       state.zoom,
       state.bearing,
       state.pitch,
-      padding,
-      transition,
+      state.padding?.toJSPadding(),
+      transition ?? const ImmediateViewportTransition(),
     );
-    await map.onceAsync('moveend').toDart;
-    return true;
+
+    if (transition != null) {
+      await map.onceAsync('moveend').toDart;
+    }
   }
 }

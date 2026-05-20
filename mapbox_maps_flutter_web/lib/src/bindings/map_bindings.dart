@@ -6,9 +6,11 @@ import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'interaction_bindings.dart';
+import 'location_bindings.dart';
 import 'viewport_bindings.dart';
 
 export 'interaction_bindings.dart';
+export 'location_bindings.dart';
 export 'viewport_bindings.dart';
 
 @JS()
@@ -69,7 +71,7 @@ extension type JSScreenPoint._(JSObject _) implements JSObject {
 @JS()
 @anonymous
 extension type JSStyleSpec._(JSObject _) implements JSObject {
-  external JSArray<JSNumber>? get center;
+  external JSLngLat? get center;
   external double? get zoom;
   external double? get bearing;
   external double? get pitch;
@@ -165,6 +167,13 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// No-op when [id] is unknown.
   external void removeInteraction(String id);
 
+  /// Attaches an `IControl` (e.g. a `GeolocateControl`) to the map.
+  external void addControl(JSControl control);
+
+  /// Removes a previously attached control. No-op when the control was
+  /// never added.
+  external void removeControl(JSControl control);
+
   /// Synthesizes an event of [type] with the given [data] payload and
   /// dispatches it to all listeners (including interactions).
   external void fire(String type, JSObject? data);
@@ -202,6 +211,17 @@ class JSMapEvents {
 @anonymous
 extension type JSMapBaseEvent._(JSObject _) implements JSObject {
   external String get type;
+}
+
+/// Payload of camera-related events (`movestart`, `move`, `moveend`).
+/// Programmatic moves leave `originalEvent` null.
+///
+/// TODO: replace with `JSGestureEventData` once the gestures-stream
+/// branch lands.
+@JS()
+@anonymous
+extension type JSMapMoveEvent._(JSObject _) implements JSObject {
+  external Event? get originalEvent;
 }
 
 /// Payload of the `sourcedata` event (and the parent `data` event before

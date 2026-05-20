@@ -74,9 +74,14 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     );
     _resizeObserver!.observe(_mapElement);
 
+    // Wire cross-domain dependencies into the viewport before flushing
+    // pending viewport state — `FollowPuckViewportState` needs them set
+    // or it's silently dropped at apply time.
+    final mapboxMap = MapboxMapWeb(nativeMap);
+    mapboxMap.attachViewport(_viewport);
+
     // Apply the initial viewport immediately — camera commands like jumpTo
     // and fitBounds work before the style finishes loading.
-    _viewport.onMapCreated(nativeMap);
     _applyViewport();
 
     // Wire GL JS events → platform-interface MapEvent subclasses. Subscribe
@@ -88,7 +93,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
       _eventBridge = MapEventBridge(nativeMap, onMapEvent);
     }
 
-    widget.onMapCreated?.call(MapboxMapWeb(nativeMap));
+    widget.onMapCreated?.call(mapboxMap);
   }
 
   @override

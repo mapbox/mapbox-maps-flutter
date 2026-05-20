@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  meta: ^1.17.0
   turf: ^0.0.10
 
 dev_dependencies:

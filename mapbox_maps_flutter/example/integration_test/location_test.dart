@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,19 +6,19 @@ import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'empty_map_widget.dart' as app;
 
+final _isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Location is updated puck 2d', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Location is updated puck 2d', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final location = mapboxMap.location;
     final expression = '["interpolate",["linear"],["zoom"],8,0,24,1]';
 
-    if (Platform.isAndroid) {
+    if (_isAndroid) {
       await mapboxMap.style.addLayer(
         SymbolLayer(id: 'layer-above', sourceId: 'source'),
       );
@@ -56,14 +54,16 @@ void main() {
       ),
     );
 
-    location.updateSettings(settings);
+    await location.updateSettings(settings);
 
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);
     expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
     expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
     expect(updatedSettings.pulsingColor, settings.pulsingColor);
-    if (Platform.isAndroid) {
+    // layerAbove/layerBelow only round-trip on Android (native applies +
+    // returns them) and on web (Dart side stores the requested value).
+    if (_isAndroid) {
       expect(updatedSettings.layerAbove, settings.layerAbove);
       expect(updatedSettings.layerBelow, settings.layerBelow);
     }
@@ -92,14 +92,12 @@ void main() {
     );
   });
 
-  testWidgets('Location is updated puck 3d', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Location is updated puck 3d', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    if (Platform.isAndroid) {
+    if (_isAndroid) {
       await mapboxMap.style.addLayer(
         SymbolLayer(id: 'layer-above', sourceId: 'source'),
       );
@@ -134,7 +132,8 @@ void main() {
 
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);
-    if (Platform.isAndroid) {
+    // modelTranslation is Android- and web-only round-trip; iOS drops it.
+    if (_isAndroid || kIsWeb) {
       expect(
         updatedSettings.locationPuck?.locationPuck3D?.modelTranslation,
         settings.locationPuck?.locationPuck3D?.modelTranslation,
@@ -156,8 +155,9 @@ void main() {
       updatedSettings.locationPuck?.locationPuck3D?.modelRotation,
       settings.locationPuck?.locationPuck3D?.modelRotation,
     );
-    // on iOS scale and scale expression are mutually exclusive
-    if (Platform.isAndroid) {
+    // on iOS scale and scale expression are mutually exclusive; the
+    // scale array is dropped when an expression is set.
+    if (_isAndroid) {
       expect(
         updatedSettings.locationPuck?.locationPuck3D?.modelScale,
         settings.locationPuck?.locationPuck3D?.modelScale,

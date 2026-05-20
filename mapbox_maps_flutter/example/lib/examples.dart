@@ -209,7 +209,9 @@ final List<Example> examples = [
   ),
   Example(
     leading: const Icon(Icons.map),
-    title: 'Location Component',
+    title: 'Locate the User',
+    subtitle:
+        'Toggle the user-location puck and follow it as the user moves.',
     builder: (_) => const LocationExample(),
   ),
   Example(

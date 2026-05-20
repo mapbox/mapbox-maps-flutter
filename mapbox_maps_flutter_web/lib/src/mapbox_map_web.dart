@@ -11,7 +11,9 @@ import 'package:turf/turf.dart' show Point, Position;
 import 'bindings/map_bindings.dart';
 import 'gestures_controller.dart';
 import 'interaction_handler.dart';
+import 'location/location_controller.dart';
 import 'unsupported_sub_interfaces.dart';
+import 'viewport/viewport_web.dart';
 
 /// Web [MapboxMapPlatformInterface] implementation backed by Mapbox GL JS.
 ///
@@ -28,8 +30,17 @@ import 'unsupported_sub_interfaces.dart';
 /// but wiring them is web-parity follow-up work.
 base class MapboxMapWeb implements MapboxMapPlatformInterface {
   final JSMap _map;
+  final _disposables = DisposeBag();
 
   MapboxMapWeb(this._map);
+
+  /// Wires [viewport] with cross-domain dependencies from this map.
+  @internal
+  void attachViewport(ViewportWeb viewport) {
+    viewport.onMapCreated(_map);
+    viewport.positionStreamProvider = () =>
+        (location as LocationController).locationUpdates;
+  }
 
   // ===== Sub-interfaces =====
 
@@ -40,8 +51,9 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     _map,
   );
   @override
-  late final LocationSettingsPlatformInterface location =
-      UnsupportedLocationSettingsWeb();
+  late final LocationSettingsPlatformInterface location = LocationController(
+    _map,
+  ).addToDisposeBag(_disposables);
   @override
   late final ScaleBarSettingsPlatformInterface scaleBar =
       UnsupportedScaleBarSettingsWeb();
@@ -120,10 +132,10 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
       JSCameraOptions(
         center: center == null
             ? null
-            : <JSAny>[
-                center.coordinates.lng.toDouble().toJS,
-                center.coordinates.lat.toDouble().toJS,
-              ].toJS,
+            : JSLngLat(
+                center.coordinates.lng.toDouble(),
+                center.coordinates.lat.toDouble(),
+              ),
         zoom: cameraOptions.zoom,
         bearing: cameraOptions.bearing,
         pitch: cameraOptions.pitch,
@@ -534,7 +546,8 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   @override
   void dispose() {
     // The JSMap instance is owned by `_MapWebWidgetState` and torn down in
-    // its own `dispose()` (see map_widget.dart). Nothing to release here.
+    // its own `dispose()` (see map_widget.dart).
+    _disposables.dispose();
   }
 }
 

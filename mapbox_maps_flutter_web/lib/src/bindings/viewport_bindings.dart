@@ -3,12 +3,14 @@ library;
 
 import 'dart:js_interop';
 
+import 'package:mapbox_maps_flutter_web/src/bindings/map_bindings.dart';
+
 /// Mapbox GL JS camera options for jumpTo/easeTo/flyTo.
 @JS()
 @anonymous
 extension type JSCameraOptions._(JSObject _) implements JSObject {
   external factory JSCameraOptions({
-    JSAny? center,
+    JSLngLat? center,
     double? zoom,
     double? bearing,
     double? pitch,
@@ -19,6 +21,17 @@ extension type JSCameraOptions._(JSObject _) implements JSObject {
     JSFunction? easing,
     bool? essential,
   });
+
+  external set center(JSLngLat value);
+  external set zoom(double value);
+  external set bearing(double value);
+  external set pitch(double value);
+  external set padding(JSPadding value);
+  external set speed(double value);
+  external set curve(double value);
+  external set duration(int value);
+  external set easing(JSFunction value);
+  external set essential(bool value);
 }
 
 /// Mapbox GL JS padding object.
@@ -41,7 +54,7 @@ extension type JSFitBoundsOptions._(JSObject _) implements JSObject {
     JSPadding? padding,
     double? bearing,
     double? pitch,
-    JSAny? offset,
+    JSScreenPoint? offset,
     int? duration,
     bool? linear,
     JSFunction? easing,

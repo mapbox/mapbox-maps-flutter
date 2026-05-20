@@ -6,27 +6,29 @@ import 'package:turf/turf.dart' as turf;
 
 import '../bindings/map_bindings.dart';
 
-/// Starts a camera animation (easeTo or flyTo) based on the transition type.
-void animate(
+/// Starts a camera animation (jumpTo / easeTo / flyTo) based on the
+/// transition type.
+void animateCamera(
   JSMap map,
-  JSAny? center,
+  JSLngLat? center,
   double? zoom,
   double? bearing,
   double? pitch,
   JSPadding? padding,
   ViewportTransition transition,
 ) {
-  final opts = JSCameraOptions(
-    center: center,
-    zoom: zoom,
-    bearing: bearing,
-    pitch: pitch,
-    padding: padding,
-    duration: transitionDurationMs(transition),
-    essential: true,
-  );
+  final opts = JSCameraOptions()..essential = true;
+  if (center != null) opts.center = center;
+  if (zoom != null) opts.zoom = zoom;
+  if (bearing != null) opts.bearing = bearing;
+  if (pitch != null) opts.pitch = pitch;
+  if (padding != null) opts.padding = padding;
+  final duration = transitionDurationMs(transition);
+  if (duration != null) opts.duration = duration;
 
   switch (transition) {
+    case ImmediateViewportTransition():
+      map.jumpTo(opts);
     case FlyViewportTransition():
       map.flyTo(opts);
     case EasingViewportTransition():
@@ -47,6 +49,7 @@ int? transitionDurationMs(ViewportTransition? transition) {
     FlyViewportTransition(:final duration) => duration?.inMilliseconds,
     EasingViewportTransition(:final duration) => duration.inMilliseconds,
     DefaultViewportTransition(:final maxDuration) => maxDuration.inMilliseconds,
+    ImmediateViewportTransition() => null,
     null => null,
   };
 }
