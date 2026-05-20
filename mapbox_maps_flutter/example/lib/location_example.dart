@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart' show Geolocator;
+import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
+import 'main.dart' show isMobile;
 
 class LocationExample extends StatefulWidget {
   const LocationExample({super.key});
@@ -11,329 +12,101 @@ class LocationExample extends StatefulWidget {
 }
 
 class LocationExampleState extends State<LocationExample> {
-  LocationExampleState();
-
-  final colors = [Colors.amber, Colors.black, Colors.blue];
-
   MapboxMap? mapboxMap;
-  int _accuracyColor = 0;
-  int _pulsingColor = 0;
-  int _accuracyBorderColor = 0;
-  double _puckScale = 10.0;
+  final _viewportController = ViewportController();
+  bool _enabled = false;
+  bool _pulsing = false;
+  bool _accuracy = false;
+  bool _bearing = false;
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
+    _viewportController.dispose();
+    mapboxMap?.dispose();
     super.dispose();
   }
 
-  Widget _show() {
-    return TextButton(
-      child: Text('show location'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(enabled: true),
-        );
-      },
+  Future<void> _toggleLocation() async {
+    final next = !_enabled;
+
+    if (next) {
+      await Geolocator.requestPermission();
+    }
+
+    await mapboxMap?.location.updateSettings(
+      LocationComponentSettings(enabled: next),
+    );
+    _viewportController.moveTo(
+      next ? FollowPuckViewportState() : const IdleViewportState(),
+      transition: const FlyViewportTransition()
+    );
+    setState(() => _enabled = next);
+  }
+
+  void _setPulsing(bool value) {
+    setState(() => _pulsing = value);
+    mapboxMap?.location.updateSettings(
+      LocationComponentSettings(pulsingEnabled: value),
     );
   }
 
-  Widget _hide() {
-    return TextButton(
-      child: Text('hide location'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(enabled: false),
-        );
-      },
+  void _setAccuracy(bool value) {
+    setState(() => _accuracy = value);
+    mapboxMap?.location.updateSettings(
+      LocationComponentSettings(showAccuracyRing: value),
     );
   }
 
-  Widget _showBearing() {
-    return TextButton(
-      child: Text('show location bearing'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(puckBearingEnabled: true),
-        );
-      },
-    );
-  }
-
-  Widget _hideBearing() {
-    return TextButton(
-      child: Text('hide location bearing'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(puckBearingEnabled: false),
-        );
-      },
-    );
-  }
-
-  Widget _showPulsing() {
-    return TextButton(
-      child: Text('show pulsing'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(pulsingEnabled: true),
-        );
-      },
-    );
-  }
-
-  Widget _hidePulsing() {
-    return TextButton(
-      child: Text('hide pulsing'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(pulsingEnabled: false),
-        );
-      },
-    );
-  }
-
-  Widget _showAccuracy() {
-    return TextButton(
-      child: Text('show accuracy'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(showAccuracyRing: true),
-        );
-      },
-    );
-  }
-
-  Widget _hideAccuracy() {
-    return TextButton(
-      child: Text('hide accuracy'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(showAccuracyRing: false),
-        );
-      },
-    );
-  }
-
-  Widget _switchAccuracyBorderColor() {
-    return TextButton(
-      child: Text('switch accuracy border color'),
-      onPressed: () {
-        _accuracyBorderColor++;
-        _accuracyBorderColor %= colors.length;
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(
-            accuracyRingBorderColor: colors[_accuracyBorderColor].value,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _switchAccuracyColor() {
-    return TextButton(
-      child: Text('switch accuracy color'),
-      onPressed: () {
-        _pulsingColor++;
-        _pulsingColor %= colors.length;
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(
-            accuracyRingColor: colors[_pulsingColor].value,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _switchPulsingColor() {
-    return TextButton(
-      child: Text('switch pulsing color'),
-      onPressed: () {
-        _accuracyColor++;
-        _accuracyColor %= colors.length;
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(pulsingColor: colors[_accuracyColor].value),
-        );
-      },
-    );
-  }
-
-  Widget _switchLocationPuck2D() {
-    return TextButton(
-      child: Text('switch to 2d puck'),
-      onPressed: () async {
-        final ByteData bytes = await rootBundle.load(
-          'assets/symbols/custom-icon.png',
-        );
-        final Uint8List list = bytes.buffer.asUint8List();
-
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(
-            enabled: true,
-            puckBearingEnabled: true,
-            locationPuck: LocationPuck(
-              locationPuck2D: DefaultLocationPuck2D(
-                topImage: list,
-                shadowImage: Uint8List.fromList([]),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _switchLocationPuck3D_duck() {
-    return TextButton(
-      child: Text('switch to 3d puck with duck model'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(
-            locationPuck: LocationPuck(
-              locationPuck3D: LocationPuck3D(
-                modelUri:
-                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
-                modelScale: [_puckScale, _puckScale, _puckScale],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _switchLocationPuck3D_car() {
-    return TextButton(
-      child: Text('switch to 3d puck with car model'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(
-            locationPuck: LocationPuck(
-              locationPuck3D: LocationPuck3D(
-                modelUri: "asset://assets/sportcar.glb",
-                modelScale: [_puckScale, _puckScale, _puckScale],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _switchPuckScale() {
-    return TextButton(
-      child: Text('scale 3d puck'),
-      onPressed: () {
-        _puckScale /= 2;
-        if (_puckScale < 1) {
-          _puckScale = 10.0;
-        }
-        print("Scale : $_puckScale");
-        mapboxMap?.location.updateSettings(
-          LocationComponentSettings(
-            locationPuck: LocationPuck(
-              locationPuck3D: LocationPuck3D(
-                modelUri:
-                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
-                modelScale: [_puckScale, _puckScale, _puckScale],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _getPermission() {
-    return TextButton(
-      child: Text('get location permission'),
-      onPressed: () async {
-        var status = await Geolocator.requestPermission();
-        print("Location granted : $status");
-      },
-    );
-  }
-
-  Widget _getSettings() {
-    return TextButton(
-      child: Text('get settings'),
-      onPressed: () {
-        mapboxMap?.location.getSettings().then(
-          (value) => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                """
-                  Location settings :
-                    enabled : ${value.enabled},
-                    puckBearingEnabled : ${value.puckBearingEnabled}
-                    puckBearing : ${value.puckBearing}
-                    pulsing : ${value.pulsingEnabled}
-                    pulsing radius : ${value.pulsingMaxRadius}
-                    pulsing color : ${value.pulsingColor}
-                    accuracy :  ${value.showAccuracyRing},
-                    accuracy color :  ${value.accuracyRingColor}
-                    accuracyRingBorderColor : ${value.accuracyRingBorderColor}
-                    """
-                    .trim(),
-              ),
-              backgroundColor: Theme.of(context).primaryColor,
-              duration: Duration(seconds: 2),
-            ),
-          ),
-        );
-      },
+  void _setBearing(bool value) {
+    setState(() => _bearing = value);
+    mapboxMap?.location.updateSettings(
+      LocationComponentSettings(puckBearingEnabled: value),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-      key: ValueKey("mapWidget"),
-      onMapCreated: _onMapCreated,
-    );
-
-    final List<Widget> listViewChildren = <Widget>[];
-
-    listViewChildren.addAll(<Widget>[
-      _getPermission(),
-      _show(),
-      _hide(),
-      _switchLocationPuck2D(),
-      _switchLocationPuck3D_duck(),
-      _switchLocationPuck3D_car(),
-      _switchPuckScale(),
-      _showBearing(),
-      _hideBearing(),
-      _showAccuracy(),
-      _hideAccuracy(),
-      _showPulsing(),
-      _hidePulsing(),
-      _switchAccuracyColor(),
-      _switchPulsingColor(),
-      _switchAccuracyBorderColor(),
-      _getSettings(),
-    ]);
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 400,
-            child: mapWidget,
+    return Scaffold(
+      body: MapWidget(
+        key: const ValueKey('mapWidget'),
+        onMapCreated: _onMapCreated,
+        viewportController: _viewportController,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _toggleLocation,
+        label: Icon(_enabled ? Icons.location_disabled : Icons.my_location),
+      ),
+      bottomNavigationBar: Card(
+        margin: EdgeInsets.zero,
+        elevation: 8,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchListTile(
+                title: const Text('Pulsing'),
+                value: isMobile ? _pulsing : true,
+                onChanged: isMobile ? (_enabled ? _setPulsing : null) : null,
+              ),
+              SwitchListTile(
+                title: const Text('Accuracy ring'),
+                value: _accuracy,
+                onChanged: _enabled ? _setAccuracy : null,
+              ),
+              SwitchListTile(
+                title: const Text('Bearing'),
+                value: _bearing,
+                onChanged: _enabled ? _setBearing : null,
+              ),
+            ],
           ),
         ),
-        Expanded(child: ListView(children: listViewChildren)),
-      ],
+      ),
     );
   }
 }

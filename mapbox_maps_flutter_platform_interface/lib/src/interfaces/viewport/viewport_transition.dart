@@ -10,6 +10,7 @@ import 'package:meta/meta.dart';
 /// - [DefaultViewportTransition], which provides the default animation for viewport transitions.
 /// - [EasingViewportTransition], which animates transitions using an easing curve.
 /// - [FlyViewportTransition], which performs a fly-over animation.
+/// - [ImmediateViewportTransition], which applies the new state instantly without animation.
 @immutable
 sealed class ViewportTransition {
   /// Creates a [ViewportTransition].
@@ -97,4 +98,11 @@ final class EasingViewportTransition extends ViewportTransition {
 
   @override
   int get hashCode => Object.hash(curve, duration);
+}
+
+/// A [ViewportTransition] that applies the new viewport state instantly,
+/// with no animation.
+final class ImmediateViewportTransition extends ViewportTransition {
+  /// Creates an [ImmediateViewportTransition].
+  const ImmediateViewportTransition() : super();
 }

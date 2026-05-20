@@ -18,8 +18,8 @@ import 'annotation/polyline_annotation_manager_web.dart';
 ///   * [UnimplementedError] — not-yet-implemented; GL JS has a plausible
 ///                            analogue waiting to be wired.
 ///
-/// Settings sub-interfaces (gestures/location/scale bar/compass/attribution/
-/// logo/indoor selector) are all [UnimplementedError] — GL JS exposes gesture
+/// Settings sub-interfaces (gestures/scale bar/compass/attribution/logo/
+/// indoor selector) are all [UnimplementedError] — GL JS exposes gesture
 /// handlers and a few built-in controls (attribution, scale), but none are
 /// wired into this package yet. The web-parity follow-up epic owns unstub.
 
@@ -284,16 +284,6 @@ class UnsupportedStyleWeb implements StylePlatformInterface {
   @override
   Future<void> setStyleTerrain(String properties) =>
       throw _unimplemented('setStyleTerrain', 'Style');
-}
-
-class UnsupportedLocationSettingsWeb
-    implements LocationSettingsPlatformInterface {
-  @override
-  Future<LocationComponentSettings> getSettings() =>
-      throw _unimplemented('getSettings', 'LocationSettings');
-  @override
-  Future<void> updateSettings(LocationComponentSettings settings) =>
-      throw _unimplemented('updateSettings', 'LocationSettings');
 }
 
 class UnsupportedScaleBarSettingsWeb

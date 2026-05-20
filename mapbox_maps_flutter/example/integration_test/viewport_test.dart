@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/turf.dart' show Point, Polygon, Position;
 import 'empty_map_widget.dart' as app;
 
 void main() {
@@ -146,9 +145,7 @@ void main() {
     // no-op viewport state, camera should not change
   });
 
-  testWidgets('FollowPuckViewportState test', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('FollowPuckViewportState test', (WidgetTester tester) async {
     final followPuckViewport = FollowPuckViewportState(
       zoom: 16.0,
       bearing: FollowPuckViewportStateBearingConstant(30.0),
