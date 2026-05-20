@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:turf/turf.dart';
 
 import '../debug_options.dart';
-import '../events.dart';
 import '../interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
@@ -80,24 +79,6 @@ abstract interface class MapboxMapPlatformInterface
   /// Stops collection started by [startPerformanceStatisticsCollection].
   /// No-op when no collection is active.
   void stopPerformanceStatisticsCollection();
-
-  // ===== Gesture listeners =====
-
-  /// Invoked on a map tap gesture.
-  OnMapTapListener? get onMapTapListener;
-  set onMapTapListener(OnMapTapListener? listener);
-
-  /// Invoked on a map long-tap gesture.
-  OnMapLongTapListener? get onMapLongTapListener;
-  set onMapLongTapListener(OnMapLongTapListener? listener);
-
-  /// Invoked on a map scroll gesture.
-  OnMapScrollListener? get onMapScrollListener;
-  set onMapScrollListener(OnMapScrollListener? listener);
-
-  /// Invoked on a map zoom gesture.
-  OnMapZoomListener? get onMapZoomListener;
-  set onMapZoomListener(OnMapZoomListener? listener);
 
   // ===== Style loading =====
 

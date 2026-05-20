@@ -8,6 +8,7 @@ final isMobile =
     !kIsWeb &&
     (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.android);
+final isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
         
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

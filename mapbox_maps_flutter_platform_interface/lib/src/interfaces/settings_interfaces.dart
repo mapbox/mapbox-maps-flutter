@@ -6,9 +6,18 @@ abstract interface class SettingsPlatformInterface<T> {
   Future<void> updateSettings(T settings);
 }
 
-/// Interface for gesture configuration settings.
+/// Interface for gesture configuration and observability.
+///
+/// Gesture-event streams emit a [MapContentGestureContext] each time the
+/// corresponding gesture transitions (started / changed / ended). Streams
+/// are broadcast — multiple listeners may subscribe.
 abstract interface class GesturesSettingsPlatformInterface
-    implements SettingsPlatformInterface<GesturesSettings> {}
+    implements SettingsPlatformInterface<GesturesSettings> {
+  Stream<MapContentGestureContext> get panEvents;
+  Stream<MapContentGestureContext> get zoomEvents;
+  Stream<MapContentGestureContext> get rotateEvents;
+  Stream<MapContentGestureContext> get pitchEvents;
+}
 
 /// Interface for scale bar ornament settings.
 abstract interface class ScaleBarSettingsPlatformInterface

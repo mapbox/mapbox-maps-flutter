@@ -328,11 +328,63 @@ class PigeonEventSink<T>(private val sink: EventChannel.EventSink) {
 abstract class AnnotationInteractionEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<AnnotationInteractionContext> {
   companion object {
     fun register(messenger: BinaryMessenger, streamHandler: AnnotationInteractionEventsStreamHandler, instanceName: String = "") {
-      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents"
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._annotationInteractionEvents"
       if (instanceName.isNotEmpty()) {
         channelName += ".$instanceName"
       }
       val internalStreamHandler = GestureListenersPigeonStreamHandler<AnnotationInteractionContext>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class PanEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<MapContentGestureContext> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: PanEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._panEvents"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<MapContentGestureContext>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class ZoomEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<MapContentGestureContext> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: ZoomEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._zoomEvents"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<MapContentGestureContext>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class RotateEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<MapContentGestureContext> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: RotateEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._rotateEvents"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<MapContentGestureContext>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class PitchEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<MapContentGestureContext> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: PitchEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._pitchEvents"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<MapContentGestureContext>(streamHandler)
       EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
     }
   }

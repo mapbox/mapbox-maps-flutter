@@ -67,7 +67,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         let locationController = LocationController(withMapView: mapView)
         _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: locationController, messageChannelSuffix: binaryMessenger.suffix)
 
-        gesturesController = GesturesController(withMapView: mapView)
+        gesturesController = GesturesController(withMapView: mapView, messenger: binaryMessenger)
         GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: gesturesController, messageChannelSuffix: binaryMessenger.suffix)
 
         interactionsController = InteractionsController(withMapView: mapView)
@@ -126,7 +126,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         case "annotation#remove_manager":
             annotationController!.handleRemoveManager(methodCall: methodCall, result: result)
         case "gesture#add_listeners":
-            gesturesController!.addListeners(messenger: binaryMessenger)
+            gesturesController!.addListeners()
             result(nil)
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()

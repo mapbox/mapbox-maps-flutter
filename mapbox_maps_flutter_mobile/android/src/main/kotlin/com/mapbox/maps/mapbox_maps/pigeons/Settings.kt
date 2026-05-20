@@ -226,6 +226,10 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
 /**
  * Gesture configuration allows to control the user touch interaction.
  *
+ * `GesturesSettingsPlatformInterface` is implemented by the hand-written
+ * `GesturesController` wrapper (which extends this pigeon-generated class
+ * and adds the gesture-event streams), not by the pigeon class itself.
+ *
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface GesturesSettingsInterface {

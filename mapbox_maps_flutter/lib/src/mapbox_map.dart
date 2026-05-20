@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -83,25 +84,33 @@ class MapboxMap implements MapboxMapInterface {
 
   // ===== Gesture listeners =====
 
-  /// Invoked on a map tap gesture.
-  OnMapTapListener? get onMapTapListener => _impl.onMapTapListener;
-  set onMapTapListener(OnMapTapListener? listener) =>
-      _impl.onMapTapListener = listener;
+  OnMapScrollListener? _onMapScrollListener;
+  StreamSubscription<MapContentGestureContext>? _scrollSubscription;
 
-  /// Invoked on a map long-tap gesture.
-  OnMapLongTapListener? get onMapLongTapListener => _impl.onMapLongTapListener;
-  set onMapLongTapListener(OnMapLongTapListener? listener) =>
-      _impl.onMapLongTapListener = listener;
+  @Deprecated('Subscribe to mapboxMap.gestures.pan.gestureEvents instead.')
+  OnMapScrollListener? get onMapScrollListener => _onMapScrollListener;
+  @Deprecated('Subscribe to mapboxMap.gestures.pan.gestureEvents instead.')
+  set onMapScrollListener(OnMapScrollListener? listener) {
+    _scrollSubscription?.cancel();
+    _onMapScrollListener = listener;
+    _scrollSubscription = listener == null
+        ? null
+        : _impl.gestures.panEvents.listen(listener);
+  }
 
-  /// Invoked on a map scroll gesture.
-  OnMapScrollListener? get onMapScrollListener => _impl.onMapScrollListener;
-  set onMapScrollListener(OnMapScrollListener? listener) =>
-      _impl.onMapScrollListener = listener;
+  OnMapZoomListener? _onMapZoomListener;
+  StreamSubscription<MapContentGestureContext>? _zoomSubscription;
 
-  /// Invoked on a map zoom gesture.
-  OnMapZoomListener? get onMapZoomListener => _impl.onMapZoomListener;
-  set onMapZoomListener(OnMapZoomListener? listener) =>
-      _impl.onMapZoomListener = listener;
+  @Deprecated('Subscribe to mapboxMap.gestures.zoom.gestureEvents instead.')
+  OnMapZoomListener? get onMapZoomListener => _onMapZoomListener;
+  @Deprecated('Subscribe to mapboxMap.gestures.zoom.gestureEvents instead.')
+  set onMapZoomListener(OnMapZoomListener? listener) {
+    _zoomSubscription?.cancel();
+    _onMapZoomListener = listener;
+    _zoomSubscription = listener == null
+        ? null
+        : _impl.gestures.zoomEvents.listen(listener);
+  }
 
   // ===== Style loading =====
 
@@ -340,16 +349,14 @@ class MapboxMap implements MapboxMapInterface {
 
   // ===== Legacy gesture listener aliases (v2 surface) =====
 
-  /// Legacy alias for `MapWidget.onScrollListener`. Stores the callback;
-  /// it fires on map scroll gestures.
+  @Deprecated('Subscribe to mapboxMap.gestures.pan.gestureEvents instead.')
   void setOnMapMoveListener(OnMapScrollListener? listener) {
-    _impl.onMapScrollListener = listener;
+    onMapScrollListener = listener;
   }
 
-  /// Legacy alias for `MapWidget.onZoomListener`. Stores the callback;
-  /// it fires on map zoom gestures.
+  @Deprecated('Subscribe to mapboxMap.gestures.zoom.gestureEvents instead.')
   void setOnMapZoomListener(OnMapZoomListener? listener) {
-    _impl.onMapZoomListener = listener;
+    onMapZoomListener = listener;
   }
 
   // ===== Snapshotter / glyphs =====
@@ -577,5 +584,9 @@ class MapboxMap implements MapboxMapInterface {
   // ===== Lifecycle =====
 
   /// Releases resources held by this map instance.
-  void dispose() => _impl.dispose();
+  void dispose() {
+    _scrollSubscription?.cancel();
+    _zoomSubscription?.cancel();
+    _impl.dispose();
+  }
 }

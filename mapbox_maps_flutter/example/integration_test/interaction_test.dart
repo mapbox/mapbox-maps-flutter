@@ -1,26 +1,71 @@
+// ignore_for_file: experimental_member_use
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'empty_map_widget.dart' as app;
 
-// Verifies the meta-package's `TapInteraction.onMap` sugar wires up against
-// a live `MapboxMap` without throwing. Trigger semantics — the actual
-// click → handler dispatch — are covered in the platform packages
-// (`mapbox_maps_flutter_mobile/example` and `mapbox_maps_flutter_web/
-// example`), since each platform needs its own click-synthesis hook.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('TapInteraction.onMap can be added and removed', (
+  testWidgets('TapInteraction.onMap fires on dispatched click', (
     WidgetTester tester,
   ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    const id = 'test-tap-interaction';
-    mapboxMap.addInteraction(TapInteraction.onMap((_) {}), interactionID: id);
+    final completer = Completer<MapContentGestureContext>();
+    const id = 'tap-interaction';
+    mapboxMap.addInteraction(
+      TapInteraction.onMap((context) {
+        expect(() => completer.complete(context), returnsNormally);
+      }),
+      interactionID: id,
+    );
+
+    await mapboxMap.dispatch('click', ScreenCoordinate(x: 10, y: 10));
+
+    final context = await completer.future.timeout(const Duration(seconds: 3));
+    expect(context.touchPosition.x, closeTo(10, 1e-4));
+    expect(context.touchPosition.y, closeTo(10, 1e-4));
+
     mapboxMap.removeInteraction(id);
+    await mapboxMap.dispatch('click', ScreenCoordinate(x: 10, y: 10));
+    await Future.delayed(const Duration(milliseconds: 500));
   });
+
+  testWidgets(
+    'LongTapInteraction.onMap fires on dispatched longClick',
+    skip: kIsWeb,
+    (WidgetTester tester) async {
+      final mapFuture = app.main();
+      await tester.pumpAndSettle();
+      final mapboxMap = await mapFuture;
+
+      final completer = Completer<MapContentGestureContext>();
+      const id = 'long-tap-interaction';
+      mapboxMap.addInteraction(
+        LongTapInteraction.onMap((context) {
+          expect(() => completer.complete(context), returnsNormally);
+        }),
+        interactionID: id,
+      );
+
+      await mapboxMap.dispatch('longClick', ScreenCoordinate(x: 10, y: 10));
+
+      final context = await completer.future.timeout(
+        const Duration(seconds: 3),
+      );
+      expect(context.touchPosition.x, closeTo(10, 1e-4));
+      expect(context.touchPosition.y, closeTo(10, 1e-4));
+
+      mapboxMap.removeInteraction(id);
+      await mapboxMap.dispatch('longClick', ScreenCoordinate(x: 10, y: 10));
+      await Future.delayed(const Duration(milliseconds: 500));
+    },
+  );
 }

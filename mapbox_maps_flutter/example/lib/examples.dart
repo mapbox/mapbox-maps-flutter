@@ -203,7 +203,7 @@ final List<Example> examples = [
     builder: (_) => const DraggableAnnotationExample(),
   ),
   Example(
-    leading: const Icon(Icons.map),
+    leading: const Icon(Icons.gesture),
     title: 'Gestures',
     builder: (_) => const GesturesExample(),
   ),

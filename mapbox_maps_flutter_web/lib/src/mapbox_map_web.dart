@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' show Point, Position;
 
 import 'bindings/map_bindings.dart';
+import 'gestures_controller.dart';
 import 'interaction_handler.dart';
 import 'unsupported_sub_interfaces.dart';
 
@@ -35,8 +36,9 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   @override
   late final StylePlatformInterface style = UnsupportedStyleWeb();
   @override
-  late final GesturesSettingsPlatformInterface gestures =
-      UnsupportedGesturesSettingsWeb();
+  late final GesturesSettingsPlatformInterface gestures = GesturesController(
+    _map,
+  );
   @override
   late final LocationSettingsPlatformInterface location =
       UnsupportedLocationSettingsWeb();
@@ -85,21 +87,6 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   void stopPerformanceStatisticsCollection() => throw UnimplementedError(
     'stopPerformanceStatisticsCollection is not yet implemented on web.',
   );
-
-  // ===== Gesture listeners =====
-  //
-  // Storage-only: setters latch the caller's listener, getters return it.
-  // The web adapter never invokes them because GL JS gesture events are not
-  // yet wired into the platform-interface MapContentGestureContext shape.
-
-  @override
-  OnMapTapListener? onMapTapListener;
-  @override
-  OnMapLongTapListener? onMapLongTapListener;
-  @override
-  OnMapScrollListener? onMapScrollListener;
-  @override
-  OnMapZoomListener? onMapZoomListener;
 
   // ===== Style loading =====
 
@@ -344,8 +331,24 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<int> getPrefetchZoomDelta() => throw _ni('getPrefetchZoomDelta');
 
   @override
-  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
-      throw _ni('dispatch');
+  Future<void> dispatch(
+    String gesture,
+    ScreenCoordinate screenCoordinate,
+  ) async {
+    final eventType = switch (gesture) {
+      'click' => 'click',
+      'drag' => 'drag',
+      'dragBegin' => 'dragstart',
+      'dragEnd' => 'dragend',
+      _ => throw ArgumentError.value(gesture, 'gesture', 'Invalid gesture'),
+    };
+    final point = JSScreenPoint(screenCoordinate.x, screenCoordinate.y);
+    final lngLat = _map.unproject(point);
+    _map.fire(
+      eventType,
+      {'point': point, 'lngLat': lngLat}.jsify() as JSObject,
+    );
+  }
 
   // ===== Snapshotter / glyphs =====
 

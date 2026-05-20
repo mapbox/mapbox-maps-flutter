@@ -313,12 +313,64 @@ Stream<AnnotationInteractionContext> _annotationInteractionEvents({
     instanceName = '.$instanceName';
   }
   final EventChannel _annotationInteractionEventsChannel = EventChannel(
-    'dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationInteractionEvents$instanceName',
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._annotationInteractionEvents$instanceName',
     pigeonMethodCodec,
   );
   return _annotationInteractionEventsChannel.receiveBroadcastStream().map((
     dynamic event,
   ) {
     return event as AnnotationInteractionContext;
+  });
+}
+
+Stream<MapContentGestureContext> _panEvents({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _panEventsChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._panEvents$instanceName',
+    pigeonMethodCodec,
+  );
+  return _panEventsChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as MapContentGestureContext;
+  });
+}
+
+Stream<MapContentGestureContext> _zoomEvents({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _zoomEventsChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._zoomEvents$instanceName',
+    pigeonMethodCodec,
+  );
+  return _zoomEventsChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as MapContentGestureContext;
+  });
+}
+
+Stream<MapContentGestureContext> _rotateEvents({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _rotateEventsChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._rotateEvents$instanceName',
+    pigeonMethodCodec,
+  );
+  return _rotateEventsChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as MapContentGestureContext;
+  });
+}
+
+Stream<MapContentGestureContext> _pitchEvents({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _pitchEventsChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._pitchEvents$instanceName',
+    pigeonMethodCodec,
+  );
+  return _pitchEventsChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as MapContentGestureContext;
   });
 }

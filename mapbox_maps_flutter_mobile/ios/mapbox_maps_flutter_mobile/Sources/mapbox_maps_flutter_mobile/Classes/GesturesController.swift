@@ -2,94 +2,140 @@ import Foundation
 @_spi(Experimental) import MapboxMaps
 import Flutter
 
+/// Shared sink-management for the four `MapContentGestureContext`-typed
+/// pigeon stream handlers. Each gesture-specific subclass conforms and
+/// inherits `send` for free; only the storage and the two pigeon
+/// overrides are repeated (Swift can't override a parent class method
+/// from a protocol extension).
+private protocol GestureEventStream: AnyObject {
+    var sink: PigeonEventSink<MapContentGestureContext>? { get }
+}
+
+extension GestureEventStream {
+    func send(_ event: MapContentGestureContext) { sink?.success(event) }
+}
+
+private final class PanEventStream: PanEventsStreamHandler, GestureEventStream {
+    var sink: PigeonEventSink<MapContentGestureContext>?
+    override func onListen(withArguments _: Any?, sink: PigeonEventSink<MapContentGestureContext>) { self.sink = sink }
+    override func onCancel(withArguments _: Any?) { sink = nil }
+}
+
+private final class ZoomEventStream: ZoomEventsStreamHandler, GestureEventStream {
+    var sink: PigeonEventSink<MapContentGestureContext>?
+    override func onListen(withArguments _: Any?, sink: PigeonEventSink<MapContentGestureContext>) { self.sink = sink }
+    override func onCancel(withArguments _: Any?) { sink = nil }
+}
+
+private final class RotateEventStream: RotateEventsStreamHandler, GestureEventStream {
+    var sink: PigeonEventSink<MapContentGestureContext>?
+    override func onListen(withArguments _: Any?, sink: PigeonEventSink<MapContentGestureContext>) { self.sink = sink }
+    override func onCancel(withArguments _: Any?) { sink = nil }
+}
+
+private final class PitchEventStream: PitchEventsStreamHandler, GestureEventStream {
+    var sink: PigeonEventSink<MapContentGestureContext>?
+    override func onListen(withArguments _: Any?, sink: PigeonEventSink<MapContentGestureContext>) { self.sink = sink }
+    override func onCancel(withArguments _: Any?) { sink = nil }
+}
+
 final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRecognizerDelegate {
 
     private var cancelables: Set<AnyCancelable> = []
     private var onGestureListener: GestureListener?
     private let mapView: MapView
+    private let messenger: SuffixBinaryMessenger
 
-    init(withMapView mapView: MapView) {
+    private let panStream = PanEventStream()
+    private let zoomStream = ZoomEventStream()
+    private let rotateStream = RotateEventStream()
+    private let pitchStream = PitchEventStream()
+
+    init(withMapView mapView: MapView, messenger: SuffixBinaryMessenger) {
         self.mapView = mapView
+        self.messenger = messenger
+        super.init()
+        register(messenger: messenger)
+    }
+
+    private func register(messenger: SuffixBinaryMessenger) {
+        mapView.gestures.panGestureRecognizer.addTarget(self, action: #selector(onMapPan))
+        mapView.gestures.quickZoomGestureRecognizer.addTarget(self, action: #selector(onMapQuickZoom))
+        mapView.gestures.pinchGestureRecognizer.addTarget(self, action: #selector(onMapPinch))
+        mapView.gestures.doubleTapToZoomInGestureRecognizer.addTarget(self, action: #selector(onMapDoubleTapZoomIn))
+        mapView.gestures.doubleTouchToZoomOutGestureRecognizer.addTarget(self, action: #selector(onMapDoubleTouchZoomOut))
+        mapView.gestures.rotateGestureRecognizer.addTarget(self, action: #selector(onMapRotate))
+        mapView.gestures.pitchGestureRecognizer.addTarget(self, action: #selector(onMapPitch))
+
+        PanEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: panStream)
+        ZoomEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: zoomStream)
+        RotateEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: rotateStream)
+        PitchEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: pitchStream)
+
+        mapView.gestures.onMapTap.observe { [weak self] context in
+            guard let self else { return }
+            self.onGestureListener?.onTap(context: context.toFLTMapContentGestureContext()) { _ in }
+        }
+        .store(in: &cancelables)
+        mapView.gestures.onMapLongPress.observe { [weak self] context in
+            guard let self else { return }
+            self.onGestureListener?.onLongTap(context: context.toFLTMapContentGestureContext()) { _ in }
+        }
+        .store(in: &cancelables)
+    }
+
+    private func makeContext(at touchPoint: CGPoint, state: UIGestureRecognizer.State) -> MapContentGestureContext {
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        return MapContentGestureContext(
+            touchPosition: touchPoint.toFLTScreenCoordinate(),
+            point: point,
+            gestureState: state.toFLTGestureState()
+        )
     }
 
     @objc private func onMapPan(_ sender: UIPanGestureRecognizer) {
-        guard sender.state == .began || sender.state == .changed || sender.state == .ended else {
-            return
-        }
-
-        let touchPoint = sender.location(in: mapView)
-        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
-        let context = MapContentGestureContext(
-            touchPosition: touchPoint.toFLTScreenCoordinate(),
-            point: point,
-            gestureState: sender.state.toFLTGestureState()
-        )
-
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
+        let context = makeContext(at: sender.location(in: mapView), state: sender.state)
         onGestureListener?.onScroll(context: context, completion: { _ in })
+        panStream.send(context)
     }
 
     @objc private func onMapQuickZoom(_ sender: UIGestureRecognizer) {
-        guard sender.state == .began || sender.state == .changed || sender.state == .ended else {
-            return
-        }
-
-        let touchPoint = sender.location(in: mapView)
-        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
-        let context = MapContentGestureContext(
-            touchPosition: touchPoint.toFLTScreenCoordinate(),
-            point: point,
-            gestureState: sender.state.toFLTGestureState()
-        )
-
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
+        let context = makeContext(at: sender.location(in: mapView), state: sender.state)
         onGestureListener?.onZoom(context: context, completion: { _ in })
+        zoomStream.send(context)
     }
 
     @objc private func onMapPinch(_ sender: UIPinchGestureRecognizer) {
-        guard sender.state == .began || sender.state == .changed || sender.state == .ended else {
-            return
-        }
-
-        let touchPoint = sender.location(in: mapView)
-        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
-        let context = MapContentGestureContext(
-            touchPosition: touchPoint.toFLTScreenCoordinate(),
-            point: point,
-            gestureState: sender.state.toFLTGestureState()
-        )
-
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
+        let context = makeContext(at: sender.location(in: mapView), state: sender.state)
         onGestureListener?.onZoom(context: context, completion: { _ in })
+        zoomStream.send(context)
     }
 
     @objc private func onMapDoubleTapZoomIn(_ sender: UITapGestureRecognizer) {
-        guard sender.state == .ended else {
-            return
-        }
-
-        let touchPoint = sender.location(in: mapView)
-        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
-        let context = MapContentGestureContext(
-            touchPosition: touchPoint.toFLTScreenCoordinate(),
-            point: point,
-            gestureState: sender.state.toFLTGestureState()
-        )
-
+        guard sender.state == .ended else { return }
+        let context = makeContext(at: sender.location(in: mapView), state: sender.state)
         onGestureListener?.onZoom(context: context, completion: { _ in })
+        zoomStream.send(context)
     }
 
     @objc private func onMapDoubleTouchZoomOut(_ sender: UITapGestureRecognizer) {
-        guard sender.state == .ended else {
-            return
-        }
-
-        let touchPoint = sender.location(in: mapView)
-        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
-        let context = MapContentGestureContext(
-            touchPosition: touchPoint.toFLTScreenCoordinate(),
-            point: point,
-            gestureState: sender.state.toFLTGestureState()
-        )
-
+        guard sender.state == .ended else { return }
+        let context = makeContext(at: sender.location(in: mapView), state: sender.state)
         onGestureListener?.onZoom(context: context, completion: { _ in })
+        zoomStream.send(context)
+    }
+
+    @objc private func onMapRotate(_ sender: UIGestureRecognizer) {
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
+        rotateStream.send(makeContext(at: sender.location(in: mapView), state: sender.state))
+    }
+
+    @objc private func onMapPitch(_ sender: UIGestureRecognizer) {
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
+        pitchStream.send(makeContext(at: sender.location(in: mapView), state: sender.state))
     }
 
     func updateSettings(settings: GesturesSettings) throws {
@@ -170,29 +216,11 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
         )
     }
 
-    func addListeners(messenger: SuffixBinaryMessenger) {
-        removeListeners()
-        mapView.gestures.panGestureRecognizer.addTarget(self, action: #selector(onMapPan))
-        mapView.gestures.quickZoomGestureRecognizer.addTarget(self, action: #selector(onMapQuickZoom))
-        mapView.gestures.pinchGestureRecognizer.addTarget(self, action: #selector(onMapPinch))
-        mapView.gestures.doubleTapToZoomInGestureRecognizer.addTarget(self, action: #selector(onMapDoubleTapZoomIn))
-        mapView.gestures.doubleTouchToZoomOutGestureRecognizer.addTarget(self, action: #selector(onMapDoubleTouchZoomOut))
-
+    func addListeners() {
         onGestureListener = GestureListener(binaryMessenger: messenger.messenger, messageChannelSuffix: messenger.suffix)
-
-        mapView.gestures.onMapTap.observe { [weak self] context in
-            guard let self else { return }
-            self.onGestureListener?.onTap(context: context.toFLTMapContentGestureContext()) { _ in }
-        }
-        .store(in: &cancelables)
-        mapView.gestures.onMapLongPress.observe { [weak self] context in
-            guard let self else { return }
-            self.onGestureListener?.onLongTap(context: context.toFLTMapContentGestureContext()) { _ in }
-        }
-        .store(in: &cancelables)
     }
 
     func removeListeners() {
-        cancelables = []
+        onGestureListener = nil
     }
 }
