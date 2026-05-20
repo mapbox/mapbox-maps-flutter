@@ -118,7 +118,11 @@ class Settings_PigeonCodec extends StandardMessageCodec {
 }
 
 /// Gesture configuration allows to control the user touch interaction.
-class GesturesSettingsInterface implements GesturesSettingsPlatformInterface {
+///
+/// `GesturesSettingsPlatformInterface` is implemented by the hand-written
+/// `GesturesController` wrapper (which extends this pigeon-generated class
+/// and adds the gesture-event streams), not by the pigeon class itself.
+class GesturesSettingsInterface {
   /// Constructor for [GesturesSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
@@ -136,7 +140,6 @@ class GesturesSettingsInterface implements GesturesSettingsPlatformInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  @override
   Future<GesturesSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -167,7 +170,6 @@ class GesturesSettingsInterface implements GesturesSettingsPlatformInterface {
     }
   }
 
-  @override
   Future<void> updateSettings(GesturesSettings settings) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';

@@ -389,6 +389,14 @@
     "reason": "Deprecated in v2 in favor of Interaction API"
   },
   {
+    "changeDescription": "MapboxMap: Field \"onMapTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Field \"onMapLongTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
     "changeDescription": "MapboxMap: Method \"fromNativeController\" removed",
     "reason": "Pre-federation entry point. Federated SDK constructs MapboxMap via platform-specific implementations in onMapCreated; customers don't construct from native handles. Removed without deprecation cycle because the construction model itself changed."
   },

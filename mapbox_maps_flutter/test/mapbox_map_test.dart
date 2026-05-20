@@ -16,6 +16,15 @@ class StubStylePlatformInterface implements StylePlatformInterface {
 class StubGesturesSettingsPlatformInterface
     implements GesturesSettingsPlatformInterface {
   @override
+  Stream<MapContentGestureContext> get panEvents => const Stream.empty();
+  @override
+  Stream<MapContentGestureContext> get zoomEvents => const Stream.empty();
+  @override
+  Stream<MapContentGestureContext> get rotateEvents => const Stream.empty();
+  @override
+  Stream<MapContentGestureContext> get pitchEvents => const Stream.empty();
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
@@ -119,15 +128,6 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   final MapRecorderPlatformInterface mapRecorder =
       StubMapRecorderPlatformInterface();
 
-  // Gesture listeners
-  @override
-  OnMapTapListener? onMapTapListener;
-  @override
-  OnMapLongTapListener? onMapLongTapListener;
-  @override
-  OnMapScrollListener? onMapScrollListener;
-  @override
-  OnMapZoomListener? onMapZoomListener;
 
   // Call counts
   int loadStyleURICallCount = 0;
@@ -921,36 +921,6 @@ void main() {
       expect(identical(style1, style2), isTrue);
     });
 
-    // ===== Gesture listeners =====
-
-    test('onMapTapListener delegates get and set', () {
-      void listener(MapContentGestureContext context) {}
-      mapboxMap.onMapTapListener = listener;
-      expect(mockImpl.onMapTapListener, same(listener));
-      expect(mapboxMap.onMapTapListener, same(listener));
-    });
-
-    test('onMapLongTapListener delegates get and set', () {
-      void listener(MapContentGestureContext context) {}
-      mapboxMap.onMapLongTapListener = listener;
-      expect(mockImpl.onMapLongTapListener, same(listener));
-      expect(mapboxMap.onMapLongTapListener, same(listener));
-    });
-
-    test('onMapScrollListener delegates get and set', () {
-      void listener(MapContentGestureContext context) {}
-      mapboxMap.onMapScrollListener = listener;
-      expect(mockImpl.onMapScrollListener, same(listener));
-      expect(mapboxMap.onMapScrollListener, same(listener));
-    });
-
-    test('onMapZoomListener delegates get and set', () {
-      void listener(MapContentGestureContext context) {}
-      mapboxMap.onMapZoomListener = listener;
-      expect(mockImpl.onMapZoomListener, same(listener));
-      expect(mapboxMap.onMapZoomListener, same(listener));
-    });
-
     // ===== Style loading =====
 
     test('loadStyleURI delegates to interface', () async {
@@ -1417,20 +1387,6 @@ void main() {
       expect(mockImpl.dispatchCallCount, 1);
       expect(mockImpl.lastDispatchGesture, 'click');
       expect(mockImpl.lastScreenCoordinate, same(coord));
-    });
-
-    // ===== Legacy gesture listener aliases =====
-
-    test('setOnMapMoveListener stores listener on interface', () {
-      void listener(_) {}
-      mapboxMap.setOnMapMoveListener(listener);
-      expect(mockImpl.onMapScrollListener, same(listener));
-    });
-
-    test('setOnMapZoomListener stores listener on interface', () {
-      void listener(_) {}
-      mapboxMap.setOnMapZoomListener(listener);
-      expect(mockImpl.onMapZoomListener, same(listener));
     });
 
     // ===== Snapshotter / glyphs =====

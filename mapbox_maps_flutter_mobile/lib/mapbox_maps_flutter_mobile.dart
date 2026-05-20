@@ -19,6 +19,7 @@ part 'src/annotation/polygon_annotation_manager.dart';
 part 'src/annotation/polyline_annotation_manager.dart';
 part 'src/annotation/annotation_manager.dart';
 part 'src/callbacks.dart';
+part 'src/gestures_controller.dart';
 part 'src/map_widget.dart';
 part 'src/mapbox_map.dart';
 part 'src/mapbox_maps_options.dart';

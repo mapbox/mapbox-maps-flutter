@@ -286,16 +286,6 @@ class UnsupportedStyleWeb implements StylePlatformInterface {
       throw _unimplemented('setStyleTerrain', 'Style');
 }
 
-class UnsupportedGesturesSettingsWeb
-    implements GesturesSettingsPlatformInterface {
-  @override
-  Future<GesturesSettings> getSettings() =>
-      throw _unimplemented('getSettings', 'GesturesSettings');
-  @override
-  Future<void> updateSettings(GesturesSettings settings) =>
-      throw _unimplemented('updateSettings', 'GesturesSettings');
-}
-
 class UnsupportedLocationSettingsWeb
     implements LocationSettingsPlatformInterface {
   @override

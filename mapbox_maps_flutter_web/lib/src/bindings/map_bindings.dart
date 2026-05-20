@@ -51,6 +51,7 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
 
 @JS('LngLat')
 extension type JSLngLat._(JSObject _) implements JSObject {
+  external JSLngLat(double lng, double lat);
   external double get lng;
   external double get lat;
 }
@@ -112,6 +113,34 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Returns the map's current pitch (tilt).
   external double getPitch();
 
+  /// Unprojects a pixel coordinate (relative to the map's container) to a
+  /// geographical coordinate.
+  external JSLngLat unproject(JSScreenPoint point);
+
+  /// Returns the HTMLElement the map is rendered into.
+  external HTMLElement getContainer();
+
+  /// One-finger pan handler.
+  external JSGestureHandler get dragPan;
+
+  /// Right-click / two-finger rotate handler.
+  external JSDragRotateHandler get dragRotate;
+
+  /// Mouse-wheel / trackpad-pinch zoom handler.
+  external JSGestureHandler get scrollZoom;
+
+  /// Two-finger vertical pitch handler.
+  external JSGestureHandler get touchPitch;
+
+  /// Two-finger pinch zoom (and rotate) handler.
+  external JSTouchZoomRotateHandler get touchZoomRotate;
+
+  /// Double-click zoom-in handler.
+  external JSGestureHandler get doubleClickZoom;
+
+  /// Keyboard shortcut handler (+/-, arrows, shift+arrows).
+  external JSKeyboardHandler get keyboard;
+
   /// Returns the map's style specification object.
   external JSStyleSpec getStyle();
 
@@ -135,6 +164,10 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Removes an interaction previously registered with [addInteraction].
   /// No-op when [id] is unknown.
   external void removeInteraction(String id);
+
+  /// Synthesizes an event of [type] with the given [data] payload and
+  /// dispatches it to all listeners (including interactions).
+  external void fire(String type, JSObject? data);
 }
 
 // ===== Event names =====
@@ -184,4 +217,49 @@ extension type JSMapDataEvent._(JSObject _) implements JSObject {
   /// `gl-js/src/ui/events.ts`, transitions to `true` on metadata-complete
   /// and stays true for subsequent content updates.
   external bool? get isSourceLoaded;
+}
+
+/// Payload of camera-surface gesture events (`drag*` / `zoom*` / `rotate*`
+/// / `pitch*`). Carries only `originalEvent`; `point`/`lngLat` are absent.
+@JS()
+@anonymous
+extension type JSGestureEventData._(JSObject _) implements JSObject {
+  external JSDOMEvent? get originalEvent;
+}
+
+/// One of GL JS's toggleable gesture handlers (`dragPan`, `dragRotate`,
+/// `scrollZoom`, `touchPitch`, `touchZoomRotate`, `doubleClickZoom`).
+@JS()
+extension type JSGestureHandler._(JSObject _) implements JSObject {
+  external void enable();
+  external void disable();
+  external bool isEnabled();
+}
+
+/// `touchZoomRotate` handler — adds `disableRotation`/`enableRotation` for
+/// turning off the rotate portion of pinch while keeping pinch-zoom on.
+@JS()
+extension type JSTouchZoomRotateHandler._(JSObject _)
+    implements JSGestureHandler {
+  external void disableRotation();
+  external void enableRotation();
+}
+
+/// `dragRotate` handler — exposes GL JS's `_pitchWithRotate` field so the
+/// pitch portion of ctrl+drag can be toggled at runtime. GL JS has no
+/// public setter for this constructor-only option yet; tracked at
+/// https://mapbox.atlassian.net/browse/GLJS-1827. Remove `pitchWithRotate`
+/// once that ships.
+@JS()
+extension type JSDragRotateHandler._(JSObject _) implements JSGestureHandler {
+  @JS('_pitchWithRotate')
+  external bool pitchWithRotate;
+}
+
+/// Keyboard handler — adds `disableRotation`/`enableRotation` for turning
+/// off shift+arrow rotate/pitch while keeping +/- zoom and arrow pan.
+@JS()
+extension type JSKeyboardHandler._(JSObject _) implements JSGestureHandler {
+  external void disableRotation();
+  external void enableRotation();
 }

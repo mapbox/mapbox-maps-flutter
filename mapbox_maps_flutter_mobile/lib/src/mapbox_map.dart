@@ -2,19 +2,9 @@ part of mapbox_maps_flutter_mobile;
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
-  MapboxMap._({
-    required _MapboxMapsPlatform mapboxMapsPlatform,
-    OnMapTapListener? onMapTapListener,
-    OnMapLongTapListener? onMapLongTapListener,
-    OnMapScrollListener? onMapScrollListener,
-    OnMapZoomListener? onMapZoomListener,
-  }) : _mapboxMapsPlatform = mapboxMapsPlatform,
-       _onMapTapListener = onMapTapListener,
-       _onMapLongTapListener = onMapLongTapListener,
-       _onMapScrollListener = onMapScrollListener,
-       _onMapZoomListener = onMapZoomListener {
+  MapboxMap._({required _MapboxMapsPlatform mapboxMapsPlatform})
+    : _mapboxMapsPlatform = mapboxMapsPlatform {
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
-    _setupGestures();
   }
 
   /// Creates a [MapboxMap] instance connected to a native MapboxMapController
@@ -90,9 +80,9 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
   );
 
-  /// The interface to access the gesture settings.
+  /// The interface to access gesture settings and event streams.
   @override
-  late final GesturesSettingsInterface gestures = GesturesSettingsInterface(
+  late final GesturesController gestures = GesturesController(
     binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
     messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
   );
@@ -140,45 +130,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
     channelSuffix: _mapboxMapsPlatform.channelSuffix,
   );
-  // Listener fields are exposed via explicit getter+setter pairs so that
-  // assignment-style updates (`mapboxMap.onMapTapListener = ...`) trigger
-  // `_setupGestures()` — the field-level auto-setter alone won't wire
-  // the native channel, leaving listener registrations silent.
-  OnMapTapListener? _onMapTapListener;
-  @override
-  OnMapTapListener? get onMapTapListener => _onMapTapListener;
-  @override
-  set onMapTapListener(OnMapTapListener? listener) {
-    _onMapTapListener = listener;
-    _setupGestures();
-  }
-
-  OnMapLongTapListener? _onMapLongTapListener;
-  @override
-  OnMapLongTapListener? get onMapLongTapListener => _onMapLongTapListener;
-  @override
-  set onMapLongTapListener(OnMapLongTapListener? listener) {
-    _onMapLongTapListener = listener;
-    _setupGestures();
-  }
-
-  OnMapScrollListener? _onMapScrollListener;
-  @override
-  OnMapScrollListener? get onMapScrollListener => _onMapScrollListener;
-  @override
-  set onMapScrollListener(OnMapScrollListener? listener) {
-    _onMapScrollListener = listener;
-    _setupGestures();
-  }
-
-  OnMapZoomListener? _onMapZoomListener;
-  @override
-  OnMapZoomListener? get onMapZoomListener => _onMapZoomListener;
-  @override
-  set onMapZoomListener(OnMapZoomListener? listener) {
-    _onMapZoomListener = listener;
-    _setupGestures();
-  }
 
   @override
   void dispose() {
@@ -812,25 +763,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   Future<void> cancelCameraAnimation() =>
       _animationManager.cancelCameraAnimation();
 
-  void _setupGestures() {
-    if (onMapTapListener != null ||
-        onMapLongTapListener != null ||
-        onMapScrollListener != null ||
-        onMapZoomListener != null) {
-      GestureListener.setUp(
-        _GestureListener(
-          onMapTapListener: onMapTapListener,
-          onMapLongTapListener: onMapLongTapListener,
-          onMapScrollListener: onMapScrollListener,
-          onMapZoomListener: onMapZoomListener,
-        ),
-        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
-      );
-      _mapboxMapsPlatform.addGestureListeners();
-    }
-  }
-
   /// Collects CPU and GPU resource usage, as well as timings of layers and rendering groups, over a user-configurable sampling duration.
   /// Use the collected information to identify layers or rendering groups that may be performing poorly.
   ///
@@ -897,26 +829,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     );
   }
 
-  void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
-    this.onMapTapListener = onMapTapListener;
-    _setupGestures();
-  }
-
-  void setOnMapLongTapListener(OnMapLongTapListener? onMapLongTapListener) {
-    this.onMapLongTapListener = onMapLongTapListener;
-    _setupGestures();
-  }
-
-  void setOnMapMoveListener(OnMapScrollListener? onMapScrollListener) {
-    this.onMapScrollListener = onMapScrollListener;
-    _setupGestures();
-  }
-
-  void setOnMapZoomListener(OnMapZoomListener? onMapZoomListener) {
-    this.onMapZoomListener = onMapZoomListener;
-    _setupGestures();
-  }
-
   /// Returns a snapshot of the map as PNG-encoded bytes.
   /// Returns null if the snapshot operation timed out or otherwise failed.
   @override
@@ -955,40 +867,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         channelSuffix: _mapboxMapsPlatform.channelSuffix,
       ).setCustomHeaders(headers);
-}
-
-class _GestureListener extends GestureListener {
-  _GestureListener({
-    this.onMapTapListener,
-    this.onMapLongTapListener,
-    this.onMapScrollListener,
-    this.onMapZoomListener,
-  });
-
-  final OnMapTapListener? onMapTapListener;
-  final OnMapLongTapListener? onMapLongTapListener;
-  final OnMapScrollListener? onMapScrollListener;
-  final OnMapZoomListener? onMapZoomListener;
-
-  @override
-  void onTap(MapContentGestureContext context) {
-    onMapTapListener?.call(context);
-  }
-
-  @override
-  void onLongTap(MapContentGestureContext context) {
-    onMapLongTapListener?.call(context);
-  }
-
-  @override
-  void onScroll(MapContentGestureContext context) {
-    onMapScrollListener?.call(context);
-  }
-
-  @override
-  void onZoom(MapContentGestureContext context) {
-    onMapZoomListener?.call(context);
-  }
 }
 
 /// Listen for a single interaction added to the map, identified by its id

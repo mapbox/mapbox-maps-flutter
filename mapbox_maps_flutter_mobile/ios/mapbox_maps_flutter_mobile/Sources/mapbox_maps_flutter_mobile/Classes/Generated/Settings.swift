@@ -206,6 +206,10 @@ class SettingsPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 
 /// Gesture configuration allows to control the user touch interaction.
 ///
+/// `GesturesSettingsPlatformInterface` is implemented by the hand-written
+/// `GesturesController` wrapper (which extends this pigeon-generated class
+/// and adds the gesture-event streams), not by the pigeon class itself.
+///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol GesturesSettingsInterface {
   func getSettings() throws -> GesturesSettings

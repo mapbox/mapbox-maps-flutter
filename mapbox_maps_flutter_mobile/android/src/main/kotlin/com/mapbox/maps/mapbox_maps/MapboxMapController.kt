@@ -203,7 +203,7 @@ class MapboxMapController(
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView, messenger, this.channelSuffix)
     locationComponentController = LocationComponentController(mapView, context)
-    gestureController = GestureController(mapView, context)
+    gestureController = GestureController(mapView, context, messenger, this.channelSuffix)
     interactionsController = InteractionsController(mapboxMap, context)
     logoController = LogoController(mapView)
     attributionController = AttributionController(mapView)
@@ -317,7 +317,7 @@ class MapboxMapController(
         annotationController.handleRemoveManager(call, result)
       }
       "gesture#add_listeners" -> {
-        gestureController.addListeners(messenger, channelSuffix)
+        gestureController.addListeners()
         result.success(null)
       }
       "gesture#remove_listeners" -> {

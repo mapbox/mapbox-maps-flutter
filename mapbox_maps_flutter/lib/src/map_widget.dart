@@ -1,7 +1,7 @@
 // AndroidPlatformViewHostingMode is @experimental but the facade widget
 // has surfaced it as a public param since v2; suppress the consumer-side
 // experimental_member_use here.
-// ignore_for_file: experimental_member_use
+// ignore_for_file: experimental_member_use, deprecated_member_use_from_same_package
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -101,16 +101,14 @@ class MapWidget extends StatelessWidget {
   /// Invoked when map makes a request to load required resources.
   final OnResourceRequestListener? onResourceRequestListener;
 
-  /// Legacy v2 alias for [MapboxMap.onMapScrollListener]. When provided,
-  /// the listener is wired onto the map after creation and fires on map
-  /// scroll gestures.
-  @Deprecated('Use MapboxMap.onMapScrollListener inside onMapCreated instead.')
+  @Deprecated(
+    'Subscribe to mapboxMap.gestures.pan.gestureEvents inside [onMapCreated] instead.',
+  )
   final OnMapScrollListener? onScrollListener;
 
-  /// Legacy v2 alias for [MapboxMap.onMapZoomListener]. When provided,
-  /// the listener is wired onto the map after creation and fires on map
-  /// zoom gestures.
-  @Deprecated('Use MapboxMap.onMapZoomListener inside onMapCreated instead.')
+  @Deprecated(
+    'Subscribe to mapboxMap.gestures.zoom.gestureEvents inside [onMapCreated] instead.',
+  )
   final OnMapZoomListener? onZoomListener;
 
   /// Initial map options applied at native-map construction time. Mobile
@@ -153,10 +151,12 @@ class MapWidget extends StatelessWidget {
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
     @Deprecated(
-      'Use MapboxMap.onMapScrollListener inside onMapCreated instead.',
+      'Subscribe to mapboxMap.gestures.pan.gestureEvents inside [onMapCreated] instead.',
     )
     this.onScrollListener,
-    @Deprecated('Use MapboxMap.onMapZoomListener inside onMapCreated instead.')
+    @Deprecated(
+      'Subscribe to mapboxMap.gestures.zoom.gestureEvents inside [onMapCreated] instead.',
+    )
     this.onZoomListener,
     this.mapOptions,
     this.textureView,
@@ -185,26 +185,20 @@ class MapWidget extends StatelessWidget {
     ViewportTransition? transition,
     void Function(bool)? completion,
   ) {
-    final hasLegacyAliases = onScrollListener != null || onZoomListener != null;
     return MapboxMapsFlutterPlatform.instance.buildView(
       styleUri: styleUri,
       mapOptions: mapOptions,
       textureView: textureView,
       androidHostingMode: androidHostingMode,
       gestureRecognizers: gestureRecognizers,
-      onMapCreated: (onMapCreated != null || hasLegacyAliases)
+      onMapCreated:
+          (onMapCreated != null ||
+              onScrollListener != null ||
+              onZoomListener != null)
           ? (map) {
               final mapboxMap = MapboxMap(map);
-              // ignore: deprecated_member_use_from_same_package
-              if (onScrollListener != null) {
-                // ignore: deprecated_member_use_from_same_package
-                mapboxMap.onMapScrollListener = onScrollListener;
-              }
-              // ignore: deprecated_member_use_from_same_package
-              if (onZoomListener != null) {
-                // ignore: deprecated_member_use_from_same_package
-                mapboxMap.onMapZoomListener = onZoomListener;
-              }
+              mapboxMap.onMapScrollListener = onScrollListener;
+              mapboxMap.onMapZoomListener = onZoomListener;
               onMapCreated?.call(mapboxMap);
             }
           : null,
