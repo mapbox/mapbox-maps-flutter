@@ -26,7 +26,6 @@ class LocationExampleState extends State<LocationExample> {
   @override
   void dispose() {
     _viewportController.dispose();
-    mapboxMap?.dispose();
     super.dispose();
   }
 

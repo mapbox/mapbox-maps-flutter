@@ -130,7 +130,13 @@ class LocationController
 
   @override
   void dispose() {
-    _detach();
+    // The JSMap instance is owned by `_MapWebWidgetState` and torn down in
+    // its own `dispose()` (see [map_widget.dart]).
+    // Here we just clean up the resources on Dart side.
+    _setupObserver?.disconnect();
+    _setupObserver = null;
+    _geolocateListener = null;
+    _control = null;
     _locationUpdates.close();
   }
 }
