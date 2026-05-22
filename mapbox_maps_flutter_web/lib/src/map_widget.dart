@@ -37,6 +37,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   late final HTMLDivElement _mapElement;
   final ViewportWeb _viewport = ViewportWeb();
   JSMap? _currentMap;
+  MapboxMapWeb? _mapboxMap;
   ResizeObserver? _resizeObserver;
   MapEventBridge? _eventBridge;
 
@@ -80,6 +81,8 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     final mapboxMap = MapboxMapWeb(nativeMap);
     mapboxMap.attachViewport(_viewport);
 
+    _mapboxMap = mapboxMap;
+
     // Apply the initial viewport immediately — camera commands like jumpTo
     // and fitBounds work before the style finishes loading.
     _applyViewport();
@@ -122,6 +125,8 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     _resizeObserver = null;
     _currentMap?.remove();
     _currentMap = null;
+    _mapboxMap?.dispose();
+    _mapboxMap = null;
     _viewport.reset();
     super.dispose();
   }
