@@ -19,10 +19,10 @@ abstract base class WebViewportStateHandler {
   Future<bool> apply(JSMap map, ViewportTransition? transition) {
     final completer = Completer<bool>();
     _completer = completer;
-    runApply(map, transition).then(
-      (_) => _complete(true),
-      onError: (_) => _complete(false),
-    );
+    runApply(
+      map,
+      transition,
+    ).then((_) => _complete(true), onError: (_) => _complete(false));
     return completer.future;
   }
 

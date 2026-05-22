@@ -14,9 +14,11 @@ final class StyleDefaultHandler extends WebViewportStateHandler {
     }
 
     final style = map.getStyle();
+    final pair = style.center;
+    final center = pair != null ? JSLngLat(pair.lng, pair.lat) : null;
     animateCamera(
       map,
-      style.center,
+      center,
       style.zoom,
       style.bearing,
       style.pitch,

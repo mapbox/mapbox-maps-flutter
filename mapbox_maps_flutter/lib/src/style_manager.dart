@@ -145,12 +145,18 @@ class StyleManager {
   /// layers survive style reloads when the new style does not redefine the
   /// same layer id. Prefer the typed [addPersistentLayer] helpers for facade
   /// layer classes.
+  ///
+  /// Note: web has no persistent-layer concept in gl-js; the layer is added
+  /// as a regular layer and will not survive a style reload.
   Future<void> addPersistentStyleLayer(
     String properties,
     LayerPosition? layerPosition,
   ) => _impl.addPersistentStyleLayer(properties, layerPosition);
 
   /// Returns whether the layer with the given id is persistent.
+  ///
+  /// Note: always returns false on web — gl-js has no persistent-layer
+  /// concept.
   Future<bool> isStyleLayerPersistent(String layerId) =>
       _impl.isStyleLayerPersistent(layerId);
 
@@ -407,6 +413,9 @@ class StyleManager {
 
   /// Adds a persistent [Layer] to the current style. Persistent layers
   /// survive style reloads when the new style does not redefine the layer id.
+  ///
+  /// Note: web has no persistent-layer concept in gl-js; the layer is added
+  /// as a regular layer and will not survive a style reload.
   Future<void> addPersistentLayer(
     Layer layer, [
     LayerPosition? position,

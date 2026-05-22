@@ -47,24 +47,8 @@ final class SlotLayer extends Layer {
   @override
   @internal
   Future<String> encode() async {
-    var layout = {};
-    if (visibilityExpression != null) {
-      layout["visibility"] = visibilityExpression!;
-    }
-    if (visibility != null) {
-      layout["visibility"] = visibility!.name.toLowerCase().replaceAll(
-        "_",
-        "-",
-      );
-    }
-
     var paint = {};
-    var properties = {
-      "id": id,
-      "type": getType(),
-      "layout": layout,
-      "paint": paint,
-    };
+    var properties = {"id": id, "type": getType(), "paint": paint};
     if (minZoom != null) {
       properties["minzoom"] = minZoom!;
     }
@@ -94,15 +78,6 @@ final class SlotLayer extends Layer {
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       slot: map["slot"],
-      visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere(
-              (e) => e.name
-                  .toLowerCase()
-                  .replaceAll("_", "-")
-                  .contains(map["layout"]["visibility"]),
-            ),
-      visibilityExpression: styleOptionalCastList(map["layout"]["visibility"]),
       filter: styleOptionalCastList(map["filter"]),
     );
   }

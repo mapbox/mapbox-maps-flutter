@@ -49,12 +49,8 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
     // 1.) Add the two 3D models to the style
     final buggyModelId = "model-buggy-id";
     final buggyModelUri =
-        "https://github.com/KhronosGroup/glTF-Sample-Models/raw/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
+        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
     await mapboxMap?.style.addStyleModel(buggyModelId, buggyModelUri);
-
-    final carModelId = "model-car-id";
-    final carModelUri = "asset://assets/sportcar.glb";
-    await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
 
     // 2.) Add the two geojson sources to provide coordinates for the models
     var buggyModelLocation = Point(coordinates: buggyModelPosition);

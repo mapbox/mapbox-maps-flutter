@@ -11,12 +11,11 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add LocationIndicatorLayer', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add LocationIndicatorLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -70,9 +69,9 @@ void main() {
     expect(layer.shadowImageSize, 1.0);
     expect(layer.topImage, "abc");
     expect(layer.topImageSize, 1.0);
-  });
+  }, skip: kIsWeb);
 
-  testWidgets('Add LocationIndicatorLayer with expressions', skip: kIsWeb, (
+  testWidgets('Add LocationIndicatorLayer with expressions', (
     WidgetTester tester,
   ) async {
     final mapFuture = app.main();
@@ -144,7 +143,7 @@ void main() {
     expect(layer.shadowImageSize, 1.0);
     expect(layer.topImageExpression, ['image', "abc"]);
     expect(layer.topImageSize, 1.0);
-  });
+  }, skip: kIsWeb);
 }
 
 // End of generated file.

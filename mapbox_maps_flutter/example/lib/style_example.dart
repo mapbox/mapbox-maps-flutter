@@ -52,62 +52,57 @@ class StyleExampleState extends State<StyleExample> {
   }
 
   void _addLayerAndSource() async {
-    mapboxMap?.style.styleSourceExists("source").then((value) async {
-      if (!value) {
-        var source = await rootBundle.loadString('assets/source.json');
-        mapboxMap?.style.addStyleSource("source", source);
-      }
-    });
-    mapboxMap?.style.styleLayerExists("custom").then((value) async {
-      if (!value) {
-        var layer = await rootBundle.loadString('assets/layer.json');
-        mapboxMap?.style.addStyleLayer(layer, null);
-      }
-    });
-    mapboxMap?.style.styleSourceExists("point_source").then((value) async {
-      if (!value) {
-        final ByteData bytes = await rootBundle.load(
-          'assets/symbols/custom-icon.png',
-        );
-        final Uint8List list = bytes.buffer.asUint8List();
-        mapboxMap?.style.addStyleImage(
-          "icon",
-          1.0,
-          MbxImage(width: 40, height: 40, data: list),
-          sdf: true,
-          stretchX: [],
-          stretchY: [],
-          content: null,
-        );
-        var geometry = {
-          "type": "Point",
-          "coordinates": [24.9384, 60.1699],
-        };
-        var data = {"type": "Feature", "geometry": geometry};
-        var source = {"type": "geojson", "data": data};
-        mapboxMap?.style.addStyleSource("point_source", json.encode(source));
-      }
-    });
-    mapboxMap?.style.styleLayerExists("point_layer").then((value) async {
-      if (!value) {
-        var layer = {
-          "id": "point_layer",
-          "type": "symbol",
-          "source": "point_source",
-        };
-        mapboxMap?.style.addStyleLayer(json.encode(layer), null);
-        var properties = {
-          "icon-image": "icon",
-          "icon-opacity": 1.0,
-          "icon-size": 1.0,
-          "icon-color": "blue",
-        };
-        mapboxMap?.style.setStyleLayerProperties(
-          "point_layer",
-          json.encode(properties),
-        );
-      }
-    });
+    final style = mapboxMap?.style;
+    if (style == null) return;
+
+    if (!await style.styleSourceExists("source")) {
+      final source = await rootBundle.loadString('assets/source.json');
+      await style.addStyleSource("source", source);
+    }
+    if (!await style.styleLayerExists("custom")) {
+      final layer = await rootBundle.loadString('assets/layer.json');
+      await style.addStyleLayer(layer, null);
+    }
+    if (!await style.styleSourceExists("point_source")) {
+      final ByteData bytes = await rootBundle.load(
+        'assets/symbols/custom-icon.png',
+      );
+      final Uint8List list = bytes.buffer.asUint8List();
+      await style.addStyleImage(
+        "icon",
+        1.0,
+        MbxImage(width: 40, height: 40, data: list),
+        sdf: true,
+        stretchX: [],
+        stretchY: [],
+        content: null,
+      );
+      final geometry = {
+        "type": "Point",
+        "coordinates": [24.9384, 60.1699],
+      };
+      final data = {"type": "Feature", "geometry": geometry};
+      final source = {"type": "geojson", "data": data};
+      await style.addStyleSource("point_source", json.encode(source));
+    }
+    if (!await style.styleLayerExists("point_layer")) {
+      final layer = {
+        "id": "point_layer",
+        "type": "symbol",
+        "source": "point_source",
+      };
+      await style.addStyleLayer(json.encode(layer), null);
+      final properties = {
+        "icon-image": "icon",
+        "icon-opacity": 1.0,
+        "icon-size": 1.0,
+        "icon-color": "blue",
+      };
+      await style.setStyleLayerProperties(
+        "point_layer",
+        json.encode(properties),
+      );
+    }
   }
 
   Widget _getStyleURI() {

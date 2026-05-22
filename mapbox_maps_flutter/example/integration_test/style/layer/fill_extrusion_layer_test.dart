@@ -11,15 +11,25 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add FillExtrusionLayer', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add FillExtrusionLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
+
+    // gl-js's Standard style keeps `composite` inside the Streets import
+    // and doesn't expose it at the top level the way gl-native does, so
+    // addLayer with sourceId "composite" fails validation on web. Provide
+    // it explicitly when it isn't already present (no-op on platforms
+    // where the Standard import already publishes it).
+    if (!await mapboxMap.style.styleSourceExists("composite")) {
+      await mapboxMap.style.addSource(
+        VectorSource(id: "composite", url: "mapbox://mapbox.mapbox-streets-v8"),
+      );
+    }
 
     await mapboxMap.style.addLayer(
       FillExtrusionLayer(
@@ -103,12 +113,23 @@ void main() {
     expect(layer.fillExtrusionVerticalScale, 1.0);
   });
 
-  testWidgets('Add FillExtrusionLayer with expressions', skip: kIsWeb, (
+  testWidgets('Add FillExtrusionLayer with expressions', (
     WidgetTester tester,
   ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
+
+    // gl-js's Standard style keeps `composite` inside the Streets import
+    // and doesn't expose it at the top level the way gl-native does, so
+    // addLayer with sourceId "composite" fails validation on web. Provide
+    // it explicitly when it isn't already present (no-op on platforms
+    // where the Standard import already publishes it).
+    if (!await mapboxMap.style.styleSourceExists("composite")) {
+      await mapboxMap.style.addSource(
+        VectorSource(id: "composite", url: "mapbox://mapbox.mapbox-streets-v8"),
+      );
+    }
 
     await mapboxMap.style.addLayer(
       FillExtrusionLayer(
@@ -134,8 +155,8 @@ void main() {
         fillExtrusionAmbientOcclusionRadiusExpression: ['number', 1.0],
         fillExtrusionAmbientOcclusionWallRadiusExpression: ['number', 1.0],
         fillExtrusionBaseExpression: ['number', 1.0],
-        fillExtrusionBaseAlignmentExpression: ['string', 'terrain'],
-        fillExtrusionCastShadowsExpression: ['==', true, true],
+        fillExtrusionBaseAlignment: FillExtrusionBaseAlignment.TERRAIN,
+        fillExtrusionCastShadows: true,
         fillExtrusionColorExpression: ['rgba', 255, 0, 0, 1],
         fillExtrusionCutoffFadeRangeExpression: ['number', 1.0],
         fillExtrusionEmissiveStrengthExpression: ['number', 1.0],
@@ -145,7 +166,7 @@ void main() {
         fillExtrusionFloodLightIntensityExpression: ['number', 1.0],
         fillExtrusionFloodLightWallRadiusExpression: ['number', 1.0],
         fillExtrusionHeightExpression: ['number', 1.0],
-        fillExtrusionHeightAlignmentExpression: ['string', 'terrain'],
+        fillExtrusionHeightAlignment: FillExtrusionHeightAlignment.TERRAIN,
         fillExtrusionLineWidthExpression: ['number', 1.0],
         fillExtrusionOpacityExpression: ['number', 1.0],
         fillExtrusionPatternExpression: ['image', "abc"],

@@ -9,10 +9,11 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addSource/getSource) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add ImageSource', skip: kIsWeb, (WidgetTester tester) async {
+  // Style-mutation APIs are supported on web via the GL JS-backed style
+  // controller. Some source properties still have platform-specific behavior
+  // or remain unsupported on web, so this test covers only the generated
+  // property set below rather than assuming full cross-platform parity.
+  testWidgets('Add ImageSource', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -41,8 +42,10 @@ void main() {
       [0.0, 1.0],
     ]);
 
-    var prefetchZoomDelta = await source.prefetchZoomDelta;
-    expect(prefetchZoomDelta, 1.0);
+    if (!kIsWeb) {
+      var prefetchZoomDelta = await source.prefetchZoomDelta;
+      expect(prefetchZoomDelta, 1.0);
+    }
   });
 }
 

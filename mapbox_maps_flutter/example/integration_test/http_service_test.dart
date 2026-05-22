@@ -7,23 +7,25 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('MapboxHttpService.setMaxRequestsPerHost', () {
-    testWidgets('accepts valid values across the supported range', skip: kIsWeb, (
-      widgetTester,
-    ) async {
-      final mapFuture = app.main();
-      await widgetTester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
+    testWidgets(
+      'accepts valid values across the supported range',
+      skip: kIsWeb,
+      (widgetTester) async {
+        final mapFuture = app.main();
+        await widgetTester.pumpAndSettle();
+        final mapboxMap = await mapFuture;
 
-      // Reasonable mid-range value.
-      await mapboxMap.httpService.setMaxRequestsPerHost(2);
+        // Reasonable mid-range value.
+        await mapboxMap.httpService.setMaxRequestsPerHost(2);
 
-      // Boundary values (1..255 maps to uint8 on the native side).
-      await mapboxMap.httpService.setMaxRequestsPerHost(1);
-      await mapboxMap.httpService.setMaxRequestsPerHost(255);
+        // Boundary values (1..255 maps to uint8 on the native side).
+        await mapboxMap.httpService.setMaxRequestsPerHost(1);
+        await mapboxMap.httpService.setMaxRequestsPerHost(255);
 
-      // Repeated calls should not throw — setting is idempotent / overwriting.
-      await mapboxMap.httpService.setMaxRequestsPerHost(8);
-      await mapboxMap.httpService.setMaxRequestsPerHost(8);
-    });
+        // Repeated calls should not throw — setting is idempotent / overwriting.
+        await mapboxMap.httpService.setMaxRequestsPerHost(8);
+        await mapboxMap.httpService.setMaxRequestsPerHost(8);
+      },
+    );
   });
 }

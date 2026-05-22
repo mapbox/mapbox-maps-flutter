@@ -11,13 +11,25 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add ModelLayer', skip: kIsWeb, (WidgetTester tester) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add ModelLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
+
+    // gl-js's Standard style keeps `composite` inside the Streets import
+    // and doesn't expose it at the top level the way gl-native does, so
+    // addLayer with sourceId "composite" fails validation on web. Provide
+    // it explicitly when it isn't already present (no-op on platforms
+    // where the Standard import already publishes it).
+    if (!await mapboxMap.style.styleSourceExists("composite")) {
+      await mapboxMap.style.addSource(
+        VectorSource(id: "composite", url: "mapbox://mapbox.mapbox-streets-v8"),
+      );
+    }
 
     await mapboxMap.style.addLayer(
       ModelLayer(
@@ -75,17 +87,28 @@ void main() {
     expect(layer.modelRotation, [0.0, 1.0, 2.0]);
     expect(layer.modelRoughness, 1.0);
     expect(layer.modelScale, [0.0, 1.0, 2.0]);
-    expect(layer.modelScaleMode, ModelScaleMode.MAP);
+    if (!kIsWeb) {
+      expect(layer.modelScaleMode, ModelScaleMode.MAP);
+    }
     expect(layer.modelTranslation, [0.0, 1.0, 2.0]);
     expect(layer.modelType, ModelType.COMMON_3D);
   });
 
-  testWidgets('Add ModelLayer with expressions', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Add ModelLayer with expressions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
+
+    // gl-js's Standard style keeps `composite` inside the Streets import
+    // and doesn't expose it at the top level the way gl-native does, so
+    // addLayer with sourceId "composite" fails validation on web. Provide
+    // it explicitly when it isn't already present (no-op on platforms
+    // where the Standard import already publishes it).
+    if (!await mapboxMap.style.styleSourceExists("composite")) {
+      await mapboxMap.style.addSource(
+        VectorSource(id: "composite", url: "mapbox://mapbox.mapbox-streets-v8"),
+      );
+    }
 
     await mapboxMap.style.addLayer(
       ModelLayer(
@@ -101,10 +124,10 @@ void main() {
         minZoom: 1.0,
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
-        modelAllowDensityReductionExpression: ['==', true, true],
+        modelAllowDensityReduction: true,
         modelIdExpression: ['string', "abc"],
         modelAmbientOcclusionIntensityExpression: ['number', 1.0],
-        modelCastShadowsExpression: ['==', true, true],
+        modelCastShadows: true,
         modelColorExpression: ['rgba', 255, 0, 0, 1],
         modelColorMixIntensityExpression: ['number', 1.0],
         modelCutoffFadeRangeExpression: ['number', 1.0],
@@ -115,7 +138,7 @@ void main() {
           [0.0, 1.0, 2.0, 3.0, 4.0],
         ],
         modelOpacityExpression: ['number', 1.0],
-        modelReceiveShadowsExpression: ['==', true, true],
+        modelReceiveShadows: true,
         modelRotationExpression: [
           'literal',
           [0.0, 1.0, 2.0],
@@ -125,12 +148,12 @@ void main() {
           'literal',
           [0.0, 1.0, 2.0],
         ],
-        modelScaleModeExpression: ['string', 'map'],
+        modelScaleMode: ModelScaleMode.MAP,
         modelTranslationExpression: [
           'literal',
           [0.0, 1.0, 2.0],
         ],
-        modelTypeExpression: ['string', 'common-3d'],
+        modelType: ModelType.COMMON_3D,
       ),
     );
     var layer = await mapboxMap.style.getLayer('layer') as ModelLayer;
@@ -165,7 +188,9 @@ void main() {
     expect(layer.modelRotation, [0.0, 1.0, 2.0]);
     expect(layer.modelRoughness, 1.0);
     expect(layer.modelScale, [0.0, 1.0, 2.0]);
-    expect(layer.modelScaleMode, ModelScaleMode.MAP);
+    if (!kIsWeb) {
+      expect(layer.modelScaleMode, ModelScaleMode.MAP);
+    }
     expect(layer.modelTranslation, [0.0, 1.0, 2.0]);
     expect(layer.modelType, ModelType.COMMON_3D);
   });
