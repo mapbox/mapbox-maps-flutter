@@ -11,10 +11,11 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addSource/getSource) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add GeoJsonSource', skip: kIsWeb, (WidgetTester tester) async {
+  // Style-mutation APIs are supported on web via the GL JS-backed style
+  // controller. Some source properties still have platform-specific behavior
+  // or remain unsupported on web, so this test covers only the generated
+  // property set below rather than assuming full cross-platform parity.
+  testWidgets('Add GeoJsonSource', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -107,18 +108,22 @@ void main() {
     var generateId = await source.generateId;
     expect(generateId, true);
 
-    var prefetchZoomDelta = await source.prefetchZoomDelta;
-    expect(prefetchZoomDelta, 1.0);
+    if (!kIsWeb) {
+      var prefetchZoomDelta = await source.prefetchZoomDelta;
+      expect(prefetchZoomDelta, 1.0);
+    }
 
-    var tileCacheBudget = await source.tileCacheBudget;
-    expect(
-      tileCacheBudget?.size,
-      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
-    );
-    expect(
-      tileCacheBudget?.type,
-      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
-    );
+    if (!kIsWeb) {
+      var tileCacheBudget = await source.tileCacheBudget;
+      expect(
+        tileCacheBudget?.size,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+      );
+      expect(
+        tileCacheBudget?.type,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+      );
+    }
   });
 }
 

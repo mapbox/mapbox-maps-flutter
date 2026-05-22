@@ -12,6 +12,7 @@ import 'bindings/map_bindings.dart';
 import 'gestures_controller.dart';
 import 'interaction_handler.dart';
 import 'location/location_controller.dart';
+import 'style_controller_web.dart';
 import 'unsupported_sub_interfaces.dart';
 import 'viewport/viewport_web.dart';
 
@@ -45,7 +46,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Sub-interfaces =====
 
   @override
-  late final StylePlatformInterface style = UnsupportedStyleWeb();
+  late final StylePlatformInterface style = StyleController(_map);
   @override
   late final GesturesSettingsPlatformInterface gestures = GesturesController(
     _map,

@@ -11,10 +11,11 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add HillshadeLayer', skip: kIsWeb, (WidgetTester tester) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add HillshadeLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -58,7 +59,7 @@ void main() {
     expect(layer.hillshadeShadowColor, Colors.red.value);
   });
 
-  testWidgets('Add HillshadeLayer with expressions', skip: kIsWeb, (
+  testWidgets('Add HillshadeLayer with expressions', (
     WidgetTester tester,
   ) async {
     final mapFuture = app.main();

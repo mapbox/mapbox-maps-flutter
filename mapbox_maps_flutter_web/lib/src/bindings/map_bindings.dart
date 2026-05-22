@@ -58,6 +58,18 @@ extension type JSLngLat._(JSObject _) implements JSObject {
   external double get lat;
 }
 
+/// `[longitude, latitude]` array pair — GL JS's `LngLatLike` array form.
+/// Used wherever the engine expects a coordinate as a 2-element array
+/// rather than a [JSLngLat] instance (e.g. `ImageSource.coordinates`,
+/// `StyleSpec.center`).
+extension type JSLngLatPair._(JSArray<JSNumber> _) implements JSArray<JSNumber> {
+  factory JSLngLatPair(double lng, double lat) =>
+      JSLngLatPair._(<JSNumber>[lng.toJS, lat.toJS].toJS);
+
+  double get lng => _[0].toDartDouble;
+  double get lat => _[1].toDartDouble;
+}
+
 /// GL JS's `Point` (`@mapbox/point-geometry`). Pixel coordinate within the
 /// map container; satisfies `PointLike` wherever GL JS accepts one.
 @JS('Point')
@@ -71,7 +83,7 @@ extension type JSScreenPoint._(JSObject _) implements JSObject {
 @JS()
 @anonymous
 extension type JSStyleSpec._(JSObject _) implements JSObject {
-  external JSLngLat? get center;
+  external JSLngLatPair? get center;
   external double? get zoom;
   external double? get bearing;
   external double? get pitch;

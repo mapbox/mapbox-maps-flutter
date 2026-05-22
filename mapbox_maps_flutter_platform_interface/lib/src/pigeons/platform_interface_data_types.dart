@@ -2499,6 +2499,10 @@ class AmbientLight {
 }
 
 /// Specifies position of a layer that is added via addStyleLayer method.
+///
+/// Set exactly one of [above], [below], or [at]. Setting more than one is
+/// considered misuse; in that case the SDK resolves them in the order
+/// `above` → `below` → `at` and ignores the rest.
 class LayerPosition {
   LayerPosition({this.above, this.below, this.at});
 

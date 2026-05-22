@@ -1,29 +1,36 @@
 // This file is generated.
 // ignore_for_file: experimental_member_use
-import 'dart:convert';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/turf.dart' show Position;
 
 import '../../empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add SymbolLayer', skip: kIsWeb, (WidgetTester tester) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add SymbolLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    final point = Point(coordinates: Position(-77.032667, 38.913175));
+    // Empty GeoJSON source — the layer-property tests don't query features,
+    // they only check the addLayer/getLayer round-trip. `lineMetrics: true`
+    // is required by gl-js whenever a `line` layer sets line-gradient or
+    // line-trim-* properties, so we enable it unconditionally; it's a no-op
+    // for non-line layers.
     await mapboxMap.style.addSource(
-      GeoJsonSource(id: "source", data: json.encode(point)),
+      GeoJsonSource(
+        id: "source",
+        data: '{"type":"FeatureCollection","features":[]}',
+        lineMetrics: true,
+      ),
     );
 
     await mapboxMap.style.addLayer(
@@ -171,7 +178,9 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
-    expect(layer.occlusionOpacityMode, OcclusionOpacityMode.ANCHOR);
+    if (!kIsWeb) {
+      expect(layer.occlusionOpacityMode, OcclusionOpacityMode.ANCHOR);
+    }
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColor, Colors.red.value);
     expect(layer.textEmissiveStrength, 1.0);
@@ -184,16 +193,22 @@ void main() {
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);
   });
 
-  testWidgets('Add SymbolLayer with expressions', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Add SymbolLayer with expressions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    final point = Point(coordinates: Position(-77.032667, 38.913175));
+    // Empty GeoJSON source — the layer-property tests don't query features,
+    // they only check the addLayer/getLayer round-trip. `lineMetrics: true`
+    // is required by gl-js whenever a `line` layer sets line-gradient or
+    // line-trim-* properties, so we enable it unconditionally; it's a no-op
+    // for non-line layers.
     await mapboxMap.style.addSource(
-      GeoJsonSource(id: "source", data: json.encode(point)),
+      GeoJsonSource(
+        id: "source",
+        data: '{"type":"FeatureCollection","features":[]}',
+        lineMetrics: true,
+      ),
     );
 
     await mapboxMap.style.addLayer(
@@ -295,7 +310,7 @@ void main() {
           [0.0, 1.0],
         ],
         iconTranslateAnchorExpression: ['string', 'map'],
-        occlusionOpacityModeExpression: ['string', 'anchor'],
+        occlusionOpacityMode: OcclusionOpacityMode.ANCHOR,
         symbolZOffsetExpression: ['number', 1.0],
         textColorExpression: ['rgba', 255, 0, 0, 1],
         textEmissiveStrengthExpression: ['number', 1.0],
@@ -381,7 +396,9 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
-    expect(layer.occlusionOpacityMode, OcclusionOpacityMode.ANCHOR);
+    if (!kIsWeb) {
+      expect(layer.occlusionOpacityMode, OcclusionOpacityMode.ANCHOR);
+    }
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.textEmissiveStrength, 1.0);

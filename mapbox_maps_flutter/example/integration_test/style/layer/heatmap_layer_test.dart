@@ -11,18 +11,25 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add HeatmapLayer', skip: kIsWeb, (WidgetTester tester) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add HeatmapLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
+    // Empty GeoJSON source — the layer-property tests don't query features,
+    // they only check the addLayer/getLayer round-trip. `lineMetrics: true`
+    // is required by gl-js whenever a `line` layer sets line-gradient or
+    // line-trim-* properties, so we enable it unconditionally; it's a no-op
+    // for non-line layers.
     await mapboxMap.style.addSource(
       GeoJsonSource(
         id: "source",
-        data: "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+        data: '{"type":"FeatureCollection","features":[]}',
+        lineMetrics: true,
       ),
     );
 
@@ -54,17 +61,21 @@ void main() {
     expect(layer.heatmapWeight, 1.0);
   });
 
-  testWidgets('Add HeatmapLayer with expressions', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Add HeatmapLayer with expressions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
+    // Empty GeoJSON source — the layer-property tests don't query features,
+    // they only check the addLayer/getLayer round-trip. `lineMetrics: true`
+    // is required by gl-js whenever a `line` layer sets line-gradient or
+    // line-trim-* properties, so we enable it unconditionally; it's a no-op
+    // for non-line layers.
     await mapboxMap.style.addSource(
       GeoJsonSource(
         id: "source",
-        data: "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+        data: '{"type":"FeatureCollection","features":[]}',
+        lineMetrics: true,
       ),
     );
 

@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'dart:js_interop';
+import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -82,8 +83,26 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       throw UnimplementedError('setAssetPath() is not implemented on web.');
 
   @override
-  Future<String?> getFlutterAssetPath(String? flutterAssetUri) =>
-      throw UnsupportedError('getFlutterAssetPath() is not supported on web.');
+  Future<String?> getFlutterAssetPath(String? flutterAssetUri) async {
+    if (flutterAssetUri == null) return null;
+    // `asset://assets/foo.glb` is a Flutter pseudo-scheme the mobile SDKs
+    // resolve via Flutter's asset registrar. On web, Flutter bundles those
+    // assets at `<base>/assets/<pubspec-asset-path>` (note the leading
+    // `assets/` segment Flutter adds on top of whatever path was declared
+    // in pubspec). Return an absolute URL: AssetManager handles the
+    // `assets/` prefix and Uri.base anchors at the document base href.
+    // The absolute form matters when the value lands in a layer's
+    // `model-id` — gl-js's ModelBucket only routes it through the
+    // URL-auto-load path when it contains `://` (see
+    // 3d-style/data/bucket/model_bucket.ts), so a relative path is
+    // silently dropped. Anything else (http(s), mapbox:, plain
+    // identifier) passes through unchanged.
+    if (!flutterAssetUri.startsWith('asset://')) return flutterAssetUri;
+    final relative = flutterAssetUri.substring('asset://'.length);
+    return Uri.base
+        .resolve(ui_web.assetManager.getAssetUrl(relative))
+        .toString();
+  }
 
   @override
   Future<TileStoreUsageMode> getTileStoreUsageMode() =>

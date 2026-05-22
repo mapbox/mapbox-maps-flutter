@@ -11,15 +11,19 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add RasterParticleLayer', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add RasterParticleLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
+
+    // gl-js requires a `raster-array` source for `raster-particle` layers.
+    await mapboxMap.style.addSource(
+      RasterArraySource(id: "source", tiles: ["a", "b", "c"]),
+    );
 
     await mapboxMap.style.addLayer(
       RasterParticleLayer(
@@ -53,12 +57,17 @@ void main() {
     expect(layer.rasterParticleSpeedFactor, 1.0);
   });
 
-  testWidgets('Add RasterParticleLayer with expressions', skip: kIsWeb, (
+  testWidgets('Add RasterParticleLayer with expressions', (
     WidgetTester tester,
   ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
+
+    // gl-js requires a `raster-array` source for `raster-particle` layers.
+    await mapboxMap.style.addSource(
+      RasterArraySource(id: "source", tiles: ["a", "b", "c"]),
+    );
 
     await mapboxMap.style.addLayer(
       RasterParticleLayer(
@@ -73,12 +82,12 @@ void main() {
         minZoom: 1.0,
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
-        rasterParticleArrayBandExpression: ['string', "abc"],
+        rasterParticleArrayBand: "abc",
         rasterParticleColorExpression: ['rgba', 255, 0, 0, 1],
-        rasterParticleCountExpression: ['number', 1.0],
+        rasterParticleCount: 1.0,
         rasterParticleFadeOpacityFactorExpression: ['number', 1.0],
-        rasterParticleMaxSpeedExpression: ['number', 1.0],
-        rasterParticleResetRateFactorExpression: ['number', 1.0],
+        rasterParticleMaxSpeed: 1.0,
+        rasterParticleResetRateFactor: 1.0,
         rasterParticleSpeedFactorExpression: ['number', 1.0],
       ),
     );

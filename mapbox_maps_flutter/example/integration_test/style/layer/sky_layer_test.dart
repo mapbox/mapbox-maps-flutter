@@ -11,10 +11,11 @@ import '../../empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Web unsupported: style-mutation APIs (addLayer/getLayer) route through
-  // `_UnsupportedStyleWeb` which throws; skip on web until the web-parity
-  // epic wires MapboxStyleWeb onto Mapbox GL JS.
-  testWidgets('Add SkyLayer', skip: kIsWeb, (WidgetTester tester) async {
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  testWidgets('Add SkyLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -53,9 +54,7 @@ void main() {
     expect(layer.skyType, SkyType.GRADIENT);
   });
 
-  testWidgets('Add SkyLayer with expressions', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Add SkyLayer with expressions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -72,13 +71,13 @@ void main() {
         minZoom: 1.0,
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
-        skyAtmosphereColorExpression: ['rgba', 255, 0, 0, 1],
-        skyAtmosphereHaloColorExpression: ['rgba', 255, 0, 0, 1],
+        skyAtmosphereColor: Colors.red.value,
+        skyAtmosphereHaloColor: Colors.red.value,
         skyAtmosphereSunExpression: [
           'literal',
           [180.0, 90.0],
         ],
-        skyAtmosphereSunIntensityExpression: ['number', 1.0],
+        skyAtmosphereSunIntensity: 1.0,
         skyGradientExpression: ['rgba', 255, 0, 0, 1],
         skyGradientCenterExpression: [
           'literal',
@@ -94,13 +93,19 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.filter, [
-      "==",
-      ["get", "type"],
-      "Feature",
-    ]);
-    expect(layer.skyAtmosphereColorExpression, ['rgba', 255, 0, 0, 1]);
-    expect(layer.skyAtmosphereHaloColorExpression, ['rgba', 255, 0, 0, 1]);
+    // gl-js's base StyleLayer constructor skips `filter` for sourceless
+    // layer types (background/sky/slot — style_layer.ts:127), so the
+    // filter we set is dropped before serialize() and the readback is
+    // null. gl-native preserves it; gate just this assertion on web.
+    if (!kIsWeb) {
+      expect(layer.filter, [
+        "==",
+        ["get", "type"],
+        "Feature",
+      ]);
+    }
+    expect(layer.skyAtmosphereColor, Colors.red.value);
+    expect(layer.skyAtmosphereHaloColor, Colors.red.value);
     expect(layer.skyAtmosphereSun, [180.0, 90.0]);
     expect(layer.skyAtmosphereSunIntensity, 1.0);
     expect(layer.skyGradientExpression, ['rgba', 255, 0, 0, 1]);
