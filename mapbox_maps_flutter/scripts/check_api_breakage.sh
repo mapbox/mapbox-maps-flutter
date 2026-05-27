@@ -101,19 +101,40 @@ UNAPPROVED=$(jq -r \
   --slurpfile allowList "$ALLOWED_CHANGES_FILE" '
   ($allowList[0] | map(.changeDescription)) as $allowed |
 
-  [
-    .report.breakingChanges.children[]? |
-    if .children then
-      (.label | split(" ") | .[1:] | join(" ")) as $className |
-      .children[]? | select(. != null and .changeDescription != null) |
-      "\($className): \(.changeDescription)"
-    else
-      select(. != null and .changeDescription != null) |
-      .changeDescription
-    end
-  ] |
+  # Recursively walk the breaking-change tree, accumulating a "Class: Method"
+  # path from labels of the form "Class X" / "Method y" / "Field z". Emit
+  # "<path>: <changeDescription>" at each leaf (or just <changeDescription> at
+  # the top level). The previous implementation only descended one level, so
+  # nested entries — e.g. a parameter-type change under a Method label — were
+  # silently swallowed.
+  def shortLabel:
+    if (.label // "") | test("^(Class|Method|Field|Interface) ")
+    then (.label | split(" ") | .[1:] | join(" "))
+    else (.label // "")
+    end;
+  def walk($prefix):
+    if .changeDescription? then
+      if $prefix == "" then .changeDescription
+      else "\($prefix): \(.changeDescription)"
+      end
+    else . as $node
+      | (shortLabel) as $name
+      | (if $prefix == "" then $name
+         elif $name == "" then $prefix
+         else "\($prefix): \($name)"
+         end) as $next
+      | ($node.children // [])[] | walk($next)
+    end;
+
+  [ .report.breakingChanges.children[]? | walk("") ] |
 
   .[] |
+  # Filter package-identity noise: when types move between packages
+  # (e.g. mapbox_maps_flutter -> mapbox_maps_flutter_platform_interface),
+  # dart-apitool emits "X -> X" annotations on every reference. These are
+  # already covered by approved "Interface X removed" entries at the type
+  # level; the per-reference echoes are noise, not new shape changes.
+  select(test("changed\\. (.+) -> \\1$") | not) |
   select(. as $desc | $allowed | index($desc) | not)
 ' "$TEMP_JSON")
 

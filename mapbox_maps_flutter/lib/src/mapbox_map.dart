@@ -276,12 +276,12 @@ class MapboxMap implements MapboxMapInterface {
       _impl.coordinateForPixel(pixel);
 
   /// Converts a list of geographic [coordinates] to screen positions.
-  Future<List<ScreenCoordinate?>> pixelsForCoordinates(
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
     List<Point> coordinates,
   ) => _impl.pixelsForCoordinates(coordinates);
 
   /// Converts a list of screen [pixels] to geographic coordinates.
-  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
+  Future<List<Point>> coordinatesForPixels(List<ScreenCoordinate> pixels) =>
       _impl.coordinatesForPixels(pixels);
 
   // ===== Map state =====
@@ -315,8 +315,7 @@ class MapboxMap implements MapboxMapInterface {
   Future<MapOptions> getMapOptions() => _impl.getMapOptions();
 
   /// Captures a snapshot of the current map view as PNG-encoded bytes.
-  /// Returns null if the snapshot operation timed out or otherwise failed.
-  Future<Uint8List?> snapshot() => _impl.snapshot();
+  Future<Uint8List> snapshot() => _impl.snapshot();
 
   // ===== Gesture / animation flags =====
 
@@ -348,7 +347,6 @@ class MapboxMap implements MapboxMapInterface {
   /// Dispatches a synthetic gesture event for testing purposes.
   ///
   /// For internal use only.
-  @experimental
   @visibleForTesting
   Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
       _impl.dispatch(gesture, screenCoordinate);

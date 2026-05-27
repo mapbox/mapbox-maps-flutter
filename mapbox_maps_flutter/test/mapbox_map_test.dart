@@ -81,12 +81,10 @@ class StubProjectionPlatformInterface implements ProjectionPlatformInterface {
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
-class StubMapRecorderPlatformInterface
-    implements MapRecorderPlatformInterface {
+class StubMapRecorderPlatformInterface implements MapRecorderPlatformInterface {
   @override
   dynamic noSuchMethod(Invocation invocation) => null;
 }
-
 
 // ===== Mock MapboxMapPlatformInterface =====
 
@@ -127,7 +125,6 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   final MapRecorderPlatformInterface mapRecorder =
       StubMapRecorderPlatformInterface();
-
 
   // Call counts
   int loadStyleURICallCount = 0;
@@ -229,7 +226,7 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   ScreenCoordinate? lastFirst;
   ScreenCoordinate? lastSecond;
   ScreenCoordinate? lastScreenCoordinate;
-  List<ScreenCoordinate?>? lastPixels;
+  List<ScreenCoordinate>? lastPixels;
   TileCacheBudgetInMegabytes? lastTileCacheBudgetInMegabytes;
   TileCacheBudgetInTiles? lastTileCacheBudgetInTiles;
   NorthOrientation? lastNorthOrientation;
@@ -481,7 +478,7 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<List<ScreenCoordinate?>> pixelsForCoordinates(
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
     List<Point> coordinates,
   ) async {
     pixelsForCoordinatesCallCount++;
@@ -490,8 +487,8 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<List<Point?>> coordinatesForPixels(
-    List<ScreenCoordinate?> pixels,
+  Future<List<Point>> coordinatesForPixels(
+    List<ScreenCoordinate> pixels,
   ) async {
     coordinatesForPixelsCallCount++;
     lastPixels = pixels;
@@ -688,9 +685,9 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<Uint8List?> snapshot() async {
+  Future<Uint8List> snapshot() async {
     snapshotCallCount++;
-    return null;
+    return Uint8List(0);
   }
 
   @override
@@ -730,7 +727,10 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) async {
+  Future<void> dispatch(
+    String gesture,
+    ScreenCoordinate screenCoordinate,
+  ) async {
     dispatchCallCount++;
     lastDispatchGesture = gesture;
     lastScreenCoordinate = screenCoordinate;
@@ -1035,8 +1035,7 @@ void main() {
 
     test('coordinateBoundsForCameraUnwrapped delegates to interface', () async {
       final camera = CameraOptions();
-      final result =
-          await mapboxMap.coordinateBoundsForCameraUnwrapped(camera);
+      final result = await mapboxMap.coordinateBoundsForCameraUnwrapped(camera);
 
       expect(mockImpl.coordinateBoundsForCameraUnwrappedCallCount, 1);
       expect(mockImpl.lastCameraOptions, same(camera));
@@ -1052,16 +1051,19 @@ void main() {
       expect(result, same(mockImpl.coordinateBoundsZoomToReturn));
     });
 
-    test('coordinateBoundsZoomForCameraUnwrapped delegates to interface',
-        () async {
-      final camera = CameraOptions();
-      final result =
-          await mapboxMap.coordinateBoundsZoomForCameraUnwrapped(camera);
+    test(
+      'coordinateBoundsZoomForCameraUnwrapped delegates to interface',
+      () async {
+        final camera = CameraOptions();
+        final result = await mapboxMap.coordinateBoundsZoomForCameraUnwrapped(
+          camera,
+        );
 
-      expect(mockImpl.coordinateBoundsZoomForCameraUnwrappedCallCount, 1);
-      expect(mockImpl.lastCameraOptions, same(camera));
-      expect(result, same(mockImpl.coordinateBoundsZoomToReturn));
-    });
+        expect(mockImpl.coordinateBoundsZoomForCameraUnwrappedCallCount, 1);
+        expect(mockImpl.lastCameraOptions, same(camera));
+        expect(result, same(mockImpl.coordinateBoundsZoomToReturn));
+      },
+    );
 
     // ===== Camera bounds =====
 
@@ -1340,7 +1342,7 @@ void main() {
     test('snapshot delegates to interface', () async {
       final result = await mapboxMap.snapshot();
       expect(mockImpl.snapshotCallCount, 1);
-      expect(result, isNull);
+      expect(result, isNotNull);
     });
 
     // ===== Gesture / animation flags =====

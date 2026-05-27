@@ -1329,5 +1329,141 @@
   {
     "changeDescription": "Interface \"TileRegionErrorType\" removed",
     "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "MapboxMap: coordinatesForPixels: Type of parameter \"pixels\" changed. List<ScreenCoordinate?> -> List<ScreenCoordinate>",
+    "reason": "Lifted Pigeon-imposed nullability now that the platform interface is decoupled from Pigeon."
+  },
+  {
+    "changeDescription": "AnnotationManager: removeAnnotationManager: Type of parameter \"manager\" changed. BaseAnnotationManager -> BaseAnnotationManager<BaseAnnotationManagerPlatformInterface>",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "MapWidget: Constructor new: Parameter \"cameraOptions\" removed",
+    "reason": "Companion to MapWidget cameraOptions field removal."
+  },
+  {
+    "changeDescription": "MapWidget: Constructor new: Parameter \"onTapListener\" removed",
+    "reason": "Companion to MapWidget onTapListener field removal."
+  },
+  {
+    "changeDescription": "MapWidget: Constructor new: Parameter \"onLongTapListener\" removed",
+    "reason": "Companion to MapWidget onLongTapListener field removal."
+  },
+  {
+    "changeDescription": "MapboxMap: styleGlyphURL: Experimental Flag changed. false -> true",
+    "reason": "Marked experimental in v3."
+  },
+  {
+    "changeDescription": "MapboxMap: setStyleGlyphURL: Experimental Flag changed. false -> true",
+    "reason": "Marked experimental in v3."
+  },
+  {
+    "changeDescription": "MapboxMap: annotations: Writability changed. true -> false",
+    "reason": "Now a final field on the facade."
+  },
+  {
+    "changeDescription": "MapboxMap: location: Type of field changed. LocationSettings -> LocationSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: gestures: Type of field changed. GesturesSettingsInterface -> GesturesSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: logo: Type of field changed. LogoSettingsInterface -> LogoSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: compass: Type of field changed. CompassSettingsInterface -> CompassSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: scaleBar: Type of field changed. ScaleBarSettingsInterface -> ScaleBarSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: attribution: Type of field changed. AttributionSettingsInterface -> AttributionSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: indoorSelector: Type of field changed. IndoorSelectorSettingsInterface -> IndoorSelectorSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "StyleManager: addGeoJSONSourceFeatures: Type of parameter \"features\" changed. List<Feature> -> List<Feature<GeometryObject>>",
+    "reason": "turf Feature is now parameterized on geometry; signature follows the upstream type."
+  },
+  {
+    "changeDescription": "StyleManager: updateGeoJSONSourceFeatures: Type of parameter \"features\" changed. List<Feature> -> List<Feature<GeometryObject>>",
+    "reason": "turf Feature is now parameterized on geometry; signature follows the upstream type."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"sdf\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"stretchX\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"stretchY\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"content\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "TapInteraction: decode: Return type changed. _Interaction -> TapInteraction<FeaturesetDescriptor>",
+    "reason": "decode now returns the concrete subtype; private _Interaction is no longer exposed."
+  },
+  {
+    "changeDescription": "LongTapInteraction: decode: Return type changed. _Interaction -> LongTapInteraction<FeaturesetDescriptor>",
+    "reason": "decode now returns the concrete subtype; private _Interaction is no longer exposed."
+  },
+  {
+    "changeDescription": "StandardBuildings: decode: Return type changed. FeaturesetDescriptor -> StandardBuildings",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardBuildingsState: decode: Return type changed. FeatureState -> StandardBuildingsState",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: decode: Return type changed. FeaturesetDescriptor -> StandardPlaceLabels",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPlaceLabelsState: decode: Return type changed. FeatureState -> StandardPlaceLabelsState",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPOIs: decode: Return type changed. FeaturesetDescriptor -> StandardPOIs",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPOIsState: decode: Return type changed. FeatureState -> StandardPOIsState",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "Snapshotter: style: Writability changed. true -> false",
+    "reason": "Now a final field on the facade."
+  },
+  {
+    "changeDescription": "TileStore: setDiskQuota: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "TileStore: setMapboxAPIUrl: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "TileStore: setTileUrlTemplate: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "TileStore: setOptionForKey: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
   }
 ]
