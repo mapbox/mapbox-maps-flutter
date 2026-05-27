@@ -464,16 +464,14 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<List<ScreenCoordinate?>> pixelsForCoordinates(
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
     List<Point> coordinates,
   ) async => [for (final c in coordinates) await pixelForCoordinate(c)];
 
   @override
-  Future<List<Point?>> coordinatesForPixels(
-    List<ScreenCoordinate?> pixels,
-  ) async => [
-    for (final p in pixels) p == null ? null : await coordinateForPixel(p),
-  ];
+  Future<List<Point>> coordinatesForPixels(
+    List<ScreenCoordinate> pixels,
+  ) async => [for (final p in pixels) await coordinateForPixel(p)];
 
   // ===== Map state =====
 
@@ -522,7 +520,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<MapOptions> getMapOptions() => throw _ni('getMapOptions');
 
   @override
-  Future<Uint8List?> snapshot() => throw _ni('snapshot');
+  Future<Uint8List> snapshot() => throw _ni('snapshot');
 
   // ===== Gesture / animation flags =====
 

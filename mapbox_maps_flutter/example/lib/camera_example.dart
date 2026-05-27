@@ -270,7 +270,7 @@ class CameraExampleState extends State<CameraExample> {
               (value) => ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    "ScreenCoordinate x: ${value.first?.x}, y: ${value.first?.y}",
+                    "ScreenCoordinate x: ${value.first.x}, y: ${value.first.y}",
                   ),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),

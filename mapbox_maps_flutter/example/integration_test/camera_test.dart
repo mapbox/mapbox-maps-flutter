@@ -261,10 +261,10 @@ void main() {
       Point(coordinates: Position(2.0, 3.0)),
     ]);
     expect(pixels.length, 2);
-    expect(pixels.first!.x, isNotNull);
-    expect(pixels.first!.y, isNotNull);
-    expect(pixels.last!.x, isNotNull);
-    expect(pixels.last!.y, isNotNull);
+    expect(pixels.first.x, isNotNull);
+    expect(pixels.first.y, isNotNull);
+    expect(pixels.last.x, isNotNull);
+    expect(pixels.last.y, isNotNull);
   });
 
   testWidgets('coordinateForPixel', (WidgetTester tester) async {

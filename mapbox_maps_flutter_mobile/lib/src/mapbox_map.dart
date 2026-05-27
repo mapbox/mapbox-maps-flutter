@@ -282,13 +282,18 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// The `screen coordinates` are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   @override
-  Future<List<ScreenCoordinate?>> pixelsForCoordinates(
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
     List<Point> coordinates,
-  ) => _cameraManager.pixelsForCoordinates(
-    coordinates
-        .map((point) => Point(coordinates: point.coordinates, bbox: point.bbox))
-        .toList(),
-  );
+  ) async {
+    final result = await _cameraManager.pixelsForCoordinates(
+      coordinates
+          .map(
+            (point) => Point(coordinates: point.coordinates, bbox: point.bbox),
+          )
+          .toList(),
+    );
+    return result.cast<ScreenCoordinate>();
+  }
 
   /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
   /// to `screen coordinates`.
@@ -296,8 +301,8 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// The screen coordinates are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   @override
-  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
-      _cameraManager.coordinatesForPixels(pixels);
+  Future<List<Point>> coordinatesForPixels(List<ScreenCoordinate> pixels) =>
+      _cameraManager.coordinatesForPixels(pixels.cast<ScreenCoordinate?>());
 
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
   /// The map will retain its current values for any details not passed via the camera options argument.
@@ -830,9 +835,17 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   }
 
   /// Returns a snapshot of the map as PNG-encoded bytes.
-  /// Returns null if the snapshot operation timed out or otherwise failed.
   @override
-  Future<Uint8List?> snapshot() => _mapInterface.snapshot();
+  Future<Uint8List> snapshot() async {
+    final bytes = await _mapInterface.snapshot();
+    if (bytes == null) {
+      throw PlatformException(
+        code: 'snapshot-failed',
+        message: 'snapshot returned no image bytes',
+      );
+    }
+    return bytes;
+  }
 
   /// Set whether legacy mode should be used for [snapshot].
   ///
