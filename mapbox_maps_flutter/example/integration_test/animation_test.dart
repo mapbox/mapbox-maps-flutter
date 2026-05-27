@@ -1,15 +1,13 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_examples/platform.dart';
 import 'empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('easeTo', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('easeTo', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -26,7 +24,7 @@ void main() {
     );
   });
 
-  testWidgets('flyTo', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('flyTo', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -43,7 +41,7 @@ void main() {
     );
   });
 
-  if (!kIsWeb && Platform.isAndroid) {
+  if (isAndroid) {
     testWidgets('moveBy', (WidgetTester tester) async {
       final mapFuture = app.main();
       await tester.pumpAndSettle();
@@ -84,9 +82,7 @@ void main() {
       );
     });
   }
-  testWidgets('cancelCameraAnimation', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('cancelCameraAnimation', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

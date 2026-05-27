@@ -14,9 +14,7 @@ void main() {
     bearing: 12,
   );
 
-  testWidgets('cameraForCoordinatesPadding', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('cameraForCoordinatesPadding', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -49,9 +47,7 @@ void main() {
     expect(camera.padding!.right, 4);
   });
 
-  testWidgets('cameraForCoordinateBounds', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('cameraForCoordinateBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -77,9 +73,7 @@ void main() {
     expect(camera.anchor, isNull);
   });
 
-  testWidgets('cameraForCoordinatesCameraOptions', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('cameraForCoordinatesCameraOptions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -107,19 +101,25 @@ void main() {
     );
     expect(camera.bearing, 20);
     expect(camera.pitch, 30);
-    final position = camera.center;
-    expect((position?.coordinates.lng as double).round(), 1);
-    expect((position?.coordinates.lat as double).round(), 2);
-    expect(camera.anchor!.x, 1);
-    expect(camera.anchor!.y, 1);
-    expect(camera.padding!.top, option.padding!.top);
-    expect(camera.padding!.left, option.padding!.left);
-    expect(camera.padding!.bottom, option.padding!.bottom);
-    expect(camera.padding!.right, option.padding!.right);
-    expect(camera.zoom!.round(), 10);
+    expect(camera.center, isNotNull);
+    if (kIsWeb) {
+      expect(camera.center!.coordinates.lng, closeTo(1, 5));
+      expect(camera.center!.coordinates.lat, closeTo(2, 5));
+      expect(camera.zoom, lessThanOrEqualTo(10));
+    } else {
+      expect((camera.center!.coordinates.lng as double).round(), 1);
+      expect((camera.center!.coordinates.lat as double).round(), 2);
+      expect(camera.anchor!.x, 1);
+      expect(camera.anchor!.y, 1);
+      expect(camera.padding!.top, option.padding!.top);
+      expect(camera.padding!.left, option.padding!.left);
+      expect(camera.padding!.bottom, option.padding!.bottom);
+      expect(camera.padding!.right, option.padding!.right);
+      expect(camera.zoom!.round(), 10);
+    }
   });
 
-  testWidgets('cameraForGeometry', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('cameraForGeometry', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -240,7 +240,7 @@ void main() {
     expect((southwest.coordinates.lng as double).round(), 1);
     expect((southwest.coordinates.lat as double).round(), 2);
   });
-  testWidgets('pixelForCoordinate', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('pixelForCoordinate', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -251,9 +251,7 @@ void main() {
     expect(pixel.x, isNotNull);
     expect(pixel.y, isNotNull);
   });
-  testWidgets('pixelsForCoordinates', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('pixelsForCoordinates', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -269,7 +267,7 @@ void main() {
     expect(pixels.last!.y, isNotNull);
   });
 
-  testWidgets('coordinateForPixel', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('coordinateForPixel', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -279,9 +277,7 @@ void main() {
     );
     expect(point, isNotNull);
   });
-  testWidgets('coordinatesForPixels', skip: kIsWeb, (
-    WidgetTester tester,
-  ) async {
+  testWidgets('coordinatesForPixels', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -325,7 +321,7 @@ void main() {
     expect(cameraState.padding.bottom, 0);
     expect(cameraState.padding.left, 0);
   });
-  testWidgets('setBounds', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('setBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -343,7 +339,7 @@ void main() {
       ),
     );
   });
-  testWidgets('getBounds', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('getBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;

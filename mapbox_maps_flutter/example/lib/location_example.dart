@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart' show isMobile;
+import 'platform.dart' show isMobile;
 
 class LocationExample extends StatefulWidget {
   const LocationExample({super.key});

@@ -210,10 +210,16 @@ class MapboxMap implements MapboxMapInterface {
   // ===== Camera bounds =====
 
   /// Constrains the camera to the given bounds options.
+  ///
+  /// Fields left null on [options] are left unchanged. To remove the
+  /// existing bounds constraint, pass [InfiniteCoordinateBounds].
   Future<void> setBounds(CameraBoundsOptions options) =>
       _impl.setBounds(options);
 
   /// Returns the current camera bounds.
+  ///
+  /// When no bounds constraint is set, the returned [CameraBounds.bounds]
+  /// has `infiniteBounds: true`.
   Future<CameraBounds> getBounds() => _impl.getBounds();
 
   // ===== Animation =====
@@ -589,4 +595,15 @@ class MapboxMap implements MapboxMapInterface {
     _zoomSubscription?.cancel();
     _impl.dispose();
   }
+}
+
+/// [CoordinateBounds] spanning the entire world with `infiniteBounds: true`.
+/// Pass to APIs like [MapboxMap.setBounds] to clear the bounds constraint.
+class InfiniteCoordinateBounds extends CoordinateBounds {
+  InfiniteCoordinateBounds()
+    : super(
+        southwest: Point(coordinates: Position(-180, -90)),
+        northeast: Point(coordinates: Position(180, 90)),
+        infiniteBounds: true,
+      );
 }

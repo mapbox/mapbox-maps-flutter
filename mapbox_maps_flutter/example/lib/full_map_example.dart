@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mapbox_maps_flutter_examples/main.dart';
-import 'package:turf/turf.dart' show Point, Position;
+import 'platform.dart';
 
 class FullMapExample extends StatefulWidget {
   const FullMapExample({super.key});
