@@ -22,11 +22,12 @@ extension type JSCameraOptions._(JSObject _) implements JSObject {
     bool? essential,
   });
 
-  external set center(JSLngLat value);
-  external set zoom(double value);
-  external set bearing(double value);
-  external set pitch(double value);
+  external JSLngLat? center;
+  external double? zoom;
+  external double? bearing;
+  external double? pitch;
   external set padding(JSPadding value);
+  external set around(JSLngLat value);
   external set speed(double value);
   external set curve(double value);
   external set duration(int value);

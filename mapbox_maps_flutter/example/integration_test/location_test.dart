@@ -1,12 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_examples/platform.dart';
 import 'empty_map_widget.dart' as app;
-
-final _isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +17,7 @@ void main() {
     final location = mapboxMap.location;
     final expression = '["interpolate",["linear"],["zoom"],8,0,24,1]';
 
-    if (_isAndroid) {
+    if (isAndroid) {
       await mapboxMap.style.addLayer(
         SymbolLayer(id: 'layer-above', sourceId: 'source'),
       );
@@ -63,7 +62,7 @@ void main() {
     expect(updatedSettings.pulsingColor, settings.pulsingColor);
     // layerAbove/layerBelow only round-trip on Android (native applies +
     // returns them) and on web (Dart side stores the requested value).
-    if (_isAndroid) {
+    if (isAndroid) {
       expect(updatedSettings.layerAbove, settings.layerAbove);
       expect(updatedSettings.layerBelow, settings.layerBelow);
     }
@@ -97,7 +96,7 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    if (_isAndroid) {
+    if (isAndroid) {
       await mapboxMap.style.addLayer(
         SymbolLayer(id: 'layer-above', sourceId: 'source'),
       );
@@ -133,7 +132,7 @@ void main() {
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);
     // modelTranslation is Android- and web-only round-trip; iOS drops it.
-    if (_isAndroid || kIsWeb) {
+    if (isAndroid || kIsWeb) {
       expect(
         updatedSettings.locationPuck?.locationPuck3D?.modelTranslation,
         settings.locationPuck?.locationPuck3D?.modelTranslation,
@@ -157,7 +156,7 @@ void main() {
     );
     // on iOS scale and scale expression are mutually exclusive; the
     // scale array is dropped when an expression is set.
-    if (_isAndroid) {
+    if (isAndroid) {
       expect(
         updatedSettings.locationPuck?.locationPuck3D?.modelScale,
         settings.locationPuck?.locationPuck3D?.modelScale,

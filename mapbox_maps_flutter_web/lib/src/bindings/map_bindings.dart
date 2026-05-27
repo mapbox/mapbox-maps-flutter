@@ -9,6 +9,7 @@ import 'interaction_bindings.dart';
 import 'location_bindings.dart';
 import 'viewport_bindings.dart';
 
+export 'camera_bindings.dart';
 export 'interaction_bindings.dart';
 export 'location_bindings.dart';
 export 'viewport_bindings.dart';
@@ -48,7 +49,10 @@ external void clearStorage(JSFunction callback);
 @JS()
 @anonymous
 extension type JSMapOptions._(JSObject _) implements JSObject {
-  external factory JSMapOptions({required HTMLDivElement container});
+  external factory JSMapOptions({
+    required HTMLDivElement container,
+    double? minZoom,
+  });
 }
 
 @JS('LngLat')
@@ -127,12 +131,11 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Returns the map's current pitch (tilt).
   external double getPitch();
 
-  /// Unprojects a pixel coordinate (relative to the map's container) to a
-  /// geographical coordinate.
-  external JSLngLat unproject(JSScreenPoint point);
-
   /// Returns the HTMLElement the map is rendered into.
   external HTMLElement getContainer();
+
+  /// Forces a single repaint of the map.
+  external void triggerRepaint();
 
   /// One-finger pan handler.
   external JSGestureHandler get dragPan;

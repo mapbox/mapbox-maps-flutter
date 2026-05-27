@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'main.dart' show isAndroid, isMobile;
+import 'platform.dart' show isAndroid, isMobile;
 
 class GesturesExample extends StatefulWidget {
   const GesturesExample({super.key});

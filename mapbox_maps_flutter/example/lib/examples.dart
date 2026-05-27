@@ -13,7 +13,7 @@ import 'geojson_line_example.dart';
 import 'gestures_example.dart';
 import 'image_source_example.dart';
 import 'location_example.dart';
-import 'main.dart' show isMobile;
+import 'platform.dart' show isMobile;
 import 'map_interface_example.dart';
 import 'map_recorder_example.dart';
 import 'model_layer_example.dart';

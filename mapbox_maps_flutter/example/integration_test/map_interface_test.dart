@@ -1,6 +1,5 @@
 // ignore_for_file: experimental_member_use
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -123,14 +122,14 @@ void main() {
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
   });
 
-  testWidgets('getSize', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('getSize', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
     await app.events.onMapLoaded.future;
 
-    if (Platform.isIOS) {
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
       final throwsPlatformException = throwsA(
         predicate(
           (p) => p is PlatformException && p.message == 'Not available.',
@@ -158,7 +157,7 @@ void main() {
     await mapboxMap.reduceMemoryUse();
   });
 
-  testWidgets('triggerRepaint', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('triggerRepaint', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -320,7 +319,9 @@ void main() {
     expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
     expect(
       await MapboxMapsOptions.getAssetPath(),
-      Platform.isAndroid ? "" : endsWith(assetPath),
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+          ? ""
+          : endsWith(assetPath),
     );
     expect(await MapboxMapsOptions.getTileStoreUsageMode(), tileStoreUsageMode);
     expect(await MapboxMapsOptions.getLanguage(), language);

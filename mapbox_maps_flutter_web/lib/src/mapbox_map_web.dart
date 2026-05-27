@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:js_interop';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show UniqueKey;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
-import 'package:turf/turf.dart' show Point, Position;
+import 'package:turf/turf.dart'
+    show GeometryObject, Point, Position, bbox, bearing;
 
+import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 import 'gestures_controller.dart';
 import 'interaction_handler.dart';
@@ -127,22 +130,19 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<void> setCamera(CameraOptions cameraOptions) async {
-    final center = cameraOptions.center;
-    _map.jumpTo(
-      JSCameraOptions(
-        center: center == null
-            ? null
-            : JSLngLat(
-                center.coordinates.lng.toDouble(),
-                center.coordinates.lat.toDouble(),
-              ),
-        zoom: cameraOptions.zoom,
-        bearing: cameraOptions.bearing,
-        pitch: cameraOptions.pitch,
+  Future<void> setCamera(CameraOptions cameraOptions) async => _map.jumpTo(
+    JSCameraOptions()
+      ..withCenter(cameraOptions.center?.toJSLngLat())
+      ..withZoom(cameraOptions.zoom)
+      ..withBearing(cameraOptions.bearing)
+      ..withPitch(cameraOptions.pitch)
+      ..withPadding(cameraOptions.padding?.toJSPadding())
+      ..withAnchor(
+        cameraOptions.anchor != null
+            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
+            : null,
       ),
-    );
-  }
+  );
 
   // ===== Camera convenience =====
 
@@ -153,7 +153,24 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     MbxEdgeInsets? coordinatesPadding,
     double? maxZoom,
     ScreenCoordinate? offset,
-  ) => throw _ni('cameraForCoordinatesPadding');
+  ) async {
+    final result = _map.cameraForBounds(
+      coordinates.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(coordinatesPadding?.toJSPadding())
+        ..withBearing(camera.bearing)
+        ..withPitch(camera.pitch)
+        ..withMaxZoom(maxZoom)
+        ..withOffset(offset?.toJSScreenPoint()),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+      padding: coordinatesPadding,
+    );
+  }
 
   @override
   Future<CameraOptions> cameraForCoordinateBounds(
@@ -163,7 +180,23 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     double? pitch,
     double? maxZoom,
     ScreenCoordinate? offset,
-  ) => throw _ni('cameraForCoordinateBounds');
+  ) async {
+    final result = _map.cameraForBounds(
+      bounds.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(padding.toJSPadding())
+        ..withBearing(bearing)
+        ..withPitch(pitch)
+        ..withMaxZoom(maxZoom)
+        ..withOffset(offset?.toJSScreenPoint()),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+    );
+  }
 
   @override
   Future<CameraOptions> cameraForCoordinates(
@@ -171,14 +204,59 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     MbxEdgeInsets padding,
     double? bearing,
     double? pitch,
-  ) => throw _ni('cameraForCoordinates');
+  ) async {
+    final result = _map.cameraForBounds(
+      coordinates.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(padding.toJSPadding())
+        ..withBearing(bearing)
+        ..withPitch(pitch),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+    );
+  }
 
   @override
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
     List<Point> coordinates,
     CameraOptions camera,
     ScreenBox box,
-  ) => throw _ni('cameraForCoordinatesCameraOptions');
+  ) async {
+    final container = _map.getContainer();
+    final padTop = box.min.y;
+    final padLeft = box.min.x;
+    final padRight = container.clientWidth - box.max.x;
+    final padBottom = container.clientHeight - box.max.y;
+    final result = _map.cameraForBounds(
+      coordinates.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..padding = JSPadding(
+          top: padTop,
+          left: padLeft,
+          right: padRight,
+          bottom: padBottom,
+        )
+        ..withBearing(camera.bearing)
+        ..withPitch(camera.pitch)
+        ..withMaxZoom(camera.zoom),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+      padding: MbxEdgeInsets(
+        top: padTop,
+        left: padLeft,
+        right: padRight,
+        bottom: padBottom,
+      ),
+    );
+  }
 
   @override
   Future<CameraOptions> cameraForGeometry(
@@ -186,7 +264,22 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     MbxEdgeInsets padding,
     double? bearing,
     double? pitch,
-  ) => throw _ni('cameraForGeometry');
+  ) async {
+    final geo = GeometryObject.deserialize(geometry.cast<String, dynamic>());
+    final result = _map.cameraForBounds(
+      bbox(geo).toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(padding.toJSPadding())
+        ..withBearing(bearing)
+        ..withPitch(pitch),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+    );
+  }
 
   @override
   Future<CoordinateBounds> coordinateBoundsForCamera(CameraOptions camera) =>
@@ -210,10 +303,51 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Camera bounds =====
 
   @override
-  Future<void> setBounds(CameraBoundsOptions options) => throw _ni('setBounds');
+  Future<void> setBounds(CameraBoundsOptions options) async {
+    final bounds = options.bounds;
+    if (bounds != null) {
+      _map.setMaxBounds(
+        bounds.infiniteBounds
+            ? null
+            : JSLngLatBounds(
+                bounds.southwest.toJSLngLat(),
+                bounds.northeast.toJSLngLat(),
+              ),
+      );
+    }
+    if (options.minZoom != null) _map.setMinZoom(options.minZoom);
+    if (options.maxZoom != null) _map.setMaxZoom(options.maxZoom);
+    if (options.minPitch != null) _map.setMinPitch(options.minPitch);
+    if (options.maxPitch != null) _map.setMaxPitch(options.maxPitch);
+  }
 
   @override
-  Future<CameraBounds> getBounds() => throw _ni('getBounds');
+  Future<CameraBounds> getBounds() async {
+    final maxBounds = _map.getMaxBounds();
+    final CoordinateBounds coordinateBounds;
+    if (maxBounds == null) {
+      coordinateBounds = CoordinateBounds(
+        southwest: Point(coordinates: Position(-180, -90)),
+        northeast: Point(coordinates: Position(180, 90)),
+        infiniteBounds: true,
+      );
+    } else {
+      final sw = maxBounds.getSouthWest();
+      final ne = maxBounds.getNorthEast();
+      coordinateBounds = CoordinateBounds(
+        southwest: Point(coordinates: Position(sw.lng, sw.lat)),
+        northeast: Point(coordinates: Position(ne.lng, ne.lat)),
+        infiniteBounds: false,
+      );
+    }
+    return CameraBounds(
+      bounds: coordinateBounds,
+      maxZoom: _map.getMaxZoom(),
+      minZoom: _map.getMinZoom(),
+      maxPitch: _map.getMaxPitch(),
+      minPitch: _map.getMinPitch(),
+    );
+  }
 
   // ===== Animation =====
 
@@ -221,72 +355,143 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<void> easeTo(
     CameraOptions cameraOptions,
     MapAnimationOptions? mapAnimationOptions,
-  ) => throw _ni('easeTo');
+  ) async => _map.easeTo(
+    JSCameraOptions()
+      ..essential = true
+      ..withCenter(cameraOptions.center?.toJSLngLat())
+      ..withZoom(cameraOptions.zoom)
+      ..withBearing(cameraOptions.bearing)
+      ..withPitch(cameraOptions.pitch)
+      ..withPadding(cameraOptions.padding?.toJSPadding())
+      ..withAnchor(
+        cameraOptions.anchor != null
+            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
+            : null,
+      )
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
 
   @override
   Future<void> flyTo(
     CameraOptions cameraOptions,
     MapAnimationOptions? mapAnimationOptions,
-  ) => throw _ni('flyTo');
+  ) async => _map.flyTo(
+    JSCameraOptions()
+      ..essential = true
+      ..withCenter(cameraOptions.center?.toJSLngLat())
+      ..withZoom(cameraOptions.zoom)
+      ..withBearing(cameraOptions.bearing)
+      ..withPitch(cameraOptions.pitch)
+      ..withPadding(cameraOptions.padding?.toJSPadding())
+      ..withAnchor(
+        cameraOptions.anchor != null
+            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
+            : null,
+      )
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
 
   @override
   Future<void> pitchBy(
     double pitch,
     MapAnimationOptions? mapAnimationOptions,
-  ) => throw _ni('pitchBy');
+  ) async => _map.easeTo(
+    JSCameraOptions()
+      ..essential = true
+      ..pitch = _map.getPitch() + pitch
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
 
   @override
   Future<void> scaleBy(
     double amount,
     ScreenCoordinate? anchor,
     MapAnimationOptions? mapAnimationOptions,
-  ) => throw _ni('scaleBy');
+  ) async => _map.zoomTo(
+    _map.getZoom() + math.log(amount) / math.ln2,
+    JSCameraOptions()
+      ..essential = true
+      ..withAnchor(
+        anchor != null ? _map.unproject(anchor.toJSScreenPoint()) : null,
+      )
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
 
   @override
   Future<void> moveBy(
     ScreenCoordinate screenCoordinate,
     MapAnimationOptions? mapAnimationOptions,
-  ) => throw _ni('moveBy');
+  ) async => _map.panBy(
+    JSScreenPoint(screenCoordinate.x, screenCoordinate.y),
+    JSCameraOptions()
+      ..essential = true
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
 
   @override
   Future<void> rotateBy(
     ScreenCoordinate first,
     ScreenCoordinate second,
     MapAnimationOptions? mapAnimationOptions,
-  ) => throw _ni('rotateBy');
+  ) async {
+    final lngLat1 = _map.unproject(JSScreenPoint(first.x, first.y));
+    final lngLat2 = _map.unproject(JSScreenPoint(second.x, second.y));
+    final p1 = Point(coordinates: Position(lngLat1.lng, lngLat1.lat));
+    final p2 = Point(coordinates: Position(lngLat2.lng, lngLat2.lat));
+    _map.rotateTo(
+      bearing(p1, p2).toDouble(),
+      JSCameraOptions()
+        ..essential = true
+        ..withDurationMs(mapAnimationOptions?.duration),
+    );
+  }
 
   @override
-  Future<void> cancelCameraAnimation() => throw _ni('cancelCameraAnimation');
+  Future<void> cancelCameraAnimation() async => _map.stop();
 
   // ===== Coordinate / pixel conversion =====
 
   @override
-  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) =>
-      throw _ni('pixelForCoordinate');
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) async {
+    final point = _map.project(coordinate.toJSLngLat());
+    return ScreenCoordinate(x: point.x, y: point.y);
+  }
 
   @override
-  Future<Point> coordinateForPixel(ScreenCoordinate pixel) =>
-      throw _ni('coordinateForPixel');
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) async {
+    final lngLat = _map.unproject(JSScreenPoint(pixel.x, pixel.y));
+    return Point(coordinates: Position(lngLat.lng, lngLat.lat));
+  }
 
   @override
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
     List<Point> coordinates,
-  ) => throw _ni('pixelsForCoordinates');
+  ) async => [for (final c in coordinates) await pixelForCoordinate(c)];
 
   @override
-  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
-      throw _ni('coordinatesForPixels');
+  Future<List<Point?>> coordinatesForPixels(
+    List<ScreenCoordinate?> pixels,
+  ) async => [
+    for (final p in pixels) p == null ? null : await coordinateForPixel(p),
+  ];
 
   // ===== Map state =====
 
   @override
-  Future<Size> getSize() => throw _ni('getSize');
+  Future<Size> getSize() async {
+    final container = _map.getContainer();
+    return Size(
+      width: container.clientWidth.toDouble(),
+      height: container.clientHeight.toDouble(),
+    );
+  }
 
   @override
-  Future<void> triggerRepaint() => throw _ni('triggerRepaint');
+  Future<void> triggerRepaint() async => _map.triggerRepaint();
 
   @override
-  Future<double?> getElevation(Point coordinate) => throw _ni('getElevation');
+  Future<double?> getElevation(Point coordinate) async =>
+      _map.queryTerrainElevation(coordinate.toJSLngLat(), null);
 
   @override
   Future<void> reduceMemoryUse() => throw _ni('reduceMemoryUse');
