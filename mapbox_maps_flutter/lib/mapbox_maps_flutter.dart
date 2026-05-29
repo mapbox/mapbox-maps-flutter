@@ -70,5 +70,4 @@ export 'src/style/source/rasterarray_source.dart';
 export 'src/style/source/rasterdem_source.dart';
 export 'src/style/source/vector_source.dart';
 
-/// Version of the `mapbox_maps_flutter` plugin.
-const String mapboxPluginVersion = '3.0.0-beta.1';
+part 'src/package_info.dart';
