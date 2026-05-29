@@ -70,65 +70,134 @@ final class StyleController implements StylePlatformInterface {
     String json, {
     Map<String, Object>? config,
     ImportPosition? importPosition,
-  }) => throw _ni('addStyleImportFromJSON');
+  }) async {
+    _map.addImport(
+      JSImportSpecification(
+        id: importId,
+        url: '',
+        data: jsonParse(json),
+        config: config?.jsify(),
+      ),
+      _resolveBeforeImportId(importPosition),
+    );
+  }
+
   @override
   Future<void> addStyleImportFromURI(
     String importId,
     String uri, {
     Map<String, Object>? config,
     ImportPosition? importPosition,
-  }) => throw _ni('addStyleImportFromURI');
+  }) async {
+    _map.addImport(
+      JSImportSpecification(id: importId, url: uri, config: config?.jsify()),
+      _resolveBeforeImportId(importPosition),
+    );
+  }
+
   @override
   Future<void> updateStyleImportWithJSON(
     String importId,
     String json, {
     Map<String, Object>? config,
-  }) => throw _ni('updateStyleImportWithJSON');
+  }) async {
+    // gl-js's in-place updateImport keeps the import's old schema;
+    // remove+add refreshes it. Capture beforeId and existing config first so
+    // the import lands back in the same slot with its config preserved —
+    // matching gl-native's documented "merge with existing" semantic.
+    final beforeId = _siblingAfterImport(importId);
+    final merged = _mergedImportConfig(importId, config);
+    _map.removeImport(importId);
+    _map.addImport(
+      JSImportSpecification(
+        id: importId,
+        url: '',
+        data: jsonParse(json),
+        config: merged?.jsify(),
+      ),
+      beforeId,
+    );
+  }
+
   @override
   Future<void> updateStyleImportWithURI(
     String importId,
     String uri, {
     Map<String, Object>? config,
-  }) => throw _ni('updateStyleImportWithURI');
+  }) async {
+    // gl-js's in-place updateImport keeps the import's old schema;
+    // remove+add refreshes it. Capture beforeId and existing config first so
+    // the import lands back in the same slot with its config preserved —
+    // matching gl-native's documented "merge with existing" semantic.
+    final beforeId = _siblingAfterImport(importId);
+    final merged = _mergedImportConfig(importId, config);
+    _map.removeImport(importId);
+    _map.addImport(
+      JSImportSpecification(id: importId, url: uri, config: merged?.jsify()),
+      beforeId,
+    );
+  }
+
   @override
   Future<void> moveStyleImport(
     String importId,
     ImportPosition? importPosition,
-  ) => throw _ni('moveStyleImport');
-  @override
-  Future<void> removeStyleImport(String importId) =>
-      throw _ni('removeStyleImport');
-  @override
-  Future<Object> getStyleImportSchema(String importId) =>
-      throw _ni('getStyleImportSchema');
+  ) async => _map.moveImport(importId, _resolveBeforeImportId(importPosition));
 
   @override
-  Future<List<StyleObjectInfo?>> getStyleImports() =>
-      throw _ni('getStyleImports');
+  Future<void> removeStyleImport(String importId) async =>
+      _map.removeImport(importId);
+
+  @override
+  Future<Object> getStyleImportSchema(String importId) async {
+    final raw = _map.getStyle().imports?.dartify();
+    if (raw is List) {
+      for (final e in raw) {
+        if (e is Map && e['id'] == importId) {
+          final data = e['data'];
+          if (data is Map && data['schema'] != null) {
+            return data['schema'] as Object;
+          }
+          break;
+        }
+      }
+    }
+    final schema = _map.getSchema(importId)?.dartify();
+    return schema is Object ? schema : const <String, Object?>{};
+  }
+
+  @override
+  Future<List<StyleObjectInfo?>> getStyleImports() async => [
+    for (final id in _importIds()) StyleObjectInfo(id: id, type: ''),
+  ];
 
   @override
   Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
     String importId,
-  ) => throw _ni('getStyleImportConfigProperties');
+  ) async {
+    final raw = _map.getConfig(importId)?.dartify();
+    if (raw is! Map) return {};
+    return {for (final e in raw.entries) '${e.key}': _wrap(e.value as Object?)};
+  }
 
   @override
   Future<StylePropertyValue> getStyleImportConfigProperty(
     String importId,
     String config,
-  ) async => throw _ni('getStyleImportConfigProperty');
+  ) async => _wrap(_map.getConfigProperty(importId, config)?.dartify());
 
   @override
   Future<void> setStyleImportConfigProperty(
     String importId,
     String config,
     Object value,
-  ) async => throw _ni('setStyleImportConfigProperty');
+  ) async => _map.setConfigProperty(importId, config, value.jsify());
 
   @override
   Future<void> setStyleImportConfigProperties(
     String importId,
     Map<String, Object> configs,
-  ) async => throw _ni('setStyleImportConfigProperties');
+  ) async => _map.setConfig(importId, configs.jsify()!);
 
   // ===== Layers =====
 
@@ -608,6 +677,63 @@ final class StyleController implements StylePlatformInterface {
       if (at >= 0 && at < layers.length) return layers[at].id;
     }
     return null;
+  }
+
+  String? _resolveBeforeImportId(ImportPosition? position) {
+    if (position == null) return null;
+    final ids = _importIds();
+    if (position.above != null) {
+      final i = ids.indexOf(position.above!);
+      if (i == -1) return null;
+      return i + 1 < ids.length ? ids[i + 1] : null;
+    }
+    if (position.below != null) return position.below;
+    if (position.at != null) {
+      final at = position.at!;
+      if (at >= 0 && at < ids.length) return ids[at];
+    }
+    return null;
+  }
+
+  List<String> _importIds() {
+    final raw = _map.getStyle().imports?.dartify();
+    if (raw is! List) return const [];
+    return [
+      for (final e in raw)
+        if (e is Map && e['id'] is String) e['id'] as String,
+    ];
+  }
+
+  /// Id of the import that follows [importId] in the current order — the
+  /// `beforeImportId` value `addImport` needs to re-insert at the same slot
+  /// after a remove. Null when [importId] is missing or already last.
+  String? _siblingAfterImport(String importId) {
+    final ids = _importIds();
+    final i = ids.indexOf(importId);
+    return (i >= 0 && i + 1 < ids.length) ? ids[i + 1] : null;
+  }
+
+  /// Merges [importId]'s current config (as reported by gl-js) with the
+  /// caller-supplied [overrides], with the overrides winning on key
+  /// collisions. Used by `updateStyleImportWith*` to preserve existing
+  /// config across the remove+add emulation, matching gl-native's documented
+  /// merge semantics. Returns null when the resulting map would be empty so
+  /// the binding omits the `config` field on the import spec — gl-js may
+  /// otherwise treat an explicit `{}` as a reset.
+  Map<String, Object>? _mergedImportConfig(
+    String importId,
+    Map<String, Object>? overrides,
+  ) {
+    final existing = _map.getConfig(importId)?.dartify();
+    final merged = <String, Object>{};
+    if (existing is Map) {
+      for (final entry in existing.entries) {
+        final value = entry.value;
+        if (value is Object) merged['${entry.key}'] = value;
+      }
+    }
+    if (overrides != null) merged.addAll(overrides);
+    return merged.isEmpty ? null : merged;
   }
 
   /// Wraps an already-dartified value into a [StylePropertyValue]. The

@@ -73,6 +73,21 @@ extension type JSAddImageOptions._(JSObject _) implements JSObject {
   });
 }
 
+/// Mirrors gl-js's `ImportSpecification` plain-object shape. [url] is
+/// required by the type system but may be passed as an empty string when
+/// [data] supplies the style JSON inline — the caller is responsible for
+/// ensuring at least one of [url] or [data] is meaningful.
+@JS()
+@anonymous
+extension type JSImportSpecification._(JSObject _) implements JSObject {
+  external factory JSImportSpecification({
+    required String id,
+    required String url,
+    JSAny? data,
+    JSAny? config,
+  });
+}
+
 /// Plain bag matching the `ImageData`-shape gl-js expects for raw RGBA
 /// pixel uploads. We synthesise it rather than going through the browser's
 /// `ImageData` constructor — gl-js only reads `{width, height, data}`.
@@ -133,6 +148,21 @@ extension Style on JSMap {
   external JSAny? getTerrain();
   external void setProjection(JSAny projection);
   external JSAny? getProjection();
+
+  // ----- Imports -----
+  external void addImport(JSImportSpecification spec, [String? beforeId]);
+  external void updateImport(String id, JSAny spec);
+  external void removeImport(String id);
+  external void moveImport(String id, [String? beforeId]);
+  external JSAny? getConfig(String importId);
+  external void setConfig(String importId, JSAny config);
+  external JSAny? getConfigProperty(String importId, String configName);
+  external void setConfigProperty(
+    String importId,
+    String configName,
+    JSAny? value,
+  );
+  external JSAny? getSchema(String importId);
 }
 
 // ===== Style spec accessors (returned by JSMap.getStyle()) =====
