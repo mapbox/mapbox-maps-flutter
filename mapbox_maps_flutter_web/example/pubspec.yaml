@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mapbox_maps_flutter_platform_interface: ^0.0.1
   mapbox_maps_flutter_web:
     path: ../
 
@@ -23,7 +22,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-dependency_overrides:
-  mapbox_maps_flutter_platform_interface:
-    path: ../../mapbox_maps_flutter_platform_interface

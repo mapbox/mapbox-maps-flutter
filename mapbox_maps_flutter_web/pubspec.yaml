@@ -1,7 +1,7 @@
 name: mapbox_maps_flutter_web
 description: Web implementation of the Mapbox Maps Flutter plugin.
-version: 0.0.1
-homepage:
+version: 3.0.0-alpha.1
+homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
@@ -13,10 +13,9 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   web: ^1.0.0
-  plugin_platform_interface: ^2.0.2
-  meta: ^1.9.1
+  meta: ^1.17.0
   turf: ^0.0.10
-  mapbox_maps_flutter_platform_interface: ^0.0.1 # Change to fixed version when the platform interface is published.
+  mapbox_maps_flutter_platform_interface: 3.0.0-alpha.1
 
 dev_dependencies:
   flutter_test:
@@ -29,8 +28,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   plugin:
+    implements: mapbox_maps_flutter
     platforms:
-      implements: mapbox_maps_flutter_platform_interface
       web:
         pluginClass: MapboxMapsFlutterWeb
         fileName: src/mapbox_maps_flutter_web.dart

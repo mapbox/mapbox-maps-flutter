@@ -333,28 +333,28 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0-beta.1"
+    version: "3.0.0-alpha.1"
   mapbox_maps_flutter_mobile:
     dependency: "direct overridden"
     description:
       path: "../../mapbox_maps_flutter_mobile"
       relative: true
     source: path
-    version: "3.0.0-beta.1"
+    version: "3.0.0-alpha.1"
   mapbox_maps_flutter_platform_interface:
     dependency: "direct overridden"
     description:
       path: "../../mapbox_maps_flutter_platform_interface"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "3.0.0-alpha.1"
   mapbox_maps_flutter_web:
     dependency: "direct overridden"
     description:
       path: "../../mapbox_maps_flutter_web"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "3.0.0-alpha.1"
   matcher:
     dependency: transitive
     description:

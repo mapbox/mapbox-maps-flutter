@@ -152,19 +152,19 @@ packages:
     source: hosted
     version: "3.0.2"
   mapbox_maps_flutter_platform_interface:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       path: "../../mapbox_maps_flutter_platform_interface"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "3.0.0-alpha.1"
   mapbox_maps_flutter_web:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "3.0.0-alpha.1"
   matcher:
     dependency: transitive
     description:
@@ -205,14 +205,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.6"
-  plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: plugin_platform_interface
-      sha256: "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.8"
   process:
     dependency: transitive
     description:
