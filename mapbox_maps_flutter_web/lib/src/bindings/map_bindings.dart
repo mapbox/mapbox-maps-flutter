@@ -66,7 +66,8 @@ extension type JSLngLat._(JSObject _) implements JSObject {
 /// Used wherever the engine expects a coordinate as a 2-element array
 /// rather than a [JSLngLat] instance (e.g. `ImageSource.coordinates`,
 /// `StyleSpec.center`).
-extension type JSLngLatPair._(JSArray<JSNumber> _) implements JSArray<JSNumber> {
+extension type JSLngLatPair._(JSArray<JSNumber> _)
+    implements JSArray<JSNumber> {
   factory JSLngLatPair(double lng, double lat) =>
       JSLngLatPair._(<JSNumber>[lng.toJS, lat.toJS].toJS);
 

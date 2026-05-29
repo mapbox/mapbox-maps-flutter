@@ -60,6 +60,9 @@ import 'style/source/rasterarray_source_test.dart' as rasterarray_source_test;
 import 'style/source/rasterdem_source_test.dart' as rasterdem_source_test;
 import 'style/source/vector_source_test.dart' as vector_source_test;
 
+// Style imports tests.
+import 'style/style_imports_test.dart' as style_imports_test;
+
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
 void main() {
@@ -119,6 +122,9 @@ void main() {
   rasterarray_source_test.main();
   rasterdem_source_test.main();
   vector_source_test.main();
+
+  // Style imports.
+  style_imports_test.main();
 
   // location_test must remain LAST on iOS — it triggers the location
   // permission dialog, which (if shown earlier) interferes with QRF/QSF
