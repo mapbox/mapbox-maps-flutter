@@ -87,8 +87,8 @@ const _inlineFragmentAfterJson = '''
 /// pumpAndSettle alone is not enough on web — gl-js's style load is async
 /// and `getStyle()` throws "Style is not done loading" until `style.load`
 /// fires. Await the harness's onStyleLoaded completer instead.
-Future<MapboxMap> _setupMap(WidgetTester tester) async {
-  final mapFuture = app.main();
+Future<MapboxMap> _setupMap(WidgetTester tester, [String styleURI = MapboxStyles.STANDARD]) async {
+  final mapFuture = app.main(styleUri: styleURI);
   await tester.pumpAndSettle();
   final mapboxMap = await mapFuture;
   if (!app.events.onStyleLoaded.isCompleted) {
@@ -309,7 +309,7 @@ void main() {
   testWidgets('updateStyleImportWithURI data-only', (
     WidgetTester tester,
   ) async {
-    final mapboxMap = await _setupMap(tester);
+    final mapboxMap = await _setupMap(tester, MapboxStyles.MAPBOX_STREETS);
 
     // Seed with OUTDOORS (no `lightPreset` in its schema) so we can observe
     // the URL swap by checking the schema after the update.

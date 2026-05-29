@@ -32,6 +32,7 @@ Future<MapboxMap> main({
   double? height,
   ViewportState? viewport,
   Alignment alignment = Alignment.topLeft,
+  String styleUri = MapboxStyles.STANDARD,
 }) {
   final completer = Completer<MapboxMap>();
 
@@ -46,6 +47,7 @@ Future<MapboxMap> main({
           child: MapWidget(
             key: const ValueKey("mapWidget"),
             viewport: viewport,
+            styleUri: styleUri,
             onMapCreated: (MapboxMap mapboxMap) {
               completer.complete(mapboxMap);
             },
