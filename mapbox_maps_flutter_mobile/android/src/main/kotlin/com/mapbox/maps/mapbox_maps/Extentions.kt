@@ -609,7 +609,7 @@ fun com.mapbox.maps.plugin.ModelElevationReference.toFLTModelElevationReference(
 }
 
 fun com.mapbox.maps.StylePropertyValue.toFLTStylePropertyValue(): StylePropertyValue {
-  return StylePropertyValue(value.contents, StylePropertyValueKind.values()[kind.ordinal])
+  return StylePropertyValue(value.toFLTValue(), StylePropertyValueKind.values()[kind.ordinal])
 }
 
 fun ProjectionName.toFLTProjectionName(): StyleProjectionName {

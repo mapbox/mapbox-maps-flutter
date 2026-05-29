@@ -176,6 +176,7 @@ class StyleController(private val context: Context, private val styleManager: Ma
       .getValueOrElse {
         throw RuntimeException(it)
       }
+      .toFLTValue() ?: throw RuntimeException("getStyleImportSchema returned null")
   }
 
   override fun getStyleImportConfigProperties(
