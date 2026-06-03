@@ -1,3 +1,5 @@
+### main
+
 ### 2.25.0-rc.1
 
 * Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
