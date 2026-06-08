@@ -1,5 +1,7 @@
 ### main
 
+- [sdk] Bump compileSdk from 35 to 36 for AndroidX compatibility
+
 ### 2.25.0-rc.1
 
 * Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
