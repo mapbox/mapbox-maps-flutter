@@ -117,6 +117,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
+        channel.invokeMethod("mapView#onMapCreated", arguments: nil)
     }
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {

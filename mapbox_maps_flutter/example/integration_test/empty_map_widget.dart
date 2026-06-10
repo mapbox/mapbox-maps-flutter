@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class Events {
@@ -99,4 +100,29 @@ Future<MapboxMap> main({
 
 void runEmpty() {
   runApp(const MaterialApp());
+}
+
+extension CompleterExpect<T> on Completer<T> {
+  void ensureCompletedOnce([FutureOr<T>? value, String? description]) {
+    if (completeOnce(value)) return;
+    fail(description ?? "Completer was already completed");
+  }
+
+  bool completeOnce([FutureOr<T>? value]) {
+    if (isCompleted) return false;
+
+    complete(value);
+    return true;
+  }
+
+  void completeWhen(bool condition, [String? description, FutureOr<T>? value]) {
+    if (isCompleted) return;
+    if (condition) {
+      complete(value);
+    } else {
+      completeError(
+        description ?? 'Completer completed before condition was met',
+      );
+    }
+  }
 }

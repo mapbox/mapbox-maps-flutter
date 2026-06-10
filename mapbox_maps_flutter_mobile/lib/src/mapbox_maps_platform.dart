@@ -15,6 +15,10 @@ class _MapboxMapsPlatform {
   final BinaryMessenger binaryMessenger;
   final int channelSuffix;
 
+  /// Called when the native [MapboxMapController] has finished initializing
+  /// and all Pigeon channels are registered.
+  void Function()? onNativeMapCreated;
+
   _MapboxMapsPlatform({
     required this.binaryMessenger,
     required this.channelSuffix,
@@ -29,9 +33,15 @@ class _MapboxMapsPlatform {
       );
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
-    print(
-      "Handle method call ${call.method}, arguments: ${call.arguments} not supported",
-    );
+    switch (call.method) {
+      case 'mapView#onMapCreated':
+        onNativeMapCreated?.call();
+        return null;
+      default:
+        developer.log(
+          "Handle method call ${call.method}, arguments: ${call.arguments} not supported",
+        );
+    }
   }
 
   Widget buildView(
@@ -136,6 +146,7 @@ class _MapboxMapsPlatform {
   }
 
   void dispose() async {
+    onNativeMapCreated = null;
     try {
       await _channel.invokeMethod('platform#releaseMethodChannels');
     } catch (e) {
