@@ -22,7 +22,7 @@ void main() {
     const id = 'tap-interaction';
     mapboxMap.addInteraction(
       TapInteraction.onMap((context) {
-        expect(() => completer.complete(context), returnsNormally);
+        completer.ensureCompletedOnce(context);
       }),
       interactionID: id,
     );
@@ -50,7 +50,7 @@ void main() {
       const id = 'long-tap-interaction';
       mapboxMap.addInteraction(
         LongTapInteraction.onMap((context) {
-          expect(() => completer.complete(context), returnsNormally);
+          completer.ensureCompletedOnce(context);
         }),
         interactionID: id,
       );

@@ -217,6 +217,8 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
 
     LogConfiguration._setupDebugLoggingIfNeeded();
+
+    _mapboxMapsPlatform.onNativeMapCreated = _onNativeMapCreated;
     _events = _MapEvents(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _suffix.toString(),
@@ -295,15 +297,22 @@ class _MapWidgetState extends State<MapWidget> {
     _events._onResourceRequestListener = widget.onResourceRequestListener;
   }
 
-  Future<void> onPlatformViewCreated(int id) async {
-    final MapboxMap controller = MapboxMap._(
+  void _onNativeMapCreated() {
+    if (mapboxMap != null || !mounted) {
+      return;
+    }
+    final controller = MapboxMap._(
       mapboxMapsPlatform: _mapboxMapsPlatform,
     );
-    if (widget.onMapCreated != null) {
-      widget.onMapCreated!(controller);
-    }
     mapboxMap = controller;
+    try {
+      widget.onMapCreated?.call(controller);
+    } finally {
+      _updateStateIfNeeded();
+    }
+  }
 
+  Future<void> onPlatformViewCreated(int id) async {
     // WARNING: Because platform view is not sized at this moment on iOS,
     // it is not safe to call methods that depend on the size of the platform view,
     // e.g. `setCamera` or any high-level API built on top of it(animations, viewport).

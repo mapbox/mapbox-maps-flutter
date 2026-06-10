@@ -234,6 +234,7 @@ class MapboxMapController(
 
     methodChannel = MethodChannel(messenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
+    methodChannel.invokeMethod("mapView#onMapCreated", null)
   }
 
   override fun getView(): View? {

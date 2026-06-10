@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:js_interop';
 import 'dart:ui_web';
 
@@ -89,16 +90,23 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     // and fitBounds work before the style finishes loading.
     _applyViewport();
 
-    // Wire GL JS events → platform-interface MapEvent subclasses. Subscribe
-    // before firing onMapCreated so any listener registered inside that
-    // callback sees the full event stream (load/style.load arrive shortly
-    // after construction).
+    final mapCreated = Completer<void>();
     final onMapEvent = widget.onMapEvent;
     if (onMapEvent != null) {
-      _eventBridge = MapEventBridge(nativeMap, onMapEvent);
+      _eventBridge = MapEventBridge(nativeMap, (event) {
+        if (mapCreated.isCompleted) {
+          onMapEvent(event);
+        } else {
+          mapCreated.future.then((_) => onMapEvent(event));
+        }
+      });
     }
 
-    widget.onMapCreated?.call(mapboxMap);
+    try {
+      widget.onMapCreated?.call(mapboxMap);
+    } finally {
+      mapCreated.complete();
+    }
   }
 
   @override
