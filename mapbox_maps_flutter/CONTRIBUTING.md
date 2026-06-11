@@ -6,13 +6,13 @@ If you have a usage question about the Mapbox Maps SDK for Flutter, please visit
 
 If you'd like to contribute code:
 
-1. Please familiarize yourself with the [install process](https://pub.dev/packages/mapbox_maps_flutter_mobile/install), the [development process](DEVELOPING.md), and the contributor license agreement (CLA) at the bottom of this document. All contributions to the project must reflect its development standards and be offered under the terms of the CLA.
+1. Please familiarize yourself with the [development process](DEVELOPING.md) and the [contributor license agreement (CLA)](#contributor-license-agreement). All contributions to the project must reflect its development standards and be offered under the terms of the CLA.
 
 2. Ensure that existing [pull requests](https://github.com/mapbox/mapbox-maps-flutter/pulls) and [issues](https://github.com/mapbox/mapbox-maps-flutter/issues) don’t already cover your contribution or question. If your planned contribution involves significant changes to the SDK, consider opening a new issue to discuss your design before beginning work.
 
 3. Pull requests are gladly accepted. If your PR makes changes to the SDK that developers should be aware of, please be sure to update [CHANGELOG.md](CHANGELOG.md)
 
-4. Prefix your commit messages with the relavent labels that your changes affect: `[sdk]`, `[gestures]`, `[animation]`, `[location]`, ...
+4. Prefix your commit messages with the relevant labels that your changes affect: `[sdk]`, `[gestures]`, `[animation]`, `[location]`, ...
 
 ### GitHub issue labels
 
@@ -50,6 +50,5 @@ You agree that the following terms apply to all of your Contributions beginning 
 
 
 **Disputes.** These Terms are governed by and construed in accordance with the laws of California, without giving effect to any principles of conflicts of law. Any action arising out of or relating to these Terms must be filed in the state or federal courts for San Francisco County, California, USA, and you hereby consent and submit to the exclusive personal jurisdiction and venue of these courts for the purposes of litigating any such action.
-.
 
 **Assignment.** You agree that Mapbox may assign this Agreement, and all of its rights, obligations and licenses hereunder.
