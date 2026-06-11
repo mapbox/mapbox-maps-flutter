@@ -25,17 +25,21 @@ final class CompassController: CompassSettingsInterface {
             compass.image = UIImage(data: data, scale: UIScreen.main.scale)
         }
 
-        if let visible = settings.enabled {
-            let fadeWhenFacingNorth = settings.fadeWhenFacingNorth ?? true
+        // Apply `enabled` and `fadeWhenFacingNorth` independently so either can be
+        // changed on its own — matching the Android implementation (CompassMappings.kt).
+        // Previously visibility was only updated when `enabled` was non-nil, so
+        // `fadeWhenFacingNorth: false` was silently ignored on iOS and the compass
+        // kept fading at north.
+        if settings.enabled != nil || settings.fadeWhenFacingNorth != nil {
+            let current = compass.visibility
+            let enabled = settings.enabled ?? (current != .hidden)
+            let fadeWhenFacingNorth = settings.fadeWhenFacingNorth ?? (current == .adaptive)
 
-            let visibility: OrnamentVisibility
-            switch (visible, fadeWhenFacingNorth) {
-            case (true, true): visibility = .adaptive
-            case (true, false): visibility = .visible
-            case (false, _): visibility = .hidden
+            switch (enabled, fadeWhenFacingNorth) {
+            case (true, true):  compass.visibility = .adaptive
+            case (true, false): compass.visibility = .visible
+            case (false, _):    compass.visibility = .hidden
             }
-
-            compass.visibility = visibility
         }
 
         ornaments.options.compass = compass
