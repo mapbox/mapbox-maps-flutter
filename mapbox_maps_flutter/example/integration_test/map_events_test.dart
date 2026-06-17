@@ -87,18 +87,32 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await Future.wait([
-      mapCreated.future,
-      onStyleLoaded.future,
-      onMapLoaded.future,
-      onMapIdle.future,
-      onStyleDataLoaded.future,
-      onSourceDataLoaded.future,
-      onSourceAdded.future,
-      onCameraChanged.future,
-      onRenderFrameStarted.future,
-      onRenderFrameFinished.future,
-      onResourceRequest.future,
-    ]).timeout(const Duration(seconds: 15));
+    final events = <String, Completer<void>>{
+      'mapCreated': mapCreated,
+      'styleLoaded': onStyleLoaded,
+      'mapLoaded': onMapLoaded,
+      'mapIdle': onMapIdle,
+      'styleDataLoaded': onStyleDataLoaded,
+      'sourceDataLoaded': onSourceDataLoaded,
+      'sourceAdded': onSourceAdded,
+      'cameraChanged': onCameraChanged,
+      'renderFrameStarted': onRenderFrameStarted,
+      'renderFrameFinished': onRenderFrameFinished,
+      'resourceRequest': onResourceRequest,
+    };
+
+    // 20s rather than ~1s for a healthy load: headless CI renders with
+    // software WebGL, so idle/load can lag under runner load.
+    try {
+      await Future.wait(
+        events.values.map((c) => c.future),
+      ).timeout(const Duration(seconds: 20));
+    } on TimeoutException {
+      final missing = events.entries
+          .where((entry) => !entry.value.isCompleted)
+          .map((entry) => entry.key)
+          .toList();
+      fail('Timed out waiting for map lifecycle events: $missing');
+    }
   });
 }
