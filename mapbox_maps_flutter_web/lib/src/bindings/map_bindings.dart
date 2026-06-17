@@ -17,6 +17,9 @@ export 'viewport_bindings.dart';
 @JS()
 external String accessToken;
 
+@JS()
+external void setSdkInfo(String info);
+
 // ===== Foundation =====
 
 /// JS plain object viewed as a key/value dictionary. Use [toDart] to

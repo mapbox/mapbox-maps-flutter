@@ -11,7 +11,7 @@ This is the app-facing package. It endorses:
 - Flutter 3.38.1 / Dart 3.10.0 or higher
 - Android: minSdk 21 or higher
 - iOS: 14 or higher
-- Web: Mapbox GL JS 3.24.0 or higher
+- Web: Mapbox GL JS 3.25.0 or higher
 
 ## Installation
 
@@ -66,8 +66,8 @@ See the [access token docs](https://docs.mapbox.com/help/getting-started/access-
 **Web** — load Mapbox GL JS in `web/index.html` inside `<head>`:
 
 ```html
-<link href='https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css' rel='stylesheet' />
-<script src='https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v3.25.0/mapbox-gl.css' rel='stylesheet' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v3.25.0/mapbox-gl.js'></script>
 ```
 
 ### 4. Add a map
