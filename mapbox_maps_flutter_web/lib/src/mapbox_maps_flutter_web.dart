@@ -11,8 +11,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:mapbox_maps_flutter_web/src/bindings/map_bindings.dart';
-import 'package:mapbox_maps_flutter_web/src/map_widget.dart';
+
+import '../mapbox_maps_flutter_web.dart';
 
 base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     implements
@@ -21,6 +21,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   /// Registers the platform implementation.
   static void registerWith(Registrar registrar) {
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterWeb();
+    setSdkInfo('FlutterPlugin/$mapboxPluginVersion');
   }
 
   @override
