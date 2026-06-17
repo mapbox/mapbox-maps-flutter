@@ -1,5 +1,8 @@
 ### main
 
+* [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
+* [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
+
 ### 2.25.0-rc.1
 
 * Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
@@ -82,8 +85,8 @@
 
 ### 2.12.0
 
-> [!NOTE] 
-> This release adds support for Android 16KB page size requirements. 
+> [!NOTE]
+> This release adds support for Android 16KB page size requirements.
 
 * Update Maps SDK to v11.16.0
   * Maps SDK Android dependency now includes NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
@@ -94,14 +97,14 @@
 
 * Update Maps SDK to v11.15.0
 * Fix map events not being called if annotations are presented
-* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format. 
+* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format.
 
 ### 2.10.0
 
 * Update Maps SDK to v11.14.0
   * Fixed FillExtrusionLayer flickering when transitioning between flat and globe projection
 * Fix crash when receiving annotation interactions.
-* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
+* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`.
 * Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
   Example usage:
   ```dart
@@ -161,12 +164,12 @@
   * `MapboxMap.removeFeatureStateForFeaturesetFeature`
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
-* Move experimental `modelElevationReference` property to `LocationPuck3D`. 
+* Move experimental `modelElevationReference` property to `LocationPuck3D`.
 * Fixed an issue where style expressions did not override constant values when both were present.
 * [ios] Fix crash when force unwrapping UIImage for point annotations.
 * Update MapboxMaps to v11.13.0
 
-### 2.8.0 
+### 2.8.0
 
 * Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
 * [Android] Fix color alpha value conversion.
