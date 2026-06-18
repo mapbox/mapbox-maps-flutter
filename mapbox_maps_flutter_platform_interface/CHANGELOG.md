@@ -1,3 +1,3 @@
-## 0.0.1
+### 3.0.0-alpha.1
 
-* TODO: Describe initial release.
+* Initial release defining shared platform interfaces and data types for the federated Maps Flutter plugin.

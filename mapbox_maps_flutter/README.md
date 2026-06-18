@@ -19,7 +19,7 @@ This is the app-facing package. It endorses:
 
 ```yaml
 dependencies:
-  mapbox_maps_flutter: ^3.0.0-beta.1
+  mapbox_maps_flutter: ^3.0.0-alpha.1
 ```
 
 Then run `flutter pub get`.
