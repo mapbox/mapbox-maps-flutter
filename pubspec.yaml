@@ -1,6 +1,6 @@
 name: mapbox_maps_flutter
 description: Interactive, thoroughly customizable maps powered by Mapbox Maps mobile SDKs.
-version: 2.26.0-SNAPSHOT-06-26--09-26.git-eaf2ac6
+version: 2.26.0-SNAPSHOT-06-27--02-04.git-1f9b8b4
 homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
