@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter SDK
 
-The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.26.0-SNAPSHOT-06-29--02-04.git-435dfa8). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.26.0-rc.1). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
 
 Web support is now in Public Preview through 3.0.0-alpha.1, see [installation guide](https://docs.mapbox.com/flutter/maps/guides/install-v3/).
 
