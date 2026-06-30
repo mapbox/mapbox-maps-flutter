@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-echo "-> Running 'flutter format' to check project dart style."
+echo "-> Running 'dart format' to check project dart style."
 
-RESULT=$(flutter format -n lib example/lib example/integration_test)
+RESULT=$(dart format --language-version=3.6 -n lib example/lib example/integration_test)
 
 if [[ $? != 0 ]]; then
     echo "----> Command failed."

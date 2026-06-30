@@ -108,7 +108,7 @@ enum class PuckBearing(val raw: Int) {
 
 /**
  * Defines scaling mode. Only applies to location-indicator type layers.
- * Default value: "map".
+ * Default value: "viewport".
  */
 enum class ModelScaleMode(val raw: Int) {
   /** Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover. */
@@ -418,7 +418,7 @@ data class LocationPuck3D(
   val modelReceiveShadows: Boolean? = null,
   /**
    * Defines scaling mode. Only applies to location-indicator type layers.
-   * Default value: "map".
+   * Default value: "viewport".
    */
   val modelScaleMode: ModelScaleMode? = null,
   /**

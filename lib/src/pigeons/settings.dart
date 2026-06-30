@@ -35,7 +35,7 @@ enum PuckBearing {
 }
 
 /// Defines scaling mode. Only applies to location-indicator type layers.
-/// Default value: "map".
+/// Default value: "viewport".
 enum ModelScaleMode {
   /// Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover.
   MAP,
@@ -366,7 +366,7 @@ class LocationPuck3D {
   bool? modelReceiveShadows;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
-  /// Default value: "map".
+  /// Default value: "viewport".
   ModelScaleMode? modelScaleMode;
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.

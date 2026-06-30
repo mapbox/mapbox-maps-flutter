@@ -267,7 +267,7 @@ class MapboxMap extends ChangeNotifier {
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
-      late final MapboxHttpService httpService = MapboxHttpService(
+  late final MapboxHttpService httpService = MapboxHttpService(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       channelSuffix: _mapboxMapsPlatform.channelSuffix);
   @Deprecated('Use [MapboxMap.addInteraction] instead')

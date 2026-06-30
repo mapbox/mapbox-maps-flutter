@@ -62,8 +62,7 @@ class MapboxHttpService {
   /// or if the operation fails.
   Future<void> setMaxRequestsPerHost(int max) async {
     try {
-      await _channel
-          .invokeMethod('map#setMaxRequestsPerHost', {'max': max});
+      await _channel.invokeMethod('map#setMaxRequestsPerHost', {'max': max});
     } on MissingPluginException catch (e) {
       throw PlatformException(
         code: 'MISSING_IMPLEMENTATION',
