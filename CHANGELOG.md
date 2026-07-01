@@ -2,6 +2,7 @@
 
 * [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
 * [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
+* [Android] Migrate to built-in Kotlin.
 
 ### 2.25.0-rc.1
 
