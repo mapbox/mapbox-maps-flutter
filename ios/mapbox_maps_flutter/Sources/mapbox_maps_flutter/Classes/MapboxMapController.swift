@@ -169,10 +169,31 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
             ))
             return
         }
-        let customInterceptor = CustomHttpServiceInterceptor()
-        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(customInterceptor)
-            customInterceptor.customHeaders = headers
+        let interceptor = CustomHttpServiceInterceptor.shared
+        interceptor.customHeaders = headers
+        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
         result(nil)
+
+        case "map#setCustomHeadersForHost":
+            guard let arguments = methodCall.arguments as? [String: Any],
+                  let host = arguments["host"] as? String, !host.isEmpty,
+                  let headers = arguments["headers"] as? [String: String]
+            else {
+                result(FlutterError(
+                    code: "setCustomHeadersForHost",
+                    message: "could not decode arguments",
+                    details: nil
+                ))
+                return
+            }
+            let interceptor = CustomHttpServiceInterceptor.shared
+            interceptor.setHeaders(headers, forHost: host)
+            HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
+            result(nil)
+
+        case "map#clearCustomHeaders":
+            CustomHttpServiceInterceptor.shared.clearAll()
+            result(nil)
 
         case "map#setMaxRequestsPerHost":
             guard let arguments = methodCall.arguments as? [String: Any],
