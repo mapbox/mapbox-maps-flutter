@@ -68,8 +68,7 @@ class MapWidget extends StatefulWidget {
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
-    @Deprecated('Use [MapboxMap.addInteraction] instead')
-    this.onTapListener,
+    @Deprecated('Use [MapboxMap.addInteraction] instead') this.onTapListener,
     @Deprecated('Use [MapboxMap.addInteraction] instead')
     this.onLongTapListener,
     this.onScrollListener,

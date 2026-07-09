@@ -1038,7 +1038,12 @@ class SettingsPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol GesturesSettingsInterface {
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   func getSettings() throws -> GesturesSettings
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   func updateSettings(settings: GesturesSettings) throws
 }
 
@@ -1048,6 +1053,8 @@ class GesturesSettingsInterfaceSetup {
   /// Sets up an instance of `GesturesSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: GesturesSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    /// Returns the currently applied settings, populated with default
+    /// values for any fields not explicitly modified via [updateSettings].
     let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
@@ -1061,6 +1068,9 @@ class GesturesSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
+    /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+    ///
+    /// Call [getSettings] to retrieve the full resulting configuration.
     let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in

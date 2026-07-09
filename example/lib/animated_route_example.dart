@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
@@ -16,7 +15,7 @@ class AnimatedRouteExample extends StatefulWidget implements Example {
   @override
   final Widget leading = const Icon(Icons.map);
   @override
-  final String title = 'High level animation';
+  final String title = 'Route animation';
   @override
   final String? subtitle = null;
 
@@ -82,7 +81,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
                     });
                   },
                   backgroundColor: trackLocation ? Colors.blue : Colors.grey,
-                  child: const Icon(FontAwesomeIcons.locationCrosshairs)),
+                  child: const Icon(Icons.my_location)),
               const SizedBox(height: 10),
               FloatingActionButton(
                   heroTag: null,
