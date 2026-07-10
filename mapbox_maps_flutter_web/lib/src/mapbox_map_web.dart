@@ -614,7 +614,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
       id,
       JSInteraction(
         type: interaction.interactionType.jsInteractionType,
-        target: interaction.featuresetDescriptor?.jsTargetDescriptor,
+        target: interaction.featuresetDescriptor?.toJSTargetDescriptor(),
         filter: filter == null ? null : jsonDecode(filter).jsify() as JSObject?,
         handler: handler,
       ),
@@ -631,13 +631,69 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
     RenderedQueryGeometry geometry,
     RenderedQueryOptions options,
-  ) => throw _ni('queryRenderedFeatures');
+  ) async {
+    final layerIds = options.layerIds?.nonNulls.toList();
+    final filter = options.filter?.trim();
+    final jsOpts = JSQueryRenderedFeaturesOptions(
+      layers: (layerIds != null && layerIds.isNotEmpty)
+          ? layerIds.map((e) => e.toJS).toList().toJS
+          : null,
+      filter: (filter != null && filter.isNotEmpty)
+          ? FilterSpecification.fromJson(filter)
+          : null,
+    );
+
+    return _map
+        .queryRenderedFeatures(geometry.toJS(), jsOpts)
+        .toDart
+        .map(
+          (f) => QueriedRenderedFeature(
+            queriedFeature: f.toQueriedFeature(
+              source: f.source,
+              sourceLayer: f.sourceLayer,
+            ),
+            layers: f.layer != null ? [f.layer!.id] : [],
+          ),
+        )
+        .toList();
+  }
 
   @override
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
     String sourceId,
     SourceQueryOptions options,
-  ) => throw _ni('querySourceFeatures');
+  ) async {
+    final sourceLayerIds = options.sourceLayerIds?.nonNulls.toList();
+    final layersToQuery = (sourceLayerIds == null || sourceLayerIds.isEmpty)
+        ? <String?>[null]
+        : sourceLayerIds.map<String?>((e) => e).toList();
+    final filter = options.filter.trim();
+    final jsFilter = filter.isNotEmpty
+        ? FilterSpecification.fromJson(filter)
+        : null;
+
+    final results = <QueriedSourceFeature?>[];
+    for (final layerId in layersToQuery) {
+      final jsOpts = JSQuerySourceFeaturesOptions(
+        sourceLayer: layerId,
+        filter: jsFilter,
+      );
+      results.addAll(
+        _map
+            .querySourceFeatures(sourceId, jsOpts)
+            .toDart
+            .map(
+              (f) => QueriedSourceFeature(
+                queriedFeature: f.toQueriedFeature(
+                  source: sourceId,
+                  sourceLayer: layerId,
+                ),
+              ),
+            ),
+      );
+    }
+    return results;
+  }
 
   @override
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
@@ -674,14 +730,32 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     String? sourceLayerId,
     String featureId,
     String state,
-  ) => throw _ni('setFeatureState');
+  ) async => _map.setFeatureState(
+    JSFeatureSelector(
+      source: sourceId,
+      sourceLayer: sourceLayerId,
+      id: featureId,
+    ),
+    JSDictionary<String, Object?>.fromJson(state),
+  );
 
   @override
   Future<String> getFeatureState(
     String sourceId,
     String? sourceLayerId,
     String featureId,
-  ) => throw _ni('getFeatureState');
+  ) async => json.encode(
+    _map
+            .getFeatureState(
+              JSFeatureSelector(
+                source: sourceId,
+                sourceLayer: sourceLayerId,
+                id: featureId,
+              ),
+            )
+            ?.toDart() ??
+        <String, Object?>{},
+  );
 
   @override
   Future<void> removeFeatureState(
@@ -689,7 +763,14 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     String? sourceLayerId,
     String featureId,
     String? stateKey,
-  ) => throw _ni('removeFeatureState');
+  ) async => _map.removeFeatureState(
+    JSFeatureSelector(
+      source: sourceId,
+      sourceLayer: sourceLayerId,
+      id: featureId,
+    ),
+    stateKey,
+  );
 
   // ===== Featureset state =====
 
@@ -698,42 +779,57 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     FeaturesetDescriptor featureset,
     FeaturesetFeatureId featureId,
     FeatureState state,
-  ) => throw _ni('setFeatureStateForFeaturesetDescriptor');
+  ) async => _map.setFeatureState(
+    featureId.toJSTargetFeature(featureset),
+    JSDictionary<String, Object?>.fromDart(state.map),
+  );
 
   @override
   Future<void> setFeatureStateForFeaturesetFeature(
     FeaturesetFeature feature,
     FeatureState state,
-  ) => throw _ni('setFeatureStateForFeaturesetFeature');
+  ) async => _map.setFeatureState(
+    feature.toJSTargetFeature(),
+    JSDictionary<String, Object?>.fromDart(state.map),
+  );
 
   @override
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
     FeaturesetDescriptor featureset,
     FeaturesetFeatureId featureId,
-  ) => throw _ni('getFeatureStateForFeaturesetDescriptor');
+  ) async =>
+      _map.getFeatureState(featureId.toJSTargetFeature(featureset))?.toDart() ??
+      <String, Object?>{};
 
   @override
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
     FeaturesetFeature feature,
-  ) => throw _ni('getFeatureStateForFeaturesetFeature');
+  ) async =>
+      _map.getFeatureState(feature.toJSTargetFeature())?.toDart() ??
+      <String, Object?>{};
 
   @override
   Future<void> removeFeatureStateForFeaturesetDescriptor({
     required FeaturesetDescriptor featureset,
     required FeaturesetFeatureId featureId,
     String? stateKey,
-  }) => throw _ni('removeFeatureStateForFeaturesetDescriptor');
+  }) async => _map.removeFeatureState(
+    featureId.toJSTargetFeature(featureset),
+    stateKey,
+  );
 
   @override
   Future<void> removeFeatureStateForFeaturesetFeature({
     required FeaturesetFeature feature,
     String? stateKey,
-  }) => throw _ni('removeFeatureStateForFeaturesetFeature');
+  }) async => _map.removeFeatureState(feature.toJSTargetFeature(), stateKey);
 
   @override
   Future<void> resetFeatureStatesForFeatureset(
     FeaturesetDescriptor featureset,
-  ) => throw _ni('resetFeatureStatesForFeatureset');
+  ) => throw UnimplementedError(
+    'resetFeatureStatesForFeatureset is not yet implemented on web.',
+  );
 
   // ===== Debug options =====
 

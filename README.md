@@ -1,1 +1,0 @@
-mapbox_maps_flutter/README.md

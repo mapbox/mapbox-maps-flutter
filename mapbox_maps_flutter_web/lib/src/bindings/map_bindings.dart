@@ -6,6 +6,7 @@ import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'interaction_bindings.dart';
+import 'json_helpers.dart';
 import 'location_bindings.dart';
 import 'viewport_bindings.dart';
 
@@ -26,6 +27,12 @@ external void setSdkInfo(String info);
 /// convert into a Dart [Map].
 @JS()
 extension type JSDictionary<K, V>._(JSObject _) implements JSObject {
+  factory JSDictionary.fromJson(String json) =>
+      JSDictionary._(jsonParse(json) as JSObject);
+
+  factory JSDictionary.fromDart(Map<K, V> map) =>
+      JSDictionary._(map.jsify()! as JSObject);
+
   Map<K, V> toDart() => (dartify() as Map?)?.cast<K, V>() ?? <K, V>{};
 }
 
@@ -196,6 +203,115 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Synthesizes an event of [type] with the given [data] payload and
   /// dispatches it to all listeners (including interactions).
   external void fire(String type, JSObject? data);
+}
+
+/// A GL JS `FilterSpecification`: an expression array such as
+/// `['==', ['get', 'id'], 3]`. The platform interface carries filters as
+/// JSON-encoded strings, so [fromJson] parses one into the array GL JS wants.
+extension type FilterSpecification._(JSArray<JSAny?> _)
+    implements JSArray<JSAny?> {
+  factory FilterSpecification.fromJson(String json) =>
+      FilterSpecification._(jsonParse(json) as JSArray<JSAny?>);
+}
+
+/// Options passed to [JSMapQueryExtension.queryRenderedFeatures].
+///
+/// Null fields are omitted; GL JS skips `layers`/`filter` when falsy.
+@JS()
+@anonymous
+extension type JSQueryRenderedFeaturesOptions._(JSObject _)
+    implements JSObject {
+  external factory JSQueryRenderedFeaturesOptions({
+    JSArray<JSString>? layers,
+    FilterSpecification? filter,
+  });
+}
+
+/// Options passed to [JSMapQueryExtension.querySourceFeatures].
+///
+/// Null fields are omitted; GL JS skips `sourceLayer`/`filter` when falsy.
+@JS()
+@anonymous
+extension type JSQuerySourceFeaturesOptions._(JSObject _) implements JSObject {
+  external factory JSQuerySourceFeaturesOptions({
+    String? sourceLayer,
+    JSArray<JSAny?>? filter,
+  });
+}
+
+/// GL JS feature-state target: `FeatureSelector` | `GeoJSONFeature` | `TargetFeature`.
+///
+/// All three are plain objects at runtime; GL JS discriminates by the presence
+/// of `target` vs `source`. Concrete interop types implement this nominally.
+extension type JSFeatureStateFeature._(JSObject _) implements JSObject {}
+
+/// A GL JS `MapboxGeoJSONFeature` as returned by the feature-query methods.
+@JS()
+extension type JSMapFeature._(JSObject _) implements JSFeatureStateFeature {
+  external String get type;
+  external JSGeometry? get geometry;
+  external JSDictionary<String?, Object?> get properties;
+  external JSIdentifier? get id;
+  external String get source;
+  external String? get sourceLayer;
+  external JSObject? get state;
+
+  /// The style layer the feature was rendered in (only set for
+  /// [JSMapQueryExtension.queryRenderedFeatures] results).
+  external JSFeatureLayer? get layer;
+}
+
+/// The style layer a [JSMapFeature] was rendered in.
+@JS()
+extension type JSFeatureLayer._(JSObject _) implements JSObject {
+  external String get id;
+}
+
+/// GL JS `FeatureSelector` — identifies a feature within a style source.
+@JS()
+@anonymous
+extension type JSFeatureSelector._(JSObject _) implements JSFeatureStateFeature {
+  external factory JSFeatureSelector({
+    required String source,
+    String? sourceLayer,
+    String? id,
+  });
+}
+
+/// Feature query and feature-state methods on [JSMap].
+extension JSMapQueryExtension on JSMap {
+  /// Returns features rendered at [geometry].
+  ///
+  /// [geometry] may be a single [JSScreenPoint], an array of two
+  /// [JSScreenPoint] forming a bounding box, or null to query the entire
+  /// viewport.
+  external JSArray<JSMapFeature> queryRenderedFeatures(
+    JSAny? geometry,
+    JSQueryRenderedFeaturesOptions? options,
+  );
+
+  /// Returns features from the source identified by [sourceId].
+  external JSArray<JSMapFeature> querySourceFeatures(
+    String sourceId,
+    JSQuerySourceFeaturesOptions? options,
+  );
+
+  /// Merges [state] into the runtime state of [feature].
+  external void setFeatureState(
+    JSFeatureStateFeature feature,
+    JSDictionary<String, Object?> state,
+  );
+
+  /// Returns the runtime state of [feature], or null when unset.
+  external JSDictionary<String, Object?>? getFeatureState(
+    JSFeatureStateFeature feature,
+  );
+
+  /// Clears [key] from [feature]'s state, or all keys when [key] is null.
+  external void removeFeatureState(
+    JSFeatureStateFeature feature,
+    String? key,
+  );
 }
 
 // ===== Event names =====

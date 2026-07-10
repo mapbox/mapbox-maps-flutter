@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:turf/turf.dart' show Position;
 
+import 'platform.dart';
+
 class StandardStyleInteractionsExample extends StatefulWidget {
   const StandardStyleInteractionsExample({super.key});
 
@@ -23,8 +25,6 @@ class StandardStyleInteractionsState
 
   void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style;
-    _updateMapStyle();
 
     /// When a POI feature in the Standard POI featureset is tapped hide the POI
     var tapInteractionPOI = TapInteraction(
@@ -72,17 +72,27 @@ class StandardStyleInteractionsState
     });
     mapboxMap.addInteraction(tapInteractionPlaceLabel);
 
-    // When the map is long-tapped print the screen coordinates of the tap
-    // and reset the state of all features in the Standard POIs, Buildings, and Place Labels featuresets.
-    var longTapInteraction = LongTapInteraction.onMap((context) {
-      log(
-        "Long tap at: ${context.touchPosition.x}, ${context.touchPosition.y}",
+    // On mobile, when the map is long-tapped print the screen coordinates of
+    // the tap and reset the state of all features in the Standard POIs,
+    // Buildings, and Place Labels featuresets. Long-tap isn't available on web.
+    if (isMobile) {
+      mapboxMap.addInteraction(
+        LongTapInteraction.onMap((context) {
+          log(
+            "Long tap at: ${context.touchPosition.x}, ${context.touchPosition.y}",
+          );
+          mapboxMap.resetFeatureStatesForFeatureset(StandardPOIs());
+          mapboxMap.resetFeatureStatesForFeatureset(StandardBuildings());
+          mapboxMap.resetFeatureStatesForFeatureset(StandardPlaceLabels());
+        }),
       );
-      mapboxMap.resetFeatureStatesForFeatureset(StandardPOIs());
-      mapboxMap.resetFeatureStatesForFeatureset(StandardBuildings());
-      mapboxMap.resetFeatureStatesForFeatureset(StandardPlaceLabels());
-    });
-    mapboxMap.addInteraction(longTapInteraction);
+    }
+  }
+
+  // The Standard style's "basemap" import is only available once the style has
+  // loaded, then we can update the map style import's config properties.
+  void _onStyleLoaded(StyleLoadedEventData data) {
+    _updateMapStyle();
   }
 
   Widget _buildDebugPanel() {
@@ -169,6 +179,7 @@ class StandardStyleInteractionsState
             ),
             styleUri: MapboxStyles.STANDARD,
             onMapCreated: _onMapCreated,
+            onStyleLoadedListener: _onStyleLoaded,
           ),
           Positioned(
             bottom: 10,

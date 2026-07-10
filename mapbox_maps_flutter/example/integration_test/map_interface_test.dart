@@ -233,7 +233,7 @@ void main() {
     expect(debugOptions.first, MapWidgetDebugOptions.tileBorders);
   });
 
-  testWidgets('featureState', skip: kIsWeb, (WidgetTester tester) async {
+  testWidgets('featureState', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -337,6 +337,7 @@ void main() {
     MapboxMapsOptions.setWorldview(null);
   });
 
+  // Skipped on web: relies on Style.addStyleImage, which isn't implemented there yet.
   testWidgets('queryRenderedFeatures', skip: kIsWeb, (
     WidgetTester tester,
   ) async {
@@ -406,6 +407,9 @@ void main() {
     expect(query.length, 0);
   });
 
+  // Skipped on web: the fixture's GeoJSON feature has a string id ("point"),
+  // and GL JS's internal vector-tile pipeline only round-trips numeric
+  // feature ids through querySourceFeatures.
   testWidgets('querySourceFeatures', skip: kIsWeb, (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();

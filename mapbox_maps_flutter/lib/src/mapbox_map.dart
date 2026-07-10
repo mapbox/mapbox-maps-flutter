@@ -412,6 +412,11 @@ class MapboxMap implements MapboxMapInterface {
 
   /// Queries the map for rendered features inside [geometry] matching the
   /// given query [options].
+  ///
+  /// {@template web_numeric_feature_id}
+  /// On web, GeoJSON feature ids must be a numeric string — GL JS's
+  /// internal vector-tile pipeline only supports integer feature ids.
+  /// {@endtemplate}
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
     RenderedQueryGeometry geometry,
     RenderedQueryOptions options,
@@ -419,6 +424,8 @@ class MapboxMap implements MapboxMapInterface {
 
   /// Queries the source identified by [sourceId] for features matching the
   /// given query [options].
+  ///
+  /// {@macro web_numeric_feature_id}
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
     String sourceId,
     SourceQueryOptions options,
@@ -458,6 +465,9 @@ class MapboxMap implements MapboxMapInterface {
   // ===== Source-feature state (pre-Featureset shapes) =====
 
   /// Updates entries in the state map of a feature within a style source.
+  ///
+  /// Requirements for [featureId]:
+  /// {@macro web_numeric_feature_id}
   Future<void> setFeatureState(
     String sourceId,
     String? sourceLayerId,
@@ -465,7 +475,11 @@ class MapboxMap implements MapboxMapInterface {
     String state,
   ) => _impl.setFeatureState(sourceId, sourceLayerId, featureId, state);
 
-  /// Returns the state map of a feature within a style source as a JSON string.
+  /// Returns the state map of a feature within a style source as a JSON
+  /// string.
+  ///
+  /// Requirements for [featureId]:
+  /// {@macro web_numeric_feature_id}
   Future<String> getFeatureState(
     String sourceId,
     String? sourceLayerId,
@@ -474,6 +488,9 @@ class MapboxMap implements MapboxMapInterface {
 
   /// Removes a single state property (or all properties) from a feature
   /// within a style source. Pass `null` for [stateKey] to remove all.
+  ///
+  /// Requirements for [featureId]:
+  /// {@macro web_numeric_feature_id}
   Future<void> removeFeatureState(
     String sourceId,
     String? sourceLayerId,
