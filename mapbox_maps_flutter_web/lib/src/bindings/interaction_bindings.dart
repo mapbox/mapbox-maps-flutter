@@ -27,9 +27,9 @@ extension type JSTargetDescriptor._(JSObject _) implements JSObject {
     String? layerId,
   });
 
-  external String? get featuresetId;
-  external String? get importId;
-  external String? get layerId;
+  external String? featuresetId;
+  external String? importId;
+  external String? layerId;
 }
 
 /// Browser-level event that triggered a gesture (`MouseEvent` / `TouchEvent`
@@ -48,11 +48,14 @@ extension type JSInteractionEvent._(JSObject _) implements JSObject {
 
 /// GL JS `TargetFeature`.
 @JS()
-extension type JSTargetFeature._(JSObject _) implements JSObject {
+extension type JSTargetFeature._(JSObject _) implements JSFeatureStateFeature {
+  JSTargetFeature() : this._(JSObject());
+
   external JSIdentifier? get id;
+  external set id(String value);
   external JSGeometry? get geometry;
   external JSDictionary<String, Object?>? get properties;
   external JSDictionary<String, Object?>? get state;
-  external String? get namespace;
-  external JSTargetDescriptor? get target;
+  external String? namespace;
+  external JSTargetDescriptor? target;
 }

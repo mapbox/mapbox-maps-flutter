@@ -55,11 +55,35 @@ extension InteractionTypeJSExtension on InteractionType {
 }
 
 extension FeaturesetDescriptorJSExtension on FeaturesetDescriptor {
-  JSTargetDescriptor get jsTargetDescriptor => JSTargetDescriptor(
-    featuresetId: featuresetId,
-    importId: importId,
-    layerId: layerId,
-  );
+  JSTargetDescriptor toJSTargetDescriptor() {
+    final descriptor = JSTargetDescriptor();
+    if (featuresetId != null) descriptor.featuresetId = featuresetId;
+    if (importId != null) descriptor.importId = importId;
+    if (layerId != null) descriptor.layerId = layerId;
+    return descriptor;
+  }
+}
+
+extension FeaturesetFeatureIdJSExtension on FeaturesetFeatureId {
+  JSTargetFeature toJSTargetFeature(FeaturesetDescriptor featureset) {
+    final feature = JSTargetFeature()
+      ..id = id
+      ..target = featureset.toJSTargetDescriptor();
+    if (namespace != null) feature.namespace = namespace;
+    return feature;
+  }
+}
+
+extension FeaturesetFeatureJSExtension on FeaturesetFeature {
+  JSTargetFeature toJSTargetFeature() {
+    final featureId = id;
+    if (featureId == null) {
+      throw ArgumentError(
+        'FeaturesetFeature.id must be non-null to access feature state.',
+      );
+    }
+    return featureId.toJSTargetFeature(featureset);
+  }
 }
 
 extension JSTargetDescriptorExtension on JSTargetDescriptor {

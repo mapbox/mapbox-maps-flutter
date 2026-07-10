@@ -502,6 +502,14 @@ final class StyleController implements StylePlatformInterface {
   // `dataId` ticketing scheme has no gl-js analogue; we drop it and let
   // gl-js coalesce updates internally. Source must be declared with
   // `dynamic: true` to accept these calls.
+  //
+  // Feature ids must be numeric (or numeric strings) for this merge — and
+  // for feature state and querySourceFeatures/queryRenderedFeatures id
+  // round-tripping in general — because GL JS re-encodes GeoJSON data into
+  // real vector-tile PBF buffers internally, and the vector tile spec only
+  // supports integer feature ids. Non-numeric ids are silently dropped at
+  // that step. This is a GL JS platform limitation, not specific to this
+  // plugin.
 
   @override
   Future<void> addGeoJSONSourceFeatures(
