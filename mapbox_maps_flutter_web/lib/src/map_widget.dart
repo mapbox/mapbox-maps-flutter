@@ -64,9 +64,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   }
 
   void _onPlatformViewCreated(int viewId) {
-    final nativeMap = JSMap(
-      JSMapOptions(container: _mapElement, minZoom: 0),
-    );
+    final nativeMap = JSMap(JSMapOptions(container: _mapElement, minZoom: 0));
     _currentMap = nativeMap;
 
     // The platform view container may not have its layout dimensions yet.

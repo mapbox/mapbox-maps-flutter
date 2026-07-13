@@ -17,9 +17,13 @@ class CustomHeaderExampleState extends State<CustomHeaderExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.httpService.setCustomHeaders({
-      'Authorization': 'Bearer your_access_token',
-    });
+    // Attach headers only to the host that needs them. Scoping to a host keeps
+    // the headers from being sent to the other (including third-party) hosts
+    // the map fetches styles, sources, sprites, glyphs or tiles from.
+    mapboxMap.httpService.setCustomHeadersForHost(
+      'tiles.example.com',
+      {'X-Custom-Header': 'value'},
+    );
   }
 
   @override
@@ -30,7 +34,7 @@ class CustomHeaderExampleState extends State<CustomHeaderExample> {
   @override
   void dispose() {
     super.dispose();
-    mapboxMap?.httpService.setCustomHeaders({});
+    mapboxMap?.httpService.clearCustomHeaders();
   }
 
   @override

@@ -166,6 +166,11 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
         if let pinchZoomEnabled = settings.pinchToZoomEnabled {
             mapView.gestures.options.pinchZoomEnabled = pinchZoomEnabled
         }
+        if let scrollDecelerationEnabled = settings.scrollDecelerationEnabled {
+            mapView.gestures.options.panDecelerationFactor = scrollDecelerationEnabled
+                ? UIScrollView.DecelerationRate.normal.rawValue
+                : 0.0
+        }
         switch settings.scrollMode {
         case .hORIZONTAL:
             mapView.gestures.options.panMode = PanMode.horizontal
@@ -208,7 +213,7 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
             focalPoint: focalPoint,
             pinchToZoomDecelerationEnabled: false,
             rotateDecelerationEnabled: false,
-            scrollDecelerationEnabled: false,
+            scrollDecelerationEnabled: options.panDecelerationFactor > 0.0,
             increaseRotateThresholdWhenPinchingToZoom: false,
             increasePinchToZoomThresholdWhenRotating: false,
             zoomAnimationAmount: 0,

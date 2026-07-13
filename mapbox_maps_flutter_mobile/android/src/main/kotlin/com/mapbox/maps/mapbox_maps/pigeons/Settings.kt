@@ -233,7 +233,16 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface GesturesSettingsInterface {
+  /**
+   * Returns the currently applied settings, populated with default
+   * values for any fields not explicitly modified via [updateSettings].
+   */
   fun getSettings(): GesturesSettings
+  /**
+   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+   *
+   * Call [getSettings] to retrieve the full resulting configuration.
+   */
   fun updateSettings(settings: GesturesSettings)
 
   companion object {

@@ -37,18 +37,15 @@ void main() {
           onMapCreated: (_) {
             mapCreated.completeOnce();
           },
-          onStyleLoadedListener: (_) =>
-              onStyleLoaded.completeWhen(
+          onStyleLoadedListener: (_) => onStyleLoaded.completeWhen(
             mapCreated.isCompleted,
             'styleLoaded should not fire before mapCreated',
           ),
-          onMapLoadedListener: (_) =>
-              onMapLoaded.completeWhen(
+          onMapLoadedListener: (_) => onMapLoaded.completeWhen(
             mapCreated.isCompleted,
             'mapLoaded should not fire before mapCreated',
           ),
-          onMapIdleListener: (_) =>
-              onMapIdle.completeWhen(
+          onMapIdleListener: (_) => onMapIdle.completeWhen(
             mapCreated.isCompleted,
             'mapIdle should not fire before mapCreated',
           ),
@@ -60,8 +57,7 @@ void main() {
             mapCreated.isCompleted,
             'sourceDataLoaded should not fire before mapCreated',
           ),
-          onSourceAddedListener: (_) =>
-              onSourceAdded.completeWhen(
+          onSourceAddedListener: (_) => onSourceAdded.completeWhen(
             mapCreated.isCompleted,
             'sourceAdded should not fire before mapCreated',
           ),
@@ -69,10 +65,11 @@ void main() {
             mapCreated.isCompleted,
             'cameraChanged should not fire before mapCreated',
           ),
-          onRenderFrameStartedListener: (_) => onRenderFrameStarted.completeWhen(
-            mapCreated.isCompleted,
+          onRenderFrameStartedListener: (_) =>
+              onRenderFrameStarted.completeWhen(
+                mapCreated.isCompleted,
                 'renderFrameStarted should not fire before mapCreated',
-          ),
+              ),
           onRenderFrameFinishedListener: (_) =>
               onRenderFrameFinished.completeWhen(
                 mapCreated.isCompleted,

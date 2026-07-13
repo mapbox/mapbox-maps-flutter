@@ -12,9 +12,9 @@ dependencies:
   meta: ^1.17.0
   flutter:
     sdk: flutter
-  mapbox_maps_flutter_platform_interface: ^3.0.0-alpha.1
-  mapbox_maps_flutter_mobile: ^3.0.0-alpha.1
-  mapbox_maps_flutter_web: ^3.0.0-alpha.1
+  mapbox_maps_flutter_platform_interface: 3.0.0-alpha.1
+  mapbox_maps_flutter_mobile: 3.0.0-alpha.1
+  mapbox_maps_flutter_web: 3.0.0-alpha.1
 
 dev_dependencies:
   flutter_test:

@@ -114,54 +114,47 @@ void main() {
     expect(returnedFeatureState2, {});
   });
 
-  testWidgets(
-    'test_reset_featurestate_methods',
-    skip: kIsWeb,
-    (WidgetTester tester) async {
-      final mapFuture = app.main(
-        width: 200,
-        height: 200,
-        viewport: CameraViewportState(
-          center: Point(coordinates: Position(0, 0)),
-          zoom: 10,
-        ),
-        alignment: Alignment(100, 100),
-      );
-      await tester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
-      var styleJson = await rootBundle.loadString(
-        'assets/featuresetsStyle.json',
-      );
-      mapboxMap.style.setStyleJSON(styleJson);
+  testWidgets('test_reset_featurestate_methods', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
+    final mapFuture = app.main(
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
 
-      await app.events.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
-      var feature = FeaturesetFeature(
-        id: FeaturesetFeatureId(id: "11", namespace: "A"),
-        featureset: FeaturesetDescriptor(
-          featuresetId: "poi",
-          importId: "nested",
-        ),
-        geometry: Point(coordinates: Position(0.01, 0.01)).toJson(),
-        properties: {},
-        state: {},
-      );
-      var state = FeatureState(map: {"highlight": true});
+    var feature = FeaturesetFeature(
+      id: FeaturesetFeatureId(id: "11", namespace: "A"),
+      featureset: FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+      geometry: Point(coordinates: Position(0.01, 0.01)).toJson(),
+      properties: {},
+      state: {},
+    );
+    var state = FeatureState(map: {"highlight": true});
 
-      await Future.delayed(Duration(seconds: 5));
-      await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
-      var returnedFeatureState = await mapboxMap
-          .getFeatureStateForFeaturesetFeature(feature);
-      expect(returnedFeatureState, state.map);
+    await Future.delayed(Duration(seconds: 5));
+    await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
+    var returnedFeatureState = await mapboxMap
+        .getFeatureStateForFeaturesetFeature(feature);
+    expect(returnedFeatureState, state.map);
 
-      await mapboxMap.resetFeatureStatesForFeatureset(
-        FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
-      );
-      var returnedFeatureState2 = await mapboxMap
-          .getFeatureStateForFeaturesetFeature(feature);
-      expect(returnedFeatureState2, {});
-    },
-  );
+    await mapboxMap.resetFeatureStatesForFeatureset(
+      FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+    );
+    var returnedFeatureState2 = await mapboxMap
+        .getFeatureStateForFeaturesetFeature(feature);
+    expect(returnedFeatureState2, {});
+  });
 
   testWidgets('test_featurestate_descriptor_methods', (
     WidgetTester tester,
