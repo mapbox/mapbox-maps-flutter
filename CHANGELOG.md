@@ -1,25 +1,25 @@
 ### main
 
 * [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
-
-### 2.26.0-rc.1
-
-* [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
-* [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
 * [Android] Migrate to built-in Kotlin.
 * Add `MapboxMap.httpService.setCustomHeadersForHost` to attach custom HTTP headers to a single host only, and `MapboxMap.httpService.clearCustomHeaders` to remove all configured headers. Host-scoped headers are matched against the request's exact URL host (case-insensitive, no subdomain or substring matching).
 * Deprecate `MapboxMap.setCustomHeaders`: headers set this way are attached to every host the map fetches from — including third-party hosts referenced by styles, sources, sprites, glyphs and tiles — which can leak credentials. Use `setCustomHeadersForHost` instead.
 
-### 2.25.0-rc.1
+### 2.26.0
+
+* [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
+* [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
+
+### 2.25.0
 
 * Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
 * Add `MapboxMap.httpService.setMaxRequestsPerHost` to cap the number of concurrent HTTP requests per host issued by the underlying HTTP service. Useful for reducing the chance of hitting per-token rate limits during offline tile region downloads.
 
-### 2.24.0-rc.1
+### 2.24.0
 
 * Add `TileStore.setOptionForKey` to allow setting custom tile store options by arbitrary string key, in addition to the existing predefined options (`diskQuota`, `mapboxApiUrl`, `tileUrlTemplate`).
 
-### 2.23.0-rc.1
+### 2.23.0
 
 * Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
 * Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
