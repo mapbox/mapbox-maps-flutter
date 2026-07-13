@@ -1,4 +1,4 @@
-### main
+### 2.27.0-rc.1
 
 * [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
 * Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
