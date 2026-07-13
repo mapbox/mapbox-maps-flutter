@@ -87,7 +87,10 @@ const _inlineFragmentAfterJson = '''
 /// pumpAndSettle alone is not enough on web — gl-js's style load is async
 /// and `getStyle()` throws "Style is not done loading" until `style.load`
 /// fires. Await the harness's onStyleLoaded completer instead.
-Future<MapboxMap> _setupMap(WidgetTester tester, [String styleURI = MapboxStyles.STANDARD]) async {
+Future<MapboxMap> _setupMap(
+  WidgetTester tester, [
+  String styleURI = MapboxStyles.STANDARD,
+]) async {
   final mapFuture = app.main(styleUri: styleURI);
   await tester.pumpAndSettle();
   final mapboxMap = await mapFuture;

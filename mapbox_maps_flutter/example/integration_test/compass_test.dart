@@ -59,9 +59,9 @@ void main() {
   // Regression test for https://github.com/mapbox/mapbox-maps-flutter/issues/602
   // On iOS `fadeWhenFacingNorth` was ignored unless `enabled` was also passed,
   // so it must be applicable on its own and stay consistent with Android.
-  testWidgets('fadeWhenFacingNorth applies without enabled',
-      skip: kIsWeb,
-      (WidgetTester tester) async {
+  testWidgets('fadeWhenFacingNorth applies without enabled', skip: kIsWeb, (
+    WidgetTester tester,
+  ) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -69,7 +69,8 @@ void main() {
 
     // Start from a known visible + fading state.
     await compass.updateSettings(
-        CompassSettings(enabled: true, fadeWhenFacingNorth: true));
+      CompassSettings(enabled: true, fadeWhenFacingNorth: true),
+    );
     expect((await compass.getSettings()).fadeWhenFacingNorth, true);
     expect((await compass.getSettings()).visibility, true);
 

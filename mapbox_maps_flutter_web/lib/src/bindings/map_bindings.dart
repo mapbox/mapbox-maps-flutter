@@ -270,7 +270,8 @@ extension type JSFeatureLayer._(JSObject _) implements JSObject {
 /// GL JS `FeatureSelector` — identifies a feature within a style source.
 @JS()
 @anonymous
-extension type JSFeatureSelector._(JSObject _) implements JSFeatureStateFeature {
+extension type JSFeatureSelector._(JSObject _)
+    implements JSFeatureStateFeature {
   external factory JSFeatureSelector({
     required String source,
     String? sourceLayer,
@@ -308,10 +309,7 @@ extension JSMapQueryExtension on JSMap {
   );
 
   /// Clears [key] from [feature]'s state, or all keys when [key] is null.
-  external void removeFeatureState(
-    JSFeatureStateFeature feature,
-    String? key,
-  );
+  external void removeFeatureState(JSFeatureStateFeature feature, String? key);
 }
 
 // ===== Event names =====

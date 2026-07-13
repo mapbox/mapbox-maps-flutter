@@ -301,9 +301,7 @@ class _MapWidgetState extends State<MapWidget> {
     if (mapboxMap != null || !mounted) {
       return;
     }
-    final controller = MapboxMap._(
-      mapboxMapsPlatform: _mapboxMapsPlatform,
-    );
+    final controller = MapboxMap._(mapboxMapsPlatform: _mapboxMapsPlatform);
     mapboxMap = controller;
     try {
       widget.onMapCreated?.call(controller);
