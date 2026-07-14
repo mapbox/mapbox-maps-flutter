@@ -8,6 +8,7 @@ import 'package:web/web.dart';
 
 import 'bindings/map_bindings.dart';
 import 'event_adapters.dart';
+import 'gl_js_loader.dart';
 import 'mapbox_map_web.dart';
 import 'viewport/viewport_web.dart';
 
@@ -64,19 +65,23 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     });
   }
 
-  void _onPlatformViewCreated(int viewId) {
-    final nativeMap = JSMap(JSMapOptions(container: _mapElement, minZoom: 0));
-    _currentMap = nativeMap;
+  void _onPlatformViewCreated(int viewId) async {
+    await ensureMapboxGlJsLoaded();
+    if (!mounted) return;
 
-    // The platform view container may not have its layout dimensions yet.
-    // A ResizeObserver keeps the map sized and applies the initial viewport the
-    // first time the container is measurable. Bounds-based states (Overview)
-    // resolve their zoom and center from the container size via `fitBounds`,
-    // which is not recomputed on later resizes, so applying at 0x0 would frame
-    // the wrong area.
+    // Wait for element to be attached to DOM before creating map.
+    // GL JS's _detectMissingCSS() check requires the element to be
+    // connected so CSS rules from document.head cascade properly.
+    final attachmentCompleter = Completer<void>();
+
     _resizeObserver = ResizeObserver(
       ((JSArray entries, JSAny observer) {
-        nativeMap.resize();
+        if (!attachmentCompleter.isCompleted && _mapElement.isConnected) {
+          attachmentCompleter.complete();
+        }
+        if (attachmentCompleter.isCompleted) {
+          _currentMap?.resize();
+        }
         if (!_initialViewportApplied &&
             _mapElement.clientWidth != 0 &&
             _mapElement.clientHeight != 0) {
@@ -86,6 +91,11 @@ class _MapWebWidgetState extends State<MapWebWidget> {
       }).toJS,
     );
     _resizeObserver!.observe(_mapElement);
+    await attachmentCompleter.future;
+    if (!mounted) return;
+
+    final nativeMap = JSMap(JSMapOptions(container: _mapElement, minZoom: 0));
+    _currentMap = nativeMap;
 
     // Wire cross-domain dependencies into the viewport before flushing
     // pending viewport state — `FollowPuckViewportState` needs them set

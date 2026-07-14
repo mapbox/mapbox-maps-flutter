@@ -11,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_web/src/gl_js_loader.dart';
 
 import '../mapbox_maps_flutter_web.dart';
 
@@ -21,7 +22,14 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   /// Registers the platform implementation.
   static void registerWith(Registrar registrar) {
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterWeb();
-    setSdkInfo('FlutterPlugin/$mapboxPluginVersion');
+
+    glJsReady.future.then((_) {
+      setSdkInfo('FlutterPlugin/$mapboxPluginVersion');
+    });
+    // Warm up the loader eagerly. A failure is surfaced to whoever awaits
+    // ensureMapboxGlJsLoaded() during map creation (and retried by the next
+    // MapWidget), so swallow it here to avoid an unhandled async error.
+    ensureMapboxGlJsLoaded().catchError((Object _) {});
   }
 
   @override
@@ -50,22 +58,14 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   }
 
   @override
-  Future<String> getAccessToken() {
-    return Future.value(accessToken);
-  }
+  Future<String> getAccessToken() => glJsReady.future.then((_) => accessToken);
+  @override
+  void setAccessToken(String token) => glJsReady.future.then((_) => accessToken = token);
 
   @override
-  void setAccessToken(String token) {
-    accessToken = token;
-  }
-
+  Future<String> getBaseUrl() => glJsReady.future.then((_) => baseApiUrl);
   @override
-  Future<String> getBaseUrl() =>
-      throw UnimplementedError('getBaseUrl() is not implemented on web.');
-
-  @override
-  void setBaseUrl(String url) =>
-      throw UnimplementedError('setBaseUrl() is not implemented on web.');
+  void setBaseUrl(String url) => glJsReady.future.then((_) => baseApiUrl = url);
 
   @override
   Future<String> getDataPath() =>

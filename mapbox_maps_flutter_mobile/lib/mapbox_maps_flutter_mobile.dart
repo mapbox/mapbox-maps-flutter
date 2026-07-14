@@ -13,6 +13,10 @@ import 'package:meta/meta.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:turf/turf.dart' show Feature, LineString, Point, Polygon;
 
+import 'src/package_info.dart';
+
+export 'src/package_info.dart';
+
 part 'src/annotation/circle_annotation_manager.dart';
 part 'src/annotation/point_annotation_manager.dart';
 part 'src/annotation/polygon_annotation_manager.dart';
@@ -56,7 +60,6 @@ part 'src/viewport/transitions/viewport_transition.dart';
 part 'src/viewport/transitions/default_viewport_transition.dart';
 part 'src/viewport/transitions/fly_viewport_transition.dart';
 part 'src/viewport/transitions/easing_viewport_transition.dart';
-part 'src/package_info.dart';
 part 'src/http/http_service.dart';
 
 part 'src/mapbox_maps_flutter_mobile.dart';

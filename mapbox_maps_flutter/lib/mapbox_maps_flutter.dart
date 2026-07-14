@@ -69,5 +69,4 @@ export 'src/style/source/raster_source.dart';
 export 'src/style/source/rasterarray_source.dart';
 export 'src/style/source/rasterdem_source.dart';
 export 'src/style/source/vector_source.dart';
-
-part 'src/package_info.dart';
+export 'src/package_info.dart';
