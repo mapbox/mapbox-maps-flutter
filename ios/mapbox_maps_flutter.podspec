@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'mapbox_maps_flutter'
-  s.version          = '2.28.0-SNAPSHOT-07-13--11-32.git-28b39e5'
+  s.version          = '2.28.0-SNAPSHOT-07-14--12-07.git-3660141'
 
   s.summary          = 'Mapbox Maps SDK Flutter Plugin.'
   s.description      = 'An officially developed solution from Mapbox that enables use of our latest Maps SDK product.'
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.dependency 'Flutter'
   s.platform = :ios, '14.0'
 
-  s.dependency 'MapboxMaps', '11.28.0-SNAPSHOT-07-13--11-32.git-28b39e5'
+  s.dependency 'MapboxMaps', '11.28.0-SNAPSHOT-07-14--12-07.git-3660141'
   s.dependency 'Turf', '4.0.0'
 
   # Flutter.framework does not contain a i386 slice.
