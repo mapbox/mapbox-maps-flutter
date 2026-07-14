@@ -1,7 +1,10 @@
+### main
+
+* Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
+
 ### 2.27.0-rc.1
 
 * [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
-* Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
 * [Android] Migrate to built-in Kotlin.
 * Add `MapboxMap.httpService.setCustomHeadersForHost` to attach custom HTTP headers to a single host only, and `MapboxMap.httpService.clearCustomHeaders` to remove all configured headers. Host-scoped headers are matched against the request's exact URL host (case-insensitive, no subdomain or substring matching).
 * Deprecate `MapboxMap.setCustomHeaders`: headers set this way are attached to every host the map fetches from — including third-party hosts referenced by styles, sources, sprites, glyphs and tiles — which can leak credentials. Use `setCustomHeadersForHost` instead.
