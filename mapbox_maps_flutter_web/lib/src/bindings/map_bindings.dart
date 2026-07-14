@@ -19,6 +19,9 @@ export 'viewport_bindings.dart';
 external String accessToken;
 
 @JS()
+external String baseApiUrl;
+
+@JS()
 external void setSdkInfo(String info);
 
 // ===== Foundation =====

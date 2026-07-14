@@ -1465,5 +1465,9 @@
   {
     "changeDescription": "TileStore: setOptionForKey: Return type changed. void -> Future<void>",
     "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "Field \"mapboxPluginVersion\" removed",
+    "reason": "The field is re-exported, false positive alarm."
   }
 ]
