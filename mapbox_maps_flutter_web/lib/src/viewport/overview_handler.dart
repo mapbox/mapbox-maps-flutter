@@ -22,20 +22,18 @@ final class OverviewHandler extends WebViewportStateHandler {
         transitionDurationMs(transition) ??
         state.animationDuration.inMilliseconds;
 
-    final fitOpts = JSFitBoundsOptions(
-      padding: state.geometryPadding.toJSPadding(),
-      bearing: state.bearing,
-      pitch: state.pitch,
-      offset: state.offset?.toJSScreenPoint(),
-      duration: duration,
-      linear:
+    // Only assign non-null fields: GL JS reads e.g. `offset.x` eagerly and
+    // throws on a null, which would abort the whole fitBounds call.
+    final fitOpts = JSFitBoundsOptions(essential: true)
+      ..padding = state.geometryPadding.toJSPadding()
+      ..duration = duration
+      ..linear =
           transition is EasingViewportTransition &&
-          transition.curve == const Cubic(0, 0, 1, 1),
-      essential: true,
-    );
-    if (state.maxZoom != null) {
-      fitOpts.maxZoom = state.maxZoom!;
-    }
+          transition.curve == const Cubic(0, 0, 1, 1);
+    if (state.bearing != null) fitOpts.bearing = state.bearing!;
+    if (state.pitch != null) fitOpts.pitch = state.pitch!;
+    if (state.offset != null) fitOpts.offset = state.offset!.toJSScreenPoint();
+    if (state.maxZoom != null) fitOpts.maxZoom = state.maxZoom!;
 
     map.fitBounds(bounds, fitOpts);
 
