@@ -48,19 +48,20 @@ extension type JSPadding._(JSObject _) implements JSObject {
 }
 
 /// Mapbox GL JS fitBounds options.
+///
+/// Optional fields are exposed as setters rather than factory arguments so
+/// callers only ever assign non-null values: GL JS reads e.g. `offset.x`
+/// eagerly and throws on a null.
 @JS()
 @anonymous
 extension type JSFitBoundsOptions._(JSObject _) implements JSObject {
-  external factory JSFitBoundsOptions({
-    JSPadding? padding,
-    double? bearing,
-    double? pitch,
-    JSScreenPoint? offset,
-    int? duration,
-    bool? linear,
-    JSFunction? easing,
-    bool? essential,
-  });
+  external factory JSFitBoundsOptions({bool? essential});
 
+  external set padding(JSPadding value);
+  external set bearing(double value);
+  external set pitch(double value);
+  external set offset(JSScreenPoint value);
+  external set duration(int value);
+  external set linear(bool value);
   external set maxZoom(double value);
 }

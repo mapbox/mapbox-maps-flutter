@@ -41,6 +41,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   MapboxMapWeb? _mapboxMap;
   ResizeObserver? _resizeObserver;
   MapEventBridge? _eventBridge;
+  bool _initialViewportApplied = false;
 
   @visibleForTesting
   JSMap? get currentMap => _currentMap;
@@ -68,10 +69,20 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     _currentMap = nativeMap;
 
     // The platform view container may not have its layout dimensions yet.
-    // Use a ResizeObserver to call map.resize() once it gets real size.
+    // A ResizeObserver keeps the map sized and applies the initial viewport the
+    // first time the container is measurable. Bounds-based states (Overview)
+    // resolve their zoom and center from the container size via `fitBounds`,
+    // which is not recomputed on later resizes, so applying at 0x0 would frame
+    // the wrong area.
     _resizeObserver = ResizeObserver(
       ((JSArray entries, JSAny observer) {
         nativeMap.resize();
+        if (!_initialViewportApplied &&
+            _mapElement.clientWidth != 0 &&
+            _mapElement.clientHeight != 0) {
+          _initialViewportApplied = true;
+          _applyViewport();
+        }
       }).toJS,
     );
     _resizeObserver!.observe(_mapElement);
@@ -83,10 +94,6 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     mapboxMap.attachViewport(_viewport);
 
     _mapboxMap = mapboxMap;
-
-    // Apply the initial viewport immediately — camera commands like jumpTo
-    // and fitBounds work before the style finishes loading.
-    _applyViewport();
 
     final mapCreated = Completer<void>();
     final onMapEvent = widget.onMapEvent;
@@ -110,7 +117,9 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   @override
   void didUpdateWidget(MapWebWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.viewport != oldWidget.viewport) {
+    // Before the container is sized, the ResizeObserver applies the latest
+    // viewport once it can; after, apply changes directly.
+    if (widget.viewport != oldWidget.viewport && _initialViewportApplied) {
       _applyViewport();
     }
   }
