@@ -25,6 +25,8 @@ import 'package:mapbox_maps_example/traffic_layer_example.dart';
 import 'package:mapbox_maps_example/spinning_globe_example.dart';
 import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
+import 'package:mapbox_maps_example/transparent_globe_example.dart';
+import 'package:mapbox_maps_example/transparent_map_example.dart';
 import 'package:mapbox_maps_example/vector_tile_source_example.dart';
 import 'package:mapbox_maps_example/viewport_example.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -76,6 +78,8 @@ final List<Example> _allPages = <Example>[
   CustomHeaderExample(),
   TrafficLayerExample(),
   CustomVectorIconsExample(),
+  TransparentMapExample(),
+  TransparentGlobeExample(),
 ];
 
 class MapsDemo extends StatelessWidget {
@@ -154,5 +158,6 @@ class MapsDemo extends StatelessWidget {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MapboxOptions.setAccessToken(MapsDemo.ACCESS_TOKEN);
+
   runApp(MaterialApp(home: MapsDemo()));
 }

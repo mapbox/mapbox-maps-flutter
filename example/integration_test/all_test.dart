@@ -51,6 +51,7 @@ import 'snapshotter/snapshotter_test.dart' as snapshotter_test;
 import 'viewport_test.dart' as viewport_test;
 import 'interactive_features_test.dart' as interactive_features_test;
 import 'map_recorder_test.dart' as map_recorder_test;
+import 'is_opaque_test.dart' as is_opaque_test;
 
 void main() {
   // annotation tests
@@ -111,6 +112,7 @@ void main() {
 
   viewport_test.main();
   map_recorder_test.main();
+  is_opaque_test.main();
 
   // location test has to be at the bottom as on iOS it triggers location permission dialog
   // to be shown which makes tests that rely on QRF/QSF fail
