@@ -45,9 +45,13 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     AndroidPlatformViewHostingMode androidHostingMode =
         AndroidPlatformViewHostingMode.VD,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    bool? isOpaque = true,
   }) {
     // mapOptions / textureView / androidHostingMode / gestureRecognizers
     // are mobile-platform-view tuning knobs and are ignored on web.
+    //
+    // isOpaque is also ignored: gl-js always renders to an alpha-capable
+    // canvas, so a transparent background works out of the box.
     return MapWebWidget(
       onMapCreated: onMapCreated,
       onMapEvent: onMapEvent,
@@ -185,7 +189,8 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     OnMapLoadErrorListener? onMapLoadErrorListener,
     OnStyleDataLoadedListener? onStyleDataLoadedListener,
     OnStyleImageMissingListener? onStyleImageMissingListener,
-  }) => throw UnimplementedError(
-    'MapboxMapsFlutterWeb.createSnapshotter is not yet implemented on web.',
-  );
+  }) =>
+      throw UnimplementedError(
+        'MapboxMapsFlutterWeb.createSnapshotter is not yet implemented on web.',
+      );
 }

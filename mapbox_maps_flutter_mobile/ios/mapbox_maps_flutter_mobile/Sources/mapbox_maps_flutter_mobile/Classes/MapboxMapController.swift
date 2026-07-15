@@ -29,13 +29,21 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         registrar: FlutterPluginRegistrar,
         pluginVersion: String,
         eventTypes: [Int],
-        externalMapView: MapView? = nil
+        externalMapView: MapView? = nil,
+        isOpaque: Bool = true
     ) {
         binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
-        mapView = externalMapView ?? MapView(frame: frame, mapInitOptions: mapInitOptions)
+        // An injected MapView is owned/configured by the external caller, so init-only
+        // parameters below are skipped and only apply when we construct it ourselves.
+        if let externalMapView {
+            mapView = externalMapView
+        } else {
+            mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
+            mapView.isOpaque = isOpaque
+        }
         mapboxMap = mapView.mapboxMap
 
         channel = FlutterMethodChannel(

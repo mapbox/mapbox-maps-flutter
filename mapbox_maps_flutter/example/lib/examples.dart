@@ -1,3 +1,6 @@
+import 'package:mapbox_maps_flutter_examples/transparent_globe_example.dart';
+import 'package:mapbox_maps_flutter_examples/transparent_map_example.dart';
+
 import 'animated_route_example.dart';
 import 'animation_example.dart';
 import 'camera_example.dart';
@@ -210,14 +213,27 @@ final List<Example> examples = [
   Example(
     leading: const Icon(Icons.map),
     title: 'Locate the User',
-    subtitle:
-        'Toggle the user-location puck and follow it as the user moves.',
+    subtitle: 'Toggle the user-location puck and follow it as the user moves.',
     builder: (_) => const LocationExample(),
   ),
   Example(
     leading: const Icon(Icons.map),
     title: 'MapInterface',
     builder: (_) => const MapInterfaceExample(),
+  ),
+  Example(
+    leading: const Icon(Icons.language),
+    title: 'Transparent globe',
+    subtitle:
+        'isOpaque=false and textureView=true makes the map transparent, letting an animated Flutter-rendered space background show behind the globe.',
+    builder: (_) => const TransparentGlobeExample(),
+  ),
+  Example(
+    leading: const Icon(Icons.waves),
+    title: 'Transparent map background',
+    subtitle:
+        'isOpaque=false and textureView=true make the map transparent, letting an animated Flutter wave texture show through the sea while land stays opaque.',
+    builder: (_) => const TransparentMapExample(),
   ),
   if (isMobile) ...[
     Example(

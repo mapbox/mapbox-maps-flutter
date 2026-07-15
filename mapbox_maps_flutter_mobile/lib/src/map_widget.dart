@@ -48,7 +48,13 @@ class MapWidget extends StatefulWidget {
     String? styleUri,
     this.viewportTransition,
     this.viewportTransitionCompletion,
-  }) : _styleUri = styleUri;
+    this.isOpaque = true,
+  })  : _styleUri = styleUri,
+        assert(
+          isOpaque != false || textureView != false,
+          'isOpaque: false requires textureView: true on Android. '
+          'SurfaceView cannot render a transparent background.',
+        );
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
@@ -161,6 +167,14 @@ class MapWidget extends StatefulWidget {
   /// Called when a viewport transition completes.
   final void Function(bool)? viewportTransitionCompletion;
 
+  /// Whether the map is rendered as opaque. Only has an effect on iOS —
+  /// on Android, a transparent background requires [MapWidget.textureView]
+  /// to be `true` (the default).
+  ///
+  /// Defaults to `true`. Set to `false` (together with a transparent style)
+  /// to render a transparent map background.
+  final bool? isOpaque;
+
   @override
   State createState() => _MapWidgetState();
 
@@ -190,6 +204,7 @@ class _MapWidgetState extends State<MapWidget> {
       'channelSuffix': _mapboxMapsPlatform.channelSuffix,
       'mapboxPluginVersion': mapboxPluginVersion,
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
+      'isOpaque': widget.isOpaque,
     };
     _events.subscribedEventTypes = _events.eventTypes;
 

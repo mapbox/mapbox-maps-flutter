@@ -1,0 +1,160 @@
+{
+    "version": 8,
+    "name": "Minimal Land & Sea (transparent sea)",
+    "projection": {
+        "name": "mercator"
+    },
+    "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+    "sources": {
+        "world": {
+            "type": "geojson",
+            "data": {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [-180, -85],
+                            [180, -85],
+                            [180, 85],
+                            [-180, 85],
+                            [-180, -85]
+                        ]
+                    ]
+                }
+            }
+        },
+        "admin": {
+            "type": "vector",
+            "url": "mapbox://mapbox.country-boundaries-v1"
+        },
+        "composite": {
+            "type": "vector",
+            "url": "mapbox://mapbox.mapbox-streets-v8"
+        }
+    },
+    "layers": [
+        {
+            "id": "sea-tint",
+            "type": "fill",
+            "source": "world",
+            "paint": {
+                "fill-color": "#3f7ea6",
+                "fill-opacity": 0.2
+            }
+        },
+        {
+            "id": "land",
+            "type": "fill",
+            "source": "admin",
+            "source-layer": "country_boundaries",
+            "paint": {
+                "fill-color": "#e6ddc9",
+                "fill-opacity": 1
+            }
+        },
+        {
+            "id": "road-casing",
+            "type": "line",
+            "source": "composite",
+            "source-layer": "road",
+            "filter": [
+                "match",
+                ["get", "class"],
+                ["motorway", "trunk", "primary", "secondary", "tertiary", "street", "street_limited"],
+                true,
+                false
+            ],
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#b9ad92",
+                "line-width": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    8, 1.2,
+                    14, 5,
+                    18, 14
+                ]
+            }
+        },
+        {
+            "id": "road",
+            "type": "line",
+            "source": "composite",
+            "source-layer": "road",
+            "filter": [
+                "match",
+                ["get", "class"],
+                ["motorway", "trunk", "primary", "secondary", "tertiary", "street", "street_limited"],
+                true,
+                false
+            ],
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#fdfaf2",
+                "line-width": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    8, 0.4,
+                    14, 3,
+                    18, 10
+                ]
+            }
+        },
+        {
+            "id": "road-label",
+            "type": "symbol",
+            "source": "composite",
+            "source-layer": "road",
+            "filter": [
+                "match",
+                ["get", "class"],
+                ["motorway", "trunk", "primary", "secondary", "tertiary", "street"],
+                true,
+                false
+            ],
+            "layout": {
+                "symbol-placement": "line",
+                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-font": ["DIN Pro Regular", "Arial Unicode MS Regular"],
+                "text-size": 11
+            },
+            "paint": {
+                "text-color": "#5a5140",
+                "text-halo-color": "#f4efe2",
+                "text-halo-width": 1.2
+            }
+        },
+        {
+            "id": "place-label",
+            "type": "symbol",
+            "source": "composite",
+            "source-layer": "place_label",
+            "layout": {
+                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+                "text-size": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    8, 11,
+                    14, 16,
+                    18, 22
+                ]
+            },
+            "paint": {
+                "text-color": "#33302a",
+                "text-halo-color": "#f4efe2",
+                "text-halo-width": 1.6
+            }
+        }
+    ]
+}
