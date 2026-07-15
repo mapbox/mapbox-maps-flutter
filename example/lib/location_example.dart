@@ -1,11 +1,33 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart' show Geolocator;
 
 import 'example.dart';
 
+const _carModelUri = 'asset://assets/sportcar.glb';
+
+const _colorSwatches = [
+  Colors.amber,
+  Colors.deepPurple,
+  Colors.cyan,
+  Colors.redAccent,
+];
+
+enum _PuckStyle {
+  defaultPuck('Default 2D'),
+  customIcon('Custom 2D'),
+  car('Custom 3D');
+
+  const _PuckStyle(this.label);
+  final String label;
+}
+
 class LocationExample extends StatefulWidget implements Example {
+  const LocationExample({super.key});
+
   @override
   final Widget leading = const Icon(Icons.map);
   @override
@@ -18,290 +40,278 @@ class LocationExample extends StatefulWidget implements Example {
 }
 
 class LocationExampleState extends State<LocationExample> {
-  LocationExampleState();
-
-  final colors = [Colors.amber, Colors.black, Colors.blue];
-
   MapboxMap? mapboxMap;
-  int _accuracyColor = 0;
-  int _pulsingColor = 0;
-  int _accuracyBorderColor = 0;
-  double _puckScale = 10.0;
+  ViewportState? _viewport;
 
-  _onMapCreated(MapboxMap mapboxMap) {
-    this.mapboxMap = mapboxMap;
+  /// The single source of truth for every control below. Every mutation
+  /// goes through [_apply], which re-reads the merged settings from the
+  /// platform side right after writing, so the UI always reflects what's
+  /// actually active - not just what was last requested.
+  LocationComponentSettings? _settings;
+
+  Uint8List? _customIcon;
+
+  bool get _enabled => _settings?.enabled ?? false;
+  bool get _pulsingEnabled => _settings?.pulsingEnabled ?? false;
+  bool get _accuracyRingEnabled => _settings?.showAccuracyRing ?? false;
+  bool get _bearingEnabled => _settings?.puckBearingEnabled ?? false;
+
+  double get _modelScale {
+    final scale = _settings?.locationPuck?.locationPuck3D?.modelScale;
+    if (scale == null || scale.isEmpty) return 8.0;
+    return scale.first ?? 8.0;
   }
+
+  /// Tracked explicitly rather than read back from the platform: the map
+  /// always starts on the default puck, and every other value is assigned
+  /// by [_selectPuckStyle] itself, since it already knows which style it's
+  /// requesting.
+  _PuckStyle _puckStyle = _PuckStyle.defaultPuck;
+
+  bool get _is3DPuckActive => _puckStyle == _PuckStyle.car;
 
   @override
   void initState() {
     super.initState();
+    rootBundle.load('assets/symbols/custom-icon.png').then((bytes) {
+      _customIcon = bytes.buffer.asUint8List();
+    });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void _onMapCreated(MapboxMap mapboxMap) {
+    this.mapboxMap = mapboxMap;
+    mapboxMap.location.getSettings().then((settings) {
+      if (!mounted) return;
+      setState(() => _settings = settings);
+    });
   }
 
-  Widget _show() {
-    return TextButton(
-      child: Text('show location'),
-      onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(enabled: true));
-      },
-    );
+  /// Applies a partial [LocationComponentSettings] update, then re-reads the
+  /// full settings back from the platform so [_settings] stays in sync with
+  /// what's actually configured. Pass [style] when the caller already knows
+  /// which puck style this update selects, so [_puckStyle] can be assigned
+  /// directly.
+  Future<void> _apply(LocationComponentSettings settings,
+      {_PuckStyle? style}) async {
+    final location = mapboxMap?.location;
+    if (location == null) return;
+    await location.updateSettings(settings);
+    final updated = await location.getSettings();
+    if (!mounted) return;
+    setState(() {
+      _settings = updated;
+      if (style != null) _puckStyle = style;
+    });
   }
 
-  Widget _hide() {
-    return TextButton(
-      child: Text('hide location'),
-      onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(enabled: false));
-      },
-    );
+  Future<void> _toggleLocation() async {
+    final next = !_enabled;
+    if (next) {
+      await Geolocator.requestPermission();
+    }
+    await _apply(LocationComponentSettings(enabled: next));
+    if (!mounted) return;
+    setStateWithViewportAnimation(() {
+      _viewport =
+          next ? const FollowPuckViewportState() : const IdleViewportState();
+    });
   }
 
-  Widget _showBearing() {
-    return TextButton(
-      child: Text('show location bearing'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-            LocationComponentSettings(puckBearingEnabled: true));
-      },
-    );
-  }
-
-  Widget _hideBearing() {
-    return TextButton(
-      child: Text('hide location bearing'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(
-            LocationComponentSettings(puckBearingEnabled: false));
-      },
-    );
-  }
-
-  Widget _showPulsing() {
-    return TextButton(
-      child: Text('show pulsing'),
-      onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(pulsingEnabled: true));
-      },
-    );
-  }
-
-  Widget _hidePulsing() {
-    return TextButton(
-      child: Text('hide pulsing'),
-      onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(pulsingEnabled: false));
-      },
-    );
-  }
-
-  Widget _showAccuracy() {
-    return TextButton(
-      child: Text('show accuracy'),
-      onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(showAccuracyRing: true));
-      },
-    );
-  }
-
-  Widget _hideAccuracy() {
-    return TextButton(
-      child: Text('hide accuracy'),
-      onPressed: () {
-        mapboxMap?.location
-            .updateSettings(LocationComponentSettings(showAccuracyRing: false));
-      },
-    );
-  }
-
-  Widget _switchAccuracyBorderColor() {
-    return TextButton(
-      child: Text('switch accuracy border color'),
-      onPressed: () {
-        _accuracyBorderColor++;
-        _accuracyBorderColor %= colors.length;
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            accuracyRingBorderColor: colors[_accuracyBorderColor].value));
-      },
-    );
-  }
-
-  Widget _switchAccuracyColor() {
-    return TextButton(
-      child: Text('switch accuracy color'),
-      onPressed: () {
-        _pulsingColor++;
-        _pulsingColor %= colors.length;
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            accuracyRingColor: colors[_pulsingColor].value));
-      },
-    );
-  }
-
-  Widget _switchPulsingColor() {
-    return TextButton(
-      child: Text('switch pulsing color'),
-      onPressed: () {
-        _accuracyColor++;
-        _accuracyColor %= colors.length;
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            pulsingColor: colors[_accuracyColor].value));
-      },
-    );
-  }
-
-  Widget _switchLocationPuck2D() {
-    return TextButton(
-      child: Text('switch to 2d puck'),
-      onPressed: () async {
-        final ByteData bytes =
-            await rootBundle.load('assets/symbols/custom-icon.png');
-        final Uint8List list = bytes.buffer.asUint8List();
-
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            enabled: true,
-            puckBearingEnabled: true,
+  Future<void> _selectPuckStyle(_PuckStyle style) {
+    switch (style) {
+      case _PuckStyle.defaultPuck:
+        return _apply(
+          LocationComponentSettings(
+            locationPuck:
+                LocationPuck(locationPuck2D: DefaultLocationPuck2D()),
+          ),
+          style: style,
+        );
+      case _PuckStyle.customIcon:
+        return _apply(
+          LocationComponentSettings(
             locationPuck: LocationPuck(
-                locationPuck2D: DefaultLocationPuck2D(
-                    topImage: list, shadowImage: Uint8List.fromList([])))));
-      },
-    );
-  }
-
-  Widget _switchLocationPuck3D_duck() {
-    return TextButton(
-      child: Text('switch to 3d puck with duck model'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
+              locationPuck2D: DefaultLocationPuck2D(topImage: _customIcon),
+            ),
+          ),
+          style: style,
+        );
+      case _PuckStyle.car:
+        return _apply(
+          LocationComponentSettings(
             locationPuck: LocationPuck(
-                locationPuck3D: LocationPuck3D(
-                    modelUri:
-                        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
-                    modelScale: [_puckScale, _puckScale, _puckScale]))));
-      },
-    );
+              locationPuck3D: LocationPuck3D(
+                modelUri: _carModelUri,
+                modelScale: [_modelScale, _modelScale, _modelScale],
+              ),
+            ),
+          ),
+          style: style,
+        );
+    }
   }
 
-  Widget _switchLocationPuck3D_car() {
-    return TextButton(
-      child: Text('switch to 3d puck with car model'),
-      onPressed: () {
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            locationPuck: LocationPuck(
-                locationPuck3D: LocationPuck3D(
-                    modelUri: "asset://assets/sportcar.glb",
-                    modelScale: [_puckScale, _puckScale, _puckScale]))));
-      },
-    );
+  Future<void> _setModelScale(double scale) {
+    // A partial 3D update: modelUri is intentionally left out, so the
+    // currently active model is kept and only its scale changes.
+    return _apply(LocationComponentSettings(
+      locationPuck: LocationPuck(
+        locationPuck3D: LocationPuck3D(modelScale: [scale, scale, scale]),
+      ),
+    ));
   }
 
-  Widget _switchPuckScale() {
-    return TextButton(
-      child: Text('scale 3d puck'),
-      onPressed: () {
-        _puckScale /= 2;
-        if (_puckScale < 1) {
-          _puckScale = 10.0;
-        }
-        print("Scale : $_puckScale");
-        mapboxMap?.location.updateSettings(LocationComponentSettings(
-            locationPuck: LocationPuck(
-                locationPuck3D: LocationPuck3D(
-                    modelUri:
-                        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
-                    modelScale: [_puckScale, _puckScale, _puckScale]))));
-      },
-    );
-  }
+  Future<void> _setPulsing(bool value) =>
+      _apply(LocationComponentSettings(pulsingEnabled: value));
 
-  Widget _getPermission() {
-    return TextButton(
-      child: Text('get location permission'),
-      onPressed: () async {
-        var status = await Geolocator.requestPermission();
-        print("Location granted : $status");
-      },
-    );
-  }
+  Future<void> _setAccuracyRing(bool value) =>
+      _apply(LocationComponentSettings(showAccuracyRing: value));
 
-  Widget _getSettings() {
-    return TextButton(
-      child: Text('get settings'),
-      onPressed: () {
-        mapboxMap?.location.getSettings().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("""
-                  Location settings : 
-                    enabled : ${value.enabled}, 
-                    puckBearingEnabled : ${value.puckBearingEnabled}
-                    puckBearing : ${value.puckBearing}
-                    pulsing : ${value.pulsingEnabled}
-                    pulsing radius : ${value.pulsingMaxRadius}
-                    pulsing color : ${value.pulsingColor}
-                    accuracy :  ${value.showAccuracyRing},
-                    accuracy color :  ${value.accuracyRingColor}
-                    accuracyRingBorderColor : ${value.accuracyRingBorderColor}
-                    """
-                      .trim()),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
-      },
+  Future<void> _setBearing(bool value) =>
+      _apply(LocationComponentSettings(puckBearingEnabled: value));
+
+  Future<void> _setPulsingColor(Color color) =>
+      _apply(LocationComponentSettings(pulsingColor: color.value));
+
+  Future<void> _setAccuracyRingColor(Color color) =>
+      _apply(LocationComponentSettings(accuracyRingColor: color.value));
+
+  Widget _colorSwatchRow({
+    required int? selectedColor,
+    required ValueChanged<Color> onSelect,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Row(
+        children: [
+          for (final color in _colorSwatches)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => onSelect(color),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: color,
+                  child: selectedColor == color.value
+                      ? const Icon(Icons.check, size: 16, color: Colors.white)
+                      : null,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
-
-    final List<Widget> listViewChildren = <Widget>[];
-
-    listViewChildren.addAll(
-      <Widget>[
-        _getPermission(),
-        _show(),
-        _hide(),
-        _switchLocationPuck2D(),
-        _switchLocationPuck3D_duck(),
-        _switchLocationPuck3D_car(),
-        _switchPuckScale(),
-        _showBearing(),
-        _hideBearing(),
-        _showAccuracy(),
-        _hideAccuracy(),
-        _showPulsing(),
-        _hidePulsing(),
-        _switchAccuracyColor(),
-        _switchPulsingColor(),
-        _switchAccuracyBorderColor(),
-        _getSettings(),
-      ],
-    );
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Center(
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
-              child: mapWidget),
-        ),
-        Expanded(
-          child: ListView(
-            children: listViewChildren,
+    return Scaffold(
+      body: MapWidget(
+        key: const ValueKey('mapWidget'),
+        onMapCreated: _onMapCreated,
+        viewport: _viewport,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _toggleLocation,
+        icon: Icon(_enabled ? Icons.location_disabled : Icons.my_location),
+        label: Text(_enabled ? 'Hide puck' : 'Show puck'),
+      ),
+      bottomNavigationBar: Card(
+        margin: EdgeInsets.zero,
+        elevation: 8,
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SegmentedButton<_PuckStyle>(
+                      segments: [
+                        for (final style in _PuckStyle.values)
+                          ButtonSegment(
+                            value: style,
+                            label: Text(style.label,
+                                style: const TextStyle(fontSize: 12)),
+                          ),
+                      ],
+                      selected: {
+                        _puckStyle
+                      },
+                      onSelectionChanged: (selection) =>
+                          _selectPuckStyle(selection.first)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.photo_size_select_small, size: 20),
+                          Expanded(
+                            child: Slider(
+                              min: 1,
+                              max: 20,
+                              value: _modelScale.clamp(1.0, 20.0).toDouble(),
+                              label: _modelScale.toStringAsFixed(1),
+                              onChanged:
+                                  _is3DPuckActive ? _setModelScale : null,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (!_is3DPuckActive)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 40),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '3D puck only',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                SwitchListTile(
+                  title: const Text('Pulsing'),
+                  subtitle: _is3DPuckActive ? const Text('2D puck only') : null,
+                  value: _pulsingEnabled,
+                  onChanged: !_is3DPuckActive ? _setPulsing : null,
+                ),
+                if (_pulsingEnabled && !_is3DPuckActive)
+                  _colorSwatchRow(
+                    selectedColor: _settings?.pulsingColor,
+                    onSelect: _setPulsingColor,
+                  ),
+                SwitchListTile(
+                  title: const Text('Accuracy ring'),
+                  subtitle: _is3DPuckActive ? const Text('2D puck only') : null,
+                  value: _accuracyRingEnabled,
+                  onChanged: !_is3DPuckActive ? _setAccuracyRing : null,
+                ),
+                if (_accuracyRingEnabled && !_is3DPuckActive)
+                  _colorSwatchRow(
+                    selectedColor: _settings?.accuracyRingColor,
+                    onSelect: _setAccuracyRingColor,
+                  ),
+                SwitchListTile(
+                  title: const Text('Bearing'),
+                  value: _bearingEnabled,
+                  onChanged: _setBearing,
+                ),
+              ],
+            ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }
