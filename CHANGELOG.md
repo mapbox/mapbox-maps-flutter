@@ -1,4 +1,4 @@
-### main
+### 2.28.0-alpha.1
 
 * Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
 
