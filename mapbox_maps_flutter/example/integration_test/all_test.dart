@@ -31,6 +31,7 @@ import 'projection_test.dart' as projection_test;
 import 'scale_bar_test.dart' as scale_bar_test;
 import 'snapshotter_test.dart' as snapshotter_test;
 import 'viewport_test.dart' as viewport_test;
+import 'is_opaque_test.dart' as is_opaque_test;
 
 // Style layer tests.
 import 'style/layer/background_layer_test.dart' as background_layer_test;
@@ -97,6 +98,7 @@ void main() {
   interactive_features_test.main();
   snapshotter_test.main();
   viewport_test.main();
+  is_opaque_test.main();
 
   // Style layers.
   background_layer_test.main();

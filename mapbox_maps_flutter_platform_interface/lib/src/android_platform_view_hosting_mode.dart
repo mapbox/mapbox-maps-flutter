@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 /// A mode for platform MapView to be hosted in Flutter on Android.
 ///
-/// As per https://github.com/flutter/flutter/wiki/Android-Platform-Views#selecting-a-mode
+/// As per https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md
 @experimental
 enum AndroidPlatformViewHostingMode {
   /// Texture Layer Hybrid Composition with fallback to Virtual Display

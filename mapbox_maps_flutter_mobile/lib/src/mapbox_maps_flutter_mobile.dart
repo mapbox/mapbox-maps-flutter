@@ -21,6 +21,7 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
     AndroidPlatformViewHostingMode androidHostingMode =
         AndroidPlatformViewHostingMode.VD,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    bool? isOpaque = true,
   }) {
     return MapWidget(
       styleUri: styleUri,
@@ -46,6 +47,7 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
       onStyleImageMissingListener: onMapEvent,
       onStyleImageUnusedListener: onMapEvent,
       onResourceRequestListener: onMapEvent,
+      isOpaque: isOpaque,
     );
   }
 
@@ -126,8 +128,8 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
   @override
   Future<TileStorePlatformInterface> createTileStore({Uri? filePath}) =>
       filePath != null
-      ? TileStore.createAt(filePath)
-      : TileStore.createDefault();
+          ? TileStore.createAt(filePath)
+          : TileStore.createDefault();
 
   @override
   Future<SnapshotterPlatformInterface> createSnapshotter({
@@ -136,11 +138,12 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
     OnMapLoadErrorListener? onMapLoadErrorListener,
     OnStyleDataLoadedListener? onStyleDataLoadedListener,
     OnStyleImageMissingListener? onStyleImageMissingListener,
-  }) => Snapshotter.create(
-    options: options,
-    onStyleLoadedListener: onStyleLoadedListener,
-    onMapLoadErrorListener: onMapLoadErrorListener,
-    onStyleDataLoadedListener: onStyleDataLoadedListener,
-    onStyleImageMissingListener: onStyleImageMissingListener,
-  );
+  }) =>
+      Snapshotter.create(
+        options: options,
+        onStyleLoadedListener: onStyleLoadedListener,
+        onMapLoadErrorListener: onMapLoadErrorListener,
+        onStyleDataLoadedListener: onStyleDataLoadedListener,
+        onStyleImageMissingListener: onStyleImageMissingListener,
+      );
 }

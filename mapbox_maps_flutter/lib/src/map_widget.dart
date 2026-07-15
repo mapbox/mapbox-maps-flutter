@@ -130,6 +130,16 @@ class MapWidget extends StatelessWidget {
   /// events. Used to integrate the map inside scrollables.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
+  /// Whether the map is rendered as opaque. Only has an effect on iOS —
+  /// on Android, a transparent background requires [MapWidget.textureView]
+  /// to be `true` (the default). Ignored on web: GL JS always renders to
+  /// an alpha-capable canvas, so a transparent background there works out
+  /// of the box and is not configurable.
+  ///
+  /// Defaults to `true`. Set to `false` (together with a transparent style)
+  /// to render a transparent map background.
+  final bool? isOpaque;
+
   const MapWidget({
     super.key,
     this.styleUri = MapboxStyles.STANDARD,
@@ -162,6 +172,7 @@ class MapWidget extends StatelessWidget {
     this.textureView,
     this.androidHostingMode = AndroidPlatformViewHostingMode.VD,
     this.gestureRecognizers,
+    this.isOpaque = true,
   });
 
   @override
@@ -191,8 +202,7 @@ class MapWidget extends StatelessWidget {
       textureView: textureView,
       androidHostingMode: androidHostingMode,
       gestureRecognizers: gestureRecognizers,
-      onMapCreated:
-          (onMapCreated != null ||
+      onMapCreated: (onMapCreated != null ||
               onScrollListener != null ||
               onZoomListener != null)
           ? (map) {
@@ -205,6 +215,7 @@ class MapWidget extends StatelessWidget {
       viewport: viewport,
       viewportTransition: transition,
       viewportTransitionCompletion: completion,
+      isOpaque: isOpaque,
       onMapEvent: (event) {
         switch (event) {
           case StyleLoadedEventData():

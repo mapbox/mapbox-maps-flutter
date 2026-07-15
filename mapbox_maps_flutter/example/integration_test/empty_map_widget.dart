@@ -34,10 +34,66 @@ Future<MapboxMap> main({
   ViewportState? viewport,
   Alignment alignment = Alignment.topLeft,
   String styleUri = MapboxStyles.STANDARD,
+  // Raw style JSON applied in onMapCreated instead of [styleUri], so no
+  // default style flashes before it loads.
+  String? styleJson,
+  bool isOpaque = true,
+  bool textureView = true,
+  // Solid backdrop placed behind the map, useful for asserting on
+  // transparency of the map surface itself.
+  Color? background,
 }) {
   final completer = Completer<MapboxMap>();
 
   events = Events();
+  final mapWidget = MapWidget(
+    key: const ValueKey("mapWidget"),
+    viewport: viewport,
+    styleUri: styleJson == null ? styleUri : '',
+    isOpaque: isOpaque,
+    textureView: textureView,
+    onMapCreated: (MapboxMap mapboxMap) async {
+      if (styleJson != null) {
+        await mapboxMap.style.setStyleJSON(styleJson);
+      }
+      completer.complete(mapboxMap);
+    },
+    onMapLoadedListener: (MapLoadedEventData data) {
+      if (!events.onMapLoaded.isCompleted) {
+        events.onMapLoaded.complete();
+      }
+    },
+    onStyleLoadedListener: (StyleLoadedEventData data) {
+      if (!events.onStyleLoaded.isCompleted) {
+        events.onStyleLoaded.complete();
+      }
+    },
+    onStyleDataLoadedListener: (StyleDataLoadedEventData data) {
+      if (!events.onStyleDataLoaded.isCompleted) {
+        events.onStyleDataLoaded.complete();
+      }
+    },
+    onSourceDataLoadedListener: (SourceDataLoadedEventData data) {
+      final dataID = data.dataId;
+      if (dataID != null) {
+        events.sourceDataIDs.add(dataID);
+      }
+      if (!events.onSourceDataLoaded.isCompleted) {
+        events.onSourceDataLoaded.complete();
+      }
+    },
+    onCameraChangeListener: (CameraChangedEventData data) {
+      if (!events.onCameraChanged.isCompleted) {
+        events.onCameraChanged.complete();
+      }
+    },
+    onMapIdleListener: (MapIdleEventData data) {
+      if (!events.onMapIdle.isCompleted) {
+        events.onMapIdle.complete();
+      }
+    },
+  );
+
   runApp(
     MaterialApp(
       home: Align(
@@ -45,48 +101,15 @@ Future<MapboxMap> main({
         child: SizedBox(
           width: width,
           height: height,
-          child: MapWidget(
-            key: const ValueKey("mapWidget"),
-            viewport: viewport,
-            styleUri: styleUri,
-            onMapCreated: (MapboxMap mapboxMap) {
-              completer.complete(mapboxMap);
-            },
-            onMapLoadedListener: (MapLoadedEventData data) {
-              if (!events.onMapLoaded.isCompleted) {
-                events.onMapLoaded.complete();
-              }
-            },
-            onStyleLoadedListener: (StyleLoadedEventData data) {
-              if (!events.onStyleLoaded.isCompleted) {
-                events.onStyleLoaded.complete();
-              }
-            },
-            onStyleDataLoadedListener: (StyleDataLoadedEventData data) {
-              if (!events.onStyleDataLoaded.isCompleted) {
-                events.onStyleDataLoaded.complete();
-              }
-            },
-            onSourceDataLoadedListener: (SourceDataLoadedEventData data) {
-              final dataID = data.dataId;
-              if (dataID != null) {
-                events.sourceDataIDs.add(dataID);
-              }
-              if (!events.onSourceDataLoaded.isCompleted) {
-                events.onSourceDataLoaded.complete();
-              }
-            },
-            onCameraChangeListener: (CameraChangedEventData data) {
-              if (!events.onCameraChanged.isCompleted) {
-                events.onCameraChanged.complete();
-              }
-            },
-            onMapIdleListener: (MapIdleEventData data) {
-              if (!events.onMapIdle.isCompleted) {
-                events.onMapIdle.complete();
-              }
-            },
-          ),
+          child: background == null
+              ? mapWidget
+              : Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ColoredBox(color: background),
+                    mapWidget,
+                  ],
+                ),
         ),
       ),
     ),

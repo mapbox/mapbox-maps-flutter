@@ -1,6 +1,17 @@
+### main
+
+* Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
+
 ### 3.0.0-alpha.1
 
 * Split the plugin into federated packages and add web support: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
+
+### 2.27.0
+
+* [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
+* [Android] Migrate to built-in Kotlin.
+* Add `MapboxMap.httpService.setCustomHeadersForHost` to attach custom HTTP headers to a single host only, and `MapboxMap.httpService.clearCustomHeaders` to remove all configured headers. Host-scoped headers are matched against the request's exact URL host (case-insensitive, no subdomain or substring matching).
+* Deprecate `MapboxMap.setCustomHeaders`: headers set this way are attached to every host the map fetches from — including third-party hosts referenced by styles, sources, sprites, glyphs and tiles — which can leak credentials. Use `setCustomHeadersForHost` instead.
 
 ### 2.26.0
 
@@ -633,7 +644,7 @@ Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldv
 * Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
 * [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
 * [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
-* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/wiki/Android-Platform-Views) guide from the Flutter team.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md) guide from the Flutter team.
 * [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
 * Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
 * Add `MapWidget.onResourceRequestListener` that can be used to subscribe to resource requests made by the map.
@@ -653,7 +664,7 @@ Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldv
 * Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
 * [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
 * [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
-* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/wiki/Android-Platform-Views) guide from the Flutter team.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md) guide from the Flutter team.
 * [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
 * Bump platform Maps SDK dependencies to 11.2.0-beta.1.
 

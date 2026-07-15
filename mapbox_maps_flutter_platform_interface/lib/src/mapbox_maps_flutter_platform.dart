@@ -118,11 +118,12 @@ abstract base class MapboxMapsFlutterPlatform {
     AndroidPlatformViewHostingMode androidHostingMode =
         AndroidPlatformViewHostingMode.VD,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    bool? isOpaque = true,
   });
 }
 
 /// Callback signature invoked when a map instance is ready.
-typedef MapboxMapCreatedCallback<T extends MapboxMapInterface> =
-    void Function(T mapboxMap);
-typedef PlatformMapCreatedCallback =
-    MapboxMapCreatedCallback<MapboxMapPlatformInterface>;
+typedef MapboxMapCreatedCallback<T extends MapboxMapInterface> = void Function(
+    T mapboxMap);
+typedef PlatformMapCreatedCallback
+    = MapboxMapCreatedCallback<MapboxMapPlatformInterface>;
