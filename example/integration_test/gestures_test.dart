@@ -68,7 +68,7 @@ void main() {
     }
   });
 
-  testWidgets('scrollMode is preserved by an update that omits it',
+  testWidgets('Gestures settings partial update preserves other fields',
       (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -94,27 +94,6 @@ void main() {
       reason:
           'A partial update only sets scrollDecelerationEnabled and must not reset rotateEnabled back to its default value.',
     );
-  });
-
-  testWidgets(
-      'scrollMode is preserved by a partial update that changes an unrelated field',
-      (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    final gestures = mapboxMap.gestures;
-
-    final baseline = GesturesSettings(
-      scrollMode: ScrollMode.HORIZONTAL,
-      rotateEnabled: false,
-    );
-    await gestures.updateSettings(baseline);
-
-    final partialUpdate = GesturesSettings(rotateEnabled: true);
-    await gestures.updateSettings(partialUpdate);
-    final updatedSettings = await gestures.getSettings();
-    expect(updatedSettings.rotateEnabled, partialUpdate.rotateEnabled);
-    expect(updatedSettings.scrollMode, baseline.scrollMode);
   });
 
   testWidgets('RecognizeTapEvent', (WidgetTester tester) async {

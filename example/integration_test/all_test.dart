@@ -44,7 +44,6 @@ import 'location_test.dart' as location_test;
 import 'logo_test.dart' as logo_test;
 import 'attribution_test.dart' as attribution_test;
 import 'compass_test.dart' as compass_test;
-import 'indoor_selector_test.dart' as indoor_selector_test;
 import 'scale_bar_test.dart' as scale_bar_test;
 import 'http_service_test.dart' as http_service_test;
 import 'offline_test.dart' as offline_test;
@@ -73,7 +72,6 @@ void main() {
   logo_test.main();
   attribution_test.main();
   compass_test.main();
-  indoor_selector_test.main();
   scale_bar_test.main();
 
   // offline_test

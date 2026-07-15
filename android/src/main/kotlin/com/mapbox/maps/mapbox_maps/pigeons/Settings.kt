@@ -1439,16 +1439,7 @@ interface GesturesSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface _LocationComponentSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): LocationComponentSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean)
 
   companion object {
@@ -1503,16 +1494,7 @@ interface _LocationComponentSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface ScaleBarSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): ScaleBarSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: ScaleBarSettings)
 
   companion object {
@@ -1566,16 +1548,7 @@ interface ScaleBarSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface CompassSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): CompassSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: CompassSettings)
 
   companion object {
@@ -1629,16 +1602,7 @@ interface CompassSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface AttributionSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): AttributionSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: AttributionSettings)
 
   companion object {
@@ -1692,16 +1656,7 @@ interface AttributionSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface LogoSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): LogoSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: LogoSettings)
 
   companion object {
@@ -1755,16 +1710,7 @@ interface LogoSettingsInterface {
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface IndoorSelectorSettingsInterface {
-  /**
-   * Returns the currently applied settings, populated with default
-   * values for any fields not explicitly modified via [updateSettings].
-   */
   fun getSettings(): IndoorSelectorSettings
-  /**
-   * Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
-   *
-   * Call [getSettings] to retrieve the full resulting configuration.
-   */
   fun updateSettings(settings: IndoorSelectorSettings)
 
   companion object {
