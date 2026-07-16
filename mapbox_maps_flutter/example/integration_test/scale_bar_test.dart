@@ -40,14 +40,12 @@ void main() {
     var updatedSettings = await scaleBar.getSettings();
     expect(updatedSettings.position, OrnamentPosition.BOTTOM_RIGHT);
     expect(updatedSettings.distanceUnits, DistanceUnits.NAUTICAL);
-    if (Platform.isIOS) {
-      expect(updatedSettings.marginRight, 3);
-      expect(updatedSettings.marginBottom, 4);
-    } else {
-      expect(updatedSettings.marginLeft, 1);
-      expect(updatedSettings.marginTop, 2);
-      expect(updatedSettings.marginRight, 3);
-      expect(updatedSettings.marginBottom, 4);
+
+    expect(updatedSettings.marginLeft, 1);
+    expect(updatedSettings.marginTop, 2);
+    expect(updatedSettings.marginRight, 3);
+    expect(updatedSettings.marginBottom, 4);
+    if (Platform.isAndroid) {
       // iOS doesn't support these settings
       expect(updatedSettings.textColor, Colors.black.value);
       expect(updatedSettings.primaryColor, Colors.red.value);
@@ -62,5 +60,95 @@ void main() {
       expect(updatedSettings.ratio, 1.5);
       expect(updatedSettings.useContinuousRendering, true);
     }
+  });
+
+  testWidgets('margins are independently tracked across position changes',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final scaleBar = mapboxMap.scaleBar;
+
+    await scaleBar.updateSettings(ScaleBarSettings(
+      position: OrnamentPosition.BOTTOM_LEFT,
+      marginLeft: 10,
+      marginRight: 20,
+      marginTop: 30,
+      marginBottom: 40,
+    ));
+
+    await scaleBar
+        .updateSettings(ScaleBarSettings(position: OrnamentPosition.TOP_RIGHT));
+
+    final settings = await scaleBar.getSettings();
+    expect(
+      settings.marginRight,
+      20,
+      reason: 'marginRight should be preserved since it is active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginTop,
+      30,
+      reason: 'marginTop should be preserved since it is active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginLeft,
+      10,
+      reason:
+          'marginLeft should be preserved even though it is not active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginBottom,
+      40,
+      reason:
+          'marginBottom should be preserved even though it is not active in TOP_RIGHT',
+    );
+  });
+
+  testWidgets('position and margins are preserved by an empty update',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final scaleBar = mapboxMap.scaleBar;
+
+    final baseline = ScaleBarSettings(
+      position: OrnamentPosition.BOTTOM_RIGHT,
+      marginRight: 11,
+      marginBottom: 22,
+    );
+    await scaleBar.updateSettings(baseline);
+    expect((await scaleBar.getSettings()).position, baseline.position);
+
+    await scaleBar.updateSettings(ScaleBarSettings());
+    final updatedSettings = await scaleBar.getSettings();
+    expect(updatedSettings.position, baseline.position);
+    expect(updatedSettings.marginRight, baseline.marginRight);
+    expect(updatedSettings.marginBottom, baseline.marginBottom);
+  });
+
+  testWidgets(
+      'position and margins are preserved by a partial update that changes an unrelated field',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final scaleBar = mapboxMap.scaleBar;
+
+    final baseline = ScaleBarSettings(
+      position: OrnamentPosition.BOTTOM_RIGHT,
+      marginRight: 11,
+      marginBottom: 22,
+      isMetricUnits: false,
+    );
+    await scaleBar.updateSettings(baseline);
+
+    final partialUpdate = ScaleBarSettings(isMetricUnits: true);
+    await scaleBar.updateSettings(partialUpdate);
+    final updatedSettings = await scaleBar.getSettings();
+    expect(updatedSettings.isMetricUnits, partialUpdate.isMetricUnits);
+    expect(updatedSettings.position, baseline.position);
+    expect(updatedSettings.marginRight, baseline.marginRight);
+    expect(updatedSettings.marginBottom, baseline.marginBottom);
   });
 }

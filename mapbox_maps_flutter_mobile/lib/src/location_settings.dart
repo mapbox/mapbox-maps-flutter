@@ -6,34 +6,31 @@ class LocationSettings implements LocationSettingsPlatformInterface {
 
   LocationSettings._(this._api);
 
-  /// Returns [LocationComponentSettings] allowing to show location indicator on the map,
-  /// customize indicator's appearance and position.
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   @override
   Future<LocationComponentSettings> getSettings() async {
     return _api.getSettings();
   }
 
-  /// Accepts an instance of [LocationComponentSettings] allowing to apply location.
-  /// indicator configuration changes.
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
   ///
-  /// Note: By default [DefaultLocationPuck2D] is used if no [LocationComponentSettings.locationPuck] specified.
+  /// Call [getSettings] to retrieve the full resulting configuration.
+  ///
+  /// Note: If no [LocationComponentSettings.locationPuck] is specified and none has been
+  /// configured yet, Mapbox's built-in default puck is shown.
   @override
   Future<void> updateSettings(LocationComponentSettings settings) async {
-    if (settings.locationPuck == null) {
-      // If locationPuck is not set, fallback to use DefaultLocationPuck2D.
-      settings.locationPuck = LocationPuck(
-        locationPuck2D: DefaultLocationPuck2D(),
-      );
-    } else {
-      settings.locationPuck?.locationPuck3D?.modelUri =
-          await MapboxMapsOptions.getFlutterAssetPath(
-            settings.locationPuck?.locationPuck3D?.modelUri,
-          );
-    }
-    _api.updateSettings(
-      settings,
-      settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D,
+    // Omitting locationPuck leaves the current puck untouched, meaning after
+    // update puck is at its previous value or platform default if no puck has
+    // been set yet.
+    final useDefaultPuck2D = settings.locationPuck == null ||
+        settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D;
+    settings.locationPuck?.locationPuck3D?.modelUri =
+        await MapboxMapsOptions.getFlutterAssetPath(
+      settings.locationPuck?.locationPuck3D?.modelUri,
     );
+    await _api.updateSettings(settings, useDefaultPuck2D);
   }
 }
 
