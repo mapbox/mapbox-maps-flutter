@@ -171,13 +171,15 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
                 ? UIScrollView.DecelerationRate.normal.rawValue
                 : 0.0
         }
-        switch settings.scrollMode {
-        case .hORIZONTAL:
-            mapView.gestures.options.panMode = PanMode.horizontal
-        case .vERTICAL:
-            mapView.gestures.options.panMode = PanMode.vertical
-        case .hORIZONTALANDVERTICAL, .none:
-            mapView.gestures.options.panMode = PanMode.horizontalAndVertical
+        if let scrollMode = settings.scrollMode {
+            switch scrollMode {
+            case .hORIZONTAL:
+                mapView.gestures.options.panMode = PanMode.horizontal
+            case .vERTICAL:
+                mapView.gestures.options.panMode = PanMode.vertical
+            case .hORIZONTALANDVERTICAL:
+                mapView.gestures.options.panMode = PanMode.horizontalAndVertical
+            }
         }
         if let focalPoint = settings.focalPoint {
             mapView.gestures.options.focalPoint = CGPoint(x: focalPoint.x, y: focalPoint.y)

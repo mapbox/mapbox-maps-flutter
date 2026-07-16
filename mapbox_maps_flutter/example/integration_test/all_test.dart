@@ -29,6 +29,7 @@ import 'map_recorder_test.dart' as map_recorder_test;
 import 'offline_test.dart' as offline_test;
 import 'projection_test.dart' as projection_test;
 import 'scale_bar_test.dart' as scale_bar_test;
+import 'indoor_selector_test.dart' as indoor_selector_test;
 import 'snapshotter_test.dart' as snapshotter_test;
 import 'viewport_test.dart' as viewport_test;
 import 'is_opaque_test.dart' as is_opaque_test;
@@ -92,6 +93,7 @@ void main() {
   logo_test.main();
   attribution_test.main();
   compass_test.main();
+  indoor_selector_test.main();
   scale_bar_test.main();
   offline_test.main();
   http_service_test.main();
