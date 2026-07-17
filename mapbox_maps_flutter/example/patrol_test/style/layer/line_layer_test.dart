@@ -1,0 +1,252 @@
+// This file is generated.
+// ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
+import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import '../../patrol.dart';
+
+import '../../empty_map_widget.dart' as app;
+
+const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+
+void main() {
+  setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
+
+  // These generated addLayer/getLayer tests run on web too. Only a limited
+  // set of known Mapbox GL JS parity gaps are gated: some properties are
+  // excluded from round-trip assertions, and a few unsupported layer types
+  // may still be skipped separately by the template.
+  patrolTest('Add LineLayer', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+
+    // Empty GeoJSON source — the layer-property tests don't query features,
+    // they only check the addLayer/getLayer round-trip. `lineMetrics: true`
+    // is required by gl-js whenever a `line` layer sets line-gradient or
+    // line-trim-* properties, so we enable it unconditionally; it's a no-op
+    // for non-line layers.
+    await mapboxMap.style.addSource(
+      GeoJsonSource(
+        id: "source",
+        data: '{"type":"FeatureCollection","features":[]}',
+        lineMetrics: true,
+      ),
+    );
+
+    await mapboxMap.style.addLayer(
+      LineLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        lineCap: LineCap.BUTT,
+        lineCrossSlope: 1.0,
+        lineElevationGroundScale: 1.0,
+        lineElevationReference: LineElevationReference.NONE,
+        lineJoin: LineJoin.BEVEL,
+        lineMiterLimit: 1.0,
+        lineRoundLimit: 1.0,
+        lineSortKey: 1.0,
+        lineWidthUnit: LineWidthUnit.PIXELS,
+        lineZOffset: 1.0,
+        lineBlur: 1.0,
+        lineBorderColor: Colors.red.value,
+        lineBorderWidth: 1.0,
+        lineColor: Colors.red.value,
+        lineCutoutFadeWidth: 1.0,
+        lineCutoutOpacity: 1.0,
+        lineDasharray: [1.0, 2.0],
+        lineDepthOcclusionFactor: 1.0,
+        lineEmissiveStrength: 1.0,
+        lineGapWidth: 1.0,
+        lineGradient: Colors.red.value,
+        lineOcclusionOpacity: 1.0,
+        lineOffset: 1.0,
+        lineOpacity: 1.0,
+        linePattern: "abc",
+        lineTranslate: [0.0, 1.0],
+        lineTranslateAnchor: LineTranslateAnchor.MAP,
+        lineTrimColor: Colors.red.value,
+        lineTrimFadeRange: [0.5, 0.5],
+        lineTrimOffset: [0.5, 0.5],
+        lineWidth: 1.0,
+      ),
+    );
+    var layer = await mapboxMap.style.getLayer('layer') as LineLayer;
+    expect('source', layer.sourceId);
+    expect(layer.minZoom, 1);
+    expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
+    expect(layer.visibility, Visibility.NONE);
+    expect(layer.lineCap, LineCap.BUTT);
+    expect(layer.lineCrossSlope, 1.0);
+    expect(layer.lineElevationGroundScale, 1.0);
+    expect(layer.lineElevationReference, LineElevationReference.NONE);
+    expect(layer.lineJoin, LineJoin.BEVEL);
+    expect(layer.lineMiterLimit, 1.0);
+    expect(layer.lineRoundLimit, 1.0);
+    expect(layer.lineSortKey, 1.0);
+    expect(layer.lineWidthUnit, LineWidthUnit.PIXELS);
+    expect(layer.lineZOffset, 1.0);
+    expect(layer.lineBlur, 1.0);
+    expect(layer.lineBorderColor, Colors.red.value);
+    expect(layer.lineBorderWidth, 1.0);
+    expect(layer.lineColor, Colors.red.value);
+    if (!kIsWeb) {
+      expect(layer.lineCutoutFadeWidth, 1.0);
+    }
+    if (!kIsWeb) {
+      expect(layer.lineCutoutOpacity, 1.0);
+    }
+    expect(layer.lineDasharray, [1.0, 2.0]);
+    if (!kIsWeb) {
+      expect(layer.lineDepthOcclusionFactor, 1.0);
+    }
+    expect(layer.lineEmissiveStrength, 1.0);
+    expect(layer.lineGapWidth, 1.0);
+    expect(layer.lineGradient, Colors.red.value);
+    if (!kIsWeb) {
+      expect(layer.lineOcclusionOpacity, 1.0);
+    }
+    expect(layer.lineOffset, 1.0);
+    expect(layer.lineOpacity, 1.0);
+    expect(layer.linePattern, "abc");
+    expect(layer.lineTranslate, [0.0, 1.0]);
+    expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
+    expect(layer.lineTrimColor, Colors.red.value);
+    expect(layer.lineTrimFadeRange, [0.5, 0.5]);
+    expect(layer.lineTrimOffset, [0.5, 0.5]);
+    expect(layer.lineWidth, 1.0);
+  });
+
+  patrolTest('Add LineLayer with expressions', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+
+    // Empty GeoJSON source — the layer-property tests don't query features,
+    // they only check the addLayer/getLayer round-trip. `lineMetrics: true`
+    // is required by gl-js whenever a `line` layer sets line-gradient or
+    // line-trim-* properties, so we enable it unconditionally; it's a no-op
+    // for non-line layers.
+    await mapboxMap.style.addSource(
+      GeoJsonSource(
+        id: "source",
+        data: '{"type":"FeatureCollection","features":[]}',
+        lineMetrics: true,
+      ),
+    );
+
+    await mapboxMap.style.addLayer(
+      LineLayer(
+        id: 'layer',
+        sourceId: 'source',
+        visibilityExpression: ['string', 'none'],
+        filter: [
+          "==",
+          ["get", "type"],
+          "Feature",
+        ],
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        slot: LayerSlot.BOTTOM,
+        lineCapExpression: ['string', 'butt'],
+        lineCrossSlopeExpression: ['number', 1.0],
+        lineElevationGroundScaleExpression: ['number', 1.0],
+        lineElevationReferenceExpression: ['string', 'none'],
+        lineJoinExpression: ['string', 'bevel'],
+        lineMiterLimitExpression: ['number', 1.0],
+        lineRoundLimitExpression: ['number', 1.0],
+        lineSortKeyExpression: ['number', 1.0],
+        lineWidthUnitExpression: ['string', 'pixels'],
+        lineZOffsetExpression: ['number', 1.0],
+        lineBlurExpression: ['number', 1.0],
+        lineBorderColorExpression: ['rgba', 255, 0, 0, 1],
+        lineBorderWidthExpression: ['number', 1.0],
+        lineColorExpression: ['rgba', 255, 0, 0, 1],
+        lineCutoutFadeWidth: 1.0,
+        lineCutoutOpacityExpression: ['number', 1.0],
+        lineDasharrayExpression: [
+          'literal',
+          [1.0, 2.0],
+        ],
+        lineDepthOcclusionFactorExpression: ['number', 1.0],
+        lineEmissiveStrengthExpression: ['number', 1.0],
+        lineGapWidthExpression: ['number', 1.0],
+        lineGradientExpression: ['rgba', 255, 0, 0, 1],
+        lineOcclusionOpacityExpression: ['number', 1.0],
+        lineOffsetExpression: ['number', 1.0],
+        lineOpacityExpression: ['number', 1.0],
+        linePatternExpression: ['image', "abc"],
+        lineTranslateExpression: [
+          'literal',
+          [0.0, 1.0],
+        ],
+        lineTranslateAnchorExpression: ['string', 'map'],
+        lineTrimColorExpression: ['rgba', 255, 0, 0, 1],
+        lineTrimFadeRangeExpression: [
+          'literal',
+          [0.5, 0.5],
+        ],
+        lineTrimOffset: [0.5, 0.5],
+        lineWidthExpression: ['number', 1.0],
+      ),
+    );
+    var layer = await mapboxMap.style.getLayer('layer') as LineLayer;
+    expect('source', layer.sourceId);
+    expect(layer.minZoom, 1);
+    expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
+    expect(layer.visibility, Visibility.NONE);
+    expect(layer.filter, [
+      "==",
+      ["get", "type"],
+      "Feature",
+    ]);
+    expect(layer.lineCap, LineCap.BUTT);
+    expect(layer.lineCrossSlope, 1.0);
+    expect(layer.lineElevationGroundScale, 1.0);
+    expect(layer.lineElevationReference, LineElevationReference.NONE);
+    expect(layer.lineJoin, LineJoin.BEVEL);
+    expect(layer.lineMiterLimit, 1.0);
+    expect(layer.lineRoundLimit, 1.0);
+    expect(layer.lineSortKey, 1.0);
+    expect(layer.lineWidthUnit, LineWidthUnit.PIXELS);
+    expect(layer.lineZOffset, 1.0);
+    expect(layer.lineBlur, 1.0);
+    expect(layer.lineBorderColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.lineBorderWidth, 1.0);
+    expect(layer.lineColorExpression, ['rgba', 255, 0, 0, 1]);
+    if (!kIsWeb) {
+      expect(layer.lineCutoutFadeWidth, 1.0);
+    }
+    if (!kIsWeb) {
+      expect(layer.lineCutoutOpacity, 1.0);
+    }
+    expect(layer.lineDasharray, [1.0, 2.0]);
+    if (!kIsWeb) {
+      expect(layer.lineDepthOcclusionFactor, 1.0);
+    }
+    expect(layer.lineEmissiveStrength, 1.0);
+    expect(layer.lineGapWidth, 1.0);
+    expect(layer.lineGradientExpression, ['rgba', 255, 0, 0, 1]);
+    if (!kIsWeb) {
+      expect(layer.lineOcclusionOpacity, 1.0);
+    }
+    expect(layer.lineOffset, 1.0);
+    expect(layer.lineOpacity, 1.0);
+    expect(layer.linePatternExpression, ['image', "abc"]);
+    expect(layer.lineTranslate, [0.0, 1.0]);
+    expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
+    expect(layer.lineTrimColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.lineTrimFadeRange, [0.5, 0.5]);
+    expect(layer.lineTrimOffset, [0.5, 0.5]);
+    expect(layer.lineWidth, 1.0);
+  });
+}
+
+// End of generated file.

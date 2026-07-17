@@ -1,0 +1,802 @@
+// ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'patrol.dart';
+import 'package:turf/turf.dart' show Point, Position;
+import 'empty_map_widget.dart' as app;
+
+const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+
+void main() {
+  setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
+
+  patrolTest('test_featureset_QRF', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+
+    await Future.delayed(Duration(seconds: 4));
+
+    // test queryRenderedFeaturesForFeatureset
+    var coord = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0.01, 0.01)),
+    );
+    var featuresetQuery = await mapboxMap.queryRenderedFeaturesForFeatureset(
+      featureset: FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+      geometry: RenderedQueryGeometry.fromScreenCoordinate(coord),
+    );
+
+    expect(featuresetQuery.length, 2);
+    expect(featuresetQuery.first.properties["name"], "nest2");
+    expect(featuresetQuery[1].properties["name"], "nest1");
+    expect(featuresetQuery[0].properties["class"], "poi");
+
+    // test queryRenderedFeaturesForFeatureset with filter
+    var filter = '["==",["get", "type"], "A"]';
+    var featuresetFilterQuery = await mapboxMap
+        .queryRenderedFeaturesForFeatureset(
+          featureset: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          geometry: RenderedQueryGeometry.fromScreenCoordinate(coord),
+          filter: filter,
+        );
+
+    expect(featuresetFilterQuery.length, 1);
+    expect(featuresetFilterQuery[0].properties["name"], "nest1");
+    expect(featuresetFilterQuery[0].properties["class"], "poi");
+
+    //test queryRenderedFeatures for full viewport
+    var viewportQuery = await mapboxMap.queryRenderedFeaturesForFeatureset(
+      featureset: FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+    );
+
+    expect(viewportQuery.length, 3);
+    expect(viewportQuery[0].properties["name"], "nest2");
+    expect(viewportQuery[1].properties["name"], "nest1");
+    expect(viewportQuery[2].properties["name"], "nest3");
+    expect(viewportQuery[2].properties["class"], "poi");
+  });
+
+  patrolTest('test_featurestate_methods', ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    var feature = FeaturesetFeature(
+      id: FeaturesetFeatureId(id: "11", namespace: "A"),
+      featureset: FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+      geometry: Point(coordinates: Position(0.01, 0.01)).toJson(),
+      properties: {},
+      state: {},
+    );
+    var state = FeatureState(map: {"highlight": true});
+
+    // test set and get featurestate
+    await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
+    var returnedFeatureState = await mapboxMap
+        .getFeatureStateForFeaturesetFeature(feature);
+    expect(returnedFeatureState, state.map);
+
+    // test remove featurestate
+    await mapboxMap.removeFeatureStateForFeaturesetFeature(
+      feature: feature,
+      stateKey: "highlight",
+    );
+    var returnedFeatureState2 = await mapboxMap
+        .getFeatureStateForFeaturesetFeature(feature);
+    expect(returnedFeatureState2, {});
+  });
+
+  patrolTest('test_reset_featurestate_methods', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    var feature = FeaturesetFeature(
+      id: FeaturesetFeatureId(id: "11", namespace: "A"),
+      featureset: FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+      geometry: Point(coordinates: Position(0.01, 0.01)).toJson(),
+      properties: {},
+      state: {},
+    );
+    var state = FeatureState(map: {"highlight": true});
+
+    await Future.delayed(Duration(seconds: 5));
+    await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
+    var returnedFeatureState = await mapboxMap
+        .getFeatureStateForFeaturesetFeature(feature);
+    expect(returnedFeatureState, state.map);
+
+    await mapboxMap.resetFeatureStatesForFeatureset(
+      FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+    );
+    var returnedFeatureState2 = await mapboxMap
+        .getFeatureStateForFeaturesetFeature(feature);
+    expect(returnedFeatureState2, {});
+  });
+
+  patrolTest('test_featurestate_descriptor_methods', ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    var featuresetDescriptor = FeaturesetDescriptor(
+      featuresetId: "poi",
+      importId: "nested",
+    );
+    var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
+    var state = FeatureState(map: {"highlight": true});
+
+    await Future.delayed(Duration(seconds: 1));
+
+    // test set and get featurestate
+    await mapboxMap.setFeatureStateForFeaturesetDescriptor(
+      featuresetDescriptor,
+      featuresetID,
+      state,
+    );
+    var returnedFeatureState = await mapboxMap
+        .getFeatureStateForFeaturesetDescriptor(
+          featuresetDescriptor,
+          featuresetID,
+        );
+    expect(returnedFeatureState, state.map);
+
+    // test remove featurestate
+    await mapboxMap.removeFeatureStateForFeaturesetDescriptor(
+      featureset: featuresetDescriptor,
+      featureId: featuresetID,
+      stateKey: "highlight",
+    );
+    var returnedFeatureState2 = await mapboxMap
+        .getFeatureStateForFeaturesetDescriptor(
+          featuresetDescriptor,
+          featuresetID,
+        );
+    expect(returnedFeatureState2, {});
+  });
+
+  patrolTest('test_state_is_queried', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
+    var featuresetDescriptor = FeaturesetDescriptor(
+      featuresetId: "poi",
+      importId: "nested",
+    );
+    var state = FeatureState(map: {"hide": true});
+    var filter = '["==",["get", "type"], "A"]';
+    Map<String, Object?> expectedProperties = {
+      "name": "nest1",
+      "type": "A",
+      "class": "poi",
+    };
+
+    await mapboxMap.setFeatureStateForFeaturesetDescriptor(
+      featuresetDescriptor,
+      featuresetID,
+      state,
+    );
+    var queryResult = await mapboxMap.queryRenderedFeaturesForFeatureset(
+      featureset: featuresetDescriptor,
+      filter: filter,
+    );
+    var poi = queryResult.first;
+    var point = Point.fromJson((poi.geometry as Map).cast<String, dynamic>());
+
+    expect(queryResult.length, 1);
+    expect(poi.id?.id, featuresetID.id);
+    expect(poi.id?.namespace, featuresetID.namespace);
+    expect(poi.state, state.map);
+    expect(point.coordinates.lat, closeTo(0.01, 0.05));
+    expect(point.coordinates.lng, closeTo(0.01, 0.05));
+    expect(poi.properties, expectedProperties);
+  });
+
+  patrolTest('test_getFeaturesets', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    var returnedFeaturesets = await mapboxMap.style.getFeaturesets();
+
+    expect(returnedFeaturesets.length, 1);
+    expect(returnedFeaturesets.first.importId, "nested");
+  });
+
+  patrolTest('test_addLongTapInteractionToMap_actionFires', skip: kIsWeb, (
+    $,
+  ) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var triggered = false;
+
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            triggered = true;
+            expect(triggered, true);
+          },
+        );
+    mapboxMap.addInteraction(tapInteraction);
+    mapboxMap.dispatch("longClick", ScreenCoordinate(x: 2, y: 2));
+  });
+
+  patrolTest('test_addTapInteractionToLayer', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    FeaturesetFeature? expectedFeature;
+    MapContentGestureContext? expectedContext;
+
+    // Add the tap interaction
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "circle-1"),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
+    mapboxMap.addInteraction(tapInteraction);
+
+    // Tap on the map
+    await Future.delayed(Duration(seconds: 3));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0, 0)),
+    );
+    mapboxMap.dispatch("click", point);
+
+    // Test the expected feature and context
+    await Future.delayed(Duration(seconds: 3));
+    expect(expectedFeature?.featureset.layerId, "circle-1");
+    expect(expectedFeature?.id?.id, "1");
+    expect(expectedFeature?.properties["foo"], 1);
+
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(0, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(0, 1e-4));
+  });
+
+  patrolTest('test_addTapInteractionToFeatureset', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    FeaturesetFeature? expectedFeature;
+    MapContentGestureContext? expectedContext;
+
+    // Add the tap interaction
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
+    mapboxMap.addInteraction(tapInteraction);
+
+    // Tap on the map
+    await Future.delayed(Duration(seconds: 1));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0.01, 0.01)),
+    );
+    mapboxMap.dispatch("click", point);
+
+    // Test the expected feature and context
+    await Future.delayed(Duration(seconds: 1));
+    expect(expectedFeature?.featureset.featuresetId, "poi");
+    expect(expectedFeature?.featureset.importId, "nested");
+    expect(expectedFeature?.id?.id, "12");
+    expect(expectedFeature?.id?.namespace, "A");
+    expect(expectedFeature?.properties["name"], "nest2");
+    expect(expectedFeature?.properties["type"], "B");
+    expect(expectedFeature?.properties["filter"], null);
+
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(0.01, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
+  });
+
+  patrolTest('test_addTapInteractionToMap', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    MapContentGestureContext? expectedContext;
+
+    // Add the tap interaction
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) => expectedContext = context,
+        );
+    mapboxMap.addInteraction(tapInteraction);
+
+    // Tap on the map
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(-0.01, -0.01)),
+    );
+    mapboxMap.dispatch("click", point);
+
+    // Test the expected context
+    await Future.delayed(Duration(seconds: 1));
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(-0.01, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(-0.01, 1e-4));
+  });
+
+  patrolTest('test_addTapInteractionToFeaturesetWithRadius', skip: kIsWeb, (
+    $,
+  ) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    int count = 0;
+
+    // Add the tap interaction
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          radius: 5,
+          action: (feature, context) {
+            if (feature != null) count++;
+          },
+        );
+    mapboxMap.addInteraction(tapInteraction);
+
+    // Tap on the map
+    await Future.delayed(Duration(seconds: 1));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0.01, 0.01)),
+    );
+    mapboxMap.dispatch("click", point);
+
+    // This is within radius
+    point.x += 3;
+    mapboxMap.dispatch("click", point);
+
+    // This is outside radius
+    point.x += 8;
+    mapboxMap.dispatch("click", point);
+
+    // Test the expected feature and context
+    await Future.delayed(Duration(seconds: 1));
+    expect(count, 2);
+  });
+
+  patrolTest('test_addTapInteractionToFeaturesetWithFilter', skip: kIsWeb, (
+    $,
+  ) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    FeaturesetFeature? expectedFeature;
+    MapContentGestureContext? expectedContext;
+
+    // Add the tap interaction
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          filter: '["==",["get", "type"], "A"]',
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
+    mapboxMap.addInteraction(tapInteraction);
+
+    // Tap on the map
+    await Future.delayed(Duration(seconds: 1));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0.01, 0.01)),
+    );
+    mapboxMap.dispatch("click", point);
+
+    // Test the expected feature and context
+    await Future.delayed(Duration(seconds: 1));
+    expect(expectedFeature?.featureset.featuresetId, "poi");
+    expect(expectedFeature?.featureset.importId, "nested");
+    expect(expectedFeature?.id?.id, "11");
+    expect(expectedFeature?.id?.namespace, "A");
+    expect(expectedFeature?.properties["name"], "nest1");
+    expect(expectedFeature?.properties["type"], "A");
+    expect(expectedFeature?.properties["filter"], null);
+
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(0.01, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
+  });
+
+  patrolTest('test_addLongTapInteractionToLayer', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    FeaturesetFeature? expectedFeature;
+    MapContentGestureContext? expectedContext;
+
+    // Add the long tap interaction
+    var longTapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(layerId: "circle-1"),
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
+    mapboxMap.addInteraction(longTapInteraction);
+
+    // Long tap on the map
+    await Future.delayed(Duration(seconds: 2));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0, 0)),
+    );
+    mapboxMap.dispatch("longClick", point);
+
+    // Test the expected feature and context
+    await Future.delayed(Duration(seconds: 2));
+    expect(expectedFeature?.featureset.layerId, "circle-1");
+    expect(expectedFeature?.id?.id, "1");
+    expect(expectedFeature?.properties["foo"], 1);
+
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(0, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(0, 1e-4));
+  });
+
+  patrolTest('test_addLongTapInteractionToFeatureset', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    FeaturesetFeature? expectedFeature;
+    MapContentGestureContext? expectedContext;
+
+    // Add the long tap interaction
+    var longTapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: FeaturesetDescriptor(
+            featuresetId: "poi",
+            importId: "nested",
+          ),
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) {
+            if (feature != null) {
+              expectedFeature = feature;
+              expectedContext = context;
+            }
+          },
+        );
+    mapboxMap.addInteraction(longTapInteraction);
+
+    // Long tap on the map
+    await Future.delayed(Duration(seconds: 1));
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0.01, 0.01)),
+    );
+    mapboxMap.dispatch("longClick", point);
+
+    // Test the expected feature and context
+    await Future.delayed(Duration(seconds: 1));
+    expect(expectedFeature?.featureset.featuresetId, "poi");
+    expect(expectedFeature?.featureset.importId, "nested");
+    expect(expectedFeature?.id?.id, "12");
+    expect(expectedFeature?.id?.namespace, "A");
+    expect(expectedFeature?.properties["name"], "nest2");
+    expect(expectedFeature?.properties["type"], "B");
+    expect(expectedFeature?.properties["filter"], null);
+
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(0.01, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(0.01, 1e-4));
+  });
+
+  patrolTest('test_addLongTapInteractionToMap', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    MapContentGestureContext? expectedContext;
+
+    // Add the long tap interaction
+    var longTapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.longTap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) => expectedContext = context,
+        );
+    mapboxMap.addInteraction(longTapInteraction);
+
+    // Long Tap on the map
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(-0.01, -0.01)),
+    );
+    mapboxMap.dispatch("longClick", point);
+
+    // Test the expected context
+    await Future.delayed(Duration(seconds: 1));
+    expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(expectedContext?.point.coordinates.lat, closeTo(-0.01, 1e-4));
+    expect(expectedContext?.point.coordinates.lng, closeTo(-0.01, 1e-4));
+  });
+
+  patrolTest('test_removeTapInteraction', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    // load style and position camera
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      width: 200,
+      height: 200,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 10,
+      ),
+      alignment: Alignment(100, 100),
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
+    int count = 0;
+
+    // Add the tap interaction
+    var tapInteraction =
+        TypedInteraction<TypedFeaturesetFeature<FeaturesetDescriptor>>(
+          featuresetDescriptor: null,
+          interactionType: InteractionType.tap,
+          featureFactory: TypedFeaturesetFeature.fromFeaturesetFeature,
+          action: (feature, context) => count++,
+        );
+    mapboxMap.addInteraction(tapInteraction, interactionID: "tapInteraction");
+
+    // Tap on the map
+    var point = await mapboxMap.pixelForCoordinate(
+      Point(coordinates: Position(0, 0)),
+    );
+    mapboxMap.dispatch("click", point);
+
+    // Remove the tap interaction
+    await Future.delayed(Duration(seconds: 1));
+    mapboxMap.removeInteraction("tapInteraction");
+
+    // Tap on the map
+    await Future.delayed(Duration(seconds: 1));
+    mapboxMap.dispatch("click", point);
+
+    // Test the expected count
+    await Future.delayed(Duration(seconds: 1));
+    expect(count, 1);
+  });
+}

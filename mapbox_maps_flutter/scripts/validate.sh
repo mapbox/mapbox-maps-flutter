@@ -42,6 +42,7 @@
 # Dependencies:
 #   - flutter, dart on PATH
 #   - dart_apitool activated: dart pub global activate dart_apitool
+#   - patrol_cli activated (stages 5/6/7): dart pub global activate patrol_cli
 #   - jq, curl, git, make
 #   - npm, node (for stage 2, transitively via make)
 #
@@ -194,6 +195,7 @@ stage_static() {
       packages/mapbox_maps_flutter_mobile/lib \
       packages/mapbox_maps_flutter/lib \
       packages/mapbox_maps_flutter/example/integration_test \
+      packages/mapbox_maps_flutter/example/patrol_test \
       packages/mapbox_maps_flutter_platform_interface/lib \
       packages/mapbox_maps_flutter_web/lib
   ) || failed=1
@@ -329,100 +331,52 @@ stage_api_breakage() {
 
 # ───── stages 5/6/7: device integration tests ───────────────────────────
 
-# Runs the facade example's integration suite on $device. The test
-# suite convention here (matching the mobile package's own example) is
-# that `integration_test/all_test.dart` is the single orchestrating
-# entry point: it sets the access token in `setUpAll` and imports
-# every other `*_test.dart` file's `main()`. Running each file with
-# `flutter test integration_test/` would re-execute those file-mains
-# without the setUpAll token wiring, which is why the previous attempt
-# saw a MapboxConfigurationException on the second test.
+# Runs the facade example's Patrol integration suite on $device. Patrol
+# discovers every `*_test.dart` under `patrol_test/` and bundles them
+# automatically — each file sets the access token in its own `setUpAll`,
+# so there is no hand-maintained aggregating entry point to keep in sync.
 run_integration_on_device() {
   local device="$1"
   local label="$2"
 
   local example_dir="$FACADE_DIR/example"
-  local entry="$example_dir/integration_test/all_test.dart"
-  if [[ ! -f "$entry" ]]; then
-    echo "no $entry — expected the orchestrating entry point"
+  if [[ ! -d "$example_dir/patrol_test" ]]; then
+    echo "no $example_dir/patrol_test — expected the Patrol test directory"
     return 1
   fi
 
-  echo "running integration tests on $label ($device) via all_test.dart"
+  echo "running Patrol integration tests on $label ($device)"
   (
     cd "$example_dir" && \
-    flutter test integration_test/all_test.dart \
-      -d "$device" \
+    patrol test \
+      --target patrol_test \
+      --device "$device" \
       --dart-define=ACCESS_TOKEN="$MAPBOX_ACCESS_TOKEN"
   )
 }
 
-# Web needs `flutter drive` against an already-running chromedriver
-# (flutter doesn't spawn one). Boot chromedriver ourselves, run each
-# integration_test file, then tear down.
+# Web runs through Patrol's Playwright runner (`patrol test -d chrome`),
+# which drives the browser itself — no chromedriver, no flutter_driver
+# entry point. Unlike CI we do NOT pass `--enable-unsafe-swiftshader`:
+# software WebGL hangs on a real macOS GPU, and the local machine renders
+# with its own GPU.
 run_integration_on_web() {
   local example_dir="$FACADE_DIR/example"
-  local driver="$example_dir/test_driver/integration_test.dart"
 
-  if [[ ! -f "$driver" ]]; then
-    echo "no $driver — web integration tests need a flutter_driver entry point"
-    return 1
-  fi
-  if [[ ! -d "$example_dir/integration_test" ]]; then
-    echo "no integration_test dir in $example_dir"
-    return 1
-  fi
-  if ! command -v chromedriver >/dev/null 2>&1; then
-    echo "chromedriver not on PATH — install via 'brew install chromedriver'"
-    return 1
-  fi
-
-  local entry="$example_dir/integration_test/all_test.dart"
-  if [[ ! -f "$entry" ]]; then
-    echo "no $entry — expected the orchestrating entry point"
-    return 1
-  fi
-
-  local cd_log
-  # `mktemp` accepts the X-template form on GNU but macOS BSD mktemp treats
-  # the argument as a literal path, which re-runs collide on. `-t <prefix>`
-  # is honored by both platforms and picks a uniquified file in $TMPDIR.
-  cd_log=$(mktemp -t chromedriver) || cd_log=$(mktemp)
-  echo "starting chromedriver --port=4444 (log: $cd_log)"
-  chromedriver --port=4444 --log-path="$cd_log" >/dev/null 2>&1 &
-  local cd_pid=$!
-  # Give it a beat to open the port; bail fast if it dies.
-  sleep 2
-  if ! kill -0 "$cd_pid" 2>/dev/null; then
-    echo "chromedriver failed to start; see $cd_log"
+  if [[ ! -d "$example_dir/patrol_test" ]]; then
+    echo "no $example_dir/patrol_test — expected the Patrol test directory"
     return 1
   fi
 
   echo ""
-  echo "  flutter drive -d chrome integration_test/all_test.dart"
-  # `-d chrome` is the canonical Flutter docs invocation for web driver
-  # tests. Flutter launches the Chrome that runs the app and chromedriver
-  # (started above) attaches to it via the standard WebDriver protocol.
-  # Crucially this device emits the test-framework reporter (`+N ~M`
-  # per-test progress with names) to stdout, which `-d web-server`
-  # suppresses.
+  echo "  patrol test --target patrol_test -d chrome"
   (
     cd "$example_dir" && \
-    flutter drive \
-      --driver=test_driver/integration_test.dart \
-      --target=integration_test/all_test.dart \
-      -d chrome \
-      --no-web-resources-cdn \
+    patrol test \
+      --target patrol_test \
+      --device chrome \
       --dart-define=ACCESS_TOKEN="$MAPBOX_ACCESS_TOKEN"
   )
-  local failed=$?
-
-  echo ""
-  echo "stopping chromedriver (pid=$cd_pid)"
-  kill "$cd_pid" 2>/dev/null
-  wait "$cd_pid" 2>/dev/null
-
-  return $failed
 }
 
 stage_android() {
@@ -440,9 +394,8 @@ stage_ios() {
     return 0
   fi
   # Default to iPhone 17 Pro. Older iOS runtimes (e.g. 15.5) have been
-  # observed to fail the integration suite even with the correct
-  # `all_test.dart` entry point; iPhone 17 Pro / iOS 26.4 is the
-  # known-good combo. Override via IOS_DEVICE.
+  # observed to fail the integration suite; iPhone 17 Pro / iOS 26.4 is
+  # the known-good combo. Override via IOS_DEVICE.
   local device="${IOS_DEVICE:-iPhone 17 Pro}"
   run_integration_on_device "$device" "ios"
 }

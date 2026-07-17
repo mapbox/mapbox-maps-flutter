@@ -1,0 +1,148 @@
+// This file is generated.
+// ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import '../patrol.dart';
+import 'package:turf/turf.dart' show LineString, Position;
+import '../empty_map_widget.dart' as app;
+
+const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+
+void main() {
+  setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
+
+  patrolTest('create PolylineAnnotation', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
+    var geometry = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
+
+    var polylineAnnotationOptions = PolylineAnnotationOptions(
+      geometry: geometry,
+      lineElevationGroundScale: 1.0,
+      lineJoin: LineJoin.BEVEL,
+      lineSortKey: 1.0,
+      lineZOffset: 1.0,
+      lineBlur: 1.0,
+      lineBorderColor: Colors.red.value,
+      lineBorderWidth: 1.0,
+      lineColor: Colors.red.value,
+      lineEmissiveStrength: 1.0,
+      lineGapWidth: 1.0,
+      lineOffset: 1.0,
+      lineOpacity: 1.0,
+      linePattern: "abc",
+      lineWidth: 1.0,
+      customData: {'foo': 'bar'},
+    );
+    final annotation = await manager.create(polylineAnnotationOptions);
+    var lineString = annotation.geometry;
+    var points = lineString.coordinates;
+    expect(2, points.length);
+    expect(1.0, points.first.lng);
+    expect(2.0, points.first.lat);
+    expect(10.0, points.last.lng);
+    expect(20.0, points.last.lat);
+    expect(1.0, annotation.lineElevationGroundScale);
+    expect(LineJoin.BEVEL, annotation.lineJoin);
+    expect(1.0, annotation.lineSortKey);
+    expect(1.0, annotation.lineZOffset);
+    expect(1.0, annotation.lineBlur);
+    expect(Colors.red.value, annotation.lineBorderColor);
+    expect(1.0, annotation.lineBorderWidth);
+    expect(Colors.red.value, annotation.lineColor);
+    expect(1.0, annotation.lineEmissiveStrength);
+    expect(1.0, annotation.lineGapWidth);
+    expect(1.0, annotation.lineOffset);
+    expect(1.0, annotation.lineOpacity);
+    expect("abc", annotation.linePattern);
+    expect(1.0, annotation.lineWidth);
+    expect({'foo': 'bar'}, annotation.customData);
+  });
+
+  patrolTest('update and delete PolylineAnnotation', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
+    var geometry = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
+
+    var polylineAnnotationOptions = PolylineAnnotationOptions(
+      geometry: geometry,
+    );
+    final annotation = await manager.create(polylineAnnotationOptions);
+    var lineString = annotation.geometry;
+    var newlineString = LineString(
+      coordinates: lineString.coordinates
+          .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
+          .toList(),
+    );
+    annotation.geometry = newlineString;
+    await manager.update(annotation);
+    await manager.delete(annotation);
+
+    for (var i = 0; i < 10; i++) {
+      await manager.create(polylineAnnotationOptions);
+    }
+
+    final annotations = await manager.getAnnotations();
+    expect(annotations.length, equals(10));
+
+    await manager.deleteAll();
+  });
+
+  patrolTest('deleteMulti PolylineAnnotation', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final manager = await mapboxMap.annotations
+        .createPolylineAnnotationManager();
+    var geometry = LineString(
+      coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)],
+    );
+
+    var polylineAnnotationOptions = PolylineAnnotationOptions(
+      geometry: geometry,
+    );
+
+    // Create 10 annotations
+    var createdAnnotations = <PolylineAnnotation>[];
+    for (var i = 0; i < 10; i++) {
+      final annotation = await manager.create(polylineAnnotationOptions);
+      createdAnnotations.add(annotation);
+    }
+
+    var allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(10));
+
+    // Delete first 5 annotations
+    final toDelete = createdAnnotations.take(5).toList();
+    await manager.deleteMulti(toDelete);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(5));
+
+    // Delete remaining annotations plus some already deleted (partial deletion)
+    await manager.deleteMulti(createdAnnotations);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+
+    // Delete empty list should succeed
+    await manager.deleteMulti([]);
+
+    allAnnotations = await manager.getAnnotations();
+    expect(allAnnotations.length, equals(0));
+  });
+}
+
+// End of generated file.
