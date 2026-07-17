@@ -27,10 +27,26 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  patrol: ^4.7.0
 
 flutter:
+  # Flutter 3.38.x ships Swift Package Manager off by default (default-on lands
+  # in 3.44). Opt in per-project so the iOS build uses SPM — which the Patrol
+  # RunnerUITests target requires (it links FlutterGeneratedPluginSwiftPackage)
+  # — regardless of the machine-global `flutter config` flag or CI step order.
+  config:
+    enable-swift-package-manager: true
   uses-material-design: true
   assets:
     - assets/
     - assets/symbols/
     - assets/cluster/
+
+# Minimum config patrol_cli requires. The web suite is driven via Playwright
+# and does not use these platform blocks; app_name is display-only on web.
+patrol:
+  app_name: Mapbox Maps Flutter Example
+  android:
+    package_name: com.mapbox.maps.mapbox_maps_flutter_examples
+  ios:
+    bundle_id: com.mapbox.maps.FlutterMapsExample
