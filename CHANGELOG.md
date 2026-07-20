@@ -1,5 +1,6 @@
 ### main
 
+* Add `ModelSource` API, exposing the 3D model source (a collection of 3D models, each with its own position, orientation, and node/material overrides).
 * Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
 * [iOS] Fix `updateSettings` on `CompassSettings`, `AttributionSettings`, `LogoSettings`, `IndoorSelectorSettings`, `ScaleBarSettings`, `GesturesSettings`, and `LocationComponentSettings` resetting omitted fields (position, margins, `enabled`, `scrollMode`, puck configuration) to defaults instead of preserving them, matching Android's partial-update behaviour.
 * [Android] Fix `LocationComponentSettings.updateSettings` dropping the previously configured 2D or 3D puck's settings when switching between puck types.
