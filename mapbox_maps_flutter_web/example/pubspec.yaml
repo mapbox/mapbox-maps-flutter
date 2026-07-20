@@ -19,6 +19,10 @@ dev_dependencies:
     sdk: flutter
   web: ^1.0.0
   turf: ^0.0.10
+  patrol: ^4.7.1
 
 flutter:
   uses-material-design: true
+
+patrol:
+  app_name: Mapbox Maps Flutter Web Example
