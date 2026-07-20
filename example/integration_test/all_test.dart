@@ -34,6 +34,7 @@ import 'style/layer/raster_particle_layer_test.dart'
     as raster_particle_layer_test;
 import 'style/layer/clip_layer_test.dart' as clip_layer_test;
 import 'style/source/geojson_source_test.dart' as geojson_source_test;
+import 'style/source/model_source_test.dart' as model_source_test;
 import 'style/source/image_source_test.dart' as image_source_test;
 import 'style/source/raster_source_test.dart' as raster_source_test;
 import 'style/source/rasterdem_source_test.dart' as rasterdem_source_test;
@@ -108,6 +109,7 @@ void main() {
   rasterarray_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
+  model_source_test.main();
 
   // snapshotter tests
   snapshotter_test.main();
