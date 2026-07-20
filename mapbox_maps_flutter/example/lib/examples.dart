@@ -1,5 +1,6 @@
 import 'package:mapbox_maps_flutter_examples/transparent_globe_example.dart';
 import 'package:mapbox_maps_flutter_examples/transparent_map_example.dart';
+import 'package:flutter/foundation.dart';
 
 import 'animated_route_example.dart';
 import 'animation_example.dart';
@@ -23,6 +24,7 @@ import 'model_layer_example.dart';
 import 'model_layer_interactions_example.dart';
 import 'offline_map_example.dart';
 import 'ornaments_example.dart';
+import 'overlay_playground_example.dart';
 import 'point_annotations_example.dart';
 import 'polygon_annotations_example.dart';
 import 'polyline_annotations_example.dart';
@@ -79,6 +81,15 @@ final List<Example> examples = [
     subtitle: "Showcase of Standard Style interactions",
     builder: (_) => const StandardStyleInteractionsExample(),
   ),
+  if (kIsWeb)
+    Example(
+      leading: const Icon(Icons.widgets_outlined),
+      title: 'Overlay & Cursor Playground',
+      subtitle:
+          'Cards, dialogs, menus, FABs, every cursor, and transparent/invisible '
+          'edge-case zones stacked over the map (web hit-testing).',
+      builder: (_) => const OverlayPlaygroundExample(),
+    ),
   Example(
     leading: const Icon(Icons.map),
     title: 'CameraManager interface',

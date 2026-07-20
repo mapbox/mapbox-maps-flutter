@@ -7,6 +7,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 import 'package:web/web.dart';
 
 import 'bindings/map_bindings.dart';
+import 'hit_test_guard.dart';
 import 'event_adapters.dart';
 import 'gl_js_loader.dart';
 import 'mapbox_map_web.dart';
@@ -38,11 +39,13 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   late final String _viewType;
   late final HTMLDivElement _mapElement;
   final ViewportWeb _viewport = ViewportWeb();
+  final GlobalKey _mapViewKey = GlobalKey();
   JSMap? _currentMap;
   MapboxMapWeb? _mapboxMap;
   ResizeObserver? _resizeObserver;
   MapEventBridge? _eventBridge;
   bool _initialViewportApplied = false;
+  HitTestGuard? _hitTestGuard;
 
   @visibleForTesting
   JSMap? get currentMap => _currentMap;
@@ -97,6 +100,12 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     final nativeMap = JSMap(JSMapOptions(container: _mapElement, minZoom: 0));
     _currentMap = nativeMap;
 
+    _hitTestGuard = HitTestGuard(
+      container: _mapElement,
+      mapViewKey: _mapViewKey,
+      map: nativeMap,
+    );
+
     // Wire cross-domain dependencies into the viewport before flushing
     // pending viewport state — `FollowPuckViewportState` needs them set
     // or it's silently dropped at apply time.
@@ -146,6 +155,8 @@ class _MapWebWidgetState extends State<MapWebWidget> {
 
   @override
   void dispose() {
+    _hitTestGuard?.dispose();
+    _hitTestGuard = null;
     _eventBridge?.dispose();
     _eventBridge = null;
     _resizeObserver?.disconnect();
@@ -161,6 +172,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
   @override
   Widget build(BuildContext context) {
     return HtmlElementView(
+      key: _mapViewKey,
       viewType: _viewType,
       onPlatformViewCreated: _onPlatformViewCreated,
     );
