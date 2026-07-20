@@ -122,7 +122,8 @@ class LocationExampleState extends State<LocationExample> {
       case _PuckStyle.defaultPuck:
         return _apply(
           LocationComponentSettings(
-            locationPuck: LocationPuck(locationPuck2D: DefaultLocationPuck2D()),
+            locationPuck:
+                LocationPuck(locationPuck2D: DefaultLocationPuck2D()),
           ),
           style: style,
         );
