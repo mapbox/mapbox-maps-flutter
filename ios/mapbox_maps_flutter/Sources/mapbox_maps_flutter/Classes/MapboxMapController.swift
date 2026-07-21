@@ -217,6 +217,28 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
             HttpServiceFactory.setMaxRequestsPerHostForMax(UInt8(clamping: max))
             result(nil)
 
+        case "platform#setMapboxAgentId":
+            // Forwards the compile-time-resolved MAPBOX_AGENT id (see
+            // `--dart-define=MAPBOX_AGENT=<id>`, only used by internal test tooling) into
+            // Common's agent-context registry, mirroring `map#setMaxRequestsPerHost` above.
+            //
+            // TODO: once a released Mapbox Common binary exposes a Swift/Obj-C binding for
+            // its agent-context registry, replace this no-op with the real forwarding call.
+            // That binding does not exist yet in any published release, so referencing it
+            // here today would fail to build; this handler is a placeholder that keeps the
+            // Dart-to-native wiring in place and ready to activate once it ships.
+            guard let arguments = methodCall.arguments as? [String: Any],
+                  let agentId = arguments["agentId"] as? String, !agentId.isEmpty
+            else {
+                result(FlutterError(
+                    code: "setMapboxAgentId",
+                    message: "could not decode arguments",
+                    details: nil
+                ))
+                return
+            }
+            result(nil)
+
         default:
             result(FlutterMethodNotImplemented)
         }
