@@ -170,7 +170,7 @@ class MapWidget extends StatelessWidget {
     this.onZoomListener,
     this.mapOptions,
     this.textureView,
-    this.androidHostingMode = AndroidPlatformViewHostingMode.VD,
+    this.androidHostingMode = AndroidPlatformViewHostingMode.HC,
     this.gestureRecognizers,
     this.isOpaque = true,
   });
