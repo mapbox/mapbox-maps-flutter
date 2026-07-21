@@ -115,8 +115,7 @@ abstract base class MapboxMapsFlutterPlatform {
     void Function(MapEvent)? onMapEvent,
     MapOptions? mapOptions,
     bool? textureView,
-    AndroidPlatformViewHostingMode androidHostingMode =
-        AndroidPlatformViewHostingMode.VD,
+    required AndroidPlatformViewHostingMode androidHostingMode,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
     bool? isOpaque = true,
   });
