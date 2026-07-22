@@ -356,6 +356,14 @@ final class StyleController implements StylePlatformInterface {
             spec['data'] = jsonDecode(data);
           }
         }
+      } else if (spec['type'] == 'model') {
+        // TODO(O-hannonen): Remove once GLJS supports `model-color` as defined by
+        // the color type: https://docs.mapbox.com/style-spec/reference/types/#color
+        _forEachModelColor(spec, (override, modelColor) {
+          if (modelColor is! String) return;
+          final array = _rgbaStringToUnitArray(modelColor);
+          if (array != null) override['model-color'] = array;
+        });
       }
     }
     _map.addSource(sourceId, spec.jsify()!);
@@ -387,7 +395,7 @@ final class StyleController implements StylePlatformInterface {
   Future<String> getStyleSourceProperties(String sourceId) async {
     final source = _map.getSource(sourceId)?.serialize().dartify();
     if (source is! Map) return '{}';
-    return jsonEncode(source);
+    return jsonEncode(_denormalizeModelSourceColors(source));
   }
 
   @override
@@ -402,7 +410,41 @@ final class StyleController implements StylePlatformInterface {
         kind: StylePropertyValueKind.UNDEFINED,
       );
     }
-    return _wrap(source[property]);
+    return _wrap(_denormalizeModelSourceColors(source)[property]);
+  }
+
+  Map<String, dynamic> _denormalizeModelSourceColors(Map source) {
+    // TODO(O-hannonen): Remove this `if` block once GLJS supports
+    // `model-color` as defined by the color type:
+    // https://docs.mapbox.com/style-spec/reference/types/#color
+    if (source['type'] == 'model') {
+      _forEachModelColor(source, (override, modelColor) {
+        if (modelColor is List && modelColor.length >= 3) {
+          override['model-color'] = _unitArrayToRgbaString(modelColor);
+        }
+      });
+    }
+    return source.cast<String, dynamic>();
+  }
+
+  // TODO(O-hannonen): Remove once GLJS supports `model-color` as defined by
+  // the color type: https://docs.mapbox.com/style-spec/reference/types/#color
+  void _forEachModelColor(
+    Map spec,
+    void Function(Map override, Object? modelColor) visit,
+  ) {
+    final models = spec['models'];
+    if (models is! Map) return;
+    for (final model in models.values) {
+      if (model is! Map) continue;
+      final materialOverrides = model['materialOverrides'];
+      if (materialOverrides is! Map) continue;
+      for (final override in materialOverrides.values) {
+        if (override is! Map) continue;
+        if (!override.containsKey('model-color')) continue;
+        visit(override, override['model-color']);
+      }
+    }
   }
 
   @override
@@ -774,6 +816,27 @@ final class StyleController implements StylePlatformInterface {
   static final _rgbaPattern = RegExp(
     r'^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)$',
   );
+
+  // TODO(O-hannonen): Remove once GLJS supports `model-color` as defined by
+  // the color type: https://docs.mapbox.com/style-spec/reference/types/#color
+  List<num>? _rgbaStringToUnitArray(String value) {
+    final m = _rgbaPattern.firstMatch(value);
+    if (m == null) return null;
+    return [
+      num.parse(m.group(1)!) / 255,
+      num.parse(m.group(2)!) / 255,
+      num.parse(m.group(3)!) / 255,
+    ];
+  }
+
+  // TODO(O-hannonen): Remove once GLJS supports `model-color` as defined by
+  // the color type: https://docs.mapbox.com/style-spec/reference/types/#color
+  String _unitArrayToRgbaString(List modelColor) {
+    final r = ((modelColor[0] as num) * 255).round();
+    final g = ((modelColor[1] as num) * 255).round();
+    final b = ((modelColor[2] as num) * 255).round();
+    return 'rgba($r, $g, $b, 1)';
+  }
 
   /// Walk a serialized spec and rewrite values into the shape the generated
   /// layer deserializers expect:

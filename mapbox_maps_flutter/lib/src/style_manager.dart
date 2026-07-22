@@ -22,6 +22,7 @@ import 'style/layer/slot_layer.dart';
 import 'style/layer/symbol_layer.dart';
 import 'style/source/geojson_source.dart';
 import 'style/source/image_source.dart';
+import 'style/source/model_source.dart';
 import 'style/source/raster_source.dart';
 import 'style/source/rasterarray_source.dart';
 import 'style/source/rasterdem_source.dart';
@@ -507,6 +508,13 @@ class StyleManager {
         break;
       case "raster-array":
         source = RasterArraySource(id: sourceId);
+        break;
+      case "model":
+      case "batched-model":
+        source = ModelSource(
+          id: sourceId,
+          batched: map["type"] == "batched-model",
+        );
         break;
     }
     source?.bind(_impl);

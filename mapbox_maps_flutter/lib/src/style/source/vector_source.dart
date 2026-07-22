@@ -14,7 +14,7 @@ import 'source.dart';
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#vector)
 final class VectorSource extends Source {
   VectorSource({
-    required String id,
+    required super.id,
     String? url,
     List<String?>? tiles,
     List<double?>? bounds,
@@ -29,7 +29,7 @@ final class VectorSource extends Source {
     double? maxOverscaleFactorForParentTiles,
     double? tileRequestsDelay,
     double? tileNetworkRequestsDelay,
-  }) : super(id: id) {
+  }) {
     _url = url;
     _tiles = tiles;
     _bounds = bounds;

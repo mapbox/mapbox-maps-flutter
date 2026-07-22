@@ -138,6 +138,25 @@ extension StyleColorInt on int {
   }
 }
 
+/// Convert the color from a CSS-style `"rgba(r,g,b,a)"` string, as returned
+/// for plain (non-expression) color properties like
+/// `ModelMaterialOverride.modelColor`, to a 32-bit ARGB int.
+extension StyleColorString on String {
+  int toRGBAInt() {
+    final match = RegExp(
+      r'^rgba\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)$',
+    ).firstMatch(this);
+    if (match == null) {
+      return 0;
+    }
+    final red = double.parse(match.group(1)!).round();
+    final green = double.parse(match.group(2)!).round();
+    final blue = double.parse(match.group(3)!).round();
+    final alpha = (double.parse(match.group(4)!) * 255).round();
+    return Color.fromARGB(alpha, red, green, blue).value;
+  }
+}
+
 /// Converts a color expression list (`[rgba, r, g, b, a]`, `[rgb, …]`,
 /// `[hsl, …]`, `[hsla, …]`) to a 32-bit ARGB int.
 extension StyleColorList on List {
