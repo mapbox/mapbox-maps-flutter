@@ -404,6 +404,25 @@ class MapboxMapController(
           result.error("MAX_REQUESTS_PER_HOST_ERROR", e.message, null)
         }
       }
+      "platform#setMapboxAgentId" -> {
+        // Forwards the compile-time-resolved MAPBOX_AGENT id (see
+        // `--dart-define=MAPBOX_AGENT=<id>`, only used by internal test tooling) into
+        // Common's agent-context registry, mirroring the `map#setMaxRequestsPerHost`
+        // call above.
+        //
+        // TODO: once a released `com.mapbox.common:common-android` artifact exposes
+        // `com.mapbox.common.MapboxAgentContextFactory`, replace this no-op with:
+        //   com.mapbox.common.MapboxAgentContextFactory.getInstance().setMapboxAgentId(agentId)
+        // That class does not exist in any published Common release yet, so calling it
+        // here today would fail to compile; this handler is a placeholder that keeps the
+        // Dart-to-native wiring in place and ready to activate with a one-line change.
+        val agentId = call.argument<String>("agentId")
+        if (agentId.isNullOrEmpty()) {
+          result.error("INVALID_ARGUMENTS", "agentId cannot be null or empty", null)
+        } else {
+          result.success(null)
+        }
+      }
       else -> {
         result.notImplemented()
       }

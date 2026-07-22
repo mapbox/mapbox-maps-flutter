@@ -2,6 +2,28 @@ part of mapbox_maps_flutter;
 
 typedef OnPlatformViewCreatedCallback = void Function(int);
 
+/// The AI-coding-agent identifier to forward to the native Mapbox Common SDK,
+/// resolved at compile time via `--dart-define=MAPBOX_AGENT=<id>`.
+///
+/// Common resolves most agent detection itself, but on platforms where the
+/// value can only be baked in at compile time (as is the case here, since
+/// Dart's [String.fromEnvironment] is not a runtime OS environment variable
+/// Common could read via `getenv`), a platform binding has to forward the
+/// resolved id explicitly. This exists purely to support internal test
+/// tooling — it is empty, and forwarding is skipped entirely, for every
+/// normal app build, since none of them pass this define.
+///
+/// Exposed (rather than kept private) only so it can be exercised from this
+/// package's tests; it is not part of the supported public API.
+@internal
+const String kMapboxAgentIdForTesting =
+    String.fromEnvironment('MAPBOX_AGENT', defaultValue: '');
+
+/// The platform channel method used to forward [kMapboxAgentIdForTesting] to
+/// the native side. Exposed for tests; not part of the supported public API.
+@internal
+const String kSetMapboxAgentIdMethod = 'platform#setMapboxAgentId';
+
 class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
       'plugins.flutter.io.${channelSuffix.toString()}',
@@ -13,6 +35,24 @@ class _MapboxMapsPlatform {
   _MapboxMapsPlatform(
       {required this.binaryMessenger, required this.channelSuffix}) {
     _channel.setMethodCallHandler(_handleMethodCall);
+    _forwardMapboxAgentIdIfSet();
+  }
+
+  /// Forwards the compile-time [kMapboxAgentIdForTesting], if any, to the
+  /// native side as early as possible — before the platform view (and thus
+  /// the native map engine) is created — so it is set before this map
+  /// instance's requests go out. A no-op for any build that does not pass
+  /// `--dart-define=MAPBOX_AGENT=<id>`.
+  void _forwardMapboxAgentIdIfSet() {
+    if (kMapboxAgentIdForTesting.isEmpty) {
+      return;
+    }
+    _channel.invokeMethod(
+      kSetMapboxAgentIdMethod,
+      <String, dynamic>{'agentId': kMapboxAgentIdForTesting},
+    ).catchError((Object error) {
+      print('Failed to forward MAPBOX_AGENT id to native platform: $error');
+    });
   }
 
   _MapboxMapsPlatform.instance(int channelSuffix)
