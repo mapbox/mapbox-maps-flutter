@@ -65,6 +65,8 @@ export 'src/style/layer/symbol_layer.dart';
 export 'src/style/source/source.dart';
 export 'src/style/source/geojson_source.dart';
 export 'src/style/source/image_source.dart';
+export 'src/style/source/model.dart';
+export 'src/style/source/model_source.dart';
 export 'src/style/source/raster_source.dart';
 export 'src/style/source/rasterarray_source.dart';
 export 'src/style/source/rasterdem_source.dart';

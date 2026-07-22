@@ -14,7 +14,7 @@ import 'source.dart';
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson)
 final class GeoJsonSource extends Source {
   GeoJsonSource({
-    required String id,
+    required super.id,
     String? data = "",
     double? maxzoom,
     String? attribution,
@@ -30,7 +30,7 @@ final class GeoJsonSource extends Source {
     bool? autoMaxZoom,
     double? prefetchZoomDelta,
     TileCacheBudget? tileCacheBudget,
-  }) : super(id: id) {
+  }) {
     _data = data;
     _maxzoom = maxzoom;
     _attribution = attribution;

@@ -14,7 +14,7 @@ import 'source.dart';
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#raster_dem)
 final class RasterDemSource extends Source {
   RasterDemSource({
-    required String id,
+    required super.id,
     String? url,
     List<String?>? tiles,
     List<double?>? bounds,
@@ -30,7 +30,7 @@ final class RasterDemSource extends Source {
     double? maxOverscaleFactorForParentTiles,
     double? tileRequestsDelay,
     double? tileNetworkRequestsDelay,
-  }) : super(id: id) {
+  }) {
     _url = url;
     _tiles = tiles;
     _bounds = bounds;

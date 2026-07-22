@@ -22,6 +22,7 @@ import 'map_interface_example.dart';
 import 'map_recorder_example.dart';
 import 'model_layer_example.dart';
 import 'model_layer_interactions_example.dart';
+import 'model_source_example.dart';
 import 'offline_map_example.dart';
 import 'ornaments_example.dart';
 import 'overlay_playground_example.dart';
@@ -152,6 +153,12 @@ final List<Example> examples = [
     title: 'Model Layer Interactions',
     subtitle: 'Showcase of Interactions using custom 3D Model Layers',
     builder: (_) => const ModelLayerInteractionsExample(),
+  ),
+  Example(
+    leading: const Icon(Icons.view_in_ar),
+    title: 'Display multiple 3D models with a ModelSource',
+    subtitle: 'Showcase the usage of the ModelSource API.',
+    builder: (_) => const ModelSourceExample(),
   ),
   Example(
     leading: const Icon(Icons.map),
