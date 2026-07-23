@@ -1,6 +1,6 @@
 name: mapbox_maps_flutter
 description: "Mapbox Maps for Flutter. Provides interactive, customizable vector maps for Android, iOS, and Web."
-version: 9.9.9-alpha.99
+version: 3.0.0-alpha.2
 homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
@@ -12,9 +12,9 @@ dependencies:
   meta: ^1.17.0
   flutter:
     sdk: flutter
-  mapbox_maps_flutter_platform_interface: ^9.9.9-alpha.99
-  mapbox_maps_flutter_mobile: ^9.9.9-alpha.99
-  mapbox_maps_flutter_web: ^9.9.9-alpha.99
+  mapbox_maps_flutter_platform_interface: ^3.0.0-alpha.2
+  mapbox_maps_flutter_mobile: ^3.0.0-alpha.2
+  mapbox_maps_flutter_web: ^3.0.0-alpha.2
 
 dev_dependencies:
   flutter_test:
