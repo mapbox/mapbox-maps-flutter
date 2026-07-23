@@ -1,3 +1,7 @@
+### 3.0.0-alpha.2
+
+* Test
+
 ### 3.0.0-alpha.1
 
 * iOS and Android implementation of the Mapbox Maps Flutter plugin, endorsed by `mapbox_maps_flutter`.

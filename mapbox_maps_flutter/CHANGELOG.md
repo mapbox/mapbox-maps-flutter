@@ -5,6 +5,10 @@
 * Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
 * [web] Fix Flutter widgets stacked over the map on web not blocking clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath. The map now respects any Flutter widgets painted on top of it.
 
+### 3.0.0-alpha.2
+
+* Test
+
 ### 3.0.0-alpha.1
 
 * Split the plugin into federated packages and add web support: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
