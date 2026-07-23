@@ -11,7 +11,7 @@ This is the app-facing package. It endorses:
 - Flutter 3.38.1 / Dart 3.10.0 or higher
 - Android: minSdk 21 or higher
 - iOS: 14 or higher
-- Web: Mapbox GL JS 3.25.0
+- Web: Mapbox GL JS 3.27.0-rc.1
 
 ## Installation
 
