@@ -5,7 +5,7 @@
 * [iOS] Fix `updateSettings` on `CompassSettings`, `AttributionSettings`, `LogoSettings`, `IndoorSelectorSettings`, `ScaleBarSettings`, `GesturesSettings`, and `LocationComponentSettings` resetting omitted fields (position, margins, `enabled`, `scrollMode`, puck configuration) to defaults instead of preserving them, matching Android's partial-update behaviour.
 * [Android] Fix `LocationComponentSettings.updateSettings` dropping the previously configured 2D or 3D puck's settings when switching between puck types.
 
-### 2.27.0-rc.1
+### 2.27.0
 
 * [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
 * [Android] Migrate to built-in Kotlin.
@@ -62,14 +62,6 @@
 ### 2.19.0
 
 * Update Maps SDK to v11.19.0
-
-### 2.19.0-rc.1
-
-* Update Maps SDK to v11.19.0-rc.1
-
-### 2.19.0-beta.1
-
-* Update Maps SDK to v11.19.0-beta.1
 
 ### 2.18.0
 
