@@ -63,7 +63,8 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   @override
   Future<String> getAccessToken() => glJsReady.future.then((_) => accessToken);
   @override
-  void setAccessToken(String token) => glJsReady.future.then((_) => accessToken = token);
+  void setAccessToken(String token) =>
+      glJsReady.future.then((_) => accessToken = token);
 
   @override
   Future<String> getBaseUrl() => glJsReady.future.then((_) => baseApiUrl);
@@ -188,8 +189,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     OnMapLoadErrorListener? onMapLoadErrorListener,
     OnStyleDataLoadedListener? onStyleDataLoadedListener,
     OnStyleImageMissingListener? onStyleImageMissingListener,
-  }) =>
-      throw UnimplementedError(
-        'MapboxMapsFlutterWeb.createSnapshotter is not yet implemented on web.',
-      );
+  }) => throw UnimplementedError(
+    'MapboxMapsFlutterWeb.createSnapshotter is not yet implemented on web.',
+  );
 }

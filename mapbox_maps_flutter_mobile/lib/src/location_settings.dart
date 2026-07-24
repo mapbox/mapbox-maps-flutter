@@ -24,12 +24,13 @@ class LocationSettings implements LocationSettingsPlatformInterface {
     // Omitting locationPuck leaves the current puck untouched, meaning after
     // update puck is at its previous value or platform default if no puck has
     // been set yet.
-    final useDefaultPuck2D = settings.locationPuck == null ||
+    final useDefaultPuck2D =
+        settings.locationPuck == null ||
         settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D;
     settings.locationPuck?.locationPuck3D?.modelUri =
         await MapboxMapsOptions.getFlutterAssetPath(
-      settings.locationPuck?.locationPuck3D?.modelUri,
-    );
+          settings.locationPuck?.locationPuck3D?.modelUri,
+        );
     await _api.updateSettings(settings, useDefaultPuck2D);
   }
 }

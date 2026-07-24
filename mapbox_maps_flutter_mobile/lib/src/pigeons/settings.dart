@@ -222,6 +222,8 @@ class _LocationComponentSettingsInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   Future<LocationComponentSettings> getSettings() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
@@ -252,6 +254,9 @@ class _LocationComponentSettingsInterface {
     }
   }
 
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   Future<void> updateSettings(
     LocationComponentSettings settings,
     bool useDefaultPuck2DIfNeeded,
@@ -302,6 +307,8 @@ class ScaleBarSettingsInterface implements ScaleBarSettingsPlatformInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   @override
   Future<ScaleBarSettings> getSettings() async {
     final String pigeonVar_channelName =
@@ -333,6 +340,9 @@ class ScaleBarSettingsInterface implements ScaleBarSettingsPlatformInterface {
     }
   }
 
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   @override
   Future<void> updateSettings(ScaleBarSettings settings) async {
     final String pigeonVar_channelName =
@@ -381,6 +391,8 @@ class CompassSettingsInterface implements CompassSettingsPlatformInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   @override
   Future<CompassSettings> getSettings() async {
     final String pigeonVar_channelName =
@@ -412,6 +424,9 @@ class CompassSettingsInterface implements CompassSettingsPlatformInterface {
     }
   }
 
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   @override
   Future<void> updateSettings(CompassSettings settings) async {
     final String pigeonVar_channelName =
@@ -461,6 +476,8 @@ class AttributionSettingsInterface
 
   final String pigeonVar_messageChannelSuffix;
 
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   @override
   Future<AttributionSettings> getSettings() async {
     final String pigeonVar_channelName =
@@ -492,6 +509,9 @@ class AttributionSettingsInterface
     }
   }
 
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   @override
   Future<void> updateSettings(AttributionSettings settings) async {
     final String pigeonVar_channelName =
@@ -540,6 +560,8 @@ class LogoSettingsInterface implements LogoSettingsPlatformInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   @override
   Future<LogoSettings> getSettings() async {
     final String pigeonVar_channelName =
@@ -571,6 +593,9 @@ class LogoSettingsInterface implements LogoSettingsPlatformInterface {
     }
   }
 
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   @override
   Future<void> updateSettings(LogoSettings settings) async {
     final String pigeonVar_channelName =
@@ -620,6 +645,8 @@ class IndoorSelectorSettingsInterface
 
   final String pigeonVar_messageChannelSuffix;
 
+  /// Returns the currently applied settings, populated with default
+  /// values for any fields not explicitly modified via [updateSettings].
   @override
   Future<IndoorSelectorSettings> getSettings() async {
     final String pigeonVar_channelName =
@@ -651,6 +678,9 @@ class IndoorSelectorSettingsInterface
     }
   }
 
+  /// Partially updates the configuration, modifying only explicitly provided fields in [settings] while preserving the rest.
+  ///
+  /// Call [getSettings] to retrieve the full resulting configuration.
   @override
   Future<void> updateSettings(IndoorSelectorSettings settings) async {
     final String pigeonVar_channelName =

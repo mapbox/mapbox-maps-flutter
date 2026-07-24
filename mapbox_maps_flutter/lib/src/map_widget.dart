@@ -202,7 +202,8 @@ class MapWidget extends StatelessWidget {
       textureView: textureView,
       androidHostingMode: androidHostingMode,
       gestureRecognizers: gestureRecognizers,
-      onMapCreated: (onMapCreated != null ||
+      onMapCreated:
+          (onMapCreated != null ||
               onScrollListener != null ||
               onZoomListener != null)
           ? (map) {

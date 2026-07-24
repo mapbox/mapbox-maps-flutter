@@ -39,24 +39,26 @@ Future<void> ensureMapboxGlJsLoaded() {
   _isLoading = true;
   final completer = _loadCompleter;
 
-  unawaited(Future.wait([
-    _loadResource(_glCssUrl, 'link'),
-    _loadResource(_glJsUrl, 'script'),
-  ], eagerError: true).then(
-    (_) {
-      _isLoading = false;
-      completer.complete();
-      glJsReady.complete();
-    },
-    onError: (Object err) {
-      // Hand a fresh completer to the next caller so a later MapWidget can
-      // retry, then fail this attempt's future so its awaiter sees the error
-      // instead of hanging on the replacement completer.
-      _isLoading = false;
-      _loadCompleter = Completer();
-      completer.completeError(err);
-    },
-  ));
+  unawaited(
+    Future.wait([
+      _loadResource(_glCssUrl, 'link'),
+      _loadResource(_glJsUrl, 'script'),
+    ], eagerError: true).then(
+      (_) {
+        _isLoading = false;
+        completer.complete();
+        glJsReady.complete();
+      },
+      onError: (Object err) {
+        // Hand a fresh completer to the next caller so a later MapWidget can
+        // retry, then fail this attempt's future so its awaiter sees the error
+        // instead of hanging on the replacement completer.
+        _isLoading = false;
+        _loadCompleter = Completer();
+        completer.completeError(err);
+      },
+    ),
+  );
 
   return completer.future;
 }

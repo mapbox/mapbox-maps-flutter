@@ -122,7 +122,7 @@ abstract base class MapboxMapsFlutterPlatform {
 }
 
 /// Callback signature invoked when a map instance is ready.
-typedef MapboxMapCreatedCallback<T extends MapboxMapInterface> = void Function(
-    T mapboxMap);
-typedef PlatformMapCreatedCallback
-    = MapboxMapCreatedCallback<MapboxMapPlatformInterface>;
+typedef MapboxMapCreatedCallback<T extends MapboxMapInterface> =
+    void Function(T mapboxMap);
+typedef PlatformMapCreatedCallback =
+    MapboxMapCreatedCallback<MapboxMapPlatformInterface>;

@@ -49,12 +49,12 @@ class MapWidget extends StatefulWidget {
     this.viewportTransition,
     this.viewportTransitionCompletion,
     this.isOpaque = true,
-  })  : _styleUri = styleUri,
-        assert(
-          isOpaque != false || textureView != false,
-          'isOpaque: false requires textureView: true on Android. '
-          'SurfaceView cannot render a transparent background.',
-        );
+  }) : _styleUri = styleUri,
+       assert(
+         isOpaque != false || textureView != false,
+         'isOpaque: false requires textureView: true on Android. '
+         'SurfaceView cannot render a transparent background.',
+       );
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
