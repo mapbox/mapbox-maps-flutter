@@ -1,4 +1,4 @@
-### 2.27.0-rc.1
+### 2.27.0
 
 * [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
 * [Android] Migrate to built-in Kotlin.
@@ -55,14 +55,6 @@
 ### 2.19.0
 
 * Update Maps SDK to v11.19.0
-
-### 2.19.0-rc.1
-
-* Update Maps SDK to v11.19.0-rc.1
-
-### 2.19.0-beta.1
-
-* Update Maps SDK to v11.19.0-beta.1
 
 ### 2.18.0
 
