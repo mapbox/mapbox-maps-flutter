@@ -197,14 +197,14 @@ packages:
       path: "../../mapbox_maps_flutter_platform_interface"
       relative: true
     source: path
-    version: "3.0.0-alpha.1"
+    version: "3.0.0-alpha.27"
   mapbox_maps_flutter_web:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0-alpha.1"
+    version: "3.0.0-alpha.27"
   matcher:
     dependency: transitive
     description:

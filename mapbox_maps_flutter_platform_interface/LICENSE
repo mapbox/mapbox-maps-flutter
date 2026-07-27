@@ -11,7 +11,7 @@ The software and files in this repository (collectively, “Software”) are lic
 
 This application makes use of the following third party libraries:
 
-### meta 1.17.0, https://github.com/dart-lang/sdk/tree/main/pkg/meta
+### meta 1.18.0, https://github.com/dart-lang/sdk/tree/main/pkg/meta
 
 ```
 Copyright 2016, the Dart project authors.
