@@ -1,5 +1,10 @@
 ### 3.0.0-alpha.27
 
+> [!IMPORTANT]
+> On web, Mapbox GL JS is now loaded automatically: the plugin injects the `<script>`/`<link>` tags for the GL JS version it pins (v3.27.0) into the page on first map use. Remove the `mapbox-gl.js` and `mapbox-gl.css` tags from your app's `web/index.html` — a `mapboxgl` global that is already on the page is reused as-is, so a manually pinned copy silently overrides the version the SDK expects.
+>
+> If your app enforces a Content-Security-Policy, it must allow script and style sources from `api.mapbox.com`.
+
 * [Android] Change the default platform-view hosting mode to Hybrid Composition (`AndroidPlatformViewHostingMode.HC`); it was previously Virtual Display. Set `MapWidget.androidHostingMode` explicitly to keep the old behaviour.
 * [web] Fix Flutter widgets stacked over the map on web not blocking clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath. The map now respects any Flutter widgets painted on top of it.
 
