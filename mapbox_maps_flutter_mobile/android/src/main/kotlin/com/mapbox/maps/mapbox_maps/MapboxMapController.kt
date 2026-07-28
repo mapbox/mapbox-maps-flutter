@@ -317,14 +317,6 @@ class MapboxMapController(
       "annotation#remove_manager" -> {
         annotationController.handleRemoveManager(call, result)
       }
-      "gesture#add_listeners" -> {
-        gestureController.addListeners()
-        result.success(null)
-      }
-      "gesture#remove_listeners" -> {
-        gestureController.removeListeners()
-        result.success(null)
-      }
       "interactions#add_interaction" -> {
         interactionsController.addInteraction(messenger, channelSuffix, call)
         result.success(null)

@@ -9,7 +9,6 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.mapbox_maps.mapping.applyFromFLT
 import com.mapbox.maps.mapbox_maps.mapping.toFLT
-import com.mapbox.maps.mapbox_maps.pigeons.GestureListener
 import com.mapbox.maps.mapbox_maps.pigeons.GestureState
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettings
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
@@ -20,8 +19,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.PitchEventsStreamHandler
 import com.mapbox.maps.mapbox_maps.pigeons.RotateEventsStreamHandler
 import com.mapbox.maps.mapbox_maps.pigeons.ScreenCoordinate
 import com.mapbox.maps.mapbox_maps.pigeons.ZoomEventsStreamHandler
-import com.mapbox.maps.plugin.gestures.OnMapClickListener
-import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.OnRotateListener
 import com.mapbox.maps.plugin.gestures.OnScaleListener
@@ -41,8 +38,6 @@ class GestureController(
   override fun updateSettings(settings: GesturesSettings) {
     mapView.gestures.applyFromFLT(settings, mapView.context)
   }
-
-  private var fltGestureListener: GestureListener? = null
 
   init {
     register()
@@ -79,7 +74,6 @@ class GestureController(
       val pixel = com.mapbox.maps.ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
       val point = mapView.mapboxMap.coordinateForPixel(pixel)
       val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point, state)
-      fltGestureListener?.onScroll(context) { }
       panEvents.sink?.success(context)
     }
 
@@ -87,7 +81,6 @@ class GestureController(
       val pixel = com.mapbox.maps.ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
       val point = mapView.mapboxMap.coordinateForPixel(pixel)
       val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point, state)
-      fltGestureListener?.onZoom(context) { }
       zoomEvents.sink?.success(context)
     }
 
@@ -104,24 +97,6 @@ class GestureController(
       val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point, state)
       pitchEvents.sink?.success(context)
     }
-
-    mapView.gestures.addOnMapClickListener(
-      OnMapClickListener { point ->
-        val pixel = mapView.mapboxMap.pixelForCoordinate(point)
-        val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point, GestureState.ENDED)
-        fltGestureListener?.onTap(context) { }
-        false
-      }
-    )
-
-    mapView.gestures.addOnMapLongClickListener(
-      OnMapLongClickListener {
-        val pixel = mapView.mapboxMap.pixelForCoordinate(it)
-        val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), it, GestureState.ENDED)
-        fltGestureListener?.onLongTap(context) { }
-        false
-      }
-    )
 
     mapView.gestures.addOnMoveListener(object : OnMoveListener {
       override fun onMove(detector: MoveGestureDetector): Boolean {
@@ -179,14 +154,6 @@ class GestureController(
         reportShove(detector, GestureState.ENDED)
       }
     })
-  }
-
-  fun addListeners() {
-    fltGestureListener = GestureListener(messenger, channelSuffix)
-  }
-
-  fun removeListeners() {
-    fltGestureListener = null
   }
 }
 

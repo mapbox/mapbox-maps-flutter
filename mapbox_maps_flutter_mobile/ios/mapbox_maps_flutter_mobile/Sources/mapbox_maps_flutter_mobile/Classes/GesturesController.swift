@@ -41,8 +41,6 @@ private final class PitchEventStream: PitchEventsStreamHandler, GestureEventStre
 
 final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRecognizerDelegate {
 
-    private var cancelables: Set<AnyCancelable> = []
-    private var onGestureListener: GestureListener?
     private let mapView: MapView
     private let messenger: SuffixBinaryMessenger
 
@@ -71,17 +69,6 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
         ZoomEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: zoomStream)
         RotateEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: rotateStream)
         PitchEventsStreamHandler.register(with: messenger.messenger, instanceName: messenger.suffix, streamHandler: pitchStream)
-
-        mapView.gestures.onMapTap.observe { [weak self] context in
-            guard let self else { return }
-            self.onGestureListener?.onTap(context: context.toFLTMapContentGestureContext()) { _ in }
-        }
-        .store(in: &cancelables)
-        mapView.gestures.onMapLongPress.observe { [weak self] context in
-            guard let self else { return }
-            self.onGestureListener?.onLongTap(context: context.toFLTMapContentGestureContext()) { _ in }
-        }
-        .store(in: &cancelables)
     }
 
     private func makeContext(at touchPoint: CGPoint, state: UIGestureRecognizer.State) -> MapContentGestureContext {
@@ -96,35 +83,30 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
     @objc private func onMapPan(_ sender: UIPanGestureRecognizer) {
         guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
         let context = makeContext(at: sender.location(in: mapView), state: sender.state)
-        onGestureListener?.onScroll(context: context, completion: { _ in })
         panStream.send(context)
     }
 
     @objc private func onMapQuickZoom(_ sender: UIGestureRecognizer) {
         guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
         let context = makeContext(at: sender.location(in: mapView), state: sender.state)
-        onGestureListener?.onZoom(context: context, completion: { _ in })
         zoomStream.send(context)
     }
 
     @objc private func onMapPinch(_ sender: UIPinchGestureRecognizer) {
         guard sender.state == .began || sender.state == .changed || sender.state == .ended else { return }
         let context = makeContext(at: sender.location(in: mapView), state: sender.state)
-        onGestureListener?.onZoom(context: context, completion: { _ in })
         zoomStream.send(context)
     }
 
     @objc private func onMapDoubleTapZoomIn(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
         let context = makeContext(at: sender.location(in: mapView), state: sender.state)
-        onGestureListener?.onZoom(context: context, completion: { _ in })
         zoomStream.send(context)
     }
 
     @objc private func onMapDoubleTouchZoomOut(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
         let context = makeContext(at: sender.location(in: mapView), state: sender.state)
-        onGestureListener?.onZoom(context: context, completion: { _ in })
         zoomStream.send(context)
     }
 
@@ -221,13 +203,5 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
             zoomAnimationAmount: 0,
             pinchPanEnabled: options.pinchPanEnabled
         )
-    }
-
-    func addListeners() {
-        onGestureListener = GestureListener(binaryMessenger: messenger.messenger, messageChannelSuffix: messenger.suffix)
-    }
-
-    func removeListeners() {
-        onGestureListener = nil
     }
 }

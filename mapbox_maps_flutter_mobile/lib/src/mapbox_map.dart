@@ -134,11 +134,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   @override
   void dispose() {
     _mapboxMapsPlatform.dispose();
-    GestureListener.setUp(
-      null,
-      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
-    );
     _PerformanceStatisticsListenerApi.setUp(
       null,
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,

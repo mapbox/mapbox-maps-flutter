@@ -510,12 +510,6 @@ typedef OnStyleImageUnusedListener =
 typedef OnResourceRequestListener =
     void Function(ResourceEventData resourceEventData);
 
-/// Gesture listener called on map tap.
-typedef OnMapTapListener = void Function(MapContentGestureContext context);
-
-/// Gesture listener called on map long tap.
-typedef OnMapLongTapListener = void Function(MapContentGestureContext context);
-
 /// Gesture listener called on map scroll.
 typedef OnMapScrollListener = void Function(MapContentGestureContext context);
 

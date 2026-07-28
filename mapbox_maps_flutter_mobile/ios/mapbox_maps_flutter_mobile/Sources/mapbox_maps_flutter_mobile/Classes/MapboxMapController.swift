@@ -134,12 +134,6 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
             annotationController!.handleRemoveManager(methodCall: methodCall, result: result)
-        case "gesture#add_listeners":
-            gesturesController!.addListeners()
-            result(nil)
-        case "gesture#remove_listeners":
-            gesturesController!.removeListeners()
-            result(nil)
         case "interactions#add_interaction":
             interactionsController!.addInteraction(messenger: binaryMessenger, methodCall: methodCall)
             result(nil)

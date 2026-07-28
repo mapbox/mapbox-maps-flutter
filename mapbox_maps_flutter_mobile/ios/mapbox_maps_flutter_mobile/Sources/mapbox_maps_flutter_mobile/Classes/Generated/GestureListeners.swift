@@ -30,10 +30,6 @@ final class GestureListenersError: Error {
   }
 }
 
-private func createConnectionError(withChannelName channelName: String) -> GestureListenersError {
-  return GestureListenersError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -204,96 +200,6 @@ class GestureListenersPigeonCodec: FlutterStandardMessageCodec, @unchecked Senda
 
 var gestureListenersPigeonMethodCodec = FlutterStandardMethodCodec(readerWriter: GestureListenersPigeonCodecReaderWriter());
 
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol GestureListenerProtocol {
-  func onTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void)
-  func onLongTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void)
-  func onScroll(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void)
-  func onZoom(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void)
-}
-class GestureListener: GestureListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: GestureListenersPigeonCodec {
-    return GestureListenersPigeonCodec.shared
-  }
-  func onTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([contextArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(GestureListenersError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-  func onLongTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([contextArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(GestureListenersError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-  func onScroll(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([contextArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(GestureListenersError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-  func onZoom(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([contextArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(GestureListenersError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-}
 
 private class PigeonStreamHandler<ReturnType>: NSObject, FlutterStreamHandler {
   private let wrapper: PigeonEventChannelWrapper<ReturnType>

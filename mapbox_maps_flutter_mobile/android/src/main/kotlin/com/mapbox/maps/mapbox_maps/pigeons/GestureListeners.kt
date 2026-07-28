@@ -8,18 +8,12 @@ import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
-import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
-import io.flutter.plugin.common.MessageCodec
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.common.StandardMethodCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
-
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
-}
 private open class GestureListenersPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -214,80 +208,6 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
 }
 
 val GestureListenersPigeonMethodCodec = StandardMethodCodec(GestureListenersPigeonCodec())
-
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class GestureListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by GestureListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      GestureListenersPigeonCodec()
-    }
-  }
-  fun onTap(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(contextArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-  fun onLongTap(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(contextArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-  fun onScroll(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(contextArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-  fun onZoom(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(contextArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-}
 
 private class GestureListenersPigeonStreamHandler<T>(
   val wrapper: GestureListenersPigeonEventChannelWrapper<T>

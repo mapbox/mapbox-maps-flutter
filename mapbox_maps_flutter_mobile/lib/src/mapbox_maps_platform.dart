@@ -182,14 +182,6 @@ class _MapboxMapsPlatform {
     }
   }
 
-  Future<dynamic> addGestureListeners() async {
-    try {
-      return _channel.invokeMethod('gesture#add_listeners');
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
-  }
-
   Future<dynamic> addInteractionsListeners(
     Interaction interaction,
     String interactionID,
@@ -222,14 +214,6 @@ class _MapboxMapsPlatform {
         'interactions#remove_interaction',
         <String, dynamic>{'identifier': interactionID},
       );
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
-  }
-
-  Future<dynamic> removeGestureListeners() async {
-    try {
-      return _channel.invokeMethod('gesture#remove_listeners');
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
