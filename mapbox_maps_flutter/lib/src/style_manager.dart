@@ -30,7 +30,7 @@ import 'style/source/source.dart';
 import 'style/source/vector_source.dart';
 
 /// Manages the map's style, including layers, sources, images, and imports.
-class StyleManager {
+base class StyleManager {
   final StylePlatformInterface _impl;
 
   @internal

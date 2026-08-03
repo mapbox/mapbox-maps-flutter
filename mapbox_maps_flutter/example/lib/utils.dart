@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'package:http/http.dart' as http;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/turf.dart' show LineString, Point, Polyline, Position;
@@ -95,19 +95,14 @@ extension AnnotationCreation on PointAnnotationManager {
   }
 }
 
-extension PuckPosition on StyleManager {
-  Future<Position?> getPuckPosition() async {
-    Layer? layer;
-    if (Platform.isAndroid) {
-      layer = await getLayer("mapbox-location-indicator-layer");
-    } else {
-      layer = await getLayer("puck");
-    }
-    final location = (layer as LocationIndicatorLayer).location;
-    if (location == null) {
-      return null;
-    }
-    return Future.value(Position(location[1]!, location[0]!));
+/// Returns the device's current location as a turf [Position], or `null` if it
+/// can't be resolved (e.g. permission denied or location services disabled).
+Future<Position?> getCurrentPosition() async {
+  try {
+    final location = await Geolocator.getCurrentPosition();
+    return Position(location.longitude, location.latitude);
+  } catch (_) {
+    return null;
   }
 }
 

@@ -12,6 +12,7 @@ This guide helps you upgrade from **mapbox_maps_flutter v2.x** to **v3.x**.
 - **Web support** — run the same `MapWidget` and most APIs on Flutter Web via Mapbox GL JS.
 - **ViewportController** — imperative, animated camera changes replace the old `setStateWithViewportAnimation` pattern.
 - **Unified gesture observability** — pan, zoom, rotate, and pitch each expose a typed `gestureEvents` stream.
+- **Flattened style API** — style methods are callable directly on `MapboxMap` and `Snapshotter` (for example `mapboxMap.addLayer(...)`); the `.style` sub-object is deprecated.
 - **Settings managers** — ornament and gesture settings are accessed through `*SettingsManager` wrappers (for example `mapboxMap.compass` is now a `CompassSettingsManager`).
 
 ## Requirements
@@ -205,6 +206,34 @@ manager.tapEvents(onTap: (annotation) {
 
 ### Style
 
+#### Style APIs available directly on `MapboxMap` and `Snapshotter`
+
+Style methods are now callable directly on the map. `MapboxMap` and `Snapshotter` expose the full style API, matching the iOS and Android SDKs and Mapbox GL JS — the `.style` hop is no longer required:
+
+```dart
+// Before (v2)
+await mapboxMap.style.setStyleURI(MapboxStyles.STANDARD);
+await mapboxMap.style.addLayer(myLayer);
+final layer = await mapboxMap.style.getLayer('my-layer');
+
+// After (v3)
+await mapboxMap.setStyleURI(MapboxStyles.STANDARD);
+await mapboxMap.addLayer(myLayer);
+final layer = await mapboxMap.getLayer('my-layer');
+```
+
+The same applies to `Snapshotter`:
+
+```dart
+// Before (v2)
+await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
+
+// After (v3)
+await snapshotter.setStyleURI(MapboxStyles.LIGHT);
+```
+
+Method names are unchanged — only the `.style` hop is dropped. `mapboxMap.style` and `snapshotter.style` still work so existing code keeps compiling, but they are **deprecated** and will be removed in a future release.
+
 #### Style type renames
 
 | v2 | v3 |
@@ -324,6 +353,7 @@ Use this as a final pass before shipping:
 - [ ] Replace scroll/zoom listeners with `gestures.*.gestureEvents`
 - [ ] Replace annotation click listeners with `tapEvents`
 - [ ] Update debug API calls (`getDebugOptions` / `setDebugOptions`)
+- [ ] Drop the `.style` hop — call style methods directly on `MapboxMap` / `Snapshotter`
 - [ ] Rename `StyleLayer` / `StyleSource` references to `Layer` / `Source`
 - [ ] Rename `Request` / `Response` / `Error` in resource callbacks
 - [ ] Use named arguments for `addStyleImage` optional parameters

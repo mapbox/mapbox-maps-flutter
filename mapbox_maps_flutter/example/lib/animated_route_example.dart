@@ -1,17 +1,11 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mapbox_maps_flutter_examples/main.dart';
 import 'package:mapbox_maps_flutter_examples/utils.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/turf.dart' show LineString, Point, Position;
-
-import 'utils.dart';
 
 class AnimatedRouteExample extends StatefulWidget {
   const AnimatedRouteExample({super.key});
@@ -33,7 +27,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
 
   late MapboxMap mapboxMap;
   PointAnnotationManager? pointAnnotationManager;
-  Timer? timer;
+  final _viewportController = ViewportController();
   Animation<double>? animation;
   AnimationController? controller;
   var trackLocation = true;
@@ -41,29 +35,29 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
 
   @override
   void dispose() {
-    timer?.cancel();
+    _viewportController.dispose();
     controller?.dispose();
     super.dispose();
   }
 
-  _onMapCreated(MapboxMap mapboxMap) async {
+  Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    this.pointAnnotationManager = await mapboxMap.annotations
+    pointAnnotationManager = await mapboxMap.annotations
         .createPointAnnotationManager();
 
     await _getPermission();
   }
 
-  _getPermission() async {
+  Future<void> _getPermission() async {
     await Geolocator.requestPermission();
   }
 
-  _onStyleLoadedCallback(StyleLoadedEventData data) {
+  Future<void> _onStyleLoadedCallback(StyleLoadedEventData data) async {
     _addRouteLineLayerAndSource();
     setLocationComponent();
     refreshTrackLocation();
     refreshCarAnnotations();
-    mapboxMap.style.setStyleImportConfigProperty(
+    await mapboxMap.setStyleImportConfigProperty(
       "basemap",
       "theme",
       "monochrome",
@@ -110,7 +104,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
       ),
       body: MapWidget(
         key: const ValueKey("mapWidget"),
-        viewport: CameraViewportState(zoom: 3.0),
+        viewportController: _viewportController,
         styleUri: MapboxStyles.STANDARD,
         onMapCreated: _onMapCreated,
         onStyleLoadedListener: _onStyleLoadedCallback,
@@ -118,14 +112,14 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     );
   }
 
-  setLocationComponent() async {
+  Future<void> setLocationComponent() async {
     await mapboxMap.location.updateSettings(
       LocationComponentSettings(enabled: true),
     );
   }
 
-  void _addRouteLineLayerAndSource() async {
-    await mapboxMap.style.addLayer(
+  Future<void> _addRouteLineLayerAndSource() async {
+    await mapboxMap.addLayer(
       LineLayer(
         id: 'layer',
         sourceId: 'source',
@@ -150,31 +144,24 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
       ),
     );
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(id: "source", lineMetrics: true),
     );
   }
 
-  refreshTrackLocation() async {
-    timer?.cancel();
-    if (trackLocation) {
-      timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        try {
-          final position = await mapboxMap.style.getPuckPosition();
-          if (position != null) {
-            setCameraPosition(position);
-          }
-        } catch (e) {
-          print(e);
-        }
-      });
-    }
+  void refreshTrackLocation() {
+    // Let the viewport follow the location puck instead of polling its
+    // position and moving the camera manually.
+    _viewportController.moveTo(
+      trackLocation ? FollowPuckViewportState() : const IdleViewportState(),
+      transition: const FlyViewportTransition(),
+    );
   }
 
   // drop 4 random annotations around current location position
-  refreshCarAnnotations() async {
+  Future<void> refreshCarAnnotations() async {
     if (showAnnotations) {
-      final myCoordinate = await mapboxMap.style.getPuckPosition();
+      final myCoordinate = await getCurrentPosition();
 
       if (myCoordinate == null) {
         return;
@@ -211,20 +198,9 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     }
   }
 
-  setCameraPosition(Position position) {
-    mapboxMap.flyTo(
-      CameraOptions(
-        center: Point(coordinates: position),
-        padding: defaultEdgeInsets,
-        zoom: 10,
-      ),
-      null,
-    );
-  }
-
   void onPointAnnotationClick(PointAnnotation annotation) async {
-    // build route from puck position to the clicked annotation
-    final start = await mapboxMap.style.getPuckPosition();
+    // build route from the current location to the clicked annotation
+    final start = await getCurrentPosition();
 
     if (start == null) {
       return;
@@ -241,9 +217,9 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     drawRouteLowLevel(coordinates);
   }
 
-  drawRouteLowLevel(List<Position> polyline) async {
+  Future<void> drawRouteLowLevel(List<Position> polyline) async {
     final line = LineString(coordinates: polyline);
-    final source = await mapboxMap.style.getSource("source");
+    final source = await mapboxMap.getSource("source");
     (source as GeoJsonSource).updateGeoJSON(json.encode(line));
 
     // animate layer to reveal it from start to end
@@ -255,7 +231,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
       ..addListener(() async {
         // set the animated value of lineTrim and update the layer
-        mapboxMap.style.setStyleLayerProperty("layer", "line-trim-offset", [
+        mapboxMap.setStyleLayerProperty("layer", "line-trim-offset", [
           animation?.value,
           1.0,
         ]);

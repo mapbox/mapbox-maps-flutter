@@ -23,16 +23,20 @@ import 'style_manager.dart';
 ///
 /// Application code and the [MapCreatedCallback] in [MapWidget] use this class.
 /// Platform packages implement [MapboxMapPlatformInterface] directly.
-class MapboxMap implements MapboxMapInterface {
+///
+/// Style APIs are available directly on this class, which extends
+/// [StyleManager] (e.g. `mapboxMap.addLayer(...)`).
+base class MapboxMap extends StyleManager implements MapboxMapInterface {
   final MapboxMapPlatformInterface _impl;
 
   @internal
-  MapboxMap(this._impl);
+  MapboxMap(this._impl) : super(_impl.style);
 
   // ===== Sub-interfaces =====
 
   /// Provides access to the map's style APIs.
-  late final StyleManager style = StyleManager(_impl.style);
+  @Deprecated('Call style APIs on this map instance directly.')
+  StyleManager get style => this;
 
   /// Provides access to gesture configuration.
   late final GesturesSettingsManager gestures = GesturesSettingsManager(

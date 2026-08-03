@@ -7,15 +7,18 @@ import 'package:turf/turf.dart';
 import 'style_manager.dart';
 
 /// Captures styled map snapshots without a live [MapWidget].
-class Snapshotter {
+///
+/// Style APIs are available directly on this class, which extends
+/// [StyleManager] (e.g. `snapshotter.setStyleURI(...)`).
+base class Snapshotter extends StyleManager {
   final SnapshotterPlatformInterface _impl;
 
   @internal
-  Snapshotter(this._impl);
+  Snapshotter(this._impl) : super(_impl.style);
 
   /// Creates a new [Snapshotter] configured with the given [options].
   ///
-  /// Set the style via [style] before calling [start].
+  /// Set the style via [setStyleURI] / [setStyleJSON] before calling [start].
   static Future<Snapshotter> create({
     required MapSnapshotOptions options,
     OnStyleLoadedListener? onStyleLoadedListener,
@@ -35,7 +38,8 @@ class Snapshotter {
 
   /// Style manager for the snapshotter — set the style URI/JSON and mutate
   /// runtime style properties (import configs, layers, sources).
-  late final StyleManager style = StyleManager(_impl.style);
+  @Deprecated('Call style APIs on this snapshotter instance directly.')
+  StyleManager get style => this;
 
   /// Event listener invoked when the style has been fully loaded.
   OnStyleLoadedListener? get onStyleLoadedListener =>
