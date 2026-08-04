@@ -5,6 +5,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 import 'package:turf/turf.dart' show Point, Position;
 import 'package:web/web.dart' as web;
 
+import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 
 class GesturesController implements GesturesSettingsPlatformInterface {
@@ -13,6 +14,7 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     _registerZoom();
     _registerRotate();
     _registerPitch();
+    _registerKeyboard();
   }
 
   final JSMap _map;
@@ -24,6 +26,8 @@ class GesturesController implements GesturesSettingsPlatformInterface {
       StreamController<MapContentGestureContext>.broadcast();
   final _pitchController =
       StreamController<MapContentGestureContext>.broadcast();
+  final _keyboardController =
+      StreamController<MapKeyboardGestureContext>.broadcast();
 
   @override
   Stream<MapContentGestureContext> get panEvents => _panController.stream;
@@ -36,6 +40,10 @@ class GesturesController implements GesturesSettingsPlatformInterface {
 
   @override
   Stream<MapContentGestureContext> get pitchEvents => _pitchController.stream;
+
+  @override
+  Stream<MapKeyboardGestureContext> get keyboardEvents =>
+      _keyboardController.stream;
 
   @override
   Future<GesturesSettings> getSettings() => Future.value(
@@ -126,6 +134,30 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     _addHandler('pitchend', GestureState.ended, _pitchController);
   }
 
+  /// Keyboard input has no cursor position, so it can't reuse [_addHandler]'s
+  /// context-building — instead filters `movestart`/`move`/`moveend` (fired
+  /// for every camera change) down to `KeyboardEvent` only.
+  void _registerKeyboard() {
+    _addKeyboardHandler('movestart', GestureState.started);
+    _addKeyboardHandler('move', GestureState.changed);
+    _addKeyboardHandler('moveend', GestureState.ended);
+  }
+
+  void _addKeyboardHandler(String type, GestureState state) {
+    _map.on(
+      type,
+      ((JSMapMoveEvent event) {
+        if (!(event.originalEvent?.isA<web.KeyboardEvent>() ?? false)) return;
+        _keyboardController.add(
+          MapKeyboardGestureContext(
+            cameraState: _map.getCameraState(),
+            gestureState: state,
+          ),
+        );
+      }).toJS,
+    );
+  }
+
   void _addHandler(
     String type,
     GestureState state,
@@ -141,7 +173,7 @@ class GesturesController implements GesturesSettingsPlatformInterface {
   }
 
   MapContentGestureContext? _buildContext(
-    JSDOMEvent? original,
+    web.Event? original,
     GestureState state,
   ) {
     if (original == null) return null;
@@ -155,7 +187,13 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     );
   }
 
-  ScreenCoordinate? _cursorPoint(JSDOMEvent original) {
+  /// Derives a screen position from the event that drove a gesture. Returns
+  /// null for anything without one — notably a `KeyboardEvent`, since GL JS
+  /// fires `zoom*`/`rotate*`/`pitch*` for keyboard-driven changes too, but
+  /// they have no cursor position to report. Those are silently dropped
+  /// from [zoomEvents]/[rotateEvents]/[pitchEvents]; keyboard input is
+  /// delivered separately through [keyboardEvents].
+  ScreenCoordinate? _cursorPoint(web.Event original) {
     final rect = _map.getContainer().getBoundingClientRect();
     if (original.isA<web.MouseEvent>()) {
       final me = original as web.MouseEvent;

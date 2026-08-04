@@ -1,3 +1,4 @@
+import '../map_keyboard_gesture_context.dart';
 import '../pigeons/platform_interface_data_types.dart';
 
 /// Generic interface for reading and updating a map settings object of type [T].
@@ -17,6 +18,12 @@ abstract interface class GesturesSettingsPlatformInterface
   Stream<MapContentGestureContext> get zoomEvents;
   Stream<MapContentGestureContext> get rotateEvents;
   Stream<MapContentGestureContext> get pitchEvents;
+
+  /// Keyboard-driven camera changes (arrow keys, +/-, shift+arrows). Unlike
+  /// [panEvents]/[zoomEvents]/[rotateEvents]/[pitchEvents], keyboard input
+  /// has no cursor position, so events carry the resulting camera state
+  /// instead.
+  Stream<MapKeyboardGestureContext> get keyboardEvents;
 }
 
 /// Interface for scale bar ornament settings.

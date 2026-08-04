@@ -350,10 +350,8 @@ extension type JSMapBaseEvent._(JSObject _) implements JSObject {
 }
 
 /// Payload of camera-related events (`movestart`, `move`, `moveend`).
-/// Programmatic moves leave `originalEvent` null.
-///
-/// TODO: replace with `JSGestureEventData` once the gestures-stream
-/// branch lands.
+/// Programmatic moves leave `originalEvent` null; keyboard-driven moves
+/// carry a `KeyboardEvent`, pointer-driven ones a `MouseEvent`/`TouchEvent`.
 @JS()
 @anonymous
 extension type JSMapMoveEvent._(JSObject _) implements JSObject {
@@ -377,10 +375,16 @@ extension type JSMapDataEvent._(JSObject _) implements JSObject {
 
 /// Payload of camera-surface gesture events (`drag*` / `zoom*` / `rotate*`
 /// / `pitch*`). Carries only `originalEvent`; `point`/`lngLat` are absent.
+///
+/// `originalEvent` is a `MouseEvent`/`TouchEvent` when a pointer/touch
+/// gesture caused the change, a `KeyboardEvent` when the keyboard did (GL JS
+/// fires these events for keyboard-driven zoom/rotate/pitch too), or null
+/// for a programmatic camera change (e.g. a direct `flyTo` call, not caused
+/// by any gesture handler).
 @JS()
 @anonymous
 extension type JSGestureEventData._(JSObject _) implements JSObject {
-  external JSDOMEvent? get originalEvent;
+  external Event? get originalEvent;
 }
 
 /// One of GL JS's toggleable gesture handlers (`dragPan`, `dragRotate`,

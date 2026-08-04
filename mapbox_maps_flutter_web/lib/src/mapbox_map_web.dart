@@ -118,16 +118,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Camera =====
 
   @override
-  Future<CameraState> getCameraState() async {
-    final center = _map.getCenter();
-    return CameraState(
-      center: Point(coordinates: Position(center.lng, center.lat)),
-      padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
-      zoom: _map.getZoom(),
-      bearing: _map.getBearing(),
-      pitch: _map.getPitch(),
-    );
-  }
+  Future<CameraState> getCameraState() async => _map.getCameraState();
 
   @override
   Future<void> setCamera(CameraOptions cameraOptions) async => _map.jumpTo(

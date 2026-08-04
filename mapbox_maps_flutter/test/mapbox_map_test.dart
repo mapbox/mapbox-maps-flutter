@@ -23,6 +23,8 @@ class StubGesturesSettingsPlatformInterface
   Stream<MapContentGestureContext> get rotateEvents => const Stream.empty();
   @override
   Stream<MapContentGestureContext> get pitchEvents => const Stream.empty();
+  @override
+  Stream<MapKeyboardGestureContext> get keyboardEvents => const Stream.empty();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => null;

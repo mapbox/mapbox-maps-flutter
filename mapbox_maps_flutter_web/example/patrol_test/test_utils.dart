@@ -105,6 +105,34 @@ web.MouseEvent mouseEvent(String type, double x, double y) => web.MouseEvent(
   ),
 );
 
+/// A `keydown`/`keyup` [type] event carrying [keyCode].
+///
+/// GL JS's `KeyboardHandler` switches on the legacy `KeyboardEvent.keyCode`
+/// property, which the standard `KeyboardEventInit` dictionary in
+/// `package:web` doesn't expose as a constructible field (the current spec
+/// derives it read-only from `code`/`key`). We build that object as
+/// plain JS literal instead of going through the typed factory.
+web.KeyboardEvent keyboardEvent(
+  String type,
+  int keyCode, {
+  bool shiftKey = false,
+  bool altKey = false,
+  bool ctrlKey = false,
+  bool metaKey = false,
+}) => web.KeyboardEvent(
+  type,
+  {
+        'keyCode': keyCode,
+        'shiftKey': shiftKey,
+        'altKey': altKey,
+        'ctrlKey': ctrlKey,
+        'metaKey': metaKey,
+        'bubbles': true,
+        'cancelable': true,
+      }.jsify()!
+      as web.KeyboardEventInit,
+);
+
 web.WheelEvent wheelEvent(double x, double y) => web.WheelEvent(
   'wheel',
   web.WheelEventInit(

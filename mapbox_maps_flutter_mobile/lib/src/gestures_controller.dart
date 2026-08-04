@@ -26,4 +26,16 @@ class GesturesController extends GesturesSettingsInterface
   @override
   Stream<MapContentGestureContext> get pitchEvents =>
       _pitchEvents(instanceName: _channelSuffix);
+
+  // Physical keyboards aren't a native mobile gesture source, so this
+  // stream never emits. A broadcast controller (not `Stream.empty()`) keeps
+  // it consistent with the interface's "streams are broadcast" contract —
+  // `Stream.empty()` is single-subscription and completes immediately,
+  // which would throw on a second listener.
+  final _keyboardEventsController =
+      StreamController<MapKeyboardGestureContext>.broadcast();
+
+  @override
+  Stream<MapKeyboardGestureContext> get keyboardEvents =>
+      _keyboardEventsController.stream;
 }

@@ -10,14 +10,14 @@ class MockGesturesSettingsPlatformInterface
   int getSettingsCallCount = 0;
   int updateSettingsCallCount = 0;
 
-  final panController =
-      StreamController<MapContentGestureContext>.broadcast();
-  final zoomController =
-      StreamController<MapContentGestureContext>.broadcast();
+  final panController = StreamController<MapContentGestureContext>.broadcast();
+  final zoomController = StreamController<MapContentGestureContext>.broadcast();
   final rotateController =
       StreamController<MapContentGestureContext>.broadcast();
   final pitchController =
       StreamController<MapContentGestureContext>.broadcast();
+  final keyboardController =
+      StreamController<MapKeyboardGestureContext>.broadcast();
 
   @override
   Stream<MapContentGestureContext> get panEvents => panController.stream;
@@ -30,6 +30,10 @@ class MockGesturesSettingsPlatformInterface
 
   @override
   Stream<MapContentGestureContext> get pitchEvents => pitchController.stream;
+
+  @override
+  Stream<MapKeyboardGestureContext> get keyboardEvents =>
+      keyboardController.stream;
 
   @override
   Future<GesturesSettings> getSettings() async {
@@ -137,5 +141,27 @@ void main() {
       mockImpl.pitchController.add(pushed);
       expect(await received, same(pushed));
     });
+
+    MapKeyboardGestureContext fakeKeyboardContext() =>
+        MapKeyboardGestureContext(
+          cameraState: CameraState(
+            center: Point(coordinates: Position(0.5, 0.6)),
+            padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+            zoom: 10,
+            bearing: 0,
+            pitch: 0,
+          ),
+          gestureState: GestureState.changed,
+        );
+
+    test(
+      'keyboard.gestureEvents forwards from interface.keyboardEvents',
+      () async {
+        final pushed = fakeKeyboardContext();
+        final received = gesturesSettings.keyboard.gestureEvents.first;
+        mockImpl.keyboardController.add(pushed);
+        expect(await received, same(pushed));
+      },
+    );
   });
 }

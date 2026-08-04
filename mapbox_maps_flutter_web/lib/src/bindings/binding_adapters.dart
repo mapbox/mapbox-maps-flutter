@@ -37,6 +37,19 @@ extension JSLngLatToPoint on JSLngLat {
   Point toPoint() => Point(coordinates: Position(lng, lat));
 }
 
+extension JSMapCameraState on JSMap {
+  CameraState getCameraState() => CameraState(
+    center: getCenter().toPoint(),
+    // GL JS manages viewport padding per camera command (jumpTo/easeTo) and
+    // does not expose a "current padding" getter; zero matches how a
+    // non-padded camera is modelled on the native side.
+    padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+    zoom: getZoom(),
+    bearing: getBearing(),
+    pitch: getPitch(),
+  );
+}
+
 extension CoordinateBoundsToJSLngLatBounds on CoordinateBounds {
   JSLngLatBounds toJSLngLatBounds() =>
       JSLngLatBounds(southwest.toJSLngLat(), northeast.toJSLngLat());

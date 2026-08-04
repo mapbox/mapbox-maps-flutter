@@ -22,6 +22,10 @@ class GesturesExampleState extends State<GesturesExample> {
 
   final Map<int, bool> _toggleValues = {};
 
+  static const _maxLogEntries = 200;
+  final List<String> _eventLog = [];
+  int _tabIndex = 0;
+
   late final List<_GestureToggle> _toggles = [
     _GestureToggle(
       label: 'Rotate',
@@ -102,36 +106,45 @@ class GesturesExampleState extends State<GesturesExample> {
     );
   }
 
-  void _onMove(MapContentGestureContext context) {
-    log(
-      "OnMove coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}"
-      " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}"
-          " state: ${context.gestureState}",
+  void _onMove(MapContentGestureContext context) => _logGesture('Pan', context);
+
+  void _onZoom(MapContentGestureContext context) =>
+      _logGesture('Zoom', context);
+
+  void _onRotate(MapContentGestureContext context) =>
+      _logGesture('Rotate', context);
+
+  void _onPitch(MapContentGestureContext context) =>
+      _logGesture('Pitch', context);
+
+  void _onKeyboard(MapKeyboardGestureContext context) {
+    final camera = context.cameraState;
+    _appendLog(
+      'Keyboard: state=${context.gestureState.name} '
+      'zoom=${camera.zoom.toStringAsFixed(2)} '
+      'bearing=${camera.bearing.toStringAsFixed(1)} '
+      'pitch=${camera.pitch.toStringAsFixed(1)}',
     );
   }
 
-  void _onZoom(MapContentGestureContext context) {
-    log(
-      "OnZoom coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}"
-      " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}"
-          " state: ${context.gestureState}",
+  void _logGesture(String label, MapContentGestureContext context) {
+    _appendLog(
+      '$label: state=${context.gestureState.name} '
+      'lng=${context.point.coordinates.lng.toStringAsFixed(5)} '
+      'lat=${context.point.coordinates.lat.toStringAsFixed(5)} '
+      'point=(${context.touchPosition.x.toStringAsFixed(0)}, '
+      '${context.touchPosition.y.toStringAsFixed(0)})',
     );
   }
 
-  void _onRotate(MapContentGestureContext context) {
-    log(
-      "OnRotate coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}"
-      " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}"
-          " state: ${context.gestureState}",
-    );
-  }
-
-  void _onPitch(MapContentGestureContext context) {
-    log(
-      "OnPitch coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}"
-      " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}"
-          " state: ${context.gestureState}",
-    );
+  void _appendLog(String entry) {
+    if (!mounted) return;
+    setState(() {
+      _eventLog.add(entry);
+      if (_eventLog.length > _maxLogEntries) {
+        _eventLog.removeRange(0, _eventLog.length - _maxLogEntries);
+      }
+    });
   }
 
   void _onMapCreated(MapboxMap mapboxMap) async {
@@ -146,6 +159,9 @@ class GesturesExampleState extends State<GesturesExample> {
       mapboxMap.gestures.zoom.gestureEvents.listen(_onZoom).asCancelable(),
       mapboxMap.gestures.rotate.gestureEvents.listen(_onRotate).asCancelable(),
       mapboxMap.gestures.pitch.gestureEvents.listen(_onPitch).asCancelable(),
+      mapboxMap.gestures.keyboard.gestureEvents
+          .listen(_onKeyboard)
+          .asCancelable(),
     ]);
 
     final settings = await mapboxMap.gestures.getSettings();
@@ -202,6 +218,29 @@ class GesturesExampleState extends State<GesturesExample> {
     );
   }
 
+  Widget _eventLogPanel() {
+    if (_eventLog.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            'No gesture events yet — pan, zoom, rotate, or pitch the map.',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      reverse: true,
+      itemCount: _eventLog.length,
+      itemBuilder: (context, index) => Text(
+        _eventLog[_eventLog.length - 1 - index],
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
@@ -210,16 +249,38 @@ class GesturesExampleState extends State<GesturesExample> {
     );
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 400,
-            child: mapWidget,
+        Expanded(flex: 3, child: mapWidget),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: SegmentedButton<int>(
+            segments: const [
+              ButtonSegment(
+                value: 0,
+                label: Text('Settings'),
+                icon: Icon(Icons.tune),
+              ),
+              ButtonSegment(
+                value: 1,
+                label: Text('Events'),
+                icon: Icon(Icons.list_alt),
+              ),
+            ],
+            selected: {_tabIndex},
+            onSelectionChanged: (selection) =>
+                setState(() => _tabIndex = selection.first),
           ),
         ),
-        Expanded(child: SingleChildScrollView(child: _settingsPanel())),
+        Expanded(
+          flex: 2,
+          child: IndexedStack(
+            index: _tabIndex,
+            children: [
+              SingleChildScrollView(child: _settingsPanel()),
+              _eventLogPanel(),
+            ],
+          ),
+        ),
       ],
     );
   }

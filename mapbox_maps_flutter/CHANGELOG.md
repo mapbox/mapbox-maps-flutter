@@ -8,6 +8,7 @@
 * [Android] Change the default platform-view hosting mode to Hybrid Composition (`AndroidPlatformViewHostingMode.HC`); it was previously Virtual Display. Set `MapWidget.androidHostingMode` explicitly to keep the old behaviour.
 * [web] Fix Flutter widgets stacked over the map on web not blocking clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath. The map now respects any Flutter widgets painted on top of it.
 * Remove the `OnMapTapListener` / `OnMapLongTapListener` typedefs, orphaned since the `MapboxMap.onMapTapListener` / `onMapLongTapListener` setters they typed were removed in favor of the Interaction API.
+* [web] Add `gestures.keyboard.gestureEvents`, delivering keyboard-driven camera changes (arrow keys, `+`/`-`, shift+arrows) that were previously not observable through the gesture event streams.
 
 ### 3.0.0-alpha.1
 

@@ -46,6 +46,7 @@ export 'interfaces/style_interface.dart';
 export 'interfaces/viewport/viewport_interface.dart';
 export 'interfaces/viewport/viewport_state.dart';
 export 'interfaces/viewport/viewport_transition.dart';
+export 'map_keyboard_gesture_context.dart';
 
 abstract base class MapboxMapsFlutterPlatform {
   static MapboxMapsFlutterPlatform? _instance;

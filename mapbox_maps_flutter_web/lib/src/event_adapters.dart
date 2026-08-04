@@ -1,8 +1,8 @@
 import 'dart:js_interop';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
-import 'package:turf/turf.dart' show Point, Position;
 
+import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 
 /// Bridges Mapbox GL JS events to platform-interface [MapEvent] subclasses.
@@ -94,22 +94,10 @@ class MapEventBridge {
     type: StyleDataType.STYLE,
   );
 
-  CameraChangedEventData _adaptCameraChanged() {
-    final center = _map.getCenter();
-    return CameraChangedEventData(
-      timestamp: _nowMicros(),
-      cameraState: CameraState(
-        center: Point(coordinates: Position(center.lng, center.lat)),
-        // GL JS manages viewport padding per camera command (jumpTo/easeTo)
-        // and does not expose a "current padding" getter; zero matches how
-        // a non-padded camera is modelled on the native side.
-        padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
-        zoom: _map.getZoom(),
-        bearing: _map.getBearing(),
-        pitch: _map.getPitch(),
-      ),
-    );
-  }
+  CameraChangedEventData _adaptCameraChanged() => CameraChangedEventData(
+    timestamp: _nowMicros(),
+    cameraState: _map.getCameraState(),
+  );
 
   MapIdleEventData _adaptIdle() => MapIdleEventData(timestamp: _nowMicros());
 

@@ -32,11 +32,6 @@ extension type JSTargetDescriptor._(JSObject _) implements JSObject {
   external String? layerId;
 }
 
-/// Browser-level event that triggered a gesture (`MouseEvent` / `TouchEvent`
-/// / `PointerEvent`). Absent for programmatic camera changes.
-@JS()
-extension type JSDOMEvent._(JSObject _) implements JSObject {}
-
 /// Event payload delivered to a `JSInteraction.handler`.
 @JS()
 extension type JSInteractionEvent._(JSObject _) implements JSObject {

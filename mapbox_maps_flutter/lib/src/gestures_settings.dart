@@ -3,10 +3,15 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 
 /// Manages gesture configuration and observability for the map.
 ///
-/// Exposes the four gestures common to iOS, Android, and Web —
-/// [pan], [zoom], [rotate], [pitch] — each as a typed [MapGesture] that
+/// Exposes the four pointer/touch gestures common to iOS, Android, and Web
+/// — [pan], [zoom], [rotate], [pitch] — each as a typed [MapGesture] that
 /// publishes [MapContentGestureContext] events through its
 /// `gestureEvents` broadcast stream.
+///
+/// [keyboard] separately covers keyboard-driven camera changes (arrow keys,
+/// `+`/`-`, shift+arrows). Web only — keyboard input has no cursor
+/// position, so it publishes [MapKeyboardGestureContext] events (camera
+/// state only) instead of [MapContentGestureContext].
 final class GesturesSettingsManager {
   final GesturesSettingsPlatformInterface _impl;
 
@@ -22,12 +27,17 @@ final class GesturesSettingsManager {
   /// The pitch (tilt) gesture.
   final MapPitchGesture pitch;
 
+  /// The keyboard gesture. Web only — never emits on iOS/Android, which
+  /// have no keyboard gesture source.
+  final MapKeyboardGesture keyboard;
+
   @internal
   GesturesSettingsManager(this._impl)
     : pan = MapPanGesture._(gestureEvents: _impl.panEvents),
       zoom = MapZoomGesture._(gestureEvents: _impl.zoomEvents),
       rotate = MapRotateGesture._(gestureEvents: _impl.rotateEvents),
-      pitch = MapPitchGesture._(gestureEvents: _impl.pitchEvents);
+      pitch = MapPitchGesture._(gestureEvents: _impl.pitchEvents),
+      keyboard = MapKeyboardGesture._(gestureEvents: _impl.keyboardEvents);
 
   /// Returns the current [GesturesSettings].
   ///
@@ -68,9 +78,9 @@ typedef GesturesSettingsInterface = GesturesSettingsManager;
 abstract base class MapGesture {
   /// Broadcast stream of gesture events for this surface.
   ///
-  /// > **Note:** on Web, this stream currently covers pointer/touch input
-  /// > only. Keyboard-driven camera changes (arrow keys, `+`/`-`,
-  /// > shift+arrows) are not yet emitted here.
+  /// > **Note:** on Web, this stream covers pointer/touch input only.
+  /// > Keyboard-driven camera changes (arrow keys, `+`/`-`, shift+arrows)
+  /// > are delivered separately through [GesturesSettingsManager.keyboard].
   final Stream<MapContentGestureContext> gestureEvents;
 
   MapGesture._({required this.gestureEvents});
@@ -94,4 +104,20 @@ final class MapRotateGesture extends MapGesture {
 /// The pitch (tilt) gesture surface on a [MapboxMap].
 final class MapPitchGesture extends MapGesture {
   MapPitchGesture._({required super.gestureEvents}) : super._();
+}
+
+/// The keyboard gesture surface on a [MapboxMap].
+///
+/// Unlike [MapPanGesture], [MapZoomGesture], [MapRotateGesture], and
+/// [MapPitchGesture], keyboard input has no cursor/touch position, so
+/// events carry the resulting [MapKeyboardGestureContext] (camera +
+/// gesture state) instead of a [MapContentGestureContext].
+///
+/// Web only — [gestureEvents] never emits on iOS/Android, which have no
+/// keyboard gesture source.
+final class MapKeyboardGesture {
+  MapKeyboardGesture._({required this.gestureEvents});
+
+  /// Broadcast stream of keyboard-driven gesture events.
+  final Stream<MapKeyboardGestureContext> gestureEvents;
 }
