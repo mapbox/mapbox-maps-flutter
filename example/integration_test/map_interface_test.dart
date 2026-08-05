@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -336,8 +337,9 @@ void main() {
         min: ScreenCoordinate(x: 0.0, y: 0.0),
         max: ScreenCoordinate(x: 500.0, y: 1000.0));
     var renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(screenBox);
-    var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
-        RenderedQueryOptions(layerIds: ['points'], filter: null));
+    var query = await _queryUntilFound(
+        mapboxMap, renderedQueryGeometry, 'points',
+        sourceId: 'source', imageId: 'icon');
     expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
@@ -449,4 +451,43 @@ void main() {
     final snapshot = await mapboxMap.snapshot();
     expect(snapshot, isNotNull);
   });
+}
+
+/// Works around the symbol query flaking on iOS only - Android is unaffected.
+/// It fails on the first run against a cold cache, roughly one run in four, and
+/// has never reproduced locally on a simulator.
+///
+/// `MapIdle` means the map has nothing left to draw right now, not that a
+/// symbol has been placed, so the feature can still be missing from the first
+/// frame after idle. This polls, and if the feature never turns up it reports
+/// what the map actually contained - the root cause is still unknown, so that
+/// output is the point: it should identify which invariant broke.
+Future<List<QueriedRenderedFeature?>> _queryUntilFound(
+    MapboxMap mapboxMap, RenderedQueryGeometry geometry, String layerId,
+    {required String sourceId,
+    required String imageId,
+    Duration timeout = const Duration(seconds: 5)}) async {
+  final options = RenderedQueryOptions(layerIds: [layerId], filter: null);
+  final deadline = DateTime.now().add(timeout);
+  var attempt = 0;
+  var query = await mapboxMap.queryRenderedFeatures(geometry, options);
+  while (query.isEmpty && DateTime.now().isBefore(deadline)) {
+    attempt++;
+    debugPrint('_queryUntilFound: "$layerId" empty on attempt $attempt, retrying...');
+    await Future.delayed(const Duration(milliseconds: 200));
+    query = await mapboxMap.queryRenderedFeatures(geometry, options);
+  }
+  if (attempt > 0 && query.isNotEmpty) {
+    debugPrint('_queryUntilFound: "$layerId" found after $attempt retries');
+  }
+  if (query.isEmpty) {
+    final style = mapboxMap.style;
+    final camera = await mapboxMap.getCameraState();
+    fail('No features in "$layerId" after ${timeout.inSeconds}s - '
+        'layer: ${await style.styleLayerExists(layerId)}, '
+        'source "$sourceId": ${await style.styleSourceExists(sourceId)}, '
+        'image "$imageId": ${await style.hasStyleImage(imageId)}, '
+        'camera: ${camera.center.coordinates} z${camera.zoom}');
+  }
+  return query;
 }
