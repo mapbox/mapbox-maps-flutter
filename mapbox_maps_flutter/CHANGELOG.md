@@ -1,3 +1,4 @@
+### main
 
 * [web] Add `GesturesSettings.scrollZoomEnabled`, `.boxZoomEnabled`, and `.pitchWithRotateEnabled` (web only; no effect on Android/iOS). **Behavior change:** `pinchToZoomEnabled` no longer also controls mouse-wheel/trackpad zoom on web (use `scrollZoomEnabled`), and `pitchEnabled` no longer also controls whether ctrl+drag combines rotate with pitch (use `pitchWithRotateEnabled`).
 * [Android] Render the map into a `SurfaceView` by default instead of a `TextureView`, avoiding the per-frame copy a `TextureView` requires. Set `MapWidget.textureView` to `true` for a transparent background (`isOpaque: false`) and for the `VD` and `TLHC_VD` hosting modes, which cannot display a `SurfaceView`.
