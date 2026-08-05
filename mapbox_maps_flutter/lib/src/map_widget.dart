@@ -116,9 +116,14 @@ class MapWidget extends StatelessWidget {
   final MapOptions? mapOptions;
 
   /// Whether to use a `TextureView` as the Android render surface. Has no
-  /// effect on iOS or web. Defaults to `true` to work around the
-  /// `SurfaceView` memory leak documented at
-  /// https://github.com/flutter/flutter/issues/118384.
+  /// effect on iOS or web.
+  ///
+  /// When unset a `SurfaceView` is used, which renders directly, without the
+  /// per-frame `SurfaceTexture` copy a `TextureView` requires. Set it to `true`
+  /// for a transparent background ([isOpaque] `false`) and for the hosting
+  /// modes that cannot display a `SurfaceView`
+  /// ([AndroidPlatformViewHostingMode.VD] and
+  /// [AndroidPlatformViewHostingMode.TLHC_VD]), which both need a `TextureView`.
   final bool? textureView;
 
   /// How the underlying Android `MapView` is hosted by Flutter. Has no
@@ -131,8 +136,8 @@ class MapWidget extends StatelessWidget {
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
   /// Whether the map is rendered as opaque. Only has an effect on iOS —
-  /// on Android, a transparent background requires [MapWidget.textureView]
-  /// to be `true` (the default). Ignored on web: GL JS always renders to
+  /// on Android, a transparent background additionally requires
+  /// [MapWidget.textureView] to be `true`. Ignored on web: GL JS always renders to
   /// an alpha-capable canvas, so a transparent background there works out
   /// of the box and is not configurable.
   ///

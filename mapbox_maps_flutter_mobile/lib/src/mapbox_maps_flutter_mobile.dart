@@ -25,7 +25,7 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
     return MapWidget(
       styleUri: styleUri,
       mapOptions: mapOptions,
-      textureView: textureView ?? true,
+      textureView: textureView ?? false,
       androidHostingMode: androidHostingMode,
       gestureRecognizers: gestureRecognizers,
       onMapCreated: onMapCreated,

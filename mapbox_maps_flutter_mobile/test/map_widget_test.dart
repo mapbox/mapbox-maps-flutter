@@ -29,16 +29,6 @@ void main() {
       );
     });
 
-    test('allows isOpaque:false with default textureView', () {
-      expect(
-        () => MapWidget(
-          isOpaque: false,
-          androidHostingMode: AndroidPlatformViewHostingMode.HC,
-        ),
-        returnsNormally,
-      );
-    });
-
     test('allows isOpaque:true with textureView:false', () {
       expect(
         () => MapWidget(
@@ -52,8 +42,9 @@ void main() {
 
     test('defaults to opaque', () {
       expect(
-        MapWidget(androidHostingMode: AndroidPlatformViewHostingMode.HC)
-            .isOpaque,
+        MapWidget(
+          androidHostingMode: AndroidPlatformViewHostingMode.HC,
+        ).isOpaque,
         isTrue,
       );
     });

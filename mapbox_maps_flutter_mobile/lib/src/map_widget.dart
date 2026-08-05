@@ -24,9 +24,7 @@ class MapWidget extends StatefulWidget {
       'Use [viewport] to specify the camera position and behavior of the map',
     )
     this.cameraOptions,
-    // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
-    // As a workaround default is true.
-    this.textureView = true,
+    this.textureView = false,
     required this.androidHostingMode,
     this.gestureRecognizers,
     this.onMapCreated,
@@ -51,7 +49,7 @@ class MapWidget extends StatefulWidget {
     this.isOpaque = true,
   }) : _styleUri = styleUri,
        assert(
-         isOpaque != false || textureView != false,
+         isOpaque != false || textureView,
          'isOpaque: false requires textureView: true on Android. '
          'SurfaceView cannot render a transparent background.',
        );
@@ -67,9 +65,13 @@ class MapWidget extends StatefulWidget {
 
   /// Flag indicating to use a TextureView as render surface for the MapWidget.
   /// Only works for Android.
-  /// FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
-  /// As a workaround default is true.
-  final bool? textureView;
+  ///
+  /// Defaults to `false`: a SurfaceView renders directly, without the per-frame
+  /// SurfaceTexture copy a TextureView requires. Set it to `true` for a
+  /// transparent background ([isOpaque] `false`) and for the hosting modes that
+  /// cannot display a SurfaceView ([AndroidPlatformViewHostingMode.VD] and
+  /// [AndroidPlatformViewHostingMode.TLHC_VD]), which both need a TextureView.
+  final bool textureView;
 
   /// Controls the way the underlying MapView is being hosted by Flutter on Android.
   /// This setting has no effect on iOS.
@@ -168,8 +170,8 @@ class MapWidget extends StatefulWidget {
   final void Function(bool)? viewportTransitionCompletion;
 
   /// Whether the map is rendered as opaque. Only has an effect on iOS —
-  /// on Android, a transparent background requires [MapWidget.textureView]
-  /// to be `true` (the default).
+  /// on Android, a transparent background additionally requires
+  /// [MapWidget.textureView] to be `true`.
   ///
   /// Defaults to `true`. Set to `false` (together with a transparent style)
   /// to render a transparent map background.
