@@ -49,11 +49,13 @@ class GesturesController implements GesturesSettingsPlatformInterface {
   Future<GesturesSettings> getSettings() => Future.value(
     GesturesSettings(
       scrollEnabled: _map.dragPan.isEnabled(),
-      pinchToZoomEnabled:
-          _map.touchZoomRotate.isEnabled() && _map.scrollZoom.isEnabled(),
+      pinchToZoomEnabled: _map.touchZoomRotate.isEnabled(),
       rotateEnabled: _map.dragRotate.isEnabled(),
       pitchEnabled: _map.touchPitch.isEnabled(),
       doubleTapToZoomInEnabled: _map.doubleClickZoom.isEnabled(),
+      scrollZoomEnabled: _map.scrollZoom.isEnabled(),
+      boxZoomEnabled: _map.boxZoom.isEnabled(),
+      pitchWithRotateEnabled: _map.dragRotate.pitchWithRotate,
     ),
   );
 
@@ -65,12 +67,7 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     }
 
     apply(settings.scrollEnabled, _map.dragPan);
-    // Pinch-to-zoom covers both touch pinch and trackpad pinch. GL JS
-    // routes trackpad pinch through `scrollZoom` (wheel events with
-    // ctrlKey), so the two must be toggled together. Side effect: this
-    // also toggles mouse-wheel zoom, which GL JS does not separate.
     apply(settings.pinchToZoomEnabled, _map.touchZoomRotate);
-    apply(settings.pinchToZoomEnabled, _map.scrollZoom);
     apply(settings.rotateEnabled, _map.dragRotate);
     // Touch two-finger rotate lives inside `touchZoomRotate`; toggle its
     // rotation portion so pinch-zoom keeps working when rotate is off.
@@ -88,15 +85,18 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     // BEFORE the mutation: when pitch is being switched on, `_mousePitch`
     // is still disabled and `dragRotate.isEnabled()` would lie about
     // whether to refresh.
-    if (settings.pitchEnabled != null) {
+    if (settings.pitchWithRotateEnabled != null) {
       final wasEnabled = _map.dragRotate.isEnabled();
-      _map.dragRotate.pitchWithRotate = settings.pitchEnabled!;
+      _map.dragRotate.pitchWithRotate =
+          settings.pitchWithRotateEnabled!;
       if (wasEnabled) {
         _map.dragRotate.disable();
         _map.dragRotate.enable();
       }
     }
     apply(settings.doubleTapToZoomInEnabled, _map.doubleClickZoom);
+    apply(settings.scrollZoomEnabled, _map.scrollZoom);
+    apply(settings.boxZoomEnabled, _map.boxZoom);
 
     // Keyboard rotate (shift+left/right) and pitch (shift+up/down) share
     // one flag in GL JS — disabling either disables both. Disable when

@@ -1894,14 +1894,31 @@ struct TransitionOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct GesturesSettings {
   /// Whether the rotate gesture is enabled.
+  ///
+  /// On web, disabling this also disables ctrl+drag pitch (they share a
+  /// handler; see [pitchWithRotateEnabled]) and keyboard
+  /// rotate/pitch (Shift+arrow keys), which share one flag with
+  /// [pitchEnabled] on web.
   var rotateEnabled: Bool? = nil
   /// Whether the pinch to zoom gesture is enabled.
+  ///
+  /// On web this covers touch-pinch only. Mouse-wheel/trackpad zoom is
+  /// [scrollZoomEnabled]; Shift+drag box-zoom is [boxZoomEnabled]. Both
+  /// toggle independently of this field.
   var pinchToZoomEnabled: Bool? = nil
   /// Whether the single-touch scroll gesture is enabled.
+  ///
+  /// On web this disables pointer/touch pan only. Keyboard arrow-pan stays
+  /// on regardless, pending GL JS support.
   var scrollEnabled: Bool? = nil
   /// Whether rotation is enabled for the pinch to zoom gesture.
   var simultaneousRotateAndPinchToZoomEnabled: Bool? = nil
   /// Whether the pitch gesture is enabled.
+  ///
+  /// On web this does not affect ctrl+drag pitch; see
+  /// [pitchWithRotateEnabled] for that. It does disable
+  /// keyboard rotate/pitch (Shift+arrow keys), which share one flag with
+  /// [rotateEnabled] on web.
   var pitchEnabled: Bool? = nil
   /// Configures the directions in which the map is allowed to move during a scroll gesture.
   var scrollMode: ScrollMode? = nil
@@ -1927,6 +1944,16 @@ struct GesturesSettings {
   var zoomAnimationAmount: Double? = nil
   /// Whether pan is enabled for the pinch gesture.
   var pinchPanEnabled: Bool? = nil
+  /// Whether the scroll-zoom gesture (mouse wheel and trackpad pinch-to-zoom) is enabled. Web only; has no effect on Android or iOS.
+  var scrollZoomEnabled: Bool? = nil
+  /// Whether the box-zoom gesture (Shift + drag) is enabled. Web only; has no effect on Android or iOS.
+  var boxZoomEnabled: Bool? = nil
+  /// Whether Ctrl + drag combines rotate and pitch into one motion. Web only; has no effect on Android or iOS.
+  ///
+  /// Independent of [pitchEnabled], which does not cover ctrl+drag pitch on
+  /// web. Not independent of [rotateEnabled]: disabling rotate disables
+  /// ctrl+drag pitch too, since both share a handler.
+  var pitchWithRotateEnabled: Bool? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1948,6 +1975,9 @@ struct GesturesSettings {
     let increasePinchToZoomThresholdWhenRotating: Bool? = nilOrValue(pigeonVar_list[14])
     let zoomAnimationAmount: Double? = nilOrValue(pigeonVar_list[15])
     let pinchPanEnabled: Bool? = nilOrValue(pigeonVar_list[16])
+    let scrollZoomEnabled: Bool? = nilOrValue(pigeonVar_list[17])
+    let boxZoomEnabled: Bool? = nilOrValue(pigeonVar_list[18])
+    let pitchWithRotateEnabled: Bool? = nilOrValue(pigeonVar_list[19])
 
     return GesturesSettings(
       rotateEnabled: rotateEnabled,
@@ -1966,7 +1996,10 @@ struct GesturesSettings {
       increaseRotateThresholdWhenPinchingToZoom: increaseRotateThresholdWhenPinchingToZoom,
       increasePinchToZoomThresholdWhenRotating: increasePinchToZoomThresholdWhenRotating,
       zoomAnimationAmount: zoomAnimationAmount,
-      pinchPanEnabled: pinchPanEnabled
+      pinchPanEnabled: pinchPanEnabled,
+      scrollZoomEnabled: scrollZoomEnabled,
+      boxZoomEnabled: boxZoomEnabled,
+      pitchWithRotateEnabled: pitchWithRotateEnabled
     )
   }
   func toList() -> [Any?] {
@@ -1988,6 +2021,9 @@ struct GesturesSettings {
       increasePinchToZoomThresholdWhenRotating,
       zoomAnimationAmount,
       pinchPanEnabled,
+      scrollZoomEnabled,
+      boxZoomEnabled,
+      pitchWithRotateEnabled,
     ]
   }
 }

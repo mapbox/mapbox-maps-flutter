@@ -95,13 +95,25 @@ web.DOMRect mapRect() {
   return (all.item(all.length - 1)! as web.HTMLElement).getBoundingClientRect();
 }
 
-web.MouseEvent mouseEvent(String type, double x, double y) => web.MouseEvent(
+web.MouseEvent mouseEvent(
+  String type,
+  double x,
+  double y, {
+  bool shiftKey = false,
+  bool ctrlKey = false,
+  int button = 0,
+  int buttons = 0,
+}) => web.MouseEvent(
   type,
   web.MouseEventInit(
     clientX: x.round(),
     clientY: y.round(),
     bubbles: true,
     cancelable: true,
+    shiftKey: shiftKey,
+    ctrlKey: ctrlKey,
+    button: button,
+    buttons: buttons,
   ),
 );
 

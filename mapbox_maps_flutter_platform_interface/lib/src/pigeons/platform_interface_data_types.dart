@@ -2669,21 +2669,41 @@ class GesturesSettings {
     this.increasePinchToZoomThresholdWhenRotating,
     this.zoomAnimationAmount,
     this.pinchPanEnabled,
+    this.scrollZoomEnabled,
+    this.boxZoomEnabled,
+    this.pitchWithRotateEnabled,
   });
 
   /// Whether the rotate gesture is enabled.
+  ///
+  /// On web, disabling this also disables ctrl+drag pitch (they share a
+  /// handler; see [pitchWithRotateEnabled]) and keyboard
+  /// rotate/pitch (Shift+arrow keys), which share one flag with
+  /// [pitchEnabled] on web.
   bool? rotateEnabled;
 
   /// Whether the pinch to zoom gesture is enabled.
+  ///
+  /// On web this covers touch-pinch only. Mouse-wheel/trackpad zoom is
+  /// [scrollZoomEnabled]; Shift+drag box-zoom is [boxZoomEnabled]. Both
+  /// toggle independently of this field.
   bool? pinchToZoomEnabled;
 
   /// Whether the single-touch scroll gesture is enabled.
+  ///
+  /// On web this disables pointer/touch pan only. Keyboard arrow-pan stays
+  /// on regardless, pending GL JS support.
   bool? scrollEnabled;
 
   /// Whether rotation is enabled for the pinch to zoom gesture.
   bool? simultaneousRotateAndPinchToZoomEnabled;
 
   /// Whether the pitch gesture is enabled.
+  ///
+  /// On web this does not affect ctrl+drag pitch; see
+  /// [pitchWithRotateEnabled] for that. It does disable
+  /// keyboard rotate/pitch (Shift+arrow keys), which share one flag with
+  /// [rotateEnabled] on web.
   bool? pitchEnabled;
 
   /// Configures the directions in which the map is allowed to move during a scroll gesture.
@@ -2722,6 +2742,19 @@ class GesturesSettings {
   /// Whether pan is enabled for the pinch gesture.
   bool? pinchPanEnabled;
 
+  /// Whether the scroll-zoom gesture (mouse wheel and trackpad pinch-to-zoom) is enabled. Web only; has no effect on Android or iOS.
+  bool? scrollZoomEnabled;
+
+  /// Whether the box-zoom gesture (Shift + drag) is enabled. Web only; has no effect on Android or iOS.
+  bool? boxZoomEnabled;
+
+  /// Whether Ctrl + drag combines rotate and pitch into one motion. Web only; has no effect on Android or iOS.
+  ///
+  /// Independent of [pitchEnabled], which does not cover ctrl+drag pitch on
+  /// web. Not independent of [rotateEnabled]: disabling rotate disables
+  /// ctrl+drag pitch too, since both share a handler.
+  bool? pitchWithRotateEnabled;
+
   List<Object?> _toList() {
     return <Object?>[
       rotateEnabled,
@@ -2741,6 +2774,9 @@ class GesturesSettings {
       increasePinchToZoomThresholdWhenRotating,
       zoomAnimationAmount,
       pinchPanEnabled,
+      scrollZoomEnabled,
+      boxZoomEnabled,
+      pitchWithRotateEnabled,
     ];
   }
 
@@ -2768,6 +2804,9 @@ class GesturesSettings {
       increasePinchToZoomThresholdWhenRotating: result[14] as bool?,
       zoomAnimationAmount: result[15] as double?,
       pinchPanEnabled: result[16] as bool?,
+      scrollZoomEnabled: result[17] as bool?,
+      boxZoomEnabled: result[18] as bool?,
+      pitchWithRotateEnabled: result[19] as bool?,
     );
   }
 
@@ -2800,7 +2839,10 @@ class GesturesSettings {
         increasePinchToZoomThresholdWhenRotating ==
             other.increasePinchToZoomThresholdWhenRotating &&
         zoomAnimationAmount == other.zoomAnimationAmount &&
-        pinchPanEnabled == other.pinchPanEnabled;
+        pinchPanEnabled == other.pinchPanEnabled &&
+        scrollZoomEnabled == other.scrollZoomEnabled &&
+        boxZoomEnabled == other.boxZoomEnabled &&
+        pitchWithRotateEnabled == other.pitchWithRotateEnabled;
   }
 
   @override

@@ -2698,15 +2698,40 @@ data class TransitionOptions(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class GesturesSettings(
-  /** Whether the rotate gesture is enabled. */
+  /**
+   * Whether the rotate gesture is enabled.
+   *
+   * On web, disabling this also disables ctrl+drag pitch (they share a
+   * handler; see [pitchWithRotateEnabled]) and keyboard
+   * rotate/pitch (Shift+arrow keys), which share one flag with
+   * [pitchEnabled] on web.
+   */
   val rotateEnabled: Boolean? = null,
-  /** Whether the pinch to zoom gesture is enabled. */
+  /**
+   * Whether the pinch to zoom gesture is enabled.
+   *
+   * On web this covers touch-pinch only. Mouse-wheel/trackpad zoom is
+   * [scrollZoomEnabled]; Shift+drag box-zoom is [boxZoomEnabled]. Both
+   * toggle independently of this field.
+   */
   val pinchToZoomEnabled: Boolean? = null,
-  /** Whether the single-touch scroll gesture is enabled. */
+  /**
+   * Whether the single-touch scroll gesture is enabled.
+   *
+   * On web this disables pointer/touch pan only. Keyboard arrow-pan stays
+   * on regardless, pending GL JS support.
+   */
   val scrollEnabled: Boolean? = null,
   /** Whether rotation is enabled for the pinch to zoom gesture. */
   val simultaneousRotateAndPinchToZoomEnabled: Boolean? = null,
-  /** Whether the pitch gesture is enabled. */
+  /**
+   * Whether the pitch gesture is enabled.
+   *
+   * On web this does not affect ctrl+drag pitch; see
+   * [pitchWithRotateEnabled] for that. It does disable
+   * keyboard rotate/pitch (Shift+arrow keys), which share one flag with
+   * [rotateEnabled] on web.
+   */
   val pitchEnabled: Boolean? = null,
   /** Configures the directions in which the map is allowed to move during a scroll gesture. */
   val scrollMode: ScrollMode? = null,
@@ -2731,7 +2756,19 @@ data class GesturesSettings(
   /** The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. */
   val zoomAnimationAmount: Double? = null,
   /** Whether pan is enabled for the pinch gesture. */
-  val pinchPanEnabled: Boolean? = null
+  val pinchPanEnabled: Boolean? = null,
+  /** Whether the scroll-zoom gesture (mouse wheel and trackpad pinch-to-zoom) is enabled. Web only; has no effect on Android or iOS. */
+  val scrollZoomEnabled: Boolean? = null,
+  /** Whether the box-zoom gesture (Shift + drag) is enabled. Web only; has no effect on Android or iOS. */
+  val boxZoomEnabled: Boolean? = null,
+  /**
+   * Whether Ctrl + drag combines rotate and pitch into one motion. Web only; has no effect on Android or iOS.
+   *
+   * Independent of [pitchEnabled], which does not cover ctrl+drag pitch on
+   * web. Not independent of [rotateEnabled]: disabling rotate disables
+   * ctrl+drag pitch too, since both share a handler.
+   */
+  val pitchWithRotateEnabled: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): GesturesSettings {
@@ -2752,7 +2789,10 @@ data class GesturesSettings(
       val increasePinchToZoomThresholdWhenRotating = pigeonVar_list[14] as Boolean?
       val zoomAnimationAmount = pigeonVar_list[15] as Double?
       val pinchPanEnabled = pigeonVar_list[16] as Boolean?
-      return GesturesSettings(rotateEnabled, pinchToZoomEnabled, scrollEnabled, simultaneousRotateAndPinchToZoomEnabled, pitchEnabled, scrollMode, doubleTapToZoomInEnabled, doubleTouchToZoomOutEnabled, quickZoomEnabled, focalPoint, pinchToZoomDecelerationEnabled, rotateDecelerationEnabled, scrollDecelerationEnabled, increaseRotateThresholdWhenPinchingToZoom, increasePinchToZoomThresholdWhenRotating, zoomAnimationAmount, pinchPanEnabled)
+      val scrollZoomEnabled = pigeonVar_list[17] as Boolean?
+      val boxZoomEnabled = pigeonVar_list[18] as Boolean?
+      val pitchWithRotateEnabled = pigeonVar_list[19] as Boolean?
+      return GesturesSettings(rotateEnabled, pinchToZoomEnabled, scrollEnabled, simultaneousRotateAndPinchToZoomEnabled, pitchEnabled, scrollMode, doubleTapToZoomInEnabled, doubleTouchToZoomOutEnabled, quickZoomEnabled, focalPoint, pinchToZoomDecelerationEnabled, rotateDecelerationEnabled, scrollDecelerationEnabled, increaseRotateThresholdWhenPinchingToZoom, increasePinchToZoomThresholdWhenRotating, zoomAnimationAmount, pinchPanEnabled, scrollZoomEnabled, boxZoomEnabled, pitchWithRotateEnabled)
     }
   }
   fun toList(): List<Any?> {
@@ -2774,6 +2814,9 @@ data class GesturesSettings(
       increasePinchToZoomThresholdWhenRotating,
       zoomAnimationAmount,
       pinchPanEnabled,
+      scrollZoomEnabled,
+      boxZoomEnabled,
+      pitchWithRotateEnabled,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2799,7 +2842,10 @@ data class GesturesSettings(
       increaseRotateThresholdWhenPinchingToZoom == other.increaseRotateThresholdWhenPinchingToZoom &&
       increasePinchToZoomThresholdWhenRotating == other.increasePinchToZoomThresholdWhenRotating &&
       zoomAnimationAmount == other.zoomAnimationAmount &&
-      pinchPanEnabled == other.pinchPanEnabled
+      pinchPanEnabled == other.pinchPanEnabled &&
+      scrollZoomEnabled == other.scrollZoomEnabled &&
+      boxZoomEnabled == other.boxZoomEnabled &&
+      pitchWithRotateEnabled == other.pitchWithRotateEnabled
   }
 
   override fun hashCode(): Int = toList().hashCode()

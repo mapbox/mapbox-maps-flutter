@@ -160,6 +160,9 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Mouse-wheel / trackpad-pinch zoom handler.
   external JSGestureHandler get scrollZoom;
 
+  /// Shift+drag box-zoom handler.
+  external JSGestureHandler get boxZoom;
+
   /// Two-finger vertical pitch handler.
   external JSGestureHandler get touchPitch;
 

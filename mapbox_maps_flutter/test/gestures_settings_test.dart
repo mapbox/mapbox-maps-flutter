@@ -95,6 +95,9 @@ void main() {
         pitchEnabled: false,
         doubleTapToZoomInEnabled: true,
         quickZoomEnabled: false,
+        scrollZoomEnabled: true,
+        boxZoomEnabled: false,
+        pitchWithRotateEnabled: true,
       );
 
       await gesturesSettings.updateSettings(settings);
@@ -106,6 +109,9 @@ void main() {
       expect(updated.pitchEnabled, false);
       expect(updated.doubleTapToZoomInEnabled, true);
       expect(updated.quickZoomEnabled, false);
+      expect(updated.scrollZoomEnabled, true);
+      expect(updated.boxZoomEnabled, false);
+      expect(updated.pitchWithRotateEnabled, true);
     });
 
     MapContentGestureContext fakeContext() => MapContentGestureContext(

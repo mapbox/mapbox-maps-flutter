@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'platform.dart' show isAndroid, isMobile;
+import 'platform.dart' show isAndroid, isMobile, isWeb;
 
 class GesturesExample extends StatefulWidget {
   const GesturesExample({super.key});
@@ -86,6 +86,23 @@ class GesturesExampleState extends State<GesturesExample> {
         read: (s) => s.increaseRotateThresholdWhenPinchingToZoom,
         apply: (v) =>
             GesturesSettings(increaseRotateThresholdWhenPinchingToZoom: v),
+      ),
+    ],
+    if (isWeb) ...[
+      _GestureToggle(
+        label: 'Scroll zoom',
+        read: (s) => s.scrollZoomEnabled,
+        apply: (v) => GesturesSettings(scrollZoomEnabled: v),
+      ),
+      _GestureToggle(
+        label: 'Box zoom',
+        read: (s) => s.boxZoomEnabled,
+        apply: (v) => GesturesSettings(boxZoomEnabled: v),
+      ),
+      _GestureToggle(
+        label: 'Pitch with rotate',
+        read: (s) => s.pitchWithRotateEnabled,
+        apply: (v) => GesturesSettings(pitchWithRotateEnabled: v),
       ),
     ],
   ];

@@ -1,3 +1,7 @@
+### main
+
+* [web] Add `GesturesSettings.scrollZoomEnabled`, `.boxZoomEnabled`, and `.pitchWithRotateEnabled` (web only; no effect on Android/iOS). **Behavior change:** `pinchToZoomEnabled` no longer also controls mouse-wheel/trackpad zoom on web (use `scrollZoomEnabled`), and `pitchEnabled` no longer also controls whether ctrl+drag combines rotate with pitch (use `pitchWithRotateEnabled`).
+
 ### 3.0.0-alpha.27
 
 > [!IMPORTANT]

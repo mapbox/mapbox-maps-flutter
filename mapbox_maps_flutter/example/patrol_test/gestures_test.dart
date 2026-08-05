@@ -2,7 +2,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_flutter_examples/platform.dart'
-    show isAndroid, isMobile;
+    show isAndroid, isMobile, isWeb;
 import 'patrol.dart';
 import 'empty_map_widget.dart' as app;
 
@@ -34,6 +34,9 @@ void main() {
       increasePinchToZoomThresholdWhenRotating: true,
       zoomAnimationAmount: 42,
       pinchPanEnabled: true,
+      scrollZoomEnabled: false,
+      boxZoomEnabled: true,
+      pitchWithRotateEnabled: false,
     );
 
     await gestures.updateSettings(settings);
@@ -48,6 +51,20 @@ void main() {
       updatedSettings.doubleTapToZoomInEnabled,
       settings.doubleTapToZoomInEnabled,
     );
+
+    if (isWeb) {
+      expect(updatedSettings.scrollZoomEnabled, settings.scrollZoomEnabled);
+      expect(updatedSettings.boxZoomEnabled, settings.boxZoomEnabled);
+      expect(
+        updatedSettings.pitchWithRotateEnabled,
+        settings.pitchWithRotateEnabled,
+      );
+
+      expect(updatedSettings.pinchToZoomEnabled, true);
+      expect(updatedSettings.scrollZoomEnabled, false);
+      expect(updatedSettings.pitchEnabled, true);
+      expect(updatedSettings.pitchWithRotateEnabled, false);
+    }
 
     if (isMobile) {
       // Supported platforms: mobile.

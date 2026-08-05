@@ -41,24 +41,30 @@ final class GesturesSettingsManager {
 
   /// Returns the current [GesturesSettings].
   ///
+  /// {@template gestures_settings_platform_support}
   /// Supported [GesturesSettings] fields per platform:
-  /// * Mobile (iOS / Android): all fields.
+  /// * Mobile (iOS / Android): all fields except
+  ///   [GesturesSettings.scrollZoomEnabled], [GesturesSettings.boxZoomEnabled],
+  ///   and [GesturesSettings.pitchWithRotateEnabled] (web only).
   /// * Web: [GesturesSettings.scrollEnabled],
   ///   [GesturesSettings.pinchToZoomEnabled],
   ///   [GesturesSettings.rotateEnabled], [GesturesSettings.pitchEnabled],
-  ///   [GesturesSettings.doubleTapToZoomInEnabled]. Other fields return
-  ///   null.
+  ///   [GesturesSettings.doubleTapToZoomInEnabled],
+  ///   [GesturesSettings.scrollZoomEnabled], [GesturesSettings.boxZoomEnabled],
+  ///   [GesturesSettings.pitchWithRotateEnabled].
+  ///
+  /// Some of these fields interact on web (e.g. rotate and pitch share a
+  /// keyboard flag). See each field's own docs for the specifics.
+  /// {@endtemplate}
+  ///
+  /// Fields not supported on the current platform return null.
   Future<GesturesSettings> getSettings() => _impl.getSettings();
 
   /// Applies [GesturesSettings] configuration changes.
   ///
-  /// Supported [GesturesSettings] fields per platform:
-  /// * Mobile (iOS / Android): all fields.
-  /// * Web: [GesturesSettings.scrollEnabled],
-  ///   [GesturesSettings.pinchToZoomEnabled],
-  ///   [GesturesSettings.rotateEnabled], [GesturesSettings.pitchEnabled],
-  ///   [GesturesSettings.doubleTapToZoomInEnabled]. Other fields are
-  ///   ignored.
+  /// {@macro gestures_settings_platform_support}
+  ///
+  /// Fields not supported on the current platform are ignored.
   ///
   /// > **Note:** on Web, [GesturesSettings.scrollEnabled] = `false`
   /// > disables pointer/touch pan but keyboard arrow-pan stays on for
