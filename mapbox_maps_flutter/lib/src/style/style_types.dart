@@ -177,8 +177,10 @@ extension StyleColorList on List {
 
   Color _decodeHSLColor() {
     final hue = this[1] is num ? (this[1] as num).toDouble() : null;
-    final saturation = this[2] is num ? (this[2] as num).toDouble() : null;
-    final lightness = this[3] is num ? (this[3] as num).toDouble() : null;
+    final saturation = this[2] is num
+        ? (this[2] as num).toDouble() / 100
+        : null;
+    final lightness = this[3] is num ? (this[3] as num).toDouble() / 100 : null;
     if (hue != null && saturation != null && lightness != null) {
       return HSLColor.fromAHSL(1, hue, saturation, lightness).toColor();
     }
@@ -187,9 +189,11 @@ extension StyleColorList on List {
 
   Color _decodeHSLAColor() {
     final hue = this[1] is num ? (this[1] as num).toDouble() : null;
-    final saturation = this[2] is num ? (this[2] as num).toDouble() : null;
-    final lightness = this[3] is num ? (this[3] as num).toDouble() : null;
-    final alpha = this[4] is num ? ((this[4] as num) * 255).toDouble() : null;
+    final saturation = this[2] is num
+        ? (this[2] as num).toDouble() / 100
+        : null;
+    final lightness = this[3] is num ? (this[3] as num).toDouble() / 100 : null;
+    final alpha = this[4] is num ? (this[4] as num).toDouble() : null;
     if (hue != null &&
         saturation != null &&
         lightness != null &&
@@ -204,7 +208,7 @@ extension StyleColorList on List {
     final green = this[2] is num ? (this[2] as num).toInt() : null;
     final blue = this[3] is num ? (this[3] as num).toInt() : null;
     if (red != null && green != null && blue != null) {
-      return Color.fromARGB(1, red, green, blue);
+      return Color.fromARGB(255, red, green, blue);
     }
     return const Color(0x00000000);
   }
