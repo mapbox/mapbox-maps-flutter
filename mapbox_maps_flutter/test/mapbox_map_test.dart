@@ -869,10 +869,6 @@ void main() {
   group('MapboxMap', () {
     // ===== Sub-interfaces =====
 
-    test('style returns a StyleManager wrapping the platform interface', () {
-      expect(mapboxMap.style, isA<StyleManager>());
-    });
-
     test('gestures returns a GesturesSettingsManager', () {
       expect(mapboxMap.gestures, isA<GesturesSettingsManager>());
     });
@@ -918,9 +914,9 @@ void main() {
     });
 
     test('sub-interfaces are cached (late final)', () {
-      final style1 = mapboxMap.style;
-      final style2 = mapboxMap.style;
-      expect(identical(style1, style2), isTrue);
+      final gestures1 = mapboxMap.gestures;
+      final gestures2 = mapboxMap.gestures;
+      expect(identical(gestures1, gestures2), isTrue);
     });
 
     // ===== Style loading =====

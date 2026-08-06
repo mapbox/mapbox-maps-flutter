@@ -146,7 +146,7 @@ Future<MapboxMap?> _pumpMapApp({
     textureView: textureView,
     onMapCreated: (MapboxMap mapboxMap) async {
       if (styleJson != null) {
-        await mapboxMap.style.setStyleJSON(styleJson);
+        await mapboxMap.setStyleJSON(styleJson);
       }
       completer.complete(mapboxMap);
     },

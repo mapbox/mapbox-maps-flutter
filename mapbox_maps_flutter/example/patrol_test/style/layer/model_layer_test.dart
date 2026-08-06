@@ -27,13 +27,13 @@ void main() {
     // addLayer with sourceId "composite" fails validation on web. Provide
     // it explicitly when it isn't already present (no-op on platforms
     // where the Standard import already publishes it).
-    if (!await mapboxMap.style.styleSourceExists("composite")) {
-      await mapboxMap.style.addSource(
+    if (!await mapboxMap.styleSourceExists("composite")) {
+      await mapboxMap.addSource(
         VectorSource(id: "composite", url: "mapbox://mapbox.mapbox-streets-v8"),
       );
     }
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       ModelLayer(
         id: 'layer',
         sourceId: "composite",
@@ -62,7 +62,7 @@ void main() {
         modelType: ModelType.COMMON_3D,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as ModelLayer;
+    var layer = await mapboxMap.getLayer('layer') as ModelLayer;
     expect('composite', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -106,13 +106,13 @@ void main() {
     // addLayer with sourceId "composite" fails validation on web. Provide
     // it explicitly when it isn't already present (no-op on platforms
     // where the Standard import already publishes it).
-    if (!await mapboxMap.style.styleSourceExists("composite")) {
-      await mapboxMap.style.addSource(
+    if (!await mapboxMap.styleSourceExists("composite")) {
+      await mapboxMap.addSource(
         VectorSource(id: "composite", url: "mapbox://mapbox.mapbox-streets-v8"),
       );
     }
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       ModelLayer(
         id: 'layer',
         sourceId: "composite",
@@ -158,7 +158,7 @@ void main() {
         modelType: ModelType.COMMON_3D,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as ModelLayer;
+    var layer = await mapboxMap.getLayer('layer') as ModelLayer;
     expect('composite', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

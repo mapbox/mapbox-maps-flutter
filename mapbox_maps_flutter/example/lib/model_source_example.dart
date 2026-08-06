@@ -99,7 +99,7 @@ class _ModelSourceExampleState extends State<ModelSourceExample> {
       throw Exception('MapboxMap is not ready yet');
     }
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       ModelSource(
         id: _sourceId,
         models: [
@@ -170,7 +170,7 @@ class _ModelSourceExampleState extends State<ModelSourceExample> {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       ModelLayer(
         id: _layerId,
         sourceId: _sourceId,
@@ -195,7 +195,7 @@ class _ModelSourceExampleState extends State<ModelSourceExample> {
       return;
     }
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       ModelSource(
         id: _interactiveSourceId,
         batched: false,
@@ -217,7 +217,7 @@ class _ModelSourceExampleState extends State<ModelSourceExample> {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       ModelLayer(
         id: _interactiveLayerId,
         sourceId: _interactiveSourceId,

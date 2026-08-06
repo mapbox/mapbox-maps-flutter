@@ -22,7 +22,7 @@ void main() {
     await tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       ModelSource(
         id: "source",
         models: [
@@ -51,7 +51,7 @@ void main() {
       ),
     );
 
-    var source = await mapboxMap.style.getSource('source') as ModelSource;
+    var source = await mapboxMap.getSource('source') as ModelSource;
     expect(source.id, 'source');
     var models = await source.models;
     expect(models?.length, 1);
@@ -88,7 +88,7 @@ void main() {
     await tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       ModelSource(
         id: "source",
         batched: true,
@@ -98,7 +98,7 @@ void main() {
       ),
     );
 
-    var source = await mapboxMap.style.getSource('source') as ModelSource;
+    var source = await mapboxMap.getSource('source') as ModelSource;
     expect(source.id, 'source');
 
     var maxzoom = await source.maxzoom;

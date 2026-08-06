@@ -17,20 +17,12 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleImportConfigProperty(
-      "basemap",
-      "lightPreset",
-      "night",
-    );
-    mapboxMap.style.setStyleImportConfigProperty(
-      "basemap",
-      "theme",
-      "monochrome",
-    );
+    mapboxMap.setStyleImportConfigProperty("basemap", "lightPreset", "night");
+    mapboxMap.setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       ImageSource(
         id: "image_source-id",
         coordinates: [
@@ -41,7 +33,7 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
         ],
       ),
     );
-    await mapboxMap?.style.addLayer(
+    await mapboxMap?.addLayer(
       RasterLayer(
         id: "image_layer-id",
         sourceId: "image_source-id",
@@ -51,7 +43,7 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
       ),
     );
     var imageSource =
-        await mapboxMap?.style.getSource("image_source-id") as ImageSource;
+        await mapboxMap?.getSource("image_source-id") as ImageSource;
     final ByteData bytes = await rootBundle.load('assets/miami_beach.png');
     final Uint8List list = bytes.buffer.asUint8List();
     imageSource.updateImage(MbxImage(width: 280, height: 203, data: list));

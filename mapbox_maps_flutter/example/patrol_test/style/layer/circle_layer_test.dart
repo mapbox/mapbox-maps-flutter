@@ -27,7 +27,7 @@ void main() {
     // is required by gl-js whenever a `line` layer sets line-gradient or
     // line-trim-* properties, so we enable it unconditionally; it's a no-op
     // for non-line layers.
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(
         id: "source",
         data: '{"type":"FeatureCollection","features":[]}',
@@ -35,7 +35,7 @@ void main() {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       CircleLayer(
         id: 'layer',
         sourceId: 'source',
@@ -59,7 +59,7 @@ void main() {
         circleTranslateAnchor: CircleTranslateAnchor.MAP,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as CircleLayer;
+    var layer = await mapboxMap.getLayer('layer') as CircleLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -91,7 +91,7 @@ void main() {
     // is required by gl-js whenever a `line` layer sets line-gradient or
     // line-trim-* properties, so we enable it unconditionally; it's a no-op
     // for non-line layers.
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(
         id: "source",
         data: '{"type":"FeatureCollection","features":[]}',
@@ -99,7 +99,7 @@ void main() {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       CircleLayer(
         id: 'layer',
         sourceId: 'source',
@@ -131,7 +131,7 @@ void main() {
         circleTranslateAnchorExpression: ['string', 'map'],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as CircleLayer;
+    var layer = await mapboxMap.getLayer('layer') as CircleLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

@@ -22,13 +22,12 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style;
 
     // Load a style fragment from a JSON file and add it to the map
     var styleJson = await rootBundle.loadString(
       "assets/fragment_realestate_NY.json",
     );
-    mapboxMap.style.addStyleImportFromJSON("real-estate-fragment", styleJson);
+    mapboxMap.addStyleImportFromJSON("real-estate-fragment", styleJson);
 
     // When the map is ready, add a tap interaction to show a snackbar with the name of the place that was tapped
     mapboxMap.addInteraction(
@@ -120,8 +119,8 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
 
     final lineSource = GeoJsonSource(id: 'line-layer', data: json.encode(line));
 
-    mapboxMap?.style.addSource(lineSource);
-    mapboxMap?.style.addLayer(lineLayer);
+    mapboxMap?.addSource(lineSource);
+    mapboxMap?.addLayer(lineLayer);
   }
 
   void _changeLightSetting() {
@@ -158,6 +157,6 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
       "showPlaceLabels": labelsSetting,
       "showLandmarkIcons": landmarkIconsSetting,
     };
-    mapboxMap?.style.setStyleImportConfigProperties("basemap", configs);
+    mapboxMap?.setStyleImportConfigProperties("basemap", configs);
   }
 }

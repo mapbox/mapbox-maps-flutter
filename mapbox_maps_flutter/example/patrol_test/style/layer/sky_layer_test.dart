@@ -22,7 +22,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       SkyLayer(
         id: 'layer',
         visibility: Visibility.NONE,
@@ -40,7 +40,7 @@ void main() {
         skyType: SkyType.GRADIENT,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as SkyLayer;
+    var layer = await mapboxMap.getLayer('layer') as SkyLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
@@ -61,7 +61,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       SkyLayer(
         id: 'layer',
         visibilityExpression: ['string', 'none'],
@@ -90,7 +90,7 @@ void main() {
         skyTypeExpression: ['string', 'gradient'],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as SkyLayer;
+    var layer = await mapboxMap.getLayer('layer') as SkyLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);

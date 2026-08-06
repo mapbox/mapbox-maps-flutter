@@ -195,7 +195,7 @@ class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
               child: Icon(Icons.swap_horiz),
               heroTag: null,
               onPressed: () {
-                mapboxMap?.style.setStyleURI(
+                mapboxMap?.setStyleURI(
                   annotationStyles[++styleIndex % annotationStyles.length],
                 );
               },

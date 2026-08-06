@@ -45,7 +45,7 @@ class _TransparentGlobeExampleState extends State<TransparentGlobeExample>
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     final json =
         await rootBundle.loadString('assets/transparent_globe_style.json');
-    await mapboxMap.style.setStyleJSON(json);
+    await mapboxMap.setStyleJSON(json);
   }
 
   @override

@@ -30,7 +30,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
     await mapboxMap.loadStyleURI(MapboxStyles.DARK);
-    var style = await mapboxMap.style.getStyleURI();
+    var style = await mapboxMap.getStyleURI();
     expect(MapboxStyles.DARK, style);
   });
 
@@ -44,7 +44,7 @@ void main() {
 
     await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
 
-    var getStyleJson = await mapboxMap.style.getStyleJSON();
+    var getStyleJson = await mapboxMap.getStyleJSON();
     expect(styleJson, getStyleJson);
   });
 
@@ -78,11 +78,11 @@ void main() {
 
     await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
 
-    var getStyleJson = await mapboxMap.style.getStyleJSON();
+    var getStyleJson = await mapboxMap.getStyleJSON();
     expect(styleJson, getStyleJson);
 
     // Test getStyleSourceProperty method
-    var rasterLayers = await mapboxMap.style.getStyleSourceProperty(
+    var rasterLayers = await mapboxMap.getStyleSourceProperty(
       "mapbox",
       "rasterLayers",
     );
@@ -99,7 +99,7 @@ void main() {
     expect(rasterDataLayers.contains(expectedValue.last), true);
 
     // Test getting the value from the source directly
-    var source = await mapboxMap.style.getSource("mapbox");
+    var source = await mapboxMap.getSource("mapbox");
     if (source is RasterArraySource) {
       var layers = await source.rasterLayers;
       expect(layers?.contains(expectedValue.first), true);
@@ -237,14 +237,13 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
-    var style = mapboxMap.style;
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
 
     app.events.resetOnStyleDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource('source', source);
-    style.addStyleLayer(layer, null);
+    mapboxMap.addStyleSource('source', source);
+    mapboxMap.addStyleLayer(layer, null);
 
     await app.waitForEvent($.tester, app.events.onSourceDataLoaded.future);
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
@@ -340,7 +339,6 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
-    var style = mapboxMap.style;
     var options = CameraOptions(
       center: Point(coordinates: Position(-77.032667, 38.913175)),
       zoom: 10,
@@ -356,7 +354,7 @@ void main() {
       'assets/symbols/custom-icon.png',
     );
     final Uint8List list = bytes.buffer.asUint8List();
-    await style.addStyleImage(
+    await mapboxMap.addStyleImage(
       'icon',
       1.0,
       MbxImage(width: 40, height: 40, data: list),
@@ -368,8 +366,8 @@ void main() {
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource('source', source);
-    style.addStyleLayer(layer, null);
+    mapboxMap.addStyleSource('source', source);
+    mapboxMap.addStyleLayer(layer, null);
     await app.waitForEvent($.tester, app.events.onSourceDataLoaded.future);
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
 
@@ -413,7 +411,6 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
-    var style = mapboxMap.style;
     var options = CameraOptions(
       center: Point(coordinates: Position(-77.032667, 38.913175)),
       zoom: 10,
@@ -431,8 +428,8 @@ void main() {
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource('source', source);
-    style.addStyleLayer(layer, null);
+    mapboxMap.addStyleSource('source', source);
+    mapboxMap.addStyleLayer(layer, null);
     await app.waitForEvent($.tester, app.events.onSourceDataLoaded.future);
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
 
@@ -449,7 +446,6 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
-    var style = mapboxMap.style;
     var source = await rootBundle.loadString(
       'assets/cluster/cluster_source.json',
     );
@@ -465,10 +461,10 @@ void main() {
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource("earthquakes", source);
-    style.addStyleLayer(layer, null);
-    style.addStyleLayer(clusterCountLayer, null);
-    style.addStyleLayer(unclusteredLayer, null);
+    mapboxMap.addStyleSource("earthquakes", source);
+    mapboxMap.addStyleLayer(layer, null);
+    mapboxMap.addStyleLayer(clusterCountLayer, null);
+    mapboxMap.addStyleLayer(unclusteredLayer, null);
     await app.waitForEvent($.tester, app.events.onSourceDataLoaded.future);
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
 

@@ -23,7 +23,7 @@ void main() {
     await tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(
         id: "source",
         data: json.encode(Point(coordinates: Position(-77.032667, 38.913175))),
@@ -60,7 +60,7 @@ void main() {
       ),
     );
 
-    var source = await mapboxMap.style.getSource('source') as GeoJsonSource;
+    var source = await mapboxMap.getSource('source') as GeoJsonSource;
     expect(source.id, 'source');
     var maxzoom = await source.maxzoom;
     expect(maxzoom, 1.0);

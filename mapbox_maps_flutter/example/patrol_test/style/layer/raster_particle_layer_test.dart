@@ -23,11 +23,11 @@ void main() {
     await tester.pumpAndSettle();
 
     // gl-js requires a `raster-array` source for `raster-particle` layers.
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterArraySource(id: "source", tiles: ["a", "b", "c"]),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       RasterParticleLayer(
         id: 'layer',
         sourceId: 'source',
@@ -44,7 +44,7 @@ void main() {
         rasterParticleSpeedFactor: 1.0,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as RasterParticleLayer;
+    var layer = await mapboxMap.getLayer('layer') as RasterParticleLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -65,11 +65,11 @@ void main() {
     await tester.pumpAndSettle();
 
     // gl-js requires a `raster-array` source for `raster-particle` layers.
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterArraySource(id: "source", tiles: ["a", "b", "c"]),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       RasterParticleLayer(
         id: 'layer',
         sourceId: 'source',
@@ -91,7 +91,7 @@ void main() {
         rasterParticleSpeedFactorExpression: ['number', 1.0],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as RasterParticleLayer;
+    var layer = await mapboxMap.getLayer('layer') as RasterParticleLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

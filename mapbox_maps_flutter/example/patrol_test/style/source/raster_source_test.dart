@@ -21,7 +21,7 @@ void main() {
     await tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterSource(
         id: "source",
         tiles: ["a", "b", "c"],
@@ -43,7 +43,7 @@ void main() {
       ),
     );
 
-    var source = await mapboxMap.style.getSource('source') as RasterSource;
+    var source = await mapboxMap.getSource('source') as RasterSource;
     expect(source.id, 'source');
     var tiles = await source.tiles;
     expect(tiles, ["a", "b", "c"]);

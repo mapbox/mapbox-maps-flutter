@@ -26,7 +26,7 @@ void main() {
     // is required by gl-js whenever a `line` layer sets line-gradient or
     // line-trim-* properties, so we enable it unconditionally; it's a no-op
     // for non-line layers.
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(
         id: "source",
         data: '{"type":"FeatureCollection","features":[]}',
@@ -34,7 +34,7 @@ void main() {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       ClipLayer(
         id: 'layer',
         sourceId: 'source',
@@ -46,7 +46,7 @@ void main() {
         clipLayerTypes: ["model", "symbol"],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as ClipLayer;
+    var layer = await mapboxMap.getLayer('layer') as ClipLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -66,7 +66,7 @@ void main() {
     // is required by gl-js whenever a `line` layer sets line-gradient or
     // line-trim-* properties, so we enable it unconditionally; it's a no-op
     // for non-line layers.
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(
         id: "source",
         data: '{"type":"FeatureCollection","features":[]}',
@@ -74,7 +74,7 @@ void main() {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       ClipLayer(
         id: 'layer',
         sourceId: 'source',
@@ -97,7 +97,7 @@ void main() {
         ],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as ClipLayer;
+    var layer = await mapboxMap.getLayer('layer') as ClipLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

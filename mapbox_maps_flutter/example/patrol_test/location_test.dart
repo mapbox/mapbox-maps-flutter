@@ -21,10 +21,10 @@ void main() {
     final expression = '["interpolate",["linear"],["zoom"],8,0,24,1]';
 
     if (isAndroid) {
-      await mapboxMap.style.addLayer(
+      await mapboxMap.addLayer(
         SymbolLayer(id: 'layer-above', sourceId: 'source'),
       );
-      await mapboxMap.style.addLayer(
+      await mapboxMap.addLayer(
         SymbolLayer(id: 'layer-below', sourceId: 'source'),
       );
     }
@@ -112,10 +112,10 @@ void main() {
     await tester.pumpAndSettle();
 
     if (isAndroid) {
-      await mapboxMap.style.addLayer(
+      await mapboxMap.addLayer(
         SymbolLayer(id: 'layer-above', sourceId: 'source'),
       );
-      await mapboxMap.style.addLayer(
+      await mapboxMap.addLayer(
         SymbolLayer(id: 'layer-below', sourceId: 'source'),
       );
     }

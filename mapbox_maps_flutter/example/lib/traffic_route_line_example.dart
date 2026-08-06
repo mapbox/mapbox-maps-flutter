@@ -22,12 +22,12 @@ class TrafficRouteLineExampleState extends State<TrafficRouteLineExample> {
 
   _onStyleLoadedCallback(StyleLoadedEventData data) async {
     final data = await rootBundle.loadString('assets/sf_airport_route.geojson');
-    await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
+    await mapboxMap.addSource(GeoJsonSource(id: "line", data: data));
     await _addRouteLine();
   }
 
   _addRouteLine() async {
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       LineLayer(
         id: "line-layer",
         sourceId: "line",

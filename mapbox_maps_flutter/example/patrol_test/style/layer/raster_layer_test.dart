@@ -22,7 +22,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterSource(
         id: "source",
         tileSize: 256,
@@ -34,7 +34,7 @@ void main() {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       RasterLayer(
         id: 'layer',
         sourceId: 'source',
@@ -58,7 +58,7 @@ void main() {
         rasterSaturation: 1.0,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as RasterLayer;
+    var layer = await mapboxMap.getLayer('layer') as RasterLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -85,7 +85,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterSource(
         id: "source",
         tileSize: 256,
@@ -97,7 +97,7 @@ void main() {
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       RasterLayer(
         id: 'layer',
         sourceId: 'source',
@@ -132,7 +132,7 @@ void main() {
         rasterSaturationExpression: ['number', 1.0],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as RasterLayer;
+    var layer = await mapboxMap.getLayer('layer') as RasterLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

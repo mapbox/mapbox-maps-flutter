@@ -59,7 +59,7 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
             });
 
             // Update icon size expression based on selection
-            mapboxMap.style.setStyleLayerProperty('points', 'icon-size', [
+            mapboxMap.setStyleLayerProperty('points', 'icon-size', [
               'case',
               [
                 '==',
@@ -120,7 +120,7 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
     };
 
     // Add GeoJSON source with flag locations
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       GeoJsonSource(id: 'points', data: json.encode(geojson)),
     );
 
@@ -141,6 +141,6 @@ class _CustomVectorIconsExampleState extends State<CustomVectorIconsExample> {
       ],
     );
 
-    await mapboxMap?.style.addLayer(layer);
+    await mapboxMap?.addLayer(layer);
   }
 }

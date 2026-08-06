@@ -22,7 +22,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       BackgroundLayer(
         id: 'layer',
         visibility: Visibility.NONE,
@@ -36,7 +36,7 @@ void main() {
         backgroundPitchAlignment: BackgroundPitchAlignment.MAP,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
+    var layer = await mapboxMap.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
@@ -53,7 +53,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       BackgroundLayer(
         id: 'layer',
         visibilityExpression: ['string', 'none'],
@@ -72,7 +72,7 @@ void main() {
         backgroundPitchAlignmentExpression: ['string', 'map'],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
+    var layer = await mapboxMap.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);

@@ -43,16 +43,16 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
   }
 
   void _addLayerAndSource() async {
-    mapboxMap?.style.styleSourceExists("earthquakes").then((value) async {
+    mapboxMap?.styleSourceExists("earthquakes").then((value) async {
       if (!value) {
         var source = await rootBundle.loadString(
           'assets/cluster/cluster_source.json',
         );
-        mapboxMap?.style.addStyleSource("earthquakes", source);
+        mapboxMap?.addStyleSource("earthquakes", source);
       }
     });
 
-    mapboxMap?.style.styleLayerExists("clusters").then((value) async {
+    mapboxMap?.styleLayerExists("clusters").then((value) async {
       if (!value) {
         // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
         // with three steps to implement three types of circles:
@@ -62,17 +62,17 @@ class StyleClustersExampleState extends State<StyleClustersExample> {
         var layer = await rootBundle.loadString(
           'assets/cluster/cluster_layer.json',
         );
-        mapboxMap?.style.addStyleLayer(layer, null);
+        mapboxMap?.addStyleLayer(layer, null);
 
         var clusterCountLayer = await rootBundle.loadString(
           'assets/cluster/cluster_count_layer.json',
         );
-        mapboxMap?.style.addStyleLayer(clusterCountLayer, null);
+        mapboxMap?.addStyleLayer(clusterCountLayer, null);
 
         var unclusteredLayer = await rootBundle.loadString(
           'assets/cluster/unclustered_point_layer.json',
         );
-        mapboxMap?.style.addStyleLayer(unclusteredLayer, null);
+        mapboxMap?.addStyleLayer(unclusteredLayer, null);
       }
     });
   }

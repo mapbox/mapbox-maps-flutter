@@ -33,7 +33,7 @@ void main() {
     );
     final snapshotter = await Snapshotter.create(options: options);
 
-    await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
+    await snapshotter.setStyleURI(MapboxStyles.LIGHT);
     final snapshotData = await snapshotter.start();
 
     // Flutter's Golden test would be quite a good fit here, too bad it is broken on Android.
@@ -62,7 +62,7 @@ void main() {
       },
     );
 
-    await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
+    await snapshotter.setStyleURI(MapboxStyles.LIGHT);
 
     expect(styleLoaded.future, completes);
     expect(styleDataLoaded.future, completes);
@@ -81,7 +81,7 @@ void main() {
     );
     final snapshotter = await Snapshotter.create(options: options);
 
-    await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
+    await snapshotter.setStyleURI(MapboxStyles.LIGHT);
 
     await snapshotter.setSize(Size(width: 192, height: 192));
     final size = await snapshotter.getSize();
@@ -144,7 +144,7 @@ void main() {
     );
     final snapshotter = await Snapshotter.create(options: options);
 
-    await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
+    await snapshotter.setStyleURI(MapboxStyles.LIGHT);
     final snapshot = snapshotter.start();
 
     snapshotter.cancel();

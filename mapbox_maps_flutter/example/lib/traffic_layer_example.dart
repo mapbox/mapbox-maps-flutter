@@ -37,14 +37,14 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
 
   Future<void> addTrafficLayer() async {
     // Add the vector source
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       VectorSource(
         id: 'traffic-source',
         url: 'mapbox://mapbox.mapbox-traffic-v1',
       ),
     );
     // Add the traffic layer
-    await mapboxMap?.style.addLayer(
+    await mapboxMap?.addLayer(
       LineLayer(
         id: 'traffic-layer',
         sourceId: 'traffic-source',
@@ -108,7 +108,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
     setState(() {
       _trafficLayerVisible = !_trafficLayerVisible!;
     });
-    await mapboxMap!.style.setStyleLayerProperty(
+    await mapboxMap!.setStyleLayerProperty(
       'traffic-layer',
       'visibility',
       _trafficLayerVisible! ? 'visible' : 'none',

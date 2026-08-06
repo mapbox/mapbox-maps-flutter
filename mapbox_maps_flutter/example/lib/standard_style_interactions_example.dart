@@ -199,6 +199,6 @@ class StandardStyleInteractionsState
       "theme": theme,
       "colorBuildingHighlight": buildingHighlightColor,
     };
-    mapboxMap?.style.setStyleImportConfigProperties("basemap", configs);
+    mapboxMap?.setStyleImportConfigProperties("basemap", configs);
   }
 }

@@ -52,23 +52,23 @@ class StyleExampleState extends State<StyleExample> {
   }
 
   void _addLayerAndSource() async {
-    final style = mapboxMap?.style;
-    if (style == null) return;
+    final map = mapboxMap;
+    if (map == null) return;
 
-    if (!await style.styleSourceExists("source")) {
+    if (!await map.styleSourceExists("source")) {
       final source = await rootBundle.loadString('assets/source.json');
-      await style.addStyleSource("source", source);
+      await map.addStyleSource("source", source);
     }
-    if (!await style.styleLayerExists("custom")) {
+    if (!await map.styleLayerExists("custom")) {
       final layer = await rootBundle.loadString('assets/layer.json');
-      await style.addStyleLayer(layer, null);
+      await map.addStyleLayer(layer, null);
     }
-    if (!await style.styleSourceExists("point_source")) {
+    if (!await map.styleSourceExists("point_source")) {
       final ByteData bytes = await rootBundle.load(
         'assets/symbols/custom-icon.png',
       );
       final Uint8List list = bytes.buffer.asUint8List();
-      await style.addStyleImage(
+      await map.addStyleImage(
         "icon",
         1.0,
         MbxImage(width: 40, height: 40, data: list),
@@ -83,25 +83,22 @@ class StyleExampleState extends State<StyleExample> {
       };
       final data = {"type": "Feature", "geometry": geometry};
       final source = {"type": "geojson", "data": data};
-      await style.addStyleSource("point_source", json.encode(source));
+      await map.addStyleSource("point_source", json.encode(source));
     }
-    if (!await style.styleLayerExists("point_layer")) {
+    if (!await map.styleLayerExists("point_layer")) {
       final layer = {
         "id": "point_layer",
         "type": "symbol",
         "source": "point_source",
       };
-      await style.addStyleLayer(json.encode(layer), null);
+      await map.addStyleLayer(json.encode(layer), null);
       final properties = {
         "icon-image": "icon",
         "icon-opacity": 1.0,
         "icon-size": 1.0,
         "icon-color": "blue",
       };
-      await style.setStyleLayerProperties(
-        "point_layer",
-        json.encode(properties),
-      );
+      await map.setStyleLayerProperties("point_layer", json.encode(properties));
     }
   }
 
@@ -109,7 +106,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleURI'),
       onPressed: () {
-        mapboxMap?.style.getStyleURI().then(
+        mapboxMap?.getStyleURI().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Style URI: $value"),
@@ -126,7 +123,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setStyleURI'),
       onPressed: () {
-        mapboxMap?.style.setStyleURI(
+        mapboxMap?.setStyleURI(
           _styleStrings[styleIndex++ % _styleStrings.length],
         );
       },
@@ -138,7 +135,7 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('setStyleJSON'),
       onPressed: () async {
         var styleJson = await rootBundle.loadString('assets/style.json');
-        mapboxMap?.style.setStyleJSON(styleJson);
+        mapboxMap?.setStyleJSON(styleJson);
       },
     );
   }
@@ -147,7 +144,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleJSON'),
       onPressed: () {
-        mapboxMap?.style.getStyleJSON().then(
+        mapboxMap?.getStyleJSON().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Style JSON: $value"),
@@ -164,7 +161,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleTransition'),
       onPressed: () {
-        mapboxMap?.style.getStyleTransition().then(
+        mapboxMap?.getStyleTransition().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -183,7 +180,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setStyleTransition'),
       onPressed: () {
-        mapboxMap?.style.setStyleTransition(
+        mapboxMap?.setStyleTransition(
           TransitionOptions(
             delay: 100,
             duration: 200,
@@ -205,16 +202,16 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('addPersistentStyleLayerAndSource'),
       onPressed: () async {
-        mapboxMap?.style.styleSourceExists("source").then((value) async {
+        mapboxMap?.styleSourceExists("source").then((value) async {
           if (!value) {
             var source = await rootBundle.loadString('assets/source.json');
-            mapboxMap?.style.addStyleSource("source", source);
+            mapboxMap?.addStyleSource("source", source);
           }
         });
-        mapboxMap?.style.styleLayerExists("custom").then((value) async {
+        mapboxMap?.styleLayerExists("custom").then((value) async {
           if (!value) {
             var layer = await rootBundle.loadString('assets/layer.json');
-            mapboxMap?.style.addPersistentStyleLayer(layer, null);
+            mapboxMap?.addPersistentStyleLayer(layer, null);
           }
         });
       },
@@ -225,8 +222,8 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('isStyleLayerPersistent'),
       onPressed: () {
-        mapboxMap?.style
-            .isStyleLayerPersistent("custom")
+        mapboxMap
+            ?.isStyleLayerPersistent("custom")
             .then(
               (value) => ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -244,10 +241,10 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('removeLayerAndSource'),
       onPressed: () {
-        mapboxMap?.style.removeStyleLayer("custom");
-        mapboxMap?.style.removeStyleSource("source");
-        mapboxMap?.style.removeStyleLayer("point_layer");
-        mapboxMap?.style.removeStyleSource("point_source");
+        mapboxMap?.removeStyleLayer("custom");
+        mapboxMap?.removeStyleSource("source");
+        mapboxMap?.removeStyleLayer("point_layer");
+        mapboxMap?.removeStyleSource("point_source");
       },
     );
   }
@@ -256,7 +253,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('moveLayer'),
       onPressed: () {
-        mapboxMap?.style.moveStyleLayer(
+        mapboxMap?.moveStyleLayer(
           "custom",
           LayerPosition(below: "pitch-outline"),
         );
@@ -268,7 +265,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleLayers'),
       onPressed: () {
-        mapboxMap?.style.getStyleLayers().then(
+        mapboxMap?.getStyleLayers().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("${value.map((e) => e?.id)}"),
@@ -285,7 +282,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleSources'),
       onPressed: () {
-        mapboxMap?.style.getStyleSources().then(
+        mapboxMap?.getStyleSources().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("${value.map((e) => e?.id)}"),
@@ -302,8 +299,8 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleLayerProperty'),
       onPressed: () {
-        mapboxMap?.style
-            .getStyleLayerProperty("custom", "circle-radius")
+        mapboxMap
+            ?.getStyleLayerProperty("custom", "circle-radius")
             .then(
               (value) => ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -321,8 +318,8 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setStyleLayerProperty'),
       onPressed: () {
-        mapboxMap?.style.setStyleLayerProperty("custom", "circle-radius", 5.0);
-        mapboxMap?.style.setStyleLayerProperty("custom", "circle-color", "red");
+        mapboxMap?.setStyleLayerProperty("custom", "circle-radius", 5.0);
+        mapboxMap?.setStyleLayerProperty("custom", "circle-color", "red");
       },
     );
   }
@@ -331,8 +328,8 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleLayerProperties'),
       onPressed: () {
-        mapboxMap?.style
-            .getStyleLayerProperties("custom")
+        mapboxMap
+            ?.getStyleLayerProperties("custom")
             .then(
               (value) => ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -351,10 +348,7 @@ class StyleExampleState extends State<StyleExample> {
       child: Text('setStyleLayerProperties'),
       onPressed: () {
         var properties = {"circle-radius": 10.0, "circle-color": "blue"};
-        mapboxMap?.style.setStyleLayerProperties(
-          "custom",
-          json.encode(properties),
-        );
+        mapboxMap?.setStyleLayerProperties("custom", json.encode(properties));
       },
     );
   }
@@ -363,8 +357,8 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleSourceProperty'),
       onPressed: () {
-        mapboxMap?.style
-            .getStyleSourceProperty("source", "type")
+        mapboxMap
+            ?.getStyleSourceProperty("source", "type")
             .then(
               (value) => ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -382,7 +376,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleSourceProperties'),
       onPressed: () {
-        mapboxMap?.style.getStyleSourceProperties("source").then((value) {
+        mapboxMap?.getStyleSourceProperties("source").then((value) {
           var properties = (json.decode(value) as Map<String, dynamic>);
           return ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -415,7 +409,7 @@ class StyleExampleState extends State<StyleExample> {
         AmbientLight ambientLight = AmbientLight(id: "ambient-light");
         ambientLight.color = Colors.white.value;
         ambientLight.intensity = 0.5;
-        mapboxMap?.style.setLights(ambientLight, directionalLight);
+        mapboxMap?.setLights(ambientLight, directionalLight);
       },
     );
   }
@@ -424,7 +418,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getStyleLightProperty'),
       onPressed: () async {
-        var lights = await mapboxMap?.style.getStyleLights();
+        var lights = await mapboxMap?.getStyleLights();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("lights: ${lights}"),
@@ -440,7 +434,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getDefaultCamera'),
       onPressed: () {
-        mapboxMap?.style.getStyleDefaultCamera().then(
+        mapboxMap?.getStyleDefaultCamera().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -459,7 +453,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('isStyleLoaded'),
       onPressed: () {
-        mapboxMap?.style.isStyleLoaded().then((value) {
+        mapboxMap?.isStyleLoaded().then((value) {
           return ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("$value"),
@@ -476,7 +470,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('hasImageIcon'),
       onPressed: () {
-        mapboxMap?.style.getStyleImage("icon").then((value) {
+        mapboxMap?.getStyleImage("icon").then((value) {
           return ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -495,7 +489,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('getProjection'),
       onPressed: () {
-        mapboxMap?.style.getProjection().then(
+        mapboxMap?.getProjection().then(
           (value) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("getProjection: ${value?.name}"),
@@ -512,7 +506,7 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('setProjection'),
       onPressed: () {
-        mapboxMap?.style.setProjection(StyleProjection(name: mapProject));
+        mapboxMap?.setProjection(StyleProjection(name: mapProject));
         if (mapProject == StyleProjectionName.globe) {
           mapProject = StyleProjectionName.mercator;
         } else {

@@ -228,13 +228,13 @@ mapboxMap.loadStyleURI(Styles.LIGHT);
 ### Work with layers
 You can familiarize with the concept of sources, layers and their supported types in the documentation for [Flutter](https://docs.mapbox.com/flutter/maps/guides/styles/work-with-layers), [iOS](https://docs.mapbox.com/ios/maps/guides/styles/work-with-layers/), and [Android](https://docs.mapbox.com/android/maps/guides/styles/work-with-layers/).
 
-To add, remove or change a source or a layer, use the `MapboxMap.style` object.
+To add, remove or change a source or a layer, call the style APIs directly on `MapboxMap`.
 
 To add a `GeoJsonSource` and a `LineLayer` using the source :
 ```
   var data = await rootBundle.loadString('assets/polyline.geojson');
-  await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
-  await mapboxMap.style.addLayer(LineLayer(
+  await mapboxMap.addSource(GeoJsonSource(id: "line", data: data));
+  await mapboxMap.addLayer(LineLayer(
       id: "line_layer",
       sourceId: "line",
       lineJoin: LineJoin.ROUND,
@@ -250,7 +250,7 @@ Refer to the [documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/exp
 
 To apply an expression to interpolate gradient color to a line layer:
 ```
-  mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
+  mapboxMap.setStyleLayerProperty("layer", "line-gradient",
       '["interpolate",["linear"],["line-progress"],0.0,["rgb",6,1,255],0.5,["rgb",0,255,42],0.7,["rgb",255,252,0],1.0,["rgb",255,30,0]]');
 ```
 

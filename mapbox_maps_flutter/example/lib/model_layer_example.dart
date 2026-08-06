@@ -50,15 +50,15 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
     final buggyModelId = "model-buggy-id";
     final buggyModelUri =
         "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
-    await mapboxMap?.style.addStyleModel(buggyModelId, buggyModelUri);
+    await mapboxMap?.addStyleModel(buggyModelId, buggyModelUri);
 
     // 2.) Add the two geojson sources to provide coordinates for the models
     var buggyModelLocation = Point(coordinates: buggyModelPosition);
     var carModelLocation = Point(coordinates: carModelPosition);
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       GeoJsonSource(id: "buggySourceId", data: json.encode(buggyModelLocation)),
     );
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       GeoJsonSource(id: "carSourceId", data: json.encode(carModelLocation)),
     );
 
@@ -71,7 +71,7 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
     buggyModelLayer.modelScale = [0.25, 0.25, 0.25];
     buggyModelLayer.modelRotation = [0, 0, 90];
     buggyModelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(buggyModelLayer);
+    mapboxMap?.addLayer(buggyModelLayer);
 
     var carModelLayer = ModelLayer(id: "model-car-id", sourceId: "carSourceId");
     carModelLayer.modelId =
@@ -79,6 +79,6 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
     carModelLayer.modelScale = [4, 4, 4];
     carModelLayer.modelRotation = [0, 0, 90];
     carModelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(carModelLayer);
+    mapboxMap?.addLayer(carModelLayer);
   }
 }

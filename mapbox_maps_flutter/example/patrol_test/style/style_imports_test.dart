@@ -129,7 +129,7 @@ Future<MapboxMap> _setupMapWithStandard(WidgetTester tester) async {
 
 /// Return the list of non-null import ids from getStyleImports().
 Future<List<String>> _importIds(MapboxMap mapboxMap) async {
-  final imports = await mapboxMap.style.getStyleImports();
+  final imports = await mapboxMap.getStyleImports();
   return imports.whereType<StyleObjectInfo>().map((e) => e.id).toList();
 }
 
@@ -144,7 +144,7 @@ Future<void> _waitForImportSchemaKey(
 }) async {
   final deadline = DateTime.now().add(timeout);
   while (DateTime.now().isBefore(deadline)) {
-    final schema = await mapboxMap.style.getStyleImportSchema(importId);
+    final schema = await mapboxMap.getStyleImportSchema(importId);
     if (schema is Map && schema.containsKey(key)) return;
     await Future<void>.delayed(const Duration(milliseconds: 100));
   }
@@ -162,7 +162,7 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMap(tester);
 
-    await mapboxMap.style.addStyleImportFromJSON(
+    await mapboxMap.addStyleImportFromJSON(
       'inline-fragment',
       _inlineFragmentJson,
     );
@@ -177,13 +177,13 @@ void main() {
     final mapboxMap = await _setupMap(tester);
 
     // Seed a first import so we can use ImportPosition.above.
-    await mapboxMap.style.addStyleImportFromJSON('frag-a', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('frag-a', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     // Use the schema-bearing fragment so the supplied config has somewhere
     // to land; verify both the position resolution and the config write
     // round-trip in a single test.
-    await mapboxMap.style.addStyleImportFromJSON(
+    await mapboxMap.addStyleImportFromJSON(
       'frag-b',
       _inlineFragmentWithSchemaJson,
       config: {'testColor': '#112233'},
@@ -197,7 +197,7 @@ void main() {
     // frag-b should appear above (i.e. later in the list than) frag-a.
     expect(ids.indexOf('frag-b'), greaterThan(ids.indexOf('frag-a')));
 
-    final colorProp = await mapboxMap.style.getStyleImportConfigProperty(
+    final colorProp = await mapboxMap.getStyleImportConfigProperty(
       'frag-b',
       'testColor',
     );
@@ -209,10 +209,7 @@ void main() {
     final mapboxMap = await _setupMap(tester);
 
     app.events.resetOnMapLoaded();
-    await mapboxMap.style.addStyleImportFromURI(
-      'uri-import',
-      MapboxStyles.OUTDOORS,
-    );
+    await mapboxMap.addStyleImportFromURI('uri-import', MapboxStyles.OUTDOORS);
     // The import is registered synchronously; only its content loads
     // asynchronously. On mobile MapLoaded fires only once per load, so a
     // second wait would never complete — pumpAndSettle is enough there. On
@@ -233,13 +230,13 @@ void main() {
     final mapboxMap = await _setupMap(tester);
 
     // Seed anchor import.
-    await mapboxMap.style.addStyleImportFromJSON('anchor', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('anchor', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
     app.events.resetOnStyleDataLoaded();
 
-    await mapboxMap.style.addStyleImportFromURI(
+    await mapboxMap.addStyleImportFromURI(
       'uri-below',
       MapboxStyles.OUTDOORS,
       importPosition: ImportPosition(below: 'anchor'),
@@ -264,18 +261,18 @@ void main() {
 
     // Seed with a fragment whose schema carries `beforeMarker` so we can
     // distinguish loaded content after the update.
-    await mapboxMap.style.addStyleImportFromJSON(
+    await mapboxMap.addStyleImportFromJSON(
       'update-target',
       _inlineFragmentBeforeJson,
     );
     await tester.pumpAndSettle();
 
     final seedSchema =
-        await mapboxMap.style.getStyleImportSchema('update-target') as Map;
+        await mapboxMap.getStyleImportSchema('update-target') as Map;
     expect(seedSchema.keys, contains('beforeMarker'));
 
     // Update with structurally different data carrying `afterMarker`.
-    await mapboxMap.style.updateStyleImportWithJSON(
+    await mapboxMap.updateStyleImportWithJSON(
       'update-target',
       _inlineFragmentAfterJson,
     );
@@ -286,7 +283,7 @@ void main() {
 
     // Schema must now reflect the post-update fragment.
     final updatedSchema =
-        await mapboxMap.style.getStyleImportSchema('update-target') as Map;
+        await mapboxMap.getStyleImportSchema('update-target') as Map;
     expect(updatedSchema.keys, contains('afterMarker'));
     expect(updatedSchema.keys, isNot(contains('beforeMarker')));
   });
@@ -298,14 +295,14 @@ void main() {
     // Both fragments share `testColor`, so config writes have somewhere to
     // land before and after. They differ in their schema marker, so the
     // data swap is observable independently of the config round-trip.
-    await mapboxMap.style.addStyleImportFromJSON(
+    await mapboxMap.addStyleImportFromJSON(
       'update-target',
       _inlineFragmentBeforeJson,
       config: {'testColor': '#ffffff'},
     );
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.updateStyleImportWithJSON(
+    await mapboxMap.updateStyleImportWithJSON(
       'update-target',
       _inlineFragmentAfterJson,
       config: {'testColor': '#112233'},
@@ -314,12 +311,12 @@ void main() {
 
     // Data swap: schema must reflect the post-update fragment.
     final updatedSchema =
-        await mapboxMap.style.getStyleImportSchema('update-target') as Map;
+        await mapboxMap.getStyleImportSchema('update-target') as Map;
     expect(updatedSchema.keys, contains('afterMarker'));
     expect(updatedSchema.keys, isNot(contains('beforeMarker')));
 
     // Config round-trip on the shared key.
-    final prop = await mapboxMap.style.getStyleImportConfigProperty(
+    final prop = await mapboxMap.getStyleImportConfigProperty(
       'update-target',
       'testColor',
     );
@@ -332,16 +329,13 @@ void main() {
 
     // Seed with OUTDOORS (no `lightPreset` in its schema) so we can observe
     // the URL swap by checking the schema after the update.
-    await mapboxMap.style.addStyleImportFromURI(
-      'uri-target',
-      MapboxStyles.OUTDOORS,
-    );
+    await mapboxMap.addStyleImportFromURI('uri-target', MapboxStyles.OUTDOORS);
 
     await tester.pumpAndSettle();
     app.events.resetOnMapIdle();
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
 
-    await mapboxMap.style.updateStyleImportWithURI(
+    await mapboxMap.updateStyleImportWithURI(
       'uri-target',
       MapboxStyles.STANDARD,
     );
@@ -354,8 +348,7 @@ void main() {
 
     // Schema gained `lightPreset`, which only Standard-family styles
     // declare — proves the URL actually swapped.
-    final schema =
-        await mapboxMap.style.getStyleImportSchema('uri-target') as Map;
+    final schema = await mapboxMap.getStyleImportSchema('uri-target') as Map;
     expect(schema.keys, contains('lightPreset'));
   });
 
@@ -367,16 +360,13 @@ void main() {
     // to STANDARD_SATELLITE because it shares the Standard config schema
     // (`lightPreset`, etc.) with the base style, giving the config write
     // a known landing spot we can assert against.
-    await mapboxMap.style.addStyleImportFromURI(
-      'uri-update',
-      MapboxStyles.OUTDOORS,
-    );
+    await mapboxMap.addStyleImportFromURI('uri-update', MapboxStyles.OUTDOORS);
 
     app.events.resetOnMapIdle();
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.updateStyleImportWithURI(
+    await mapboxMap.updateStyleImportWithURI(
       'uri-update',
       MapboxStyles.STANDARD_SATELLITE,
       config: {'lightPreset': 'night'},
@@ -384,7 +374,7 @@ void main() {
     app.events.resetOnMapIdle();
     await app.waitForEvent($.tester, app.events.onMapIdle.future);
 
-    final prop = await mapboxMap.style.getStyleImportConfigProperty(
+    final prop = await mapboxMap.getStyleImportConfigProperty(
       'uri-update',
       'lightPreset',
     );
@@ -397,7 +387,7 @@ void main() {
       final tester = $.tester;
       final mapboxMap = await _setupMap(tester);
 
-      await mapboxMap.style.addStyleImportFromJSON(
+      await mapboxMap.addStyleImportFromJSON(
         'merge-target',
         _inlineFragmentBeforeJson,
         config: {'testColor': '#445566'},
@@ -407,13 +397,13 @@ void main() {
       // Update data without supplying config — the previously-set value must
       // survive across the remove+add emulation (matches gl-native's merge
       // semantics).
-      await mapboxMap.style.updateStyleImportWithJSON(
+      await mapboxMap.updateStyleImportWithJSON(
         'merge-target',
         _inlineFragmentAfterJson,
       );
       await tester.pumpAndSettle();
 
-      final prop = await mapboxMap.style.getStyleImportConfigProperty(
+      final prop = await mapboxMap.getStyleImportConfigProperty(
         'merge-target',
         'testColor',
       );
@@ -429,15 +419,15 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMap(tester);
 
-    await mapboxMap.style.addStyleImportFromJSON('m-a', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('m-b', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('m-c', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('m-a', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('m-b', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('m-c', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     // Move m-a above m-b. Avoid targeting the topmost import (m-c) — gl-js's
     // moveImport with a null/omitted beforeId is a no-op, so "above the last
     // entry" cannot be expressed via the beforeId form the web binding uses.
-    await mapboxMap.style.moveStyleImport('m-a', ImportPosition(above: 'm-b'));
+    await mapboxMap.moveStyleImport('m-a', ImportPosition(above: 'm-b'));
     await tester.pumpAndSettle();
 
     final ids = await _importIds(mapboxMap);
@@ -449,13 +439,13 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMap(tester);
 
-    await mapboxMap.style.addStyleImportFromJSON('n-a', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('n-b', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('n-c', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('n-a', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('n-b', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('n-c', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     // Move n-c below n-a (n-c should end up before n-a in the list).
-    await mapboxMap.style.moveStyleImport('n-c', ImportPosition(below: 'n-a'));
+    await mapboxMap.moveStyleImport('n-c', ImportPosition(below: 'n-a'));
     await tester.pumpAndSettle();
 
     final ids = await _importIds(mapboxMap);
@@ -467,19 +457,16 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMap(tester);
 
-    await mapboxMap.style.addStyleImportFromJSON('p-a', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('p-b', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('p-c', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('p-a', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('p-b', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('p-c', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     final idsBefore = await _importIds(mapboxMap);
     // Move p-c to p-a's slot. `at: i` reinserts before `ids[i]`, so p-c
     // should land directly ahead of p-a in the resulting order.
     final targetIndex = idsBefore.indexOf('p-a');
-    await mapboxMap.style.moveStyleImport(
-      'p-c',
-      ImportPosition(at: targetIndex),
-    );
+    await mapboxMap.moveStyleImport('p-c', ImportPosition(at: targetIndex));
     await tester.pumpAndSettle();
     final idsAfter = await _importIds(mapboxMap);
     expect(idsAfter, containsAll(['p-a', 'p-b', 'p-c']));
@@ -490,15 +477,15 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMap(tester);
 
-    await mapboxMap.style.addStyleImportFromJSON('q-a', _inlineFragmentJson);
-    await mapboxMap.style.addStyleImportFromJSON('q-b', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('q-a', _inlineFragmentJson);
+    await mapboxMap.addStyleImportFromJSON('q-b', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     // gl-js's moveImport with a null/omitted beforeId does not append, so
     // the platform contract's "null → move to top" cannot be honored via the
     // beforeId form. Assert the imports are unaffected (no crash, both ids
     // still present) rather than parity with gl-native.
-    await mapboxMap.style.moveStyleImport('q-a', null);
+    await mapboxMap.moveStyleImport('q-a', null);
     await tester.pumpAndSettle();
 
     final ids = await _importIds(mapboxMap);
@@ -513,16 +500,13 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMap(tester);
 
-    await mapboxMap.style.addStyleImportFromJSON(
-      'removable',
-      _inlineFragmentJson,
-    );
+    await mapboxMap.addStyleImportFromJSON('removable', _inlineFragmentJson);
     await tester.pumpAndSettle();
 
     final idsBefore = await _importIds(mapboxMap);
     expect(idsBefore, contains('removable'));
 
-    await mapboxMap.style.removeStyleImport('removable');
+    await mapboxMap.removeStyleImport('removable');
     await tester.pumpAndSettle();
 
     final idsAfter = await _importIds(mapboxMap);
@@ -542,7 +526,7 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMapWithStandard(tester);
 
-    final schema = await mapboxMap.style.getStyleImportSchema('basemap');
+    final schema = await mapboxMap.getStyleImportSchema('basemap');
     expect(schema, isA<Map>());
     final schemaMap = schema as Map;
     expect(schemaMap.keys, contains('lightPreset'));
@@ -557,7 +541,7 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMapWithStandard(tester);
 
-    final prop = await mapboxMap.style.getStyleImportConfigProperty(
+    final prop = await mapboxMap.getStyleImportConfigProperty(
       'basemap',
       'lightPreset',
     );
@@ -574,14 +558,12 @@ void main() {
     // gl-native's getConfig only surfaces explicitly-set values, not schema
     // defaults — seed two properties so the bulk read has something to
     // observe.
-    await mapboxMap.style.setStyleImportConfigProperties('basemap', {
+    await mapboxMap.setStyleImportConfigProperties('basemap', {
       'lightPreset': 'day',
       'showPlaceLabels': true,
     });
 
-    final props = await mapboxMap.style.getStyleImportConfigProperties(
-      'basemap',
-    );
+    final props = await mapboxMap.getStyleImportConfigProperties('basemap');
 
     expect(props, isA<Map<String, StylePropertyValue>>());
     expect(props.keys, contains('lightPreset'));
@@ -598,13 +580,13 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMapWithStandard(tester);
 
-    await mapboxMap.style.setStyleImportConfigProperty(
+    await mapboxMap.setStyleImportConfigProperty(
       'basemap',
       'lightPreset',
       'night',
     );
 
-    final prop = await mapboxMap.style.getStyleImportConfigProperty(
+    final prop = await mapboxMap.getStyleImportConfigProperty(
       'basemap',
       'lightPreset',
     );
@@ -617,14 +599,12 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await _setupMapWithStandard(tester);
 
-    await mapboxMap.style.setStyleImportConfigProperties('basemap', {
+    await mapboxMap.setStyleImportConfigProperties('basemap', {
       'lightPreset': 'dawn',
       'showPlaceLabels': false,
     });
 
-    final props = await mapboxMap.style.getStyleImportConfigProperties(
-      'basemap',
-    );
+    final props = await mapboxMap.getStyleImportConfigProperties('basemap');
 
     expect(props.keys, containsAll(['lightPreset', 'showPlaceLabels']));
     expect(props['lightPreset']?.value, 'dawn');

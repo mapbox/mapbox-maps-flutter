@@ -72,7 +72,7 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
       onChanged: (annotation) async {
         points[annotation.id] = annotation.geometry;
         // Update source with new feature.
-        await mapboxMap.style.updateGeoJSONSourceFeatures(
+        await mapboxMap.updateGeoJSONSourceFeatures(
           _sourceId,
           "editable-polygon",
           [
@@ -98,11 +98,11 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
         },
       ],
     };
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       GeoJsonSource(id: _sourceId, data: jsonEncode(geoJsonData)),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       FillLayer(
         id: "city-fill-layer",
         sourceId: _sourceId,

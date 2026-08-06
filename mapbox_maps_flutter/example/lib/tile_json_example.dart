@@ -15,11 +15,11 @@ class TileJsonExampleState extends State<TileJsonExample> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleJSON("{}");
+    mapboxMap.setStyleJSON("{}");
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       RasterSource(
         id: "source",
         tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
@@ -31,9 +31,7 @@ class TileJsonExampleState extends State<TileJsonExample> {
         attribution: "&copy; OpenStreetMap contributors, CC-BY-SA",
       ),
     );
-    await mapboxMap?.style.addLayer(
-      RasterLayer(id: "layer", sourceId: "source"),
-    );
+    await mapboxMap?.addLayer(RasterLayer(id: "layer", sourceId: "source"));
   }
 
   @override

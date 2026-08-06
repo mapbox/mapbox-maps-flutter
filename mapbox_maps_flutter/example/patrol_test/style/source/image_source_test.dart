@@ -21,7 +21,7 @@ void main() {
     await tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       ImageSource(
         id: "source",
         coordinates: [
@@ -34,7 +34,7 @@ void main() {
       ),
     );
 
-    var source = await mapboxMap.style.getSource('source') as ImageSource;
+    var source = await mapboxMap.getSource('source') as ImageSource;
     expect(source.id, 'source');
     var coordinates = await source.coordinates;
     expect(coordinates, [

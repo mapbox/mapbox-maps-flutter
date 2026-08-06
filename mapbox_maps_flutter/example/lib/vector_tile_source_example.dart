@@ -14,26 +14,18 @@ class VectorTileSourceExampleState extends State<VectorTileSourceExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleImportConfigProperty(
-      "basemap",
-      "lightPreset",
-      "day",
-    );
-    mapboxMap.style.setStyleImportConfigProperty(
-      "basemap",
-      "theme",
-      "monochrome",
-    );
+    mapboxMap.setStyleImportConfigProperty("basemap", "lightPreset", "day");
+    mapboxMap.setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) async {
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       VectorSource(
         id: "terrain-data",
         url: "mapbox://mapbox.mapbox-terrain-v2",
       ),
     );
-    await mapboxMap?.style.addLayer(
+    await mapboxMap?.addLayer(
       LineLayer(
         id: "terrain-data",
         sourceId: "terrain-data",

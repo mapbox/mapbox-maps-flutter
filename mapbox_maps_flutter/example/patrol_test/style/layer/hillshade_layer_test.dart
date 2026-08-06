@@ -22,14 +22,14 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterDemSource(
         id: "source",
         url: "mapbox://mapbox.mapbox-terrain-dem-v1",
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       HillshadeLayer(
         id: 'layer',
         sourceId: 'source',
@@ -46,7 +46,7 @@ void main() {
         hillshadeShadowColor: Colors.red.value,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as HillshadeLayer;
+    var layer = await mapboxMap.getLayer('layer') as HillshadeLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
@@ -66,14 +66,14 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addSource(
+    await mapboxMap.addSource(
       RasterDemSource(
         id: "source",
         url: "mapbox://mapbox.mapbox-terrain-dem-v1",
       ),
     );
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       HillshadeLayer(
         id: 'layer',
         sourceId: 'source',
@@ -95,7 +95,7 @@ void main() {
         hillshadeShadowColorExpression: ['rgba', 255, 0, 0, 1],
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as HillshadeLayer;
+    var layer = await mapboxMap.getLayer('layer') as HillshadeLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

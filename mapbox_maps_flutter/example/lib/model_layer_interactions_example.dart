@@ -33,11 +33,11 @@ class _ModelLayerInteractionsExampleState
     final buggyModelId = "buggy-model-id";
     final buggyModelUri =
         "https://github.com/KhronosGroup/glTF-Sample-Models/raw/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
-    await mapboxMap?.style.addStyleModel(buggyModelId, buggyModelUri);
+    await mapboxMap?.addStyleModel(buggyModelId, buggyModelUri);
 
     final carModelId = "car-model-id";
     final carModelUri = "asset://assets/sportcar.glb";
-    await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
+    await mapboxMap?.addStyleModel(carModelId, carModelUri);
 
     // 2.) Create features with an ID and a Point geometry to represent the location of the models
     var buggyFeature = Feature(
@@ -51,10 +51,10 @@ class _ModelLayerInteractionsExampleState
       properties: {"name": "CAR", "type": "glb"},
     );
 
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       GeoJsonSource(id: "buggySource", data: json.encode(buggyFeature)),
     );
-    await mapboxMap?.style.addSource(
+    await mapboxMap?.addSource(
       GeoJsonSource(id: "carSource", data: json.encode(carFeature)),
     );
 
@@ -67,7 +67,7 @@ class _ModelLayerInteractionsExampleState
     buggyModelLayer.modelScale = [0.15, 0.15, 0.15];
     buggyModelLayer.modelRotation = [0, 0, 90];
     buggyModelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(buggyModelLayer);
+    mapboxMap?.addLayer(buggyModelLayer);
 
     var carModelLayer = ModelLayer(id: "modelLayer-car", sourceId: "carSource");
     carModelLayer.modelId =
@@ -75,12 +75,11 @@ class _ModelLayerInteractionsExampleState
     carModelLayer.modelScale = [4, 4, 4];
     carModelLayer.modelRotation = [0, 0, 90];
     carModelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(carModelLayer);
+    mapboxMap?.addLayer(carModelLayer);
   }
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style;
 
     // Tap Interaction for Buggy Layer
     var tapInteractionBuggy =

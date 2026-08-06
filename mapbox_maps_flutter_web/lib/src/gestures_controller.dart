@@ -87,8 +87,7 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     // whether to refresh.
     if (settings.pitchWithRotateEnabled != null) {
       final wasEnabled = _map.dragRotate.isEnabled();
-      _map.dragRotate.pitchWithRotate =
-          settings.pitchWithRotateEnabled!;
+      _map.dragRotate.pitchWithRotate = settings.pitchWithRotateEnabled!;
       if (wasEnabled) {
         _map.dragRotate.disable();
         _map.dragRotate.enable();

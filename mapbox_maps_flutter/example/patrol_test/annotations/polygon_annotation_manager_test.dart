@@ -24,17 +24,17 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
     final dummyLayer = FillLayer(id: "dummyLayer", sourceId: 'sourceId');
-    await mapboxMap.style.addLayer(dummyLayer);
+    await mapboxMap.addLayer(dummyLayer);
     final id = "PolygonAnnotationManagerId";
     final manager = await mapboxMap.annotations.createPolygonAnnotationManager(
       id: id,
       below: 'dummyLayer',
     );
 
-    expect(await mapboxMap.style.styleLayerExists(id), isTrue);
-    expect(await mapboxMap.style.styleSourceExists(id), isTrue);
+    expect(await mapboxMap.styleLayerExists(id), isTrue);
+    expect(await mapboxMap.styleSourceExists(id), isTrue);
     expect(manager.id, id);
-    final layers = await mapboxMap.style.getStyleLayers();
+    final layers = await mapboxMap.getStyleLayers();
     expect(layers.first?.id, id);
     expect(layers.last?.id, dummyLayer.id);
   });

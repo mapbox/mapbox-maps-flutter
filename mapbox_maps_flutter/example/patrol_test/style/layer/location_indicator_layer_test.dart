@@ -22,7 +22,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       LocationIndicatorLayer(
         id: 'layer',
         visibility: Visibility.NONE,
@@ -48,8 +48,7 @@ void main() {
         topImageSize: 1.0,
       ),
     );
-    var layer =
-        await mapboxMap.style.getLayer('layer') as LocationIndicatorLayer;
+    var layer = await mapboxMap.getLayer('layer') as LocationIndicatorLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
@@ -78,7 +77,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       LocationIndicatorLayer(
         id: 'layer',
         visibilityExpression: ['string', 'none'],
@@ -115,8 +114,7 @@ void main() {
         topImageSizeExpression: ['number', 1.0],
       ),
     );
-    var layer =
-        await mapboxMap.style.getLayer('layer') as LocationIndicatorLayer;
+    var layer = await mapboxMap.getLayer('layer') as LocationIndicatorLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);

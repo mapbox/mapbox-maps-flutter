@@ -28,7 +28,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
 
     await Future.delayed(Duration(seconds: 4));
 
@@ -89,7 +89,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -132,7 +132,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -174,7 +174,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -229,7 +229,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -282,11 +282,11 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    var returnedFeaturesets = await mapboxMap.style.getFeaturesets();
+    var returnedFeaturesets = await mapboxMap.getFeaturesets();
 
     expect(returnedFeaturesets.length, 1);
     expect(returnedFeaturesets.first.importId, "nested");
@@ -339,7 +339,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -392,7 +392,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -452,7 +452,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     MapContentGestureContext? expectedContext;
 
     // Add the tap interaction
@@ -496,7 +496,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     int count = 0;
 
     // Add the tap interaction
@@ -552,7 +552,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -613,7 +613,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -666,7 +666,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -726,7 +726,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     MapContentGestureContext? expectedContext;
 
     // Add the long tap interaction
@@ -768,7 +768,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
+    mapboxMap.setStyleJSON(styleJson);
     int count = 0;
 
     // Add the tap interaction

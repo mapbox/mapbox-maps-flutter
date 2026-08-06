@@ -23,8 +23,8 @@ class DrawGeoJsonLineExampleState extends State<DrawGeoJsonLineExample> {
       'assets/from_crema_to_council_crest.geojson',
     );
 
-    await mapboxMap?.style.addSource(GeoJsonSource(id: "line", data: data));
-    await mapboxMap?.style.addLayer(
+    await mapboxMap?.addSource(GeoJsonSource(id: "line", data: data));
+    await mapboxMap?.addLayer(
       LineLayer(
         id: "line_layer",
         sourceId: "line",
@@ -50,7 +50,7 @@ class DrawGeoJsonLineExampleState extends State<DrawGeoJsonLineExample> {
         ],
       ),
     );
-    await mapboxMap?.style.updateGeoJSONSourceFeatures("line", "new_line", [
+    await mapboxMap?.updateGeoJSONSourceFeatures("line", "new_line", [
       newFeature,
     ]);
   }

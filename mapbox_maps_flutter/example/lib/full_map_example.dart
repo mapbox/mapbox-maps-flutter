@@ -17,11 +17,7 @@ class FullMapExampleState extends State<FullMapExample> {
 
   void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleImportConfigProperty(
-      "basemap",
-      "theme",
-      "monochrome",
-    );
+    mapboxMap.setStyleImportConfigProperty("basemap", "theme", "monochrome");
 
     mapboxMap.addInteraction(
       TapInteraction.onMap((context) {
@@ -118,13 +114,13 @@ class FullMapExampleState extends State<FullMapExample> {
               onPressed: () {
                 setState(() => isLight = !isLight);
                 if (isLight) {
-                  mapboxMap?.style.setStyleImportConfigProperty(
+                  mapboxMap?.setStyleImportConfigProperty(
                     "basemap",
                     "lightPreset",
                     "day",
                   );
                 } else {
-                  mapboxMap?.style.setStyleImportConfigProperty(
+                  mapboxMap?.setStyleImportConfigProperty(
                     "basemap",
                     "lightPreset",
                     "night",

@@ -21,7 +21,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       SlotLayer(
         id: 'layer',
         visibility: Visibility.NONE,
@@ -30,7 +30,7 @@ void main() {
         slot: LayerSlot.BOTTOM,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as SlotLayer;
+    var layer = await mapboxMap.getLayer('layer') as SlotLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
@@ -41,7 +41,7 @@ void main() {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
 
-    await mapboxMap.style.addLayer(
+    await mapboxMap.addLayer(
       SlotLayer(
         id: 'layer',
         visibilityExpression: ['string', 'none'],
@@ -55,7 +55,7 @@ void main() {
         slot: LayerSlot.BOTTOM,
       ),
     );
-    var layer = await mapboxMap.style.getLayer('layer') as SlotLayer;
+    var layer = await mapboxMap.getLayer('layer') as SlotLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);

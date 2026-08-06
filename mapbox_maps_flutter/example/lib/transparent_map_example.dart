@@ -26,7 +26,7 @@ class _TransparentMapExampleState extends State<TransparentMapExample>
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     final json = await rootBundle.loadString('assets/transparent_style.json');
-    await mapboxMap.style.setStyleJSON(json);
+    await mapboxMap.setStyleJSON(json);
 
     // Lock the map: disable every gesture so the camera can't be moved.
     await mapboxMap.gestures.updateSettings(GesturesSettings(

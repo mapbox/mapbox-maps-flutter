@@ -36,16 +36,16 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
   }
 
   void _addLayerAndSource() async {
-    mapboxMap?.style.styleSourceExists("source").then((value) async {
+    mapboxMap?.styleSourceExists("source").then((value) async {
       if (!value) {
         var source = await rootBundle.loadString('assets/source.json');
-        mapboxMap?.style.addStyleSource("source", source);
+        mapboxMap?.addStyleSource("source", source);
       }
     });
-    mapboxMap?.style.styleLayerExists("points").then((value) async {
+    mapboxMap?.styleLayerExists("points").then((value) async {
       if (!value) {
         var layer = await rootBundle.loadString('assets/point_layer.json');
-        mapboxMap?.style.addStyleLayer(layer, null);
+        mapboxMap?.addStyleLayer(layer, null);
       }
     });
   }
