@@ -8,7 +8,6 @@ import com.mapbox.maps.MapOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
-import com.mapbox.maps.module.telemetry.UiFramework
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.platform.PlatformView
@@ -41,9 +40,7 @@ class MapboxMapFactory(
       cameraOptions = cameraOptions?.toCameraOptions(context),
       textureView = textureView,
       styleUri = styleUri
-    ).apply {
-      uiFramework = UiFramework.FLUTTER
-    }
+    )
     mapCounter.increment()
 
     val externalMapView = pendingMapView

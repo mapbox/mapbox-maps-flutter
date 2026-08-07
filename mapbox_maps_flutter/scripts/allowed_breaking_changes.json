@@ -1469,5 +1469,9 @@
   {
     "changeDescription": "Field \"mapboxPluginVersion\" removed",
     "reason": "The field is re-exported, false positive alarm."
+  },
+  {
+    "changeDescription": "ModelSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
   }
 ]
