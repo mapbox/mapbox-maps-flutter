@@ -1,5 +1,7 @@
 ### main
 
+### 2.29.0-rc.1
+
 ### 2.28.0
 
 * Add `ModelSource` API, exposing the 3D model source (a collection of 3D models, each with its own position, orientation, and node/material overrides).
