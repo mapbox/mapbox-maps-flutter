@@ -668,8 +668,12 @@ class StyleController(private val context: Context, private val styleManager: Ma
     layerIds: List<String>?,
     callback: (Result<Unit>) -> Unit
   ) {
-    styleManager.localizeLabels(Locale(locale), layerIds)
-    callback(Result.success(Unit))
+    try {
+      styleManager.localizeLabels(Locale(locale), layerIds)
+      callback(Result.success(Unit))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
   }
 
   override fun getFeaturesets(): List<FeaturesetDescriptor> {
