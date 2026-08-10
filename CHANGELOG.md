@@ -1,4 +1,6 @@
-### 2.28.0-rc.1
+### main
+
+### 2.28.0
 
 * Add `ModelSource` API, exposing the 3D model source (a collection of 3D models, each with its own position, orientation, and node/material overrides).
 * Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
