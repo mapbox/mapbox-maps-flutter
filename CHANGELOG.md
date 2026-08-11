@@ -1,7 +1,6 @@
 ### main
 
-* [iOS] Fix `StyleManager.localizeLabels` crashing the app instead of completing its `Future` with an error when localization fails — for example on a style whose symbol layer compares a property against `null` ([#2423](https://github.com/mapbox/mapbox-maps-ios/issues/2423)).
-* [Android] `StyleManager.localizeLabels` now reports the underlying error when localization fails, instead of a generic `PlatformException` with code `channel-error`.
+### 2.29.0-rc.1
 
 ### 2.28.0
 
