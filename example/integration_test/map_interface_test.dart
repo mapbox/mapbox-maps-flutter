@@ -328,9 +328,10 @@ void main() {
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource('source', source);
-    style.addStyleLayer(layer, null);
-    await app.events.onSourceDataLoaded.future;
+    app.events.resetMapLoadingErrors();
+    await style.addStyleSource('source', source);
+    await style.addStyleLayer(layer, null);
+    await _waitForSourceDataLoaded(app.events, 'source');
     await app.events.onMapIdle.future;
 
     var screenBox = ScreenBox(
@@ -379,9 +380,10 @@ void main() {
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource('source', source);
-    style.addStyleLayer(layer, null);
-    await app.events.onSourceDataLoaded.future;
+    app.events.resetMapLoadingErrors();
+    await style.addStyleSource('source', source);
+    await style.addStyleLayer(layer, null);
+    await _waitForSourceDataLoaded(app.events, 'source');
     await app.events.onMapIdle.future;
 
     var query = await mapboxMap.querySourceFeatures(
@@ -407,11 +409,19 @@ void main() {
 
     app.events.resetOnSourceDataLoaded();
     app.events.resetOnMapIdle();
-    style.addStyleSource("earthquakes", source);
-    style.addStyleLayer(layer, null);
-    style.addStyleLayer(clusterCountLayer, null);
-    style.addStyleLayer(unclusteredLayer, null);
-    await app.events.onSourceDataLoaded.future;
+    app.events.resetMapLoadingErrors();
+    await style.addStyleSource("earthquakes", source);
+    await style.addStyleLayer(layer, null);
+    await style.addStyleLayer(clusterCountLayer, null);
+    await style.addStyleLayer(unclusteredLayer, null);
+    // "earthquakes" data is fetched from a remote URL (see cluster_source.json),
+    // unlike the inline GeoJSON used elsewhere in this file, so give it more
+    // time to land under a cold cache.
+    await _waitForSourceDataLoaded(
+      app.events,
+      "earthquakes",
+      timeout: const Duration(seconds: 20),
+    );
     await app.events.onMapIdle.future;
 
     var feature = {
@@ -463,17 +473,21 @@ void main() {
 /// what the map actually contained - the root cause is still unknown, so that
 /// output is the point: it should identify which invariant broke.
 Future<List<QueriedRenderedFeature?>> _queryUntilFound(
-    MapboxMap mapboxMap, RenderedQueryGeometry geometry, String layerId,
-    {required String sourceId,
-    required String imageId,
-    Duration timeout = const Duration(seconds: 5)}) async {
+  MapboxMap mapboxMap,
+  RenderedQueryGeometry geometry,
+  String layerId, {
+  required String sourceId,
+  required String imageId,
+  Duration timeout = const Duration(seconds: 5),
+}) async {
   final options = RenderedQueryOptions(layerIds: [layerId], filter: null);
   final deadline = DateTime.now().add(timeout);
   var attempt = 0;
   var query = await mapboxMap.queryRenderedFeatures(geometry, options);
   while (query.isEmpty && DateTime.now().isBefore(deadline)) {
     attempt++;
-    debugPrint('_queryUntilFound: "$layerId" empty on attempt $attempt, retrying...');
+    debugPrint(
+        '_queryUntilFound: "$layerId" empty on attempt $attempt, retrying...');
     await Future.delayed(const Duration(milliseconds: 200));
     query = await mapboxMap.queryRenderedFeatures(geometry, options);
   }
@@ -487,7 +501,44 @@ Future<List<QueriedRenderedFeature?>> _queryUntilFound(
         'layer: ${await style.styleLayerExists(layerId)}, '
         'source "$sourceId": ${await style.styleSourceExists(sourceId)}, '
         'image "$imageId": ${await style.hasStyleImage(imageId)}, '
-        'camera: ${camera.center.coordinates} z${camera.zoom}');
+        'camera: ${camera.center.coordinates} z${camera.zoom}, '
+        'mapLoadingErrors: ${_describeMapLoadingErrors(app.events)}');
   }
   return query;
+}
+
+/// Waits until a `SourceDataLoaded` event for [sourceId] has been observed.
+///
+/// `onSourceDataLoaded.future` resolves on the first `SourceDataLoaded` event
+/// after the last reset, which can belong to any source already streaming
+/// tiles in the background - not necessarily [sourceId]. This waits for the
+/// specific source instead.
+Future<void> _waitForSourceDataLoaded(
+  app.Events events,
+  String sourceId, {
+  Duration timeout = const Duration(seconds: 5),
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (!events.loadedSourceIds.contains(sourceId) &&
+      DateTime.now().isBefore(deadline)) {
+    await Future.delayed(const Duration(milliseconds: 50));
+  }
+  if (!events.loadedSourceIds.contains(sourceId)) {
+    fail(
+        'No SourceDataLoaded event for "$sourceId" after ${timeout.inSeconds}s - '
+        'observed sources: ${events.loadedSourceIds}, '
+        'mapLoadingErrors: ${_describeMapLoadingErrors(events)}');
+  }
+}
+
+/// Formats collected `MapLoadingError`s for a failure message, excluding
+/// per-tile errors: background tile fetches routinely get cancelled by
+/// widget teardown and camera moves, which would otherwise drown out the
+/// style/source/sprite/glyphs errors this diagnostic exists to surface.
+String _describeMapLoadingErrors(app.Events events) {
+  return events.mapLoadingErrors
+      .where((e) => e.type != MapLoadErrorType.TILE)
+      .map((e) => '${e.type}: ${e.message}')
+      .toList()
+      .toString();
 }
