@@ -1,3 +1,8 @@
+### main
+
+* `RenderedQueryGeometry` is now a sealed class hierarchy (`ScreenCoordinateRenderedQueryGeometry`, `ScreenBoxRenderedQueryGeometry`, `ScreenCoordinateListRenderedQueryGeometry`) instead of an untyped `{value, type}` pair. Construct it the same way as before, via `fromScreenCoordinate()`/`fromScreenBox()`/`fromList()`. Use pattern matching on the subclasses to inspect it instead of the now-deprecated, read-only `value`/`type` accessors.
+* [web] Fix `queryRenderedFeatures` querying the whole viewport for an empty `fromList([])`; it now matches no features, in line with mobile.
+
 ### 3.0.0-alpha.28
 
 * [web] Add `GesturesSettings.scrollZoomEnabled`, `.boxZoomEnabled`, and `.pitchWithRotateEnabled` (web only; no effect on Android/iOS). **Behavior change:** `pinchToZoomEnabled` no longer also controls mouse-wheel/trackpad zoom on web (use `scrollZoomEnabled`), and `pitchEnabled` no longer also controls whether ctrl+drag combines rotate with pitch (use `pitchWithRotateEnabled`).

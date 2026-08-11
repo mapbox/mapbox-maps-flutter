@@ -1,4 +1,3 @@
-import 'dart:convert' show jsonDecode;
 import 'dart:js_interop';
 import 'dart:ui' show Offset;
 
@@ -126,61 +125,51 @@ extension JSCameraOptionsMerge on JSCameraOptions {
 }
 
 /// Converts a [RenderedQueryGeometry] to the JS geometry argument accepted by
-/// GL JS's `queryRenderedFeatures`: a single [JSScreenPoint], a two-element
-/// [JSArray] of [JSScreenPoint] (bounding box), or null for the full viewport.
+/// GL JS's `queryRenderedFeatures`: a single [JSScreenPoint], or a
+/// two-element [JSArray] of [JSScreenPoint] (bounding box).
+///
+/// A [RenderedQueryGeometry.fromList] built from an empty point list has no
+/// GL JS representation. GL JS treats a missing geometry as a request for
+/// the whole viewport. An empty query area never means that. Callers must
+/// special-case an empty point list before calling [toJS].
 extension RenderedQueryGeometryToJS on RenderedQueryGeometry {
-  JSAny? toJS() {
-    final decoded = jsonDecode(value) as Object;
-    switch (type) {
-      case Type.SCREEN_COORDINATE:
-        final map = decoded as Map<String, dynamic>;
-        return JSScreenPoint(
-          (map['x'] as num).toDouble(),
-          (map['y'] as num).toDouble(),
-        );
-      case Type.SCREEN_BOX:
-        final map = decoded as Map<String, dynamic>;
-        final min = map['min'] as Map<String, dynamic>;
-        final max = map['max'] as Map<String, dynamic>;
-        return <JSScreenPoint>[
-          JSScreenPoint(
-            (min['x'] as num).toDouble(),
-            (min['y'] as num).toDouble(),
-          ),
-          JSScreenPoint(
-            (max['x'] as num).toDouble(),
-            (max['y'] as num).toDouble(),
-          ),
-        ].toJS;
-      case Type.LIST:
-        // GL JS only accepts a single point or a two-point bounding box.
-        // Derive the axis-aligned bounding box of all points in the list.
-        final list = decoded as List<dynamic>;
-        if (list.isEmpty) return null;
-        if (list.length == 1) {
-          final p = list[0] as Map<String, dynamic>;
-          return JSScreenPoint(
-            (p['x'] as num).toDouble(),
-            (p['y'] as num).toDouble(),
-          );
-        }
-        double minX = double.infinity, minY = double.infinity;
-        double maxX = double.negativeInfinity, maxY = double.negativeInfinity;
-        for (final item in list) {
-          final p = item as Map<String, dynamic>;
-          final x = (p['x'] as num).toDouble();
-          final y = (p['y'] as num).toDouble();
-          if (x < minX) minX = x;
-          if (y < minY) minY = y;
-          if (x > maxX) maxX = x;
-          if (y > maxY) maxY = y;
-        }
-        return <JSScreenPoint>[
-          JSScreenPoint(minX, minY),
-          JSScreenPoint(maxX, maxY),
-        ].toJS;
-    }
+  JSAny toJS() => switch (this) {
+    ScreenCoordinateRenderedQueryGeometry(:final point) =>
+      point.toJSScreenPoint(),
+    ScreenBoxRenderedQueryGeometry(:final box) => <JSScreenPoint>[
+      box.min.toJSScreenPoint(),
+      box.max.toJSScreenPoint(),
+    ].toJS,
+    ScreenCoordinateListRenderedQueryGeometry(:final points) => _boundingBoxFor(
+      points,
+    ),
+  };
+}
+
+/// GL JS only accepts a single point or a two-point bounding box.
+/// Derives the axis-aligned bounding box of all points in the list.
+///
+/// Throws [ArgumentError] if [points] is empty. See
+/// [RenderedQueryGeometryToJS] for why.
+JSAny _boundingBoxFor(List<ScreenCoordinate> points) {
+  if (points.isEmpty) {
+    throw ArgumentError.value(points, 'points', 'must not be empty');
   }
+  if (points.length == 1) {
+    return points[0].toJSScreenPoint();
+  }
+  double minX = double.infinity, minY = double.infinity;
+  double maxX = double.negativeInfinity, maxY = double.negativeInfinity;
+  for (final p in points) {
+    if (p.x < minX) minX = p.x;
+    if (p.y < minY) minY = p.y;
+    if (p.x > maxX) maxX = p.x;
+    if (p.y > maxY) maxY = p.y;
+  }
+  return <JSScreenPoint>[
+    JSScreenPoint(minX, minY),
+    JSScreenPoint(maxX, maxY),
+  ].toJS;
 }
 
 extension JSMapFeatureToQueried on JSMapFeature {

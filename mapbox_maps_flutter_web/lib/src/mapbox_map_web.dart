@@ -623,6 +623,14 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     RenderedQueryGeometry geometry,
     RenderedQueryOptions options,
   ) async {
+    // An empty point list has no GL JS representation: a missing geometry
+    // means "query the whole viewport" in GL JS. Handle it here, before
+    // calling toJS(). An empty query area matches no features, the same as
+    // the native mobile behavior for an empty shape.
+    if (geometry case ScreenCoordinateListRenderedQueryGeometry(points: [])) {
+      return <QueriedRenderedFeature?>[];
+    }
+
     final layerIds = options.layerIds?.nonNulls.toList();
     final filter = options.filter?.trim();
     final jsOpts = JSQueryRenderedFeaturesOptions(

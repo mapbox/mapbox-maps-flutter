@@ -1,37 +1,119 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show immutable, listEquals;
+
 import 'events.dart';
 import 'pigeons/platform_interface_data_types.dart';
 
 /// Geometry for querying rendered features.
-class RenderedQueryGeometry {
+///
+/// Construct via [RenderedQueryGeometry.fromScreenCoordinate],
+/// [RenderedQueryGeometry.fromScreenBox], or [RenderedQueryGeometry.fromList].
+@immutable
+sealed class RenderedQueryGeometry {
+  const RenderedQueryGeometry._();
+
+  /// Query a single screen point.
+  const factory RenderedQueryGeometry.fromScreenCoordinate(
+    ScreenCoordinate point,
+  ) = ScreenCoordinateRenderedQueryGeometry;
+
+  /// Query a rectangular screen area.
+  const factory RenderedQueryGeometry.fromScreenBox(ScreenBox box) =
+      ScreenBoxRenderedQueryGeometry;
+
+  /// Query a screen area defined by a list of points.
+  ///
+  /// On web, GL JS only accepts a point or an axis-aligned bounding box. The
+  /// points are always reduced to their bounding box before querying. This
+  /// also applies to a two-point list: it becomes a rectangle on web. On
+  /// mobile, the native hit-test receives the points as given.
+  factory RenderedQueryGeometry.fromList(List<ScreenCoordinate> points) =
+      ScreenCoordinateListRenderedQueryGeometry;
+
+  /// JSON-encoded representation of the geometry.
   @Deprecated(
-    'Use RenderedQueryGeometry.fromList()/fromScreenBox()/fromScreenCoordinate() instead',
+    'Use pattern matching on the RenderedQueryGeometry subclasses '
+    '(ScreenCoordinateRenderedQueryGeometry, ScreenBoxRenderedQueryGeometry, '
+    'ScreenCoordinateListRenderedQueryGeometry) instead. Will be removed in '
+    'a future release.',
   )
-  RenderedQueryGeometry({required this.value, required this.type});
+  String get value => switch (this) {
+    ScreenCoordinateRenderedQueryGeometry(:final point) => jsonEncode(
+      <String, dynamic>{'x': point.x, 'y': point.y},
+    ),
+    ScreenBoxRenderedQueryGeometry(:final box) => jsonEncode(<String, dynamic>{
+      'min': <String, dynamic>{'x': box.min.x, 'y': box.min.y},
+      'max': <String, dynamic>{'x': box.max.x, 'y': box.max.y},
+    }),
+    ScreenCoordinateListRenderedQueryGeometry(:final points) => jsonEncode(
+      points.map((e) => <String, dynamic>{'x': e.x, 'y': e.y}).toList(),
+    ),
+  };
 
-  RenderedQueryGeometry.fromList(List<ScreenCoordinate> points)
-    : value = jsonEncode(
-        points.map((e) => <String, dynamic>{'x': e.x, 'y': e.y}).toList(),
-      ),
-      type = Type.LIST;
+  /// The type of geometry encoded in [value].
+  @Deprecated(
+    'Use pattern matching on the RenderedQueryGeometry subclasses instead. '
+    'Will be removed in a future release.',
+  )
+  Type get type => switch (this) {
+    ScreenCoordinateRenderedQueryGeometry() => Type.SCREEN_COORDINATE,
+    ScreenBoxRenderedQueryGeometry() => Type.SCREEN_BOX,
+    ScreenCoordinateListRenderedQueryGeometry() => Type.LIST,
+  };
+}
 
-  RenderedQueryGeometry.fromScreenBox(ScreenBox box)
-    : value = jsonEncode(<String, dynamic>{
-        'min': <String, dynamic>{'x': box.min.x, 'y': box.min.y},
-        'max': <String, dynamic>{'x': box.max.x, 'y': box.max.y},
-      }),
-      type = Type.SCREEN_BOX;
+/// [RenderedQueryGeometry] for a single screen point.
+final class ScreenCoordinateRenderedQueryGeometry
+    extends RenderedQueryGeometry {
+  const ScreenCoordinateRenderedQueryGeometry(this.point) : super._();
 
-  RenderedQueryGeometry.fromScreenCoordinate(ScreenCoordinate point)
-    : value = jsonEncode(<String, dynamic>{'x': point.x, 'y': point.y}),
-      type = Type.SCREEN_COORDINATE;
+  /// The screen point to query.
+  final ScreenCoordinate point;
 
-  /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
-  String value;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScreenCoordinateRenderedQueryGeometry && other.point == point);
 
-  /// Type of the geometry encoded in [value].
-  Type type;
+  @override
+  int get hashCode => point.hashCode;
+}
+
+/// [RenderedQueryGeometry] for a rectangular screen area.
+final class ScreenBoxRenderedQueryGeometry extends RenderedQueryGeometry {
+  const ScreenBoxRenderedQueryGeometry(this.box) : super._();
+
+  /// The screen box to query.
+  final ScreenBox box;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScreenBoxRenderedQueryGeometry && other.box == box);
+
+  @override
+  int get hashCode => box.hashCode;
+}
+
+/// [RenderedQueryGeometry] for a screen area defined by a list of points.
+final class ScreenCoordinateListRenderedQueryGeometry
+    extends RenderedQueryGeometry {
+  ScreenCoordinateListRenderedQueryGeometry(List<ScreenCoordinate> points)
+    : points = List.unmodifiable(points),
+      super._();
+
+  /// The screen points defining the queried area.
+  final List<ScreenCoordinate> points;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScreenCoordinateListRenderedQueryGeometry &&
+          listEquals(other.points, points));
+
+  @override
+  int get hashCode => Object.hashAll(points);
 }
 
 /// A [FeaturesetFeature] with a typed [FeaturesetDescriptor]. This is used to

@@ -315,6 +315,37 @@ final impl = mapbox_mobile.MapboxMap.fromNativeController(channelSuffix);
 final mapboxMap = MapboxMap(impl);
 ```
 
+#### `RenderedQueryGeometry` internals
+
+`RenderedQueryGeometry` (used with `queryRenderedFeatures`/`queryRenderedFeaturesForFeatureset`) is now a sealed class hierarchy. Each subclass carries its own typed data. The platform interface no longer needs to JSON-encode this data.
+
+Construction is unchanged.
+
+The `value` and `type` accessors are deprecated. Use pattern matching on the sealed subclasses instead. These accessors will be removed in a future release. They are also now read-only getters. Code that assigns to `.value` or `.type` after construction no longer compiles.
+
+`RenderedQueryGeometry.fromList` now copies the list you pass in. Mutating your original list afterward has no effect on the geometry. The geometry's own `points` list cannot be added to or removed from. Note that the `ScreenCoordinate` points themselves are still shared, not copied — mutating a point you passed in still changes the geometry.
+
+```dart
+// Construction — unchanged from v2
+final geometry = RenderedQueryGeometry.fromScreenCoordinate(point);
+
+// Before (v2) — introspecting via value/type
+if (geometry.type == Type.SCREEN_COORDINATE) {
+  final decoded = jsonDecode(geometry.value);
+  // ...
+}
+
+// After (v3) — pattern matching on the sealed subclasses
+switch (geometry) {
+  case ScreenCoordinateRenderedQueryGeometry(:final point):
+    print(point);
+  case ScreenBoxRenderedQueryGeometry(:final box):
+    print(box);
+  case ScreenCoordinateListRenderedQueryGeometry(:final points):
+    print(points);
+}
+```
+
 ### Debug
 
 #### Debug API rename

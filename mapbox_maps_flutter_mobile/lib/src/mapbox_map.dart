@@ -428,10 +428,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
     RenderedQueryGeometry geometry,
     RenderedQueryOptions options,
-  ) => _mapInterface.queryRenderedFeatures(
-    _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
-    options,
-  );
+  ) => _mapInterface.queryRenderedFeatures(geometry._toPigeon(), options);
 
   /// Queries the map for rendered features with one typed featureset.
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
@@ -441,9 +438,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   }) async {
     return _mapInterface.queryRenderedFeaturesForFeatureset(
       featureset,
-      (geometry != null)
-          ? _RenderedQueryGeometry(value: geometry.value, type: geometry.type)
-          : null,
+      geometry?._toPigeon(),
       filter,
     );
   }
@@ -879,6 +874,27 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         channelSuffix: _mapboxMapsPlatform.channelSuffix,
       ).setCustomHeaders(headers);
+}
+
+/// Serializes a [RenderedQueryGeometry] into the JSON-encoded Pigeon wire
+/// format expected by the native (Kotlin/Swift) implementations.
+extension on RenderedQueryGeometry {
+  _RenderedQueryGeometry _toPigeon() => switch (this) {
+    ScreenCoordinateRenderedQueryGeometry(:final point) =>
+      _RenderedQueryGeometry(
+        value: jsonEncode(point.toJson()),
+        type: Type.SCREEN_COORDINATE,
+      ),
+    ScreenBoxRenderedQueryGeometry(:final box) => _RenderedQueryGeometry(
+      value: jsonEncode(box.toJson()),
+      type: Type.SCREEN_BOX,
+    ),
+    ScreenCoordinateListRenderedQueryGeometry(:final points) =>
+      _RenderedQueryGeometry(
+        value: jsonEncode(points.map((e) => e.toJson()).toList()),
+        type: Type.LIST,
+      ),
+  };
 }
 
 /// Listen for a single interaction added to the map, identified by its id
