@@ -1,5 +1,7 @@
 ### main
 
+* Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
+
 ### 2.29.0-rc.1
 
 ### 2.28.0
