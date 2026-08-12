@@ -328,12 +328,21 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    // WARNING: Because platform view is not sized at this moment on iOS,
-    // it is not safe to call methods that depend on the size of the platform view,
-    // e.g. `setCamera` or any high-level API built on top of it(animations, viewport).
+    // WARNING: The platform view isn't guaranteed to be sized at this moment
+    // (e.g. always on iOS, and on Android in the default HC hosting mode),
+    // so it is not safe to call methods that depend on the size of the
+    // platform view, e.g. `setCamera` or any high-level API built on top of
+    // it (animations, viewport).
     //
     // As a way to address this we pass the size hint to the view upon creation.
-    final size = key.currentContext?.size;
+    //
+    // `key.currentContext?.size` looks equivalent but throws instead of
+    // returning null when the element is mounted but not yet laid out —
+    // this callback's timing relative to layout isn't guaranteed.
+    final renderObject = key.currentContext?.findRenderObject();
+    final size = renderObject is RenderBox && renderObject.hasSize
+        ? renderObject.size
+        : null;
     if (size != null) {
       await _mapboxMapsPlatform.submitViewSizeHint(
         width: size.width,
