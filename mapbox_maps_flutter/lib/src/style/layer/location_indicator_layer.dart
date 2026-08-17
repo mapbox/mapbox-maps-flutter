@@ -70,132 +70,200 @@ final class LocationIndicatorLayer extends Layer {
 
   /// The accuracy, in meters, of the position source used to retrieve the position of the location indicator.
   /// Default value: 0. The unit of accuracyRadius is in meters.
+  ///
+  /// Supported platforms: Android, iOS.
   double? accuracyRadius;
 
   /// The accuracy, in meters, of the position source used to retrieve the position of the location indicator.
   /// Default value: 0. The unit of accuracyRadius is in meters.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? accuracyRadiusExpression;
 
   /// The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
   /// Default value: "#ffffff".
+  ///
+  /// Supported platforms: Android, iOS.
   int? accuracyRadiusBorderColor;
 
   /// The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
   /// Default value: "#ffffff".
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? accuracyRadiusBorderColorExpression;
 
   /// The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
   /// Default value: "#ffffff".
+  ///
+  /// Supported platforms: Android, iOS.
   int? accuracyRadiusColor;
 
   /// The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
   /// Default value: "#ffffff".
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? accuracyRadiusColorExpression;
 
   /// The bearing of the location indicator. Values under 0.01 degree variation are ignored.
   /// Default value: 0. The unit of bearing is in degrees.
+  ///
+  /// Supported platforms: Android, iOS.
   double? bearing;
 
   /// The bearing of the location indicator. Values under 0.01 degree variation are ignored.
   /// Default value: 0. The unit of bearing is in degrees.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? bearingExpression;
 
   /// Name of image in sprite to use as the middle of the location indicator.
+  ///
+  /// Supported platforms: Android, iOS.
   String? bearingImage;
 
   /// Name of image in sprite to use as the middle of the location indicator.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? bearingImageExpression;
 
   /// The size of the bearing image, as a scale factor applied to the size of the specified image.
   /// Default value: 1. The unit of bearingImageSize is in factor of the original icon size.
+  ///
+  /// Supported platforms: Android, iOS.
   double? bearingImageSize;
 
   /// The size of the bearing image, as a scale factor applied to the size of the specified image.
   /// Default value: 1. The unit of bearingImageSize is in factor of the original icon size.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? bearingImageSizeExpression;
 
   /// The color of the circle emphasizing the indicator. To adjust transparency, set the alpha component of the color accordingly.
   /// Default value: "#ffffff".
+  ///
+  /// Supported platforms: Android, iOS.
   int? emphasisCircleColor;
 
   /// The color of the circle emphasizing the indicator. To adjust transparency, set the alpha component of the color accordingly.
   /// Default value: "#ffffff".
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? emphasisCircleColorExpression;
 
   /// Specifies a glow effect range of the emphasis circle, in pixels. If [0,0] values are provided, it renders the circle as a solid color. The first value specifies the start of the glow effect where it is equal to the circle's color, the second is the end, where it's fully transparent. Between the two values the effect is linearly faded out.
   /// Default value: [0,0].
+  ///
+  /// Supported platforms: Android, iOS.
   List<double?>? emphasisCircleGlowRange;
 
   /// Specifies a glow effect range of the emphasis circle, in pixels. If [0,0] values are provided, it renders the circle as a solid color. The first value specifies the start of the glow effect where it is equal to the circle's color, the second is the end, where it's fully transparent. Between the two values the effect is linearly faded out.
   /// Default value: [0,0].
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? emphasisCircleGlowRangeExpression;
 
   /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
   /// Default value: 0. The unit of emphasisCircleRadius is in pixels.
+  ///
+  /// Supported platforms: Android, iOS.
   double? emphasisCircleRadius;
 
   /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
   /// Default value: 0. The unit of emphasisCircleRadius is in pixels.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? emphasisCircleRadiusExpression;
 
   /// The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
   /// Default value: "0". The unit of imagePitchDisplacement is in pixels.
+  ///
+  /// Supported platforms: Android, iOS.
   double? imagePitchDisplacement;
 
   /// The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
   /// Default value: "0". The unit of imagePitchDisplacement is in pixels.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? imagePitchDisplacementExpression;
 
   /// An array of [latitude, longitude, altitude] position of the location indicator. Values under 0.000001 variation are ignored.
   /// Default value: [0,0,0].
+  ///
+  /// Supported platforms: Android, iOS.
   List<double?>? location;
 
   /// An array of [latitude, longitude, altitude] position of the location indicator. Values under 0.000001 variation are ignored.
   /// Default value: [0,0,0].
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? locationExpression;
 
   /// The opacity of the entire location indicator layer.
   /// Default value: 1. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   double? locationIndicatorOpacity;
 
   /// The opacity of the entire location indicator layer.
   /// Default value: 1. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? locationIndicatorOpacityExpression;
 
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
   /// Default value: "0.85".
+  ///
+  /// Supported platforms: Android, iOS.
   double? perspectiveCompensation;
 
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
   /// Default value: "0.85".
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? perspectiveCompensationExpression;
 
   /// Name of image in sprite to use as the background of the location indicator.
+  ///
+  /// Supported platforms: Android, iOS.
   String? shadowImage;
 
   /// Name of image in sprite to use as the background of the location indicator.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? shadowImageExpression;
 
   /// The size of the shadow image, as a scale factor applied to the size of the specified image.
   /// Default value: 1. The unit of shadowImageSize is in factor of the original icon size.
+  ///
+  /// Supported platforms: Android, iOS.
   double? shadowImageSize;
 
   /// The size of the shadow image, as a scale factor applied to the size of the specified image.
   /// Default value: 1. The unit of shadowImageSize is in factor of the original icon size.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? shadowImageSizeExpression;
 
   /// Name of image in sprite to use as the top of the location indicator.
+  ///
+  /// Supported platforms: Android, iOS.
   String? topImage;
 
   /// Name of image in sprite to use as the top of the location indicator.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? topImageExpression;
 
   /// The size of the top image, as a scale factor applied to the size of the specified image.
   /// Default value: 1. The unit of topImageSize is in factor of the original icon size.
+  ///
+  /// Supported platforms: Android, iOS.
   double? topImageSize;
 
   /// The size of the top image, as a scale factor applied to the size of the specified image.
   /// Default value: 1. The unit of topImageSize is in factor of the original icon size.
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? topImageSizeExpression;
 
   @override

@@ -74,21 +74,29 @@ final class FillLayer extends Layer {
 
   /// Determines whether bridge guard rails are added for elevated roads.
   /// Default value: "true".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   bool? fillConstructBridgeGuardRail;
 
   /// Determines whether bridge guard rails are added for elevated roads.
   /// Default value: "true".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? fillConstructBridgeGuardRailExpression;
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   FillElevationReference? fillElevationReference;
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? fillElevationReferenceExpression;
 
@@ -108,11 +116,15 @@ final class FillLayer extends Layer {
 
   /// The color of bridge guard rail.
   /// Default value: "rgba(241, 236, 225, 255)".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   int? fillBridgeGuardRailColor;
 
   /// The color of bridge guard rail.
   /// Default value: "rgba(241, 236, 225, 255)".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? fillBridgeGuardRailColorExpression;
 
@@ -178,11 +190,15 @@ final class FillLayer extends Layer {
 
   /// The color of tunnel structures (tunnel entrance and tunnel walls).
   /// Default value: "rgba(241, 236, 225, 255)".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   int? fillTunnelStructureColor;
 
   /// The color of tunnel structures (tunnel entrance and tunnel walls).
   /// Default value: "rgba(241, 236, 225, 255)".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? fillTunnelStructureColorExpression;
 

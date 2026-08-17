@@ -174,11 +174,15 @@ final class LineLayer extends Layer {
 
   /// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release.
   /// Default value: "pixels".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   LineWidthUnit? lineWidthUnit;
 
   /// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release.
   /// Default value: "pixels".
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? lineWidthUnitExpression;
 
@@ -224,21 +228,29 @@ final class LineLayer extends Layer {
 
   /// The width of the cutout fade effect as a proportion of the cutout width.
   /// Default value: 0.4. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   double? lineCutoutFadeWidth;
 
   /// The width of the cutout fade effect as a proportion of the cutout width.
   /// Default value: 0.4. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? lineCutoutFadeWidthExpression;
 
   /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
   /// Default value: 1. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   double? lineCutoutOpacity;
 
   /// The opacity of the aboveground objects affected by the line cutout. Cutout for tunnels isn't affected by this property, If set to 0, the cutout is fully transparent. Cutout opacity should have the same value for all layers that specify it. If all layers don't have the same value, it is not specified which value is used.
   /// Default value: 1. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   @experimental
   List<Object>? lineCutoutOpacityExpression;
 
@@ -252,10 +264,14 @@ final class LineLayer extends Layer {
 
   /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded.
   /// Default value: 1. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   double? lineDepthOcclusionFactor;
 
   /// This property is deprecated and replaced by line-occlusion-opacity. Value 0 disables occlusion, value 1 means fully occluded. Note: line-occlusion-opacity has the opposite effect - value 1 disables occlusion, value 0 means fully occluded.
   /// Default value: 1. Value range: [0, 1]
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? lineDepthOcclusionFactorExpression;
 
   /// Controls the intensity of light emitted on the source features.

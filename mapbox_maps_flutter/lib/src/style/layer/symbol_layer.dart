@@ -652,20 +652,22 @@ final class SymbolLayer extends Layer {
 
   /// Specify how opacity in case of being occluded should be applied
   /// Default value: "anchor".
+  ///
+  /// Supported platforms: Android, iOS.
   OcclusionOpacityMode? occlusionOpacityMode;
 
   /// Specify how opacity in case of being occluded should be applied
   /// Default value: "anchor".
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? occlusionOpacityModeExpression;
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
-  @experimental
   double? symbolZOffset;
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
-  @experimental
   List<Object>? symbolZOffsetExpression;
 
   /// The color with which the text will be drawn.

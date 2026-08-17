@@ -202,10 +202,14 @@ final class ModelLayer extends Layer {
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
   /// Default value: "map".
+  ///
+  /// Supported platforms: Android, iOS.
   ModelScaleMode? modelScaleMode;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
   /// Default value: "map".
+  ///
+  /// Supported platforms: Android, iOS.
   List<Object>? modelScaleModeExpression;
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
