@@ -30,6 +30,7 @@ import 'point_annotations_example.dart';
 import 'polygon_annotations_example.dart';
 import 'polyline_annotations_example.dart';
 import 'projection_example.dart';
+import 'rainbow_road_example.dart';
 import 'simple_map_example.dart';
 import 'snapshotter_example.dart';
 import 'spinning_globe_example.dart';
@@ -113,6 +114,13 @@ final List<Example> examples = [
     title: 'Style a route showing traffic',
     subtitle: 'Use LineLayer to style a route line with traffic data.',
     builder: (_) => const TrafficRouteLineExample(),
+  ),
+  Example(
+    leading: const Icon(Icons.gradient),
+    title: 'Rainbow road',
+    subtitle:
+        'Animate LineLayer.lineBorderGradient along the Circuit de Monaco using line-progress.',
+    builder: (_) => const RainbowRoadExample(),
   ),
   Example(
     leading: const Icon(Icons.map),

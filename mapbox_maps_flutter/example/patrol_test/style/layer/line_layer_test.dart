@@ -55,6 +55,7 @@ void main() {
         lineZOffset: 1.0,
         lineBlur: 1.0,
         lineBorderColor: Colors.red.value,
+        lineBorderGradient: Colors.red.value,
         lineBorderWidth: 1.0,
         lineColor: Colors.red.value,
         lineCutoutFadeWidth: 1.0,
@@ -94,6 +95,7 @@ void main() {
     expect(layer.lineZOffset, 1.0);
     expect(layer.lineBlur, 1.0);
     expect(layer.lineBorderColor, Colors.red.value);
+    expect(layer.lineBorderGradient, Colors.red.value);
     expect(layer.lineBorderWidth, 1.0);
     expect(layer.lineColor, Colors.red.value);
     if (!kIsWeb) {
@@ -166,6 +168,7 @@ void main() {
         lineZOffsetExpression: ['number', 1.0],
         lineBlurExpression: ['number', 1.0],
         lineBorderColorExpression: ['rgba', 255, 0, 0, 1],
+        lineBorderGradientExpression: ['rgba', 255, 0, 0, 1],
         lineBorderWidthExpression: ['number', 1.0],
         lineColorExpression: ['rgba', 255, 0, 0, 1],
         lineCutoutFadeWidth: 1.0,
@@ -219,6 +222,7 @@ void main() {
     expect(layer.lineZOffset, 1.0);
     expect(layer.lineBlur, 1.0);
     expect(layer.lineBorderColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.lineBorderGradientExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.lineBorderWidth, 1.0);
     expect(layer.lineColorExpression, ['rgba', 255, 0, 0, 1]);
     if (!kIsWeb) {

@@ -47,6 +47,8 @@ final class LineLayer extends Layer {
     List<Object>? this.lineBlurExpression,
     int? this.lineBorderColor,
     List<Object>? this.lineBorderColorExpression,
+    int? this.lineBorderGradient,
+    List<Object>? this.lineBorderGradientExpression,
     double? this.lineBorderWidth,
     List<Object>? this.lineBorderWidthExpression,
     int? this.lineColor,
@@ -209,6 +211,14 @@ final class LineLayer extends Layer {
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? lineBorderColorExpression;
+
+  /// A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `line-border-color`. Has no effect unless `line-border-width` is greater than zero. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+  @experimental
+  int? lineBorderGradient;
+
+  /// A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `line-border-color`. Has no effect unless `line-border-width` is greater than zero. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+  @experimental
+  List<Object>? lineBorderGradientExpression;
 
   /// The width of the line border. A value of zero means no border.
   /// Default value: 0. Minimum value: 0.
@@ -489,6 +499,12 @@ final class LineLayer extends Layer {
       paint["line-border-color"] = lineBorderColor?.toRGBA();
     }
 
+    if (lineBorderGradientExpression != null) {
+      paint["line-border-gradient"] = lineBorderGradientExpression;
+    } else if (lineBorderGradient != null) {
+      paint["line-border-gradient"] = lineBorderGradient?.toRGBA();
+    }
+
     if (lineBorderWidthExpression != null) {
       paint["line-border-width"] = lineBorderWidthExpression;
     } else if (lineBorderWidth != null) {
@@ -734,6 +750,11 @@ final class LineLayer extends Layer {
           ?.toRGBAInt(),
       lineBorderColorExpression: styleOptionalCastList(
         map["paint"]["line-border-color"],
+      ),
+      lineBorderGradient: (map["paint"]["line-border-gradient"] as List?)
+          ?.toRGBAInt(),
+      lineBorderGradientExpression: styleOptionalCastList(
+        map["paint"]["line-border-gradient"],
       ),
       lineBorderWidth: styleOptionalCast(map["paint"]["line-border-width"]),
       lineBorderWidthExpression: styleOptionalCastList(
