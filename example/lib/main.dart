@@ -37,6 +37,7 @@ import 'location_example.dart';
 import 'example.dart';
 import 'point_annotations_example.dart';
 import 'projection_example.dart';
+import 'rainbow_road_example.dart';
 import 'style_example.dart';
 import 'gestures_example.dart';
 import 'debug_options_example.dart';
@@ -47,6 +48,7 @@ final List<Example> _allPages = <Example>[
   ViewportExample(),
   SnapshotterExample(),
   TrafficRouteLineExample(),
+  RainbowRoadExample(),
   OfflineMapExample(),
   ModelLayerExample(),
   ModelSourceExample(),
