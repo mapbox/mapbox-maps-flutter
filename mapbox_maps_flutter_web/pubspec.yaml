@@ -1,7 +1,9 @@
 name: mapbox_maps_flutter_web
 description: Web implementation of the Mapbox Maps Flutter plugin.
 version: 3.0.0-alpha.28
-homepage: https://github.com/mapbox/mapbox-maps-flutter
+homepage: https://www.mapbox.com/maps
+repository: https://github.com/mapbox/mapbox-maps-flutter
+issue_tracker: https://github.com/mapbox/mapbox-maps-flutter/issues
 
 environment:
   sdk: ">=3.10.0 <4.0.0"

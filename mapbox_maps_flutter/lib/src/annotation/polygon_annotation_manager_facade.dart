@@ -1,5 +1,4 @@
 // This file is generated.
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -9,9 +8,7 @@ import '../annotations_manager.dart' show BaseAnnotationManager;
 final class PolygonAnnotationManager
     extends BaseAnnotationManager<PolygonAnnotationManagerPlatformInterface> {
   @internal
-  PolygonAnnotationManager(
-    PolygonAnnotationManagerPlatformInterface super.impl,
-  );
+  PolygonAnnotationManager(super.impl);
 
   /// Registers tap event callbacks for the annotations managed by this manager.
   ///

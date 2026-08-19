@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 final _TileStoreInstanceManager _tileStoreInstanceManager =
     _TileStoreInstanceManager();
@@ -15,7 +15,9 @@ final class TileStore implements TileStorePlatformInterface {
         "tilestore/${suffix.toString()}",
       );
       _suffixesRegistry.releaseSuffix(suffix);
-    } catch (e) {}
+    } catch (e) {
+      // This runs during GC. A tear-down failure here has no useful response.
+    }
   });
 
   late final _TileStore _api;

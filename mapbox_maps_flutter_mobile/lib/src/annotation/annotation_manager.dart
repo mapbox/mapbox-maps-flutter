@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 class AnnotationManager implements AnnotationManagerPlatformInterface {
   final _MapboxMapsPlatform _mapboxMapsPlatform;

@@ -2,7 +2,6 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -13,39 +12,31 @@ import 'layer.dart';
 /// Client-side hillshading visualization based on DEM data. Currently, the implementation only supports Mapbox Terrain RGB and Mapzen Terrarium tiles.
 final class HillshadeLayer extends Layer {
   HillshadeLayer({
-    required String id,
-    Visibility? visibility,
-    List<Object>? visibilityExpression,
-    List<Object>? filter,
-    double? minZoom,
-    double? maxZoom,
-    String? slot,
-    required String this.sourceId,
-    String? this.sourceLayer,
+    required super.id,
+    super.visibility,
+    super.visibilityExpression,
+    super.filter,
+    super.minZoom,
+    super.maxZoom,
+    super.slot,
+    required this.sourceId,
+    this.sourceLayer,
 
-    int? this.hillshadeAccentColor,
-    List<Object>? this.hillshadeAccentColorExpression,
-    double? this.hillshadeEmissiveStrength,
-    List<Object>? this.hillshadeEmissiveStrengthExpression,
-    double? this.hillshadeExaggeration,
-    List<Object>? this.hillshadeExaggerationExpression,
-    int? this.hillshadeHighlightColor,
-    List<Object>? this.hillshadeHighlightColorExpression,
-    HillshadeIlluminationAnchor? this.hillshadeIlluminationAnchor,
-    List<Object>? this.hillshadeIlluminationAnchorExpression,
-    double? this.hillshadeIlluminationDirection,
-    List<Object>? this.hillshadeIlluminationDirectionExpression,
-    int? this.hillshadeShadowColor,
-    List<Object>? this.hillshadeShadowColorExpression,
-  }) : super(
-         id: id,
-         visibility: visibility,
-         visibilityExpression: visibilityExpression,
-         filter: filter,
-         maxZoom: maxZoom,
-         minZoom: minZoom,
-         slot: slot,
-       );
+    this.hillshadeAccentColor,
+    this.hillshadeAccentColorExpression,
+    this.hillshadeEmissiveStrength,
+    this.hillshadeEmissiveStrengthExpression,
+    this.hillshadeExaggeration,
+    this.hillshadeExaggerationExpression,
+    this.hillshadeHighlightColor,
+    this.hillshadeHighlightColorExpression,
+    this.hillshadeIlluminationAnchor,
+    this.hillshadeIlluminationAnchorExpression,
+    this.hillshadeIlluminationDirection,
+    this.hillshadeIlluminationDirectionExpression,
+    this.hillshadeShadowColor,
+    this.hillshadeShadowColorExpression,
+  });
 
   @override
   String getType() => "hillshade";

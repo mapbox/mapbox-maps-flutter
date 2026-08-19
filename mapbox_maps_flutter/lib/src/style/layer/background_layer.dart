@@ -2,7 +2,6 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -13,33 +12,25 @@ import 'layer.dart';
 /// The background color or pattern of the map.
 final class BackgroundLayer extends Layer {
   BackgroundLayer({
-    required String id,
-    Visibility? visibility,
-    List<Object>? visibilityExpression,
-    List<Object>? filter,
-    double? minZoom,
-    double? maxZoom,
-    String? slot,
+    required super.id,
+    super.visibility,
+    super.visibilityExpression,
+    super.filter,
+    super.minZoom,
+    super.maxZoom,
+    super.slot,
 
-    int? this.backgroundColor,
-    List<Object>? this.backgroundColorExpression,
-    double? this.backgroundEmissiveStrength,
-    List<Object>? this.backgroundEmissiveStrengthExpression,
-    double? this.backgroundOpacity,
-    List<Object>? this.backgroundOpacityExpression,
-    String? this.backgroundPattern,
-    List<Object>? this.backgroundPatternExpression,
-    BackgroundPitchAlignment? this.backgroundPitchAlignment,
-    List<Object>? this.backgroundPitchAlignmentExpression,
-  }) : super(
-         id: id,
-         visibility: visibility,
-         visibilityExpression: visibilityExpression,
-         filter: filter,
-         maxZoom: maxZoom,
-         minZoom: minZoom,
-         slot: slot,
-       );
+    this.backgroundColor,
+    this.backgroundColorExpression,
+    this.backgroundEmissiveStrength,
+    this.backgroundEmissiveStrengthExpression,
+    this.backgroundOpacity,
+    this.backgroundOpacityExpression,
+    this.backgroundPattern,
+    this.backgroundPatternExpression,
+    this.backgroundPitchAlignment,
+    this.backgroundPitchAlignmentExpression,
+  });
 
   @override
   String getType() => "background";

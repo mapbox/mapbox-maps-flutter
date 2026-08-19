@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// The PolygonAnnotationManager to add/update/delete PolygonAnnotationAnnotations on the map.
 class PolygonAnnotationManager extends BaseAnnotationManager

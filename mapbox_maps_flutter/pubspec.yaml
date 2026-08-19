@@ -1,7 +1,20 @@
 name: mapbox_maps_flutter
-description: "Mapbox Maps for Flutter. Provides interactive, customizable vector maps for Android, iOS, and Web."
+description: "Official Mapbox Maps SDK for Flutter. Add an interactive map widget that renders Mapbox Vector Tile (MVT) maps. Customize it for Android, iOS, and Web."
 version: 3.0.0-alpha.28
-homepage: https://github.com/mapbox/mapbox-maps-flutter
+homepage: https://www.mapbox.com/maps
+repository: https://github.com/mapbox/mapbox-maps-flutter
+issue_tracker: https://github.com/mapbox/mapbox-maps-flutter/issues
+topics:
+  - mapbox
+  - map
+  - maps
+  - vector-tiles
+  - mvt
+screenshots:
+  - description: "The same map renders on all supported platforms from one Flutter codebase."
+    path: screenshots/cross_platform_eiffel_tower.webp
+  - description: "Standard, Streets, Light, Dark, and Satellite Streets styles, shown over Turku, Finland."
+    path: screenshots/map_styles_turku.webp
 
 environment:
   sdk: ">=3.10.0 <4.0.0"

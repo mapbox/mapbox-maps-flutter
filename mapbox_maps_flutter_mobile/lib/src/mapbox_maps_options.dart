@@ -1,8 +1,8 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// Class for Mapbox SDK settings management
 final class MapboxOptions {
-  static _MapboxOptions _options = () {
+  static final _MapboxOptions _options = () {
     LogConfiguration._setupDebugLoggingIfNeeded();
     return _MapboxOptions();
   }();
@@ -31,9 +31,9 @@ final class MapboxOptions {
 /// before any of the Maps API objects are constructed. Although it is technically possible to run Maps API objects that use different
 /// resource options, such a setup might cause performance implications.
 final class MapboxMapsOptions {
-  static _MapboxMapsOptions _options = _MapboxMapsOptions();
+  static final _MapboxMapsOptions _options = _MapboxMapsOptions();
 
-  MapboxMapsOptions._() {}
+  MapboxMapsOptions._();
 
   /// The base URL that would be used by the Maps engine to make HTTP requests.
   /// By default the engine uses the base URL `https://api.mapbox.com`

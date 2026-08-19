@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
@@ -431,6 +431,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ) => _mapInterface.queryRenderedFeatures(geometry._toPigeon(), options);
 
   /// Queries the map for rendered features with one typed featureset.
+  @override
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
     required FeaturesetDescriptor featureset,
     RenderedQueryGeometry? geometry,

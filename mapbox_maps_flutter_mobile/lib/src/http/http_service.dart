@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// A service that handles HTTP-related functionality for Mapbox
 class MapboxHttpService implements MapboxHttpServicePlatformInterface {
@@ -56,6 +56,7 @@ class MapboxHttpService implements MapboxHttpServicePlatformInterface {
   ///
   /// Throws a [PlatformException] if the native implementation is not available
   /// or if the operation fails.
+  @override
   Future<void> setCustomHeadersForHost(
     String host,
     Map<String, String> headers,
@@ -86,6 +87,7 @@ class MapboxHttpService implements MapboxHttpServicePlatformInterface {
   ///
   /// Throws a [PlatformException] if the native implementation is not available
   /// or if the operation fails.
+  @override
   Future<void> clearCustomHeaders() async {
     try {
       await _channel.invokeMethod('map#clearCustomHeaders');

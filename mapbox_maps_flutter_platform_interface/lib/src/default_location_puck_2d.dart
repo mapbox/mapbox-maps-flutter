@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'pigeons/platform_interface_data_types.dart' show LocationPuck2D;
 
 /// Marker subclass of [LocationPuck2D] that signals the platform
@@ -13,16 +11,10 @@ import 'pigeons/platform_interface_data_types.dart' show LocationPuck2D;
 /// `updateSettings` call regardless.
 class DefaultLocationPuck2D extends LocationPuck2D {
   DefaultLocationPuck2D({
-    Uint8List? topImage,
-    Uint8List? bearingImage,
-    Uint8List? shadowImage,
-    String? scaleExpression,
-    double? opacity,
-  }) : super(
-         topImage: topImage,
-         bearingImage: bearingImage,
-         shadowImage: shadowImage,
-         scaleExpression: scaleExpression,
-         opacity: opacity,
-       );
+    super.topImage,
+    super.bearingImage,
+    super.shadowImage,
+    super.scaleExpression,
+    super.opacity,
+  });
 }

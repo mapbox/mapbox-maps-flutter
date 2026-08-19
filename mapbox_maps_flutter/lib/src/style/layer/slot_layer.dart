@@ -2,7 +2,6 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -13,25 +12,17 @@ import 'layer.dart';
 /// Marks the position of a slot.
 final class SlotLayer extends Layer {
   SlotLayer({
-    required String id,
-    Visibility? visibility,
-    List<Object>? visibilityExpression,
-    List<Object>? filter,
-    double? minZoom,
-    double? maxZoom,
-    String? slot,
+    required super.id,
+    super.visibility,
+    super.visibilityExpression,
+    super.filter,
+    super.minZoom,
+    super.maxZoom,
+    super.slot,
 
     @Deprecated("This property has no effect on SlotLayer") String? sourceId,
     @Deprecated("This property has no effect on SlotLayer") String? sourceLayer,
-  }) : super(
-         id: id,
-         visibility: visibility,
-         visibilityExpression: visibilityExpression,
-         filter: filter,
-         maxZoom: maxZoom,
-         minZoom: minZoom,
-         slot: slot,
-       );
+  });
 
   @override
   String getType() => "slot";

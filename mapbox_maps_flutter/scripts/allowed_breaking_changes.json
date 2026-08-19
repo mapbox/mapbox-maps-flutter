@@ -1255,6 +1255,10 @@
     "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
   },
   {
+    "changeDescription": "ModelSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
     "changeDescription": "Source: Field \"style\" added (required)",
     "reason": "`Source` gained a required `style` field to resolve source references when sources are passed by value through `StyleManager.addSource`. Typed `Source` subclasses set this field automatically."
   },

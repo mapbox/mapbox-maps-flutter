@@ -2,7 +2,6 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -13,35 +12,27 @@ import 'layer.dart';
 /// A heatmap.
 final class HeatmapLayer extends Layer {
   HeatmapLayer({
-    required String id,
-    Visibility? visibility,
-    List<Object>? visibilityExpression,
-    List<Object>? filter,
-    double? minZoom,
-    double? maxZoom,
-    String? slot,
-    required String this.sourceId,
-    String? this.sourceLayer,
+    required super.id,
+    super.visibility,
+    super.visibilityExpression,
+    super.filter,
+    super.minZoom,
+    super.maxZoom,
+    super.slot,
+    required this.sourceId,
+    this.sourceLayer,
 
-    int? this.heatmapColor,
-    List<Object>? this.heatmapColorExpression,
-    double? this.heatmapIntensity,
-    List<Object>? this.heatmapIntensityExpression,
-    double? this.heatmapOpacity,
-    List<Object>? this.heatmapOpacityExpression,
-    double? this.heatmapRadius,
-    List<Object>? this.heatmapRadiusExpression,
-    double? this.heatmapWeight,
-    List<Object>? this.heatmapWeightExpression,
-  }) : super(
-         id: id,
-         visibility: visibility,
-         visibilityExpression: visibilityExpression,
-         filter: filter,
-         maxZoom: maxZoom,
-         minZoom: minZoom,
-         slot: slot,
-       );
+    this.heatmapColor,
+    this.heatmapColorExpression,
+    this.heatmapIntensity,
+    this.heatmapIntensityExpression,
+    this.heatmapOpacity,
+    this.heatmapOpacityExpression,
+    this.heatmapRadius,
+    this.heatmapRadiusExpression,
+    this.heatmapWeight,
+    this.heatmapWeightExpression,
+  });
 
   @override
   String getType() => "heatmap";

@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// Pigeon-side handler that forwards to a hand-written
 /// [PerformanceStatisticsListener]. Keeps the Pigeon FlutterApi class

@@ -2,7 +2,6 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -13,41 +12,33 @@ import 'layer.dart';
 /// A spherical dome around the map that is always rendered behind all other layers.
 final class SkyLayer extends Layer {
   SkyLayer({
-    required String id,
-    Visibility? visibility,
-    List<Object>? visibilityExpression,
-    List<Object>? filter,
-    double? minZoom,
-    double? maxZoom,
-    String? slot,
+    required super.id,
+    super.visibility,
+    super.visibilityExpression,
+    super.filter,
+    super.minZoom,
+    super.maxZoom,
+    super.slot,
 
-    int? this.skyAtmosphereColor,
-    List<Object>? this.skyAtmosphereColorExpression,
-    int? this.skyAtmosphereHaloColor,
-    List<Object>? this.skyAtmosphereHaloColorExpression,
-    List<double?>? this.skyAtmosphereSun,
-    List<Object>? this.skyAtmosphereSunExpression,
-    double? this.skyAtmosphereSunIntensity,
-    List<Object>? this.skyAtmosphereSunIntensityExpression,
-    int? this.skyGradient,
-    List<Object>? this.skyGradientExpression,
-    List<double?>? this.skyGradientCenter,
-    List<Object>? this.skyGradientCenterExpression,
-    double? this.skyGradientRadius,
-    List<Object>? this.skyGradientRadiusExpression,
-    double? this.skyOpacity,
-    List<Object>? this.skyOpacityExpression,
-    SkyType? this.skyType,
-    List<Object>? this.skyTypeExpression,
-  }) : super(
-         id: id,
-         visibility: visibility,
-         visibilityExpression: visibilityExpression,
-         filter: filter,
-         maxZoom: maxZoom,
-         minZoom: minZoom,
-         slot: slot,
-       );
+    this.skyAtmosphereColor,
+    this.skyAtmosphereColorExpression,
+    this.skyAtmosphereHaloColor,
+    this.skyAtmosphereHaloColorExpression,
+    this.skyAtmosphereSun,
+    this.skyAtmosphereSunExpression,
+    this.skyAtmosphereSunIntensity,
+    this.skyAtmosphereSunIntensityExpression,
+    this.skyGradient,
+    this.skyGradientExpression,
+    this.skyGradientCenter,
+    this.skyGradientCenterExpression,
+    this.skyGradientRadius,
+    this.skyGradientRadiusExpression,
+    this.skyOpacity,
+    this.skyOpacityExpression,
+    this.skyType,
+    this.skyTypeExpression,
+  });
 
   @override
   String getType() => "sky";

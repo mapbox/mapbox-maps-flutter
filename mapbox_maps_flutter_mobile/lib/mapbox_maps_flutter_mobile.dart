@@ -1,4 +1,4 @@
-library mapbox_maps_flutter_mobile;
+library;
 
 import 'dart:async';
 import 'dart:convert';

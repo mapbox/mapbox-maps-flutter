@@ -2,7 +2,6 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:meta/meta.dart';
 
@@ -14,39 +13,31 @@ import 'layer.dart';
 @experimental
 final class RasterParticleLayer extends Layer {
   RasterParticleLayer({
-    required String id,
-    Visibility? visibility,
-    List<Object>? visibilityExpression,
-    List<Object>? filter,
-    double? minZoom,
-    double? maxZoom,
-    String? slot,
-    required String this.sourceId,
-    String? this.sourceLayer,
+    required super.id,
+    super.visibility,
+    super.visibilityExpression,
+    super.filter,
+    super.minZoom,
+    super.maxZoom,
+    super.slot,
+    required this.sourceId,
+    this.sourceLayer,
 
-    String? this.rasterParticleArrayBand,
-    List<Object>? this.rasterParticleArrayBandExpression,
-    int? this.rasterParticleColor,
-    List<Object>? this.rasterParticleColorExpression,
-    double? this.rasterParticleCount,
-    List<Object>? this.rasterParticleCountExpression,
-    double? this.rasterParticleFadeOpacityFactor,
-    List<Object>? this.rasterParticleFadeOpacityFactorExpression,
-    double? this.rasterParticleMaxSpeed,
-    List<Object>? this.rasterParticleMaxSpeedExpression,
-    double? this.rasterParticleResetRateFactor,
-    List<Object>? this.rasterParticleResetRateFactorExpression,
-    double? this.rasterParticleSpeedFactor,
-    List<Object>? this.rasterParticleSpeedFactorExpression,
-  }) : super(
-         id: id,
-         visibility: visibility,
-         visibilityExpression: visibilityExpression,
-         filter: filter,
-         maxZoom: maxZoom,
-         minZoom: minZoom,
-         slot: slot,
-       );
+    this.rasterParticleArrayBand,
+    this.rasterParticleArrayBandExpression,
+    this.rasterParticleColor,
+    this.rasterParticleColorExpression,
+    this.rasterParticleCount,
+    this.rasterParticleCountExpression,
+    this.rasterParticleFadeOpacityFactor,
+    this.rasterParticleFadeOpacityFactorExpression,
+    this.rasterParticleMaxSpeed,
+    this.rasterParticleMaxSpeedExpression,
+    this.rasterParticleResetRateFactor,
+    this.rasterParticleResetRateFactorExpression,
+    this.rasterParticleSpeedFactor,
+    this.rasterParticleSpeedFactorExpression,
+  });
 
   @override
   String getType() => "raster-particle";

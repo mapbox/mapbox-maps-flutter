@@ -251,7 +251,7 @@ struct _InteractionPigeon {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct _RenderedQueryGeometry {
-  /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
+  /// `ScreenCoordinate`/`List<ScreenCoordinate>`/`ScreenBox` in Json mode.
   var value: String
   var type: Type
 

@@ -329,7 +329,7 @@ data class _InteractionPigeon(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class _RenderedQueryGeometry(
-  /** ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode. */
+  /** `ScreenCoordinate`/`List<ScreenCoordinate>`/`ScreenBox` in Json mode. */
   val value: String,
   val type: Type
 ) {

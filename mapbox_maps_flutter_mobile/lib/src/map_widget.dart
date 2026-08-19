@@ -2,7 +2,7 @@
 // surface; mobile uses it as the default hosting mode in its plumbing.
 // ignore_for_file: experimental_member_use
 
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 final _SuffixesRegistry _suffixesRegistry = _SuffixesRegistry._instance();
 

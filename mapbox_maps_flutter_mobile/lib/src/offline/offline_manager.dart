@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 final _OfflineMapInstanceManager _offlineMapInstanceManager =
     _OfflineMapInstanceManager();
@@ -15,7 +15,9 @@ final class OfflineManager implements OfflineManagerPlatformInterface {
         "offline-manager/${suffix.toString()}",
       );
       _suffixesRegistry.releaseSuffix(suffix);
-    } catch (e) {}
+    } catch (e) {
+      // This runs during GC. A tear-down failure here has no useful response.
+    }
   });
 
   OfflineManager._() {
@@ -71,7 +73,7 @@ final class OfflineManager implements OfflineManagerPlatformInterface {
     if (progressListener != null) {
       await _api.addStylePackLoadProgressListener(styleURI);
       final eventChannel = EventChannel(
-        "com.mapbox.maps.flutter/${_messageChannel}/${styleURI}",
+        "com.mapbox.maps.flutter/$_messageChannel/$styleURI",
       );
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(StylePackLoadProgress.decode(event));

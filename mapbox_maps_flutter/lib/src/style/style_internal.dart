@@ -11,7 +11,7 @@ T? styleOptionalCast<T>(dynamic value) {
 @internal
 List<T>? styleOptionalCastList<T>(dynamic value) {
   if (value is List) {
-    return value.where((v) => v is T).cast<T>().toList();
+    return value.whereType<T>().toList();
   }
   return null;
 }

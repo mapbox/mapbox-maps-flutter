@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 final _SnapshotterInstanceManager _snapshotterInstanceManager =
     _SnapshotterInstanceManager();
@@ -40,7 +40,7 @@ final class Snapshotter implements SnapshotterPlatformInterface {
       );
       _suffixesRegistry.releaseSuffix(suffix);
     } catch (e) {
-      print("Error: Failed to dispose snapshotter, error: $e");
+      debugPrint("Error: Failed to dispose snapshotter, error: $e");
     }
   });
 

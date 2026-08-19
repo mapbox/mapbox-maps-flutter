@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 final class _MapEvents {
   OnStyleLoadedListener? _onStyleLoadedListener;
@@ -41,11 +41,11 @@ final class _MapEvents {
     BinaryMessenger? binaryMessenger,
     required String channelSuffix,
   }) {
-    final pigeon_channelSuffix = channelSuffix.length > 0
-        ? '.${channelSuffix}'
+    final pigeonChannelSuffix = channelSuffix.isNotEmpty
+        ? '.$channelSuffix'
         : '';
     _channel = MethodChannel(
-      'com.mapbox.maps.flutter.map_events${pigeon_channelSuffix}',
+      'com.mapbox.maps.flutter.map_events$pigeonChannelSuffix',
       const StandardMethodCodec(),
       binaryMessenger,
     );
@@ -80,7 +80,7 @@ final class _MapEvents {
         throw MissingPluginException();
       }
     } catch (error) {
-      print(
+      debugPrint(
         "Handle method call ${call.method}, arguments: ${call.arguments} with error: $error",
       );
     }

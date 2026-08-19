@@ -1,3 +1,5 @@
+// Some enum constants below match native SDK names for events and resource
+// types exactly, such as style, source, and tile.
 import 'package:turf/turf.dart';
 
 import 'pigeons/platform_interface_data_types.dart';
@@ -150,18 +152,23 @@ class MapLoadedEventData extends MapEvent {
 /// Describes what resource could not be loaded.
 enum MapLoadErrorType {
   /// An error related to style.
+  // ignore: constant_identifier_names
   STYLE,
 
   /// An error related to sprite.
+  // ignore: constant_identifier_names
   SPRITE,
 
   /// An error related to source.
+  // ignore: constant_identifier_names
   SOURCE,
 
   /// An error related to glyphs.
+  // ignore: constant_identifier_names
   GLYPHS,
 
   /// An error related to tile.
+  // ignore: constant_identifier_names
   TILE,
 }
 
@@ -194,9 +201,11 @@ class MapLoadingErrorEventData extends MapEvent {
 /// Describes whether a map or frame has been fully rendered.
 enum RenderMode {
   /// The map is partially rendered.
+  // ignore: constant_identifier_names
   PARTIAL,
 
   /// The map is fully rendered.
+  // ignore: constant_identifier_names
   FULL,
 }
 
@@ -260,9 +269,11 @@ class SourceRemovedEventData extends MapEvent {
 /// Defines what kind of source data was loaded.
 enum SourceDataType {
   /// Source metadata (e.g. TileJSON).
+  // ignore: constant_identifier_names
   METADATA,
 
   /// Source tile data.
+  // ignore: constant_identifier_names
   TILE,
 }
 
@@ -300,12 +311,15 @@ class SourceDataLoadedEventData extends MapEvent {
 /// Defines what kind of style data was loaded.
 enum StyleDataType {
   /// Style JSON.
+  // ignore: constant_identifier_names
   STYLE,
 
   /// Sprite data.
+  // ignore: constant_identifier_names
   SPRITE,
 
   /// Source metadata.
+  // ignore: constant_identifier_names
   SOURCES,
 }
 
@@ -348,31 +362,44 @@ class StyleImageUnusedEventData extends MapEvent {
 }
 
 /// Describes the data source type for a resource request.
+// ignore: constant_identifier_names
 enum DataSourceType { ASSET, DATABASE, FILE_SYSTEM, NETWORK, RESOURCE_LOADER }
 
 // ResponseErrorReason is generated in platform_interface_data_types.dart
 // (pigeon spec) so it also appears in the native Swift/Kotlin pigeon output.
 
 /// The source of a response.
+// ignore: constant_identifier_names
 enum ResponseSourceType { NETWORK, CACHE, TILE_STORE, LOCAL_FILE }
 
 /// The method used to make a resource request.
+// ignore: constant_identifier_names
 enum RequestLoadingMethodType { NETWORK, CACHE }
 
 /// The type of a requested resource.
 enum RequestType {
+  // ignore: constant_identifier_names
   UNKNOWN,
+  // ignore: constant_identifier_names
   STYLE,
+  // ignore: constant_identifier_names
   SOURCE,
+  // ignore: constant_identifier_names
   TILE,
+  // ignore: constant_identifier_names
   GLYPHS,
+  // ignore: constant_identifier_names
   SPRITE_IMAGE,
+  // ignore: constant_identifier_names
   SPRITE_JSON,
+  // ignore: constant_identifier_names
   IMAGE,
+  // ignore: constant_identifier_names
   MODEL,
 }
 
 /// The priority of a request.
+// ignore: constant_identifier_names
 enum RequestPriority { REGULAR, LOW }
 
 /// An error in a resource response.

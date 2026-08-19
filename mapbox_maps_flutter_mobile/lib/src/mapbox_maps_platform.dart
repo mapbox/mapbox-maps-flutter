@@ -2,7 +2,7 @@
 // surface; mobile branches on it to pick the correct platform-view path.
 // ignore_for_file: experimental_member_use
 
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 typedef OnPlatformViewCreatedCallback = void Function(int);
 
@@ -38,7 +38,7 @@ class _MapboxMapsPlatform {
         onNativeMapCreated?.call();
         return null;
       default:
-        developer.log(
+        debugPrint(
           "Handle method call ${call.method}, arguments: ${call.arguments} not supported",
         );
     }
@@ -73,7 +73,7 @@ class _MapboxMapsPlatform {
                     viewType: 'plugins.flutter.io/mapbox_maps',
                     layoutDirection: TextDirection.ltr,
                     creationParams: creationParams,
-                    creationParamsCodec: const MapInterfaces_PigeonCodec(),
+                    creationParamsCodec: const _MapInterfacesPigeonCodec(),
                     onFocus: () => params.onFocusChanged(true),
                   );
               controller.addOnPlatformViewCreatedListener(
@@ -94,7 +94,7 @@ class _MapboxMapsPlatform {
             onPlatformViewCreated: onPlatformViewCreated,
             gestureRecognizers: gestureRecognizers,
             creationParams: creationParams,
-            creationParamsCodec: const MapInterfaces_PigeonCodec(),
+            creationParamsCodec: const _MapInterfacesPigeonCodec(),
           );
       }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -104,7 +104,7 @@ class _MapboxMapsPlatform {
         onPlatformViewCreated: onPlatformViewCreated,
         gestureRecognizers: gestureRecognizers,
         creationParams: creationParams,
-        creationParamsCodec: const MapInterfaces_PigeonCodec(),
+        creationParamsCodec: const _MapInterfacesPigeonCodec(),
       );
     }
     return Text(
@@ -150,7 +150,7 @@ class _MapboxMapsPlatform {
     try {
       await _channel.invokeMethod('platform#releaseMethodChannels');
     } catch (e) {
-      print("Error releasing method channels: $e");
+      debugPrint("Error releasing method channels: $e");
     }
 
     _channel.setMethodCallHandler(null);
@@ -162,23 +162,23 @@ class _MapboxMapsPlatform {
     String? belowLayerId,
   }) async {
     try {
-      return _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'annotation#create_manager',
         <String, dynamic>{'type': type, 'id': id, 'belowLayerId': belowLayerId},
       );
     } on PlatformException catch (e) {
-      return new Future.error(e);
+      return Future.error(e);
     }
   }
 
-  Future<void> removeAnnotationManager(String id) {
+  Future<void> removeAnnotationManager(String id) async {
     try {
-      return _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'annotation#remove_manager',
         <String, dynamic>{'id': id},
       );
     } on PlatformException catch (e) {
-      return new Future.error(e);
+      return Future.error(e);
     }
   }
 
@@ -199,23 +199,23 @@ class _MapboxMapsPlatform {
       filter: interaction.filter,
     );
     try {
-      return _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'interactions#add_interaction',
         <String, dynamic>{'interaction': interactionPigeon.encode()},
       );
     } on PlatformException catch (e) {
-      return new Future.error(e);
+      return Future.error(e);
     }
   }
 
   Future<dynamic> removeInteractionsListeners(String interactionID) async {
     try {
-      return _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'interactions#remove_interaction',
         <String, dynamic>{'identifier': interactionID},
       );
     } on PlatformException catch (e) {
-      return new Future.error(e);
+      return Future.error(e);
     }
   }
 }

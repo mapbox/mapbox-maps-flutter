@@ -1,8 +1,9 @@
 # mapbox_maps_flutter
 
-Flutter plugin for [Mapbox Maps](https://www.mapbox.com/maps). Provides interactive, customizable vector maps for Android, iOS, and Web.
+Official [Mapbox](https://www.mapbox.com/maps) Maps SDK for Flutter. Add a `MapWidget` to your app. It renders native, GPU-accelerated, cross-platform maps on Android, iOS, and Web. It builds maps from Mapbox Vector Tiles (MVT), GeoJSON, and other data sources. Use a ready-made style, such as Standard, Satellite, or Streets. Or use your own custom style, with layer types such as circle, line, fill, raster, heatmap, hillshade, sky, and 3D fill-extrusion. Add map markers and other annotations, with marker clustering for large datasets. Show a live location puck, and control the camera with gestures. Listen for map, camera, and style events. On Android and iOS, you can also cache maps for offline use and take a map snapshot.
 
-This is the app-facing package. It endorses:
+This is the app-facing plugin package. It endorses:
+
 - [`mapbox_maps_flutter_mobile`](../mapbox_maps_flutter_mobile) for Android and iOS.
 - [`mapbox_maps_flutter_web`](../mapbox_maps_flutter_web) for Web.
 

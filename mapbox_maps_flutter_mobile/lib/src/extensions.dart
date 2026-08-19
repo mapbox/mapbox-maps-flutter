@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 // `extension Conversion on CameraState { CameraOptions toCameraOptions() }`
 // lives in `packages/mapbox_maps_flutter/lib/src/camera_state_extensions.dart`

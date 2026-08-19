@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// The PointAnnotationManager to add/update/delete PointAnnotationAnnotations on the map.
 class PointAnnotationManager extends BaseAnnotationManager

@@ -1,13 +1,12 @@
-part of mapbox_maps_flutter_mobile;
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// Pairs the pigeon-generated [GesturesSettingsInterface] (settings host
 /// API) with the four gesture-event broadcast streams produced by the
 /// `MapEventChannel` event channels.
 class GesturesController extends GesturesSettingsInterface
     implements GesturesSettingsPlatformInterface {
-  GesturesController({super.binaryMessenger, String messageChannelSuffix = ''})
-    : _channelSuffix = messageChannelSuffix,
-      super(messageChannelSuffix: messageChannelSuffix);
+  GesturesController({super.binaryMessenger, super.messageChannelSuffix})
+    : _channelSuffix = messageChannelSuffix;
 
   final String _channelSuffix;
 

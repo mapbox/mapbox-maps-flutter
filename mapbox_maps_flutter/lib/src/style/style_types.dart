@@ -11,18 +11,22 @@ import 'package:meta/meta.dart';
 /// in the layer template, not visited by the per-property generator loop.
 enum Visibility {
   /// The layer is shown.
+  // ignore: constant_identifier_names
   VISIBLE,
 
   /// The layer is hidden.
+  // ignore: constant_identifier_names
   NONE,
 }
 
 /// The unit a cache budget is measured in.
 enum TileCacheBudgetType {
   /// Measured in tile units.
+  // ignore: constant_identifier_names
   TILES,
 
   /// Measured in megabytes.
+  // ignore: constant_identifier_names
   MEGABYTES,
 }
 
@@ -119,22 +123,28 @@ class StyleTransition {
 /// (e.g. on top of existing land layers but below all labels).
 class LayerSlot {
   /// Place a layer above POI labels and behind Place/Transit labels.
+  // ignore: constant_identifier_names
   static const String TOP = "top";
 
   /// Place a layer above lines (roads, etc.) and behind 3D buildings.
+  // ignore: constant_identifier_names
   static const String MIDDLE = "middle";
 
   /// Place a layer above polygons (land, landuse, water, etc.).
+  // ignore: constant_identifier_names
   static const String BOTTOM = "bottom";
 }
+
+int _toByte(double component) => (component * 255).round().clamp(0, 255);
 
 /// Converts a 32-bit ARGB [Color]-int to a `rgba(r, g, b, a)` CSS-like string.
 extension StyleColorInt on int {
   String toRGBA() {
     final color = Color(this);
-    // ignore: deprecated_member_use — .red/.green/.blue are still the shape
-    // the GL-Native side expects in `rgba(r, g, b, a)` strings.
-    return "rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha / 255})";
+    final red = _toByte(color.r);
+    final green = _toByte(color.g);
+    final blue = _toByte(color.b);
+    return "rgba($red, $green, $blue, ${color.a})";
   }
 }
 
@@ -153,7 +163,7 @@ extension StyleColorString on String {
     final green = double.parse(match.group(2)!).round();
     final blue = double.parse(match.group(3)!).round();
     final alpha = (double.parse(match.group(4)!) * 255).round();
-    return Color.fromARGB(alpha, red, green, blue).value;
+    return Color.fromARGB(alpha, red, green, blue).toARGB32();
   }
 }
 
@@ -163,13 +173,13 @@ extension StyleColorList on List {
   int toRGBAInt() {
     switch ((firstOrNull, length)) {
       case ("rgb", 4):
-        return _decodeRGBColor().value;
+        return _decodeRGBColor().toARGB32();
       case ("rgba", 5):
-        return _decodeRGBAColor().value;
+        return _decodeRGBAColor().toARGB32();
       case ("hsl", 4):
-        return _decodeHSLColor().value;
+        return _decodeHSLColor().toARGB32();
       case ("hsla", 5):
-        return _decodeHSLAColor().value;
+        return _decodeHSLAColor().toARGB32();
       default:
         return 0;
     }
