@@ -9,5 +9,13 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   errors:
     library_private_types_in_public_api: error
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 # Additional information can be found at https://dart.dev/guides/language/analysis-options

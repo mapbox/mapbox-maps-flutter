@@ -364,8 +364,12 @@ final class StyleController: StyleManager {
     }
 
     func localizeLabels(locale: String, layerIds: [String]?, completion: @escaping (Result<Void, Error>) -> Void) {
-        try! styleManager.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)
-        completion(.success(()))
+        do {
+            try styleManager.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
+        }
     }
 
     // MARK: Style Imports

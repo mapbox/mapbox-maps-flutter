@@ -134,7 +134,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## License
 
-Mapbox Maps for iOS version 11.29.0-SNAPSHOT-08-07--12-48.git-47db05d
+Mapbox Maps for iOS version 11.30.0-SNAPSHOT-08-20--01-52.git-78299c3
 Mapbox Maps iOS SDK
 
 Copyright &copy; 2021 - 2026 Mapbox, Inc. All rights reserved.
@@ -165,7 +165,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ---
 
-### MapboxCoreMaps,11.29.0-SNAPSHOT-08-07--12-48.git-47db05d,Mapbox ToS,Mapbox,https://www.mapbox.com/
+### MapboxCoreMaps,11.30.0-SNAPSHOT-08-20--01-52.git-78299c3,Mapbox ToS,Mapbox,https://www.mapbox.com/
 
 ```
 Mapbox Core Maps version 11.0
@@ -2102,7 +2102,7 @@ DEALINGS IN THE SOFTWARE.
 
 ### License
 
-Mapbox Maps for Android version 11.29.0-SNAPSHOT-08-07--12-48.git-47db05d
+Mapbox Maps for Android version 11.30.0-SNAPSHOT-08-20--01-52.git-78299c3
 Mapbox Maps Android SDK
 
 Copyright &copy; 2021 - 2026 Mapbox, Inc. All rights reserved.
@@ -2590,7 +2590,7 @@ License: [The Apache Software License, Version 2.0](http://www.apache.org/licens
 
 ===========================================================================
 
-### MapboxCoreMaps,11.29.0-SNAPSHOT-08-07--12-48.git-47db05d,Mapbox ToS,Mapbox,https://www.mapbox.com/
+### MapboxCoreMaps,11.30.0-SNAPSHOT-08-20--01-52.git-78299c3,Mapbox ToS,Mapbox,https://www.mapbox.com/
 
 ```
 Mapbox Core Maps version 11.0
@@ -4828,7 +4828,7 @@ The EGL Specification and various headers:
 
 ---
 
-### vulkan,v1.4.311,MIT,KhronosGroup,https://github.com/KhronosGroup/Vulkan-Headers
+### vulkan,v1.4.321,MIT,KhronosGroup,https://github.com/KhronosGroup/Vulkan-Headers
 
 ```
 MIT License
@@ -4845,10 +4845,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
-### volk,1.4.304,MIT,zeux,https://github.com/zeux/volk
+### volk,vulkan-sdk-1.4.321.0,MIT,zeux,https://github.com/zeux/volk
 
 ```
-Copyright (c) 2018-2024 Arseny Kapoulkine
+Copyright (c) 2018-2025 Arseny Kapoulkine
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4872,7 +4872,7 @@ SOFTWARE.
 
 ---
 
-### vk-bootstrap,v1.4.307,MIT,Charles Giessen,https://github.com/charles-lunarg/vk-bootstrap
+### vk-bootstrap,v1.4.321,MIT,Charles Giessen,https://github.com/charles-lunarg/vk-bootstrap
 
 ```
 Copyright © 2020 Charles Giessen (charles@lunarg.com)
@@ -4886,10 +4886,10 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 ---
 
-### vma,v3.3.0,MIT,Advanced Micro Devices,https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+### vma,v3.4.0,MIT,Advanced Micro Devices,https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
 
 ```
-Copyright (c) 2017-2025 Advanced Micro Devices, Inc. All rights reserved.
+Copyright (c) 2017-2026 Advanced Micro Devices, Inc. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

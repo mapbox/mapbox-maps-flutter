@@ -13,17 +13,21 @@ class Events {
   var onCameraChanged = Completer();
   List<MapContentGestureContext> mapInteractions = [];
   var sourceDataIDs = [""];
+  List<String> loadedSourceIds = [];
+  List<MapLoadingErrorEventData> mapLoadingErrors = [];
 
   void resetOnMapLoaded() => onMapLoaded = Completer();
   void resetOnStyleLoaded() => onStyleLoaded = Completer();
   void resetOnStyleDataLoaded() => onStyleDataLoaded = Completer();
   void resetOnSourceDataLoaded() => {
     sourceDataIDs.clear(),
+    loadedSourceIds.clear(),
     onSourceDataLoaded = Completer(),
   };
   void resetOnCameraChanged() => onCameraChanged = Completer();
   void resetOnMapIdle() => onMapIdle = Completer();
   void resetMapInteractions() => mapInteractions.clear();
+  void resetMapLoadingErrors() => mapLoadingErrors.clear();
 }
 
 var events = Events();
@@ -155,6 +159,9 @@ Future<MapboxMap?> _pumpMapApp({
         events.onMapLoaded.complete();
       }
     },
+    onMapLoadErrorListener: (MapLoadingErrorEventData data) {
+      events.mapLoadingErrors.add(data);
+    },
     onStyleLoadedListener: (StyleLoadedEventData data) {
       if (!events.onStyleLoaded.isCompleted) {
         events.onStyleLoaded.complete();
@@ -170,6 +177,7 @@ Future<MapboxMap?> _pumpMapApp({
       if (dataID != null) {
         events.sourceDataIDs.add(dataID);
       }
+      events.loadedSourceIds.add(data.id);
       if (!events.onSourceDataLoaded.isCompleted) {
         events.onSourceDataLoaded.complete();
       }
