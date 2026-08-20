@@ -1,7 +1,11 @@
-### main
+### 3.0.0-alpha.28
 
-* Fix Flutter widgets stacked over the map on web not blocking clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath. The map now respects any Flutter widgets painted on top of it.
+* See the changelog for 3.0.0-alpha.28 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.28/changelog).
+
+### 3.0.0-alpha.27
+
+* See the changelog for 3.0.0-alpha.27 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.27/changelog).
 
 ### 3.0.0-alpha.1
 
-* Initial release. Web implementation of the Mapbox Maps Flutter plugin using Mapbox GL JS, endorsed by `mapbox_maps_flutter`.
+* See the changelog for 3.0.0-alpha.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.1/changelog).
