@@ -9,3 +9,11 @@ analyzer:
     # that are only used in files with API classes. Data-only generated files
     # have these utilities but no callers, triggering this warning.
     unused_element: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
