@@ -69,7 +69,7 @@ See the [access token docs](https://docs.mapbox.com/help/getting-started/access-
 ### 4. Add a map
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class MapScreen extends StatelessWidget {
@@ -77,7 +77,7 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: MapWidget());
+    return const MapWidget();
   }
 }
 ```

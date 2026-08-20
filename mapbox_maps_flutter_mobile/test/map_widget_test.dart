@@ -3,8 +3,8 @@
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart'
@@ -93,8 +93,9 @@ void main() {
       // Stops the pipeline right after the build phase, before layout, so
       // the MapWidget's element is mounted but not yet laid out.
       await tester.pumpWidget(
-        const MaterialApp(
-          home: MapWidget(
+        WidgetsApp(
+          color: const Color(0xFF000000),
+          builder: (context, child) => const MapWidget(
             androidHostingMode: AndroidPlatformViewHostingMode.HC,
           ),
         ),

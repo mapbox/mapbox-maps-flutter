@@ -6,9 +6,9 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:turf/turf.dart' show Feature, LineString, Point, Polygon;

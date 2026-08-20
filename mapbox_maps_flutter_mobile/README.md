@@ -58,7 +58,7 @@ Read more about access tokens in the platform [Android](https://docs.mapbox.com/
 
 #### Access token
 You can set the access token for Mapbox Maps Flutter SDK(as well as for every Mapbox SDK) via `MapboxOptions`:
-```
+```bash
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
 
@@ -66,18 +66,18 @@ It's a good practice to retrieve the access token from some external source.
 
 You can pass access token via the command line arguments when either building :
 
-```
+```bash
 flutter build <platform> --dart-define ACCESS_TOKEN=...
 ```
 
 or running the application :
 
-```
+```bash
 flutter run --dart-define ACCESS_TOKEN=...
 ```
 
 You can also persist token in launch.json :
-```
+```json
 "configurations": [
     {
         ...
@@ -89,7 +89,7 @@ You can also persist token in launch.json :
 ```
 
 Then to retrieve the token from the environment in the application :
-```
+```dart
 String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 ```
 
@@ -102,7 +102,7 @@ You also need to declare the permission for both platforms :
 
 #### Android
 Add the following permissions to the manifest:
-```
+```xml
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
@@ -110,19 +110,27 @@ Add the following permissions to the manifest:
 #### iOS
 Add the following key/value pair to the `Runner/Info.plist`. In the value field, explain why you need access to location:
 
-```
+```xml
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>[Your explanation here]</string>
 ```
 
 ### Add a map
-Import `mapbox_maps_flutter_mobile` library and add a simple map:
-```
-import 'package:flutter/material.dart';
+Import `mapbox_maps_flutter_mobile` library and add a simple map.
+
+```dart
+import 'package:flutter/widgets.dart';
 import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 void main() {
-  runApp(MaterialApp(home: MapWidget()));
+  runApp(
+    WidgetsApp(
+      color: const Color(0xFF000000),
+      builder: (context, child) =>
+          MapWidget(androidHostingMode: AndroidPlatformViewHostingMode.HC),
+    ),
+  );
 }
 ```
 
@@ -140,7 +148,7 @@ query rendered features, etc.
 It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.11.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.11.0/documentation/mapboxmaps/mapboxmap) counterparts.
 
 To interact with the map after it's created store the MapboxMap object somewhere :
-```
+```dart
 class FullMap extends StatefulWidget {
   const FullMap();
 
@@ -178,7 +186,7 @@ To customize the appearance of the location puck call `MapboxMap.location.update
 
 To use the 3D puck with model downloaded from Uri instead of the default 2D puck:
 
-```
+```dart
   mapboxMap.location.updateSettings(LocationComponentSettings(
       locationPuck: LocationPuck(
           locationPuck3D: LocationPuck3D(
@@ -196,7 +204,7 @@ You have several options to add annotations on the map.
 1. Use the AnnotationManager APIs to create circle, point, polygon, and polyline annotations.
 
 To create 5 point annotations using custom icon:
-```
+```dart
   mapboxMap.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
     final ByteData bytes =
         await rootBundle.load('assets/symbols/custom-icon.png');
@@ -221,7 +229,7 @@ The Mapbox Maps Flutter SDK allows full customization of the look of the map use
 ### Set a style
 You can specify the initial style uri at `MapWidget.styleUri`, or load it at runtime using `MapboxMap.loadStyleURI` / `MapboxMap.loadStyleJson`:
 
-```
+```dart
 mapboxMap.loadStyleURI(Styles.LIGHT);
 ```
 
@@ -231,7 +239,7 @@ You can familiarize with the concept of sources, layers and their supported type
 To add, remove or change a source or a layer, call the style APIs directly on `MapboxMap`.
 
 To add a `GeoJsonSource` and a `LineLayer` using the source :
-```
+```dart
   var data = await rootBundle.loadString('assets/polyline.geojson');
   await mapboxMap.addSource(GeoJsonSource(id: "line", data: data));
   await mapboxMap.addLayer(LineLayer(
@@ -249,7 +257,7 @@ You can change the appearance of a layer based on properties in the layer's data
 Refer to the [documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/) for the description of supported expressions. You can also learn more in the documentation for [Flutter](https://docs.mapbox.com/flutter/maps/guides/styles/style-layers#work-with-expressions), [iOS](https://docs.mapbox.com/ios/maps/guides/styles/style-layers/#work-with-expressions), and [Android](https://docs.mapbox.com/android/maps/guides/styles/style-layers/#work-with-expressions).
 
 To apply an expression to interpolate gradient color to a line layer:
-```
+```dart
   mapboxMap.setStyleLayerProperty("layer", "line-gradient",
       '["interpolate",["linear"],["line-progress"],0.0,["rgb",6,1,255],0.5,["rgb",0,255,42],0.7,["rgb",255,252,0],1.0,["rgb",255,30,0]]');
 ```
@@ -262,7 +270,7 @@ The camera is the user's viewpoint above the map. The Maps Flutter SDK provides 
 ### Camera position
 You can set the starting camera position using `MapWidget.viewport`:
 
-```
+```dart
 MapWidget(
   key: ValueKey("mapWidget"),
   viewport: CameraViewportState(
@@ -273,7 +281,7 @@ MapWidget(
 
 or update it at runtime using `MapboxMap.setCamera` :
 
-```
+```dart
 MapboxMap.setCamera(CameraOptions(
   center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
   zoom: 12.0));
@@ -285,7 +293,7 @@ You can find more examples of interaction with the camera in the sample [app](ex
 Camera animations are the means by which camera settings are changed from old values to new values over a period of time. You can animate the camera using `flyTo` or `easeTo` and move to a new center location, update the bearing, pitch, zoom, padding, and anchor.
 
 To start a `flyTo` animation to the specific camera options :
-```
+```dart
   mapboxMap?.flyTo(
     CameraOptions(
         anchor: ScreenCoordinate(x: 0, y: 0),
