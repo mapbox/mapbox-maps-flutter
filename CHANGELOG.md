@@ -1,6 +1,18 @@
-### main
+### 2.29.0
 
-### 2.29.0-rc.1
+* Update Maps SDK to v11.29.0
+
+### 2.28.3
+
+* Update Maps SDK to v11.28.3
+
+### 2.28.2
+
+* Update Maps SDK to v11.28.2
+
+### 2.28.1
+
+* Update Maps SDK to v11.28.1
 
 ### 2.28.0
 
@@ -8,6 +20,10 @@
 * Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
 * [iOS] Fix `updateSettings` on `CompassSettings`, `AttributionSettings`, `LogoSettings`, `IndoorSelectorSettings`, `ScaleBarSettings`, `GesturesSettings`, and `LocationComponentSettings` resetting omitted fields (position, margins, `enabled`, `scrollMode`, puck configuration) to defaults instead of preserving them, matching Android's partial-update behaviour.
 * [Android] Fix `LocationComponentSettings.updateSettings` dropping the previously configured 2D or 3D puck's settings when switching between puck types.
+
+### 2.27.2
+
+* Update Maps SDK to v11.27.2
 
 ### 2.27.0
 
@@ -20,6 +36,10 @@
 
 * [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
 * [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
+
+### 2.25.3
+
+* Update Maps SDK to v11.25.3
 
 ### 2.25.0
 
