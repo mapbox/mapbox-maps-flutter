@@ -11,7 +11,7 @@ The software and files in this repository (collectively, “Software”) are lic
 
 This application makes use of the following third party libraries:
 
-### flutter_plugin_android_lifecycle 2.0.33, https://github.com/flutter/packages/tree/main/packages/flutter_plugin_android_lifecycle
+### flutter_plugin_android_lifecycle 2.0.35, https://github.com/flutter/packages/tree/main/packages/flutter_plugin_android_lifecycle
 
 ```
 Copyright 2013 The Flutter Authors
@@ -73,7 +73,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-### turf 0.0.10, https://github.com/dartclub/turf_dart
+### turf 0.0.12, https://github.com/dartclub/turf_dart
 
 ```
 The MIT License (MIT)

@@ -48,14 +48,12 @@ SDK_REGISTRY_TOKEN=<your-secret-token>
     cd mapbox-maps-flutter
     ```
 
-2. Resolve dependencies for the federated packages — for example, by
-   running `flutter pub get` in each package, or by setting up a
-   [pub workspace](https://dart.dev/tools/pub/workspaces) at the repo
-   root.
-
-   The example app under `mapbox_maps_flutter/example/` already has a
-   `pubspec_overrides.yaml` that points its dependencies at the in-tree
-   packages, so no extra wiring is required to run it.
+2. Resolve dependencies. This repo is a Dart
+   [pub workspace](https://dart.dev/tools/pub/workspaces) rooted at
+   `pubspec.yaml`, so running `flutter pub get` anywhere — the repo
+   root, any package, or `mapbox_maps_flutter/example/` — resolves
+   every federated package to its in-tree version automatically. No
+   extra wiring is required.
 
 3. Verify your environment is ready by analyzing any package:
 

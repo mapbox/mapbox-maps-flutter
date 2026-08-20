@@ -70,7 +70,3 @@ migrate_working_dir/
 **/test_bundle.dart
 **/playwright-report/
 **/test-results/
-
-# Example apps should track their lock files for reproducible builds.
-!**/example/pubspec.lock
-!**/example/pubspec_overrides.yaml

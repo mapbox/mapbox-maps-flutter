@@ -1,0 +1,14 @@
+name: mapbox_maps_flutter_workspace
+publish_to: 'none'
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.1"
+
+workspace:
+  - mapbox_maps_flutter
+  - mapbox_maps_flutter/example
+  - mapbox_maps_flutter_mobile
+  - mapbox_maps_flutter_platform_interface
+  - mapbox_maps_flutter_web
+  - mapbox_maps_flutter_web/example
