@@ -125,6 +125,10 @@ if [ "$mode" == "validate" ]; then
         cat LICENSE > /tmp/current_license.txt
         echo "Diff (expected vs current):"
         diff /tmp/expected_license.txt /tmp/current_license.txt || true
+        echo ""
+        echo "To fix, from the mapbox-sdk repo root run:"
+        echo "  cd projects/maps-flutter && make generate-license"
+        echo "Then commit the updated LICENSE file."
         exit 1
     fi
 elif [ "$mode" == "generate" ]; then
