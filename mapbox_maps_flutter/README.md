@@ -12,7 +12,7 @@ This is the app-facing plugin package. It endorses:
 - Flutter 3.38.1 / Dart 3.10.0 or higher
 - Android: minSdk 21 or higher
 - iOS: 14 or higher
-- Web: Mapbox GL JS 3.28.1
+- Web: Mapbox GL JS 3.29.0
 
 ## Installation
 
@@ -20,7 +20,7 @@ This is the app-facing plugin package. It endorses:
 
 ```yaml
 dependencies:
-  mapbox_maps_flutter: ^3.0.0-alpha.28
+  mapbox_maps_flutter: ^3.0.0-alpha.29
 ```
 
 Then run `flutter pub get`.

@@ -1,4 +1,4 @@
-### main
+### 3.0.0-alpha.29
 
 * Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.
 * Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode (the default) ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
