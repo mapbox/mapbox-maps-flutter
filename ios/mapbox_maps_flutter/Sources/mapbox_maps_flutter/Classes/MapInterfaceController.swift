@@ -442,6 +442,6 @@ final class MapInterfaceController: _MapInterface {
 
     func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID] {
         return mapboxMap.tileCover(for: options.toTileCoverOptions())
-            .map { $0.toFLTCanonicalTileID() }
+            .map { $0.canonical.toFLTCanonicalTileID() }
     }
 }

@@ -132,6 +132,7 @@ final class Snapshotter {
           pitch: pitch);
 
   /// Returns array of tile identifiers that cover current map camera.
+  @experimental
   Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>
       _snapshotterMessenger.tileCover(options);
 
