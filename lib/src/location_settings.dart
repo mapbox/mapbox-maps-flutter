@@ -4,7 +4,67 @@ part of mapbox_maps_flutter;
 class LocationSettings {
   final _LocationComponentSettingsInterface _api;
 
-  LocationSettings._(this._api);
+  // Native location-provider override channel. Plain MethodChannel, not
+  // Pigeon-generated: Mapbox doesn't ship the Pigeon input specs for this
+  // plugin publicly, only the generated output, so this is a small
+  // hand-written channel kept isolated from the generated code to stay easy
+  // to rebase. Names must match `LocationController.swift`
+  // (`setUpExternalLocationChannel`) and `LocationComponentController.kt`
+  // (`setUpExternalLocationChannel`) exactly.
+  final MethodChannel _externalLocationChannel;
+
+  LocationSettings._(this._api, {required String messageChannelSuffix, BinaryMessenger? binaryMessenger})
+      : _externalLocationChannel = MethodChannel(
+          'plugins.flutter.io.mapbox_maps_flutter.externalLocation.$messageChannelSuffix',
+          const StandardMethodCodec(),
+          binaryMessenger,
+        );
+
+  /// Pushes an externally-sourced location into the native location-provider
+  /// override, replacing whatever Mapbox's default location provider (GPS)
+  /// would otherwise show. Registers the override on first call; the map
+  /// behaves exactly as it does today until this is called at least once.
+  ///
+  /// [timestamp] defaults to now if omitted. [floor] is only meaningful on
+  /// iOS (Mapbox's native `Location` type carries it; the Android
+  /// `LocationConsumer` API has no floor concept at all, so it's dropped on
+  /// that platform — callers needing floor-aware behavior on Android should
+  /// track it themselves alongside the location).
+  ///
+  /// Example:
+  /// ```dart
+  /// mapboxMap.location.setExternalLocation(
+  ///     latitude: 37.775,
+  ///     longitude: -122.418,
+  ///     heading: 90.0,
+  ///     accuracy: 5.0);
+  /// ```
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) {
+    return _externalLocationChannel.invokeMethod<void>('setExternalLocation', {
+      'latitude': latitude,
+      'longitude': longitude,
+      if (accuracy != null) 'accuracy': accuracy,
+      if (heading != null) 'heading': heading,
+      if (headingAccuracy != null) 'headingAccuracy': headingAccuracy,
+      if (floor != null) 'floor': floor,
+      'timestamp':
+          (timestamp ?? DateTime.now()).toUtc().millisecondsSinceEpoch.toDouble(),
+    });
+  }
+
+  /// Clears the override and restores Mapbox's default location provider
+  /// (i.e. back to normal GPS).
+  Future<void> clearExternalLocation() {
+    return _externalLocationChannel.invokeMethod<void>('clearExternalLocation');
+  }
 
   /// Returns the currently applied settings, populated with default
   /// values for any fields not explicitly modified via [updateSettings].

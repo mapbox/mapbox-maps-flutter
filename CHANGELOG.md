@@ -1,6 +1,12 @@
 ### main
 
+* Add `MapboxMap.location.setExternalLocation`/`.clearExternalLocation`, letting apps drive the location puck from a location source other than the platform's default GPS-based provider (e.g. an indoor-positioning SDK). Resolves [#1085](https://github.com/mapbox/mapbox-maps-flutter/issues/1085).
+
 ### 2.30.0
+
+* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
+* Promote `SymbolLayer.symbolZOffset` to stable.
+* Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
 
 ### 2.30.0-rc.1
 

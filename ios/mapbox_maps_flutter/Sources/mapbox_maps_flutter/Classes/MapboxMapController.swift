@@ -74,6 +74,10 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
 
         let locationController = LocationController(withMapView: mapView)
         _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: locationController, messageChannelSuffix: binaryMessenger.suffix)
+        // Hand-written channel (not Pigeon-generated, see
+        // LocationController.setUpExternalLocationChannel) for the native
+        // location-provider override.
+        locationController.setUpExternalLocationChannel(binaryMessenger: binaryMessenger.messenger, channelSuffix: binaryMessenger.suffix)
 
         gesturesController = GesturesController(withMapView: mapView)
         GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: gesturesController, messageChannelSuffix: binaryMessenger.suffix)

@@ -171,7 +171,9 @@ class MapboxMap extends ChangeNotifier {
   late final LocationSettings location = LocationSettings._(
       _LocationComponentSettingsInterface(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString()),
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   late final _CameraManager _cameraManager = _CameraManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
