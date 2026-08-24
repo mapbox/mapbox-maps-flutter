@@ -83,7 +83,7 @@ class SnapshotterController(
   }
 
   override fun tileCover(options: TileCoverOptions): List<CanonicalTileID> {
-    return snapshotter.tileCover(options.toTileCoverOptions(), null).map { it.toFLTCanonicalTileID() }
+    return snapshotter.tileCover(options.toTileCoverOptions(), null).map { it.canonical.toFLTCanonicalTileID() }
   }
 
   override fun clearData(callback: (Result<Unit>) -> Unit) {

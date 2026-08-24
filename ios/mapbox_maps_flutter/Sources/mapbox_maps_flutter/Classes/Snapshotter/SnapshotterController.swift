@@ -71,7 +71,7 @@ final class SnapshotterController: _SnapshotterMessenger {
 
     func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID] {
         return snapshotter.tileCover(for: options.toTileCoverOptions())
-            .map { $0.toFLTCanonicalTileID() }
+            .map { $0.canonical.toFLTCanonicalTileID() }
     }
 
     func clearData(completion: @escaping (Result<Void, any Swift.Error>) -> Void) {

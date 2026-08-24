@@ -463,7 +463,7 @@ class MapInterfaceController(
 
   override fun tileCover(options: TileCoverOptions): List<CanonicalTileID> {
     return mapboxMap.tileCover(options.toTileCoverOptions(), null)
-      .map { it.toFLTCanonicalTileID() }
+      .map { it.canonical.toFLTCanonicalTileID() }
   }
 
   override fun setPrefetchZoomDelta(delta: Long) {
