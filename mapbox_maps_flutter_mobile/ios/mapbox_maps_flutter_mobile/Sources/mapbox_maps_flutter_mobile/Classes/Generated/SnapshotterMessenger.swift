@@ -101,6 +101,8 @@ private class SnapshotterMessengerPigeonCodecReader: FlutterStandardReader {
     case 140:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
     case 141:
+      return OverscaledTileID.fromList(self.readValue() as! [Any?])
+    case 142:
       return MapSnapshotOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -146,8 +148,11 @@ private class SnapshotterMessengerPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? CanonicalTileID {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? MapSnapshotOptions {
+    } else if let value = value as? OverscaledTileID {
       super.writeByte(141)
+      super.writeValue(value.toList())
+    } else if let value = value as? MapSnapshotOptions {
+      super.writeByte(142)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -315,7 +320,7 @@ protocol _SnapshotterMessenger {
   func cancel() throws
   func coordinateBounds(camera: CameraOptions) throws -> CoordinateBounds
   func camera(coordinates: [Point], padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?) throws -> CameraOptions
-  func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID]
+  func tileCover(options: TileCoverOptions) throws -> [OverscaledTileID]
   func clearData(completion: @escaping (Result<Void, Error>) -> Void)
 }
 

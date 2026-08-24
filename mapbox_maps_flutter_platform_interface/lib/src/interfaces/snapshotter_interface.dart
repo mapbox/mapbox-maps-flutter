@@ -52,7 +52,7 @@ abstract interface class SnapshotterPlatformInterface {
   });
 
   /// Returns tile identifiers covering the current snapshotter camera.
-  Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options);
+  Future<List<OverscaledTileID?>> tileCover(TileCoverOptions options);
 
   /// Clears temporary map data from the snapshotter's data path.
   Future<void> clearData();

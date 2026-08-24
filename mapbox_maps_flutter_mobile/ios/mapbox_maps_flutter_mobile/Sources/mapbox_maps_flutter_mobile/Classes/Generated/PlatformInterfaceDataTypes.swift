@@ -2634,6 +2634,47 @@ struct CanonicalTileID {
   }
 }
 
+/// Represents a tile coordinate at the zoom level it was requested at, which
+/// can differ from the [canonical] zoom level when the tile is overscaled.
+///
+/// `tileCover` returns `OverscaledTileID` instead of `CanonicalTileID` so
+/// callers can tell overscaled tiles apart from tiles at their native zoom
+/// level, and tell tiles that repeat across the antimeridian apart through
+/// [wrap]. Overscaling happens only when `TileCoverOptions.maxZoom` is set
+/// and the camera zoom exceeds it: the tile is clamped to `maxZoom`, and
+/// [canonical] holds the coordinate at that clamped zoom level.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct OverscaledTileID {
+  /// The zoom level this tile was requested at.
+  var overscaledZ: Int64
+  /// The horizontal wrap offset, for tiles that repeat across the antimeridian.
+  var wrap: Int64
+  /// The canonical tile coordinate backing this overscaled tile.
+  var canonical: CanonicalTileID
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> OverscaledTileID? {
+    let overscaledZ = pigeonVar_list[0] as! Int64
+    let wrap = pigeonVar_list[1] as! Int64
+    let canonical = pigeonVar_list[2] as! CanonicalTileID
+
+    return OverscaledTileID(
+      overscaledZ: overscaledZ,
+      wrap: wrap,
+      canonical: canonical
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      overscaledZ,
+      wrap,
+      canonical,
+    ]
+  }
+}
+
 /// Set of options for taking map snapshot with `map snapshotter`.
 ///
 /// Generated class from Pigeon that represents data sent in messages.

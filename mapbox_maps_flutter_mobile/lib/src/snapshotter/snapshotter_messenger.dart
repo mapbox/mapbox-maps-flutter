@@ -47,8 +47,11 @@ class _SnapshotterMessengerPigeonCodec extends StandardMessageCodec {
     } else if (value is CanonicalTileID) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is MapSnapshotOptions) {
+    } else if (value is OverscaledTileID) {
       buffer.putUint8(141);
+      writeValue(buffer, value.encode());
+    } else if (value is MapSnapshotOptions) {
+      buffer.putUint8(142);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -86,6 +89,8 @@ class _SnapshotterMessengerPigeonCodec extends StandardMessageCodec {
       case 140:
         return CanonicalTileID.decode(readValue(buffer)!);
       case 141:
+        return OverscaledTileID.decode(readValue(buffer)!);
+      case 142:
         return MapSnapshotOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -560,7 +565,7 @@ class _SnapshotterMessenger {
     }
   }
 
-  Future<List<CanonicalTileID>> tileCover(TileCoverOptions options) async {
+  Future<List<OverscaledTileID>> tileCover(TileCoverOptions options) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.tileCover$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -589,7 +594,7 @@ class _SnapshotterMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<CanonicalTileID>();
+          .cast<OverscaledTileID>();
     }
   }
 

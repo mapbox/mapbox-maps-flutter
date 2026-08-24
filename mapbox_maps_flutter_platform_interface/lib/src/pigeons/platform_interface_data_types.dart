@@ -3819,6 +3819,67 @@ class CanonicalTileID {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Represents a tile coordinate at the zoom level it was requested at, which
+/// can differ from the [canonical] zoom level when the tile is overscaled.
+///
+/// `tileCover` returns `OverscaledTileID` instead of `CanonicalTileID` so
+/// callers can tell overscaled tiles apart from tiles at their native zoom
+/// level, and tell tiles that repeat across the antimeridian apart through
+/// [wrap]. Overscaling happens only when `TileCoverOptions.maxZoom` is set
+/// and the camera zoom exceeds it: the tile is clamped to `maxZoom`, and
+/// [canonical] holds the coordinate at that clamped zoom level.
+class OverscaledTileID {
+  OverscaledTileID({
+    required this.overscaledZ,
+    required this.wrap,
+    required this.canonical,
+  });
+
+  /// The zoom level this tile was requested at.
+  int overscaledZ;
+
+  /// The horizontal wrap offset, for tiles that repeat across the antimeridian.
+  int wrap;
+
+  /// The canonical tile coordinate backing this overscaled tile.
+  CanonicalTileID canonical;
+
+  List<Object?> _toList() {
+    return <Object?>[overscaledZ, wrap, canonical];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static OverscaledTileID decode(Object result) {
+    result as List<Object?>;
+    return OverscaledTileID(
+      overscaledZ: result[0]! as int,
+      wrap: result[1]! as int,
+      canonical: result[2]! as CanonicalTileID,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! OverscaledTileID || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return overscaledZ == other.overscaledZ &&
+        wrap == other.wrap &&
+        canonical == other.canonical;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// Set of options for taking map snapshot with `map snapshotter`.
 class MapSnapshotOptions {
   MapSnapshotOptions({

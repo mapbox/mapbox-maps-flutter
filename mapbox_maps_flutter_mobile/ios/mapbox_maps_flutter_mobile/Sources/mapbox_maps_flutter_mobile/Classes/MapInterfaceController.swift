@@ -445,8 +445,8 @@ final class MapInterfaceController: _MapInterface {
         return mapboxMap.elevation(at: coordinate.coordinates)
     }
 
-    func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID] {
+    func tileCover(options: TileCoverOptions) throws -> [OverscaledTileID] {
         return mapboxMap.tileCover(for: options.toTileCoverOptions())
-            .map { $0.toFLTCanonicalTileID() }
+            .map { $0.toFLTOverscaledTileID() }
     }
 }

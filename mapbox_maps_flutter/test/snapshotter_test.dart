@@ -111,7 +111,7 @@ class MockSnapshotterPlatformInterface
   }
 
   @override
-  Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) async {
+  Future<List<OverscaledTileID?>> tileCover(TileCoverOptions options) async {
     tileCoverCallCount++;
     lastTileCoverOptions = options;
     return [];

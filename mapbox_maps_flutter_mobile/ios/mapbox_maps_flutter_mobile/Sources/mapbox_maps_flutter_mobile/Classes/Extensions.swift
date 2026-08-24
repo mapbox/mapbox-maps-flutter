@@ -465,6 +465,16 @@ extension MapboxMaps.CanonicalTileID {
     }
 }
 
+extension MapboxMaps.OverscaledTileID {
+    func toFLTOverscaledTileID() -> OverscaledTileID {
+        return OverscaledTileID(
+            overscaledZ: Int64(overscaledZ),
+            wrap: Int64(wrap),
+            canonical: canonical.toFLTCanonicalTileID()
+        )
+    }
+}
+
 extension MapboxMaps.CameraState {
     func toFLTCameraState() -> CameraState {
         return CameraState(

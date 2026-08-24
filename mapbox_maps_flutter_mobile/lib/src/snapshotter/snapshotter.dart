@@ -158,7 +158,8 @@ final class Snapshotter implements SnapshotterPlatformInterface {
 
   /// Returns array of tile identifiers that cover current map camera.
   @override
-  Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>
+  @experimental
+  Future<List<OverscaledTileID?>> tileCover(TileCoverOptions options) =>
       _snapshotterMessenger.tileCover(options);
 
   /// Clears temporary map data.

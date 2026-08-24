@@ -582,6 +582,14 @@ fun com.mapbox.maps.CanonicalTileID.toFLTCanonicalTileID(): CanonicalTileID {
   return CanonicalTileID(z = z.toLong(), x = x.toLong(), y = y.toLong())
 }
 
+fun com.mapbox.maps.OverscaledTileID.toFLTOverscaledTileID(): OverscaledTileID {
+  return OverscaledTileID(
+    overscaledZ = overscaledZ.toLong(),
+    wrap = wrap.toLong(),
+    canonical = canonical.toFLTCanonicalTileID()
+  )
+}
+
 fun com.mapbox.common.LoggingLevel.toFLTLoggingLevel(): LoggingLevel {
   return when (this) {
     com.mapbox.common.LoggingLevel.DEBUG -> LoggingLevel.DEBUG

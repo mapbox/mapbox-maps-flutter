@@ -7,17 +7,17 @@ import com.mapbox.maps.Snapshotter
 import com.mapbox.maps.mapbox_maps.MapboxEventHandler
 import com.mapbox.maps.mapbox_maps.pigeons.CameraOptions
 import com.mapbox.maps.mapbox_maps.pigeons.CameraState
-import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.CoordinateBounds
 import com.mapbox.maps.mapbox_maps.pigeons.MbxEdgeInsets
+import com.mapbox.maps.mapbox_maps.pigeons.OverscaledTileID
 import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
 import com.mapbox.maps.mapbox_maps.pigeons._SnapshotterMessenger
 import com.mapbox.maps.mapbox_maps.toCameraOptions
 import com.mapbox.maps.mapbox_maps.toCameraState
 import com.mapbox.maps.mapbox_maps.toEdgeInsets
 import com.mapbox.maps.mapbox_maps.toFLTCameraOptions
-import com.mapbox.maps.mapbox_maps.toFLTCanonicalTileID
 import com.mapbox.maps.mapbox_maps.toFLTCoordinateBounds
+import com.mapbox.maps.mapbox_maps.toFLTOverscaledTileID
 import com.mapbox.maps.mapbox_maps.toFLTSize
 import com.mapbox.maps.mapbox_maps.toSize
 import com.mapbox.maps.mapbox_maps.toTileCoverOptions
@@ -82,8 +82,8 @@ class SnapshotterController(
       .toFLTCameraOptions(context)
   }
 
-  override fun tileCover(options: TileCoverOptions): List<CanonicalTileID> {
-    return snapshotter.tileCover(options.toTileCoverOptions(), null).map { it.toFLTCanonicalTileID() }
+  override fun tileCover(options: TileCoverOptions): List<OverscaledTileID> {
+    return snapshotter.tileCover(options.toTileCoverOptions(), null).map { it.toFLTOverscaledTileID() }
   }
 
   override fun clearData(callback: (Result<Unit>) -> Unit) {

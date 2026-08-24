@@ -102,6 +102,11 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
       }
       141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          OverscaledTileID.fromList(it)
+        }
+      }
+      142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           MapSnapshotOptions.fromList(it)
         }
       }
@@ -158,8 +163,12 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is MapSnapshotOptions -> {
+      is OverscaledTileID -> {
         stream.write(141)
+        writeValue(stream, value.toList())
+      }
+      is MapSnapshotOptions -> {
+        stream.write(142)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -305,7 +314,7 @@ interface _SnapshotterMessenger {
   fun cancel()
   fun coordinateBounds(camera: CameraOptions): CoordinateBounds
   fun camera(coordinates: List<Point>, padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?): CameraOptions
-  fun tileCover(options: TileCoverOptions): List<CanonicalTileID>
+  fun tileCover(options: TileCoverOptions): List<OverscaledTileID>
   fun clearData(callback: (Result<Unit>) -> Unit)
 
   companion object {

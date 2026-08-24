@@ -1477,5 +1477,9 @@
   {
     "changeDescription": "ModelSource: Method \"bind\" removed",
     "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "Snapshotter: tileCover: Experimental Flag changed. false -> true",
+    "reason": "tileCover was previously marked stable by mistake; the underlying native tileCover API is experimental. Also switches the return type to OverscaledTileID instead of CanonicalTileID, matching the native SDKs. Remove this entry once mapbox_maps_flutter 2.30 is released, since the pub.dev baseline will then already have tileCover marked experimental."
   }
 ]

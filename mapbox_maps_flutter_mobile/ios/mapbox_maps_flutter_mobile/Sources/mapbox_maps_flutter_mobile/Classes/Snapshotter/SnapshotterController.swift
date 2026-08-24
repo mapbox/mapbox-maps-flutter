@@ -69,9 +69,9 @@ final class SnapshotterController: _SnapshotterMessenger {
         ).toFLTCameraOptions()
     }
 
-    func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID] {
+    func tileCover(options: TileCoverOptions) throws -> [OverscaledTileID] {
         return snapshotter.tileCover(for: options.toTileCoverOptions())
-            .map { $0.toFLTCanonicalTileID() }
+            .map { $0.toFLTOverscaledTileID() }
     }
 
     func clearData(completion: @escaping (Result<Void, any Swift.Error>) -> Void) {

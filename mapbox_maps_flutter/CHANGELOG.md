@@ -1,3 +1,7 @@
+### main
+
+* `tileCover` and `Snapshotter.tileCover` are marked experimental and now return `OverscaledTileID` instead of `CanonicalTileID`, matching the native SDKs. `OverscaledTileID` keeps the canonical tile coordinate in its `canonical` field, and adds `overscaledZ` and `wrap` so callers can distinguish overscaled tiles from their canonical zoom level, and tiles that repeat across the antimeridian.
+
 ### 3.0.0-alpha.29
 
 * Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.

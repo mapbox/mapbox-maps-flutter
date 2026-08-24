@@ -16,7 +16,6 @@ import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.interactions.FeatureStateKey
-import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.ConstrainMode
 import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor
@@ -25,6 +24,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeatureId
 import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapWidgetDebugOptionsData
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
+import com.mapbox.maps.mapbox_maps.pigeons.OverscaledTileID
 import com.mapbox.maps.mapbox_maps.pigeons.QueriedRenderedFeature
 import com.mapbox.maps.mapbox_maps.pigeons.QueriedSourceFeature
 import com.mapbox.maps.mapbox_maps.pigeons.RenderedQueryOptions
@@ -458,9 +458,9 @@ class MapInterfaceController(
     return mapboxMap.getElevation(coordinate)
   }
 
-  override fun tileCover(options: TileCoverOptions): List<CanonicalTileID> {
+  override fun tileCover(options: TileCoverOptions): List<OverscaledTileID> {
     return mapboxMap.tileCover(options.toTileCoverOptions(), null)
-      .map { it.toFLTCanonicalTileID() }
+      .map { it.toFLTOverscaledTileID() }
   }
 
   override fun setPrefetchZoomDelta(delta: Long) {

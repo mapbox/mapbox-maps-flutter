@@ -506,6 +506,8 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 196:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
     case 197:
+      return OverscaledTileID.fromList(self.readValue() as! [Any?])
+    case 198:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -719,8 +721,11 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? CanonicalTileID {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? OverscaledTileID {
       super.writeByte(197)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePropertyValue {
+      super.writeByte(198)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1693,7 +1698,7 @@ protocol _MapInterface {
   /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
   func getElevation(coordinate: Point) throws -> Double?
   /// Returns array of tile identifiers that cover current map camera.
-  func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID]
+  func tileCover(options: TileCoverOptions) throws -> [OverscaledTileID]
   /// Set whether legacy mode should be used for [snapshot].
   ///
   /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)

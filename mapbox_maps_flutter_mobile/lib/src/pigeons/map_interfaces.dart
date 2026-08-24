@@ -533,8 +533,11 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
     } else if (value is CanonicalTileID) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is OverscaledTileID) {
       buffer.putUint8(197);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePropertyValue) {
+      buffer.putUint8(198);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -708,6 +711,8 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
       case 196:
         return CanonicalTileID.decode(readValue(buffer)!);
       case 197:
+        return OverscaledTileID.decode(readValue(buffer)!);
+      case 198:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3049,7 +3054,7 @@ class _MapInterface {
   }
 
   /// Returns array of tile identifiers that cover current map camera.
-  Future<List<CanonicalTileID>> tileCover(TileCoverOptions options) async {
+  Future<List<OverscaledTileID>> tileCover(TileCoverOptions options) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3078,7 +3083,7 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<CanonicalTileID>();
+          .cast<OverscaledTileID>();
     }
   }
 

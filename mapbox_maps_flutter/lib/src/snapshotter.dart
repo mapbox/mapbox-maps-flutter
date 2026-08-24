@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:meta/meta.dart';
 import 'package:turf/turf.dart';
 
 import 'style_manager.dart';
@@ -92,7 +93,8 @@ base class Snapshotter extends StyleManager {
   );
 
   /// Returns tile identifiers covering the current snapshotter camera.
-  Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>
+  @experimental
+  Future<List<OverscaledTileID?>> tileCover(TileCoverOptions options) =>
       _impl.tileCover(options);
 
   /// Clears temporary map data from the snapshotter's data path.

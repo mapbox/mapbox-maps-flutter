@@ -704,6 +704,11 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          OverscaledTileID.fromList(it)
+        }
+      }
+      198.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
       }
@@ -984,8 +989,12 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is OverscaledTileID -> {
         stream.write(197)
+        writeValue(stream, value.toList())
+      }
+      is StylePropertyValue -> {
+        stream.write(198)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1954,7 +1963,7 @@ interface _MapInterface {
    */
   fun getElevation(coordinate: Point): Double?
   /** Returns array of tile identifiers that cover current map camera. */
-  fun tileCover(options: TileCoverOptions): List<CanonicalTileID>
+  fun tileCover(options: TileCoverOptions): List<OverscaledTileID>
   /**
    * Set whether legacy mode should be used for [snapshot].
    *

@@ -3570,6 +3570,57 @@ data class CanonicalTileID(
 }
 
 /**
+ * Represents a tile coordinate at the zoom level it was requested at, which
+ * can differ from the [canonical] zoom level when the tile is overscaled.
+ *
+ * `tileCover` returns `OverscaledTileID` instead of `CanonicalTileID` so
+ * callers can tell overscaled tiles apart from tiles at their native zoom
+ * level, and tell tiles that repeat across the antimeridian apart through
+ * [wrap]. Overscaling happens only when `TileCoverOptions.maxZoom` is set
+ * and the camera zoom exceeds it: the tile is clamped to `maxZoom`, and
+ * [canonical] holds the coordinate at that clamped zoom level.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class OverscaledTileID(
+  /** The zoom level this tile was requested at. */
+  val overscaledZ: Long,
+  /** The horizontal wrap offset, for tiles that repeat across the antimeridian. */
+  val wrap: Long,
+  /** The canonical tile coordinate backing this overscaled tile. */
+  val canonical: CanonicalTileID
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): OverscaledTileID {
+      val overscaledZ = pigeonVar_list[0] as Long
+      val wrap = pigeonVar_list[1] as Long
+      val canonical = pigeonVar_list[2] as CanonicalTileID
+      return OverscaledTileID(overscaledZ, wrap, canonical)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      overscaledZ,
+      wrap,
+      canonical,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is OverscaledTileID) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return overscaledZ == other.overscaledZ &&
+      wrap == other.wrap &&
+      canonical == other.canonical
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * Set of options for taking map snapshot with `map snapshotter`.
  *
  * Generated class from Pigeon that represents data sent in messages.
