@@ -74,7 +74,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 }
 
 dependencies {
-    implementation "com.mapbox.maps:android-ndk27:11.31.0-SNAPSHOT-08-25--01-53.git-9037a0e"
+    implementation "com.mapbox.maps:android-ndk27:11.31.0-SNAPSHOT-08-26--01-56.git-d68bdbf"
 
     implementation "androidx.annotation:annotation:1.5.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
