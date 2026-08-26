@@ -1,5 +1,9 @@
 ### main
 
+* Introduce experimental `RasterLayer.rasterAllowDraping` property which allows raster layers to opt out of draping.
+* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
+* Promote `SymbolLayer.symbolZOffset` to stable.
+
 ### 2.30.0-rc.1
 
 * Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.

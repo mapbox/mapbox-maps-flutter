@@ -57,6 +57,17 @@ enum RasterResampling {
   NEAREST,
 }
 
+/// When `raster-color` is active, specifies how raster values are distributed across the color ramp over the range specified by `raster-color-range`.
+/// Default value: "linear".
+@experimental
+enum RasterColorScale {
+  /// Raster values are spaced evenly across the color ramp.
+  LINEAR,
+
+  /// Raster values are spaced logarithmically, giving more of the color ramp to smaller values. Useful for data concentrated near the low end of a wide range.
+  LOG,
+}
+
 /// Direction of light source when map is rotated.
 enum HillshadeIlluminationAnchor {
   /// The hillshade illumination is relative to the north direction.

@@ -552,7 +552,6 @@ data class PointAnnotation(
   /**
    * Specifies an uniform elevation from the ground, in meters.
    * Default value: 0. Minimum value: 0.
-   * @experimental
    */
   val symbolZOffset: Double? = null,
   /**
@@ -878,7 +877,6 @@ data class PointAnnotationOptions(
   /**
    * Specifies an uniform elevation from the ground, in meters.
    * Default value: 0. Minimum value: 0.
-   * @experimental
    */
   val symbolZOffset: Double? = null,
   /**

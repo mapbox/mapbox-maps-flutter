@@ -373,7 +373,6 @@ struct PointAnnotation {
   var iconOpacity: Double? = nil
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
-  /// @experimental
   var symbolZOffset: Double? = nil
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
@@ -623,7 +622,6 @@ struct PointAnnotationOptions {
   var iconOpacity: Double? = nil
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
-  /// @experimental
   var symbolZOffset: Double? = nil
   /// The color with which the text will be drawn.
   /// Default value: "#000000".

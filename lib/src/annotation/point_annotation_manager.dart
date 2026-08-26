@@ -576,12 +576,10 @@ class PointAnnotationManager extends BaseAnnotationManager {
       _annotationMessenger.getOcclusionOpacityMode(id);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
-  @experimental
   Future<void> setSymbolZOffset(double symbolZOffset) =>
       _annotationMessenger.setSymbolZOffset(id, symbolZOffset);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
-  @experimental
   Future<double?> getSymbolZOffset() =>
       _annotationMessenger.getSymbolZOffset(id);
 

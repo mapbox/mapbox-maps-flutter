@@ -27,12 +27,14 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      rasterAllowDraping: true,
       rasterArrayBand: "abc",
       rasterBrightnessMax: 1.0,
       rasterBrightnessMin: 1.0,
       rasterColor: Colors.red.value,
       rasterColorMix: [0.0, 1.0, 2.0, 3.0],
       rasterColorRange: [0.0, 1.0],
+      rasterColorScale: RasterColorScale.LINEAR,
       rasterContrast: 1.0,
       rasterElevation: 1.0,
       rasterEmissiveStrength: 1.0,
@@ -48,12 +50,14 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.rasterAllowDraping, true);
     expect(layer.rasterArrayBand, "abc");
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
     expect(layer.rasterColor, Colors.red.value);
     expect(layer.rasterColorMix, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.rasterColorRange, [0.0, 1.0]);
+    expect(layer.rasterColorScale, RasterColorScale.LINEAR);
     expect(layer.rasterContrast, 1.0);
     expect(layer.rasterElevation, 1.0);
     expect(layer.rasterEmissiveStrength, 1.0);
@@ -88,6 +92,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      rasterAllowDrapingExpression: ['==', true, true],
       rasterArrayBandExpression: ['string', "abc"],
       rasterBrightnessMaxExpression: ['number', 1.0],
       rasterBrightnessMinExpression: ['number', 1.0],
@@ -100,6 +105,7 @@ void main() {
         'literal',
         [0.0, 1.0]
       ],
+      rasterColorScaleExpression: ['string', 'linear'],
       rasterContrastExpression: ['number', 1.0],
       rasterElevationExpression: ['number', 1.0],
       rasterEmissiveStrengthExpression: ['number', 1.0],
@@ -120,12 +126,14 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+    expect(layer.rasterAllowDraping, true);
     expect(layer.rasterArrayBand, "abc");
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
     expect(layer.rasterColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.rasterColorMix, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.rasterColorRange, [0.0, 1.0]);
+    expect(layer.rasterColorScale, RasterColorScale.LINEAR);
     expect(layer.rasterContrast, 1.0);
     expect(layer.rasterElevation, 1.0);
     expect(layer.rasterEmissiveStrength, 1.0);

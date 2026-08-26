@@ -434,7 +434,6 @@ class PointAnnotation {
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
-  /// @experimental
   double? symbolZOffset;
 
   /// The color with which the text will be drawn.
@@ -782,7 +781,6 @@ class PointAnnotationOptions {
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
-  /// @experimental
   double? symbolZOffset;
 
   /// The color with which the text will be drawn.
