@@ -1,5 +1,5 @@
-import 'viewport_state.dart';
-import 'viewport_transition.dart';
+import '../../public/viewport/viewport_state.dart';
+import '../../public/viewport/viewport_transition.dart';
 
 /// Abstract interface for performing viewport transitions.
 ///

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// [TileStore] manages downloads and storage for requests to tile-related API endpoints, enforcing a disk usage
 /// quota: tiles available on disk may be deleted to make room for a new download. This interface can be used by an

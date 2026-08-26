@@ -1,5 +1,5 @@
 // This file is generated.
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// Web stub. Methods that mutate the map throw [UnimplementedError];
 /// the interaction streams are empty broadcast streams so listener

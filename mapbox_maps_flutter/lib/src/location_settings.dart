@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// Shows a location puck on the map.
 class LocationSettingsManager {

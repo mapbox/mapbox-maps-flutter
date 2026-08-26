@@ -1,5 +1,5 @@
 // This file is generated.
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
 
 import '../annotations_manager.dart' show BaseAnnotationManager;

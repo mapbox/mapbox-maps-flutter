@@ -2,7 +2,7 @@
 // types exactly, such as style, source, and tile.
 import 'package:turf/turf.dart';
 
-import 'pigeons/platform_interface_data_types.dart';
+import '../pigeons/platform_interface_data_types.dart';
 
 // ===== Private JSON helpers =====
 

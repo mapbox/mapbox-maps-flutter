@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 // Geometry types (Point / LineString / Polygon / Position) are re-exported by
 // the meta-package barrel, so no separate turf import is needed.
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 void main() {
   test('annotation tap events can be listened and canceled', () async {

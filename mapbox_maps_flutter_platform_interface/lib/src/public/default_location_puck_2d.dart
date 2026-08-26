@@ -1,4 +1,4 @@
-import 'pigeons/platform_interface_data_types.dart' show LocationPuck2D;
+import '../pigeons/platform_interface_data_types.dart' show LocationPuck2D;
 
 /// Marker subclass of [LocationPuck2D] that signals the platform
 /// implementation should fall back to the default 2D puck imagery

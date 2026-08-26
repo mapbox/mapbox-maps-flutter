@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:turf/turf.dart';
 
-import '../events.dart';
+import '../public/events.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'style_interface.dart';
 

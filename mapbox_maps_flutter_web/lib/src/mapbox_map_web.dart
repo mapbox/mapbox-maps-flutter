@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show UniqueKey;
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart'
     show GeometryObject, Point, Position, bbox, bearing;

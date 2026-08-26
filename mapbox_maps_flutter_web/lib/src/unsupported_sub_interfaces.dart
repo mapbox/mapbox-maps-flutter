@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' show Point;
 

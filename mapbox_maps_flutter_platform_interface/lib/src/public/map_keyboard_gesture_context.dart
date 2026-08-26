@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'pigeons/platform_interface_data_types.dart';
+import '../pigeons/platform_interface_data_types.dart';
 
 /// Additional information about a keyboard-driven map gesture.
 ///

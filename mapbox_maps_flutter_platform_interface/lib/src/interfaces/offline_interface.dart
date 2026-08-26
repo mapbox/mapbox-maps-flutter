@@ -1,3 +1,4 @@
+import '../public/offline_progress_listeners.dart';
 import '../pigeons/platform_interface_data_types.dart';
 
 // ===== Abstract interfaces =====
@@ -83,17 +84,3 @@ abstract interface class OfflineSwitchPlatformInterface {
   /// Enables or disables the Mapbox network stack.
   Future<void> setMapboxStackConnected(bool isConnected);
 }
-
-// ===== Progress listener typedefs =====
-
-/// StylePack load progress callback.
-typedef OnStylePackLoadProgressListener =
-    void Function(StylePackLoadProgress progress);
-
-/// TileRegion load progress callback.
-typedef OnTileRegionLoadProgressListener =
-    void Function(TileRegionLoadProgress progress);
-
-/// TileRegion estimate progress callback.
-typedef OnTileRegionEstimateProgressListener =
-    void Function(TileRegionEstimateProgress progress);

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart';
 
 /// Collection of [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html)

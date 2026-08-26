@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:js_interop';
 
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:web/web.dart';
 
 import '../bindings/map_bindings.dart';

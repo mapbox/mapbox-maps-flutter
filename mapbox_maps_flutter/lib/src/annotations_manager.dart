@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 import 'annotation/circle_annotation_manager_facade.dart';
 import 'annotation/point_annotation_manager_facade.dart';

@@ -1,4 +1,4 @@
-import '../map_keyboard_gesture_context.dart';
+import '../public/map_keyboard_gesture_context.dart';
 import '../pigeons/platform_interface_data_types.dart';
 
 /// Generic interface for reading and updating a map settings object of type [T].

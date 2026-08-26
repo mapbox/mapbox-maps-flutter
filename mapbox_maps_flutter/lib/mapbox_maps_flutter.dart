@@ -1,7 +1,6 @@
 library;
 
-export 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart'
-    hide Disposable, DisposeBag, AddToDisposeBag;
+export 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 export 'package:turf/turf.dart';
 
 export 'src/attribution_settings.dart';

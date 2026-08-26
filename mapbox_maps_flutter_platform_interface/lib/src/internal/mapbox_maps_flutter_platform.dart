@@ -2,51 +2,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import 'android_platform_view_hosting_mode.dart';
-import 'events.dart'
+import '../interfaces/log_configuration_interface.dart';
+import '../interfaces/mapbox_map_interface.dart';
+import '../interfaces/mapbox_maps_options_interface.dart';
+import '../interfaces/mapbox_options_interface.dart';
+import '../interfaces/offline_interface.dart';
+import '../interfaces/snapshotter_interface.dart';
+import '../pigeons/platform_interface_data_types.dart'
+    show MapOptions, MapSnapshotOptions;
+import '../public/android_platform_view_hosting_mode.dart';
+import '../public/events.dart'
     show
         MapEvent,
         OnMapLoadErrorListener,
         OnStyleDataLoadedListener,
         OnStyleImageMissingListener,
         OnStyleLoadedListener;
-import 'interfaces/log_configuration_interface.dart';
-import 'interfaces/mapbox_map_interface.dart';
-import 'interfaces/mapbox_maps_options_interface.dart';
-import 'interfaces/mapbox_options_interface.dart';
-import 'interfaces/offline_interface.dart';
-import 'interfaces/snapshotter_interface.dart';
-import 'interfaces/viewport/viewport_state.dart';
-import 'interfaces/viewport/viewport_transition.dart';
-import 'pigeons/platform_interface_data_types.dart'
-    show MapOptions, MapSnapshotOptions;
-
-export 'android_platform_view_hosting_mode.dart';
-export 'debug_options.dart';
-export 'events.dart';
-export 'interactive_features.dart';
-export 'interfaces/annotations_interface.dart';
-export 'interfaces/circle_annotation_manager_interface.dart';
-export 'interfaces/http_service_interface.dart';
-export 'interfaces/location_settings_interface.dart';
-export 'interfaces/log_configuration_interface.dart';
-export 'interfaces/map_recorder_interface.dart';
-export 'interfaces/mapbox_map_interface.dart';
-export 'interfaces/mapbox_maps_options_interface.dart';
-export 'interfaces/mapbox_options_interface.dart';
-export 'interfaces/offline_interface.dart';
-export 'interfaces/performance_statistics_listener.dart';
-export 'interfaces/point_annotation_manager_interface.dart';
-export 'interfaces/polygon_annotation_manager_interface.dart';
-export 'interfaces/polyline_annotation_manager_interface.dart';
-export 'interfaces/projection_interface.dart';
-export 'interfaces/settings_interfaces.dart';
-export 'interfaces/snapshotter_interface.dart';
-export 'interfaces/style_interface.dart';
-export 'interfaces/viewport/viewport_interface.dart';
-export 'interfaces/viewport/viewport_state.dart';
-export 'interfaces/viewport/viewport_transition.dart';
-export 'map_keyboard_gesture_context.dart';
+import '../public/viewport/viewport_state.dart';
+import '../public/viewport/viewport_transition.dart';
 
 abstract base class MapboxMapsFlutterPlatform {
   static MapboxMapsFlutterPlatform? _instance;

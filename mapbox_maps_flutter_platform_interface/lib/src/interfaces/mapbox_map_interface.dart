@@ -3,14 +3,14 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart';
 
-import '../debug_options.dart';
-import '../interactive_features.dart';
+import '../public/debug_options.dart';
+import '../public/interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
 import 'http_service_interface.dart';
 import 'location_settings_interface.dart';
 import 'map_recorder_interface.dart';
-import 'performance_statistics_listener.dart';
+import '../public/performance_statistics_listener.dart';
 import 'projection_interface.dart';
 import 'settings_interfaces.dart';
 import 'style_interface.dart';

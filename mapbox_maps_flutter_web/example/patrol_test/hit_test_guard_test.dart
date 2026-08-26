@@ -4,7 +4,7 @@ import 'dart:js_interop';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemMouseCursor;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:mapbox_maps_flutter_web/mapbox_maps_flutter_web.dart';
 import 'package:turf/turf.dart' show Point, Position;
 import 'patrol.dart';

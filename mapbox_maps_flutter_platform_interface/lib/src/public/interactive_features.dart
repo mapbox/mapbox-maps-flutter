@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show immutable, listEquals;
 
 import 'events.dart';
-import 'pigeons/platform_interface_data_types.dart';
+import '../pigeons/platform_interface_data_types.dart';
 
 /// Geometry for querying rendered features.
 ///

@@ -1,4 +1,4 @@
-import 'pigeons/platform_interface_data_types.dart';
+import '../pigeons/platform_interface_data_types.dart';
 
 /// Options for enabling debugging features in a map.
 class MapWidgetDebugOptions {
