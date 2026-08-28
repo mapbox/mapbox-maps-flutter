@@ -2,6 +2,7 @@ library mapbox_maps_flutter;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui' as ui;
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
@@ -92,4 +93,5 @@ part 'src/viewport/transitions/easing_viewport_transition.dart';
 part 'src/package_info.dart';
 part 'src/http/http_service.dart';
 part 'src/cancelable.dart';
+part 'src/map_texture.dart';
 part 'src/deprecated.dart';
