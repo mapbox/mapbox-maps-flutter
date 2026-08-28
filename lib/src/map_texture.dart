@@ -86,8 +86,10 @@ class _MapTextureState extends State<MapTexture> {
   /// Metal output. Mapbox's terms require them on screen, so they are
   /// rasterised on the host and drawn here over the texture.
   Future<void> _loadOrnaments(int id) async {
-    // one frame of settling, or the ornaments have not been laid out yet
-    await Future<void>.delayed(const Duration(milliseconds: 400));
+    // the ornaments are laid out by uikit, so wait for a frame rather than
+    // guessing at a delay
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
     final bytes = await _channel
         .invokeMethod<Uint8List>('ornaments', {'textureId': id});
     if (!mounted || bytes == null) return;

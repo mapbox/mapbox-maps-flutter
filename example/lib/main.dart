@@ -36,6 +36,7 @@ import 'full_map_example.dart';
 import 'location_example.dart';
 import 'example.dart';
 import 'map_texture_example.dart';
+import 'map_texture_perf_example.dart';
 import 'point_annotations_example.dart';
 import 'projection_example.dart';
 import 'rainbow_road_example.dart';
@@ -47,6 +48,7 @@ import 'map_recorder_example.dart';
 final List<Example> _allPages = <Example>[
   SimpleMapExample(),
   MapTextureExample(),
+  MapTexturePerfExample(),
   ViewportExample(),
   SnapshotterExample(),
   TrafficRouteLineExample(),
