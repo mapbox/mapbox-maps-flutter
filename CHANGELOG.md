@@ -3,6 +3,7 @@
 * Introduce experimental `RasterLayer.rasterAllowDraping` property which allows raster layers to opt out of draping.
 * Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
 * Promote `SymbolLayer.symbolZOffset` to stable.
+* Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
 
 ### 2.30.0-rc.1
 
