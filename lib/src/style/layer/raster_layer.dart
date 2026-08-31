@@ -13,8 +13,6 @@ class RasterLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-    bool? this.rasterAllowDraping,
-    List<Object>? this.rasterAllowDrapingExpression,
     String? this.rasterArrayBand,
     List<Object>? this.rasterArrayBandExpression,
     double? this.rasterBrightnessMax,
@@ -62,16 +60,6 @@ class RasterLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
-
-  /// Whether the raster layer is allowed to drape over terrain and globe. When disabled, the layer is rendered after all draped layers, which can change its position in the layer order. Disabling draping has a performance cost, since the terrain/globe geometry must be rendered again for each such layer.
-  /// Default value: true.
-  @experimental
-  bool? rasterAllowDraping;
-
-  /// Whether the raster layer is allowed to drape over terrain and globe. When disabled, the layer is rendered after all draped layers, which can change its position in the layer order. Disabling draping has a performance cost, since the terrain/globe geometry must be rendered again for each such layer.
-  /// Default value: true.
-  @experimental
-  List<Object>? rasterAllowDrapingExpression;
 
   /// Displayed band of raster array source layer. Defaults to the first band if not set.
   @experimental
@@ -205,12 +193,6 @@ class RasterLayer extends Layer {
     }
 
     var paint = {};
-    if (rasterAllowDrapingExpression != null) {
-      paint["raster-allow-draping"] = rasterAllowDrapingExpression;
-    } else if (rasterAllowDraping != null) {
-      paint["raster-allow-draping"] = rasterAllowDraping;
-    }
-
     if (rasterArrayBandExpression != null) {
       paint["raster-array-band"] = rasterArrayBandExpression;
     } else if (rasterArrayBand != null) {
@@ -352,9 +334,6 @@ class RasterLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
-      rasterAllowDraping: _optionalCast(map["paint"]["raster-allow-draping"]),
-      rasterAllowDrapingExpression:
-          _optionalCastList(map["paint"]["raster-allow-draping"]),
       rasterArrayBand: _optionalCast(map["paint"]["raster-array-band"]),
       rasterArrayBandExpression:
           _optionalCastList(map["paint"]["raster-array-band"]),

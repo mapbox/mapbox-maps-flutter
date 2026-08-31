@@ -27,7 +27,6 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
-      rasterAllowDraping: true,
       rasterArrayBand: "abc",
       rasterBrightnessMax: 1.0,
       rasterBrightnessMin: 1.0,
@@ -50,7 +49,6 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.rasterAllowDraping, true);
     expect(layer.rasterArrayBand, "abc");
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
@@ -92,7 +90,6 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
-      rasterAllowDrapingExpression: ['==', true, true],
       rasterArrayBandExpression: ['string', "abc"],
       rasterBrightnessMaxExpression: ['number', 1.0],
       rasterBrightnessMinExpression: ['number', 1.0],
@@ -126,7 +123,6 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
-    expect(layer.rasterAllowDraping, true);
     expect(layer.rasterArrayBand, "abc");
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
