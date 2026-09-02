@@ -22,7 +22,6 @@ class LocationController
         onCancel: _detachGeolocateListener,
       );
   JSFunction? _geolocateListener;
-  MutationObserver? _setupObserver;
 
   /// Stream of positions reported by the active `GeolocateControl`. Empty
   /// while `enabled = false`. Used by the viewport for follow-puck.
@@ -36,26 +35,34 @@ class LocationController
   @override
   Future<void> updateSettings(LocationComponentSettings settings) async {
     _current = _merge(_current, settings);
+    final control = _control;
 
-    // Workaround: GL JS's `GeolocateControl` options are construction-only,
-    // so every settings change requires tearing the control down and
-    // recreating it. Remove this once GL JS exposes runtime option
-    // updates https://mapbox.atlassian.net/browse/GLJS-1821.
-    if (_current.enabled == true) {
-      _attach();
-    } else {
+    if (_current.enabled != true) {
       _detach();
+      return;
+    }
+
+    if (control == null) {
+      _attach();
+      return;
+    }
+
+    if (settings.puckBearingEnabled case final puckBearingEnabled?) {
+      control.setShowUserHeading(puckBearingEnabled);
+    }
+    if (settings.showAccuracyRing case final showAccuracyRing?) {
+      control.setShowAccuracyCircle(showAccuracyRing);
     }
   }
 
   void _attach() {
-    _detach();
     final control = JSGeolocateControl(
       JSGeolocateControlOptions(
         positionOptions: JSPositionOptions(enableHighAccuracy: true),
         // `trackUserLocation` keeps watchPosition alive so the puck moves
         // with the user; `followUserLocation: false` keeps the camera put —
-        // camera control lives in the viewport API, not here.
+        // camera control lives in the viewport API, not here. Neither is
+        // ever changed at runtime, so they stay construction-only.
         trackUserLocation: true,
         followUserLocation: false,
         showUserHeading: _current.puckBearingEnabled ?? false,
@@ -70,7 +77,9 @@ class LocationController
     // to the [locationUpdates] stream; otherwise leave it off until a
     // subscriber appears (see [onListen] on `_locationUpdates`).
     if (_locationUpdates.hasListener) _attachGeolocateListener();
-    _whenButtonAppears(() => control.trigger());
+    // `trigger()` before `'ready'` logs a warning; the control fires
+    // `'ready'` exactly once, so a plain listener behaves like `once`.
+    control.on(JSGeolocateEventType.ready, (() => control.trigger()).toJS);
   }
 
   void _attachGeolocateListener() {
@@ -90,37 +99,7 @@ class LocationController
     _geolocateListener = null;
   }
 
-  // Workaround: GL JS provides no signal that the control is ready to
-  // `trigger()`, so we watch the DOM for the button instead. Remove
-  // once GL JS exposes a 'ready' event https://mapbox.atlassian.net/browse/GLJS-1822.
-  void _whenButtonAppears(void Function() callback) {
-    final container = _map.getContainer();
-    const selector = '.mapboxgl-ctrl-geolocate';
-    // Fast path: browsers without `navigator.permissions` finish setup
-    // synchronously inside `addControl`, so the button is already there.
-    if (container.querySelector(selector) != null) {
-      callback();
-      return;
-    }
-    final observer = MutationObserver(
-      ((JSArray<MutationRecord> _, MutationObserver _) {
-        if (container.querySelector(selector) != null) {
-          _setupObserver?.disconnect();
-          _setupObserver = null;
-          callback();
-        }
-      }).toJS,
-    );
-    _setupObserver = observer;
-    observer.observe(
-      container,
-      MutationObserverInit(childList: true, subtree: true),
-    );
-  }
-
   void _detach() {
-    _setupObserver?.disconnect();
-    _setupObserver = null;
     final control = _control;
     if (control == null) return;
     _detachGeolocateListener();
@@ -133,8 +112,6 @@ class LocationController
     // The JSMap instance is owned by `_MapWebWidgetState` and torn down in
     // its own `dispose()` (see [map_widget.dart]).
     // Here we just clean up the resources on Dart side.
-    _setupObserver?.disconnect();
-    _setupObserver = null;
     _geolocateListener = null;
     _control = null;
     _locationUpdates.close();

@@ -42,14 +42,21 @@ extension type JSPositionOptions._(JSObject _) implements JSObject {
 
 /// `mapboxgl.GeolocateControl`. Renders the user-location puck and accuracy
 /// ring; subscribes to `navigator.geolocation.watchPosition` while attached
-/// to the map.
+/// to the map. `positionOptions`, `trackUserLocation`, `showUserLocation`,
+/// `followUserLocation`, and `showButton` are never changed after
+/// construction, so only the two settings the handler updates at runtime
+/// have setters below.
 @JS('GeolocateControl')
 extension type JSGeolocateControl._(JSObject _) implements JSControl {
   external JSGeolocateControl(JSGeolocateControlOptions options);
 
   /// Programmatically starts location tracking. Prompts the user for
-  /// geolocation permission on first call.
+  /// geolocation permission on first call. Must not be called before the
+  /// `'ready'` event fires.
   external void trigger();
+
+  external void setShowAccuracyCircle(bool show);
+  external void setShowUserHeading(bool show);
 
   external void on(JSGeolocateEventType event, JSFunction handler);
   external void off(JSGeolocateEventType event, JSFunction handler);
@@ -61,6 +68,10 @@ extension type const JSGeolocateEventType._(String value) {
   static const JSGeolocateEventType geolocate = JSGeolocateEventType._(
     'geolocate',
   );
+
+  /// Fires once, after the control finishes initializing and is safe to
+  /// [JSGeolocateControl.trigger].
+  static const JSGeolocateEventType ready = JSGeolocateEventType._('ready');
 }
 
 /// Payload of `GeolocateControl`'s `'geolocate'` event.
