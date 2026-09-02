@@ -517,7 +517,7 @@ void main() {
     expect(clusterExpansionZoom.value, '1');
   });
 
-  patrolTest('snapshot', skip: kIsWeb, ($) async {
+  patrolTest('snapshot', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();

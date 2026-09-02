@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -26,6 +27,10 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
 
+    if (kIsWeb) {
+      return;
+    }
+
     _snapshotter = await Snapshotter.create(
       options: MapSnapshotOptions(
         size: Size(width: 400, height: 400),
@@ -46,7 +51,9 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
   }
 
   _onMapIdle(MapIdleEventData data) async {
-    if (snapshotting) {
+    // On web there's no standalone Snapshotter (createSnapshotter isn't
+    // supported); MapboxMap.snapshot() below is triggered on demand instead.
+    if (kIsWeb || snapshotting) {
       return;
     }
     snapshotting = true;
@@ -72,6 +79,13 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
     snapshotting = false;
   }
 
+  _captureMapSnapshot() async {
+    final snapshot = await mapboxMap!.snapshot();
+    setState(() {
+      snapshotImage = Image.memory(snapshot);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
@@ -84,6 +98,14 @@ class SnapshotterExampleState extends State<SnapshotterExample> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(child: mapWidget),
+          if (kIsWeb)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: ElevatedButton(
+                onPressed: _captureMapSnapshot,
+                child: const Text('Capture MapboxMap.snapshot()'),
+              ),
+            ),
           SizedBox(height: 12, child: ColoredBox(color: Colors.amber)),
           Expanded(
             key: _snapshotKey,

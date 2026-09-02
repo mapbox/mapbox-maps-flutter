@@ -65,6 +65,7 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
   external factory JSMapOptions({
     required HTMLDivElement container,
     double? minZoom,
+    bool? preserveDrawingBuffer,
   });
 }
 
@@ -147,6 +148,9 @@ extension type JSMap._(JSObject _) implements JSObject {
 
   /// Returns the HTMLElement the map is rendered into.
   external HTMLElement getContainer();
+
+  /// Returns the map's `<canvas>` element.
+  external HTMLCanvasElement getCanvas();
 
   /// Forces a single repaint of the map.
   external void triggerRepaint();

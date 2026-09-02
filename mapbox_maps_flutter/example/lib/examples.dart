@@ -280,14 +280,14 @@ final List<Example> examples = [
       title: 'Projection interface',
       builder: (_) => const ProjectionExample(),
     ),
-    Example(
-      leading: const Icon(Icons.camera_alt_outlined),
-      title: 'Create a static map snapshot',
-      subtitle:
-          'Create a static, non-interactive image of a map style with specified camera position.',
-      builder: (_) => const SnapshotterExample(),
-    ),
   ],
+  Example(
+    leading: const Icon(Icons.camera_alt_outlined),
+    title: 'Create a static map snapshot',
+    subtitle:
+        'Create a static, non-interactive image of a map style with specified camera position.',
+    builder: (_) => const SnapshotterExample(),
+  ),
 ];
 
 class Example {

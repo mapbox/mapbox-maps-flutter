@@ -97,7 +97,16 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     await attachmentCompleter.future;
     if (!mounted) return;
 
-    final nativeMap = JSMap(JSMapOptions(container: _mapElement, minZoom: 0));
+    // `preserveDrawingBuffer` keeps the WebGL backbuffer readable after
+    // render, which `MapboxMap.snapshot()` needs to call `toDataURL()` on
+    // the canvas. It costs an extra backbuffer copy per frame.
+    final nativeMap = JSMap(
+      JSMapOptions(
+        container: _mapElement,
+        minZoom: 0,
+        preserveDrawingBuffer: true,
+      ),
+    );
     _currentMap = nativeMap;
 
     _hitTestGuard = HitTestGuard(

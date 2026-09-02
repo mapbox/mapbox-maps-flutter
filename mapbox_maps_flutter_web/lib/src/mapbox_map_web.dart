@@ -5,10 +5,12 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show UniqueKey;
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart'
     show GeometryObject, Point, Position, bbox, bearing;
+import 'package:web/web.dart' show Blob;
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
@@ -513,7 +515,24 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<MapOptions> getMapOptions() => throw _ni('getMapOptions');
 
   @override
-  Future<Uint8List> snapshot() => throw _ni('snapshot');
+  Future<Uint8List> snapshot() async {
+    try {
+      final blobCompleter = Completer<Blob?>();
+      _map.getCanvas().toBlob(
+        ((Blob? blob) => blobCompleter.complete(blob)).toJS,
+        'image/png',
+      );
+      final blob = await blobCompleter.future;
+      if (blob == null) throw StateError('no blob produced');
+      final buffer = await blob.arrayBuffer().toDart;
+      return buffer.toDart.asUint8List();
+    } catch (e) {
+      throw PlatformException(
+        code: 'snapshot-failed',
+        message: 'snapshot returned no image bytes: $e',
+      );
+    }
+  }
 
   // ===== Gesture / animation flags =====
 
