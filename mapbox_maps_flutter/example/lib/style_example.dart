@@ -140,6 +140,16 @@ class StyleExampleState extends State<StyleExample> {
     );
   }
 
+  Widget _loadStyleJson() {
+    return TextButton(
+      child: Text('loadStyleJson'),
+      onPressed: () async {
+        var styleJson = await rootBundle.loadString('assets/style.json');
+        mapboxMap?.loadStyleJson(styleJson);
+      },
+    );
+  }
+
   Widget _getStyleJSON() {
     return TextButton(
       child: Text('getStyleJSON'),
@@ -531,6 +541,7 @@ class StyleExampleState extends State<StyleExample> {
       _setStyleURI(),
       _getStyleJSON(),
       _setStyleJSON(),
+      _loadStyleJson(),
       _getStyleTransition(),
       _setStyleTransition(),
       _addStyleLayerAndSource(),

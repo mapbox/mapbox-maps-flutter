@@ -34,7 +34,7 @@ void main() {
     expect(MapboxStyles.DARK, style);
   });
 
-  patrolTest('loadStyleJson', skip: kIsWeb, ($) async {
+  patrolTest('loadStyleJson', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -45,7 +45,10 @@ void main() {
     await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
 
     var getStyleJson = await mapboxMap.getStyleJSON();
-    expect(styleJson, getStyleJson);
+    // Compare parsed JSON rather than raw strings: web's getStyleJSON()
+    // round-trips through GL JS, which re-serializes with different
+    // whitespace and key order than the source file.
+    expect(jsonDecode(getStyleJson), jsonDecode(styleJson));
   });
 
   patrolTest('loadRasterArray', skip: kIsWeb, ($) async {

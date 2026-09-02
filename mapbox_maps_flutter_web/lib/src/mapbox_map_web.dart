@@ -12,6 +12,7 @@ import 'package:turf/turf.dart'
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
+import 'bindings/style_bindings.dart';
 import 'gestures_controller.dart';
 import 'interaction_handler.dart';
 import 'location/location_controller.dart';
@@ -112,8 +113,9 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<void> loadStyleJson(String styleJson) =>
-      throw UnimplementedError('loadStyleJson is not yet implemented on web.');
+  Future<void> loadStyleJson(String styleJson) async {
+    _map.setStyle(jsonParse(styleJson));
+  }
 
   // ===== Camera =====
 
