@@ -58,38 +58,6 @@ void main() {
   });
 
   group('MapboxHttpService', () {
-    test('setCustomHeaders delegates to interface', () async {
-      final headers = {'Authorization': 'Bearer token123'};
-
-      await httpService.setCustomHeaders(headers);
-
-      expect(mockImpl.setCustomHeadersCallCount, 1);
-      expect(mockImpl.lastHeaders, same(headers));
-    });
-
-    test('setCustomHeaders can be called multiple times', () async {
-      await httpService.setCustomHeaders({'Key1': 'Value1'});
-      await httpService.setCustomHeaders({'Key2': 'Value2'});
-
-      expect(mockImpl.setCustomHeadersCallCount, 2);
-      expect(mockImpl.lastHeaders, {'Key2': 'Value2'});
-    });
-
-    test('setCustomHeaders passes all headers correctly', () async {
-      final headers = {
-        'Authorization': 'Bearer token',
-        'X-Custom-Header': 'custom-value',
-        'Accept': 'application/json',
-      };
-
-      await httpService.setCustomHeaders(headers);
-
-      final passed = mockImpl.lastHeaders!;
-      expect(passed['Authorization'], 'Bearer token');
-      expect(passed['X-Custom-Header'], 'custom-value');
-      expect(passed['Accept'], 'application/json');
-    });
-
     test('setMaxRequestsPerHost delegates to interface', () async {
       await httpService.setMaxRequestsPerHost(8);
 
@@ -152,15 +120,16 @@ void main() {
         'tiles.example.com',
         {'X-Custom-Header': 'value'},
       );
-      // ignore: deprecated_member_use
-      await httpService.setCustomHeaders({'X-Global': 'g'});
+      await httpService.setCustomHeadersForHost(
+        'api.example.org',
+        {'X-Global': 'g'},
+      );
 
       // Clearing everything should not throw and should be idempotent.
       await httpService.clearCustomHeaders();
       await httpService.clearCustomHeaders();
 
       expect(mockImpl.hostHeaders, isEmpty);
-      expect(mockImpl.lastHeaders, isNull);
       expect(mockImpl.clearCustomHeadersCallCount, 2);
     });
   });

@@ -1,5 +1,6 @@
 ### main
 
+* Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), and `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`).
 * [web] Add `MapboxMap.snapshot()` support on web. It captures the map's current canvas as PNG-encoded bytes, matching Android and iOS.
 * `tileCover` and `Snapshotter.tileCover` are marked experimental and now return `OverscaledTileID` instead of `CanonicalTileID`, matching the native SDKs. `OverscaledTileID` keeps the canonical tile coordinate in its `canonical` field, and adds `overscaledZ` and `wrap` so callers can distinguish overscaled tiles from their canonical zoom level, and tiles that repeat across the antimeridian.
 * [web] Add `loadStyleJson` support.

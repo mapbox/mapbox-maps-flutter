@@ -8,29 +8,6 @@ class MapboxHttpService {
   @internal
   MapboxHttpService(this._impl);
 
-  /// Sets custom HTTP headers that are attached to every request the map makes,
-  /// regardless of host.
-  ///
-  /// **Warning:** these headers are not restricted to Mapbox hosts — they are
-  /// attached to every outgoing request, including requests to third-party
-  /// hosts referenced by styles, sources, sprites, glyphs and tiles. Placing a
-  /// credential here can therefore leak it to hosts you do not control.
-  ///
-  /// Use [setCustomHeadersForHost] to attach headers to a specific host only.
-  ///
-  /// [headers] is a map of header names to header values. Pass an empty map to
-  /// clear previously set global headers.
-  ///
-  /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails.
-  @Deprecated(
-    'Headers set this way are attached to every host the map fetches from, '
-    'including third-party hosts, which can leak credentials. Use '
-    'setCustomHeadersForHost to scope headers to a specific host.',
-  )
-  Future<void> setCustomHeaders(Map<String, String> headers) =>
-      _impl.setCustomHeaders(headers);
-
   /// Sets custom HTTP headers scoped to a specific [host].
   ///
   /// The headers are attached only to requests whose URL host matches [host]
@@ -51,7 +28,7 @@ class MapboxHttpService {
     Map<String, String> headers,
   ) async => _impl.setCustomHeadersForHost(host, headers);
 
-  /// Removes all custom headers previously configured via [setCustomHeaders] or
+  /// Removes all custom headers previously configured via
   /// [setCustomHeadersForHost].
   ///
   /// Throws a [PlatformException] if the native implementation is not available

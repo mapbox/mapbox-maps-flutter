@@ -568,10 +568,6 @@ struct PointAnnotation {
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   var iconHaloWidth: Double? = nil
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
-  /// Default value: 0. Value range: [0, 1]
-  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
-  var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
   var iconOcclusionOpacity: Double? = nil
@@ -638,19 +634,18 @@ struct PointAnnotation {
     let iconHaloBlur: Double? = nilOrValue(pigeonVar_list[24])
     let iconHaloColor: Int64? = nilOrValue(pigeonVar_list[25])
     let iconHaloWidth: Double? = nilOrValue(pigeonVar_list[26])
-    let iconImageCrossFade: Double? = nilOrValue(pigeonVar_list[27])
-    let iconOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[28])
-    let iconOpacity: Double? = nilOrValue(pigeonVar_list[29])
-    let symbolZOffset: Double? = nilOrValue(pigeonVar_list[30])
-    let textColor: Int64? = nilOrValue(pigeonVar_list[31])
-    let textEmissiveStrength: Double? = nilOrValue(pigeonVar_list[32])
-    let textHaloBlur: Double? = nilOrValue(pigeonVar_list[33])
-    let textHaloColor: Int64? = nilOrValue(pigeonVar_list[34])
-    let textHaloWidth: Double? = nilOrValue(pigeonVar_list[35])
-    let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[36])
-    let textOpacity: Double? = nilOrValue(pigeonVar_list[37])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[38])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[39])
+    let iconOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[27])
+    let iconOpacity: Double? = nilOrValue(pigeonVar_list[28])
+    let symbolZOffset: Double? = nilOrValue(pigeonVar_list[29])
+    let textColor: Int64? = nilOrValue(pigeonVar_list[30])
+    let textEmissiveStrength: Double? = nilOrValue(pigeonVar_list[31])
+    let textHaloBlur: Double? = nilOrValue(pigeonVar_list[32])
+    let textHaloColor: Int64? = nilOrValue(pigeonVar_list[33])
+    let textHaloWidth: Double? = nilOrValue(pigeonVar_list[34])
+    let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[35])
+    let textOpacity: Double? = nilOrValue(pigeonVar_list[36])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[37])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[38])
 
     return PointAnnotation(
       id: id,
@@ -680,7 +675,6 @@ struct PointAnnotation {
       iconHaloBlur: iconHaloBlur,
       iconHaloColor: iconHaloColor,
       iconHaloWidth: iconHaloWidth,
-      iconImageCrossFade: iconImageCrossFade,
       iconOcclusionOpacity: iconOcclusionOpacity,
       iconOpacity: iconOpacity,
       symbolZOffset: symbolZOffset,
@@ -724,7 +718,6 @@ struct PointAnnotation {
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
-      iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
       symbolZOffset,
@@ -818,10 +811,6 @@ struct PointAnnotationOptions {
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   var iconHaloWidth: Double? = nil
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
-  /// Default value: 0. Value range: [0, 1]
-  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
-  var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
   var iconOcclusionOpacity: Double? = nil
@@ -887,19 +876,18 @@ struct PointAnnotationOptions {
     let iconHaloBlur: Double? = nilOrValue(pigeonVar_list[23])
     let iconHaloColor: Int64? = nilOrValue(pigeonVar_list[24])
     let iconHaloWidth: Double? = nilOrValue(pigeonVar_list[25])
-    let iconImageCrossFade: Double? = nilOrValue(pigeonVar_list[26])
-    let iconOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[27])
-    let iconOpacity: Double? = nilOrValue(pigeonVar_list[28])
-    let symbolZOffset: Double? = nilOrValue(pigeonVar_list[29])
-    let textColor: Int64? = nilOrValue(pigeonVar_list[30])
-    let textEmissiveStrength: Double? = nilOrValue(pigeonVar_list[31])
-    let textHaloBlur: Double? = nilOrValue(pigeonVar_list[32])
-    let textHaloColor: Int64? = nilOrValue(pigeonVar_list[33])
-    let textHaloWidth: Double? = nilOrValue(pigeonVar_list[34])
-    let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[35])
-    let textOpacity: Double? = nilOrValue(pigeonVar_list[36])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[37])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[38])
+    let iconOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[26])
+    let iconOpacity: Double? = nilOrValue(pigeonVar_list[27])
+    let symbolZOffset: Double? = nilOrValue(pigeonVar_list[28])
+    let textColor: Int64? = nilOrValue(pigeonVar_list[29])
+    let textEmissiveStrength: Double? = nilOrValue(pigeonVar_list[30])
+    let textHaloBlur: Double? = nilOrValue(pigeonVar_list[31])
+    let textHaloColor: Int64? = nilOrValue(pigeonVar_list[32])
+    let textHaloWidth: Double? = nilOrValue(pigeonVar_list[33])
+    let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[34])
+    let textOpacity: Double? = nilOrValue(pigeonVar_list[35])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[36])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[37])
 
     return PointAnnotationOptions(
       geometry: geometry,
@@ -928,7 +916,6 @@ struct PointAnnotationOptions {
       iconHaloBlur: iconHaloBlur,
       iconHaloColor: iconHaloColor,
       iconHaloWidth: iconHaloWidth,
-      iconImageCrossFade: iconImageCrossFade,
       iconOcclusionOpacity: iconOcclusionOpacity,
       iconOpacity: iconOpacity,
       symbolZOffset: symbolZOffset,
@@ -971,7 +958,6 @@ struct PointAnnotationOptions {
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
-      iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
       symbolZOffset,

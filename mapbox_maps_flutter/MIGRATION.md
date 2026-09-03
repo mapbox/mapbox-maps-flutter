@@ -204,6 +204,44 @@ manager.tapEvents(onTap: (annotation) {
 });
 ```
 
+#### `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` removed
+
+Use `PointAnnotationManager.iconImageCrossFade` instead:
+
+```dart
+// Before (v2)
+final annotation = await manager.create(
+  PointAnnotationOptions(
+    geometry: point,
+    iconImageCrossFade: 0.5,
+  ),
+);
+
+// After (v3)
+final annotation = await manager.create(
+  PointAnnotationOptions(geometry: point),
+);
+await manager.setIconImageCrossFade(0.5);
+```
+
+### HTTP headers
+
+#### `setCustomHeaders` removed
+
+`MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` were removed (they were deprecated in v2). Both attached headers to every host the map fetched from, which could leak credentials to third-party hosts. Use `setCustomHeadersForHost` to scope headers to a specific host:
+
+```dart
+// Before (v2)
+mapboxMap.httpService.setCustomHeaders({
+  'Authorization': 'Bearer your_secret_token',
+});
+
+// After (v3)
+mapboxMap.httpService.setCustomHeadersForHost('tiles.example.com', {
+  'Authorization': 'Bearer your_secret_token',
+});
+```
+
 ### Style
 
 #### Style APIs available directly on `MapboxMap` and `Snapshotter`

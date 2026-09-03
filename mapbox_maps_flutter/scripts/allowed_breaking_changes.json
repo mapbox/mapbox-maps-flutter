@@ -373,6 +373,14 @@
     "reason": "Deprecated in v2, use onMapCreated to get the instance of MapboxMap"
   },
   {
+    "changeDescription": "MapboxMap: Method \"setCustomHeaders\" removed",
+    "reason": "Deprecated in v2, use httpService.setCustomHeadersForHost to scope headers to a specific host"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Method \"setCustomHeaders\" removed",
+    "reason": "Deprecated in v2, use setCustomHeadersForHost to scope headers to a specific host"
+  },
+  {
     "changeDescription": "MapWidget: Field \"onTapListener\" removed",
     "reason": "Deprecated in v2 in favor of Interaction API"
   },

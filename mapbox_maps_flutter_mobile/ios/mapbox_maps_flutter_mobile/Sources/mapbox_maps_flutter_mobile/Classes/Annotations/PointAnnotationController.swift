@@ -1369,9 +1369,6 @@ extension PointAnnotationOptions {
         if let iconHaloWidth {
             annotation.iconHaloWidth = iconHaloWidth
         }
-        if let iconImageCrossFade {
-            annotation.iconImageCrossFade = iconImageCrossFade
-        }
         if let iconOcclusionOpacity {
             annotation.iconOcclusionOpacity = iconOcclusionOpacity
         }
@@ -1491,9 +1488,6 @@ extension PointAnnotation {
         if let iconHaloWidth {
             annotation.iconHaloWidth = iconHaloWidth
         }
-        if let iconImageCrossFade {
-            annotation.iconImageCrossFade = iconImageCrossFade
-        }
         if let iconOcclusionOpacity {
             annotation.iconOcclusionOpacity = iconOcclusionOpacity
         }
@@ -1564,7 +1558,6 @@ extension MapboxMaps.PointAnnotation {
             iconHaloBlur: iconHaloBlur,
             iconHaloColor: iconHaloColor?.intValue,
             iconHaloWidth: iconHaloWidth,
-            iconImageCrossFade: iconImageCrossFade,
             iconOcclusionOpacity: iconOcclusionOpacity,
             iconOpacity: iconOpacity,
             symbolZOffset: symbolZOffset,

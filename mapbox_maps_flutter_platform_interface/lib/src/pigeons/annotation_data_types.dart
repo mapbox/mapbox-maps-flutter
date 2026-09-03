@@ -759,7 +759,6 @@ class PointAnnotation {
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
-    this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
     this.symbolZOffset,
@@ -878,11 +877,6 @@ class PointAnnotation {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   double? iconHaloWidth;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
-  /// Default value: 0. Value range: [0, 1]
-  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
-  double? iconImageCrossFade;
-
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
   double? iconOcclusionOpacity;
@@ -959,7 +953,6 @@ class PointAnnotation {
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
-      iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
       symbolZOffset,
@@ -1009,19 +1002,18 @@ class PointAnnotation {
       iconHaloBlur: result[24] as double?,
       iconHaloColor: result[25] as int?,
       iconHaloWidth: result[26] as double?,
-      iconImageCrossFade: result[27] as double?,
-      iconOcclusionOpacity: result[28] as double?,
-      iconOpacity: result[29] as double?,
-      symbolZOffset: result[30] as double?,
-      textColor: result[31] as int?,
-      textEmissiveStrength: result[32] as double?,
-      textHaloBlur: result[33] as double?,
-      textHaloColor: result[34] as int?,
-      textHaloWidth: result[35] as double?,
-      textOcclusionOpacity: result[36] as double?,
-      textOpacity: result[37] as double?,
-      isDraggable: result[38] as bool?,
-      customData: (result[39] as Map<Object?, Object?>?)
+      iconOcclusionOpacity: result[27] as double?,
+      iconOpacity: result[28] as double?,
+      symbolZOffset: result[29] as double?,
+      textColor: result[30] as int?,
+      textEmissiveStrength: result[31] as double?,
+      textHaloBlur: result[32] as double?,
+      textHaloColor: result[33] as int?,
+      textHaloWidth: result[34] as double?,
+      textOcclusionOpacity: result[35] as double?,
+      textOpacity: result[36] as double?,
+      isDraggable: result[37] as bool?,
+      customData: (result[38] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -1062,7 +1054,6 @@ class PointAnnotation {
         iconHaloBlur == other.iconHaloBlur &&
         iconHaloColor == other.iconHaloColor &&
         iconHaloWidth == other.iconHaloWidth &&
-        iconImageCrossFade == other.iconImageCrossFade &&
         iconOcclusionOpacity == other.iconOcclusionOpacity &&
         iconOpacity == other.iconOpacity &&
         symbolZOffset == other.symbolZOffset &&
@@ -1110,7 +1101,6 @@ class PointAnnotationOptions {
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
-    this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
     this.symbolZOffset,
@@ -1226,11 +1216,6 @@ class PointAnnotationOptions {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   double? iconHaloWidth;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
-  /// Default value: 0. Value range: [0, 1]
-  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
-  double? iconImageCrossFade;
-
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
   double? iconOcclusionOpacity;
@@ -1306,7 +1291,6 @@ class PointAnnotationOptions {
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
-      iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
       symbolZOffset,
@@ -1355,19 +1339,18 @@ class PointAnnotationOptions {
       iconHaloBlur: result[23] as double?,
       iconHaloColor: result[24] as int?,
       iconHaloWidth: result[25] as double?,
-      iconImageCrossFade: result[26] as double?,
-      iconOcclusionOpacity: result[27] as double?,
-      iconOpacity: result[28] as double?,
-      symbolZOffset: result[29] as double?,
-      textColor: result[30] as int?,
-      textEmissiveStrength: result[31] as double?,
-      textHaloBlur: result[32] as double?,
-      textHaloColor: result[33] as int?,
-      textHaloWidth: result[34] as double?,
-      textOcclusionOpacity: result[35] as double?,
-      textOpacity: result[36] as double?,
-      isDraggable: result[37] as bool?,
-      customData: (result[38] as Map<Object?, Object?>?)
+      iconOcclusionOpacity: result[26] as double?,
+      iconOpacity: result[27] as double?,
+      symbolZOffset: result[28] as double?,
+      textColor: result[29] as int?,
+      textEmissiveStrength: result[30] as double?,
+      textHaloBlur: result[31] as double?,
+      textHaloColor: result[32] as int?,
+      textHaloWidth: result[33] as double?,
+      textOcclusionOpacity: result[34] as double?,
+      textOpacity: result[35] as double?,
+      isDraggable: result[36] as bool?,
+      customData: (result[37] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -1407,7 +1390,6 @@ class PointAnnotationOptions {
         iconHaloBlur == other.iconHaloBlur &&
         iconHaloColor == other.iconHaloColor &&
         iconHaloWidth == other.iconHaloWidth &&
-        iconImageCrossFade == other.iconImageCrossFade &&
         iconOcclusionOpacity == other.iconOcclusionOpacity &&
         iconOpacity == other.iconOpacity &&
         symbolZOffset == other.symbolZOffset &&

@@ -745,12 +745,6 @@ data class PointAnnotation(
    */
   val iconHaloWidth: Double? = null,
   /**
-   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
-   * Default value: 0. Value range: [0, 1]
-   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
-   */
-  val iconImageCrossFade: Double? = null,
-  /**
    * The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
    * Default value: 0. Value range: [0, 1]
    */
@@ -835,20 +829,19 @@ data class PointAnnotation(
       val iconHaloBlur = pigeonVar_list[24] as Double?
       val iconHaloColor = pigeonVar_list[25] as Long?
       val iconHaloWidth = pigeonVar_list[26] as Double?
-      val iconImageCrossFade = pigeonVar_list[27] as Double?
-      val iconOcclusionOpacity = pigeonVar_list[28] as Double?
-      val iconOpacity = pigeonVar_list[29] as Double?
-      val symbolZOffset = pigeonVar_list[30] as Double?
-      val textColor = pigeonVar_list[31] as Long?
-      val textEmissiveStrength = pigeonVar_list[32] as Double?
-      val textHaloBlur = pigeonVar_list[33] as Double?
-      val textHaloColor = pigeonVar_list[34] as Long?
-      val textHaloWidth = pigeonVar_list[35] as Double?
-      val textOcclusionOpacity = pigeonVar_list[36] as Double?
-      val textOpacity = pigeonVar_list[37] as Double?
-      val isDraggable = pigeonVar_list[38] as Boolean?
-      val customData = pigeonVar_list[39] as Map<String, Any>?
-      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
+      val iconOcclusionOpacity = pigeonVar_list[27] as Double?
+      val iconOpacity = pigeonVar_list[28] as Double?
+      val symbolZOffset = pigeonVar_list[29] as Double?
+      val textColor = pigeonVar_list[30] as Long?
+      val textEmissiveStrength = pigeonVar_list[31] as Double?
+      val textHaloBlur = pigeonVar_list[32] as Double?
+      val textHaloColor = pigeonVar_list[33] as Long?
+      val textHaloWidth = pigeonVar_list[34] as Double?
+      val textOcclusionOpacity = pigeonVar_list[35] as Double?
+      val textOpacity = pigeonVar_list[36] as Double?
+      val isDraggable = pigeonVar_list[37] as Boolean?
+      val customData = pigeonVar_list[38] as Map<String, Any>?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -880,7 +873,6 @@ data class PointAnnotation(
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
-      iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
       symbolZOffset,
@@ -929,7 +921,6 @@ data class PointAnnotation(
       iconHaloBlur == other.iconHaloBlur &&
       iconHaloColor == other.iconHaloColor &&
       iconHaloWidth == other.iconHaloWidth &&
-      iconImageCrossFade == other.iconImageCrossFade &&
       iconOcclusionOpacity == other.iconOcclusionOpacity &&
       iconOpacity == other.iconOpacity &&
       symbolZOffset == other.symbolZOffset &&
@@ -1071,12 +1062,6 @@ data class PointAnnotationOptions(
    */
   val iconHaloWidth: Double? = null,
   /**
-   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
-   * Default value: 0. Value range: [0, 1]
-   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
-   */
-  val iconImageCrossFade: Double? = null,
-  /**
    * The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
    * Default value: 0. Value range: [0, 1]
    */
@@ -1160,20 +1145,19 @@ data class PointAnnotationOptions(
       val iconHaloBlur = pigeonVar_list[23] as Double?
       val iconHaloColor = pigeonVar_list[24] as Long?
       val iconHaloWidth = pigeonVar_list[25] as Double?
-      val iconImageCrossFade = pigeonVar_list[26] as Double?
-      val iconOcclusionOpacity = pigeonVar_list[27] as Double?
-      val iconOpacity = pigeonVar_list[28] as Double?
-      val symbolZOffset = pigeonVar_list[29] as Double?
-      val textColor = pigeonVar_list[30] as Long?
-      val textEmissiveStrength = pigeonVar_list[31] as Double?
-      val textHaloBlur = pigeonVar_list[32] as Double?
-      val textHaloColor = pigeonVar_list[33] as Long?
-      val textHaloWidth = pigeonVar_list[34] as Double?
-      val textOcclusionOpacity = pigeonVar_list[35] as Double?
-      val textOpacity = pigeonVar_list[36] as Double?
-      val isDraggable = pigeonVar_list[37] as Boolean?
-      val customData = pigeonVar_list[38] as Map<String, Any>?
-      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
+      val iconOcclusionOpacity = pigeonVar_list[26] as Double?
+      val iconOpacity = pigeonVar_list[27] as Double?
+      val symbolZOffset = pigeonVar_list[28] as Double?
+      val textColor = pigeonVar_list[29] as Long?
+      val textEmissiveStrength = pigeonVar_list[30] as Double?
+      val textHaloBlur = pigeonVar_list[31] as Double?
+      val textHaloColor = pigeonVar_list[32] as Long?
+      val textHaloWidth = pigeonVar_list[33] as Double?
+      val textOcclusionOpacity = pigeonVar_list[34] as Double?
+      val textOpacity = pigeonVar_list[35] as Double?
+      val isDraggable = pigeonVar_list[36] as Boolean?
+      val customData = pigeonVar_list[37] as Map<String, Any>?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -1204,7 +1188,6 @@ data class PointAnnotationOptions(
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
-      iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
       symbolZOffset,
@@ -1252,7 +1235,6 @@ data class PointAnnotationOptions(
       iconHaloBlur == other.iconHaloBlur &&
       iconHaloColor == other.iconHaloColor &&
       iconHaloWidth == other.iconHaloWidth &&
-      iconImageCrossFade == other.iconImageCrossFade &&
       iconOcclusionOpacity == other.iconOcclusionOpacity &&
       iconOpacity == other.iconOpacity &&
       symbolZOffset == other.symbolZOffset &&

@@ -20,10 +20,6 @@ class MapWidget extends StatefulWidget {
   const MapWidget({
     super.key,
     this.mapOptions,
-    @Deprecated(
-      'Use [viewport] to specify the camera position and behavior of the map',
-    )
-    this.cameraOptions,
     this.textureView = false,
     required this.androidHostingMode,
     this.gestureRecognizers,
@@ -56,12 +52,6 @@ class MapWidget extends StatefulWidget {
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
-
-  /// The Initial Camera options when creating a MapWidget.
-  @Deprecated(
-    'This will be removed in future major version, use [viewport] instead',
-  )
-  final CameraOptions? cameraOptions;
 
   /// Flag indicating to use a TextureView as render surface for the MapWidget.
   /// Only works for Android.
@@ -179,11 +169,6 @@ class MapWidget extends StatefulWidget {
 
   @override
   State createState() => _MapWidgetState();
-
-  @Deprecated(
-    'Subscribe to onMapCreated to receive an instance of MapboxMap instead',
-  )
-  MapboxMap? getMapboxMap() => null;
 }
 
 class _MapWidgetState extends State<MapWidget> {
@@ -200,7 +185,6 @@ class _MapWidgetState extends State<MapWidget> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = <String, dynamic>{
       'mapOptions': widget.mapOptions,
-      'cameraOptions': null,
       'textureView': widget.textureView,
       'styleUri': widget._styleUri,
       'channelSuffix': _mapboxMapsPlatform.channelSuffix,

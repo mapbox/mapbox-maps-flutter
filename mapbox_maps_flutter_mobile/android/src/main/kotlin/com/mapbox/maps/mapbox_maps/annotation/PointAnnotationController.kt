@@ -267,9 +267,6 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.iconHaloWidth?.let {
       originalAnnotation.iconHaloWidth = it
     }
-    annotation.iconImageCrossFade?.let {
-      originalAnnotation.iconImageCrossFade = it
-    }
     annotation.iconOcclusionOpacity?.let {
       originalAnnotation.iconOcclusionOpacity = it
     }
@@ -1906,7 +1903,6 @@ fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnota
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     iconHaloColor = iconHaloColorInt?.toUInt()?.toLong(),
     iconHaloWidth = iconHaloWidth,
-    iconImageCrossFade = iconImageCrossFade,
     iconOcclusionOpacity = iconOcclusionOpacity,
     iconOpacity = iconOpacity,
     symbolZOffset = symbolZOffset,
@@ -2005,9 +2001,6 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   }
   this.iconHaloWidth?.let {
     options.withIconHaloWidth(it)
-  }
-  this.iconImageCrossFade?.let {
-    options.withIconImageCrossFade(it)
   }
   this.iconOcclusionOpacity?.let {
     options.withIconOcclusionOpacity(it)

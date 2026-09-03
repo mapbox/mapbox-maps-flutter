@@ -574,27 +574,6 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   void stopPerformanceStatisticsCollection() =>
       _impl.stopPerformanceStatisticsCollection();
 
-  // ===== Custom headers =====
-
-  /// Set custom headers for all Mapbox HTTP requests
-  ///
-  /// [headers] is a map of header names to header values
-  ///
-  /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails
-  ///
-  /// Example:
-  /// ```dart
-  /// MapboxMap.setCustomHeaders({
-  ///   "Authorization": "Bearer your_secret_token",
-  /// });
-  /// ```
-  ///
-  /// Throws a [PlatformException] if the native implementation is not available
-  /// or if the operation fails
-  Future<void> setCustomHeaders(Map<String, String> headers) =>
-      httpService.setCustomHeaders(headers);
-
   // ===== Debug options =====
 
   /// Returns the currently-enabled widget debug options for this map.
