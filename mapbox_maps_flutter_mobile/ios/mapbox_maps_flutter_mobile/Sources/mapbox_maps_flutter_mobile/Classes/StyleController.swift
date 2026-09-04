@@ -2,6 +2,32 @@
 import Foundation
 import Flutter
 
+// `StyleImageWireRgba.pixels` must be raw, premultiplied RGBA bytes: 4 bytes per
+// pixel, R then G then B then A, row by row, with no padding. `.premultipliedLast`
+// combined with `.byteOrder32Big` is what makes a `CGContext` write pixels in
+// that exact byte order instead of the host's native (reversed) order.
+private func rawRGBAPremultipliedData(from image: UIImage) -> Data? {
+    guard let cgImage = image.cgImage else { return nil }
+    let width = Int(image.size.width * image.scale)
+    let height = Int(image.size.height * image.scale)
+    guard width > 0, height > 0 else { return nil }
+
+    let bytesPerRow = width * 4
+    var rawBytes = [UInt8](repeating: 0, count: height * bytesPerRow)
+    let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
+    guard let context = CGContext(data: &rawBytes,
+                                   width: width,
+                                   height: height,
+                                   bitsPerComponent: 8,
+                                   bytesPerRow: bytesPerRow,
+                                   space: CGColorSpaceCreateDeviceRGB(),
+                                   bitmapInfo: bitmapInfo) else {
+        return nil
+    }
+    context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+    return Data(rawBytes)
+}
+
 final class StyleController: StyleManager {
     private static let errorCode = "0"
 
@@ -225,8 +251,8 @@ final class StyleController: StyleManager {
         completion(.success(()))
     }
 
-    func updateStyleImageSourceImage(sourceId: String, image: MbxImage, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let image = UIImage(data: image.data.data, scale: UIScreen.main.scale) else {
+    func updateStyleImageSourceImage(sourceId: String, image: StyleImageWire, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let image = image.toUIImage(scale: UIScreen.main.scale) else {
             completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not initialize the image from the specified data.", details: nil)))
             return
         }
@@ -284,21 +310,24 @@ final class StyleController: StyleManager {
         }
     }
 
-    func getStyleImage(imageId: String, completion: @escaping (Result<MbxImage?, Error>) -> Void) {
+    func getStyleImage(imageId: String, completion: @escaping (Result<StyleImageWireRgba?, Error>) -> Void) {
         guard let image = styleManager.image(withId: imageId) else {
             completion(.success(nil))
             return
         }
 
-        let data = FlutterStandardTypedData(bytes: image.pngData()!)
+        guard let rawData = rawRGBAPremultipliedData(from: image) else {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not read pixel data from the style image.", details: nil)))
+            return
+        }
 
-        completion(.success(MbxImage(width: Int64(image.size.width * image.scale),
+        completion(.success(StyleImageWireRgba(width: Int64(image.size.width * image.scale),
                                     height: Int64(image.size.height * image.scale),
-                                    data: data)))
+                                    pixels: FlutterStandardTypedData(bytes: rawData))))
     }
 
-    func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let image = UIImage(data: image.data.data, scale: scale) else {
+    func addStyleImage(imageId: String, scale: Double, image: StyleImageWire, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let image = image.toUIImage(scale: scale) else {
             completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not initialize the image from the specified data.", details: nil)))
             return
         }

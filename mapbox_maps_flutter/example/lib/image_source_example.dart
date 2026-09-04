@@ -15,13 +15,13 @@ class ImageSourceExample extends StatefulWidget {
 class ImageSourceExampleState extends State<ImageSourceExample> {
   MapboxMap? mapboxMap;
 
-  _onMapCreated(MapboxMap mapboxMap) async {
+  Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     mapboxMap.setStyleImportConfigProperty("basemap", "lightPreset", "night");
     mapboxMap.setStyleImportConfigProperty("basemap", "theme", "monochrome");
   }
 
-  _onStyleLoaded(StyleLoadedEventData data) async {
+  Future<void> _onStyleLoaded(StyleLoadedEventData data) async {
     await mapboxMap?.addSource(
       ImageSource(
         id: "image_source-id",
@@ -46,12 +46,12 @@ class ImageSourceExampleState extends State<ImageSourceExample> {
         await mapboxMap?.getSource("image_source-id") as ImageSource;
     final ByteData bytes = await rootBundle.load('assets/miami_beach.png');
     final Uint8List list = bytes.buffer.asUint8List();
-    imageSource.updateImage(MbxImage(width: 280, height: 203, data: list));
+    await imageSource.updateStyleImage(StyleImage.bytes(list));
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: MapWidget(
         key: ValueKey("mapWidget"),
         styleUri: MapboxStyles.STANDARD,

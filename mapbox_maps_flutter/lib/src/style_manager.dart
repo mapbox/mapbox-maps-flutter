@@ -232,10 +232,10 @@ base class StyleManager {
   /// Adds an image to the style. Existing images with the same [imageId] are
   /// replaced. [stretchX] and [stretchY] default to empty lists; [content]
   /// and [sdf] to null/false — mirroring the most common usage.
-  Future<void> addStyleImage(
+  Future<void> addImage(
     String imageId,
     double scale,
-    MbxImage image, {
+    StyleImage image, {
     bool sdf = false,
     List<ImageStretches?> stretchX = const <ImageStretches?>[],
     List<ImageStretches?> stretchY = const <ImageStretches?>[],
@@ -250,9 +250,40 @@ base class StyleManager {
     content,
   );
 
+  /// Adds an image to the style.
+  ///
+  /// Prefer [addImage] with a [StyleImage].
+  @Deprecated('Use addImage with StyleImage.bytes or StyleImage.rgba.')
+  Future<void> addStyleImage(
+    String imageId,
+    double scale,
+    MbxImage image, {
+    bool sdf = false,
+    List<ImageStretches?> stretchX = const <ImageStretches?>[],
+    List<ImageStretches?> stretchY = const <ImageStretches?>[],
+    ImageContent? content,
+  }) => _impl.addStyleImage(
+    imageId,
+    scale,
+    image.toStyleImage(),
+    sdf,
+    stretchX,
+    stretchY,
+    content,
+  );
+
   /// Replaces the image data of an existing image-type style source.
-  Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image) =>
+  Future<void> updateImageForSource(String sourceId, StyleImage image) =>
       _impl.updateStyleImageSourceImage(sourceId, image);
+
+  /// Replaces the image data of an existing image-type style source.
+  ///
+  /// Prefer [updateImageForSource] with a [StyleImage].
+  @Deprecated(
+    'Use updateImageForSource with StyleImage.bytes or StyleImage.rgba.',
+  )
+  Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image) =>
+      _impl.updateStyleImageSourceImage(sourceId, image.toStyleImage());
 
   /// Removes a style image.
   Future<void> removeStyleImage(String imageId) =>
@@ -308,8 +339,15 @@ base class StyleManager {
   // ===== Image lookup =====
 
   /// Returns a previously-added style image, or null when [imageId] is unknown.
-  Future<MbxImage?> getStyleImage(String imageId) =>
+  Future<StyleImageRgba?> getImage(String imageId) =>
       _impl.getStyleImage(imageId);
+
+  /// Returns a previously-added style image, or null when [imageId] is unknown.
+  ///
+  /// Prefer [getImage], which returns a [StyleImageRgba].
+  @Deprecated('Use getImage, which returns StyleImageRgba.')
+  Future<MbxImage?> getStyleImage(String imageId) async =>
+      (await _impl.getStyleImage(imageId))?.toMbxImage();
 
   // ===== Custom geometry source invalidation =====
 

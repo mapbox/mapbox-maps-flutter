@@ -3,6 +3,10 @@
 * Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), and `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`).
 * [web] Add `MapboxMap.snapshot()` support on web. It captures the map's current canvas as PNG-encoded bytes, matching Android and iOS.
 * `tileCover` and `Snapshotter.tileCover` are marked experimental and now return `OverscaledTileID` instead of `CanonicalTileID`, matching the native SDKs. `OverscaledTileID` keeps the canonical tile coordinate in its `canonical` field, and adds `overscaledZ` and `wrap` so callers can distinguish overscaled tiles from their canonical zoom level, and tiles that repeat across the antimeridian.
+* Introduce `StyleImage` (`.bytes` for PNG/JPEG/WebP, `.rgba` for premultiplied pixels) and prefer it via `addImage`, `updateImageForSource`, and `getImage`. Deprecate the `MbxImage`-based `addStyleImage`, `updateStyleImageSourceImage`, and `getStyleImage` wrappers. Style image add/has/remove is implemented on web; `getImage` and image-source updates remain mobile-only for now.
+* `getStyleImage` (and the deprecated `getStyleImage`/`getImage` wrappers built on it) now return raw premultiplied RGBA pixel data instead of a PNG-encoded image, matching Android's existing behavior. Code that decoded the returned `data` as PNG must decode it as raw RGBA instead.
+* `MbxImage` is deprecated and slated for removal in a future release. Use `StyleImage` instead.
+* Add `StyleImage.fromImage` to build a `StyleImage` from a `dart:ui` `Image` (for example one produced by a `CustomPainter` or `Canvas.toImage`)
 * [web] Add `loadStyleJson` support.
 
 ### 3.0.0-alpha.29

@@ -82,30 +82,25 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          CanonicalTileID.fromList(it)
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
-        }
-      }
-      141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           OverscaledTileID.fromList(it)
         }
       }
-      142.toByte() -> {
+      141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapSnapshotOptions.fromList(it)
         }
@@ -147,28 +142,24 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationOptions -> {
+      is TileCoverOptions -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is CanonicalTileID -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is OverscaledTileID -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is OverscaledTileID -> {
-        stream.write(141)
-        writeValue(stream, value.toList())
-      }
       is MapSnapshotOptions -> {
-        stream.write(142)
+        stream.write(141)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

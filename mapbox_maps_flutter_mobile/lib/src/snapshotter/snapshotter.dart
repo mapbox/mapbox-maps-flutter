@@ -10,7 +10,7 @@ final _SnapshotterInstanceManager _snapshotterInstanceManager =
 final class Snapshotter implements SnapshotterPlatformInterface {
   /// A `style` object that can be manipulated to set different styles for a snapshot.
   @override
-  late StyleManager style;
+  late StyleController style;
 
   /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.
   @override
@@ -54,7 +54,9 @@ final class Snapshotter implements SnapshotterPlatformInterface {
     _snapshotterMessenger = _SnapshotterMessenger(
       messageChannelSuffix: _suffix.toString(),
     );
-    style = StyleManager(messageChannelSuffix: _suffix.toString());
+    style = StyleController(
+      StyleManager(messageChannelSuffix: _suffix.toString()),
+    );
     _mapEvents = _MapEvents(channelSuffix: _suffix.toString());
   }
 

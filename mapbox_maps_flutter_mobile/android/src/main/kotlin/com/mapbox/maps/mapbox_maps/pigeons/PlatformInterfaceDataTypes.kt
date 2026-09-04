@@ -2215,6 +2215,8 @@ data class StylePropertyValue(
 /**
  * Image type.
  *
+ * Deprecated: Use `StyleImage` instead.
+ *
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class MbxImage(

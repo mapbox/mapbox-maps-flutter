@@ -68,10 +68,10 @@ class StyleExampleState extends State<StyleExample> {
         'assets/symbols/custom-icon.png',
       );
       final Uint8List list = bytes.buffer.asUint8List();
-      await map.addStyleImage(
+      await map.addImage(
         "icon",
         1.0,
-        MbxImage(width: 40, height: 40, data: list),
+        StyleImage.bytes(list),
         sdf: true,
         stretchX: [],
         stretchY: [],
@@ -480,12 +480,12 @@ class StyleExampleState extends State<StyleExample> {
     return TextButton(
       child: Text('hasImageIcon'),
       onPressed: () {
-        mapboxMap?.getStyleImage("icon").then((value) {
+        mapboxMap?.getImage("icon").then((value) {
+          final width = value?.width;
+          final height = value?.height;
           return ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                "icon width: ${value?.width}, icon height: ${value?.height}",
-              ),
+              content: Text("icon width: $width, icon height: $height"),
               backgroundColor: Theme.of(context).primaryColor,
               duration: Duration(seconds: 1),
             ),

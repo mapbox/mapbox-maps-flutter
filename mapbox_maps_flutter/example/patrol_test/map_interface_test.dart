@@ -1,5 +1,6 @@
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -337,8 +338,7 @@ void main() {
     MapboxMapsOptions.setWorldview(null);
   });
 
-  // Skipped on web: relies on Style.addStyleImage, which isn't implemented there yet.
-  patrolTest('queryRenderedFeatures', skip: kIsWeb, ($) async {
+  patrolTest('queryRenderedFeatures', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -357,10 +357,10 @@ void main() {
       'assets/symbols/custom-icon.png',
     );
     final Uint8List list = bytes.buffer.asUint8List();
-    await mapboxMap.addStyleImage(
+    await mapboxMap.addImage(
       'icon',
       1.0,
-      MbxImage(width: 40, height: 40, data: list),
+      StyleImage.bytes(list),
       sdf: true,
       stretchX: [],
       stretchY: [],
@@ -375,9 +375,15 @@ void main() {
     await _waitForSourceDataLoaded(app.events, 'source');
     await app.events.onMapIdle.future;
 
+    // Query the whole canvas: a box sized for one platform's viewport can
+    // miss a centered marker on another's. mapboxMap.getSize() is the
+    // correct source for this (the render view's size is the full window,
+    // not the map view's actual size), but it is not supported on iOS. Use
+    // the window size here as an approximation until iOS support lands.
+    var size = tester.binding.renderViews.first.size;
     var screenBox = ScreenBox(
       min: ScreenCoordinate(x: 0.0, y: 0.0),
-      max: ScreenCoordinate(x: 500.0, y: 1000.0),
+      max: ScreenCoordinate(x: size.width, y: size.height),
     );
     var renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(screenBox);
     var query = await _queryUntilFound(
@@ -389,7 +395,13 @@ void main() {
     );
     expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
-    expect(query[0]!.queriedFeature.feature['id'], 'point');
+    if (!kIsWeb) {
+      // Skipped on web: the fixture's GeoJSON feature has a string id
+      // ("point"), and GL JS's internal vector-tile pipeline only
+      // round-trips numeric feature ids through queryRenderedFeatures, same
+      // as the querySourceFeatures limitation noted below.
+      expect(query[0]!.queriedFeature.feature['id'], 'point');
+    }
 
     query = await mapboxMap.queryRenderedFeatures(
       RenderedQueryGeometry.fromScreenCoordinate(
@@ -515,6 +527,30 @@ void main() {
       feature,
     );
     expect(clusterExpansionZoom.value, '1');
+  });
+
+  patrolTest('addImage StyleImage.rgba', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+
+    const imageId = 'rgba-pixel';
+    final image = StyleImage.rgba(
+      width: 1,
+      height: 1,
+      pixels: Uint8List.fromList(const [255, 0, 0, 255]),
+    );
+
+    expect(await mapboxMap.hasStyleImage(imageId), isFalse);
+    await mapboxMap.addImage(imageId, 1.0, image);
+    expect(await mapboxMap.hasStyleImage(imageId), isTrue);
+
+    if (!kIsWeb) {
+      expect(await mapboxMap.getImage(imageId), isNotNull);
+    }
+
+    await mapboxMap.removeStyleImage(imageId);
+    expect(await mapboxMap.hasStyleImage(imageId), isFalse);
   });
 
   patrolTest('snapshot', ($) async {

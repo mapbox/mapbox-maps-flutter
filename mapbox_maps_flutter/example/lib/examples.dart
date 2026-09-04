@@ -14,6 +14,7 @@ import 'draggable-annotations-example.dart';
 import 'edit_polygon_example.dart';
 import 'full_map_example.dart';
 import 'geojson_line_example.dart';
+import 'generated_style_image_example.dart';
 import 'gestures_example.dart';
 import 'image_source_example.dart';
 import 'location_example.dart';
@@ -131,6 +132,14 @@ final List<Example> examples = [
     leading: const Icon(Icons.map),
     title: 'Style interface',
     builder: (_) => const StyleExample(),
+  ),
+  Example(
+    leading: const Icon(Icons.gradient),
+    title: 'Style images (RGBA & bytes)',
+    subtitle:
+        'Add icons with both StyleImage.rgba and StyleImage.bytes, '
+        'and verify hasStyleImage/getImage.',
+    builder: (_) => const GeneratedStyleImageExample(),
   ),
   Example(
     leading: const Icon(Icons.touch_app),

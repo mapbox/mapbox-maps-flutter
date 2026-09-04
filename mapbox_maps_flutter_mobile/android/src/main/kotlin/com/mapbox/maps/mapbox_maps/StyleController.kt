@@ -2,12 +2,8 @@ package com.mapbox.maps.mapbox_maps
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
-import com.mapbox.maps.Image
 import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.RuntimeStylingOptions
 import com.mapbox.maps.extension.localization.localizeLabels
@@ -25,14 +21,14 @@ import com.mapbox.maps.mapbox_maps.pigeons.ImageContent
 import com.mapbox.maps.mapbox_maps.pigeons.ImageStretches
 import com.mapbox.maps.mapbox_maps.pigeons.ImportPosition
 import com.mapbox.maps.mapbox_maps.pigeons.LayerPosition
-import com.mapbox.maps.mapbox_maps.pigeons.MbxImage
+import com.mapbox.maps.mapbox_maps.pigeons.StyleImageWire
+import com.mapbox.maps.mapbox_maps.pigeons.StyleImageWireRgba
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons.StyleObjectInfo
 import com.mapbox.maps.mapbox_maps.pigeons.StyleProjection
 import com.mapbox.maps.mapbox_maps.pigeons.StylePropertyValue
 import com.mapbox.maps.mapbox_maps.pigeons.StylePropertyValueKind
 import com.mapbox.maps.mapbox_maps.pigeons.TransitionOptions
-import java.nio.ByteBuffer
 import java.util.Locale
 
 class StyleController(private val context: Context, private val styleManager: MapboxStyleManager) :
@@ -472,28 +468,16 @@ class StyleController(private val context: Context, private val styleManager: Ma
 
   override fun updateStyleImageSourceImage(
     sourceId: String,
-    image: MbxImage,
+    image: StyleImageWire,
     callback: (Result<Unit>) -> Unit
   ) {
-    var bitmap = BitmapFactory.decodeByteArray(
-      image.data,
-      0,
-      image.data.size
-    )
-    if (bitmap.config != Bitmap.Config.ARGB_8888) {
-      bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
+    val mapboxImage = try {
+      image.toMapboxImage()
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+      return
     }
-    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
-    bitmap.copyPixelsToBuffer(byteBuffer)
-
-    val expected = styleManager.updateStyleImageSourceImage(
-      sourceId,
-      Image(
-        image.width.toInt(),
-        image.height.toInt(),
-        DataRef(byteBuffer)
-      )
-    )
+    val expected = styleManager.updateStyleImageSourceImage(sourceId, mapboxImage)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -608,7 +592,7 @@ class StyleController(private val context: Context, private val styleManager: Ma
     }
   }
 
-  override fun getStyleImage(imageId: String, callback: (Result<MbxImage?>) -> Unit) {
+  override fun getStyleImage(imageId: String, callback: (Result<StyleImageWireRgba?>) -> Unit) {
     val image = styleManager.getStyleImage(imageId)
 
     if (image == null) {
@@ -621,7 +605,7 @@ class StyleController(private val context: Context, private val styleManager: Ma
     buffer.get(byteArray)
     callback(
       Result.success(
-        MbxImage(width = image.width.toLong(), height = image.height.toLong(), data = byteArray)
+        StyleImageWireRgba(width = image.width.toLong(), height = image.height.toLong(), pixels = byteArray)
       )
     )
   }
@@ -705,30 +689,22 @@ class StyleController(private val context: Context, private val styleManager: Ma
   override fun addStyleImage(
     imageId: String,
     scale: Double,
-    image: MbxImage,
+    image: StyleImageWire,
     sdf: Boolean,
     stretchX: List<ImageStretches?>,
     stretchY: List<ImageStretches?>,
     content: ImageContent?,
     callback: (Result<Unit>) -> Unit
   ) {
-    var bitmap = BitmapFactory.decodeByteArray(
-      image.data,
-      0,
-      image.data.size
-    )
-    if (bitmap.config != Bitmap.Config.ARGB_8888) {
-      bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
+    val mapboxImage = try {
+      image.toMapboxImage()
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+      return
     }
-    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
-    bitmap.copyPixelsToBuffer(byteBuffer)
     val expected = styleManager.addStyleImage(
       imageId, scale.toFloat(),
-      Image(
-        image.width.toInt(),
-        image.height.toInt(),
-        DataRef(byteBuffer)
-      ),
+      mapboxImage,
       sdf,
       stretchX.map {
         com.mapbox.maps.ImageStretches(

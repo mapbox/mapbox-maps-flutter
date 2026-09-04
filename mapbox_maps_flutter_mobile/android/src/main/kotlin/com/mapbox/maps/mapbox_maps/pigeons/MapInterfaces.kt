@@ -684,32 +684,37 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          CanonicalTileID.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          OverscaledTileID.fromList(it)
         }
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OverscaledTileID.fromList(it)
+          StylePropertyValue.fromList(it)
         }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
+          StyleImageWireBytes.fromList(it)
+        }
+      }
+      199.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StyleImageWireRgba.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -973,28 +978,32 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is ImageStretches -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is ImageContent -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is CanonicalTileID -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is OverscaledTileID -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is OverscaledTileID -> {
+      is StylePropertyValue -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is StyleImageWireBytes -> {
         stream.write(198)
+        writeValue(stream, value.toList())
+      }
+      is StyleImageWireRgba -> {
+        stream.write(199)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3736,7 +3745,7 @@ interface StyleManager {
    *
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
-  fun updateStyleImageSourceImage(sourceId: String, image: MbxImage, callback: (Result<Unit>) -> Unit)
+  fun updateStyleImageSourceImage(sourceId: String, image: StyleImageWire, callback: (Result<Unit>) -> Unit)
   /**
    * Removes an existing style source.
    *
@@ -3821,7 +3830,7 @@ interface StyleManager {
    *
    * @return The `image` for the given `imageId`, or empty if no image is associated with the `imageId`.
    */
-  fun getStyleImage(imageId: String, callback: (Result<MbxImage?>) -> Unit)
+  fun getStyleImage(imageId: String, callback: (Result<StyleImageWireRgba?>) -> Unit)
   /**
    * Adds an image to be used in the style. This API can also be used for updating
    * an image. If the image for a given `imageId` was already added, it gets replaced by the new image.
@@ -3845,7 +3854,7 @@ interface StyleManager {
    *
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
-  fun addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Boolean, stretchX: List<ImageStretches?>, stretchY: List<ImageStretches?>, content: ImageContent?, callback: (Result<Unit>) -> Unit)
+  fun addStyleImage(imageId: String, scale: Double, image: StyleImageWire, sdf: Boolean, stretchX: List<ImageStretches?>, stretchY: List<ImageStretches?>, content: ImageContent?, callback: (Result<Unit>) -> Unit)
   /**
    * Removes an image from the style.
    *
@@ -4700,7 +4709,7 @@ interface StyleManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdArg = args[0] as String
-            val imageArg = args[1] as MbxImage
+            val imageArg = args[1] as StyleImageWire
             api.updateStyleImageSourceImage(sourceIdArg, imageArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -4935,7 +4944,7 @@ interface StyleManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val imageIdArg = args[0] as String
-            api.getStyleImage(imageIdArg) { result: Result<MbxImage?> ->
+            api.getStyleImage(imageIdArg) { result: Result<StyleImageWireRgba?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -4956,7 +4965,7 @@ interface StyleManager {
             val args = message as List<Any?>
             val imageIdArg = args[0] as String
             val scaleArg = args[1] as Double
-            val imageArg = args[2] as MbxImage
+            val imageArg = args[2] as StyleImageWire
             val sdfArg = args[3] as Boolean
             val stretchXArg = args[4] as List<ImageStretches?>
             val stretchYArg = args[5] as List<ImageStretches?>

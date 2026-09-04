@@ -1,6 +1,7 @@
 import 'package:turf/turf.dart';
 
 import '../pigeons/platform_interface_data_types.dart';
+import '../public/style_image.dart';
 
 /// Abstract interface for managing the map's style.
 ///
@@ -170,7 +171,7 @@ abstract interface class StylePlatformInterface {
   Future<void> addStyleImage(
     String imageId,
     double scale,
-    MbxImage image,
+    StyleImage image,
     bool sdf,
     List<ImageStretches?> stretchX,
     List<ImageStretches?> stretchY,
@@ -178,7 +179,7 @@ abstract interface class StylePlatformInterface {
   );
 
   /// Replaces the image data of an existing image-type style source.
-  Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image);
+  Future<void> updateStyleImageSourceImage(String sourceId, StyleImage image);
 
   /// Removes a style image.
   Future<void> removeStyleImage(String imageId);
@@ -223,7 +224,7 @@ abstract interface class StylePlatformInterface {
   // ===== Image lookup =====
 
   /// Returns a previously-added style image, or null if none exists for [imageId].
-  Future<MbxImage?> getStyleImage(String imageId);
+  Future<StyleImageRgba?> getStyleImage(String imageId);
 
   // ===== Custom geometry source invalidation =====
 

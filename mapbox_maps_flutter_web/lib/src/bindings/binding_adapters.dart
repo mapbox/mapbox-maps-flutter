@@ -1,12 +1,14 @@
 import 'dart:js_interop';
+import 'dart:typed_data';
 import 'dart:ui' show Offset;
 
 import 'package:flutter/painting.dart' show EdgeInsets;
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart';
+import 'package:web/web.dart' as web;
 
-import 'json_helpers.dart';
 import 'map_bindings.dart';
+import 'style_bindings.dart';
 
 extension PointToJSLngLat on Point {
   JSLngLat toJSLngLat() =>
@@ -197,4 +199,68 @@ extension JSMapFeatureToQueried on JSMapFeature {
       state: state != null ? jsonStringify(state!) : '{}',
     );
   }
+}
+
+/// Converts [StyleImage] for gl-js `Map.addImage`.
+extension StyleImageToJS on StyleImage {
+  Future<JSAny> toJSImage() async {
+    switch (this) {
+      case StyleImageRgba(:final width, :final height, :final pixels):
+        return web.ImageData(
+          pixels.unpremultiplied().toJSUint8ClampedArray(),
+          width,
+          height.toJS,
+        );
+      case StyleImageBytes(:final bytes):
+        final blob = web.Blob(
+          [bytes.toJS].toJS,
+          web.BlobPropertyBag(type: StyleImageFormat.fromBytes(bytes).mimeType),
+        );
+        return await web.window.createImageBitmap(blob).toDart;
+    }
+  }
+}
+
+extension on Uint8List {
+  JSUint8ClampedArray toJSUint8ClampedArray() =>
+      JSUint8ClampedArray(buffer.toJS, offsetInBytes, this.length);
+
+  /// Reverses alpha premultiplication for `web.ImageData`, which stores
+  /// straight (non-premultiplied) alpha; GL JS re-premultiplies on texture
+  /// upload via `UNPACK_PREMULTIPLY_ALPHA_WEBGL`.
+  Uint8List unpremultiplied() {
+    final result = Uint8List(this.length);
+    for (var i = 0; i < this.length; i += 4) {
+      final alpha = this[i + 3];
+      if (alpha == 0 || alpha == 255) {
+        result[i] = this[i];
+        result[i + 1] = this[i + 1];
+        result[i + 2] = this[i + 2];
+      } else {
+        result[i] = (this[i] * 255 / alpha).round().clamp(0, 255);
+        result[i + 1] = (this[i + 1] * 255 / alpha).round().clamp(0, 255);
+        result[i + 2] = (this[i + 2] * 255 / alpha).round().clamp(0, 255);
+      }
+      result[i + 3] = alpha;
+    }
+    return result;
+  }
+}
+
+extension ImageStretchesListToJS on List<ImageStretches> {
+  /// `[[first, second], …]` for gl-js `addImage` stretch options, or null
+  /// when empty (gl-js treats missing as "no stretch").
+  JSArray<JSArray<JSNumber>>? toJS() {
+    if (isEmpty) return null;
+    return [
+      for (final stretch in this)
+        <JSNumber>[stretch.first.toJS, stretch.second.toJS].toJS,
+    ].toJS;
+  }
+}
+
+extension ImageContentToJS on ImageContent {
+  /// `[left, top, right, bottom]` for gl-js `addImage` content.
+  JSArray<JSNumber> toJS() =>
+      <JSNumber>[left.toJS, top.toJS, right.toJS, bottom.toJS].toJS;
 }

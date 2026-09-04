@@ -498,17 +498,19 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 192:
       return AmbientLight.fromList(self.readValue() as! [Any?])
     case 193:
-      return MbxImage.fromList(self.readValue() as! [Any?])
-    case 194:
       return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 195:
+    case 194:
       return ImageContent.fromList(self.readValue() as! [Any?])
-    case 196:
+    case 195:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 197:
+    case 196:
       return OverscaledTileID.fromList(self.readValue() as! [Any?])
-    case 198:
+    case 197:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
+    case 198:
+      return StyleImageWireBytes.fromList(self.readValue() as! [Any?])
+    case 199:
+      return StyleImageWireRgba.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -709,23 +711,26 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? AmbientLight {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? ImageStretches {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? ImageContent {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? OverscaledTileID {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? OverscaledTileID {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleImageWireBytes {
       super.writeByte(198)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleImageWireRgba {
+      super.writeByte(199)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3428,7 +3433,7 @@ protocol StyleManager {
   /// @param image An `image`.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
-  func updateStyleImageSourceImage(sourceId: String, image: MbxImage, completion: @escaping (Result<Void, Error>) -> Void)
+  func updateStyleImageSourceImage(sourceId: String, image: StyleImageWire, completion: @escaping (Result<Void, Error>) -> Void)
   /// Removes an existing style source.
   ///
   /// @param sourceId An identifier of the style source to remove.
@@ -3491,7 +3496,7 @@ protocol StyleManager {
   /// @param imageId The identifier of the `image`.
   ///
   /// @return The `image` for the given `imageId`, or empty if no image is associated with the `imageId`.
-  func getStyleImage(imageId: String, completion: @escaping (Result<MbxImage?, Error>) -> Void)
+  func getStyleImage(imageId: String, completion: @escaping (Result<StyleImageWireRgba?, Error>) -> Void)
   /// Adds an image to be used in the style. This API can also be used for updating
   /// an image. If the image for a given `imageId` was already added, it gets replaced by the new image.
   ///
@@ -3513,7 +3518,7 @@ protocol StyleManager {
   /// icon uses icon-text-fit, the symbol's text will be fit inside the content box.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
-  func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void)
+  func addStyleImage(imageId: String, scale: Double, image: StyleImageWire, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void)
   /// Removes an image from the style.
   ///
   /// @param imageId The identifier of the image to remove.
@@ -4532,7 +4537,7 @@ class StyleManagerSetup {
       updateStyleImageSourceImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdArg = args[0] as! String
-        let imageArg = args[1] as! MbxImage
+        let imageArg = args[1] as! StyleImageWire
         api.updateStyleImageSourceImage(sourceId: sourceIdArg, image: imageArg) { result in
           switch result {
           case .success:
@@ -4828,7 +4833,7 @@ class StyleManagerSetup {
         let args = message as! [Any?]
         let imageIdArg = args[0] as! String
         let scaleArg = args[1] as! Double
-        let imageArg = args[2] as! MbxImage
+        let imageArg = args[2] as! StyleImageWire
         let sdfArg = args[3] as! Bool
         let stretchXArg = args[4] as! [ImageStretches?]
         let stretchYArg = args[5] as! [ImageStretches?]

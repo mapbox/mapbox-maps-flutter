@@ -88,19 +88,6 @@ extension type JSImportSpecification._(JSObject _) implements JSObject {
   });
 }
 
-/// Plain bag matching the `ImageData`-shape gl-js expects for raw RGBA
-/// pixel uploads. We synthesise it rather than going through the browser's
-/// `ImageData` constructor — gl-js only reads `{width, height, data}`.
-@JS()
-@anonymous
-extension type JSRawImageData._(JSObject _) implements JSObject {
-  external factory JSRawImageData({
-    required int width,
-    required int height,
-    required JSUint8ClampedArray data,
-  });
-}
-
 // ===== Style API surface on JSMap =====
 
 extension Style on JSMap {

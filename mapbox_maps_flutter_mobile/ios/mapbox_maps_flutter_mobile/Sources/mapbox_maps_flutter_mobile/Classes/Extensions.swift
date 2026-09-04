@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 @_spi(Experimental) import MapboxMaps
 import MapboxCoreMaps_Private
 import Flutter
@@ -1350,6 +1351,47 @@ func executeOnMainThread<T>(_ execute: @escaping (T) -> Void) -> (T) -> Void {
     return { t in
         DispatchQueue.main.async {
             execute(t)
+        }
+    }
+}
+
+extension StyleImageWire {
+    /// Builds a `UIImage` from this pigeon image.
+    func toUIImage(scale: CGFloat) -> UIImage? {
+        switch self {
+        case let rgba as StyleImageWireRgba:
+            let width = Int(rgba.width)
+            let height = Int(rgba.height)
+            let bytes = rgba.pixels.data
+            guard let provider = CGDataProvider(data: bytes as CFData) else {
+                return nil
+            }
+            let bitmapInfo = CGBitmapInfo.byteOrder32Big.union(
+                CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+            )
+            guard let cgImage = CGImage(
+                width: width,
+                height: height,
+                bitsPerComponent: 8,
+                bitsPerPixel: 32,
+                bytesPerRow: width * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: bitmapInfo,
+                provider: provider,
+                decode: nil,
+                shouldInterpolate: false,
+                intent: .defaultIntent
+            ) else {
+                return nil
+            }
+            return UIImage(cgImage: cgImage, scale: scale, orientation: .up)
+        case let bytes as StyleImageWireBytes:
+            return UIImage(data: bytes.data.data, scale: scale)
+        default:
+            // StyleImageWire is a protocol, not an enum, so Swift can't prove this
+            // switch is exhaustive. Only Pigeon instantiates its subclasses, so this
+            // branch is unreachable unless a new variant is added without updating this switch.
+            return nil
         }
     }
 }

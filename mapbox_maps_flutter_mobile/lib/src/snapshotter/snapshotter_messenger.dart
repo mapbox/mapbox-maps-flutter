@@ -35,23 +35,20 @@ class _SnapshotterMessengerPigeonCodec extends StandardMessageCodec {
     } else if (value is CameraState) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is OverscaledTileID) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is OverscaledTileID) {
-      buffer.putUint8(141);
-      writeValue(buffer, value.encode());
     } else if (value is MapSnapshotOptions) {
-      buffer.putUint8(142);
+      buffer.putUint8(141);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -81,16 +78,14 @@ class _SnapshotterMessengerPigeonCodec extends StandardMessageCodec {
       case 136:
         return CameraState.decode(readValue(buffer)!);
       case 137:
-        return MbxImage.decode(readValue(buffer)!);
-      case 138:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 139:
+      case 138:
         return TileCoverOptions.decode(readValue(buffer)!);
-      case 140:
+      case 139:
         return CanonicalTileID.decode(readValue(buffer)!);
-      case 141:
+      case 140:
         return OverscaledTileID.decode(readValue(buffer)!);
-      case 142:
+      case 141:
         return MapSnapshotOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

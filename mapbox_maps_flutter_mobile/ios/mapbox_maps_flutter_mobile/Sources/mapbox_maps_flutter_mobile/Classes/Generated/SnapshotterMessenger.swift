@@ -93,16 +93,14 @@ private class SnapshotterMessengerPigeonCodecReader: FlutterStandardReader {
     case 136:
       return CameraState.fromList(self.readValue() as! [Any?])
     case 137:
-      return MbxImage.fromList(self.readValue() as! [Any?])
-    case 138:
       return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
-    case 139:
+    case 138:
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
-    case 140:
+    case 139:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 141:
+    case 140:
       return OverscaledTileID.fromList(self.readValue() as! [Any?])
-    case 142:
+    case 141:
       return MapSnapshotOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -136,23 +134,20 @@ private class SnapshotterMessengerPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? CameraState {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? OverscaledTileID {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? OverscaledTileID {
-      super.writeByte(141)
-      super.writeValue(value.toList())
     } else if let value = value as? MapSnapshotOptions {
-      super.writeByte(142)
+      super.writeByte(141)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

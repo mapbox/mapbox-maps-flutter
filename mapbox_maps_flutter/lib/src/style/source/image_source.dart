@@ -2,7 +2,7 @@
 // ignore_for_file: unused_import
 import 'dart:convert';
 
-import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
 
 import '../style_internal.dart';
@@ -70,9 +70,19 @@ final class ImageSource extends Source {
 
   /// Updates the image of an image style source.
   ///
-  /// See [https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image)
-  Future<void>? updateImage(MbxImage image) {
+  /// See [https://docs.mapbox.com/style-spec/reference/sources/#image](https://docs.mapbox.com/style-spec/reference/sources/#image)
+  Future<void>? updateStyleImage(StyleImage image) {
     return style?.updateStyleImageSourceImage(id, image);
+  }
+
+  /// Updates the image of an image style source.
+  ///
+  /// Prefer [updateStyleImage] with a [StyleImage].
+  ///
+  /// See [https://docs.mapbox.com/style-spec/reference/sources/#image](https://docs.mapbox.com/style-spec/reference/sources/#image)
+  @Deprecated('Use updateStyleImage with StyleImage.bytes or StyleImage.rgba.')
+  Future<void>? updateImage(MbxImage image) {
+    return style?.updateStyleImageSourceImage(id, image.toStyleImage());
   }
 
   @override

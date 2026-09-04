@@ -77,6 +77,7 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   String? lastLayerId;
   String? lastSourceId;
   String? lastImageId;
+  StyleImage? lastImage;
   String? lastProperty;
   Object? lastValue;
   ImportPosition? lastImportPosition;
@@ -138,8 +139,12 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<void> addStyleImportFromJSON(String importId, String json,
-      {Map<String, Object>? config, ImportPosition? importPosition}) async {
+  Future<void> addStyleImportFromJSON(
+    String importId,
+    String json, {
+    Map<String, Object>? config,
+    ImportPosition? importPosition,
+  }) async {
     addStyleImportFromJSONCallCount++;
     lastImportId = importId;
     lastJson = json;
@@ -148,8 +153,12 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<void> addStyleImportFromURI(String importId, String uri,
-      {Map<String, Object>? config, ImportPosition? importPosition}) async {
+  Future<void> addStyleImportFromURI(
+    String importId,
+    String uri, {
+    Map<String, Object>? config,
+    ImportPosition? importPosition,
+  }) async {
     addStyleImportFromURICallCount++;
     lastImportId = importId;
     lastUri = uri;
@@ -158,8 +167,11 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<void> updateStyleImportWithJSON(String importId, String json,
-      {Map<String, Object>? config}) async {
+  Future<void> updateStyleImportWithJSON(
+    String importId,
+    String json, {
+    Map<String, Object>? config,
+  }) async {
     updateStyleImportWithJSONCallCount++;
     lastImportId = importId;
     lastJson = json;
@@ -167,8 +179,11 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<void> updateStyleImportWithURI(String importId, String uri,
-      {Map<String, Object>? config}) async {
+  Future<void> updateStyleImportWithURI(
+    String importId,
+    String uri, {
+    Map<String, Object>? config,
+  }) async {
     updateStyleImportWithURICallCount++;
     lastImportId = importId;
     lastUri = uri;
@@ -176,7 +191,8 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<void> moveStyleImport(String importId,
+  Future<void> moveStyleImport(
+    String importId,
     ImportPosition? importPosition,
   ) async {
     moveStyleImportCallCount++;
@@ -243,7 +259,8 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<void> moveStyleLayer(String layerId,
+  Future<void> moveStyleLayer(
+    String layerId,
     LayerPosition? layerPosition,
   ) async {
     moveStyleLayerCallCount++;
@@ -303,7 +320,10 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> setStyleLayerProperty(
-      String layerId, String property, Object value) async {
+    String layerId,
+    String property,
+    Object value,
+  ) async {
     setStyleLayerPropertyCallCount++;
     lastLayerId = layerId;
     lastProperty = property;
@@ -319,7 +339,9 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> setStyleLayerProperties(
-      String layerId, String properties) async {
+    String layerId,
+    String properties,
+  ) async {
     setStyleLayerPropertiesCallCount++;
     lastLayerId = layerId;
   }
@@ -333,7 +355,10 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> setStyleSourceProperty(
-      String sourceId, String property, Object value) async {
+    String sourceId,
+    String property,
+    Object value,
+  ) async {
     setStyleSourcePropertyCallCount++;
     lastSourceId = sourceId;
     lastProperty = property;
@@ -342,14 +367,18 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> setStyleSourceProperties(
-      String sourceId, String properties) async {
+    String sourceId,
+    String properties,
+  ) async {
     setStyleSourcePropertiesCallCount++;
     lastSourceId = sourceId;
   }
 
   @override
   Future<StylePropertyValue> getStyleSourceProperty(
-      String sourceId, String property) async {
+    String sourceId,
+    String property,
+  ) async {
     getStyleSourcePropertyCallCount++;
     lastSourceId = sourceId;
     lastProperty = property;
@@ -363,7 +392,7 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   Future<void> addStyleImage(
     String imageId,
     double scale,
-    MbxImage image,
+    StyleImage image,
     bool sdf,
     List<ImageStretches?> stretchX,
     List<ImageStretches?> stretchY,
@@ -371,18 +400,25 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   ) async {
     addStyleImageCallCount++;
     lastImageId = imageId;
+    lastImage = image;
   }
 
   @override
   Future<void> updateStyleImageSourceImage(
-      String sourceId, MbxImage image) async {
+    String sourceId,
+    StyleImage image,
+  ) async {
     updateStyleImageSourceImageCallCount++;
     lastSourceId = sourceId;
+    lastImage = image;
   }
 
   @override
   Future<void> setStyleImportConfigProperty(
-      String importId, String config, Object value) async {
+    String importId,
+    String config,
+    Object value,
+  ) async {
     setStyleImportConfigPropertyCallCount++;
     lastImportId = importId;
     lastProperty = config;
@@ -391,7 +427,9 @@ class MockStylePlatformInterface implements StylePlatformInterface {
 
   @override
   Future<void> setStyleImportConfigProperties(
-      String importId, Map<String, Object> configs) async {
+    String importId,
+    Map<String, Object> configs,
+  ) async {
     setStyleImportConfigPropertiesCallCount++;
     lastImportId = importId;
     lastConfigs = configs;
@@ -518,7 +556,7 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   }
 
   @override
-  Future<MbxImage?> getStyleImage(String imageId) async {
+  Future<StyleImageRgba?> getStyleImage(String imageId) async {
     getStyleImageCallCount++;
     lastImageId = imageId;
     return null;
@@ -665,7 +703,9 @@ void main() {
     });
 
     test('setStyleTransition delegates to interface', () async {
-      await style.setStyleTransition(TransitionOptions(duration: 500, delay: 0));
+      await style.setStyleTransition(
+        TransitionOptions(duration: 500, delay: 0),
+      );
 
       expect(mockImpl.setStyleTransitionCallCount, 1);
     });
@@ -673,8 +713,11 @@ void main() {
     // ===== Style imports =====
 
     test('addStyleImportFromJSON delegates to interface', () async {
-      await style.addStyleImportFromJSON('import-1', '{}',
-          config: {'key': 'value'});
+      await style.addStyleImportFromJSON(
+        'import-1',
+        '{}',
+        config: {'key': 'value'},
+      );
 
       expect(mockImpl.addStyleImportFromJSONCallCount, 1);
       expect(mockImpl.lastImportId, 'import-1');
@@ -684,7 +727,9 @@ void main() {
 
     test('addStyleImportFromURI delegates to interface', () async {
       await style.addStyleImportFromURI(
-          'import-1', 'mapbox://styles/mapbox/dark-v11');
+        'import-1',
+        'mapbox://styles/mapbox/dark-v11',
+      );
 
       expect(mockImpl.addStyleImportFromURICallCount, 1);
       expect(mockImpl.lastImportId, 'import-1');
@@ -742,8 +787,10 @@ void main() {
     });
 
     test('getStyleImportConfigProperty delegates to interface', () async {
-      final result =
-          await style.getStyleImportConfigProperty('import-1', 'theme');
+      final result = await style.getStyleImportConfigProperty(
+        'import-1',
+        'theme',
+      );
 
       expect(mockImpl.getStyleImportConfigPropertyCallCount, 1);
       expect(mockImpl.lastImportId, 'import-1');
@@ -778,8 +825,7 @@ void main() {
     });
 
     test('getStyleLayerProperty delegates to interface', () async {
-      final result =
-          await style.getStyleLayerProperty('layer-1', 'visibility');
+      final result = await style.getStyleLayerProperty('layer-1', 'visibility');
 
       expect(mockImpl.getStyleLayerPropertyCallCount, 1);
       expect(mockImpl.lastLayerId, 'layer-1');
@@ -852,7 +898,10 @@ void main() {
 
     test('addGeoJSONSourceFeatures delegates to interface', () async {
       final features = [
-        Feature(id: 'f-1', geometry: Point(coordinates: Position(0, 0))),
+        Feature(
+          id: 'f-1',
+          geometry: Point(coordinates: Position(0, 0)),
+        ),
       ];
       await style.addGeoJSONSourceFeatures('source-1', 'data-1', features);
 
@@ -864,7 +913,10 @@ void main() {
 
     test('updateGeoJSONSourceFeatures delegates to interface', () async {
       final features = [
-        Feature(id: 'f-1', geometry: Point(coordinates: Position(1, 1))),
+        Feature(
+          id: 'f-1',
+          geometry: Point(coordinates: Position(1, 1)),
+        ),
       ];
       await style.updateGeoJSONSourceFeatures('source-1', 'data-1', features);
 
@@ -875,11 +927,10 @@ void main() {
     });
 
     test('removeGeoJSONSourceFeatures delegates to interface', () async {
-      await style.removeGeoJSONSourceFeatures(
-        'source-1',
-        'data-1',
-        ['f-1', 'f-2'],
-      );
+      await style.removeGeoJSONSourceFeatures('source-1', 'data-1', [
+        'f-1',
+        'f-2',
+      ]);
 
       expect(mockImpl.removeGeoJSONSourceFeaturesCallCount, 1);
       expect(mockImpl.lastSourceId, 'source-1');
@@ -904,12 +955,24 @@ void main() {
       expect(mockImpl.lastImageId, 'marker-icon');
     });
 
-    test('updateStyleImageSourceImage delegates to interface', () async {
-      final image = MbxImage(width: 1, height: 1, data: Uint8List(4));
-      await style.updateStyleImageSourceImage('source-1', image);
+    test('updateImageForSource delegates to interface', () async {
+      final pixels = Uint8List(4);
+      final image = StyleImage.rgba(width: 1, height: 1, pixels: pixels);
+      await style.updateImageForSource('source-1', image);
 
       expect(mockImpl.updateStyleImageSourceImageCallCount, 1);
       expect(mockImpl.lastSourceId, 'source-1');
+      expect(mockImpl.lastImage, image);
+    });
+
+    test('addImage with StyleImage.rgba delegates to interface', () async {
+      final pixels = Uint8List.fromList(const [255, 0, 0, 255]);
+      final image = StyleImage.rgba(width: 1, height: 1, pixels: pixels);
+      await style.addImage('gradient', 1.0, image);
+
+      expect(mockImpl.addStyleImageCallCount, 1);
+      expect(mockImpl.lastImageId, 'gradient');
+      expect(mockImpl.lastImage, image);
     });
 
     // ===== Models =====
@@ -994,8 +1057,8 @@ void main() {
 
     // ===== Image lookup =====
 
-    test('getStyleImage delegates to interface', () async {
-      final result = await style.getStyleImage('marker-icon');
+    test('getImage delegates to interface', () async {
+      final result = await style.getImage('marker-icon');
 
       expect(mockImpl.getStyleImageCallCount, 1);
       expect(mockImpl.lastImageId, 'marker-icon');
@@ -1004,30 +1067,36 @@ void main() {
 
     // ===== Custom geometry source invalidation =====
 
-    test('invalidateStyleCustomGeometrySourceTile delegates to interface',
-        () async {
-      final tileId = CanonicalTileID(z: 10, x: 5, y: 7);
-      await style.invalidateStyleCustomGeometrySourceTile('source-1', tileId);
+    test(
+      'invalidateStyleCustomGeometrySourceTile delegates to interface',
+      () async {
+        final tileId = CanonicalTileID(z: 10, x: 5, y: 7);
+        await style.invalidateStyleCustomGeometrySourceTile('source-1', tileId);
 
-      expect(mockImpl.invalidateStyleCustomGeometrySourceTileCallCount, 1);
-      expect(mockImpl.lastSourceId, 'source-1');
-      expect(mockImpl.lastTileId, same(tileId));
-    });
+        expect(mockImpl.invalidateStyleCustomGeometrySourceTileCallCount, 1);
+        expect(mockImpl.lastSourceId, 'source-1');
+        expect(mockImpl.lastTileId, same(tileId));
+      },
+    );
 
-    test('invalidateStyleCustomGeometrySourceRegion delegates to interface',
-        () async {
-      final bounds = CoordinateBounds(
-        southwest: Point(coordinates: Position(0, 0)),
-        northeast: Point(coordinates: Position(1, 1)),
-        infiniteBounds: false,
-      );
-      await style.invalidateStyleCustomGeometrySourceRegion(
-          'source-1', bounds);
+    test(
+      'invalidateStyleCustomGeometrySourceRegion delegates to interface',
+      () async {
+        final bounds = CoordinateBounds(
+          southwest: Point(coordinates: Position(0, 0)),
+          northeast: Point(coordinates: Position(1, 1)),
+          infiniteBounds: false,
+        );
+        await style.invalidateStyleCustomGeometrySourceRegion(
+          'source-1',
+          bounds,
+        );
 
-      expect(mockImpl.invalidateStyleCustomGeometrySourceRegionCallCount, 1);
-      expect(mockImpl.lastSourceId, 'source-1');
-      expect(mockImpl.lastBounds, same(bounds));
-    });
+        expect(mockImpl.invalidateStyleCustomGeometrySourceRegionCallCount, 1);
+        expect(mockImpl.lastSourceId, 'source-1');
+        expect(mockImpl.lastBounds, same(bounds));
+      },
+    );
 
     // ===== Style state =====
 
@@ -1063,8 +1132,9 @@ void main() {
     });
 
     test('setProjection delegates to interface', () async {
-      await style
-          .setProjection(StyleProjection(name: StyleProjectionName.globe));
+      await style.setProjection(
+        StyleProjection(name: StyleProjectionName.globe),
+      );
 
       expect(mockImpl.setProjectionCallCount, 1);
     });
@@ -1104,8 +1174,7 @@ void main() {
     });
 
     test('getStyleSourceProperty delegates to interface', () async {
-      final result =
-          await style.getStyleSourceProperty('source-1', 'data');
+      final result = await style.getStyleSourceProperty('source-1', 'data');
 
       expect(mockImpl.getStyleSourcePropertyCallCount, 1);
       expect(mockImpl.lastSourceId, 'source-1');
@@ -1129,8 +1198,7 @@ void main() {
     });
 
     test('setStyleImportConfigProperty delegates to interface', () async {
-      await style.setStyleImportConfigProperty(
-          'import-1', 'theme', 'dark');
+      await style.setStyleImportConfigProperty('import-1', 'theme', 'dark');
 
       expect(mockImpl.setStyleImportConfigPropertyCallCount, 1);
       expect(mockImpl.lastImportId, 'import-1');
@@ -1139,8 +1207,10 @@ void main() {
     });
 
     test('setStyleImportConfigProperties delegates to interface', () async {
-      await style.setStyleImportConfigProperties(
-          'import-1', {'theme': 'dark', 'labels': 'en'});
+      await style.setStyleImportConfigProperties('import-1', {
+        'theme': 'dark',
+        'labels': 'en',
+      });
 
       expect(mockImpl.setStyleImportConfigPropertiesCallCount, 1);
       expect(mockImpl.lastImportId, 'import-1');

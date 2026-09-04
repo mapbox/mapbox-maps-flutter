@@ -1503,6 +1503,8 @@ struct StylePropertyValue {
 
 /// Image type.
 ///
+/// Deprecated: Use `StyleImage` instead.
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct MbxImage {
   /// The width of the image, in screen pixels.

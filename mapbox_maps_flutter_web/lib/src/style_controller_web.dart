@@ -6,6 +6,7 @@ import 'dart:js_interop';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart' show Feature, Point, Position;
 
+import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 import 'bindings/style_bindings.dart';
 import 'style/expression_operators.dart';
@@ -545,32 +546,52 @@ final class StyleController implements StylePlatformInterface {
   }
 
   // ===== Images =====
+  //
+  // gl-js `Map.addImage` errors when the id already exists; the platform
+  // contract replaces, so we remove-then-add when needed.
 
   @override
-  Future<bool> hasStyleImage(String imageId) async =>
-      throw _ni('hasStyleImage');
+  Future<bool> hasStyleImage(String imageId) async => _map.hasImage(imageId);
 
   @override
   Future<void> removeStyleImage(String imageId) async =>
-      throw _ni('removeStyleImage');
+      _map.removeImage(imageId);
 
   @override
   Future<void> addStyleImage(
     String imageId,
     double scale,
-    MbxImage image,
+    StyleImage image,
     bool sdf,
     List<ImageStretches?> stretchX,
     List<ImageStretches?> stretchY,
     ImageContent? content,
-  ) async => throw _ni('addStyleImage');
+  ) async {
+    final options = JSAddImageOptions(
+      pixelRatio: scale,
+      sdf: sdf,
+      stretchX: stretchX.whereType<ImageStretches>().toList().toJS(),
+      stretchY: stretchY.whereType<ImageStretches>().toList().toJS(),
+      content: content?.toJS(),
+    );
+    if (_map.hasImage(imageId)) {
+      _map.removeImage(imageId);
+    }
+    _map.addImage(imageId, await image.toJSImage(), options);
+  }
 
   @override
-  Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image) =>
+  Future<void> updateStyleImageSourceImage(String sourceId, StyleImage image) =>
       throw _ni('updateStyleImageSourceImage');
 
   @override
-  Future<MbxImage?> getStyleImage(String imageId) => throw _ni('getStyleImage');
+  Future<StyleImageRgba?> getStyleImage(
+    String imageId,
+  ) => throw UnsupportedError(
+    // GL JS exposes add/update/remove/has/listImages on Map, but not a
+    // public getImage. Pixel readout lives on the internal Style class only.
+    'Style.getStyleImage() is not supported on web',
+  );
 
   // ===== Models =====
 

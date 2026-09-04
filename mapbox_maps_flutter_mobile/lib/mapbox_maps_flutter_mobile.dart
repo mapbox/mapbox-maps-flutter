@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart' show Feature, LineString, Point, Polygon;
 
+import 'src/internal/style_image_wire.dart';
 import 'src/package_info.dart';
 
 export 'src/package_info.dart';
@@ -23,8 +24,11 @@ part 'src/annotation/polygon_annotation_manager.dart';
 part 'src/annotation/polyline_annotation_manager.dart';
 part 'src/annotation/annotation_manager.dart';
 part 'src/callbacks.dart';
-part 'src/gestures_controller.dart';
+part 'src/controllers/gestures_controller.dart';
+part 'src/controllers/location_settings.dart';
+part 'src/controllers/style_controller.dart';
 part 'src/map_widget.dart';
+part 'src/internal/style_image_conversions.dart';
 part 'src/mapbox_map.dart';
 part 'src/mapbox_maps_options.dart';
 part 'src/mapbox_maps_platform.dart';
@@ -39,7 +43,6 @@ part 'src/pigeons/map_recorder_messenger.dart';
 part 'src/snapshotter/snapshotter_messenger.dart';
 part 'src/pigeons/log_backend.dart';
 part 'src/pigeons/performace_statistics.dart';
-part 'src/location_settings.dart';
 part 'src/snapshotter/snapshotter.dart';
 part 'src/log_configuration.dart';
 part 'src/performance_statistics.dart';

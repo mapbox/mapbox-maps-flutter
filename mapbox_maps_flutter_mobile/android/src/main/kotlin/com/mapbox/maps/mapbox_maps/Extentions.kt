@@ -3,13 +3,16 @@ package com.mapbox.maps.mapbox_maps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.google.gson.Gson
+import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
 import com.mapbox.bindgen.Value
 import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.Image
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
@@ -27,8 +30,7 @@ import com.mapbox.maps.logE
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-
+import java.nio.ByteBuffer
 // FLT to Android
 
 fun PerformanceStatisticsOptions.toPerformanceStatisticsOptions(): com.mapbox.maps.PerformanceStatisticsOptions {
@@ -785,10 +787,26 @@ fun Number.toLogicalPixels(context: Context): Double {
   return this.toDouble() / context.resources.displayMetrics.density
 }
 
-fun Bitmap.toMbxImage(): MbxImage {
-  val outputStream = ByteArrayOutputStream(byteCount)
-  compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-  return MbxImage(width.toLong(), height.toLong(), outputStream.toByteArray())
+/** Builds a Maps [Image] from a [StyleImageWire]. */
+fun StyleImageWire.toMapboxImage(): Image = when (this) {
+  is StyleImageWireRgba -> {
+    val w = width.toInt()
+    val h = height.toInt()
+    val byteBuffer = ByteBuffer.allocateDirect(pixels.size)
+    byteBuffer.put(pixels)
+    byteBuffer.rewind()
+    Image(w, h, DataRef(byteBuffer))
+  }
+  is StyleImageWireBytes -> {
+    var bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+      ?: throw IllegalArgumentException("Could not decode image data")
+    if (bitmap.config != Bitmap.Config.ARGB_8888) {
+      bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
+    }
+    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
+    bitmap.copyPixelsToBuffer(byteBuffer)
+    Image(bitmap.width, bitmap.height, DataRef(byteBuffer))
+  }
 }
 
 fun StylePackLoadOptions.toStylePackLoadOptions(): com.mapbox.maps.StylePackLoadOptions {

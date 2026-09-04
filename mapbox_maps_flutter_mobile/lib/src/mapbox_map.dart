@@ -23,9 +23,11 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
 
   /// The currently loaded StyleManager object.
   @override
-  late final StyleManager style = StyleManager(
-    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  late final StyleController style = StyleController(
+    StyleManager(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    ),
   );
 
   /// The interface to set the location puck.

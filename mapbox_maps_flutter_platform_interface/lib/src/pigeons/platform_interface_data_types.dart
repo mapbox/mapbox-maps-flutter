@@ -2062,6 +2062,9 @@ class StylePropertyValue {
 }
 
 /// Image type.
+///
+/// Deprecated: Use `StyleImage` instead.
+@Deprecated("Use [StyleImage] instead.")
 class MbxImage {
   MbxImage({required this.width, required this.height, required this.data});
 

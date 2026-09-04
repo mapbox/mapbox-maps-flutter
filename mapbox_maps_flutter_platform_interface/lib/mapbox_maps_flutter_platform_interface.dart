@@ -19,6 +19,7 @@ export 'src/public/log_writer_backend.dart';
 export 'src/public/map_keyboard_gesture_context.dart';
 export 'src/public/offline_progress_listeners.dart';
 export 'src/public/performance_statistics_listener.dart';
+export 'src/public/style_image.dart';
 export 'src/public/viewport/viewport_state.dart';
 export 'src/public/viewport/viewport_transition.dart';
 
