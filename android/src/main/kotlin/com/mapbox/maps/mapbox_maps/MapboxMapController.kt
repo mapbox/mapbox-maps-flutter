@@ -205,6 +205,10 @@ class MapboxMapController(
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView, messenger, this.channelSuffix)
     locationComponentController = LocationComponentController(mapView, context)
+    // Hand-written channel (not Pigeon-generated, see
+    // LocationComponentController.setUpExternalLocationChannel) for the
+    // native location-provider override.
+    locationComponentController.setUpExternalLocationChannel(messenger, this.channelSuffix)
     gestureController = GestureController(mapView, context)
     interactionsController = InteractionsController(mapboxMap, context)
     logoController = LogoController(mapView)

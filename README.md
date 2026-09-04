@@ -190,6 +190,19 @@ To use the 3D puck with model downloaded from Uri instead of the default 2D puck
 
 You can find more examples of customization in the sample [app](example/lib/location_example.dart).
 
+### External location provider
+To drive the puck from a location source other than the platform's default (GPS-based) provider — for example, an indoor-positioning SDK — call `MapboxMap.location.setExternalLocation`. This registers a native location-provider override on first call; until then, the map behaves exactly as it does with the default provider.
+
+```dart
+mapboxMap.location.setExternalLocation(
+    latitude: 37.775,
+    longitude: -122.418,
+    heading: 90.0,
+    accuracy: 5.0);
+```
+
+Call `MapboxMap.location.clearExternalLocation()` to restore the default provider (e.g. falling back to GPS when leaving indoor coverage).
+
 ## Markers and annotations
 Additional information is available in our [Flutter](https://docs.mapbox.com/flutter/maps/guides/markers-and-annotations/), [Android](https://docs.mapbox.com/android/maps/guides/annotations/), and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/) documentation.
 
