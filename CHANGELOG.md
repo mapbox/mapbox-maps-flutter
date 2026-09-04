@@ -1,14 +1,14 @@
 ### main
 
-### 2.30.0
+* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
+* Promote `SymbolLayer.symbolZOffset` to stable.
+* Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
 
-### 2.30.0-rc.1
+### 2.30.0
 
 * Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.
 * Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
 * Mark `Snapshotter.tileCover` as experimental since the underlying native APIs are experimental.
-
-### 2.29.0-rc.1
 
 ### 2.28.0
 
