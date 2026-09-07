@@ -1,5 +1,7 @@
 ### main
 
+### 2.31.0-rc.1
+
 * Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
 * Promote `SymbolLayer.symbolZOffset` to stable.
 * Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
