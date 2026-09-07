@@ -612,6 +612,15 @@ enum RasterResampling {
   NEAREST,
 }
 
+/// When `raster-color` is active, specifies how raster values are distributed across the color ramp over the range specified by `raster-color-range`.
+enum RasterColorScale {
+  /// Raster values are spaced evenly across the color ramp.
+  LINEAR,
+
+  /// Raster values are spaced logarithmically, giving more of the color ramp to smaller values. Useful for data concentrated near the low end of a wide range.
+  LOG,
+}
+
 /// Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed.
 enum Scheme {
   /// Slippy map tilenames scheme.

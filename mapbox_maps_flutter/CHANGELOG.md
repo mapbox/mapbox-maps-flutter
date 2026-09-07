@@ -8,6 +8,8 @@
 * `MbxImage` is deprecated and slated for removal in a future release. Use `StyleImage` instead.
 * Add `StyleImage.fromImage` to build a `StyleImage` from a `dart:ui` `Image` (for example one produced by a `CustomPainter` or `Canvas.toImage`)
 * [web] Add `loadStyleJson` support.
+* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
+* Promote `SymbolLayer.symbolZOffset` to stable.
 
 ### 3.0.0-alpha.29
 

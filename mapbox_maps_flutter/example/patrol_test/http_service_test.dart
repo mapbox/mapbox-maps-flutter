@@ -80,10 +80,9 @@ void main() {
           'tiles.example.com',
           {'X-Custom-Header': 'value'},
         );
-        await mapboxMap.httpService.setCustomHeadersForHost(
-          'api.example.org',
-          {'X-Global': 'g'},
-        );
+        await mapboxMap.httpService.setCustomHeadersForHost('api.example.org', {
+          'X-Global': 'g',
+        });
 
         // Clearing everything should not throw and should be idempotent.
         await mapboxMap.httpService.clearCustomHeaders();

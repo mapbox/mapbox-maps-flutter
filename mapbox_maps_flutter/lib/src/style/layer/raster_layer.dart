@@ -34,6 +34,8 @@ final class RasterLayer extends Layer {
     this.rasterColorMixExpression,
     this.rasterColorRange,
     this.rasterColorRangeExpression,
+    this.rasterColorScale,
+    this.rasterColorScaleExpression,
     this.rasterContrast,
     this.rasterContrastExpression,
     this.rasterElevation,
@@ -104,6 +106,16 @@ final class RasterLayer extends Layer {
 
   /// When `raster-color` is active, specifies the range of raster values mapped onto the color ramp, from the start of the ramp (low bound) to its end (high bound). For `rasterarray` sources the raster value is the decoded source data in the source's own units, and the source's stated data range is used when this property is unspecified. For other raster sources the raster value is computed from the source's channels via `raster-color-mix`. Defaults to `[0, 1]` when no range is otherwise available.
   List<Object>? rasterColorRangeExpression;
+
+  /// When `raster-color` is active, specifies how raster values are distributed across the color ramp over the range specified by `raster-color-range`.
+  /// Default value: "linear".
+  @experimental
+  RasterColorScale? rasterColorScale;
+
+  /// When `raster-color` is active, specifies how raster values are distributed across the color ramp over the range specified by `raster-color-range`.
+  /// Default value: "linear".
+  @experimental
+  List<Object>? rasterColorScaleExpression;
 
   /// Increase or reduce the contrast of the image.
   /// Default value: 0. Value range: [-1, 1]
@@ -220,6 +232,14 @@ final class RasterLayer extends Layer {
       paint["raster-color-range"] = rasterColorRangeExpression;
     } else if (rasterColorRange != null) {
       paint["raster-color-range"] = rasterColorRange;
+    }
+
+    if (rasterColorScaleExpression != null) {
+      paint["raster-color-scale"] = rasterColorScaleExpression;
+    } else if (rasterColorScale != null) {
+      paint["raster-color-scale"] = rasterColorScale?.name
+          .toLowerCase()
+          .replaceAll("_", "-");
     }
 
     if (rasterContrastExpression != null) {
@@ -354,6 +374,17 @@ final class RasterLayer extends Layer {
           .toList(),
       rasterColorRangeExpression: styleOptionalCastList(
         map["paint"]["raster-color-range"],
+      ),
+      rasterColorScale: map["paint"]["raster-color-scale"] == null
+          ? null
+          : RasterColorScale.values.firstWhere(
+              (e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["raster-color-scale"]),
+            ),
+      rasterColorScaleExpression: styleOptionalCastList(
+        map["paint"]["raster-color-scale"],
       ),
       rasterContrast: styleOptionalCast(map["paint"]["raster-contrast"]),
       rasterContrastExpression: styleOptionalCastList(
