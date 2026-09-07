@@ -1,3 +1,7 @@
+### 3.0.0-alpha.30
+
+* See the changelog for 3.0.0-alpha.30 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.30/changelog).
+
 ### 3.0.0-alpha.29
 
 * See the changelog for 3.0.0-alpha.29 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.29/changelog).

@@ -1,4 +1,4 @@
-### main
+### 3.0.0-alpha.30
 
 * Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), and `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`).
 * [web] Add `MapboxMap.snapshot()` support on web. It captures the map's current canvas as PNG-encoded bytes, matching Android and iOS.
