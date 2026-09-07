@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use_from_same_package
 import '../pigeons/platform_interface_data_types.dart';
 import '../public/style_image.dart';
 
