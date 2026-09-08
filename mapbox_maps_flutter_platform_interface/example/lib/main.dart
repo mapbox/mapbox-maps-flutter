@@ -5,9 +5,7 @@ void main() {
     WidgetsApp(
       color: Color(0xFFFFFFFF),
       home: Center(
-        child: Text(
-          'See patrol_test/ for web-specific integration tests and mapbox_maps_flutter package for full example suite.',
-        ),
+        child: Text('See mapbox_maps_flutter package for full example suite.'),
       ),
     ),
   );
