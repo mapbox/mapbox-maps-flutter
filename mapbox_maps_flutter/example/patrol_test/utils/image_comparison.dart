@@ -1,17 +1,24 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 /// Whether [a] and [b] decode to pixel-identical images.
 ///
-/// Every image field round-trips through a native decode/re-encode step
-/// (Bitmap -> PNG on Android, UIImage -> pngData() on iOS) before Flutter
-/// ever sees it again. That re-encoding produces a different file -
-/// different size, different compression - but doesn't touch a single
-/// pixel.
-Future<bool> isSameImage(Uint8List? a, Uint8List? b) async {
+/// [a] may be raw, premultiplied RGBA pixel data (for example
+/// `StyleImageRgba.pixels` from `getImage()`) or an encoded image container
+/// like PNG (for example a bundled asset). [_decode] checks for
+/// a PNG signature and falls back to raw RGBA using [widthA]/[heightA]
+/// otherwise. [b] is always genuine PNG bytes built by the test, so it
+/// never needs a width or height.
+Future<bool> isSameImage(
+  Uint8List? a,
+  Uint8List? b, {
+  int? widthA,
+  int? heightA,
+}) async {
   if (a == null || b == null) return a == b;
 
-  final imageA = await _decode(a);
+  final imageA = await _decode(a, width: widthA, height: heightA);
   final imageB = await _decode(b);
   try {
     if (imageA.width != imageB.width || imageA.height != imageB.height) {
@@ -30,10 +37,35 @@ Future<bool> isSameImage(Uint8List? a, Uint8List? b) async {
   }
 }
 
-Future<ui.Image> _decode(Uint8List bytes) async {
-  final codec = await ui.instantiateImageCodec(bytes);
-  final frame = await codec.getNextFrame();
-  return frame.image;
+final _pngSignature = <int>[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+
+bool _isPng(Uint8List bytes) {
+  if (bytes.length < _pngSignature.length) return false;
+  for (var i = 0; i < _pngSignature.length; i++) {
+    if (bytes[i] != _pngSignature[i]) return false;
+  }
+  return true;
+}
+
+Future<ui.Image> _decode(Uint8List bytes, {int? width, int? height}) async {
+  if (_isPng(bytes)) {
+    final codec = await ui.instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    return frame.image;
+  }
+
+  if (width == null || height == null) {
+    throw ArgumentError('Raw pixel data needs a width and a height.');
+  }
+  final completer = Completer<ui.Image>();
+  ui.decodeImageFromPixels(
+    bytes,
+    width,
+    height,
+    ui.PixelFormat.rgba8888,
+    completer.complete,
+  );
+  return completer.future;
 }
 
 Future<Uint8List> _rawRgba(ui.Image image) async {

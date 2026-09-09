@@ -43,19 +43,28 @@ class PointAnnotationManager extends BaseAnnotationManager
 
   /// Create a new annotation with the option.
   @override
-  Future<PointAnnotation> create(PointAnnotationOptions annotation) =>
-      _annotationMessenger.create(id, annotation);
+  Future<PointAnnotation> create(PointAnnotationOptions annotation) {
+    annotation.deriveIconImageIfNeeded();
+    return _annotationMessenger.create(id, annotation);
+  }
 
   /// Create multi annotations with the options.
   @override
   Future<List<PointAnnotation?>> createMulti(
     List<PointAnnotationOptions> annotations,
-  ) => _annotationMessenger.createMulti(id, annotations);
+  ) {
+    for (final annotation in annotations) {
+      annotation.deriveIconImageIfNeeded();
+    }
+    return _annotationMessenger.createMulti(id, annotations);
+  }
 
   /// Update an added annotation with new properties.
   @override
-  Future<void> update(PointAnnotation annotation) =>
-      _annotationMessenger.update(id, annotation);
+  Future<void> update(PointAnnotation annotation) {
+    annotation.deriveIconImageIfNeeded();
+    return _annotationMessenger.update(id, annotation);
+  }
 
   /// Delete an added annotation.
   @override

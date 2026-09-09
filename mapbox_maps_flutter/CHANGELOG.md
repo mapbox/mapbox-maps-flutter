@@ -8,6 +8,7 @@
 * `MbxImage` is deprecated and slated for removal in a future release. Use `StyleImage` instead.
 * Add `StyleImage.fromImage` to build a `StyleImage` from a `dart:ui` `Image` (for example one produced by a `CustomPainter` or `Canvas.toImage`)
 * [web] Add `loadStyleJson` support.
+* Fix `PointAnnotationManager.update()` not applying a new `image` on iOS and Android when the annotation's `iconImage` still named a previous registration ([#532](https://github.com/mapbox/mapbox-maps-flutter/issues/532)). If you leave `iconImage` unset, the SDK derives one from a hash of `image`, so a content change now applies automatically. Set `iconImage` yourself for full control of the style-image name: for example, to reuse one name across annotations, or to point at a style image added elsewhere without uploading `image`.
 * Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
 * Promote `SymbolLayer.symbolZOffset` to stable.
 

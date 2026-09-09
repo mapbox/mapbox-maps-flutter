@@ -1,6 +1,7 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.pigeons.PointAnnotation
 import com.mapbox.maps.plugin.annotation.Annotation
@@ -262,6 +263,8 @@ class AnnotationController(
     }
     return managerMap[managerId]!!
   }
+
+  override fun getStyleManager(): MapboxStyleManager = mapView.mapboxMap
 
   companion object {
     class InteractionEventsHandler {

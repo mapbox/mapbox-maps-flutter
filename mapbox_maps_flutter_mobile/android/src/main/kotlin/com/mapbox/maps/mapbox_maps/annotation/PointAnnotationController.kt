@@ -4,6 +4,8 @@ package com.mapbox.maps.mapbox_maps.annotation
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.google.gson.Gson
+import com.mapbox.maps.extension.style.image.addImage
+import com.mapbox.maps.extension.style.image.image
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import toFLTIconAnchor
@@ -57,6 +59,14 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
+      annotationOption.image?.let { bytes ->
+        annotationOption.iconImage?.let { iconImageId ->
+          val styleManager = delegate.getStyleManager()
+          if (!styleManager.hasStyleImage(iconImageId)) {
+            styleManager.addImage(image(iconImageId, BitmapFactory.decodeByteArray(bytes, 0, bytes.size)))
+          }
+        }
+      }
       val annotation = manager.create(annotationOption.toPointAnnotationOptions())
       annotationMap[annotation.id] = annotation
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
@@ -77,6 +87,16 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
+      annotationOptions.forEach { option ->
+        option.image?.let { bytes ->
+          option.iconImage?.let { iconImageId ->
+            val styleManager = delegate.getStyleManager()
+            if (!styleManager.hasStyleImage(iconImageId)) {
+              styleManager.addImage(image(iconImageId, BitmapFactory.decodeByteArray(bytes, 0, bytes.size)))
+            }
+          }
+        }
+      }
       val annotations = manager.create(annotationOptions.map { it.toPointAnnotationOptions() })
       annotations.forEach {
         annotationMap[it.id] = it
@@ -192,8 +212,19 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.geometry?.let {
       originalAnnotation.geometry = it
     }
-    annotation.image?.let {
-      originalAnnotation.iconImageBitmap = (BitmapFactory.decodeByteArray(it, 0, it.size))
+    annotation.image?.let { bytes ->
+      val decoded = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+      // Keeps the decoded bitmap on the native annotation, so
+      // `toFLTPointAnnotation()` can read it back later. The generic `iconImage`
+      // handling below always runs next and sets the final style-image name, so
+      // this never triggers the plugin's own auto-naming.
+      originalAnnotation.iconImageBitmap = decoded
+      annotation.iconImage?.let { iconImageId ->
+        val styleManager = delegate.getStyleManager()
+        if (!styleManager.hasStyleImage(iconImageId)) {
+          styleManager.addImage(image(iconImageId, decoded))
+        }
+      }
     }
     annotation.iconAnchor?.let {
       originalAnnotation.iconAnchor = it.toIconAnchor()
@@ -1924,6 +1955,11 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.geometry?.let {
     options.withPoint(it)
   }
+  // Keeps the decoded bitmap on the native annotation, so
+  // `toFLTPointAnnotation()` can read it back later. The controller already
+  // registers the style image under `iconImage` above. `build()` stores `iconImage`
+  // before it applies this bitmap, so this never triggers the plugin's own
+  // auto-naming.
   this.image?.let {
     options.withIconImage(BitmapFactory.decodeByteArray(it, 0, it.size))
   }
