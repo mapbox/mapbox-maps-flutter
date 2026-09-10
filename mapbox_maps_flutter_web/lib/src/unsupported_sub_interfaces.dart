@@ -18,36 +18,16 @@ import 'annotation/polyline_annotation_manager_web.dart';
 ///   * [UnimplementedError] — not-yet-implemented; GL JS has a plausible
 ///                            analogue waiting to be wired.
 ///
-/// Settings sub-interfaces (gestures/scale bar/compass/attribution/logo/
-/// indoor selector) are all [UnimplementedError] — GL JS exposes gesture
-/// handlers and a few built-in controls (attribution, scale), but none are
-/// wired into this package yet. The web-parity follow-up epic owns unstub.
+/// The remaining settings sub-interfaces (attribution/logo/indoor selector)
+/// are [UnimplementedError] — GL JS has built-in controls for attribution
+/// and the logo, but they are not wired into this package yet. Gestures,
+/// the scale bar and the compass are implemented in their own controllers.
 
 UnimplementedError _unimplemented(String method, String owner) =>
     UnimplementedError('$owner.$method is not yet implemented on web.');
 
 UnsupportedError _unsupported(String method, String reason) =>
     UnsupportedError('$method is not supported on web: $reason');
-
-class UnsupportedScaleBarSettingsWeb
-    implements ScaleBarSettingsPlatformInterface {
-  @override
-  Future<ScaleBarSettings> getSettings() =>
-      throw _unimplemented('getSettings', 'ScaleBarSettings');
-  @override
-  Future<void> updateSettings(ScaleBarSettings settings) =>
-      throw _unimplemented('updateSettings', 'ScaleBarSettings');
-}
-
-class UnsupportedCompassSettingsWeb
-    implements CompassSettingsPlatformInterface {
-  @override
-  Future<CompassSettings> getSettings() =>
-      throw _unimplemented('getSettings', 'CompassSettings');
-  @override
-  Future<void> updateSettings(CompassSettings settings) =>
-      throw _unimplemented('updateSettings', 'CompassSettings');
-}
 
 class UnsupportedAttributionSettingsWeb
     implements AttributionSettingsPlatformInterface {

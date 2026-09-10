@@ -18,6 +18,8 @@ import 'bindings/style_bindings.dart';
 import 'gestures_controller.dart';
 import 'interaction_handler.dart';
 import 'location/location_controller.dart';
+import 'ornaments/compass_controller.dart';
+import 'ornaments/scale_bar_controller.dart';
 import 'style_controller_web.dart';
 import 'unsupported_sub_interfaces.dart';
 import 'viewport/viewport_web.dart';
@@ -31,15 +33,30 @@ import 'viewport/viewport_web.dart';
 /// throws [UnimplementedError] for "GL JS has an analogue we haven't wired
 /// yet" or [UnsupportedError] for "web does not support this by design".
 ///
-/// Sub-interface getters return the throwing stubs in
-/// [unsupported_sub_interfaces.dart]. Gesture listener slots round-trip the
-/// caller's value but never fire — GL JS has gesture events we could adapt,
-/// but wiring them is web-parity follow-up work.
+/// Sub-interfaces are backed by GL JS where they are implemented — style,
+/// gestures, location, the scale bar and the compass — and otherwise return
+/// the throwing stubs in [unsupported_sub_interfaces.dart].
 base class MapboxMapWeb implements MapboxMapPlatformInterface {
   final JSMap _map;
   final _disposables = DisposeBag();
 
-  MapboxMapWeb(this._map);
+  MapboxMapWeb(this._map) {
+    // The scale bar and compass are enabled by default, matching the mobile
+    // SDKs, so their controllers are built here rather than on first use.
+    // A `late final` field would otherwise leave the map without the
+    // ornaments `getSettings` reports until something touched the field.
+    //
+    // Safe this early: GL JS creates the per-corner control containers in
+    // the `Map` constructor, long before the `load` event, so `addControl`
+    // works as soon as the map object exists.
+    scaleBar;
+    compass;
+  }
+
+  /// The GL JS map this wraps. For tests that need to assert on the DOM GL
+  /// JS manages, so they read the same map instance the controllers use.
+  @visibleForTesting
+  JSMap get jsMap => _map;
 
   /// Wires [viewport] with cross-domain dependencies from this map.
   @internal
@@ -62,11 +79,13 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     _map,
   ).addToDisposeBag(_disposables);
   @override
-  late final ScaleBarSettingsPlatformInterface scaleBar =
-      UnsupportedScaleBarSettingsWeb();
+  late final ScaleBarSettingsPlatformInterface scaleBar = ScaleBarController(
+    _map,
+  ).addToDisposeBag(_disposables);
   @override
-  late final CompassSettingsPlatformInterface compass =
-      UnsupportedCompassSettingsWeb();
+  late final CompassSettingsPlatformInterface compass = CompassController(
+    _map,
+  ).addToDisposeBag(_disposables);
   @override
   late final AttributionSettingsPlatformInterface attribution =
       UnsupportedAttributionSettingsWeb();

@@ -8,11 +8,13 @@ import 'package:web/web.dart';
 import 'interaction_bindings.dart';
 import 'json_helpers.dart';
 import 'location_bindings.dart';
+import 'ornament_bindings.dart';
 import 'viewport_bindings.dart';
 
 export 'camera_bindings.dart';
 export 'interaction_bindings.dart';
 export 'location_bindings.dart';
+export 'ornament_bindings.dart';
 export 'viewport_bindings.dart';
 
 @JS()
@@ -203,8 +205,10 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// No-op when [id] is unknown.
   external void removeInteraction(String id);
 
-  /// Attaches an `IControl` (e.g. a `GeolocateControl`) to the map.
-  external void addControl(JSControl control);
+  /// Attaches an `IControl` (e.g. a `GeolocateControl`) to the map, in the
+  /// given corner. When [position] is omitted GL JS falls back to the
+  /// control's own `getDefaultPosition()`, or `'top-right'` if it has none.
+  external void addControl(JSControl control, [JSControlPosition? position]);
 
   /// Removes a previously attached control. No-op when the control was
   /// never added.

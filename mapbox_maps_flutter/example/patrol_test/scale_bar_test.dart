@@ -13,7 +13,7 @@ const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
-  patrolTest('ScaleBar settings', skip: kIsWeb, ($) async {
+  patrolTest('ScaleBar settings', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -48,8 +48,8 @@ void main() {
     expect(updatedSettings.marginTop, 2);
     expect(updatedSettings.marginRight, 3);
     expect(updatedSettings.marginBottom, 4);
-    if (Platform.isAndroid) {
-      // iOS doesn't support these settings
+    if (!kIsWeb && Platform.isAndroid) {
+      // iOS and web don't support these settings
       expect(updatedSettings.textColor, Colors.black.value);
       expect(updatedSettings.primaryColor, Colors.red.value);
       expect(updatedSettings.secondaryColor, Colors.blue.value);
@@ -65,84 +65,78 @@ void main() {
     }
   });
 
-  patrolTest(
-    'margins are independently tracked across position changes',
-    skip: kIsWeb,
-    ($) async {
-      final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await tester.pumpAndSettle();
-      final scaleBar = mapboxMap.scaleBar;
+  patrolTest('margins are independently tracked across position changes', (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final scaleBar = mapboxMap.scaleBar;
 
-      await scaleBar.updateSettings(
-        ScaleBarSettings(
-          position: OrnamentPosition.BOTTOM_LEFT,
-          marginLeft: 10,
-          marginRight: 20,
-          marginTop: 30,
-          marginBottom: 40,
-        ),
-      );
+    await scaleBar.updateSettings(
+      ScaleBarSettings(
+        position: OrnamentPosition.BOTTOM_LEFT,
+        marginLeft: 10,
+        marginRight: 20,
+        marginTop: 30,
+        marginBottom: 40,
+      ),
+    );
 
-      await scaleBar.updateSettings(
-        ScaleBarSettings(position: OrnamentPosition.TOP_RIGHT),
-      );
+    await scaleBar.updateSettings(
+      ScaleBarSettings(position: OrnamentPosition.TOP_RIGHT),
+    );
 
-      final settings = await scaleBar.getSettings();
-      expect(
-        settings.marginRight,
-        20,
-        reason:
-            'marginRight should be preserved since it is active in TOP_RIGHT',
-      );
-      expect(
-        settings.marginTop,
-        30,
-        reason: 'marginTop should be preserved since it is active in TOP_RIGHT',
-      );
-      expect(
-        settings.marginLeft,
-        10,
-        reason:
-            'marginLeft should be preserved even though it is not active in TOP_RIGHT',
-      );
-      expect(
-        settings.marginBottom,
-        40,
-        reason:
-            'marginBottom should be preserved even though it is not active in TOP_RIGHT',
-      );
-    },
-  );
+    final settings = await scaleBar.getSettings();
+    expect(
+      settings.marginRight,
+      20,
+      reason: 'marginRight should be preserved since it is active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginTop,
+      30,
+      reason: 'marginTop should be preserved since it is active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginLeft,
+      10,
+      reason:
+          'marginLeft should be preserved even though it is not active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginBottom,
+      40,
+      reason:
+          'marginBottom should be preserved even though it is not active in TOP_RIGHT',
+    );
+  });
 
-  patrolTest(
-    'position and margins are preserved by an empty update',
-    skip: kIsWeb,
-    ($) async {
-      final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await tester.pumpAndSettle();
-      final scaleBar = mapboxMap.scaleBar;
+  patrolTest('position and margins are preserved by an empty update', (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final scaleBar = mapboxMap.scaleBar;
 
-      final baseline = ScaleBarSettings(
-        position: OrnamentPosition.BOTTOM_RIGHT,
-        marginRight: 11,
-        marginBottom: 22,
-      );
-      await scaleBar.updateSettings(baseline);
-      expect((await scaleBar.getSettings()).position, baseline.position);
+    final baseline = ScaleBarSettings(
+      position: OrnamentPosition.BOTTOM_RIGHT,
+      marginRight: 11,
+      marginBottom: 22,
+    );
+    await scaleBar.updateSettings(baseline);
+    expect((await scaleBar.getSettings()).position, baseline.position);
 
-      await scaleBar.updateSettings(ScaleBarSettings());
-      final updatedSettings = await scaleBar.getSettings();
-      expect(updatedSettings.position, baseline.position);
-      expect(updatedSettings.marginRight, baseline.marginRight);
-      expect(updatedSettings.marginBottom, baseline.marginBottom);
-    },
-  );
+    await scaleBar.updateSettings(ScaleBarSettings());
+    final updatedSettings = await scaleBar.getSettings();
+    expect(updatedSettings.position, baseline.position);
+    expect(updatedSettings.marginRight, baseline.marginRight);
+    expect(updatedSettings.marginBottom, baseline.marginBottom);
+  });
 
   patrolTest(
     'position and margins are preserved by a partial update that changes an unrelated field',
-    skip: kIsWeb,
     ($) async {
       final tester = $.tester;
       final mapboxMap = await app.pumpMap(tester: $.tester);

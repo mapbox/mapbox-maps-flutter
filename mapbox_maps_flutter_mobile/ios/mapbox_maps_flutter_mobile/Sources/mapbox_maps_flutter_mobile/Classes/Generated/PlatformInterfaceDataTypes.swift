@@ -2277,29 +2277,100 @@ struct LocationComponentSettings {
 
 /// Shows the scale bar on the map.
 ///
+/// On web the scale bar is the Mapbox GL JS `ScaleControl`, which draws a
+/// bordered label instead of the tick-marked ruler the mobile SDKs draw.
+/// Fields it cannot represent are marked below. Each one is still stored and
+/// returned by `getSettings`, so a value written with `updateSettings`
+/// survives a round-trip through the API.
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct ScaleBarSettings {
   /// Whether the scale is visible on the map.
+  /// Default value: true.
   var enabled: Bool? = nil
   /// Defines where the scale bar is positioned on the map.
+  /// Default value: "top-left".
   var position: OrnamentPosition? = nil
+  /// Defines the margin to the left that the scale bar honors.
+  /// Default value: 4.
   var marginLeft: Double? = nil
+  /// Defines the margin to the top that the scale bar honors.
+  /// Default value: 4.
   var marginTop: Double? = nil
+  /// Defines the margin to the right that the scale bar honors.
+  /// Default value: 4.
   var marginRight: Double? = nil
+  /// Defines the margin to the bottom that the scale bar honors.
+  /// Default value: 4.
   var marginBottom: Double? = nil
+  /// Defines text color of the scale bar.
+  /// Default value: "black".
   var textColor: Int64? = nil
+  /// Defines primary color of the scale bar.
+  /// Default value: "black".
+  ///
+  /// On web this becomes the border color of the scale bar label: Mapbox GL
+  /// JS draws no ruler segments to alternate between this color and
+  /// [secondaryColor].
   var primaryColor: Int64? = nil
+  /// Defines secondary color of the scale bar.
+  /// Default value: "white".
+  ///
+  /// On web this becomes the background color of the scale bar label, for the
+  /// reason given on [primaryColor].
   var secondaryColor: Int64? = nil
+  /// Defines width of the border for the scale bar.
+  /// Default value: 2.
   var borderWidth: Double? = nil
+  /// Defines height of the scale bar.
+  /// Default value: 2.
+  ///
+  /// Has no effect on web: Mapbox GL JS has no equivalent option, so the
+  /// value is stored and returned by `getSettings` but is not applied.
   var height: Double? = nil
+  /// Defines margin of the text bar of the scale bar.
+  /// Default value: 8.
+  ///
+  /// Has no effect on web: Mapbox GL JS has no equivalent option, so the
+  /// value is stored and returned by `getSettings` but is not applied.
   var textBarMargin: Double? = nil
+  /// Defines text border width of the scale bar.
+  /// Default value: 2.
+  ///
+  /// Has no effect on web: Mapbox GL JS has no equivalent option, so the
+  /// value is stored and returned by `getSettings` but is not applied.
   var textBorderWidth: Double? = nil
+  /// Defines text size of the scale bar.
+  /// Default value: 8.
   var textSize: Double? = nil
+  /// Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units.
+  /// Default value: true.
+  ///
+  /// Superseded by [distanceUnits], which can also select nautical units.
   var isMetricUnits: Bool? = nil
+  /// Supported distance unit types.
+  /// Default value: "metric".
   var distanceUnits: DistanceUnits? = nil
+  /// Configures minimum refresh interval, in millisecond, default is 15.
+  /// Default value: 15.
+  ///
+  /// Has no effect on web: Mapbox GL JS has no equivalent option, so the
+  /// value is stored and returned by `getSettings` but is not applied.
   var refreshInterval: Int64? = nil
+  /// Configures whether to show the text border or not, default is true.
+  /// Default value: true.
+  ///
+  /// Has no effect on web: Mapbox GL JS has no equivalent option, so the
+  /// value is stored and returned by `getSettings` but is not applied.
   var showTextBorder: Bool? = nil
+  /// configures ratio of scale bar max width compared with MapView width, default is 0.5.
+  /// Default value: 0.5.
   var ratio: Double? = nil
+  /// If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command.
+  /// Default value: false.
+  ///
+  /// Has no effect on web: Mapbox GL JS has no equivalent option, so the
+  /// value is stored and returned by `getSettings` but is not applied.
   var useContinuousRendering: Bool? = nil
 
 
@@ -2377,20 +2448,60 @@ struct ScaleBarSettings {
 
 /// Shows the compass on the map.
 ///
+/// On web the compass is the compass button of the Mapbox GL JS
+/// `NavigationControl`, added without its zoom buttons. Fields it cannot
+/// represent are marked below. Each one is still stored and returned by
+/// `getSettings`, so a value written with `updateSettings` survives a
+/// round-trip through the API.
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct CompassSettings {
+  /// Whether the compass is visible on the map.
+  /// Default value: true.
+  ///
+  /// Equivalent to [visibility] on iOS and on web, where both fields map
+  /// onto one visibility state.
   var enabled: Bool? = nil
+  /// Defines where the compass is positioned on the map.
+  /// Default value: "top-right".
   var position: OrnamentPosition? = nil
+  /// Defines the margin to the left that the compass icon honors.
+  /// Default value: 4.
   var marginLeft: Double? = nil
+  /// Defines the margin to the top that the compass icon honors.
+  /// Default value: 4.
   var marginTop: Double? = nil
+  /// Defines the margin to the right that the compass icon honors.
+  /// Default value: 4.
   var marginRight: Double? = nil
+  /// Defines the margin to the bottom that the compass icon honors.
+  /// Default value: 4.
   var marginBottom: Double? = nil
+  /// The alpha channel value of the compass image.
+  /// Default value: 1.
   var opacity: Double? = nil
+  /// The clockwise rotation value in degrees of the compass.
+  /// Default value: 0.
+  ///
+  /// Has no effect on web: Mapbox GL JS rewrites the needle's rotation on
+  /// every camera change, so the value is stored and returned by
+  /// `getSettings` but is not applied.
   var rotation: Double? = nil
+  /// Whether the compass is displayed.
+  /// Default value: true.
+  ///
+  /// Equivalent to [enabled] on iOS and on web, where both fields map onto
+  /// one visibility state.
   var visibility: Bool? = nil
+  /// Whether the compass fades out to invisible when facing north direction.
+  /// Default value: true.
   var fadeWhenFacingNorth: Bool? = nil
+  /// Whether the compass can be clicked and click events can be registered.
+  /// Default value: true.
   var clickable: Bool? = nil
   /// The compass image, the visual representation of the compass.
+  ///
+  /// An empty list restores the default compass image.
   var image: FlutterStandardTypedData? = nil
 
 

@@ -14,7 +14,7 @@ const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
-  patrolTest('Compass settings', skip: kIsWeb, ($) async {
+  patrolTest('Compass settings', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -66,17 +66,21 @@ void main() {
       reason:
           'marginRight should be preserved even though it is not active in TOP_LEFT',
     );
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       expect(updatedSettings.clickable, true);
       expect(updatedSettings.opacity, 0.5);
       expect(updatedSettings.rotation, 10);
     }
-    expect(await isSameImage(iconData, updatedSettings.image), isTrue);
+    if (kIsWeb) {
+      // Web stores the image bytes as given; `isSameImage` decodes through
+      // the native image pipeline, which is not what web round-trips.
+      expect(updatedSettings.image, iconData);
+    } else {
+      expect(await isSameImage(iconData, updatedSettings.image), isTrue);
+    }
   });
 
-  patrolTest('getSettings enabled reflects a disabled compass', skip: kIsWeb, (
-    $,
-  ) async {
+  patrolTest('getSettings enabled reflects a disabled compass', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -89,53 +93,49 @@ void main() {
     expect((await compass.getSettings()).enabled, isFalse);
   });
 
-  patrolTest(
-    'margins are independently tracked across position changes',
-    skip: kIsWeb,
-    ($) async {
-      final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await tester.pumpAndSettle();
-      final compass = mapboxMap.compass;
+  patrolTest('margins are independently tracked across position changes', (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final compass = mapboxMap.compass;
 
-      await compass.updateSettings(
-        CompassSettings(
-          position: OrnamentPosition.BOTTOM_LEFT,
-          marginLeft: 10,
-          marginRight: 20,
-          marginTop: 30,
-          marginBottom: 40,
-        ),
-      );
+    await compass.updateSettings(
+      CompassSettings(
+        position: OrnamentPosition.BOTTOM_LEFT,
+        marginLeft: 10,
+        marginRight: 20,
+        marginTop: 30,
+        marginBottom: 40,
+      ),
+    );
 
-      await compass.updateSettings(
-        CompassSettings(position: OrnamentPosition.TOP_RIGHT),
-      );
+    await compass.updateSettings(
+      CompassSettings(position: OrnamentPosition.TOP_RIGHT),
+    );
 
-      final settings = await compass.getSettings();
-      expect(settings.marginRight, 20);
-      expect(settings.marginTop, 30);
-      expect(
-        settings.marginLeft,
-        10,
-        reason:
-            'marginLeft should be preserved even though it is not active in TOP_RIGHT',
-      );
-      expect(
-        settings.marginBottom,
-        40,
-        reason:
-            'marginBottom should be preserved even though it is not active in TOP_RIGHT',
-      );
-    },
-  );
+    final settings = await compass.getSettings();
+    expect(settings.marginRight, 20);
+    expect(settings.marginTop, 30);
+    expect(
+      settings.marginLeft,
+      10,
+      reason:
+          'marginLeft should be preserved even though it is not active in TOP_RIGHT',
+    );
+    expect(
+      settings.marginBottom,
+      40,
+      reason:
+          'marginBottom should be preserved even though it is not active in TOP_RIGHT',
+    );
+  });
 
   // Regression test for https://github.com/mapbox/mapbox-maps-flutter/issues/602
   // On iOS `fadeWhenFacingNorth` was ignored unless `enabled` was also passed,
   // so it must be applicable on its own and stay consistent with Android.
-  patrolTest('fadeWhenFacingNorth applies without enabled', skip: kIsWeb, (
-    $,
-  ) async {
+  patrolTest('fadeWhenFacingNorth applies without enabled', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -163,34 +163,31 @@ void main() {
     expect(updatedSettings.visibility, true);
   });
 
-  patrolTest(
-    'position and margins are preserved by an empty update',
-    skip: kIsWeb,
-    ($) async {
-      final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await tester.pumpAndSettle();
-      final compass = mapboxMap.compass;
+  patrolTest('position and margins are preserved by an empty update', (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    final compass = mapboxMap.compass;
 
-      final baseline = CompassSettings(
-        position: OrnamentPosition.BOTTOM_LEFT,
-        marginLeft: 11,
-        marginBottom: 22,
-      );
-      await compass.updateSettings(baseline);
-      expect((await compass.getSettings()).position, baseline.position);
+    final baseline = CompassSettings(
+      position: OrnamentPosition.BOTTOM_LEFT,
+      marginLeft: 11,
+      marginBottom: 22,
+    );
+    await compass.updateSettings(baseline);
+    expect((await compass.getSettings()).position, baseline.position);
 
-      await compass.updateSettings(CompassSettings());
-      final updatedSettings = await compass.getSettings();
-      expect(updatedSettings.position, baseline.position);
-      expect(updatedSettings.marginLeft, baseline.marginLeft);
-      expect(updatedSettings.marginBottom, baseline.marginBottom);
-    },
-  );
+    await compass.updateSettings(CompassSettings());
+    final updatedSettings = await compass.getSettings();
+    expect(updatedSettings.position, baseline.position);
+    expect(updatedSettings.marginLeft, baseline.marginLeft);
+    expect(updatedSettings.marginBottom, baseline.marginBottom);
+  });
 
   patrolTest(
     'position and margins are preserved by a partial update that changes an unrelated field',
-    skip: kIsWeb,
     ($) async {
       final tester = $.tester;
       final mapboxMap = await app.pumpMap(tester: $.tester);
