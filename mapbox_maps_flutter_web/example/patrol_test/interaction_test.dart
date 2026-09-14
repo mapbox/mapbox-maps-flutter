@@ -24,6 +24,7 @@ void main() {
             children: [
               Positioned.fill(
                 child: MapWebWidget(
+                  styleUri: 'mapbox://styles/mapbox/standard',
                   viewport: _viewport,
                   onMapCreated: onCreated,
                 ),

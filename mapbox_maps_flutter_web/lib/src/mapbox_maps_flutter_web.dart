@@ -52,6 +52,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     // isOpaque is also ignored: gl-js always renders to an alpha-capable
     // canvas, so a transparent background works out of the box.
     return MapWebWidget(
+      styleUri: styleUri,
       onMapCreated: onMapCreated,
       onMapEvent: onMapEvent,
       viewport: viewport,

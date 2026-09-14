@@ -14,6 +14,7 @@ import 'mapbox_map_web.dart';
 import 'viewport/viewport_web.dart';
 
 class MapWebWidget extends StatefulWidget {
+  final String styleUri;
   final PlatformMapCreatedCallback? onMapCreated;
   final void Function(MapEvent)? onMapEvent;
   final ViewportState? viewport;
@@ -22,6 +23,7 @@ class MapWebWidget extends StatefulWidget {
 
   const MapWebWidget({
     super.key,
+    required this.styleUri,
     this.onMapCreated,
     this.onMapEvent,
     this.viewport,
@@ -100,11 +102,16 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     // `preserveDrawingBuffer` keeps the WebGL backbuffer readable after
     // render, which `MapboxMap.snapshot()` needs to call `toDataURL()` on
     // the canvas. It costs an extra backbuffer copy per frame.
+    //
+    // The style must be set here, not in a later `setStyle` call. gl-js
+    // otherwise loads its empty default style and fires `style.load` for it,
+    // then discards everything the caller added from that callback.
     final nativeMap = JSMap(
       JSMapOptions(
         container: _mapElement,
         minZoom: 0,
         preserveDrawingBuffer: true,
+        style: widget.styleUri.toJS,
       ),
     );
     _currentMap = nativeMap;

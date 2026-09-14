@@ -71,8 +71,8 @@ final class StyleController implements StylePlatformInterface {
     String json, {
     Map<String, Object>? config,
     ImportPosition? importPosition,
-  }) async {
-    _map.addImport(
+  }) => _waitForImportLoad(
+    () => _map.addImport(
       JSImportSpecification(
         id: importId,
         url: '',
@@ -80,8 +80,8 @@ final class StyleController implements StylePlatformInterface {
         config: config?.jsify(),
       ),
       _resolveBeforeImportId(importPosition),
-    );
-  }
+    ),
+  );
 
   @override
   Future<void> addStyleImportFromURI(
@@ -90,9 +90,40 @@ final class StyleController implements StylePlatformInterface {
     Map<String, Object>? config,
     ImportPosition? importPosition,
   }) async {
+    // A URI import merges only when its fetch completes, on all platforms, so
+    // this does not wait for the merge.
     _map.addImport(
       JSImportSpecification(id: importId, url: uri, config: config?.jsify()),
       _resolveBeforeImportId(importPosition),
+    );
+  }
+
+  // `Map#addImport` does not return a promise. A caller that changes the style
+  // immediately after it races the merge, and gets "Style is not done
+  // loading". GL JS merges in a microtask after `style.import.load`, then
+  // fires `styledata`. Wait for that `styledata`.
+  Future<void> _waitForImportLoad(void Function() addImport) {
+    final completer = Completer<void>();
+    late final JSFunction onImportLoad;
+    late final JSFunction onStyleData;
+
+    void finish() {
+      _map.off(JSMapEvents.styleImportLoad, onImportLoad);
+      _map.off(JSMapEvents.styleData, onStyleData);
+      if (!completer.isCompleted) completer.complete();
+    }
+
+    onStyleData = (() => finish()).toJS;
+    onImportLoad = (() => _map.once(JSMapEvents.styleData, onStyleData)).toJS;
+    _map.once(JSMapEvents.styleImportLoad, onImportLoad);
+
+    addImport();
+
+    // An import that fails to load never reaches `styledata`. Complete the
+    // future anyway, because the caller must not wait forever.
+    return completer.future.timeout(
+      const Duration(seconds: 10),
+      onTimeout: finish,
     );
   }
 
@@ -101,23 +132,25 @@ final class StyleController implements StylePlatformInterface {
     String importId,
     String json, {
     Map<String, Object>? config,
-  }) async {
+  }) {
     // gl-js's in-place updateImport keeps the import's old schema;
     // remove+add refreshes it. Capture beforeId and existing config first so
     // the import lands back in the same slot with its config preserved —
     // matching gl-native's documented "merge with existing" semantic.
     final beforeId = _siblingAfterImport(importId);
     final merged = _mergedImportConfig(importId, config);
-    _map.removeImport(importId);
-    _map.addImport(
-      JSImportSpecification(
-        id: importId,
-        url: '',
-        data: jsonParse(json),
-        config: merged?.jsify(),
-      ),
-      beforeId,
-    );
+    return _waitForImportLoad(() {
+      _map.removeImport(importId);
+      _map.addImport(
+        JSImportSpecification(
+          id: importId,
+          url: '',
+          data: jsonParse(json),
+          config: merged?.jsify(),
+        ),
+        beforeId,
+      );
+    });
   }
 
   @override
@@ -130,6 +163,8 @@ final class StyleController implements StylePlatformInterface {
     // remove+add refreshes it. Capture beforeId and existing config first so
     // the import lands back in the same slot with its config preserved —
     // matching gl-native's documented "merge with existing" semantic.
+    // A URI import merges only when its fetch completes, so this does not
+    // wait for the merge.
     final beforeId = _siblingAfterImport(importId);
     final merged = _mergedImportConfig(importId, config);
     _map.removeImport(importId);

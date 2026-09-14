@@ -13,7 +13,11 @@ Widget _mapApp(ViewportState? viewport, PlatformMapCreatedCallback onCreated) =>
         body: Stack(
           children: [
             Positioned.fill(
-              child: MapWebWidget(viewport: viewport, onMapCreated: onCreated),
+              child: MapWebWidget(
+                styleUri: 'mapbox://styles/mapbox/standard',
+                viewport: viewport,
+                onMapCreated: onCreated,
+              ),
             ),
           ],
         ),

@@ -28,7 +28,11 @@ Widget _mapApp(PlatformMapCreatedCallback onCreated) => MaterialApp(
     body: Stack(
       children: [
         Positioned.fill(
-          child: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+          child: MapWebWidget(
+            styleUri: 'mapbox://styles/mapbox/standard',
+            viewport: _viewport,
+            onMapCreated: onCreated,
+          ),
         ),
       ],
     ),
@@ -233,6 +237,7 @@ void main() {
             children: [
               Positioned.fill(
                 child: MapWebWidget(
+                  styleUri: 'mapbox://styles/mapbox/standard',
                   viewport: pitchedViewport,
                   onMapCreated: onCreated,
                 ),

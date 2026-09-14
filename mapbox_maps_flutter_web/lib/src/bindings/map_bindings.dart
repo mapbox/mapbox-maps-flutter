@@ -68,6 +68,7 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
     required HTMLDivElement container,
     double? minZoom,
     bool? preserveDrawingBuffer,
+    JSString? style,
   });
 }
 
@@ -336,6 +337,7 @@ class JSMapEvents {
 
   static const load = 'load';
   static const styleLoad = 'style.load';
+  static const styleImportLoad = 'style.import.load';
   static const styleData = 'styledata';
   static const idle = 'idle';
 

@@ -36,7 +36,11 @@ Future<MapboxMapWeb> pumpOrnamentMap(WidgetTester tester) async {
     tester,
     (onCreated) => MaterialApp(
       home: Scaffold(
-        body: MapWebWidget(viewport: ornamentViewport, onMapCreated: onCreated),
+        body: MapWebWidget(
+          styleUri: 'mapbox://styles/mapbox/standard',
+          viewport: ornamentViewport,
+          onMapCreated: onCreated,
+        ),
       ),
     ),
   );

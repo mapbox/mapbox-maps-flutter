@@ -1,6 +1,7 @@
 {
     "version": 8,
     "sprite": "mapbox://sprites/examples/clkiip5x600b501pb4al5g7wv/du1h5vs55f48z8rgjod0dggl9",
+    "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
     "projection": { "name": "globe" },
     "sources": {
         "water_source": {
@@ -34,7 +35,6 @@
             "layout": {},
             "paint": {
                 "line-emissive-strength": 1,
-                "line-depth-occlusion-factor": 0.9,
                 "line-color": [
                     "match",
                     ["get", "name"],

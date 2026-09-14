@@ -1,3 +1,8 @@
+### main
+
+* [web] Fix `addStyleImportFromJSON` and `updateStyleImportWithJSON`. They completed before the style held the fragment, so the next call failed with "Style is not done loading". Both now complete after the style holds the fragment, as on Android and iOS.
+* [web] Fix `MapWidget` ignoring `styleUri`. The map loaded a default style first, fired `onStyleLoaded` for it, then loaded the requested style, which removed everything `onStyleLoaded` had added. The map now loads the requested style directly.
+
 ### 3.0.0-alpha.30
 
 * Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), and `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`).
