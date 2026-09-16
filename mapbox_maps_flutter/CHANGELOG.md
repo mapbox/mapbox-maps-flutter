@@ -15,8 +15,6 @@
 * Add `StyleImage.fromImage` to build a `StyleImage` from a `dart:ui` `Image` (for example one produced by a `CustomPainter` or `Canvas.toImage`)
 * [web] Add `loadStyleJson` support.
 * Fix `PointAnnotationManager.update()` not applying a new `image` on iOS and Android when the annotation's `iconImage` still named a previous registration ([#532](https://github.com/mapbox/mapbox-maps-flutter/issues/532)). If you leave `iconImage` unset, the SDK derives one from a hash of `image`, so a content change now applies automatically. Set `iconImage` yourself for full control of the style-image name: for example, to reuse one name across annotations, or to point at a style image added elsewhere without uploading `image`.
-* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
-* Promote `SymbolLayer.symbolZOffset` to stable.
 
 ### 3.0.0-alpha.29
 
@@ -46,6 +44,27 @@
 ### 3.0.0-alpha.1
 
 * Split the plugin into federated packages and add web support: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
+
+### 2.31.0-rc.1
+
+* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
+* Promote `SymbolLayer.symbolZOffset` to stable.
+* Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
+
+### 2.30.1
+
+### 2.30.0
+
+* Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.
+* Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
+* Mark `Snapshotter.tileCover` as experimental since the underlying native APIs are experimental.
+
+### 2.28.0
+
+* Add `ModelSource` API, exposing the 3D model source (a collection of 3D models, each with its own position, orientation, and node/material overrides).
+* Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
+* [iOS] Fix `updateSettings` on `CompassSettings`, `AttributionSettings`, `LogoSettings`, `IndoorSelectorSettings`, `ScaleBarSettings`, `GesturesSettings`, and `LocationComponentSettings` resetting omitted fields (position, margins, `enabled`, `scrollMode`, puck configuration) to defaults instead of preserving them, matching Android's partial-update behaviour.
+* [Android] Fix `LocationComponentSettings.updateSettings` dropping the previously configured 2D or 3D puck's settings when switching between puck types.
 
 ### 2.27.0
 

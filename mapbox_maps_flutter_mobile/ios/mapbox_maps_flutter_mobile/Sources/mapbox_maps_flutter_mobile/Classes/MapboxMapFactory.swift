@@ -1,7 +1,7 @@
 import Flutter
 import MapboxCommon
 import MapboxCommon_Private
-import MapboxMaps
+@_spi(Restricted) import MapboxMaps
 
 final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     private static let mapCounter = FeatureTelemetryCounter.create(
@@ -43,7 +43,7 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         guard let args = args as? [String: Any] else {
             return MapboxMapController(
                 withFrame: frame,
-                mapInitOptions: MapInitOptions(),
+                mapInitOptions: MapInitOptions(mapStyle: .standard, uiFramework: .flutter),
                 channelSuffix: 0,
                 registrar: registrar,
                 pluginVersion: "",
@@ -53,15 +53,16 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             )
         }
 
-        let styleURI = (args["styleUri"] as? String).map(StyleURI.init(rawValue:))
+        let styleURI = (args["styleUri"] as? String).flatMap(StyleURI.init(rawValue:))
         let isOpaque = args["isOpaque"] as? Bool
         let mapOptions = args["mapOptions"] as? MapOptions
         let cameraOptions = args["cameraOptions"] as? CameraOptions
 
         let mapInitOptions = MapInitOptions(
+            mapStyle: MapStyle(uri: styleURI ?? .standard),
             mapOptions: mapOptions?.toMapOptions() ?? MapboxMaps.MapOptions(),
             cameraOptions: cameraOptions?.toCameraOptions(),
-            styleURI: styleURI ?? .standard
+            uiFramework: .flutter
         )
 
         Self.mapCounter.increment()
