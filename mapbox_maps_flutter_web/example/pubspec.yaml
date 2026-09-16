@@ -20,7 +20,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   web: ^1.0.0
-  turf: ^0.0.10
+  turf: ^0.0.13
   patrol: ^4.7.1
 
 flutter:

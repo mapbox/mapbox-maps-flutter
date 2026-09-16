@@ -18,7 +18,7 @@ dependencies:
     sdk: flutter
   web: ^1.0.0
   meta: ^1.17.0
-  turf: ^0.0.10
+  turf: ^0.0.13
   mapbox_maps_flutter_platform_interface: ^3.0.0-alpha.30
 
 dev_dependencies:

@@ -23,7 +23,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  turf: ^0.0.10
+  turf: ^0.0.13
   meta: ^1.17.0
   flutter:
     sdk: flutter
