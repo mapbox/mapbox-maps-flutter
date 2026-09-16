@@ -50,38 +50,13 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
     _refreshAll();
   }
 
-  /// Names of the ornaments this platform does not implement, so their tabs
-  /// can say so instead of failing.
-  final _unsupported = <String>{};
-
-  /// Runs [read], returning null when the platform does not implement the
-  /// ornament. Not every ornament is available everywhere — web has no logo
-  /// or attribution settings yet — and one missing ornament must not stop
-  /// the others from working.
-  Future<T?> _tryRead<T>(String ornament, Future<T> Function() read) async {
-    try {
-      final value = await read();
-      _unsupported.remove(ornament);
-      return value;
-    } on UnimplementedError {
-      _unsupported.add(ornament);
-      return null;
-    } on UnsupportedError {
-      _unsupported.add(ornament);
-      return null;
-    }
-  }
-
   Future<void> _refreshAll() async {
     final map = mapboxMap;
     if (map == null) return;
-    final compass = await _tryRead('Compass', map.compass.getSettings);
-    final scaleBar = await _tryRead('Scale bar', map.scaleBar.getSettings);
-    final logo = await _tryRead('Logo', map.logo.getSettings);
-    final attribution = await _tryRead(
-      'Attribution',
-      map.attribution.getSettings,
-    );
+    final compass = await map.compass.getSettings();
+    final scaleBar = await map.scaleBar.getSettings();
+    final logo = await map.logo.getSettings();
+    final attribution = await map.attribution.getSettings();
     if (!mounted) return;
     setState(() {
       compassSettings = compass;
@@ -93,37 +68,33 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
 
   /// Sends [settings] to one ornament, then re-reads the merged result so the
   /// read-back rows show what the platform kept.
-  Future<void> _update<T>(
-    String ornament,
-    Future<void> Function(T) update,
-    T settings,
-  ) async {
-    await _tryRead(ornament, () async => update(settings));
+  Future<void> _update<T>(Future<void> Function(T) update, T settings) async {
+    await update(settings);
     await _refreshAll();
   }
 
   Future<void> _updateCompass(CompassSettings settings) async {
     final map = mapboxMap;
     if (map == null) return;
-    await _update('Compass', map.compass.updateSettings, settings);
+    await _update(map.compass.updateSettings, settings);
   }
 
   Future<void> _updateScaleBar(ScaleBarSettings settings) async {
     final map = mapboxMap;
     if (map == null) return;
-    await _update('Scale bar', map.scaleBar.updateSettings, settings);
+    await _update(map.scaleBar.updateSettings, settings);
   }
 
   Future<void> _updateLogo(LogoSettings settings) async {
     final map = mapboxMap;
     if (map == null) return;
-    await _update('Logo', map.logo.updateSettings, settings);
+    await _update(map.logo.updateSettings, settings);
   }
 
   Future<void> _updateAttribution(AttributionSettings settings) async {
     final map = mapboxMap;
     if (map == null) return;
-    await _update('Attribution', map.attribution.updateSettings, settings);
+    await _update(map.attribution.updateSettings, settings);
   }
 
   Future<Uint8List> _loadCustomCompassImage() async {
@@ -312,32 +283,54 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
     _stepperTile('Bottom', bottom, 0, 100, onBottom, step: 4),
   ];
 
-  Widget _colorTile(String title, int? value, ValueChanged<int> onChanged) =>
-      ListTile(
-        dense: true,
-        title: Text(title),
-        trailing: PopupMenuButton<int>(
-          initialValue: value,
-          onSelected: onChanged,
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: value == null ? null : Color(value),
-            ),
-            label: Text(_colorLabel(value)),
-          ),
-          itemBuilder: (_) => _colorChoices.entries
-              .map(
-                (entry) =>
-                    PopupMenuItem(value: entry.value, child: Text(entry.key)),
-              )
-              .toList(),
+  Widget _colorTile(
+    String title,
+    int? value,
+    ValueChanged<int> onChanged, {
+    String? note,
+  }) => ListTile(
+    dense: true,
+    title: Text(title),
+    subtitle: note == null ? null : Text(note),
+    trailing: PopupMenuButton<int>(
+      initialValue: value,
+      onSelected: onChanged,
+      child: Chip(
+        avatar: CircleAvatar(
+          backgroundColor: value == null ? null : Color(value),
         ),
-      );
+        label: Text(_colorLabel(value)),
+      ),
+      itemBuilder: (_) => _colorChoices.entries
+          .map(
+            (entry) =>
+                PopupMenuItem(value: entry.value, child: Text(entry.key)),
+          )
+          .toList(),
+    ),
+  );
 
   /// Note for a field no platform except Android draws.
   String get _androidOnly => kIsWeb
       ? 'Stored on web, but not drawn.'
       : 'Android only. Stored elsewhere, but not drawn.';
+
+  /// Note for the logo `enabled` switch.
+  String get _logoEnabledNote => kIsWeb
+      ? 'Hides the logo, but keeps it in the page. A style that does not '
+            'require the logo hides it whatever this says.'
+      : 'Restricted API. Contact Mapbox before you hide the logo.';
+
+  /// Note for a field that only the mobile SDKs draw.
+  String get _mobileOnly => kIsWeb
+      ? 'Stored on web, but not drawn: GL JS draws the icon as an image '
+            'that CSS cannot recolor.'
+      : 'Tints the attribution icon.';
+
+  /// Note for the attribution `clickable` field, which iOS does not model.
+  String get _clickableNote => kIsWeb
+      ? 'Turns pointer events on the attribution control on and off.'
+      : 'Stored on iOS, but getSettings returns null for it.';
 
   /// Note for the scale bar styling fields, which Android and web draw but
   /// iOS does not.
@@ -345,25 +338,6 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
       ? 'Web maps these onto the GL JS scale bar label, so the colors are '
             'an approximation of the segmented native ruler.'
       : 'Not drawn on iOS, but stored and returned by getSettings.';
-
-  /// Banner shown at the top of a tab whose ornament this platform has not
-  /// implemented, so the controls below it do nothing.
-  Widget? _unsupportedBanner(String ornament) {
-    if (!_unsupported.contains(ornament)) return null;
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.errorContainer,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        '$ornament settings are not implemented on this platform. The '
-        'controls below have no effect.',
-        style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
-      ),
-    );
-  }
 
   /// Read-back of the fields the platform stores but may not draw, so the
   /// partial-update behaviour stays visible even for unsupported fields.
@@ -379,7 +353,6 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
-        ?_unsupportedBanner('Compass'),
         _switchTile(
           'Enabled',
           settings?.enabled,
@@ -475,7 +448,6 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
-        ?_unsupportedBanner('Scale bar'),
         _switchTile(
           'Enabled',
           settings?.enabled,
@@ -623,11 +595,11 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
-        ?_unsupportedBanner('Logo'),
         _switchTile(
           'Enabled',
           settings?.enabled,
           (v) => _updateLogo(LogoSettings(enabled: v)),
+          subtitle: _logoEnabledNote,
         ),
         _positionTile(
           settings?.position,
@@ -643,6 +615,11 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
           onRight: (v) => _updateLogo(LogoSettings(marginRight: v)),
           onBottom: (v) => _updateLogo(LogoSettings(marginBottom: v)),
         ),
+        _readBack(
+          'Read back: enabled=${settings?.enabled}, '
+          'position=${_positionLabel(settings?.position)}, '
+          'margins=${_margins(settings?.marginLeft, settings?.marginTop, settings?.marginRight, settings?.marginBottom)}',
+        ),
       ],
     );
   }
@@ -652,7 +629,6 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
-        ?_unsupportedBanner('Attribution'),
         _switchTile(
           'Enabled',
           settings?.enabled,
@@ -678,14 +654,19 @@ class _OrnamentsExampleState extends State<OrnamentsExample>
           'Icon color',
           settings?.iconColor,
           (v) => _updateAttribution(AttributionSettings(iconColor: v)),
+          note: _mobileOnly,
         ),
         _switchTile(
           'Clickable',
           settings?.clickable,
           (v) => _updateAttribution(AttributionSettings(clickable: v)),
+          subtitle: _clickableNote,
         ),
         _readBack(
-          'Read back: iconColor=${_hex(settings?.iconColor)}, '
+          'Read back: enabled=${settings?.enabled}, '
+          'position=${_positionLabel(settings?.position)}, '
+          'margins=${_margins(settings?.marginLeft, settings?.marginTop, settings?.marginRight, settings?.marginBottom)}, '
+          'iconColor=${_hex(settings?.iconColor)}, '
           'clickable=${settings?.clickable}',
         ),
       ],
@@ -762,3 +743,9 @@ String _unitsLabel(DistanceUnits? units) => switch (units) {
   DistanceUnits.NAUTICAL => 'Nautical',
   null => 'Default',
 };
+
+/// The four margins on one line, for the read-back lines.
+String _margins(double? left, double? top, double? right, double? bottom) =>
+    '${_num(left)}/${_num(top)}/${_num(right)}/${_num(bottom)}';
+
+String _num(double? value) => value == null ? 'null' : '${value.round()}';

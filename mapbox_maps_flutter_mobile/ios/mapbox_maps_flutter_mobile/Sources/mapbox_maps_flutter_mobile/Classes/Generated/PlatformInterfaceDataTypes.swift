@@ -2557,14 +2557,50 @@ struct CompassSettings {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct AttributionSettings {
+  /// Whether the attribution icon is shown on the map.
+  ///
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  ///
+  /// Default value: true.
   var enabled: Bool? = nil
+  /// The color of the attribution icon.
+  ///
+  /// Default value: 0xFF1E8CAB.
+  ///
+  /// Has no effect on web: Mapbox GL JS draws the icon as a background
+  /// image, which CSS cannot recolor. The value is stored and returned by
+  /// `getSettings`, but not applied.
   var iconColor: Int64? = nil
+  /// The position of the attribution icon on the map.
+  ///
+  /// Default value: `OrnamentPosition.BOTTOM_LEFT` on Android, and
+  /// `OrnamentPosition.BOTTOM_RIGHT` on iOS and web.
   var position: OrnamentPosition? = nil
+  /// The distance from the left edge of the map, in logical pixels.
+  ///
+  /// Default value: 92 on Android, and 8 on iOS and web. Android puts
+  /// attribution in the same corner as the logo, so it uses a wider margin
+  /// to keep the two apart.
   var marginLeft: Double? = nil
+  /// The distance from the top edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginTop: Double? = nil
+  /// The distance from the right edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginRight: Double? = nil
+  /// The distance from the bottom edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginBottom: Double? = nil
+  /// Whether the attribution icon can be clicked and click events can be
+  /// registered.
+  ///
+  /// Default value: true.
+  ///
+  /// Has no effect on iOS: the value is stored but `getSettings` returns
+  /// null for it.
   var clickable: Bool? = nil
 
 
@@ -2608,12 +2644,36 @@ struct AttributionSettings {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct LogoSettings {
+  /// Whether the Mapbox logo is shown on the map.
+  ///
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  ///
+  /// Default value: true.
+  ///
+  /// On web this value only stops the SDK from hiding the logo. Mapbox GL JS
+  /// hides the logo for a style whose sources do not require it. So
+  /// `getSettings` can report the logo as enabled while the style keeps it
+  /// hidden.
   var enabled: Bool? = nil
+  /// The position of the Mapbox logo on the map.
+  ///
+  /// Default value: `OrnamentPosition.BOTTOM_LEFT`.
   var position: OrnamentPosition? = nil
+  /// The distance from the left edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginLeft: Double? = nil
+  /// The distance from the top edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginTop: Double? = nil
+  /// The distance from the right edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginRight: Double? = nil
+  /// The distance from the bottom edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   var marginBottom: Double? = nil
 
 

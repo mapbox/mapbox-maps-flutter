@@ -3502,14 +3502,66 @@ data class CompassSettings(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class AttributionSettings(
-  /** Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property. */
+  /**
+   * Whether the attribution icon is shown on the map.
+   *
+   * Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+   *
+   * Default value: true.
+   */
   val enabled: Boolean? = null,
+  /**
+   * The color of the attribution icon.
+   *
+   * Default value: 0xFF1E8CAB.
+   *
+   * Has no effect on web: Mapbox GL JS draws the icon as a background
+   * image, which CSS cannot recolor. The value is stored and returned by
+   * `getSettings`, but not applied.
+   */
   val iconColor: Long? = null,
+  /**
+   * The position of the attribution icon on the map.
+   *
+   * Default value: `OrnamentPosition.BOTTOM_LEFT` on Android, and
+   * `OrnamentPosition.BOTTOM_RIGHT` on iOS and web.
+   */
   val position: OrnamentPosition? = null,
+  /**
+   * The distance from the left edge of the map, in logical pixels.
+   *
+   * Default value: 92 on Android, and 8 on iOS and web. Android puts
+   * attribution in the same corner as the logo, so it uses a wider margin
+   * to keep the two apart.
+   */
   val marginLeft: Double? = null,
+  /**
+   * The distance from the top edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginTop: Double? = null,
+  /**
+   * The distance from the right edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginRight: Double? = null,
+  /**
+   * The distance from the bottom edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginBottom: Double? = null,
+  /**
+   * Whether the attribution icon can be clicked and click events can be
+   * registered.
+   *
+   * Default value: true.
+   *
+   * Has no effect on iOS: the value is stored but `getSettings` returns
+   * null for it.
+   */
   val clickable: Boolean? = null
 ) {
   companion object {
@@ -3563,12 +3615,48 @@ data class AttributionSettings(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class LogoSettings(
-  /** Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property. */
+  /**
+   * Whether the Mapbox logo is shown on the map.
+   *
+   * Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+   *
+   * Default value: true.
+   *
+   * On web this value only stops the SDK from hiding the logo. Mapbox GL JS
+   * hides the logo for a style whose sources do not require it. So
+   * `getSettings` can report the logo as enabled while the style keeps it
+   * hidden.
+   */
   val enabled: Boolean? = null,
+  /**
+   * The position of the Mapbox logo on the map.
+   *
+   * Default value: `OrnamentPosition.BOTTOM_LEFT`.
+   */
   val position: OrnamentPosition? = null,
+  /**
+   * The distance from the left edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginLeft: Double? = null,
+  /**
+   * The distance from the top edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginTop: Double? = null,
+  /**
+   * The distance from the right edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginRight: Double? = null,
+  /**
+   * The distance from the bottom edge of the map, in logical pixels.
+   *
+   * Default value: 4 on Android, and 8 on iOS and web.
+   */
   val marginBottom: Double? = null
 ) {
   companion object {

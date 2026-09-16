@@ -100,4 +100,63 @@ void main() {
       expect(s.clickable, false);
     }
   });
+
+  patrolTest('every logo field the example exposes round-trips', ($) async {
+    final map = await app.pumpMap(tester: $.tester);
+    await $.tester.pumpAndSettle();
+    final logo = map.logo;
+
+    await logo.updateSettings(LogoSettings(enabled: true));
+    await logo.updateSettings(
+      LogoSettings(position: OrnamentPosition.BOTTOM_RIGHT),
+    );
+    await logo.updateSettings(LogoSettings(marginLeft: 31));
+    await logo.updateSettings(LogoSettings(marginTop: 32));
+    await logo.updateSettings(LogoSettings(marginRight: 33));
+    await logo.updateSettings(LogoSettings(marginBottom: 34));
+
+    // Each field above was sent alone, so all of them must still be set.
+    final s = await logo.getSettings();
+    expect(s.position, OrnamentPosition.BOTTOM_RIGHT);
+    expect(s.marginLeft, 31);
+    expect(s.marginTop, 32);
+    expect(s.marginRight, 33);
+    expect(s.marginBottom, 34);
+    expect(s.enabled, isTrue, reason: 'enabled must survive later updates');
+  });
+
+  patrolTest('every attribution field the example exposes round-trips', (
+    $,
+  ) async {
+    final map = await app.pumpMap(tester: $.tester);
+    await $.tester.pumpAndSettle();
+    final attribution = map.attribution;
+
+    await attribution.updateSettings(AttributionSettings(enabled: true));
+    await attribution.updateSettings(
+      AttributionSettings(position: OrnamentPosition.TOP_RIGHT),
+    );
+    await attribution.updateSettings(AttributionSettings(marginLeft: 41));
+    await attribution.updateSettings(AttributionSettings(marginTop: 42));
+    await attribution.updateSettings(AttributionSettings(marginRight: 43));
+    await attribution.updateSettings(AttributionSettings(marginBottom: 44));
+    await attribution.updateSettings(
+      AttributionSettings(iconColor: 0xFF2196F3),
+    );
+    await attribution.updateSettings(AttributionSettings(clickable: false));
+
+    final s = await attribution.getSettings();
+    expect(s.position, OrnamentPosition.TOP_RIGHT);
+    expect(s.marginLeft, 41);
+    expect(s.marginTop, 42);
+    expect(s.marginRight, 43);
+    expect(s.marginBottom, 44);
+    expect(s.enabled, isTrue, reason: 'enabled must survive later updates');
+    // iOS returns null for `clickable`, which it does not model, and rounds
+    // `iconColor` through a UIColor. Android and web store and return both.
+    if (kIsWeb) {
+      expect(s.iconColor, 0xFF2196F3);
+      expect(s.clickable, isFalse);
+    }
+  });
 }

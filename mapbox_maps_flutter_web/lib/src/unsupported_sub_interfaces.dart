@@ -18,35 +18,15 @@ import 'annotation/polyline_annotation_manager_web.dart';
 ///   * [UnimplementedError] — not-yet-implemented; GL JS has a plausible
 ///                            analogue waiting to be wired.
 ///
-/// The remaining settings sub-interfaces (attribution/logo/indoor selector)
-/// are [UnimplementedError] — GL JS has built-in controls for attribution
-/// and the logo, but they are not wired into this package yet. Gestures,
-/// the scale bar and the compass are implemented in their own controllers.
+/// The indoor selector is the one settings sub-interface left throwing
+/// [UnimplementedError]. Gestures, the scale bar, the compass, attribution
+/// and the logo are implemented in their own controllers.
 
 UnimplementedError _unimplemented(String method, String owner) =>
     UnimplementedError('$owner.$method is not yet implemented on web.');
 
 UnsupportedError _unsupported(String method, String reason) =>
     UnsupportedError('$method is not supported on web: $reason');
-
-class UnsupportedAttributionSettingsWeb
-    implements AttributionSettingsPlatformInterface {
-  @override
-  Future<AttributionSettings> getSettings() =>
-      throw _unimplemented('getSettings', 'AttributionSettings');
-  @override
-  Future<void> updateSettings(AttributionSettings settings) =>
-      throw _unimplemented('updateSettings', 'AttributionSettings');
-}
-
-class UnsupportedLogoSettingsWeb implements LogoSettingsPlatformInterface {
-  @override
-  Future<LogoSettings> getSettings() =>
-      throw _unimplemented('getSettings', 'LogoSettings');
-  @override
-  Future<void> updateSettings(LogoSettings settings) =>
-      throw _unimplemented('updateSettings', 'LogoSettings');
-}
 
 class UnsupportedIndoorSelectorSettingsWeb
     implements IndoorSelectorSettingsPlatformInterface {

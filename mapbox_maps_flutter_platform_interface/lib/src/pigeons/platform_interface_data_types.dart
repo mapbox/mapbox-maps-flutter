@@ -3624,21 +3624,57 @@ class AttributionSettings {
     this.clickable,
   });
 
+  /// Whether the attribution icon is shown on the map.
+  ///
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  ///
+  /// Default value: true.
   bool? enabled;
 
+  /// The color of the attribution icon.
+  ///
+  /// Default value: 0xFF1E8CAB.
+  ///
+  /// Has no effect on web: Mapbox GL JS draws the icon as a background
+  /// image, which CSS cannot recolor. The value is stored and returned by
+  /// `getSettings`, but not applied.
   int? iconColor;
 
+  /// The position of the attribution icon on the map.
+  ///
+  /// Default value: `OrnamentPosition.BOTTOM_LEFT` on Android, and
+  /// `OrnamentPosition.BOTTOM_RIGHT` on iOS and web.
   OrnamentPosition? position;
 
+  /// The distance from the left edge of the map, in logical pixels.
+  ///
+  /// Default value: 92 on Android, and 8 on iOS and web. Android puts
+  /// attribution in the same corner as the logo, so it uses a wider margin
+  /// to keep the two apart.
   double? marginLeft;
 
+  /// The distance from the top edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginTop;
 
+  /// The distance from the right edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginRight;
 
+  /// The distance from the bottom edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginBottom;
 
+  /// Whether the attribution icon can be clicked and click events can be
+  /// registered.
+  ///
+  /// Default value: true.
+  ///
+  /// Has no effect on iOS: the value is stored but `getSettings` returns
+  /// null for it.
   bool? clickable;
 
   List<Object?> _toList() {
@@ -3707,17 +3743,41 @@ class LogoSettings {
     this.marginBottom,
   });
 
+  /// Whether the Mapbox logo is shown on the map.
+  ///
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  ///
+  /// Default value: true.
+  ///
+  /// On web this value only stops the SDK from hiding the logo. Mapbox GL JS
+  /// hides the logo for a style whose sources do not require it. So
+  /// `getSettings` can report the logo as enabled while the style keeps it
+  /// hidden.
   bool? enabled;
 
+  /// The position of the Mapbox logo on the map.
+  ///
+  /// Default value: `OrnamentPosition.BOTTOM_LEFT`.
   OrnamentPosition? position;
 
+  /// The distance from the left edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginLeft;
 
+  /// The distance from the top edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginTop;
 
+  /// The distance from the right edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginRight;
 
+  /// The distance from the bottom edge of the map, in logical pixels.
+  ///
+  /// Default value: 4 on Android, and 8 on iOS and web.
   double? marginBottom;
 
   List<Object?> _toList() {

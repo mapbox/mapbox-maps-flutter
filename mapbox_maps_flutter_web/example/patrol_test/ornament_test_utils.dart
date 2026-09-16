@@ -64,6 +64,22 @@ web.HTMLElement? scaleBarElement(JSMap map) =>
     map.getContainer().querySelector('.mapboxgl-ctrl-scale')
         as web.HTMLElement?;
 
+/// Attribution element inside [map]'s own container.
+web.HTMLElement? attributionElement(JSMap map) =>
+    map.getContainer().querySelector('.mapboxgl-ctrl-attrib')
+        as web.HTMLElement?;
+
+/// The Mapbox logo link inside [map]'s own container.
+web.HTMLElement? logoElement(JSMap map) =>
+    map.getContainer().querySelector('.mapboxgl-ctrl-logo') as web.HTMLElement?;
+
+/// The element wrapping the logo link, which carries the margins.
+web.HTMLElement? logoRoot(JSMap map) =>
+    logoElement(map)?.parentElement as web.HTMLElement?;
+
+/// Name of the corner container [element] sits in.
+String cornerOf(web.HTMLElement element) => element.parentElement!.className;
+
 /// Points the camera away from north, so the compass's fade-at-north
 /// behaviour does not drive opacity to zero during a styling assertion.
 Future<void> faceAwayFromNorth(WidgetTester tester, JSMap map) async {

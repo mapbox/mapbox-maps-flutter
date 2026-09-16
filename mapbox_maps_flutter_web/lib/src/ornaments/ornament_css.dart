@@ -63,3 +63,19 @@ void applyMargins(
 /// second map on the page cannot be picked up by mistake.
 web.HTMLElement? findControlElement(JSMap map, String selector) =>
     map.getContainer().querySelector(selector) as web.HTMLElement?;
+
+/// Moves [element] into the corner container GL JS keeps for [position].
+///
+/// GL JS sets a control's corner when the control is added, so an ornament
+/// GL JS owns can only be moved in the DOM.
+void moveToCorner(
+  JSMap map,
+  web.HTMLElement element,
+  OrnamentPosition? position,
+) {
+  final corner = map.getContainer().querySelector(
+    '.mapboxgl-ctrl-${toJSControlPosition(position).value}',
+  );
+  if (corner == null) return;
+  corner.appendChild(element);
+}

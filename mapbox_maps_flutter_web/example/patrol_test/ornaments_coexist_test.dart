@@ -6,9 +6,9 @@ import 'ornament_test_utils.dart';
 import 'patrol.dart';
 
 void main() {
-  // Both ornaments share the corner containers GL JS keeps per position, so
+  // The ornaments share the corner containers GL JS keeps per position, so
   // exercise them together the way the ornaments example page does.
-  patrolTest('the scale bar and compass coexist in one corner', ($) async {
+  patrolTest('the ornaments coexist in one corner', ($) async {
     final platformMap = await pumpOrnamentMap($.tester);
     final map = platformMap.jsMap;
 
@@ -22,7 +22,28 @@ void main() {
     expect(scaleBarElement(map), isNotNull);
     expect(compassElement(map), isNotNull);
 
-    // Removing one must leave the other in place.
+    // Attribution and the logo start in opposite bottom corners.
+    expect(
+      cornerOf(attributionElement(map)!),
+      contains('mapboxgl-ctrl-bottom-right'),
+    );
+    expect(cornerOf(logoRoot(map)!), contains('mapboxgl-ctrl-bottom-left'));
+
+    // Moving attribution onto the logo must leave both in place.
+    await platformMap.attribution.updateSettings(
+      AttributionSettings(position: OrnamentPosition.BOTTOM_LEFT),
+    );
+    expect(
+      cornerOf(attributionElement(map)!),
+      contains('mapboxgl-ctrl-bottom-left'),
+    );
+    expect(
+      logoElement(map),
+      isNotNull,
+      reason: 'moving attribution must not displace the logo',
+    );
+
+    // Removing one must leave the others in place.
     await platformMap.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
     expect(scaleBarElement(map), isNull);
     expect(
@@ -30,5 +51,7 @@ void main() {
       isNotNull,
       reason: 'disabling the scale bar must not remove the compass',
     );
+    expect(attributionElement(map), isNotNull);
+    expect(logoElement(map), isNotNull);
   });
 }
