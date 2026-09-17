@@ -11,6 +11,10 @@ struct SuffixBinaryMessenger {
 public final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
+
+    /// The underlying map, for callers that host this controller outside the
+    /// platform view (see HeadlessMapTexture).
+    var map: MapboxMap { mapboxMap }
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
