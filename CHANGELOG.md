@@ -1,8 +1,4 @@
-### main
-
 ### 2.31.0
-
-### 2.31.0-rc.1
 
 * Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
 * Promote `SymbolLayer.symbolZOffset` to stable.
