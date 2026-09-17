@@ -57,6 +57,7 @@ void main() {
         tileCacheBudget: TileCacheBudget.inMegabytes(
           TileCacheBudgetInMegabytes(size: 3),
         ),
+        dynamicData: true,
       ),
     );
 
@@ -125,6 +126,11 @@ void main() {
         tileCacheBudget?.type,
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
       );
+    }
+
+    if (kIsWeb) {
+      var dynamicData = await source.dynamicData;
+      expect(dynamicData, true);
     }
   });
 }

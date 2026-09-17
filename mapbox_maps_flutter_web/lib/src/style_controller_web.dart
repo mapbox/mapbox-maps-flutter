@@ -536,8 +536,9 @@ final class StyleController implements StylePlatformInterface {
   //
   // GL JS's `GeoJSONSource.updateData` merges by feature id. The mobile
   // `dataId` ticketing scheme has no gl-js analogue; we drop it and let
-  // gl-js coalesce updates internally. Source must be declared with
-  // `dynamic: true` to accept these calls.
+  // gl-js coalesce updates internally. The source must set
+  // `GeoJsonSource.dynamicData` to accept these calls. GL JS reports a
+  // refusal on its error event rather than throwing, so check here instead.
   //
   // Feature ids must be numeric (or numeric strings) for this merge — and
   // for feature state and querySourceFeatures/queryRenderedFeatures id
@@ -567,8 +568,11 @@ final class StyleController implements StylePlatformInterface {
     String dataId,
     List<String> featureIds,
   ) async => _updateGeoJSON(sourceId, [
+    // GL JS matches by strict equality on the feature id, so a numeric id
+    // added as a number must be removed as a number, not the string this
+    // method receives.
     for (final id in featureIds)
-      {'type': 'Feature', 'id': id, 'geometry': null},
+      {'type': 'Feature', 'id': num.tryParse(id) ?? id, 'geometry': null},
   ]);
 
   void _updateGeoJSON(String sourceId, List<Map<String, dynamic>> features) {
@@ -576,8 +580,15 @@ final class StyleController implements StylePlatformInterface {
     if (source == null || source.type != 'geojson') {
       throw StateError('GeoJSON source "$sourceId" not found.');
     }
+    final geoJsonSource = source as JSGeoJSONSource;
+    if (!geoJsonSource.isDynamic) {
+      throw StateError(
+        'GeoJSON source "$sourceId" does not accept feature updates. '
+        'Set GeoJsonSource.dynamicData to true when you add the source.',
+      );
+    }
     final fc = {'type': 'FeatureCollection', 'features': features};
-    (source as JSGeoJSONSource).updateData(fc.jsify()!);
+    geoJsonSource.updateData(fc.jsify()!);
   }
 
   // ===== Images =====

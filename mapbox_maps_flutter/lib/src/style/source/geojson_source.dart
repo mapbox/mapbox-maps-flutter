@@ -29,6 +29,7 @@ final class GeoJsonSource extends Source {
     bool? autoMaxZoom,
     double? prefetchZoomDelta,
     TileCacheBudget? tileCacheBudget,
+    bool? dynamicData,
   }) {
     _data = data;
     _maxzoom = maxzoom;
@@ -45,6 +46,7 @@ final class GeoJsonSource extends Source {
     _autoMaxZoom = autoMaxZoom;
     _prefetchZoomDelta = prefetchZoomDelta;
     _tileCacheBudget = tileCacheBudget;
+    _dynamicData = dynamicData;
   }
 
   @override
@@ -268,6 +270,33 @@ final class GeoJsonSource extends Source {
     return TileCacheBudget.decode(raw);
   }
 
+  bool? _dynamicData;
+
+  /// Whether to optimize this source for frequent data updates, such as animated features.
+  ///
+  /// Set this to true to change single features after you add the source, with
+  /// [MapboxMap.addGeoJSONSourceFeatures], [MapboxMap.updateGeoJSONSourceFeatures] or
+  /// [MapboxMap.removeGeoJSONSourceFeatures].
+  ///
+  /// {@macro web_geojson_dynamic_update} Android and iOS accept the three methods on every
+  /// GeoJSON source and ignore this property.
+  ///
+  /// The three methods find the feature to change by its id.
+  ///
+  /// {@macro web_numeric_feature_id}
+  ///
+  /// A dynamic source uses an index that is faster to update but slower to query, so set this
+  /// only on sources that you change after you add them.
+  ///
+  /// Default value: false.
+  Future<bool?> get dynamicData async {
+    final localStyle = style;
+    if (localStyle == null) return null;
+    final raw = (await localStyle.getStyleSourceProperty(id, "dynamic")).value;
+    if (raw == null) return null;
+    return raw as bool;
+  }
+
   /// Update this GeojsonSource with a URL to a GeoJSON file, or inline GeoJSON.
   Future<void>? updateGeoJSON(String geoJson) async {
     return style?.setStyleSourceProperty(id, "data", geoJson);
@@ -344,6 +373,9 @@ final class GeoJsonSource extends Source {
       }
       if (_autoMaxZoom != null) {
         properties["autoMaxZoom"] = _autoMaxZoom;
+      }
+      if (_dynamicData != null) {
+        properties["dynamic"] = _dynamicData;
       }
     }
 

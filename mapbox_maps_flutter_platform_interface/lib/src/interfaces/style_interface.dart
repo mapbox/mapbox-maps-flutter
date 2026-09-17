@@ -137,10 +137,21 @@ abstract interface class StylePlatformInterface {
   Future<void> removeStyleSource(String sourceId);
 
   // ===== GeoJSON source partial updates =====
+  //
+  // On web, GL JS refuses these calls on a source that does not set `dynamic`
+  // (`GeoJsonSource.dynamicData`), and reports the refusal on an error event
+  // rather than throwing — so a web implementation checks the property itself
+  // and throws a [StateError]. GL Native has no such option and accepts all
+  // three methods on every GeoJSON source.
 
   /// Adds features to a GeoJSON style source. The add operation is scheduled
   /// and applied on a GeoJSON serialization queue; observe `onSourceDataLoaded`
   /// to know when changes are visible.
+  ///
+  /// {@template style_interface_web_geojson_dynamic_update}
+  /// On web this throws a [StateError] if the source does not set
+  /// `GeoJsonSource.dynamicData`.
+  /// {@endtemplate}
   Future<void> addGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
@@ -149,6 +160,13 @@ abstract interface class StylePlatformInterface {
 
   /// Updates existing features in a GeoJSON style source. Features are matched
   /// by id; provide unique ids on every feature to avoid `map-loading-error`.
+  ///
+  /// {@macro style_interface_web_geojson_dynamic_update}
+  ///
+  /// {@template style_interface_web_numeric_feature_id}
+  /// On web, GeoJSON feature ids must be a numeric string — GL JS's internal
+  /// vector-tile pipeline only supports integer feature ids.
+  /// {@endtemplate}
   Future<void> updateGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
@@ -156,6 +174,10 @@ abstract interface class StylePlatformInterface {
   );
 
   /// Removes features from a GeoJSON style source by id.
+  ///
+  /// {@macro style_interface_web_geojson_dynamic_update}
+  ///
+  /// {@macro style_interface_web_numeric_feature_id}
   Future<void> removeGeoJSONSourceFeatures(
     String sourceId,
     String dataId,

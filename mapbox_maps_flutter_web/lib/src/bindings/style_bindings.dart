@@ -19,6 +19,11 @@ extension type JSSource._(JSObject _) implements JSObject {
   external JSObject serialize();
 }
 
+/// The part of a serialized GeoJSON source spec this package reads back.
+extension type JSGeoJSONSourceSpec._(JSObject _) implements JSObject {
+  external bool? get dynamic;
+}
+
 /// Runtime `GeoJSONSource` instance returned by [Style.getSource].
 ///
 /// [updateData] needs `dynamic: true` on the source spec; otherwise gl-js
@@ -28,6 +33,9 @@ extension type JSSource._(JSObject _) implements JSObject {
 extension type JSGeoJSONSource._(JSObject _) implements JSSource {
   external void setData(JSAny data);
   external void updateData(JSAny data);
+
+  /// Whether the source spec declared `dynamic: true`, required by [updateData].
+  bool get isDynamic => (serialize() as JSGeoJSONSourceSpec).dynamic ?? false;
 }
 
 extension type JSImageSource._(JSObject _) implements JSSource {

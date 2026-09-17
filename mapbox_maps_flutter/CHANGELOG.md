@@ -1,5 +1,7 @@
 ### main
 
+* Add `GeoJsonSource.dynamicData` that maps to the `dynamic` option in the style specification. On web, set it to true for the source to accept `addGeoJSONSourceFeatures`, `updateGeoJSONSourceFeatures`, and `removeGeoJSONSourceFeatures`. Android and iOS ignore `dynamicData` and accept feature updates on all GeoJSON sources.
+* [web] Fix `removeGeoJSONSourceFeatures` failing to remove a feature that was added with a numeric id.
 * [web] Add ornament settings support: `compass`, `scaleBar`, `logo` and `attribution` are backed by the Mapbox GL JS controls and support partial updates, matching Android and iOS. Some fields have no GL JS counterpart and are stored and returned by `getSettings` without being applied; see each field's documentation. Note `LogoSettings.enabled` and `AttributionSettings.enabled` are a restricted API.
 * [web] Fix `addStyleImportFromJSON` and `updateStyleImportWithJSON`. They completed before the style held the fragment, so the next call failed with "Style is not done loading". Both now complete after the style holds the fragment, as on Android and iOS.
 * [web] Fix `MapWidget` ignoring `styleUri`. The map loaded a default style first, fired `onStyleLoaded` for it, then loaded the requested style, which removed everything `onStyleLoaded` had added. The map now loads the requested style directly.

@@ -204,13 +204,26 @@ base class StyleManager {
   // ===== GeoJSON source partial updates =====
 
   /// Adds features to a GeoJSON style source.
+  ///
+  /// {@template web_geojson_dynamic_update}
+  /// On web, set [GeoJsonSource.dynamicData] to true when you add the source,
+  /// or this method throws a [StateError]. Android and iOS accept this
+  /// method on every GeoJSON source.
+  /// {@endtemplate}
+  ///
+  /// {@macro web_numeric_feature_id}
   Future<void> addGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
     List<Feature> features,
   ) => _impl.addGeoJSONSourceFeatures(sourceId, dataId, features);
 
-  /// Updates existing features in a GeoJSON style source.
+  /// Updates existing features in a GeoJSON style source, matched by id.
+  ///
+  /// {@macro web_geojson_dynamic_update}
+  ///
+  /// {@macro web_numeric_feature_id} A feature with a different type of id
+  /// gets added instead of replacing the feature you want to update.
   Future<void> updateGeoJSONSourceFeatures(
     String sourceId,
     String dataId,
@@ -218,6 +231,10 @@ base class StyleManager {
   ) => _impl.updateGeoJSONSourceFeatures(sourceId, dataId, features);
 
   /// Removes features from a GeoJSON style source by id.
+  ///
+  /// {@macro web_geojson_dynamic_update}
+  ///
+  /// {@macro web_numeric_feature_id}
   Future<void> removeGeoJSONSourceFeatures(
     String sourceId,
     String dataId,

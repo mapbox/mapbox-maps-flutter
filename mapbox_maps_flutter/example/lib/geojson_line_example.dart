@@ -23,7 +23,11 @@ class DrawGeoJsonLineExampleState extends State<DrawGeoJsonLineExample> {
       'assets/from_crema_to_council_crest.geojson',
     );
 
-    await mapboxMap?.addSource(GeoJsonSource(id: "line", data: data));
+    // `dynamicData` lets the source accept feature updates on web. Android
+    // and iOS accept them on all GeoJSON sources and ignore this property.
+    await mapboxMap?.addSource(
+      GeoJsonSource(id: "line", data: data, dynamicData: true),
+    );
     await mapboxMap?.addLayer(
       LineLayer(
         id: "line_layer",
@@ -38,8 +42,10 @@ class DrawGeoJsonLineExampleState extends State<DrawGeoJsonLineExample> {
     // Wait 5 seconds, then update the GeoJSONSource with the new line
     await Future.delayed(Duration(seconds: 5));
 
+    // The update replaces the feature that has the same id. The id must be a
+    // number, because web keeps only numeric feature ids.
     var newFeature = Feature(
-      id: "featureID",
+      id: 1,
       geometry: LineString(
         coordinates: [
           Position(-122.483696, 37.833818),
