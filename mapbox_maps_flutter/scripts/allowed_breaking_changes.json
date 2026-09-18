@@ -907,6 +907,10 @@
     "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
   },
   {
+    "changeDescription": "Interface \"RasterColorScale\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
     "changeDescription": "Interface \"RasterResampling\" removed",
     "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
   },
