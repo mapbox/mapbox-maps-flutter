@@ -2717,10 +2717,9 @@ data class GesturesSettings(
   /**
    * Whether the rotate gesture is enabled.
    *
-   * On web, disabling this also disables ctrl+drag pitch (they share a
-   * handler; see [pitchWithRotateEnabled]) and keyboard
-   * rotate/pitch (Shift+arrow keys), which share one flag with
-   * [pitchEnabled] on web.
+   * On web this also gates two-finger touch rotate and keyboard
+   * Shift+Left/Right rotate. Disabling it does not disable ctrl+drag
+   * pitch; see [pitchWithRotateEnabled] for that.
    */
   val rotateEnabled: Boolean? = null,
   /**
@@ -2734,8 +2733,7 @@ data class GesturesSettings(
   /**
    * Whether the single-touch scroll gesture is enabled.
    *
-   * On web this disables pointer/touch pan only. Keyboard arrow-pan stays
-   * on regardless, pending GL JS support.
+   * On web this also gates keyboard arrow-key pan.
    */
   val scrollEnabled: Boolean? = null,
   /** Whether rotation is enabled for the pinch to zoom gesture. */
@@ -2743,10 +2741,8 @@ data class GesturesSettings(
   /**
    * Whether the pitch gesture is enabled.
    *
-   * On web this does not affect ctrl+drag pitch; see
-   * [pitchWithRotateEnabled] for that. It does disable
-   * keyboard rotate/pitch (Shift+arrow keys), which share one flag with
-   * [rotateEnabled] on web.
+   * On web this also gates keyboard Shift+Up/Down pitch. It does not
+   * affect ctrl+drag pitch; see [pitchWithRotateEnabled] for that.
    */
   val pitchEnabled: Boolean? = null,
   /** Configures the directions in which the map is allowed to move during a scroll gesture. */
@@ -2755,7 +2751,11 @@ data class GesturesSettings(
   val doubleTapToZoomInEnabled: Boolean? = null,
   /** Whether single tapping the map with two touches results in a zoom-out animation. */
   val doubleTouchToZoomOutEnabled: Boolean? = null,
-  /** Whether the quick zoom gesture is enabled. */
+  /**
+   * Whether the quick zoom gesture is enabled.
+   *
+   * On web this maps to double-tap-and-drag zoom.
+   */
   val quickZoomEnabled: Boolean? = null,
   /** By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead. */
   val focalPoint: ScreenCoordinate? = null,
@@ -2780,9 +2780,8 @@ data class GesturesSettings(
   /**
    * Whether Ctrl + drag combines rotate and pitch into one motion. Web only; has no effect on Android or iOS.
    *
-   * Independent of [pitchEnabled], which does not cover ctrl+drag pitch on
-   * web. Not independent of [rotateEnabled]: disabling rotate disables
-   * ctrl+drag pitch too, since both share a handler.
+   * Independent of [pitchEnabled], which does not cover ctrl+drag pitch
+   * on web. Disabling [rotateEnabled] no longer disables this too.
    */
   val pitchWithRotateEnabled: Boolean? = null
 ) {

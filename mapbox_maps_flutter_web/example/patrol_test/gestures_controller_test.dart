@@ -12,6 +12,12 @@ import 'patrol.dart';
 
 import 'test_utils.dart';
 
+// GL JS `KeyboardHandler.keydown()` switches on the legacy DOM `keyCode`
+// values below.
+const _arrowUp = 38;
+const _arrowRight = 39;
+const _equals = 187;
+
 final _viewport = CameraViewportState(
   center: Point(coordinates: Position(0, 0)),
   zoom: 5,
@@ -229,7 +235,7 @@ void main() {
   );
 
   patrolTest(
-    'rotateEnabled disables ctrl+drag pitch too, since both live in the same handler',
+    'rotateEnabled and pitchWithRotateEnabled toggle independently on the drag-rotate handler',
     ($) async {
       final tester = $.tester;
       await pumpMapTree(
@@ -253,7 +259,9 @@ void main() {
       );
       final end = (x: start.x + 60, y: start.y - 60);
 
-      await gestures.updateSettings(GesturesSettings(rotateEnabled: false));
+      await gestures.updateSettings(
+        GesturesSettings(rotateEnabled: false, pitchWithRotateEnabled: true),
+      );
       final bearing = map.getBearing();
       final pitch = map.getPitch();
       _ctrlDrag(start, end);
@@ -261,13 +269,186 @@ void main() {
       expect(map.getBearing(), bearing, reason: 'ctrl+drag rotate must be off');
       expect(
         map.getPitch(),
-        pitch,
+        isNot(pitch),
         reason:
-            'disabling rotateEnabled must also disable ctrl+drag pitch: GL '
-            "JS's dragRotate.disable() disables both _mouseRotate and "
-            '_mousePitch unconditionally, with no way to keep one and drop '
-            'the other',
+            'ctrl+drag pitch must keep working: rotateEnabled and '
+            'pitchWithRotateEnabled are independent sub-toggles on the '
+            'drag-rotate handler',
       );
     },
   );
+
+  patrolTest(
+    'rotateEnabled and pitchWithRotateEnabled can both be re-enabled together in one call',
+    ($) async {
+      final tester = $.tester;
+      await pumpMapTree(
+        tester,
+        (onCreated) => MaterialApp(
+          home: Scaffold(
+            body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+          ),
+        ),
+      );
+      final map = currentMap(tester)!;
+      final gestures = GesturesController(map);
+      final rect = mapRect();
+      final start = (
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height * 3 / 4,
+      );
+      final end = (x: start.x + 60, y: start.y - 60);
+
+      // Start from both off, then re-enable both in the SAME call.
+      await gestures.updateSettings(
+        GesturesSettings(rotateEnabled: false, pitchWithRotateEnabled: false),
+      );
+      await gestures.updateSettings(
+        GesturesSettings(rotateEnabled: true, pitchWithRotateEnabled: true),
+      );
+      final bearing = map.getBearing();
+      final pitch = map.getPitch();
+      _ctrlDrag(start, end);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(
+        map.getBearing(),
+        isNot(bearing),
+        reason: 'ctrl+drag rotate must work',
+      );
+      expect(map.getPitch(), isNot(pitch), reason: 'ctrl+drag pitch must work');
+    },
+  );
+
+  patrolTest(
+    'scrollEnabled gates keyboard arrow-pan too, independently of keyboard zoom/rotate/pitch',
+    ($) async {
+      final controller = await pumpMapTree(
+        $.tester,
+        (onCreated) => MaterialApp(
+          home: Scaffold(
+            body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+          ),
+        ),
+      );
+      final map = currentMap($.tester)!;
+
+      await controller.gestures.updateSettings(
+        GesturesSettings(scrollEnabled: false),
+      );
+      final center = map.getCenter();
+      final zoom = map.getZoom();
+      final canvas = canvasContainer();
+      canvas.dispatchEvent(keyboardEvent('keydown', _arrowRight));
+      canvas.dispatchEvent(keyboardEvent('keyup', _arrowRight));
+      await $.tester.pump(const Duration(milliseconds: 500));
+      expect(
+        map.getCenter().lng,
+        closeTo(center.lng, 0.0001),
+        reason: 'arrow-key pan must stop once scrollEnabled is disabled',
+      );
+
+      canvas.dispatchEvent(keyboardEvent('keydown', _equals));
+      canvas.dispatchEvent(keyboardEvent('keyup', _equals));
+      await $.tester.pump(const Duration(milliseconds: 500));
+      expect(
+        map.getZoom(),
+        isNot(zoom),
+        reason: 'keyboard zoom must be unaffected by scrollEnabled',
+      );
+    },
+  );
+
+  patrolTest(
+    'rotateEnabled and pitchEnabled independently gate keyboard Shift+arrow rotate and pitch',
+    ($) async {
+      final controller = await pumpMapTree(
+        $.tester,
+        (onCreated) => MaterialApp(
+          home: Scaffold(
+            body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+          ),
+        ),
+      );
+      final map = currentMap($.tester)!;
+
+      await controller.gestures.updateSettings(
+        GesturesSettings(rotateEnabled: false),
+      );
+      final bearing = map.getBearing();
+      final pitch = map.getPitch();
+      final canvas = canvasContainer();
+
+      canvas.dispatchEvent(
+        keyboardEvent('keydown', _arrowRight, shiftKey: true),
+      );
+      canvas.dispatchEvent(keyboardEvent('keyup', _arrowRight, shiftKey: true));
+      await $.tester.pump(const Duration(milliseconds: 500));
+      expect(
+        map.getBearing(),
+        closeTo(bearing, 0.0001),
+        reason:
+            'Shift+ArrowRight rotate must stop once rotateEnabled is '
+            'disabled',
+      );
+
+      canvas.dispatchEvent(keyboardEvent('keydown', _arrowUp, shiftKey: true));
+      canvas.dispatchEvent(keyboardEvent('keyup', _arrowUp, shiftKey: true));
+      await $.tester.pump(const Duration(milliseconds: 500));
+      expect(
+        map.getPitch(),
+        isNot(pitch),
+        reason:
+            'Shift+ArrowUp pitch must keep working: keyboard rotate and '
+            'pitch no longer share one flag',
+      );
+    },
+  );
+
+  patrolTest('quickZoomEnabled gates tap-drag-zoom', ($) async {
+    final tester = $.tester;
+    await pumpMapTree(
+      tester,
+      (onCreated) => MaterialApp(
+        home: Scaffold(
+          body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+        ),
+      ),
+    );
+    final map = currentMap(tester)!;
+    final gestures = GesturesController(map);
+    final rect = mapRect();
+    final center = (
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    );
+
+    // Tap-drag-zoom lives inside `touchZoomRotate`, alongside two-finger
+    // pinch-zoom (`pinchToZoomEnabled`); leave that on so this exercises
+    // quickZoomEnabled alone, the same way two-finger touch-rotate needs
+    // pinch-zoom on regardless of rotateEnabled.
+    Future<bool> tapDragZoom() {
+      final canvas = canvasContainer();
+      canvas.dispatchEvent(touchEvent('touchstart', center.x, center.y));
+      canvas.dispatchEvent(touchEvent('touchend', center.x, center.y));
+      canvas.dispatchEvent(touchEvent('touchstart', center.x, center.y));
+      return _zoomFires(map, () {
+        canvas.dispatchEvent(touchEvent('touchmove', center.x, center.y - 40));
+        canvas.dispatchEvent(touchEvent('touchend', center.x, center.y - 40));
+      });
+    }
+
+    await gestures.updateSettings(GesturesSettings(quickZoomEnabled: true));
+    expect(
+      await tapDragZoom(),
+      isTrue,
+      reason: 'tap-drag-zoom must work once quickZoomEnabled is enabled',
+    );
+
+    await gestures.updateSettings(GesturesSettings(quickZoomEnabled: false));
+    expect(
+      await tapDragZoom(),
+      isFalse,
+      reason: 'tap-drag-zoom must stop once quickZoomEnabled is disabled',
+    );
+  });
 }

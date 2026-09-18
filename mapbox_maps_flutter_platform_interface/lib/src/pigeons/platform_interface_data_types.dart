@@ -2688,10 +2688,9 @@ class GesturesSettings {
 
   /// Whether the rotate gesture is enabled.
   ///
-  /// On web, disabling this also disables ctrl+drag pitch (they share a
-  /// handler; see [pitchWithRotateEnabled]) and keyboard
-  /// rotate/pitch (Shift+arrow keys), which share one flag with
-  /// [pitchEnabled] on web.
+  /// On web this also gates two-finger touch rotate and keyboard
+  /// Shift+Left/Right rotate. Disabling it does not disable ctrl+drag
+  /// pitch; see [pitchWithRotateEnabled] for that.
   bool? rotateEnabled;
 
   /// Whether the pinch to zoom gesture is enabled.
@@ -2703,8 +2702,7 @@ class GesturesSettings {
 
   /// Whether the single-touch scroll gesture is enabled.
   ///
-  /// On web this disables pointer/touch pan only. Keyboard arrow-pan stays
-  /// on regardless, pending GL JS support.
+  /// On web this also gates keyboard arrow-key pan.
   bool? scrollEnabled;
 
   /// Whether rotation is enabled for the pinch to zoom gesture.
@@ -2712,10 +2710,8 @@ class GesturesSettings {
 
   /// Whether the pitch gesture is enabled.
   ///
-  /// On web this does not affect ctrl+drag pitch; see
-  /// [pitchWithRotateEnabled] for that. It does disable
-  /// keyboard rotate/pitch (Shift+arrow keys), which share one flag with
-  /// [rotateEnabled] on web.
+  /// On web this also gates keyboard Shift+Up/Down pitch. It does not
+  /// affect ctrl+drag pitch; see [pitchWithRotateEnabled] for that.
   bool? pitchEnabled;
 
   /// Configures the directions in which the map is allowed to move during a scroll gesture.
@@ -2728,6 +2724,8 @@ class GesturesSettings {
   bool? doubleTouchToZoomOutEnabled;
 
   /// Whether the quick zoom gesture is enabled.
+  ///
+  /// On web this maps to double-tap-and-drag zoom.
   bool? quickZoomEnabled;
 
   /// By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead.
@@ -2762,9 +2760,8 @@ class GesturesSettings {
 
   /// Whether Ctrl + drag combines rotate and pitch into one motion. Web only; has no effect on Android or iOS.
   ///
-  /// Independent of [pitchEnabled], which does not cover ctrl+drag pitch on
-  /// web. Not independent of [rotateEnabled]: disabling rotate disables
-  /// ctrl+drag pitch too, since both share a handler.
+  /// Independent of [pitchEnabled], which does not cover ctrl+drag pitch
+  /// on web. Disabling [rotateEnabled] no longer disables this too.
   bool? pitchWithRotateEnabled;
 
   List<Object?> _toList() {

@@ -50,12 +50,16 @@ class GesturesController implements GesturesSettingsPlatformInterface {
     GesturesSettings(
       scrollEnabled: _map.dragPan.isEnabled(),
       pinchToZoomEnabled: _map.touchZoomRotate.isEnabled(),
-      rotateEnabled: _map.dragRotate.isEnabled(),
+      // Not `dragRotate.isEnabled()`: that aggregates rotate and pitch, and
+      // is true whenever either sub-toggle is on. `isRotationEnabled()`
+      // reports the rotate sub-toggle alone.
+      rotateEnabled: _map.dragRotate.isRotationEnabled(),
       pitchEnabled: _map.touchPitch.isEnabled(),
       doubleTapToZoomInEnabled: _map.doubleClickZoom.isEnabled(),
       scrollZoomEnabled: _map.scrollZoom.isEnabled(),
       boxZoomEnabled: _map.boxZoom.isEnabled(),
-      pitchWithRotateEnabled: _map.dragRotate.pitchWithRotate,
+      pitchWithRotateEnabled: _map.dragRotate.isPitchEnabled(),
+      quickZoomEnabled: _map.touchZoomRotate.isTapDragZoomEnabled(),
     ),
   );
 
@@ -68,7 +72,12 @@ class GesturesController implements GesturesSettingsPlatformInterface {
 
     apply(settings.scrollEnabled, _map.dragPan);
     apply(settings.pinchToZoomEnabled, _map.touchZoomRotate);
-    apply(settings.rotateEnabled, _map.dragRotate);
+
+    if (settings.rotateEnabled != null) {
+      settings.rotateEnabled!
+          ? _map.dragRotate.enableRotation()
+          : _map.dragRotate.disableRotation();
+    }
     // Touch two-finger rotate lives inside `touchZoomRotate`; toggle its
     // rotation portion so pinch-zoom keeps working when rotate is off.
     if (settings.rotateEnabled != null) {
@@ -76,36 +85,39 @@ class GesturesController implements GesturesSettingsPlatformInterface {
           ? _map.touchZoomRotate.enableRotation()
           : _map.touchZoomRotate.disableRotation();
     }
-    apply(settings.pitchEnabled, _map.touchPitch);
-    // ctrl+drag pitch lives inside `dragRotate` and is gated by a
-    // constructor-only `pitchWithRotate` option. Until
-    // https://mapbox.atlassian.net/browse/GLJS-1827 lands a public setter,
-    // mutate the convention-private field and re-enable `dragRotate` so the
-    // underlying `_mousePitch` reflects the new value. Read `isEnabled()`
-    // BEFORE the mutation: when pitch is being switched on, `_mousePitch`
-    // is still disabled and `dragRotate.isEnabled()` would lie about
-    // whether to refresh.
     if (settings.pitchWithRotateEnabled != null) {
-      final wasEnabled = _map.dragRotate.isEnabled();
-      _map.dragRotate.pitchWithRotate = settings.pitchWithRotateEnabled!;
-      if (wasEnabled) {
-        _map.dragRotate.disable();
-        _map.dragRotate.enable();
-      }
+      settings.pitchWithRotateEnabled!
+          ? _map.dragRotate.enablePitch()
+          : _map.dragRotate.disablePitch();
     }
+    apply(settings.pitchEnabled, _map.touchPitch);
     apply(settings.doubleTapToZoomInEnabled, _map.doubleClickZoom);
     apply(settings.scrollZoomEnabled, _map.scrollZoom);
     apply(settings.boxZoomEnabled, _map.boxZoom);
+    // Double-tap-and-drag zoom has no dedicated mobile equivalent beyond
+    // `quickZoomEnabled`; wire it to that flag on web.
+    if (settings.quickZoomEnabled != null) {
+      settings.quickZoomEnabled!
+          ? _map.touchZoomRotate.enableTapDragZoom()
+          : _map.touchZoomRotate.disableTapDragZoom();
+    }
 
-    // Keyboard rotate (shift+left/right) and pitch (shift+up/down) share
-    // one flag in GL JS — disabling either disables both. Disable when
-    // either rotateEnabled or pitchEnabled resolves to false.
-    if (settings.rotateEnabled != null || settings.pitchEnabled != null) {
-      final rotate = settings.rotateEnabled ?? _map.dragRotate.isEnabled();
-      final pitch = settings.pitchEnabled ?? _map.touchPitch.isEnabled();
-      rotate && pitch
-          ? _map.keyboard.enableRotation()
-          : _map.keyboard.disableRotation();
+    // Keyboard pan/rotate(bearing)/pitch each have their own sub-toggle,
+    // mirroring the pointer/touch gestures they stand in for.
+    if (settings.scrollEnabled != null) {
+      settings.scrollEnabled!
+          ? _map.keyboard.enablePan()
+          : _map.keyboard.disablePan();
+    }
+    if (settings.rotateEnabled != null) {
+      settings.rotateEnabled!
+          ? _map.keyboard.enableBearing()
+          : _map.keyboard.disableBearing();
+    }
+    if (settings.pitchEnabled != null) {
+      settings.pitchEnabled!
+          ? _map.keyboard.enablePitch()
+          : _map.keyboard.disablePitch();
     }
   }
 

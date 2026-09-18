@@ -25,6 +25,9 @@
 * Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode (the default) ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
 * `RenderedQueryGeometry` is now a sealed class hierarchy (`ScreenCoordinateRenderedQueryGeometry`, `ScreenBoxRenderedQueryGeometry`, `ScreenCoordinateListRenderedQueryGeometry`) instead of an untyped `{value, type}` pair. Construct it the same way as before, via `fromScreenCoordinate()`/`fromScreenBox()`/`fromList()`. Use pattern matching on the subclasses to inspect it instead of the now-deprecated, read-only `value`/`type` accessors.
 * [web] Fix `queryRenderedFeatures` querying the whole viewport for an empty `fromList([])`; it now matches no features, in line with mobile.
+* [web] Keyboard input now follows the same gesture settings as pointer/touch input: `GesturesSettings.scrollEnabled` gates arrow-key pan, and `.rotateEnabled`/`.pitchEnabled` independently gate Shift+arrow rotate and pitch.
+* [web] **Behavior change:** disabling `GesturesSettings.rotateEnabled` no longer also disables ctrl+drag pitch.
+* [web] `GesturesSettings.quickZoomEnabled` now controls tap-and-drag zoom; previously unsupported on web.
 
 ### 3.0.0-alpha.28
 

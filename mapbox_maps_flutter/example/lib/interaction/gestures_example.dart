@@ -62,16 +62,16 @@ class _GesturesExampleState extends State<GesturesExample> {
       read: (s) => s.doubleTapToZoomInEnabled,
       apply: (v) => GesturesSettings(doubleTapToZoomInEnabled: v),
     ),
+    _GestureToggle(
+      label: 'Quick zoom',
+      read: (s) => s.quickZoomEnabled,
+      apply: (v) => GesturesSettings(quickZoomEnabled: v),
+    ),
     if (!kIsWeb) ...[
       _GestureToggle(
         label: 'Double-touch to zoom out',
         read: (s) => s.doubleTouchToZoomOutEnabled,
         apply: (v) => GesturesSettings(doubleTouchToZoomOutEnabled: v),
-      ),
-      _GestureToggle(
-        label: 'Quick zoom',
-        read: (s) => s.quickZoomEnabled,
-        apply: (v) => GesturesSettings(quickZoomEnabled: v),
       ),
       _GestureToggle(
         label: 'Pinch pan',

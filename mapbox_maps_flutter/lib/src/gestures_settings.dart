@@ -50,11 +50,11 @@ final class GesturesSettingsManager {
   ///   [GesturesSettings.pinchToZoomEnabled],
   ///   [GesturesSettings.rotateEnabled], [GesturesSettings.pitchEnabled],
   ///   [GesturesSettings.doubleTapToZoomInEnabled],
+  ///   [GesturesSettings.quickZoomEnabled],
   ///   [GesturesSettings.scrollZoomEnabled], [GesturesSettings.boxZoomEnabled],
   ///   [GesturesSettings.pitchWithRotateEnabled].
   ///
-  /// Some of these fields interact on web (e.g. rotate and pitch share a
-  /// keyboard flag). See each field's own docs for the specifics.
+  /// See each field's own docs for platform-specific behavior.
   /// {@endtemplate}
   ///
   /// Fields not supported on the current platform return null.
@@ -65,11 +65,6 @@ final class GesturesSettingsManager {
   /// {@macro gestures_settings_platform_support}
   ///
   /// Fields not supported on the current platform are ignored.
-  ///
-  /// > **Note:** on Web, [GesturesSettings.scrollEnabled] = `false`
-  /// > disables pointer/touch pan but keyboard arrow-pan stays on for
-  /// > accessibility. A fine-grained keyboard pan toggle is pending
-  /// > GL JS support ([GLJS-1828](https://mapbox.atlassian.net/browse/GLJS-1828)).
   Future<void> updateSettings(GesturesSettings settings) =>
       _impl.updateSettings(settings);
 }

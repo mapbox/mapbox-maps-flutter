@@ -410,29 +410,46 @@ extension type JSGestureHandler._(JSObject _) implements JSObject {
 }
 
 /// `touchZoomRotate` handler — adds `disableRotation`/`enableRotation` for
-/// turning off the rotate portion of pinch while keeping pinch-zoom on.
+/// turning off the rotate portion of pinch while keeping pinch-zoom on, and
+/// `disableTapDragZoom`/`enableTapDragZoom` for turning off double-tap-and-
+/// drag zoom while keeping pinch-zoom on.
 @JS()
 extension type JSTouchZoomRotateHandler._(JSObject _)
     implements JSGestureHandler {
   external void disableRotation();
   external void enableRotation();
+  external bool isRotationEnabled();
+  external void disableTapDragZoom();
+  external void enableTapDragZoom();
+  external bool isTapDragZoomEnabled();
 }
 
-/// `dragRotate` handler — exposes GL JS's `_pitchWithRotate` field so the
-/// pitch portion of ctrl+drag can be toggled at runtime. GL JS has no
-/// public setter for this constructor-only option yet; tracked at
-/// https://mapbox.atlassian.net/browse/GLJS-1827. Remove `pitchWithRotate`
-/// once that ships.
+/// `dragRotate` handler — adds `disablePitch`/`enablePitch` for turning off
+/// ctrl+drag pitch while keeping ctrl+drag rotate on, and
+/// `disableRotation`/`enableRotation` for the reverse.
 @JS()
 extension type JSDragRotateHandler._(JSObject _) implements JSGestureHandler {
-  @JS('_pitchWithRotate')
-  external bool pitchWithRotate;
-}
-
-/// Keyboard handler — adds `disableRotation`/`enableRotation` for turning
-/// off shift+arrow rotate/pitch while keeping +/- zoom and arrow pan.
-@JS()
-extension type JSKeyboardHandler._(JSObject _) implements JSGestureHandler {
+  external void disablePitch();
+  external void enablePitch();
+  external bool isPitchEnabled();
   external void disableRotation();
   external void enableRotation();
+  external bool isRotationEnabled();
+}
+
+/// Keyboard handler — adds independent `disablePan`/`enablePan`,
+/// `disableBearing`/`enableBearing`, and `disablePitch`/`enablePitch` so
+/// arrow-key pan, Shift+arrow rotate, and Shift+arrow pitch can each be
+/// toggled without affecting the other two (or `+`/`-` zoom).
+@JS()
+extension type JSKeyboardHandler._(JSObject _) implements JSGestureHandler {
+  external void disablePan();
+  external void enablePan();
+  external bool isPanEnabled();
+  external void disableBearing();
+  external void enableBearing();
+  external bool isBearingEnabled();
+  external void disablePitch();
+  external void enablePitch();
+  external bool isPitchEnabled();
 }
