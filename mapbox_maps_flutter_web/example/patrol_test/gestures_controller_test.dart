@@ -286,7 +286,11 @@ void main() {
         tester,
         (onCreated) => MaterialApp(
           home: Scaffold(
-            body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+            body: MapWebWidget(
+              styleUri: 'mapbox://styles/mapbox/standard',
+              viewport: _viewport,
+              onMapCreated: onCreated,
+            ),
           ),
         ),
       );
@@ -326,7 +330,11 @@ void main() {
         $.tester,
         (onCreated) => MaterialApp(
           home: Scaffold(
-            body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+            body: MapWebWidget(
+              styleUri: 'mapbox://styles/mapbox/standard',
+              viewport: _viewport,
+              onMapCreated: onCreated,
+            ),
           ),
         ),
       );
@@ -365,7 +373,11 @@ void main() {
         $.tester,
         (onCreated) => MaterialApp(
           home: Scaffold(
-            body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+            body: MapWebWidget(
+              styleUri: 'mapbox://styles/mapbox/standard',
+              viewport: _viewport,
+              onMapCreated: onCreated,
+            ),
           ),
         ),
       );
@@ -410,7 +422,11 @@ void main() {
       tester,
       (onCreated) => MaterialApp(
         home: Scaffold(
-          body: MapWebWidget(viewport: _viewport, onMapCreated: onCreated),
+          body: MapWebWidget(
+            styleUri: 'mapbox://styles/mapbox/standard',
+            viewport: _viewport,
+            onMapCreated: onCreated,
+          ),
         ),
       ),
     );

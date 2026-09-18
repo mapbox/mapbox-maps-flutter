@@ -1,4 +1,4 @@
-### main
+### 3.0.0-alpha.31
 
 * Add `GeoJsonSource.dynamicData` that maps to the `dynamic` option in the style specification. On web, set it to true for the source to accept `addGeoJSONSourceFeatures`, `updateGeoJSONSourceFeatures`, and `removeGeoJSONSourceFeatures`. Android and iOS ignore `dynamicData` and accept feature updates on all GeoJSON sources.
 * [web] Fix `removeGeoJSONSourceFeatures` failing to remove a feature that was added with a numeric id.
