@@ -36,6 +36,8 @@
 * Promote `SymbolLayer.symbolZOffset` to stable.
 * Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
 
+### 2.30.2
+
 ### 2.30.1
 
 * Update Maps SDK to v11.30.1
