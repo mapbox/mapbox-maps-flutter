@@ -5,6 +5,7 @@
 * [web] Add ornament settings support: `compass`, `scaleBar`, `logo` and `attribution` are backed by the Mapbox GL JS controls and support partial updates, matching Android and iOS. Some fields have no GL JS counterpart and are stored and returned by `getSettings` without being applied; see each field's documentation. Note `LogoSettings.enabled` and `AttributionSettings.enabled` are a restricted API.
 * [web] Fix `addStyleImportFromJSON` and `updateStyleImportWithJSON`. They completed before the style held the fragment, so the next call failed with "Style is not done loading". Both now complete after the style holds the fragment, as on Android and iOS.
 * [web] Fix `MapWidget` ignoring `styleUri`. The map loaded a default style first, fired `onStyleLoaded` for it, then loaded the requested style, which removed everything `onStyleLoaded` had added. The map now loads the requested style directly.
+* [web] Document how web keeps a GeoJSON feature id. GL JS keeps the id only if it is a number, or a string that holds a number. It removes all other string ids, and the feature then has no id on web. Use a number for these ids, or put the id in a feature property.
 
 ### 3.0.0-alpha.30
 

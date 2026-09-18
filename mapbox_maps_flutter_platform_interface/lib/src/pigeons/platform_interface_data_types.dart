@@ -5122,6 +5122,11 @@ class FeaturesetFeature {
   ///
   /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
   /// In this case it's impossible to set a feature state for an individual feature.
+  ///
+  /// On web, GL JS keeps a GeoJSON feature id only if it is a number, or a
+  /// string that holds a number. It removes all other string ids, and this
+  /// field is then null. Android and iOS keep the id. For an id on all
+  /// platforms, use a number, or copy the id into [properties].
   FeaturesetFeatureId? id;
 
   /// A featureset descriptor denoting the featureset this feature belongs to.

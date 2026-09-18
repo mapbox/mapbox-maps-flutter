@@ -5,6 +5,9 @@ import 'package:meta/meta.dart';
 import '../annotations_manager.dart' show BaseAnnotationManager;
 
 /// Manages polygon annotations.
+///
+/// Not supported on web: every method throws [UnimplementedError]. Add layers
+/// and sources directly instead.
 final class PolygonAnnotationManager
     extends BaseAnnotationManager<PolygonAnnotationManagerPlatformInterface> {
   @internal

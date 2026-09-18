@@ -1,12 +1,12 @@
 {
-    "name": "example",
-    "short_name": "example",
+    "name": "Mapbox Maps SDK for Flutter examples",
+    "short_name": "Mapbox Maps Flutter",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#0E1012",
+    "theme_color": "#0E1012",
+    "description": "Live, interactive examples for the Mapbox Maps SDK for Flutter, running on the web.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

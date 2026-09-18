@@ -11,6 +11,10 @@ import 'source.dart';
 
 /// A GeoJSON data source.
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson)
+///
+/// On web, GL JS keeps a feature id in this source only if it is a number, or
+/// a string that holds a number. It removes all other string ids. Android and
+/// iOS keep the id.
 final class GeoJsonSource extends Source {
   GeoJsonSource({
     required super.id,

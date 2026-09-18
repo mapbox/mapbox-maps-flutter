@@ -7,12 +7,13 @@ This is the app-facing plugin package. It endorses:
 - [`mapbox_maps_flutter_mobile`](../mapbox_maps_flutter_mobile) for Android and iOS.
 - [`mapbox_maps_flutter_web`](../mapbox_maps_flutter_web) for Web.
 
+**Try it now:** a hosted, interactive demo is available at [demos.mapbox.com/flutter](https://demos.mapbox.com/flutter/)
+
 ## Requirements
 
 - Flutter 3.38.1 / Dart 3.10.0 or higher
 - Android: minSdk 21 or higher
 - iOS: 14 or higher
-- Web: Mapbox GL JS 3.30.0
 
 ## Installation
 

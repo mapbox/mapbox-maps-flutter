@@ -1,52 +1,45 @@
-import 'package:mapbox_maps_flutter_examples/transparent_globe_example.dart';
-import 'package:mapbox_maps_flutter_examples/transparent_map_example.dart';
-import 'package:flutter/foundation.dart';
-
-import 'animated_route_example.dart';
-import 'animation_example.dart';
-import 'camera_example.dart';
-import 'circle_annotations_example.dart';
-import 'cluster_example.dart';
-import 'custom_header_example.dart';
-import 'custom_vector_icons_example.dart';
-import 'debug_options_example.dart';
-import 'draggable-annotations-example.dart';
-import 'edit_polygon_example.dart';
-import 'full_map_example.dart';
-import 'geojson_line_example.dart';
-import 'generated_style_image_example.dart';
-import 'gestures_example.dart';
-import 'image_source_example.dart';
-import 'location_example.dart';
-import 'platform.dart' show isMobile;
-import 'map_interface_example.dart';
-import 'map_recorder_example.dart';
-import 'model_layer_example.dart';
-import 'model_layer_interactions_example.dart';
-import 'model_source_example.dart';
-import 'offline_map_example.dart';
-import 'ornaments_example.dart';
-import 'overlay_playground_example.dart';
-import 'point_annotations_example.dart';
-import 'polygon_annotations_example.dart';
-import 'polyline_annotations_example.dart';
-import 'projection_example.dart';
-import 'rainbow_road_example.dart';
-import 'simple_map_example.dart';
-import 'snapshotter_example.dart';
-import 'spinning_globe_example.dart';
-import 'standard_style_import_example.dart';
-import 'standard_style_interactions_example.dart';
-import 'style_example.dart';
-import 'tile_json_example.dart';
-import 'traffic_layer_example.dart';
-import 'traffic_route_line_example.dart';
-import 'vector_tile_source_example.dart';
-import 'viewport_example.dart';
 import 'package:flutter/material.dart';
 
+import 'animations/animated_route_example.dart';
+import 'animations/transparency_example.dart';
+import 'camera/camera_example.dart';
+import 'camera/camera_playground_example.dart';
+import 'camera/projection_example.dart';
+import 'docs/circle_annotations_example.dart';
+import 'docs/full_map_example.dart';
+import 'docs/geojson_line_example.dart';
+import 'docs/location_example.dart';
+import 'docs/model_layer_example.dart';
+import 'docs/offline_map_example.dart';
+import 'docs/snapshotter_example.dart';
+import 'docs/standard_style_interactions_example.dart';
+import 'docs/traffic_route_line_example.dart';
+import 'docs/vector_tile_source_example.dart';
+import 'example.dart';
+import 'getting_started/ornaments_example.dart';
+import 'getting_started/simple_map_example.dart';
+import 'interaction/annotations_example.dart';
+import 'interaction/gestures_example.dart';
+import 'interaction/overlay_playground_example.dart';
+import 'platform.dart' show isMobile, isWeb;
+import 'platform/debug_options_example.dart';
+import 'platform/map_interface_example.dart';
+import 'platform/map_recorder_example.dart';
+import 'styles/model_comparison_example.dart';
+import 'styles/sources_example.dart';
+import 'styles/standard_style_import_example.dart';
+import 'styles/style_example.dart';
+import 'styles/style_images_example.dart';
+
+/// Examples available on the current platform.
+///
+/// An entry guarded by [isMobile] uses an API with no web implementation. An
+/// example where only a part is native-only stays listed, and disables that
+/// part.
 final List<Example> examples = [
   Example(
+    slug: 'simple_map',
+    category: ExampleCategory.gettingStarted,
     leading: const Icon(Icons.map_outlined),
     title: 'Display a simple map',
     subtitle:
@@ -54,261 +47,266 @@ final List<Example> examples = [
     builder: (_) => const SimpleMapExample(),
   ),
   Example(
-    leading: const Icon(Icons.flight_takeoff),
-    title: 'Move camera with viewport',
-    subtitle: 'Move the camera to different cities with viewport animations.',
-    builder: (_) => const ViewportExample(),
+    slug: 'full_map',
+    category: ExampleCategory.docs,
+    docsUrl: 'https://docs.mapbox.com/flutter/maps/examples/full_map/',
+    leading: const Icon(Icons.fullscreen),
+    title: 'Display a full screen map',
+    subtitle: 'Switch the basemap light preset and observe map events.',
+    builder: (_) => const FullMapExample(),
   ),
   Example(
-    leading: const Icon(Icons.map),
-    title: 'Ornaments',
-    builder: (_) => const OrnamentsExample(),
+    slug: 'camera_playground',
+    category: ExampleCategory.camera,
+    leading: const Icon(Icons.videocam_outlined),
+    title: 'Camera playground',
+    subtitle:
+        'Imperative animations, declarative viewport states and a globe that '
+        'spins on its own.',
+    builder: (_) => const CameraPlaygroundExample(),
   ),
   Example(
-    leading: const Icon(Icons.threesixty_outlined),
-    title: 'Spinning Globe',
-    subtitle: 'Display your map as an interactive, rotating globe.',
-    builder: (_) => const SpinningGlobeExample(),
-  ),
-  if (isMobile)
-    Example(
-      leading: const Icon(Icons.wifi_off),
-      title: 'Offline Map',
-      subtitle:
-          'Shows how to use OfflineManager and TileStore to download regions for offline use.',
-      builder: (_) => const OfflineMapExample(),
-    ),
-  Example(
-    leading: const Icon(Icons.touch_app),
-    title: "Standard Style Interactions",
-    subtitle: "Showcase of Standard Style interactions",
-    builder: (_) => const StandardStyleInteractionsExample(),
-  ),
-  if (kIsWeb)
-    Example(
-      leading: const Icon(Icons.widgets_outlined),
-      title: 'Overlay & Cursor Playground',
-      subtitle:
-          'Cards, dialogs, menus, FABs, every cursor, and transparent/invisible '
-          'edge-case zones stacked over the map (web hit-testing).',
-      builder: (_) => const OverlayPlaygroundExample(),
-    ),
-  Example(
-    leading: const Icon(Icons.map),
+    slug: 'camera',
+    category: ExampleCategory.camera,
+    leading: const Icon(Icons.videocam_outlined),
     title: 'CameraManager interface',
+    subtitle: 'Drive the camera from sliders and read the state back.',
     builder: (_) => const CameraExample(),
   ),
   Example(
-    leading: const Icon(Icons.map),
-    title: 'High level animation',
-    builder: (_) => const AnimationExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Animated route',
+    slug: 'ornaments',
+    category: ExampleCategory.gettingStarted,
+    leading: const Icon(Icons.explore_outlined),
+    title: 'Ornaments',
     subtitle:
-        'Track location, animate a route line, and reveal it with a trim animation.',
-    builder: (_) => const AnimatedRouteExample(),
+        'Toggle and reposition the compass, scale bar, logo and '
+        'attribution.',
+    builder: (_) => const OrnamentsExample(),
   ),
   Example(
+    slug: 'gestures',
+    category: ExampleCategory.interaction,
+    leading: const Icon(Icons.gesture),
+    title: 'Gestures',
+    subtitle: 'Configure gesture settings and observe gesture events.',
+    builder: (_) => const GesturesExample(),
+  ),
+  Example(
+    slug: 'standard_interactions',
+    category: ExampleCategory.docs,
+    docsUrl:
+        'https://docs.mapbox.com/flutter/maps/examples/standard_interactions/',
+    leading: const Icon(Icons.touch_app),
+    title: 'Standard style interactions',
+    subtitle: 'Add interactions to the predefined Standard featuresets.',
+    builder: (_) => const StandardStyleInteractionsExample(),
+  ),
+  Example(
+    slug: 'standard_style_import',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.settings_suggest_outlined),
+    title: 'Standard style import',
+    subtitle: 'Tune lighting and labels, then tap a place label to inspect it.',
+    builder: (_) => const StandardStyleImportExample(),
+  ),
+  Example(
+    slug: 'style',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.layers_outlined),
+    title: 'Style interface',
+    subtitle: 'Swap the basemap, restyle your own layer, light a 3D scene.',
+    builder: (_) => const StyleExample(),
+  ),
+  Example(
+    slug: 'style_images',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.image_outlined),
+    title: 'Style images',
+    subtitle:
+        'Runtime StyleImage.rgba/.bytes icons you can hide and re-add, plus '
+        'colorized vector icon flags.',
+    builder: (_) => const StyleImagesExample(),
+  ),
+  Example(
+    slug: 'sources',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.storage_outlined),
+    title: 'Data sources',
+    subtitle:
+        'GeoJSON, vector tiles, raster tiles, an image source, clustered '
+        'points and live traffic.',
+    builder: (_) => const SourcesExample(),
+  ),
+  Example(
+    slug: 'geojson_line',
+    category: ExampleCategory.docs,
+    docsUrl: 'https://docs.mapbox.com/flutter/maps/examples/geojson_line/',
+    leading: const Icon(Icons.polyline_outlined),
+    title: 'Add a line with a GeoJSON source',
+    subtitle: 'Use a GeoJSON source as the data for a line layer.',
+    builder: (_) => const DrawGeoJsonLineExample(),
+  ),
+  Example(
+    slug: 'route_line',
+    category: ExampleCategory.docs,
+    docsUrl: 'https://docs.mapbox.com/flutter/maps/examples/route_line/',
     leading: const Icon(Icons.turn_sharp_left),
-    title: 'Style a route showing traffic',
+    title: 'Draw a route line with traffic',
     subtitle: 'Use LineLayer to style a route line with traffic data.',
     builder: (_) => const TrafficRouteLineExample(),
   ),
   Example(
-    leading: const Icon(Icons.gradient),
-    title: 'Rainbow road',
+    slug: 'animated_route',
+    category: ExampleCategory.animations,
+    leading: const Icon(Icons.route_outlined),
+    title: 'Animated route',
     subtitle:
-        'Animate LineLayer.lineBorderGradient along the Circuit de Monaco using line-progress.',
-    builder: (_) => const RainbowRoadExample(),
+        'Tap the map to route from a fixed point or your own location, with '
+        'an animated line reveal, plus a rainbow gradient road animation.',
+    builder: (_) => const AnimatedRouteExample(),
   ),
   Example(
-    leading: const Icon(Icons.map),
-    title: 'Full screen map',
-    builder: (_) => const FullMapExample(),
+    slug: 'vector_tile_source',
+    category: ExampleCategory.docs,
+    docsUrl:
+        'https://docs.mapbox.com/flutter/maps/examples/vector_tile_source/',
+    leading: const Icon(Icons.grid_on_outlined),
+    title: 'Add vector tiles',
+    subtitle: 'Add a vector tile source and render it with a line layer.',
+    builder: (_) => const VectorTileSourceExample(),
   ),
   Example(
-    leading: const Icon(Icons.map),
-    title: 'Style interface',
-    builder: (_) => const StyleExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.gradient),
-    title: 'Style images (RGBA & bytes)',
+    slug: 'transparency',
+    category: ExampleCategory.animations,
+    leading: const Icon(Icons.blur_on),
+    title: 'Transparent map surface',
     subtitle:
-        'Add icons with both StyleImage.rgba and StyleImage.bytes, '
-        'and verify hasStyleImage/getImage.',
-    builder: (_) => const GeneratedStyleImageExample(),
+        'Composite Flutter widgets behind a transparent map, as space around '
+        'a globe or animated sea.',
+    builder: (_) => const TransparencyExample(),
   ),
   Example(
-    leading: const Icon(Icons.touch_app),
-    title: 'Standard Style Import',
-    subtitle: 'Configure the Standard Style and add interactions',
-    builder: (_) => const StandardStyleImportExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.network_check),
-    title: 'Custom Header Example',
-    builder: (_) => const CustomHeaderExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.flag),
-    title: 'Custom Vector Icons',
-    subtitle:
-        'Colorize and interact with vector icons using parameterized SVGs',
-    builder: (_) => const CustomVectorIconsExample(),
-  ),
-  Example(
+    slug: 'model_layer',
+    category: ExampleCategory.docs,
+    docsUrl: 'https://docs.mapbox.com/flutter/maps/examples/model_layer/',
     leading: const Icon(Icons.view_in_ar),
-    title: 'Display a 3D model in a model layer',
+    title: 'Display a 3D model',
     subtitle: 'Showcase the usage of a 3D model layer.',
     builder: (_) => const ModelLayerExample(),
   ),
   Example(
-    leading: const Icon(Icons.touch_app),
-    title: 'Model Layer Interactions',
-    subtitle: 'Showcase of Interactions using custom 3D Model Layers',
-    builder: (_) => const ModelLayerInteractionsExample(),
+    slug: 'model_comparison',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.view_in_ar_outlined),
+    title: 'Model layer and model source',
+    subtitle:
+        'Two ways to place 3D models: a ModelLayer over a GeoJSON source, '
+        'or a single ModelSource.',
+    builder: (_) => const ModelComparisonExample(),
   ),
+  if (isMobile)
+    Example(
+      slug: 'annotations',
+      category: ExampleCategory.interaction,
+      leading: const Icon(Icons.place_outlined),
+      title: 'Annotations',
+      subtitle:
+          'Point, circle, polyline and polygon annotations with drag and tap '
+          'events.',
+      builder: (_) => const AnnotationsExample(),
+    ),
+  if (isMobile)
+    Example(
+      slug: 'circle_annotations',
+      category: ExampleCategory.docs,
+      docsUrl:
+          'https://docs.mapbox.com/flutter/maps/examples/circle_annotations/',
+      leading: const Icon(Icons.circle_outlined),
+      title: 'Add circle annotations',
+      subtitle: 'Show circle annotations on a map.',
+      builder: (_) => const CircleAnnotationExample(),
+    ),
   Example(
-    leading: const Icon(Icons.view_in_ar),
-    title: 'Display multiple 3D models with a ModelSource',
-    subtitle: 'Showcase the usage of the ModelSource API.',
-    builder: (_) => const ModelSourceExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'StyleClusters',
-    builder: (_) => const StyleClustersExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Draw GeoJson Line',
-    builder: (_) => const DrawGeoJsonLineExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Image source',
-    builder: (_) => const ImageSourceExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Tile Json',
-    builder: (_) => const TileJsonExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Traffic Layer',
-    subtitle: 'Toggle traffic layer on/off',
-    builder: (_) => const TrafficLayerExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Vector Tile Source',
-    builder: (_) => const VectorTileSourceExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Edit polygon',
-    subtitle: 'Edit a polygon by dragging/dropping its vertices',
-    builder: (_) => const EditPolygonExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Point Annotations',
-    builder: (_) => const PointAnnotationExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Circle annotations',
-    builder: (_) => const CircleAnnotationExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Polygon Annotations',
-    builder: (_) => const PolygonAnnotationExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Polyline Annotations',
-    builder: (_) => const PolylineAnnotationExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.touch_app),
-    title: 'Draggable Annotations Example',
-    subtitle: 'Demonstrates draggable annotations on the map.',
-    builder: (_) => const DraggableAnnotationExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.gesture),
-    title: 'Gestures',
-    builder: (_) => const GesturesExample(),
-  ),
-  Example(
-    leading: const Icon(Icons.map),
-    title: 'Locate the User',
+    slug: 'location_component',
+    category: ExampleCategory.docs,
+    docsUrl:
+        'https://docs.mapbox.com/flutter/maps/examples/location_component/',
+    leading: const Icon(Icons.my_location),
+    title: "Display the user's location",
     subtitle: 'Toggle the user-location puck and follow it as the user moves.',
     builder: (_) => const LocationExample(),
   ),
   Example(
-    leading: const Icon(Icons.map),
+    slug: 'map_interface',
+    category: ExampleCategory.platform,
+    leading: const Icon(Icons.api),
     title: 'MapInterface',
+    subtitle: 'Query rendered features and drive feature state from taps.',
     builder: (_) => const MapInterfaceExample(),
   ),
   Example(
-    leading: const Icon(Icons.language),
-    title: 'Transparent globe',
-    subtitle:
-        'isOpaque=false and textureView=true makes the map transparent, letting an animated Flutter-rendered space background show behind the globe.',
-    builder: (_) => const TransparentGlobeExample(),
+    slug: 'snapshot',
+    category: ExampleCategory.docs,
+    docsUrl: 'https://docs.mapbox.com/flutter/maps/examples/snapshot/',
+    leading: const Icon(Icons.camera_alt_outlined),
+    title: 'Create a static map snapshot',
+    subtitle: 'Create a static, non-interactive image of a map style.',
+    builder: (_) => const SnapshotterExample(),
   ),
-  Example(
-    leading: const Icon(Icons.waves),
-    title: 'Transparent map background',
-    subtitle:
-        'isOpaque=false and textureView=true make the map transparent, letting an animated Flutter wave texture show through the sea while land stays opaque.',
-    builder: (_) => const TransparentMapExample(),
-  ),
+  if (isWeb)
+    Example(
+      slug: 'overlay_playground',
+      category: ExampleCategory.interaction,
+      leading: const Icon(Icons.widgets_outlined),
+      title: 'Overlay & cursor playground',
+      subtitle:
+          'Cards, dialogs, menus, FABs and every cursor stacked over the map '
+          'to exercise web hit-testing.',
+      builder: (_) => const OverlayPlaygroundExample(),
+    ),
+  // These APIs have no web implementation.
   if (isMobile) ...[
     Example(
+      slug: 'offline',
+      category: ExampleCategory.docs,
+      docsUrl: 'https://docs.mapbox.com/flutter/maps/examples/offline/',
+      leading: const Icon(Icons.wifi_off),
+      title: 'Offline map',
+      subtitle: 'Use OfflineManager and TileStore to download regions.',
+      builder: (_) => const OfflineMapExample(),
+    ),
+    Example(
+      slug: 'debug_options',
+      category: ExampleCategory.platform,
       leading: const Icon(Icons.construction),
       title: 'Map debug options',
       subtitle:
-          'This example shows how the map looks with different debug options.',
+          'Toggle tile borders, collision boxes, wireframes and more, live.',
       builder: (_) => const DebugOptionsExample(),
     ),
     Example(
+      slug: 'map_recorder',
+      category: ExampleCategory.platform,
       leading: const Icon(Icons.fiber_smart_record),
-      title: 'Map Recorder',
-      subtitle: 'Record and replay map sessions',
+      title: 'Map recorder',
+      subtitle: 'Record and replay map sessions.',
       builder: (_) => const MapRecorderExample(),
     ),
     Example(
-      leading: const Icon(Icons.map),
+      slug: 'projection',
+      category: ExampleCategory.camera,
+      leading: const Icon(Icons.public),
       title: 'Projection interface',
+      subtitle: 'Tap to see one point in four coordinate spaces.',
       builder: (_) => const ProjectionExample(),
     ),
   ],
-  Example(
-    leading: const Icon(Icons.camera_alt_outlined),
-    title: 'Create a static map snapshot',
-    subtitle:
-        'Create a static, non-interactive image of a map style with specified camera position.',
-    builder: (_) => const SnapshotterExample(),
-  ),
 ];
 
-class Example {
-  final Widget leading;
-  final String title;
-  final String? subtitle;
-  final WidgetBuilder builder;
-
-  const Example({
-    required this.leading,
-    required this.title,
-    this.subtitle,
-    required this.builder,
-  });
+/// Example matching [slug], or `null` when no example on this platform has it.
+Example? exampleForSlug(String slug) {
+  for (final example in examples) {
+    if (example.slug == slug) return example;
+  }
+  return null;
 }

@@ -504,6 +504,9 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   // ===== Featureset state =====
 
   /// Updates entries in the state map of a feature within a [featureset].
+  ///
+  /// Requirements for [featureId]:
+  /// {@macro web_numeric_feature_id}
   Future<void> setFeatureStateForFeaturesetDescriptor(
     FeaturesetDescriptor featureset,
     FeaturesetFeatureId featureId,
@@ -515,23 +518,35 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   );
 
   /// Updates the state map of an individual [feature].
+  ///
+  /// Requirements for the feature's id:
+  /// {@macro web_numeric_feature_id}
   Future<void> setFeatureStateForFeaturesetFeature(
     FeaturesetFeature feature,
     FeatureState state,
   ) => _impl.setFeatureStateForFeaturesetFeature(feature, state);
 
   /// Gets the state map of a feature within a [featureset].
+  ///
+  /// Requirements for [featureId]:
+  /// {@macro web_numeric_feature_id}
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
     FeaturesetDescriptor featureset,
     FeaturesetFeatureId featureId,
   ) => _impl.getFeatureStateForFeaturesetDescriptor(featureset, featureId);
 
   /// Gets the state map of a [feature].
+  ///
+  /// Requirements for the feature's id:
+  /// {@macro web_numeric_feature_id}
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
     FeaturesetFeature feature,
   ) => _impl.getFeatureStateForFeaturesetFeature(feature);
 
   /// Removes entries from a feature state object within a [featureset].
+  ///
+  /// Requirements for [featureId]:
+  /// {@macro web_numeric_feature_id}
   Future<void> removeFeatureStateForFeaturesetDescriptor({
     required FeaturesetDescriptor featureset,
     required FeaturesetFeatureId featureId,
@@ -543,6 +558,9 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   );
 
   /// Removes entries from a [feature] state object.
+  ///
+  /// Requirements for the feature's id:
+  /// {@macro web_numeric_feature_id}
   Future<void> removeFeatureStateForFeaturesetFeature({
     required FeaturesetFeature feature,
     String? stateKey,
