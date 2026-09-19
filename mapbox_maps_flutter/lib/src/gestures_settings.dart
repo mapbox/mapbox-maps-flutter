@@ -1,0 +1,124 @@
+import 'package:flutter/foundation.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
+
+/// Manages gesture configuration and observability for the map.
+///
+/// Exposes the four pointer/touch gestures common to iOS, Android, and Web
+/// — [pan], [zoom], [rotate], [pitch] — each as a typed [MapGesture] that
+/// publishes [MapContentGestureContext] events through its
+/// `gestureEvents` broadcast stream.
+///
+/// [keyboard] separately covers keyboard-driven camera changes (arrow keys,
+/// `+`/`-`, shift+arrows). Web only — keyboard input has no cursor
+/// position, so it publishes [MapKeyboardGestureContext] events (camera
+/// state only) instead of [MapContentGestureContext].
+final class GesturesSettingsManager {
+  final GesturesSettingsPlatformInterface _impl;
+
+  /// The pan (drag) gesture.
+  final MapPanGesture pan;
+
+  /// The zoom (pinch / wheel / double-tap) gesture.
+  final MapZoomGesture zoom;
+
+  /// The rotate gesture.
+  final MapRotateGesture rotate;
+
+  /// The pitch (tilt) gesture.
+  final MapPitchGesture pitch;
+
+  /// The keyboard gesture. Web only — never emits on iOS/Android, which
+  /// have no keyboard gesture source.
+  final MapKeyboardGesture keyboard;
+
+  @internal
+  GesturesSettingsManager(this._impl)
+    : pan = MapPanGesture._(gestureEvents: _impl.panEvents),
+      zoom = MapZoomGesture._(gestureEvents: _impl.zoomEvents),
+      rotate = MapRotateGesture._(gestureEvents: _impl.rotateEvents),
+      pitch = MapPitchGesture._(gestureEvents: _impl.pitchEvents),
+      keyboard = MapKeyboardGesture._(gestureEvents: _impl.keyboardEvents);
+
+  /// Returns the current [GesturesSettings].
+  ///
+  /// {@template gestures_settings_platform_support}
+  /// Supported [GesturesSettings] fields per platform:
+  /// * Mobile (iOS / Android): all fields except
+  ///   [GesturesSettings.scrollZoomEnabled], [GesturesSettings.boxZoomEnabled],
+  ///   and [GesturesSettings.pitchWithRotateEnabled] (web only).
+  /// * Web: [GesturesSettings.scrollEnabled],
+  ///   [GesturesSettings.pinchToZoomEnabled],
+  ///   [GesturesSettings.rotateEnabled], [GesturesSettings.pitchEnabled],
+  ///   [GesturesSettings.doubleTapToZoomInEnabled],
+  ///   [GesturesSettings.quickZoomEnabled],
+  ///   [GesturesSettings.scrollZoomEnabled], [GesturesSettings.boxZoomEnabled],
+  ///   [GesturesSettings.pitchWithRotateEnabled].
+  ///
+  /// See each field's own docs for platform-specific behavior.
+  /// {@endtemplate}
+  ///
+  /// Fields not supported on the current platform return null.
+  Future<GesturesSettings> getSettings() => _impl.getSettings();
+
+  /// Applies [GesturesSettings] configuration changes.
+  ///
+  /// {@macro gestures_settings_platform_support}
+  ///
+  /// Fields not supported on the current platform are ignored.
+  Future<void> updateSettings(GesturesSettings settings) =>
+      _impl.updateSettings(settings);
+}
+
+/// Deprecated: Use [GesturesSettingsManager] instead.
+@Deprecated('Use GesturesSettingsManager instead.')
+typedef GesturesSettingsInterface = GesturesSettingsManager;
+
+/// Common base for gesture surfaces — currently [MapPanGesture],
+/// [MapZoomGesture], [MapRotateGesture], [MapPitchGesture] — exposing
+/// a broadcast `gestureEvents` stream of [MapContentGestureContext]s.
+abstract base class MapGesture {
+  /// Broadcast stream of gesture events for this surface.
+  ///
+  /// > **Note:** on Web, this stream covers pointer/touch input only.
+  /// > Keyboard-driven camera changes (arrow keys, `+`/`-`, shift+arrows)
+  /// > are delivered separately through [GesturesSettingsManager.keyboard].
+  final Stream<MapContentGestureContext> gestureEvents;
+
+  MapGesture._({required this.gestureEvents});
+}
+
+/// The pan (drag) gesture surface on a [MapboxMap].
+final class MapPanGesture extends MapGesture {
+  MapPanGesture._({required super.gestureEvents}) : super._();
+}
+
+/// The zoom gesture surface on a [MapboxMap].
+final class MapZoomGesture extends MapGesture {
+  MapZoomGesture._({required super.gestureEvents}) : super._();
+}
+
+/// The rotate gesture surface on a [MapboxMap].
+final class MapRotateGesture extends MapGesture {
+  MapRotateGesture._({required super.gestureEvents}) : super._();
+}
+
+/// The pitch (tilt) gesture surface on a [MapboxMap].
+final class MapPitchGesture extends MapGesture {
+  MapPitchGesture._({required super.gestureEvents}) : super._();
+}
+
+/// The keyboard gesture surface on a [MapboxMap].
+///
+/// Unlike [MapPanGesture], [MapZoomGesture], [MapRotateGesture], and
+/// [MapPitchGesture], keyboard input has no cursor/touch position, so
+/// events carry the resulting [MapKeyboardGestureContext] (camera +
+/// gesture state) instead of a [MapContentGestureContext].
+///
+/// Web only — [gestureEvents] never emits on iOS/Android, which have no
+/// keyboard gesture source.
+final class MapKeyboardGesture {
+  MapKeyboardGesture._({required this.gestureEvents});
+
+  /// Broadcast stream of keyboard-driven gesture events.
+  final Stream<MapKeyboardGestureContext> gestureEvents;
+}

@@ -1,0 +1,44 @@
+name: mapbox_maps_flutter_mobile
+description: Interactive, thoroughly customizable maps powered by Mapbox Maps mobile SDKs.
+version: 2.32.0-SNAPSHOT-09-18--06-57.git-73c06bb
+homepage: https://github.com/mapbox/mapbox-maps-flutter
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.1"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_plugin_android_lifecycle: ^2.0.29
+  typed_data: ^1.3.0
+  meta: ^1.17.0
+  turf: ^0.0.13
+  mapbox_maps_flutter_platform_interface: ^2.32.0-SNAPSHOT-09-18--06-57.git-73c06bb
+
+dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  test: ^1.19.0
+  flutter_lints: ^6.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  plugin:
+    implements: mapbox_maps_flutter
+    platforms:
+      android:
+        package: com.mapbox.maps.mapbox_maps
+        pluginClass: MapboxMapsPlugin
+        dartPluginClass: MapboxMapsFlutterMobile
+
+      ios:
+        pluginClass: MapboxMapsPlugin
+        dartPluginClass: MapboxMapsFlutterMobile

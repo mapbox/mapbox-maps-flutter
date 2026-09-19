@@ -1,0 +1,251 @@
+// AndroidPlatformViewHostingMode is @experimental on the platform_interface
+// surface; mobile branches on it to pick the correct platform-view path.
+// ignore_for_file: experimental_member_use
+
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+
+typedef OnPlatformViewCreatedCallback = void Function(int);
+
+class _MapboxMapsPlatform {
+  late final MethodChannel _channel = MethodChannel(
+    'plugins.flutter.io.${channelSuffix.toString()}',
+    const StandardMethodCodec(),
+    binaryMessenger,
+  );
+  final BinaryMessenger binaryMessenger;
+  final int channelSuffix;
+
+  /// Called when the native [MapboxMapController] has finished initializing
+  /// and all Pigeon channels are registered.
+  void Function()? onNativeMapCreated;
+
+  _MapboxMapsPlatform({
+    required this.binaryMessenger,
+    required this.channelSuffix,
+  }) {
+    _channel.setMethodCallHandler(_handleMethodCall);
+  }
+
+  _MapboxMapsPlatform.instance(int channelSuffix)
+    : this(
+        binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+        channelSuffix: channelSuffix,
+      );
+
+  Future<dynamic> _handleMethodCall(MethodCall call) async {
+    switch (call.method) {
+      case 'mapView#onMapCreated':
+        onNativeMapCreated?.call();
+        return null;
+      default:
+        debugPrint(
+          "Handle method call ${call.method}, arguments: ${call.arguments} not supported",
+        );
+    }
+  }
+
+  Widget buildView(
+    AndroidPlatformViewHostingMode androidHostingMode,
+    Map<String, dynamic> creationParams,
+    OnPlatformViewCreatedCallback onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers, {
+    Key? key,
+  }) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      switch (androidHostingMode) {
+        case AndroidPlatformViewHostingMode.TLHC_VD:
+        case AndroidPlatformViewHostingMode.TLHC_HC:
+        case AndroidPlatformViewHostingMode.HC:
+          return PlatformViewLink(
+            key: key,
+            viewType: "plugins.flutter.io/mapbox_maps",
+            surfaceFactory: (context, controller) {
+              return AndroidViewSurface(
+                controller: controller as AndroidViewController,
+                hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                gestureRecognizers: gestureRecognizers ?? {},
+              );
+            },
+            onCreatePlatformView: (params) {
+              final AndroidViewController controller =
+                  _androidViewControllerFactoryForMode(androidHostingMode)(
+                    id: params.id,
+                    viewType: 'plugins.flutter.io/mapbox_maps',
+                    layoutDirection: TextDirection.ltr,
+                    creationParams: creationParams,
+                    creationParamsCodec: const _MapInterfacesPigeonCodec(),
+                    onFocus: () => params.onFocusChanged(true),
+                  );
+              controller.addOnPlatformViewCreatedListener(
+                params.onPlatformViewCreated,
+              );
+              controller.addOnPlatformViewCreatedListener(
+                onPlatformViewCreated,
+              );
+
+              controller.create();
+              return controller;
+            },
+          );
+        case AndroidPlatformViewHostingMode.VD:
+          return AndroidView(
+            key: key,
+            viewType: 'plugins.flutter.io/mapbox_maps',
+            onPlatformViewCreated: onPlatformViewCreated,
+            gestureRecognizers: gestureRecognizers,
+            creationParams: creationParams,
+            creationParamsCodec: const _MapInterfacesPigeonCodec(),
+          );
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return UiKitView(
+        key: key,
+        viewType: 'plugins.flutter.io/mapbox_maps',
+        onPlatformViewCreated: onPlatformViewCreated,
+        gestureRecognizers: gestureRecognizers,
+        creationParams: creationParams,
+        creationParamsCodec: const _MapInterfacesPigeonCodec(),
+      );
+    }
+    return Text(
+      '$defaultTargetPlatform is not yet supported by the maps plugin',
+    );
+  }
+
+  AndroidViewController Function({
+    required int id,
+    required String viewType,
+    required TextDirection layoutDirection,
+    dynamic creationParams,
+    MessageCodec<dynamic>? creationParamsCodec,
+    VoidCallback? onFocus,
+  })
+  _androidViewControllerFactoryForMode(
+    AndroidPlatformViewHostingMode hostingMode,
+  ) {
+    switch (hostingMode) {
+      case AndroidPlatformViewHostingMode.TLHC_VD:
+        return PlatformViewsService.initAndroidView;
+      case AndroidPlatformViewHostingMode.TLHC_HC:
+        return PlatformViewsService.initSurfaceAndroidView;
+      case AndroidPlatformViewHostingMode.HC:
+        return PlatformViewsService.initExpensiveAndroidView;
+      case AndroidPlatformViewHostingMode.VD:
+        throw "Unexpected hosting mode(VD) when selecting an android view controller";
+    }
+  }
+
+  Future<void> submitViewSizeHint({
+    required double width,
+    required double height,
+  }) {
+    return _channel.invokeMethod(
+      'mapView#submitViewSizeHint',
+      <String, dynamic>{'width': width, 'height': height},
+    );
+  }
+
+  void dispose() async {
+    onNativeMapCreated = null;
+    try {
+      await _channel.invokeMethod('platform#releaseMethodChannels');
+    } catch (e) {
+      debugPrint("Error releasing method channels: $e");
+    }
+
+    _channel.setMethodCallHandler(null);
+  }
+
+  Future<dynamic> createAnnotationManager(
+    String type, {
+    String? id,
+    String? belowLayerId,
+  }) async {
+    try {
+      return await _channel.invokeMethod(
+        'annotation#create_manager',
+        <String, dynamic>{'type': type, 'id': id, 'belowLayerId': belowLayerId},
+      );
+    } on PlatformException catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<void> removeAnnotationManager(String id) async {
+    try {
+      return await _channel.invokeMethod(
+        'annotation#remove_manager',
+        <String, dynamic>{'id': id},
+      );
+    } on PlatformException catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<dynamic> addInteractionsListeners(
+    Interaction interaction,
+    String interactionID,
+  ) async {
+    var interactionPigeon = _InteractionPigeon(
+      featuresetDescriptor:
+          interaction.featuresetDescriptor?.encode() as List<Object?>?,
+      stopPropagation: interaction.stopPropagation,
+      interactionType: switch (interaction.interactionType) {
+        InteractionType.tap => 'TAP',
+        InteractionType.longTap => 'LONG_TAP',
+      },
+      identifier: interactionID,
+      radius: interaction.radius,
+      filter: interaction.filter,
+    );
+    try {
+      return await _channel.invokeMethod(
+        'interactions#add_interaction',
+        <String, dynamic>{'interaction': interactionPigeon.encode()},
+      );
+    } on PlatformException catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<dynamic> removeInteractionsListeners(String interactionID) async {
+    try {
+      return await _channel.invokeMethod(
+        'interactions#remove_interaction',
+        <String, dynamic>{'identifier': interactionID},
+      );
+    } on PlatformException catch (e) {
+      return Future.error(e);
+    }
+  }
+}
+
+/// A registry to hold suffixes for Channels.
+///
+class _SuffixesRegistry {
+  _SuffixesRegistry._instance();
+
+  int _suffix = -1;
+  final Set<int> suffixesInUse = {};
+  final Set<int> suffixesAvailable = {};
+
+  int getSuffix() {
+    int suffix;
+
+    if (suffixesAvailable.isEmpty) {
+      _suffix++;
+      suffix = _suffix;
+    } else {
+      suffix = suffixesAvailable.first;
+      suffixesAvailable.remove(suffix);
+    }
+    suffixesInUse.add(suffix);
+
+    return suffix;
+  }
+
+  void releaseSuffix(int suffix) {
+    suffixesInUse.remove(suffix);
+    suffixesAvailable.add(suffix);
+  }
+}

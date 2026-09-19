@@ -1,0 +1,1497 @@
+[
+  {
+    "changeDescription": "MapboxOptions: Method \"getAccessToken\" removed"
+  },
+  {
+    "changeDescription": "Interface \"MapDebugOptions\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapWidgetDebugOptions + MapboxMap.setDebugOptions / getDebugOptions instead."
+  },
+  {
+    "changeDescription": "Interface \"MapDebugOptionsData\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapWidgetDebugOptions + MapboxMap.setDebugOptions / getDebugOptions instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"getDebug\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapboxMap.getDebugOptions instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setDebug\" removed",
+    "reason": "Deprecated legacy debug API dropped in v3. Use MapboxMap.setDebugOptions instead."
+  },
+  {
+    "changeDescription": "iOS platform removed",
+    "reason": "Mobile implementation is now consolidated in the endorsed package, mapbox_maps_flutter_mobile."
+  },
+  {
+    "changeDescription": "Android platform removed",
+    "reason": "Mobile implementation is now consolidated in the endorsed package, mapbox_maps_flutter_mobile."
+  },
+  {
+    "changeDescription": "Function \"wrapResponse\" removed",
+    "reason": "Pigeon utils are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Field \"pigeonMethodCodec\" removed",
+    "reason": "Pigeon utils are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotationMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"MapInterfaces_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"Settings_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"GestureListeners_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"MapRecorderMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"SnapshotterMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"LogBackend_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"PerformaceStatistics_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"OfflineMessenger_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"ViewportInternal_PigeonCodec\" removed",
+    "reason": "PigeonCodec classes are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"Point\" removed",
+    "reason": "turf subclasses are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"Polygon\" removed",
+    "reason": "turf subclasses are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"LineString\" removed",
+    "reason": "turf subclasses are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Function \"convertToValidMap\" removed",
+    "reason": "turf utils are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "Interface \"ConstrainMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ViewportMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"NorthOrientation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GlyphsRasterizationMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleProjectionName\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"OrnamentPosition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScrollMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"PuckBearing\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ModelScaleMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ModelElevationReference\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"DistanceUnits\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GestureState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileStoreUsageMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"NetworkRestriction\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileDataDomain\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ResponseErrorReason\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScreenCoordinate\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MbxEdgeInsets\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CoordinateBounds\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CoordinateBoundsZoom\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraBoundsOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraBounds\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapAnimationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"Size\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScreenBox\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GlyphsRasterizationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileCoverOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleObjectInfo\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleProjection\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LayerPosition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ImportPosition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TransitionOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"GesturesSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationPuck2D\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationPuck3D\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationPuck\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LocationComponentSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ScaleBarSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CompassSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"AttributionSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LogoSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IndoorSelectorSettings\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapContentGestureContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CanonicalTileID\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapSnapshotOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StylePackLoadOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StylePack\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StylePackLoadProgress\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TilesetDescriptorOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionLoadOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegion\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionEstimateResult\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionEstimateOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionLoadProgress\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileRegionEstimateProgress\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileCacheBudgetInMegabytes\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileCacheBudgetInTiles\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "MapWidget: Changed supertype from \"StatefulWidget\" to \"StatelessWidget\"",
+    "reason": "MapWidget is now stateless; viewport animations are handled by the new ViewportController"
+  },
+  {
+    "changeDescription": "MapWidget: Super Type \"StatefulWidget\" removed",
+    "reason": "MapWidget is now stateless; viewport animations are handled by the new ViewportController"
+  },
+  {
+    "changeDescription": "Function \"setStateWithViewportAnimation\" removed",
+    "reason": "Replaced by ViewportController.moveTo() for imperative viewport animations"
+  },
+  {
+    "changeDescription": "Interface \"WidgetViewportAnimation\" removed",
+    "reason": "Replaced by ViewportController for imperative viewport animations"
+  },
+  {
+    "changeDescription": "Interface \"TypedInteraction\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"_Interaction\" removed"
+  },
+  {
+    "changeDescription": "Interface \"_InteractionType\" removed"
+  },
+  {
+    "changeDescription": "MapWidget: Field \"cameraOptions\" removed",
+    "reason": "Deprecated in v2 in favor of Viewport API"
+  },
+  {
+    "changeDescription": "MapWidget: Method \"getMapboxMap\" removed",
+    "reason": "Deprecated in v2, use onMapCreated to get the instance of MapboxMap"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setCustomHeaders\" removed",
+    "reason": "Deprecated in v2, use httpService.setCustomHeadersForHost to scope headers to a specific host"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Method \"setCustomHeaders\" removed",
+    "reason": "Deprecated in v2, use setCustomHeadersForHost to scope headers to a specific host"
+  },
+  {
+    "changeDescription": "MapWidget: Field \"onTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapWidget: Field \"onLongTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setOnMapTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"setOnMapLongTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Field \"onMapTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Field \"onMapLongTapListener\" removed",
+    "reason": "Deprecated in v2 in favor of Interaction API"
+  },
+  {
+    "changeDescription": "MapboxMap: Method \"fromNativeController\" removed",
+    "reason": "Pre-federation entry point. Federated SDK constructs MapboxMap via platform-specific implementations in onMapCreated; customers don't construct from native handles. Removed without deprecation cycle because the construction model itself changed."
+  },
+  {
+    "changeDescription": "TapInteraction: Super Type \"_Interaction\" removed"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Super Type \"_Interaction\" removed"
+  },
+  {
+    "changeDescription": "TapInteraction: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"action\" removed",
+    "reason": "False positive — field is inherited from TypedInteraction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"featuresetDescriptor\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"interactionType\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"stopPropagation\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"filter\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "TapInteraction: Field \"radius\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"action\" removed",
+    "reason": "False positive — field is inherited from TypedInteraction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"featuresetDescriptor\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"interactionType\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"stopPropagation\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"filter\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "LongTapInteraction: Field \"radius\" removed",
+    "reason": "False positive — field is inherited from Interaction in platform interface"
+  },
+  {
+    "changeDescription": "Interface \"Type\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeaturesetDescriptor\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeaturesetFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeaturesetFeatureId\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FeatureState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TypedFeaturesetFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "StandardBuildings: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"featuresetId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"importId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"layerId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildings: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardBuildingsState: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeatureState in platform interface"
+  },
+  {
+    "changeDescription": "StandardBuildingsState: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"featuresetId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"importId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"layerId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPlaceLabelsState: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeatureState in platform interface"
+  },
+  {
+    "changeDescription": "StandardPlaceLabelsState: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPOIs: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"featuresetId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"importId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"layerId\" removed",
+    "reason": "False positive — field is inherited from FeaturesetDescriptor in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIs: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StandardPOIsState: Method \"encode\" removed",
+    "reason": "False positive — method is inherited from FeatureState in platform interface"
+  },
+  {
+    "changeDescription": "StandardPOIsState: Field \"hashCode\" removed",
+    "reason": "False positive — hashCode is inherited from Object"
+  },
+  {
+    "changeDescription": "StyleManager: Constructor \"new\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "StyleManager: Field \"pigeonVar_binaryMessenger\" removed",
+    "reason": "Pigeon-related fields are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "StyleManager: Field \"pigeonChannelCodec\" removed",
+    "reason": "Pigeon-related fields are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "StyleManager: Field \"pigeonVar_messageChannelSuffix\" removed",
+    "reason": "Pigeon-related fields are now defined in mapbox_maps_flutter_mobile"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Constructor \"new\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Field \"binaryMessenger\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "MapboxHttpService: Field \"channelSuffix\" removed",
+    "reason": "Access via MapboxMap interface instead"
+  },
+  {
+    "changeDescription": "Interface \"CameraChangedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"DataSourceType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"EventTimeInterval\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearing\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearingConstant\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearingCourse\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportStateBearingHeading\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapIdleEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapLoadErrorType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"MapLoadingErrorEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderedQueryGeometry\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderFrameFinishedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderFrameStartedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RenderMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RequestLoadingMethodType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RequestPriority\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RequestType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ResourceEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ResponseSourceType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceAddedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceDataLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceDataType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SourceRemovedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleDataLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleDataType\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleImageMissingEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleImageUnusedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleLoadedEventData\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TileID\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CameraViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"OverviewViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FollowPuckViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"StyleDefaultViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IdleViewportState\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"DefaultViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FlyViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"EasingViewportTransition\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"BackgroundPitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CircleElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CirclePitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CirclePitchScale\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"CircleTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillExtrusionBaseAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillExtrusionHeightAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconPitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconRotationAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconTextFit\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"IconTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineCap\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineJoin\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"LineWidthUnit\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"OcclusionOpacityMode\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SymbolElevationReference\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SymbolPlacement\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SymbolZOrder\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextJustify\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextPitchAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextRotationAlignment\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextTransform\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"TextTranslateAnchor\" removed",
+    "reason": "WS2a: moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"Encoding\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"FillExtrusionTranslateAnchor\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"HillshadeIlluminationAnchor\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"ModelType\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RasterColorScale\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"RasterResampling\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"Scheme\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Interface \"SkyType\" removed",
+    "reason": "WS2a (post-rebase): moved to mapbox_maps_flutter_platform_interface and re-exported"
+  },
+  {
+    "changeDescription": "Projection: Constructor \"new\" removed",
+    "reason": "WS2b: facade Projection is now a hand-written wrapper over ProjectionPlatformInterface; the mobile-only Pigeon constructor is internal"
+  },
+  {
+    "changeDescription": "Projection: Field \"pigeonChannelCodec\" removed",
+    "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon codec field"
+  },
+  {
+    "changeDescription": "Projection: Field \"pigeonVar_binaryMessenger\" removed",
+    "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon binaryMessenger field"
+  },
+  {
+    "changeDescription": "Projection: Field \"pigeonVar_messageChannelSuffix\" removed",
+    "reason": "WS2b: facade Projection no longer exposes the mobile Pigeon messageChannelSuffix field"
+  },
+  {
+    "changeDescription": "BaseAnnotationManager: Number of type parameters changed. Before: \"\" After: \"T\" (required)",
+    "reason": "Parameterized on the platform-interface type so subclasses use super.impl forwarding without holding a duplicate _impl field. Bound: T extends BaseAnnotationManagerPlatformInterface."
+  },
+  {
+    "changeDescription": "BaseAnnotationManager: Field \"impl\" added (required)",
+    "reason": "@protected typed getter exposing the private _impl to subclass wrappers in different files — Dart library-private fields aren't accessible across files even in the same package."
+  },
+  {
+    "changeDescription": "PointAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<PointAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition. Customer code referencing PointAnnotationManager compiles unchanged."
+  },
+  {
+    "changeDescription": "CircleAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<CircleAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "PolygonAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<PolygonAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "PolylineAnnotationManager: Super Type changed from \"BaseAnnotationManager\" to \"BaseAnnotationManager<PolylineAnnotationManagerPlatformInterface>\"",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "Interface \"OnCircleAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [CircleAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "Interface \"OnPointAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PointAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "Interface \"OnPolygonAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolygonAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "Interface \"OnPolylineAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolylineAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "CircleAnnotationManager: Method \"addOnCircleAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [CircleAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "PointAnnotationManager: Method \"addOnPointAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PointAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "PolygonAnnotationManager: Method \"addOnPolygonAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolygonAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "PolylineAnnotationManager: Method \"addOnPolylineAnnotationClickListener\" removed",
+    "reason": "Deprecated click-listener API dropped in v3. Use [PolylineAnnotationManager.tapEvents] instead."
+  },
+  {
+    "changeDescription": "MapboxMap: Super Type \"ChangeNotifier\" removed",
+    "reason": "Vestigial supertype: v2.23 declared `MapboxMap extends ChangeNotifier` but had zero `notifyListeners()` call sites. Customer code observing it was already a silent no-op."
+  },
+  {
+    "changeDescription": "MapboxMap: Super Type \"Listenable\" removed",
+    "reason": "Inherited via ChangeNotifier; see ChangeNotifier removal reason."
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"Cancelable\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotation\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotationOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MapOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ContextMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"AndroidPlatformViewHostingMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"StylePropertyValue\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"StylePropertyValueKind\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MbxImage\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"FlatLight\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"Anchor\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"AmbientLight\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"DirectionalLight\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ImageStretches\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ImageContent\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"ProjectedMeters\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MercatorCoordinate\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"MapWidgetDebugOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"RenderedQueryOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"QueriedRenderedFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"QueriedFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"SourceQueryOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"QueriedSourceFeature\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"FeatureExtensionValue\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceStatisticsOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceSamplerOptions\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"DurationStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"CumulativeRenderingStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PerFrameRenderingStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"GroupPerformanceStatistics\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"AnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PointAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"CircleAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolygonAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"PolylineAnnotationInteractionContext\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"LoggingLevel\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"DefaultLocationPuck2D\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"TextVariableAnchor\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"TextWritingMode\" removed",
+    "reason": "Moved to mapbox_maps_flutter_platform_interface and re-exported via facade barrel. The symbol is reachable through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart`; dart-apitool flags it because it does not follow cross-package re-export chains."
+  },
+  {
+    "changeDescription": "Interface \"Conversion\" removed",
+    "reason": "Relocated to packages/mapbox_maps_flutter/lib/src/camera_state_extensions.dart. Customer code calling `cameraState.toCameraOptions()` through `package:mapbox_maps_flutter/mapbox_maps_flutter.dart` continues to compile; dart-apitool flags the class because the declared library URI changed."
+  },
+  {
+    "changeDescription": "Conversion: Method \"fromJson\" removed",
+    "reason": "Previously-unused `static CameraState fromJson(...)` dropped during the Conversion extension's relocation (no callers in any package at lift time)."
+  },
+  {
+    "changeDescription": "Interface \"ScreenBoxToJson\" removed",
+    "reason": "Pigeon-internal JSON-serialization helper kept in mapbox_maps_flutter_mobile/lib/src/extensions.dart and no longer reachable from the federated facade. No customer callers; serialization is now Pigeon-typed."
+  },
+  {
+    "changeDescription": "Interface \"ScreenCoordinateToJson\" removed",
+    "reason": "Pigeon-internal JSON-serialization helper kept in mapbox_maps_flutter_mobile/lib/src/extensions.dart and no longer reachable from the federated facade. No customer callers; serialization is now Pigeon-typed."
+  },
+  {
+    "changeDescription": "Interface \"LocationSettings\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"GesturesSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"LogoSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"CompassSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"ScaleBarSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"AttributionSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"IndoorSelectorSettingsInterface\" removed",
+    "reason": "Renamed to `*Manager`; `@Deprecated` typedef alias retained on the facade. dart-apitool reports the class->typedef shape change as a removal."
+  },
+  {
+    "changeDescription": "Interface \"Feature\" removed",
+    "reason": "v2 was a thin `turf.Feature` wrapper with encode()/decode() helpers for Pigeon serialization. Constructor surface preserved via the re-exported `package:turf/turf.dart`; the encode/decode helpers were Pigeon-internal plumbing, not customer surface."
+  },
+  {
+    "changeDescription": "Interface \"StyleLayer\" removed",
+    "reason": "Renamed: `StyleLayer` -> `Layer`, `StyleSource` -> `Source`. Class shape preserved on the new names; customers update import names."
+  },
+  {
+    "changeDescription": "Interface \"StyleSource\" removed",
+    "reason": "Renamed: `StyleLayer` -> `Layer`, `StyleSource` -> `Source`. Class shape preserved on the new names; customers update import names."
+  },
+  {
+    "changeDescription": "GeoJsonSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "Source: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "ImageSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "RasterSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "RasterDemSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "VectorSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "ModelSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "Source: Field \"style\" added (required)",
+    "reason": "`Source` gained a required `style` field to resolve source references when sources are passed by value through `StyleManager.addSource`. Typed `Source` subclasses set this field automatically."
+  },
+  {
+    "changeDescription": "Interface \"Settings\" removed",
+    "reason": "Pigeon `@HostApi` for in-process key-value storage; mobile-internal in the federated layout. No federated facade equivalent; use `shared_preferences` for portable persistent storage."
+  },
+  {
+    "changeDescription": "Interface \"GestureListener\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to the mobile platform-channel transport; replaced by the typed `onMapTapListener` / `onMapLongTapListener` / `onMapScrollListener` / `onMapZoomListener` setter properties on `MapboxMap`."
+  },
+  {
+    "changeDescription": "Interface \"LogWriterBackend\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to mobile; replaced by the hand-written `OnLogListener` interface."
+  },
+  {
+    "changeDescription": "Interface \"PerformanceStatisticsListener\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to mobile; replaced by the hand-written `OnPerformanceStatisticsListener` interface."
+  },
+  {
+    "changeDescription": "Interface \"OnSnapshotStyleListener\" removed",
+    "reason": "Pigeon `FlutterApi` listener internal to mobile; replaced by typed listener params on `MapboxMapsFlutterPlatform.createSnapshotter` (`onStyleLoadedListener`, `onMapLoadErrorListener`, `onStyleDataLoadedListener`, `onStyleImageMissingListener`)."
+  },
+  {
+    "changeDescription": "Interface \"Request\" removed",
+    "reason": "Renamed at the v2->v3 boundary for clarity, avoiding generic top-level names: `Request` -> `ResourceRequest`, `Response` -> `ResourceResponse`, `Error` -> `ResponseError`. New types live in `platform_interface/lib/src/events.dart`. Customers update the type name; field shape preserved."
+  },
+  {
+    "changeDescription": "Interface \"Response\" removed",
+    "reason": "Renamed at the v2->v3 boundary for clarity, avoiding generic top-level names: `Request` -> `ResourceRequest`, `Response` -> `ResourceResponse`, `Error` -> `ResponseError`. New types live in `platform_interface/lib/src/events.dart`. Customers update the type name; field shape preserved."
+  },
+  {
+    "changeDescription": "Interface \"Error\" removed",
+    "reason": "Renamed at the v2->v3 boundary for clarity, avoiding generic top-level names: `Request` -> `ResourceRequest`, `Response` -> `ResourceResponse`, `Error` -> `ResponseError`. New types live in `platform_interface/lib/src/events.dart`. Customers update the type name; field shape preserved."
+  },
+  {
+    "changeDescription": "Interface \"MapRecorderOptions\" removed",
+    "reason": "`MapRecorder` API uses named parameters (`timeWindow`, `loggingEnabled`, `compressed`; `playbackCount`, `playbackSpeedMultiplier`, `avoidPlaybackPauses`) instead of option struct types. Mobile constructs the Pigeon options at the wire boundary."
+  },
+  {
+    "changeDescription": "Interface \"MapPlayerOptions\" removed",
+    "reason": "`MapRecorder` API uses named parameters (`timeWindow`, `loggingEnabled`, `compressed`; `playbackCount`, `playbackSpeedMultiplier`, `avoidPlaybackPauses`) instead of option struct types. Mobile constructs the Pigeon options at the wire boundary."
+  },
+  {
+    "changeDescription": "Interface \"ViewAnnotationAnchor\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"StylePackErrorType\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"OfflineRegionDownloadState\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"HttpMethod\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"HttpRequestErrorType\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"DownloadErrorCode\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"DownloadState\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "Interface \"TileRegionErrorType\" removed",
+    "reason": "Pigeon-emitted codec scaffolding never referenced by any v2.23 public API. Reachability through `part of mapbox_maps_flutter` was an accidental consequence of Pigeon's monolithic-package output, not a deliberate customer surface — no v2 call site lost."
+  },
+  {
+    "changeDescription": "MapboxMap: coordinatesForPixels: Type of parameter \"pixels\" changed. List<ScreenCoordinate?> -> List<ScreenCoordinate>",
+    "reason": "Lifted Pigeon-imposed nullability now that the platform interface is decoupled from Pigeon."
+  },
+  {
+    "changeDescription": "AnnotationManager: removeAnnotationManager: Type of parameter \"manager\" changed. BaseAnnotationManager -> BaseAnnotationManager<BaseAnnotationManagerPlatformInterface>",
+    "reason": "Companion to the BaseAnnotationManager generic parameter addition."
+  },
+  {
+    "changeDescription": "MapWidget: Constructor new: Parameter \"cameraOptions\" removed",
+    "reason": "Companion to MapWidget cameraOptions field removal."
+  },
+  {
+    "changeDescription": "MapWidget: Constructor new: Parameter \"onTapListener\" removed",
+    "reason": "Companion to MapWidget onTapListener field removal."
+  },
+  {
+    "changeDescription": "MapWidget: Constructor new: Parameter \"onLongTapListener\" removed",
+    "reason": "Companion to MapWidget onLongTapListener field removal."
+  },
+  {
+    "changeDescription": "MapboxMap: styleGlyphURL: Experimental Flag changed. false -> true",
+    "reason": "Marked experimental in v3."
+  },
+  {
+    "changeDescription": "MapboxMap: setStyleGlyphURL: Experimental Flag changed. false -> true",
+    "reason": "Marked experimental in v3."
+  },
+  {
+    "changeDescription": "MapboxMap: annotations: Writability changed. true -> false",
+    "reason": "Now a final field on the facade."
+  },
+  {
+    "changeDescription": "MapboxMap: location: Type of field changed. LocationSettings -> LocationSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: gestures: Type of field changed. GesturesSettingsInterface -> GesturesSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: logo: Type of field changed. LogoSettingsInterface -> LogoSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: compass: Type of field changed. CompassSettingsInterface -> CompassSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: scaleBar: Type of field changed. ScaleBarSettingsInterface -> ScaleBarSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: attribution: Type of field changed. AttributionSettingsInterface -> AttributionSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "MapboxMap: indoorSelector: Type of field changed. IndoorSelectorSettingsInterface -> IndoorSelectorSettingsManager",
+    "reason": "Settings facade now exposes a Manager wrapper around the platform-interface mixin."
+  },
+  {
+    "changeDescription": "StyleManager: addGeoJSONSourceFeatures: Type of parameter \"features\" changed. List<Feature> -> List<Feature<GeometryObject>>",
+    "reason": "turf Feature is now parameterized on geometry; signature follows the upstream type."
+  },
+  {
+    "changeDescription": "StyleManager: updateGeoJSONSourceFeatures: Type of parameter \"features\" changed. List<Feature> -> List<Feature<GeometryObject>>",
+    "reason": "turf Feature is now parameterized on geometry; signature follows the upstream type."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"sdf\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"stretchX\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"stretchY\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "StyleManager: addStyleImage: Kind of parameter \"content\" changed. not named -> named",
+    "reason": "Optional addStyleImage params converted to named arguments for ergonomics."
+  },
+  {
+    "changeDescription": "TapInteraction: decode: Return type changed. _Interaction -> TapInteraction<FeaturesetDescriptor>",
+    "reason": "decode now returns the concrete subtype; private _Interaction is no longer exposed."
+  },
+  {
+    "changeDescription": "LongTapInteraction: decode: Return type changed. _Interaction -> LongTapInteraction<FeaturesetDescriptor>",
+    "reason": "decode now returns the concrete subtype; private _Interaction is no longer exposed."
+  },
+  {
+    "changeDescription": "StandardBuildings: decode: Return type changed. FeaturesetDescriptor -> StandardBuildings",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardBuildingsState: decode: Return type changed. FeatureState -> StandardBuildingsState",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPlaceLabels: decode: Return type changed. FeaturesetDescriptor -> StandardPlaceLabels",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPlaceLabelsState: decode: Return type changed. FeatureState -> StandardPlaceLabelsState",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPOIs: decode: Return type changed. FeaturesetDescriptor -> StandardPOIs",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "StandardPOIsState: decode: Return type changed. FeatureState -> StandardPOIsState",
+    "reason": "decode now returns the concrete subtype rather than its base."
+  },
+  {
+    "changeDescription": "Snapshotter: style: Writability changed. true -> false",
+    "reason": "Now a final field on the facade."
+  },
+  {
+    "changeDescription": "TileStore: setDiskQuota: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "TileStore: setMapboxAPIUrl: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "TileStore: setTileUrlTemplate: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "TileStore: setOptionForKey: Return type changed. void -> Future<void>",
+    "reason": "TileStore mutator is now async."
+  },
+  {
+    "changeDescription": "Field \"mapboxPluginVersion\" removed",
+    "reason": "The field is re-exported, false positive alarm."
+  },
+  {
+    "changeDescription": "ModelSource: Method \"bind\" removed",
+    "reason": "`bind()` parameter type changed from `StyleManager` to `StylePlatformInterface` after the federated split. Method is now `@internal`; use `mapboxMap.style.addSource(source)` instead."
+  },
+  {
+    "changeDescription": "Snapshotter: tileCover: Experimental Flag changed. false -> true",
+    "reason": "tileCover was previously marked stable by mistake; the underlying native tileCover API is experimental. Also switches the return type to OverscaledTileID instead of CanonicalTileID, matching the native SDKs. Remove this entry once mapbox_maps_flutter 2.30 is released, since the pub.dev baseline will then already have tileCover marked experimental."
+  }
+]

@@ -1,0 +1,920 @@
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+
+/// Controller for a single MapboxMap instance running on the host platform.
+class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
+  MapboxMap._({required _MapboxMapsPlatform mapboxMapsPlatform})
+    : _mapboxMapsPlatform = mapboxMapsPlatform {
+    annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
+  }
+
+  /// Creates a [MapboxMap] instance connected to a native MapboxMapController
+  /// that has already been registered with the given [channelSuffix].
+  ///
+  /// This is used by plugins that create a native MapboxMapController
+  /// programmatically (e.g., navigation plugins that wrap their own MapView)
+  /// and need to expose the standard [MapboxMap] API to Dart.
+  static MapboxMap fromNativeController(int channelSuffix) {
+    return MapboxMap._(
+      mapboxMapsPlatform: _MapboxMapsPlatform.instance(channelSuffix),
+    );
+  }
+
+  final _MapboxMapsPlatform _mapboxMapsPlatform;
+
+  /// The currently loaded StyleManager object.
+  @override
+  late final StyleController style = StyleController(
+    StyleManager(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    ),
+  );
+
+  /// The interface to set the location puck.
+  @override
+  late final LocationSettings location = LocationSettings._(
+    _LocationComponentSettingsInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    ),
+  );
+
+  late final _CameraManager _cameraManager = _CameraManager(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+  late final _MapInterface _mapInterface = _MapInterface(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+  late final _AnimationManager _animationManager = _AnimationManager(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+  late final _ViewportMessenger _viewportMessenger = _ViewportMessenger(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+  late final _PerformanceStatisticsApi _performanceStatistics =
+      _PerformanceStatisticsApi(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+      );
+  late final _MapRecorderMessenger _mapRecorderMessenger =
+      _MapRecorderMessenger(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+      );
+
+  /// The interface to create and set annotations.
+  @override
+  late final AnnotationManager annotations;
+
+  @override
+  @experimental
+  MapRecorderPlatformInterface get mapRecorder => _mapRecorderMessenger;
+
+  // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
+  /// The map projection of the style.
+  @override
+  late final ProjectionPlatformInterface projection = Projection(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+
+  /// The interface to access gesture settings and event streams.
+  @override
+  late final GesturesController gestures = GesturesController(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+
+  /// The interface to set the logo settings.
+  @override
+  late final LogoSettingsInterface logo = LogoSettingsInterface(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+
+  /// The interface to access the compass settings.
+  @override
+  late final CompassSettingsInterface compass = CompassSettingsInterface(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+
+  /// The interface to access the compass settings.
+  @override
+  late final ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+
+  /// The interface to access the attribution settings.
+  @override
+  late final AttributionSettingsInterface attribution =
+      AttributionSettingsInterface(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+      );
+
+  /// The interface to access the indoor selector settings.
+  @experimental
+  @override
+  late final IndoorSelectorSettingsInterface indoorSelector =
+      IndoorSelectorSettingsInterface(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+      );
+
+  @override
+  late final MapboxHttpService httpService = MapboxHttpService(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    channelSuffix: _mapboxMapsPlatform.channelSuffix,
+  );
+
+  @override
+  void dispose() {
+    _mapboxMapsPlatform.dispose();
+    _PerformanceStatisticsListenerApi.setUp(
+      null,
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    );
+    super.dispose();
+  }
+
+  /// Convenience method that returns the `camera options` object for given parameters.
+  @override
+  Future<CameraOptions> cameraForCoordinatesPadding(
+    List<Point> coordinates,
+    CameraOptions camera,
+    MbxEdgeInsets? coordinatesPadding,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) => _cameraManager.cameraForCoordinatesPadding(
+    coordinates
+        .map((e) => Point(coordinates: e.coordinates, bbox: e.bbox))
+        .toList(),
+    camera,
+    coordinatesPadding,
+    maxZoom,
+    offset,
+  );
+
+  /// Convenience method that returns the `camera options` object for given parameters.
+  @override
+  Future<CameraOptions> cameraForCoordinateBounds(
+    CoordinateBounds bounds,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) => _cameraManager.cameraForCoordinateBounds(
+    bounds,
+    padding,
+    bearing,
+    pitch,
+    maxZoom,
+    offset,
+  );
+
+  /// Convenience method that returns the `camera options` object for given parameters.
+
+  @Deprecated('Use [cameraForCoordinatesPadding] instead')
+  @override
+  Future<CameraOptions> cameraForCoordinates(
+    List<Point> coordinates,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) => _cameraManager.cameraForCoordinates(
+    coordinates
+        .map((e) => Point(coordinates: e.coordinates, bbox: e.bbox))
+        .toList(),
+    padding,
+    bearing,
+    pitch,
+  );
+
+  /// Convenience method that adjusts the provided `camera options` object for given parameters.
+  ///
+  /// Returns the provided `camera` options with zoom adjusted to fit `coordinates` into the `box`, so that `coordinates` on the left,
+  /// top and right of the effective `camera` center at the principal point of the projection (defined by `padding`) fit into the `box`.
+  /// Returns the provided `camera` options object unchanged upon an error.
+  /// Note that this method may fail if the principal point of the projection is not inside the `box` or
+  /// if there is no sufficient screen space, defined by principal point and the `box`, to fit the geometry.
+  @override
+  Future<CameraOptions> cameraForCoordinatesCameraOptions(
+    List<Point> coordinates,
+    CameraOptions camera,
+    ScreenBox box,
+  ) => _cameraManager.cameraForCoordinatesCameraOptions(
+    coordinates,
+    camera,
+    box,
+  );
+
+  /// Convenience method that returns the `camera options` object for given parameters.
+  @override
+  Future<CameraOptions> cameraForGeometry(
+    Map<String?, Object?> geometry,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) => _cameraManager.cameraForGeometry(geometry, padding, bearing, pitch);
+
+  /// Returns the `coordinate bounds` for a given camera.
+  @override
+  Future<CoordinateBounds> coordinateBoundsForCamera(CameraOptions camera) =>
+      _cameraManager.coordinateBoundsForCamera(camera);
+
+  /// Returns the `coordinate bounds` for a given camera.
+  @override
+  Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
+    CameraOptions camera,
+  ) => _cameraManager.coordinateBoundsForCameraUnwrapped(camera);
+
+  /// Returns the `coordinate bounds` and the `zoom` for a given `camera`.
+  ///
+  /// Note that if the given `camera` shows the antimeridian, the returned wrapped `coordinate bounds`
+  /// might not represent the minimum bounding box.
+  @override
+  Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
+    CameraOptions camera,
+  ) => _cameraManager.coordinateBoundsZoomForCamera(camera);
+
+  /// Returns the unwrapped `coordinate bounds` and `zoom` for a given `camera`.
+  ///
+  /// This method is useful if the `camera` shows the antimeridian.
+  @override
+  Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
+    CameraOptions camera,
+  ) => _cameraManager.coordinateBoundsZoomForCameraUnwrapped(camera);
+
+  /// Calculates a `screen coordinate` that corresponds to a geographical coordinate
+  /// (i.e., longitude-latitude pair).
+  ///
+  /// The `screen coordinate` is in `logical pixels` relative to the top left corner
+  /// of the map (not of the whole screen).
+  @override
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) =>
+      _cameraManager.pixelForCoordinate(
+        Point(coordinates: coordinate.coordinates, bbox: coordinate.bbox),
+      );
+
+  /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
+  /// to a `screen coordinate`.
+  ///
+  /// The screen coordinate is in `logical pixels`relative to the top left corner
+  /// of the map (not of the whole screen).
+  @override
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) =>
+      _cameraManager.coordinateForPixel(pixel);
+
+  /// Calculates `screen coordinates` that correspond to geographical `coordinates`
+  /// (i.e., longitude-latitude pairs).
+  ///
+  /// The `screen coordinates` are in `logical pixels` relative to the top left corner
+  /// of the map (not of the whole screen).
+  @override
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
+    List<Point> coordinates,
+  ) async {
+    final result = await _cameraManager.pixelsForCoordinates(
+      coordinates
+          .map(
+            (point) => Point(coordinates: point.coordinates, bbox: point.bbox),
+          )
+          .toList(),
+    );
+    return result.cast<ScreenCoordinate>();
+  }
+
+  /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
+  /// to `screen coordinates`.
+  ///
+  /// The screen coordinates are in `logical pixels` relative to the top left corner
+  /// of the map (not of the whole screen).
+  @override
+  Future<List<Point>> coordinatesForPixels(List<ScreenCoordinate> pixels) =>
+      _cameraManager.coordinatesForPixels(pixels.cast<ScreenCoordinate?>());
+
+  /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
+  /// The map will retain its current values for any details not passed via the camera options argument.
+  /// It is not guaranteed that the provided `camera options` will be set, the map may apply constraints resulting in a
+  /// different `camera state`.
+  @override
+  Future<void> setCamera(CameraOptions cameraOptions) =>
+      _cameraManager.setCamera(cameraOptions);
+
+  /// Returns the current `camera state`.
+  @override
+  Future<CameraState> getCameraState() => _cameraManager.getCameraState();
+
+  /// Sets the `camera bounds options` of the map. The map will retain its current values for any
+  /// details not passed via the camera bounds options arguments.
+  /// When camera bounds options are set, the camera center is constrained by these bounds, as well as the minimum
+  /// zoom level of the camera, to prevent out of bounds areas to be visible.
+  /// Note that tilting or rotating the map, or setting stricter minimum and maximum zoom within `options` may still cause some out of bounds areas to become visible.
+  @override
+  Future<void> setBounds(CameraBoundsOptions options) =>
+      _cameraManager.setBounds(options);
+
+  /// Returns the `camera bounds` of the map.
+  @override
+  Future<CameraBounds> getBounds() => _cameraManager.getBounds();
+
+  /// Gets the size of the map.
+  /// Note : not supported for iOS.
+  @override
+  Future<Size> getSize() => _mapInterface.getSize();
+
+  /// Triggers a repaint of the map.
+  @override
+  Future<void> triggerRepaint() => _mapInterface.triggerRepaint();
+
+  /// Tells the map rendering engine that there is currently a gesture in progress. This
+  /// affects how the map renders labels, as it will use different texture filters if a gesture
+  /// is ongoing.
+  @override
+  Future<void> setGestureInProgress(bool inProgress) =>
+      _mapInterface.setGestureInProgress(inProgress);
+
+  /// Returns `true` if a gesture is currently in progress.
+  @override
+  Future<bool> isGestureInProgress() => _mapInterface.isGestureInProgress();
+
+  @override
+  @visibleForTesting
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      _mapInterface.dispatch(gesture, screenCoordinate);
+
+  /// Tells the map rendering engine that the animation is currently performed by the
+  /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
+  /// In particular, it brings more stability to symbol placement and rendering.
+  @override
+  Future<void> setUserAnimationInProgress(bool inProgress) =>
+      _mapInterface.setUserAnimationInProgress(inProgress);
+
+  /// Returns `true` if user animation is currently in progress.
+  @override
+  Future<bool> isUserAnimationInProgress() =>
+      _mapInterface.isUserAnimationInProgress();
+
+  /// When loading a map, if prefetch zoom `delta` is set to any number greater than 0,
+  /// the map will first request a tile at zoom level lower than `zoom - delta`, with requested
+  /// zoom level a multiple of `delta`, in an attempt to display a full map at lower resolution as quick as possible.
+  @override
+  Future<void> setPrefetchZoomDelta(int delta) =>
+      _mapInterface.setPrefetchZoomDelta(delta);
+
+  /// Returns the map's prefetch zoom delta.
+  @override
+  Future<int> getPrefetchZoomDelta() => _mapInterface.getPrefetchZoomDelta();
+
+  /// Sets the north `orientation mode`.
+  @override
+  Future<void> setNorthOrientation(NorthOrientation orientation) =>
+      _mapInterface.setNorthOrientation(orientation);
+
+  /// Sets the map `constrain mode`.
+  @override
+  Future<void> setConstrainMode(ConstrainMode mode) =>
+      _mapInterface.setConstrainMode(mode);
+
+  /// Sets the `viewport mode`.
+  @override
+  Future<void> setViewportMode(ViewportMode mode) =>
+      _mapInterface.setViewportMode(mode);
+
+  /// Returns the `map options`.
+  @override
+  Future<MapOptions> getMapOptions() => _mapInterface.getMapOptions();
+
+  /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+  ///
+  /// This property allows setting a custom glyph URL at runtime, making it easier to
+  /// apply custom fonts to the map without modifying the base style.
+  @override
+  @experimental
+  Future<String> styleGlyphURL() => _mapInterface.styleGlyphURL();
+
+  /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+  ///
+  /// This property allows setting a custom glyph URL at runtime, making it easier to
+  /// apply custom fonts to the map without modifying the base style.
+  @override
+  @experimental
+  Future<void> setStyleGlyphURL(String glyphURL) =>
+      _mapInterface.setStyleGlyphURL(glyphURL);
+
+  /// Debug options for the widget associated with the map.
+  @override
+  Future<List<MapWidgetDebugOptions>> getDebugOptions() async {
+    final raw = await _mapInterface.getDebugOptions();
+    return raw.map(MapWidgetDebugOptions.fromData).toList();
+  }
+
+  /// Set debug options for the widget associated with the map.
+  @override
+  Future<void> setDebugOptions(List<MapWidgetDebugOptions> debugOptions) {
+    return _mapInterface.setDebugOptions(
+      debugOptions.map((e) => e.data).toList(),
+    );
+  }
+
+  /// Queries the map for rendered features.
+  @override
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+    RenderedQueryGeometry geometry,
+    RenderedQueryOptions options,
+  ) => _mapInterface.queryRenderedFeatures(geometry._toPigeon(), options);
+
+  /// Queries the map for rendered features with one typed featureset.
+  @override
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
+    required FeaturesetDescriptor featureset,
+    RenderedQueryGeometry? geometry,
+    String? filter,
+  }) async {
+    return _mapInterface.queryRenderedFeaturesForFeatureset(
+      featureset,
+      geometry?._toPigeon(),
+      filter,
+    );
+  }
+
+  /// Queries the map for source features.
+  @override
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+    String sourceId,
+    SourceQueryOptions options,
+  ) => _mapInterface.querySourceFeatures(sourceId, options);
+
+  /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
+  /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
+  ///
+  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+    int? limit,
+    int? offset,
+  ) => _mapInterface.getGeoJsonClusterLeaves(
+    sourceIdentifier,
+    cluster,
+    limit,
+    offset,
+  );
+
+  /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
+  /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
+  ///
+  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterChildren(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) => _mapInterface.getGeoJsonClusterChildren(sourceIdentifier, cluster);
+
+  /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
+  /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
+  ///
+  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) => _mapInterface.getGeoJsonClusterExpansionZoom(sourceIdentifier, cluster);
+
+  /// Updates the state object of a feature within a style source.
+  ///
+  /// Update entries in the `state` object of a given feature within a style source. Only properties of the
+  /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
+  /// retain its previous value.
+  ///
+  /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
+  /// immediately visible using `getStateFeature`.
+  @override
+  Future<void> setFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String state,
+  ) => _mapInterface.setFeatureState(sourceId, sourceLayerId, featureId, state);
+
+  /// Update the state map of a feature within a featureset.
+  /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+  /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+  @override
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    FeatureState state,
+  ) => _mapInterface.setFeatureStateForFeaturesetDescriptor(
+    featureset,
+    featureId,
+    state.map,
+  );
+
+  /// Update the state map of an individual feature.
+  ///
+  /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+  /// the operation will be no-op and callback will receive an error.
+  @override
+  Future<void> setFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+    FeatureState state,
+  ) => _mapInterface.setFeatureStateForFeaturesetFeature(feature, state.map);
+
+  /// Gets the state map of a feature within a style source.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
+  /// immediately visible.
+  @override
+  Future<String> getFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+  ) => _mapInterface.getFeatureState(sourceId, sourceLayerId, featureId);
+
+  /// Get the state map of a feature within a style source.
+  @override
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+  ) => _mapInterface.getFeatureStateForFeaturesetDescriptor(
+    featureset,
+    featureId,
+  );
+
+  /// Get the state map of a feature within a style source.
+  @override
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+  ) => _mapInterface.getFeatureStateForFeaturesetFeature(feature);
+
+  /// Removes entries from a feature state object.
+  ///
+  /// Remove a specified property or all property from a feature's state object, depending on the value of
+  /// `stateKey`.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+  /// immediately visible using `getStateFeature`.
+  @override
+  Future<void> removeFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String? stateKey,
+  ) => _mapInterface.removeFeatureState(
+    sourceId,
+    sourceLayerId,
+    featureId,
+    stateKey,
+  );
+
+  /// Removes entries from a feature state object of a feature in the specified featureset.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  @override
+  Future<void> removeFeatureStateForFeaturesetDescriptor({
+    required FeaturesetDescriptor featureset,
+    required FeaturesetFeatureId featureId,
+    String? stateKey,
+  }) => _mapInterface.removeFeatureStateForFeaturesetDescriptor(
+    featureset,
+    featureId,
+    stateKey,
+  );
+
+  /// Removes entries from a specified Feature.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  @override
+  Future<void> removeFeatureStateForFeaturesetFeature({
+    required FeaturesetFeature feature,
+    String? stateKey,
+  }) => _mapInterface.removeFeatureStateForFeaturesetFeature(feature, stateKey);
+
+  /// Reset all the feature states within a featureset.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+  /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+  @override
+  Future<void> resetFeatureStatesForFeatureset(
+    FeaturesetDescriptor featureset,
+  ) => _mapInterface.resetFeatureStatesForFeatureset(featureset);
+
+  /// References for all interactions added to the map.
+  final _InteractionsMap _interactionsMap = _InteractionsMap(interactions: {});
+
+  /// Add an interaction to the map
+  /// An identifier can be provided, which you can use to remove
+  /// the interaction with `.removeInteraction(interactionID)`
+  @override
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
+    TypedInteraction<T> interaction, {
+    String? interactionID,
+  }) {
+    final id = interactionID ?? UniqueKey().toString();
+    _interactionsMap.interactions[id] = _InteractionListener<T>(
+      onInteractionListener: interaction.action,
+      interactionID: id,
+      featureFactory: interaction.featureFactory,
+    );
+    _InteractionsListener.setUp(
+      _interactionsMap,
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    );
+    _mapboxMapsPlatform.addInteractionsListeners(interaction, id);
+  }
+
+  /// Remove an interaction from the map with the given interactionID
+  /// that was passed with `.addInteraction(interaction, interactionID)`
+  @override
+  void removeInteraction(String interactionID) {
+    _interactionsMap.interactions.remove(interactionID);
+    _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
+  }
+
+  /// Reduces memory use. Useful to call when the application gets paused or sent to background.
+  @override
+  Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
+
+  /// Gets elevation for the given coordinate.
+  /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
+  @override
+  Future<double?> getElevation(Point coordinate) => _mapInterface.getElevation(
+    Point(coordinates: coordinate.coordinates, bbox: coordinate.bbox),
+  );
+
+  /// Will load a new map style asynchronous from the specified URI.
+  ///
+  /// URI can take the following forms:
+  ///
+  /// - **Constants**: load one of the bundled styles in [Style].
+  ///
+  /// - **`mapbox://styles/<user>/<style>`**:
+  /// loads the style from a [Mapbox account](https://www.mapbox.com/account/).
+  /// *user* is your username. *style* is the ID of your custom
+  /// style created in [Mapbox Studio](https://www.mapbox.com/studio).
+  ///
+  /// - **`http://...` or `https://...`**:
+  /// loads the style over the Internet from any web server.
+  ///
+  /// - **`asset://...`**:
+  /// loads the style from the APK *assets* directory.
+  /// This is used to load a style bundled with your app.
+  ///
+  /// - **`file://...`**:
+  /// loads the style from a file path. This is used to load a style from disk.
+  ///
+  /// Will load an empty json `{}` if the styleUri is empty.
+  @override
+  Future<void> loadStyleURI(String styleURI) =>
+      _mapInterface.loadStyleURI(styleURI);
+
+  /// Loads a style from a JSON string, calling a completion closure when the
+  /// style is fully loaded or there has been an error during load.
+  @override
+  Future<void> loadStyleJson(String styleJson) =>
+      _mapInterface.loadStyleJson(styleJson);
+
+  /// Clears temporary map data.
+  ///
+  /// Clears temporary map data from the data path defined in the given resource options.
+  /// Useful to reduce the disk usage or in case the disk cache contains invalid data.
+  ///
+  /// Note that calling this API will affect all maps that use the same data path and does not
+  /// affect persistent map data like offline style packages.
+  @override
+  Future<void> clearData() => _mapInterface.clearData();
+
+  /// The memory budget hint to be used by the map. The budget can be given in
+  /// tile units or in megabytes. A Map will do the best effort to keep memory
+  /// allocations for a non essential resources within the budget.
+  ///
+  /// The memory budget distribution and resource
+  /// eviction logic is a subject to change. Current implementation sets memory budget
+  /// hint per data source.
+  ///
+  /// If null is set, the memory budget in tile units will be dynamically calculated based on
+  /// the current viewport size.
+  @override
+  Future<void> setTileCacheBudget(
+    TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
+    TileCacheBudgetInTiles? tileCacheBudgetInTiles,
+  ) => _mapInterface.setTileCacheBudget(
+    tileCacheBudgetInMegabytes,
+    tileCacheBudgetInTiles,
+  );
+
+  /// Ease the map camera to a given camera options and animation options
+  @override
+  Future<void> easeTo(
+    CameraOptions cameraOptions,
+    MapAnimationOptions? mapAnimationOptions,
+  ) => _animationManager.easeTo(cameraOptions, mapAnimationOptions);
+
+  /// Fly the map camera to a given camera options.
+  @override
+  Future<void> flyTo(
+    CameraOptions cameraOptions,
+    MapAnimationOptions? mapAnimationOptions,
+  ) => _animationManager.flyTo(cameraOptions, mapAnimationOptions);
+
+  /// Pitch the map by with optional animation.
+  @override
+  Future<void> pitchBy(
+    double pitch,
+    MapAnimationOptions? mapAnimationOptions,
+  ) => _animationManager.pitchBy(pitch, mapAnimationOptions);
+
+  /// Scale the map by with optional animation.
+  @override
+  Future<void> scaleBy(
+    double amount,
+    ScreenCoordinate? screenCoordinate,
+    MapAnimationOptions? mapAnimationOptions,
+  ) => _animationManager.scaleBy(amount, screenCoordinate, mapAnimationOptions);
+
+  /// Move the map by a given screen coordinate with optional animation.
+  @override
+  Future<void> moveBy(
+    ScreenCoordinate screenCoordinate,
+    MapAnimationOptions? mapAnimationOptions,
+  ) => _animationManager.moveBy(screenCoordinate, mapAnimationOptions);
+
+  /// Rotate the map by with optional animation.
+  @override
+  Future<void> rotateBy(
+    ScreenCoordinate first,
+    ScreenCoordinate second,
+    MapAnimationOptions? mapAnimationOptions,
+  ) => _animationManager.rotateBy(first, second, mapAnimationOptions);
+
+  /// Cancel the ongoing camera animation if there is one.
+  @override
+  Future<void> cancelCameraAnimation() =>
+      _animationManager.cancelCameraAnimation();
+
+  /// Collects CPU and GPU resource usage, as well as timings of layers and rendering groups, over a user-configurable sampling duration.
+  /// Use the collected information to identify layers or rendering groups that may be performing poorly.
+  ///
+  /// Use ``PerformanceStatisticsOptions`` to configure the following collection behaviours:
+  ///     - Which types of sampling to perform, whether cumulative, per-frame, or both.
+  ///     - Duration of sampling in milliseconds. A value of 0 forces the collection of performance statistics every frame.
+  ///
+  /// The statistics collection can be canceled by calling [stopPerformanceStatisticsCollection]. Canceling collection will prevent the listener
+  /// callback from being called. Collection can be restarted by calling [startPerformanceStatisticsCollection] again.
+  ///
+  /// The callback function will be called every time the configured sampling duration [PerformanceStatisticsOptions.samplingDurationMillis] has elapsed.
+  ///
+  /// - Parameters:
+  ///   - options The statistics collection options to collect.
+  ///   - callback The callback to be invoked when performance statistics are available.
+  /// Enable real-time collection of map rendering performance statistics, for development purposes. Use after `render()` has
+  /// been called for the first time.
+  ///
+  /// Collects CPU, GPU resource usage and timings of layers and rendering groups over a user-configurable sampling duration.
+  /// Use the collected information to find which layers or rendering groups might be performing poorly. Use
+  /// [PerformanceStatisticsOptions] to configure the following statistics collection behaviors:
+  /// <ul>
+  ///     <li>Specify the types of sampling: cumulative, per-frame, or both.</li>
+  ///     <li>Define the minimum amount of time over which to perform sampling.</li>
+  /// </ul>
+  ///
+  /// Utilize [PerformanceStatisticsListener] to observe the collected performance statistics. The callback function is invoked
+  /// after the configured sampling duration has elapsed. The collection process is continuous; without user-input,
+  /// it restarts after each callback invocation. Note: Specifying a negative sampling duration
+  /// or omitting the callback function will result in no operation, which will be logged for visibility.
+  ///
+  /// In order to stop the collection process, call [stopPerformanceStatisticsCollection].
+  /// After calling [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
+  /// restarted.
+  @override
+  @experimental
+  void startPerformanceStatisticsCollection(
+    PerformanceStatisticsOptions options,
+    PerformanceStatisticsListener listener,
+  ) {
+    _PerformanceStatisticsListenerApi.setUp(
+      _PerformanceStatisticsListenerBridge(listener),
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    );
+
+    _performanceStatistics.startPerformanceStatisticsCollection(options);
+  }
+
+  /// Disable performance statistics collection.
+  ///
+  /// Calling [stopPerformanceStatisticsCollection] when no collection is enabled is a no-op. After calling
+  /// [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
+  /// restarted.
+  @override
+  @experimental
+  void stopPerformanceStatisticsCollection() {
+    _performanceStatistics.stopPerformanceStatisticsCollection();
+
+    _PerformanceStatisticsListenerApi.setUp(
+      null,
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+    );
+  }
+
+  /// Returns a snapshot of the map as PNG-encoded bytes.
+  @override
+  Future<Uint8List> snapshot() async {
+    final bytes = await _mapInterface.snapshot();
+    if (bytes == null) {
+      throw PlatformException(
+        code: 'snapshot-failed',
+        message: 'snapshot returned no image bytes',
+      );
+    }
+    return bytes;
+  }
+
+  /// Set whether legacy mode should be used for [snapshot].
+  ///
+  /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+  /// but may help with vendor specific issues like described in
+  /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+  ///
+  /// Note: This method has no effect on iOS platform.
+  @override
+  @experimental
+  Future<void> setSnapshotLegacyMode(bool enable) =>
+      _mapInterface.setSnapshotLegacyMode(enable);
+}
+
+/// Serializes a [RenderedQueryGeometry] into the JSON-encoded Pigeon wire
+/// format expected by the native (Kotlin/Swift) implementations.
+extension on RenderedQueryGeometry {
+  _RenderedQueryGeometry _toPigeon() => switch (this) {
+    ScreenCoordinateRenderedQueryGeometry(:final point) =>
+      _RenderedQueryGeometry(
+        value: jsonEncode(point.toJson()),
+        type: Type.SCREEN_COORDINATE,
+      ),
+    ScreenBoxRenderedQueryGeometry(:final box) => _RenderedQueryGeometry(
+      value: jsonEncode(box.toJson()),
+      type: Type.SCREEN_BOX,
+    ),
+    ScreenCoordinateListRenderedQueryGeometry(:final points) =>
+      _RenderedQueryGeometry(
+        value: jsonEncode(points.map((e) => e.toJson()).toList()),
+        type: Type.LIST,
+      ),
+  };
+}
+
+/// Listen for a single interaction added to the map, identified by its id
+class _InteractionListener<T extends FeaturesetFeature>
+    extends _InteractionsListener {
+  _InteractionListener({
+    required this.interactionID,
+    required this.onInteractionListener,
+    required this.featureFactory,
+  });
+
+  String interactionID;
+
+  final OnInteraction<T> onInteractionListener;
+  final T Function(FeaturesetFeature) featureFactory;
+
+  @override
+  void onInteraction(
+    FeaturesetFeature? feature,
+    MapContentGestureContext context,
+    String interactionID,
+  ) {
+    if (feature != null) {
+      onInteractionListener.call(featureFactory(feature), context);
+    } else {
+      onInteractionListener.call(null, context);
+    }
+  }
+}
+
+/// Listen to all interactions on the map, determine which interaction to call
+class _InteractionsMap<T extends FeaturesetFeature>
+    extends _InteractionsListener {
+  _InteractionsMap({required this.interactions});
+
+  Map<String, _InteractionListener> interactions;
+
+  @override
+  void onInteraction(
+    FeaturesetFeature? feature,
+    MapContentGestureContext context,
+    String interactionID,
+  ) {
+    interactions[interactionID]?.onInteraction(feature, context, interactionID);
+  }
+}

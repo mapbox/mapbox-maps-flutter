@@ -1,0 +1,340 @@
+// AndroidPlatformViewHostingMode is @experimental on the platform_interface
+// surface; mobile uses it as the default hosting mode in its plumbing.
+// ignore_for_file: experimental_member_use
+
+part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
+
+final _SuffixesRegistry _suffixesRegistry = _SuffixesRegistry._instance();
+
+/// A MapWidget provides an embeddable map interface.
+/// You use this class to display map information and to manipulate the map contents from your application.
+/// You can center the map on a given coordinate, specify the size of the area you want to display,
+/// and style the features of the map to fit your application's use case.
+///
+/// Use of MapWidget requires a Mapbox API access token.
+/// Obtain an access token on the [Mapbox account page](https://www.mapbox.com/studio/account/tokens/).
+///
+/// <strong>Warning:</strong> Please note that you are responsible for getting permission to use the map data,
+/// and for ensuring your use adheres to the relevant terms of use.
+class MapWidget extends StatefulWidget {
+  const MapWidget({
+    super.key,
+    this.mapOptions,
+    this.textureView = false,
+    required this.androidHostingMode,
+    this.gestureRecognizers,
+    this.onMapCreated,
+    this.onStyleLoadedListener,
+    this.onCameraChangeListener,
+    this.onMapIdleListener,
+    this.onMapLoadedListener,
+    this.onMapLoadErrorListener,
+    this.onRenderFrameStartedListener,
+    this.onRenderFrameFinishedListener,
+    this.onSourceAddedListener,
+    this.onSourceDataLoadedListener,
+    this.onSourceRemovedListener,
+    this.onStyleDataLoadedListener,
+    this.onStyleImageMissingListener,
+    this.onStyleImageUnusedListener,
+    this.onResourceRequestListener,
+    this.viewport,
+    String? styleUri,
+    this.viewportTransition,
+    this.viewportTransitionCompletion,
+    this.isOpaque = true,
+  }) : _styleUri = styleUri,
+       assert(
+         isOpaque != false || textureView,
+         'isOpaque: false requires textureView: true on Android. '
+         'SurfaceView cannot render a transparent background.',
+       );
+
+  /// Describes the map options value when using a MapWidget.
+  final MapOptions? mapOptions;
+
+  /// Flag indicating to use a TextureView as render surface for the MapWidget.
+  /// Only works for Android.
+  ///
+  /// Defaults to `false`: a SurfaceView renders directly, without the per-frame
+  /// SurfaceTexture copy a TextureView requires. Set it to `true` for a
+  /// transparent background ([isOpaque] `false`) and for the hosting modes that
+  /// cannot display a SurfaceView ([AndroidPlatformViewHostingMode.VD] and
+  /// [AndroidPlatformViewHostingMode.TLHC_VD]), which both need a TextureView.
+  final bool textureView;
+
+  /// Controls the way the underlying MapView is being hosted by Flutter on Android.
+  /// This setting has no effect on iOS.
+  @experimental
+  final AndroidPlatformViewHostingMode androidHostingMode;
+
+  /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set.
+  final String? _styleUri;
+
+  /// Invoked when a new Map is created and return a MapboxMap instance to handle the Map.
+  final void Function(MapboxMap)? onMapCreated;
+
+  /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.
+  final OnStyleLoadedListener? onStyleLoadedListener;
+
+  /// Invoked whenever camera position changes.
+  final OnCameraChangeListener? onCameraChangeListener;
+
+  /// Invoked when the Map has entered the idle state. The Map is in the idle state when there are no ongoing transitions
+  /// and the Map has rendered all available tiles.
+  final OnMapIdleListener? onMapIdleListener;
+
+  /// Invoked when the Map's style has been fully loaded, and the Map has rendered all visible tiles.
+  final OnMapLoadedListener? onMapLoadedListener;
+
+  /// Invoked whenever the map load errors out.
+  final OnMapLoadErrorListener? onMapLoadErrorListener;
+
+  /// Invoked whenever the Map finished rendering a frame.
+  /// The render-mode value tells whether the Map has all data ("full") required to render the visible viewport.
+  /// The needs-repaint value provides information about ongoing transitions that trigger Map repaint.
+  /// The placement-changed value tells if the symbol placement has been changed in the visible viewport.
+  final OnRenderFrameFinishedListener? onRenderFrameFinishedListener;
+
+  /// Invoked whenever the Map started rendering a frame.
+  final OnRenderFrameStartedListener? onRenderFrameStartedListener;
+
+  /// Invoked whenever the Source has been added with StyleManager#addStyleSource runtime API.
+  final OnSourceAddedListener? onSourceAddedListener;
+
+  /// Invoked when the requested source data has been loaded.
+  final OnSourceDataLoadedListener? onSourceDataLoadedListener;
+
+  /// Invoked whenever the Source has been removed with StyleManager#removeStyleSource runtime API.
+  final OnSourceRemovedListener? onSourceRemovedListener;
+
+  /// Invoked when the requested style data has been loaded.
+  final OnStyleDataLoadedListener? onStyleDataLoadedListener;
+
+  /// Invoked whenever a style has a missing image. This event is emitted when the Map renders visible tiles and
+  /// one of the required images is missing in the sprite sheet. Subscriber has to provide the missing image
+  /// by calling StyleManager#addStyleImage method.
+  final OnStyleImageMissingListener? onStyleImageMissingListener;
+
+  /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.
+  final OnStyleImageUnusedListener? onStyleImageUnusedListener;
+
+  /// Invoked when map makes a request to load required resources.
+  final OnResourceRequestListener? onResourceRequestListener;
+
+  /// Which gestures should be consumed by the map.
+  ///
+  /// It is possible for other gesture recognizers to be competing with the map on pointer
+  /// events, e.g if the map is inside a [ListView] the [ListView] will want to handle
+  /// vertical drags. The map will claim gestures that are recognized by any of the
+  /// recognizers on this list.
+  ///
+  /// When this set is empty or null, the map will only handle pointer events for gestures that
+  /// were not claimed by any other gesture recognizer.
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+
+  /// The initial camera position and behavior of the map.
+  ///
+  /// Use [viewport] to specify how the camera is positioned when the map is first displayed.
+  /// By providing a [ViewportState] subclass, you can control the camera's initial focus,
+  /// such as centering on a specific location or following the user's position.
+  ///
+  /// If [viewport] is not provided, the map uses its default camera settings.
+  ///
+  /// **Example:**
+  ///
+  /// ```dart
+  /// MapWidget(
+  ///   viewport: CameraViewportState(
+  ///     center: Point(coordinates: Position(-117.918976, 33.812092)),
+  ///     zoom: 15.0,
+  ///   ),
+  /// );
+  /// ```
+  final ViewportState? viewport;
+
+  /// The transition animation to use when changing the viewport state.
+  final ViewportTransition? viewportTransition;
+
+  /// Called when a viewport transition completes.
+  final void Function(bool)? viewportTransitionCompletion;
+
+  /// Whether the map is rendered as opaque. Only has an effect on iOS —
+  /// on Android, a transparent background additionally requires
+  /// [MapWidget.textureView] to be `true`.
+  ///
+  /// Defaults to `true`. Set to `false` (together with a transparent style)
+  /// to render a transparent map background.
+  final bool? isOpaque;
+
+  @override
+  State createState() => _MapWidgetState();
+}
+
+class _MapWidgetState extends State<MapWidget> {
+  late final _MapboxMapsPlatform _mapboxMapsPlatform =
+      _MapboxMapsPlatform.instance(_suffix);
+  final int _suffix = _suffixesRegistry.getSuffix();
+  late final _MapEvents _events;
+  bool _needsStateUpdate = false;
+  int _viewportGeneration = 0;
+  MapboxMap? mapboxMap;
+  GlobalKey key = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, dynamic> creationParams = <String, dynamic>{
+      'mapOptions': widget.mapOptions,
+      'textureView': widget.textureView,
+      'styleUri': widget._styleUri,
+      'channelSuffix': _mapboxMapsPlatform.channelSuffix,
+      'mapboxPluginVersion': mapboxPluginVersion,
+      'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
+      'isOpaque': widget.isOpaque,
+    };
+    _events.subscribedEventTypes = _events.eventTypes;
+
+    return _mapboxMapsPlatform.buildView(
+      widget.androidHostingMode,
+      creationParams,
+      onPlatformViewCreated,
+      widget.gestureRecognizers,
+      key: key,
+    );
+  }
+
+  @override
+  void dispose() {
+    mapboxMap?.dispose();
+    _suffixesRegistry.releaseSuffix(_suffix);
+    _events.dispose();
+    _needsStateUpdate = false;
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    LogConfiguration._setupDebugLoggingIfNeeded();
+
+    _mapboxMapsPlatform.onNativeMapCreated = _onNativeMapCreated;
+    _events = _MapEvents(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      channelSuffix: _suffix.toString(),
+    );
+
+    _updateEventListeners();
+    // Here we mark the state as needing an update to ensure
+    // the widget configuration is propagated to the platform side.
+    //
+    // No need to call _updateStateIfNeeded() here as the platform view is not yet created.
+    _markNeedsStateUpdate();
+  }
+
+  void _markNeedsStateUpdate() {
+    _needsStateUpdate = true;
+  }
+
+  void _updateStateIfNeeded({MapWidget? oldWidget}) {
+    if (!_needsStateUpdate) {
+      return;
+    }
+    _updateViewportState(oldWidget);
+    _updateEventListeners();
+    _events.updateSubscriptions();
+    _needsStateUpdate = false;
+  }
+
+  @override
+  void didUpdateWidget(MapWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Widget properties have changed, mark the state as needing an update
+    // and update the state(if platform view has been created already).
+    _markNeedsStateUpdate();
+    _updateStateIfNeeded(oldWidget: oldWidget);
+  }
+
+  void _updateViewportState(MapWidget? oldWidget) async {
+    final mapboxMap = this.mapboxMap;
+    if (mapboxMap == null) {
+      return;
+    }
+    final currentViewport = widget.viewport;
+    if (currentViewport == oldWidget?.viewport || currentViewport == null) {
+      return;
+    }
+    final gen = ++_viewportGeneration;
+    final viewportAnimation = widget.viewportTransition;
+    final completion = widget.viewportTransitionCompletion;
+
+    final result = await mapboxMap._viewportMessenger.transition(
+      currentViewport._toStorage(),
+      viewportAnimation?._toStorage(),
+    );
+
+    if (mounted && gen == _viewportGeneration) {
+      completion?.call(result);
+    }
+  }
+
+  void _updateEventListeners() {
+    _events._onStyleLoadedListener = widget.onStyleLoadedListener;
+    _events._onCameraChangeListener = widget.onCameraChangeListener;
+    _events._onMapIdleListener = widget.onMapIdleListener;
+    _events._onMapLoadedListener = widget.onMapLoadedListener;
+    _events._onMapLoadErrorListener = widget.onMapLoadErrorListener;
+    _events._onRenderFrameFinishedListener =
+        widget.onRenderFrameFinishedListener;
+    _events._onRenderFrameStartedListener = widget.onRenderFrameStartedListener;
+    _events._onSourceAddedListener = widget.onSourceAddedListener;
+    _events._onSourceDataLoadedListener = widget.onSourceDataLoadedListener;
+    _events._onSourceRemovedListener = widget.onSourceRemovedListener;
+    _events._onStyleDataLoadedListener = widget.onStyleDataLoadedListener;
+    _events._onStyleImageMissingListener = widget.onStyleImageMissingListener;
+    _events._onStyleImageUnusedListener = widget.onStyleImageUnusedListener;
+    _events._onResourceRequestListener = widget.onResourceRequestListener;
+  }
+
+  void _onNativeMapCreated() {
+    if (mapboxMap != null || !mounted) {
+      return;
+    }
+    final controller = MapboxMap._(mapboxMapsPlatform: _mapboxMapsPlatform);
+    mapboxMap = controller;
+    try {
+      widget.onMapCreated?.call(controller);
+    } finally {
+      _updateStateIfNeeded();
+    }
+  }
+
+  Future<void> onPlatformViewCreated(int id) async {
+    // WARNING: The platform view isn't guaranteed to be sized at this moment
+    // (e.g. always on iOS, and on Android in the default HC hosting mode),
+    // so it is not safe to call methods that depend on the size of the
+    // platform view, e.g. `setCamera` or any high-level API built on top of
+    // it (animations, viewport).
+    //
+    // As a way to address this we pass the size hint to the view upon creation.
+    //
+    // `key.currentContext?.size` looks equivalent but throws instead of
+    // returning null when the element is mounted but not yet laid out —
+    // this callback's timing relative to layout isn't guaranteed.
+    final renderObject = key.currentContext?.findRenderObject();
+    final size = renderObject is RenderBox && renderObject.hasSize
+        ? renderObject.size
+        : null;
+    if (size != null) {
+      await _mapboxMapsPlatform.submitViewSizeHint(
+        width: size.width,
+        height: size.height,
+      );
+    }
+
+    // The platform view is created, update the state if there were any requests.
+    _updateStateIfNeeded();
+  }
+}

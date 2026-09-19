@@ -1,0 +1,22 @@
+name: mapbox_maps_flutter_mobile_example
+description: Example app for the Mapbox Maps Flutter mobile plugin.
+publish_to: 'none'
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.1"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  mapbox_maps_flutter_mobile:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

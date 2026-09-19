@@ -1,0 +1,455 @@
+@JS('mapboxgl')
+library;
+
+import 'dart:js_interop';
+
+import 'package:web/web.dart';
+
+import 'interaction_bindings.dart';
+import 'json_helpers.dart';
+import 'location_bindings.dart';
+import 'ornament_bindings.dart';
+import 'viewport_bindings.dart';
+
+export 'camera_bindings.dart';
+export 'interaction_bindings.dart';
+export 'location_bindings.dart';
+export 'ornament_bindings.dart';
+export 'viewport_bindings.dart';
+
+@JS()
+external String accessToken;
+
+@JS()
+external String baseApiUrl;
+
+@JS()
+external void setSdkInfo(String info);
+
+// ===== Foundation =====
+
+/// JS plain object viewed as a key/value dictionary. Use [toDart] to
+/// convert into a Dart [Map].
+@JS()
+extension type JSDictionary<K, V>._(JSObject _) implements JSObject {
+  factory JSDictionary.fromJson(String json) =>
+      JSDictionary._(jsonParse(json) as JSObject);
+
+  factory JSDictionary.fromDart(Map<K, V> map) =>
+      JSDictionary._(map.jsify()! as JSObject);
+
+  Map<K, V> toDart() => (dartify() as Map?)?.cast<K, V>() ?? <K, V>{};
+}
+
+/// GeoJSON geometry object. Same shape as [JSDictionary] but kept as a
+/// distinct nominal type so geometry-specific helpers can be added here.
+@JS()
+extension type JSGeometry._(JSObject _)
+    implements JSDictionary<String?, Object?> {}
+
+/// Identifier value — GL JS types feature/source ids as `string | number`.
+/// Numeric ids are treated as integers (the typical tile-feature shape).
+@JS()
+extension type JSIdentifier._(JSAny _) implements JSAny {
+  String toDart() {
+    if (isA<JSString>()) return (this as JSString).toDart;
+    if (isA<JSNumber>()) return (this as JSNumber).toDartInt.toString();
+    return '';
+  }
+}
+
+@JS()
+external void clearStorage(JSFunction callback);
+
+@JS()
+@anonymous
+extension type JSMapOptions._(JSObject _) implements JSObject {
+  external factory JSMapOptions({
+    required HTMLDivElement container,
+    double? minZoom,
+    bool? preserveDrawingBuffer,
+    JSString? style,
+  });
+}
+
+@JS('LngLat')
+extension type JSLngLat._(JSObject _) implements JSObject {
+  external JSLngLat(double lng, double lat);
+  external double get lng;
+  external double get lat;
+}
+
+/// `[longitude, latitude]` array pair — GL JS's `LngLatLike` array form.
+/// Used wherever the engine expects a coordinate as a 2-element array
+/// rather than a [JSLngLat] instance (e.g. `ImageSource.coordinates`,
+/// `StyleSpec.center`).
+extension type JSLngLatPair._(JSArray<JSNumber> _)
+    implements JSArray<JSNumber> {
+  factory JSLngLatPair(double lng, double lat) =>
+      JSLngLatPair._(<JSNumber>[lng.toJS, lat.toJS].toJS);
+
+  double get lng => _[0].toDartDouble;
+  double get lat => _[1].toDartDouble;
+}
+
+/// GL JS's `Point` (`@mapbox/point-geometry`). Pixel coordinate within the
+/// map container; satisfies `PointLike` wherever GL JS accepts one.
+@JS('Point')
+extension type JSScreenPoint._(JSObject _) implements JSObject {
+  external JSScreenPoint(double x, double y);
+  external double get x;
+  external double get y;
+}
+
+/// The root-level camera fields from a Mapbox style specification.
+@JS()
+@anonymous
+extension type JSStyleSpec._(JSObject _) implements JSObject {
+  external JSLngLatPair? get center;
+  external double? get zoom;
+  external double? get bearing;
+  external double? get pitch;
+}
+
+@JS('Map')
+extension type JSMap._(JSObject _) implements JSObject {
+  external JSMap(JSMapOptions container);
+  external void on(String event, JSFunction callback);
+  external void off(String event, JSFunction callback);
+  external void once(String event, JSFunction callback);
+
+  /// Returns a Promise that resolves when the event fires once.
+  @JS('once')
+  external JSPromise<JSAny> onceAsync(String event);
+
+  /// Instantly sets the camera to the given options.
+  external void jumpTo(JSCameraOptions options);
+
+  /// Animates the camera to the given options using an ease animation.
+  external void easeTo(JSCameraOptions options);
+
+  /// Animates the camera to the given options using a fly animation.
+  external void flyTo(JSCameraOptions options);
+
+  /// Fits the map to the given geographical bounds.
+  external void fitBounds(JSAny bounds, JSFitBoundsOptions? options);
+
+  /// Stops any current camera animation.
+  external void stop();
+
+  /// Returns the map's current center as a LngLat object.
+  external JSLngLat getCenter();
+
+  /// Returns the map's current zoom level.
+  external double getZoom();
+
+  /// Returns the map's current bearing (rotation).
+  external double getBearing();
+
+  /// Returns the map's current pitch (tilt).
+  external double getPitch();
+
+  /// Returns the HTMLElement the map is rendered into.
+  external HTMLElement getContainer();
+
+  /// Returns the map's `<canvas>` element.
+  external HTMLCanvasElement getCanvas();
+
+  /// Forces a single repaint of the map.
+  external void triggerRepaint();
+
+  /// One-finger pan handler.
+  external JSGestureHandler get dragPan;
+
+  /// Right-click / two-finger rotate handler.
+  external JSDragRotateHandler get dragRotate;
+
+  /// Mouse-wheel / trackpad-pinch zoom handler.
+  external JSGestureHandler get scrollZoom;
+
+  /// Shift+drag box-zoom handler.
+  external JSGestureHandler get boxZoom;
+
+  /// Two-finger vertical pitch handler.
+  external JSGestureHandler get touchPitch;
+
+  /// Two-finger pinch zoom (and rotate) handler.
+  external JSTouchZoomRotateHandler get touchZoomRotate;
+
+  /// Double-click zoom-in handler.
+  external JSGestureHandler get doubleClickZoom;
+
+  /// Keyboard shortcut handler (+/-, arrows, shift+arrows).
+  external JSKeyboardHandler get keyboard;
+
+  /// Returns the map's style specification object.
+  external JSStyleSpec getStyle();
+
+  /// Loads a new style by URI (`mapbox://styles/...`) or inline JSON object.
+  external void setStyle(JSAny style);
+
+  /// Returns whether the map's style is fully loaded.
+  external bool isStyleLoaded();
+
+  /// Recalculates the map's dimensions and re-renders.
+  external void resize();
+
+  /// Cleans up all resources associated with this map instance:
+  /// destroys the WebGL context, removes DOM elements, clears event listeners.
+  external void remove();
+
+  /// Registers an interaction (gesture handler) under [id]. GL JS throws if
+  /// [id] is already registered.
+  external void addInteraction(String id, JSInteraction interaction);
+
+  /// Removes an interaction previously registered with [addInteraction].
+  /// No-op when [id] is unknown.
+  external void removeInteraction(String id);
+
+  /// Attaches an `IControl` (e.g. a `GeolocateControl`) to the map, in the
+  /// given corner. When [position] is omitted GL JS falls back to the
+  /// control's own `getDefaultPosition()`, or `'top-right'` if it has none.
+  external void addControl(JSControl control, [JSControlPosition? position]);
+
+  /// Removes a previously attached control. No-op when the control was
+  /// never added.
+  external void removeControl(JSControl control);
+
+  /// Synthesizes an event of [type] with the given [data] payload and
+  /// dispatches it to all listeners (including interactions).
+  external void fire(String type, JSObject? data);
+}
+
+/// A GL JS `FilterSpecification`: an expression array such as
+/// `['==', ['get', 'id'], 3]`. The platform interface carries filters as
+/// JSON-encoded strings, so [fromJson] parses one into the array GL JS wants.
+extension type FilterSpecification._(JSArray<JSAny?> _)
+    implements JSArray<JSAny?> {
+  factory FilterSpecification.fromJson(String json) =>
+      FilterSpecification._(jsonParse(json) as JSArray<JSAny?>);
+}
+
+/// Options passed to [JSMapQueryExtension.queryRenderedFeatures].
+///
+/// Null fields are omitted; GL JS skips `layers`/`filter` when falsy.
+@JS()
+@anonymous
+extension type JSQueryRenderedFeaturesOptions._(JSObject _)
+    implements JSObject {
+  external factory JSQueryRenderedFeaturesOptions({
+    JSArray<JSString>? layers,
+    FilterSpecification? filter,
+  });
+}
+
+/// Options passed to [JSMapQueryExtension.querySourceFeatures].
+///
+/// Null fields are omitted; GL JS skips `sourceLayer`/`filter` when falsy.
+@JS()
+@anonymous
+extension type JSQuerySourceFeaturesOptions._(JSObject _) implements JSObject {
+  external factory JSQuerySourceFeaturesOptions({
+    String? sourceLayer,
+    JSArray<JSAny?>? filter,
+  });
+}
+
+/// GL JS feature-state target: `FeatureSelector` | `GeoJSONFeature` | `TargetFeature`.
+///
+/// All three are plain objects at runtime; GL JS discriminates by the presence
+/// of `target` vs `source`. Concrete interop types implement this nominally.
+extension type JSFeatureStateFeature._(JSObject _) implements JSObject {}
+
+/// A GL JS `MapboxGeoJSONFeature` as returned by the feature-query methods.
+@JS()
+extension type JSMapFeature._(JSObject _) implements JSFeatureStateFeature {
+  external String get type;
+  external JSGeometry? get geometry;
+  external JSDictionary<String?, Object?> get properties;
+  external JSIdentifier? get id;
+  external String get source;
+  external String? get sourceLayer;
+  external JSObject? get state;
+
+  /// The style layer the feature was rendered in (only set for
+  /// [JSMapQueryExtension.queryRenderedFeatures] results).
+  external JSFeatureLayer? get layer;
+}
+
+/// The style layer a [JSMapFeature] was rendered in.
+@JS()
+extension type JSFeatureLayer._(JSObject _) implements JSObject {
+  external String get id;
+}
+
+/// GL JS `FeatureSelector` — identifies a feature within a style source.
+@JS()
+@anonymous
+extension type JSFeatureSelector._(JSObject _)
+    implements JSFeatureStateFeature {
+  external factory JSFeatureSelector({
+    required String source,
+    String? sourceLayer,
+    String? id,
+  });
+}
+
+/// Feature query and feature-state methods on [JSMap].
+extension JSMapQueryExtension on JSMap {
+  /// Returns features rendered at [geometry].
+  ///
+  /// [geometry] may be a single [JSScreenPoint], an array of two
+  /// [JSScreenPoint] forming a bounding box, or null to query the entire
+  /// viewport.
+  external JSArray<JSMapFeature> queryRenderedFeatures(
+    JSAny? geometry,
+    JSQueryRenderedFeaturesOptions? options,
+  );
+
+  /// Returns features from the source identified by [sourceId].
+  external JSArray<JSMapFeature> querySourceFeatures(
+    String sourceId,
+    JSQuerySourceFeaturesOptions? options,
+  );
+
+  /// Merges [state] into the runtime state of [feature].
+  external void setFeatureState(
+    JSFeatureStateFeature feature,
+    JSDictionary<String, Object?> state,
+  );
+
+  /// Returns the runtime state of [feature], or null when unset.
+  external JSDictionary<String, Object?>? getFeatureState(
+    JSFeatureStateFeature feature,
+  );
+
+  /// Clears [key] from [feature]'s state, or all keys when [key] is null.
+  external void removeFeatureState(JSFeatureStateFeature feature, String? key);
+}
+
+// ===== Event names =====
+
+/// Mapbox GL JS event names that the web implementation subscribes to.
+/// Kept as constants so callers can reference one name from bindings and
+/// adapters without a typo-prone duplicate string.
+class JSMapEvents {
+  JSMapEvents._();
+
+  static const load = 'load';
+  static const styleLoad = 'style.load';
+  static const styleImportLoad = 'style.import.load';
+  static const styleData = 'styledata';
+  static const idle = 'idle';
+
+  /// Camera-position change. GL JS calls this `'move'`; renamed at the
+  /// constant level to disambiguate from gesture events (mouse/touch
+  /// `move` belongs to the gesture surface, not the camera surface).
+  static const cameraMove = 'move';
+
+  static const sourceData = 'sourcedata';
+  static const renderStart = 'renderstart';
+  static const render = 'render';
+}
+
+// ===== Event payload extern types =====
+
+/// Shared shape of every Mapbox GL JS map event. Carries `type`; the full
+/// object also exposes `target: JSMap` but we reach the map via closure
+/// capture instead, so it isn't declared here.
+@JS()
+@anonymous
+extension type JSMapBaseEvent._(JSObject _) implements JSObject {
+  external String get type;
+}
+
+/// Payload of camera-related events (`movestart`, `move`, `moveend`).
+/// Programmatic moves leave `originalEvent` null; keyboard-driven moves
+/// carry a `KeyboardEvent`, pointer-driven ones a `MouseEvent`/`TouchEvent`.
+@JS()
+@anonymous
+extension type JSMapMoveEvent._(JSObject _) implements JSObject {
+  external Event? get originalEvent;
+}
+
+/// Payload of the `sourcedata` event (and the parent `data` event before
+/// the Map re-fires it as `sourcedata`/`styledata`). Only the fields the
+/// adapters read are declared.
+@JS()
+@anonymous
+extension type JSMapDataEvent._(JSObject _) implements JSObject {
+  /// Source id the event relates to, when `dataType == 'source'`.
+  external String? get sourceId;
+
+  /// True once the source has finished its initial load. Per
+  /// `gl-js/src/ui/events.ts`, transitions to `true` on metadata-complete
+  /// and stays true for subsequent content updates.
+  external bool? get isSourceLoaded;
+}
+
+/// Payload of camera-surface gesture events (`drag*` / `zoom*` / `rotate*`
+/// / `pitch*`). Carries only `originalEvent`; `point`/`lngLat` are absent.
+///
+/// `originalEvent` is a `MouseEvent`/`TouchEvent` when a pointer/touch
+/// gesture caused the change, a `KeyboardEvent` when the keyboard did (GL JS
+/// fires these events for keyboard-driven zoom/rotate/pitch too), or null
+/// for a programmatic camera change (e.g. a direct `flyTo` call, not caused
+/// by any gesture handler).
+@JS()
+@anonymous
+extension type JSGestureEventData._(JSObject _) implements JSObject {
+  external Event? get originalEvent;
+}
+
+/// One of GL JS's toggleable gesture handlers (`dragPan`, `dragRotate`,
+/// `scrollZoom`, `touchPitch`, `touchZoomRotate`, `doubleClickZoom`).
+@JS()
+extension type JSGestureHandler._(JSObject _) implements JSObject {
+  external void enable();
+  external void disable();
+  external bool isEnabled();
+}
+
+/// `touchZoomRotate` handler — adds `disableRotation`/`enableRotation` for
+/// turning off the rotate portion of pinch while keeping pinch-zoom on, and
+/// `disableTapDragZoom`/`enableTapDragZoom` for turning off double-tap-and-
+/// drag zoom while keeping pinch-zoom on.
+@JS()
+extension type JSTouchZoomRotateHandler._(JSObject _)
+    implements JSGestureHandler {
+  external void disableRotation();
+  external void enableRotation();
+  external bool isRotationEnabled();
+  external void disableTapDragZoom();
+  external void enableTapDragZoom();
+  external bool isTapDragZoomEnabled();
+}
+
+/// `dragRotate` handler — adds `disablePitch`/`enablePitch` for turning off
+/// ctrl+drag pitch while keeping ctrl+drag rotate on, and
+/// `disableRotation`/`enableRotation` for the reverse.
+@JS()
+extension type JSDragRotateHandler._(JSObject _) implements JSGestureHandler {
+  external void disablePitch();
+  external void enablePitch();
+  external bool isPitchEnabled();
+  external void disableRotation();
+  external void enableRotation();
+  external bool isRotationEnabled();
+}
+
+/// Keyboard handler — adds independent `disablePan`/`enablePan`,
+/// `disableBearing`/`enableBearing`, and `disablePitch`/`enablePitch` so
+/// arrow-key pan, Shift+arrow rotate, and Shift+arrow pitch can each be
+/// toggled without affecting the other two (or `+`/`-` zoom).
+@JS()
+extension type JSKeyboardHandler._(JSObject _) implements JSGestureHandler {
+  external void disablePan();
+  external void enablePan();
+  external bool isPanEnabled();
+  external void disableBearing();
+  external void enableBearing();
+  external bool isBearingEnabled();
+  external void disablePitch();
+  external void enablePitch();
+  external bool isPitchEnabled();
+}
