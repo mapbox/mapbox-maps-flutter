@@ -4,7 +4,52 @@ part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 class LocationSettings implements LocationSettingsPlatformInterface {
   final _LocationComponentSettingsInterface _api;
 
-  LocationSettings._(this._api);
+  // Native location-provider override channel. A plain MethodChannel rather
+  // than Pigeon-generated: this repo ships the generated Pigeon output but
+  // not the input specs, so the channel is hand-written and kept isolated
+  // from the generated code. Names must match `LocationController.swift`
+  // and `LocationComponentController.kt` (`setUpExternalLocationChannel`)
+  // exactly.
+  final MethodChannel _externalLocationChannel;
+
+  LocationSettings._(
+    this._api, {
+    required String messageChannelSuffix,
+    BinaryMessenger? binaryMessenger,
+  }) : _externalLocationChannel = MethodChannel(
+         'plugins.flutter.io.mapbox_maps_flutter.externalLocation.$messageChannelSuffix',
+         const StandardMethodCodec(),
+         binaryMessenger,
+       );
+
+  @override
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) {
+    return _externalLocationChannel.invokeMethod<void>('setExternalLocation', {
+      'latitude': latitude,
+      'longitude': longitude,
+      'accuracy': ?accuracy,
+      'heading': ?heading,
+      'headingAccuracy': ?headingAccuracy,
+      'floor': ?floor,
+      'timestamp': (timestamp ?? DateTime.now())
+          .toUtc()
+          .millisecondsSinceEpoch
+          .toDouble(),
+    });
+  }
+
+  @override
+  Future<void> clearExternalLocation() {
+    return _externalLocationChannel.invokeMethod<void>('clearExternalLocation');
+  }
 
   /// Returns the currently applied settings, populated with default
   /// values for any fields not explicitly modified via [updateSettings].

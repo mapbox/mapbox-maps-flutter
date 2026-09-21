@@ -35,6 +35,56 @@ class LocationSettingsManager {
   /// ```
   Future<void> updateSettings(LocationComponentSettings settings) =>
       _impl.updateSettings(settings);
+
+  /// Pushes an externally-sourced location into the native location-provider
+  /// override, replacing whatever the platform's default location provider
+  /// (GPS) would otherwise show. Useful when the location comes from
+  /// something other than the device's GNSS receiver — an indoor-positioning
+  /// SDK, a simulation, or a vehicle's own sensors.
+  ///
+  /// The override is registered lazily on the first call; until this is
+  /// called at least once the puck behaves exactly as it does today.
+  ///
+  /// [timestamp] defaults to now if omitted. [floor] is only meaningful on
+  /// iOS, whose native `Location` type carries it; Android's
+  /// `LocationConsumer` API has no floor concept at all, so it is dropped on
+  /// that platform — callers needing floor-aware behaviour on Android should
+  /// track it themselves alongside the location.
+  ///
+  /// Supported on Android and iOS. Throws [UnsupportedError] on web.
+  ///
+  /// Example:
+  /// ```dart
+  /// mapboxMap.location.setExternalLocation(
+  ///   latitude: 37.775,
+  ///   longitude: -122.418,
+  ///   heading: 90.0,
+  ///   accuracy: 5.0,
+  /// );
+  /// ```
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) => _impl.setExternalLocation(
+    latitude: latitude,
+    longitude: longitude,
+    accuracy: accuracy,
+    heading: heading,
+    headingAccuracy: headingAccuracy,
+    floor: floor,
+    timestamp: timestamp,
+  );
+
+  /// Clears the override set by [setExternalLocation] and restores the
+  /// platform's default location provider (i.e. back to normal GPS).
+  ///
+  /// Supported on Android and iOS. Throws [UnsupportedError] on web.
+  Future<void> clearExternalLocation() => _impl.clearExternalLocation();
 }
 
 /// Deprecated: Use [LocationSettingsManager] instead.
