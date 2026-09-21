@@ -1,65 +1,42 @@
-### 3.0.0-alpha.31
-
-* Add `GeoJsonSource.dynamicData` that maps to the `dynamic` option in the style specification. On web, set it to true for the source to accept `addGeoJSONSourceFeatures`, `updateGeoJSONSourceFeatures`, and `removeGeoJSONSourceFeatures`. Android and iOS ignore `dynamicData` and accept feature updates on all GeoJSON sources.
-* [web] Fix `removeGeoJSONSourceFeatures` failing to remove a feature that was added with a numeric id.
-* [web] Add ornament settings support: `compass`, `scaleBar`, `logo` and `attribution` are backed by the Mapbox GL JS controls and support partial updates, matching Android and iOS. Some fields have no GL JS counterpart and are stored and returned by `getSettings` without being applied; see each field's documentation. Note `LogoSettings.enabled` and `AttributionSettings.enabled` are a restricted API.
-* [web] Fix `addStyleImportFromJSON` and `updateStyleImportWithJSON`. They completed before the style held the fragment, so the next call failed with "Style is not done loading". Both now complete after the style holds the fragment, as on Android and iOS.
-* [web] Fix `MapWidget` ignoring `styleUri`. The map loaded a default style first, fired `onStyleLoaded` for it, then loaded the requested style, which removed everything `onStyleLoaded` had added. The map now loads the requested style directly.
-* [web] Document how web keeps a GeoJSON feature id. GL JS keeps the id only if it is a number, or a string that holds a number. It removes all other string ids, and the feature then has no id on web. Use a number for these ids, or put the id in a feature property.
-
-### 3.0.0-alpha.30
-
-* Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), and `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`).
-* [web] Add `MapboxMap.snapshot()` support on web. It captures the map's current canvas as PNG-encoded bytes, matching Android and iOS.
-* `tileCover` and `Snapshotter.tileCover` are marked experimental and now return `OverscaledTileID` instead of `CanonicalTileID`, matching the native SDKs. `OverscaledTileID` keeps the canonical tile coordinate in its `canonical` field, and adds `overscaledZ` and `wrap` so callers can distinguish overscaled tiles from their canonical zoom level, and tiles that repeat across the antimeridian.
-* Introduce `StyleImage` (`.bytes` for PNG/JPEG/WebP, `.rgba` for premultiplied pixels) and prefer it via `addImage`, `updateImageForSource`, and `getImage`. Deprecate the `MbxImage`-based `addStyleImage`, `updateStyleImageSourceImage`, and `getStyleImage` wrappers. Style image add/has/remove is implemented on web; `getImage` and image-source updates remain mobile-only for now.
-* `getStyleImage` (and the deprecated `getStyleImage`/`getImage` wrappers built on it) now return raw premultiplied RGBA pixel data instead of a PNG-encoded image, matching Android's existing behavior. Code that decoded the returned `data` as PNG must decode it as raw RGBA instead.
-* `MbxImage` is deprecated and slated for removal in a future release. Use `StyleImage` instead.
-* Add `StyleImage.fromImage` to build a `StyleImage` from a `dart:ui` `Image` (for example one produced by a `CustomPainter` or `Canvas.toImage`)
-* [web] Add `loadStyleJson` support.
-* Fix `PointAnnotationManager.update()` not applying a new `image` on iOS and Android when the annotation's `iconImage` still named a previous registration ([#532](https://github.com/mapbox/mapbox-maps-flutter/issues/532)). If you leave `iconImage` unset, the SDK derives one from a hash of `image`, so a content change now applies automatically. Set `iconImage` yourself for full control of the style-image name: for example, to reuse one name across annotations, or to point at a style image added elsewhere without uploading `image`.
-
-### 3.0.0-alpha.29
-
-* Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.
-* Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode (the default) ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
-* `RenderedQueryGeometry` is now a sealed class hierarchy (`ScreenCoordinateRenderedQueryGeometry`, `ScreenBoxRenderedQueryGeometry`, `ScreenCoordinateListRenderedQueryGeometry`) instead of an untyped `{value, type}` pair. Construct it the same way as before, via `fromScreenCoordinate()`/`fromScreenBox()`/`fromList()`. Use pattern matching on the subclasses to inspect it instead of the now-deprecated, read-only `value`/`type` accessors.
-* [web] Fix `queryRenderedFeatures` querying the whole viewport for an empty `fromList([])`; it now matches no features, in line with mobile.
-* [web] Keyboard input now follows the same gesture settings as pointer/touch input: `GesturesSettings.scrollEnabled` gates arrow-key pan, and `.rotateEnabled`/`.pitchEnabled` independently gate Shift+arrow rotate and pitch.
-* [web] **Behavior change:** disabling `GesturesSettings.rotateEnabled` no longer also disables ctrl+drag pitch.
-* [web] `GesturesSettings.quickZoomEnabled` now controls tap-and-drag zoom; previously unsupported on web.
-
-### 3.0.0-alpha.28
-
-* [web] Add `GesturesSettings.scrollZoomEnabled`, `.boxZoomEnabled`, and `.pitchWithRotateEnabled` (web only; no effect on Android/iOS). **Behavior change:** `pinchToZoomEnabled` no longer also controls mouse-wheel/trackpad zoom on web (use `scrollZoomEnabled`), and `pitchEnabled` no longer also controls whether ctrl+drag combines rotate with pitch (use `pitchWithRotateEnabled`).
-* [Android] Render the map into a `SurfaceView` by default instead of a `TextureView`, avoiding the per-frame copy a `TextureView` requires. Set `MapWidget.textureView` to `true` for a transparent background (`isOpaque: false`) and for the `VD` and `TLHC_VD` hosting modes, which cannot display a `SurfaceView`.
-* Fix `rgb`, `hsl`, and `hsla` style-color expressions decoding incorrectly: `rgb` colors rendered nearly fully transparent, and `hsl`/`hsla` colors used the wrong saturation/lightness scale and alpha, producing wrong or (in debug builds) crashing results. `rgba` expressions were not affected.
-
-### 3.0.0-alpha.27
+### main
 
 > [!IMPORTANT]
-> On web, Mapbox GL JS is now loaded automatically: the plugin injects the `<script>`/`<link>` tags for the GL JS version it pins (v3.27.0) into the page on first map use. Remove the `mapbox-gl.js` and `mapbox-gl.css` tags from your app's `web/index.html` — a `mapboxgl` global that is already on the page is reused as-is, so a manually pinned copy silently overrides the version the SDK expects.
+> On web, Mapbox GL JS is loaded automatically: the plugin injects the `<script>`/`<link>` tags for the GL JS version it pins into the page on first map use.
 >
 > If your app enforces a Content-Security-Policy, it must allow script and style sources from `api.mapbox.com`.
 
+* **Add web support.**
+  * Support `MapWidget`, `MapboxMap`, gestures, camera, the viewport API (Camera, FollowPuck, Idle, Overview, StyleDefault states, with Default/Easing/Fly transitions), and the location puck. The Interaction API is supported except for `LongTapInteraction`. Annotation managers (Circle, Point, Polyline, Polygon) are not yet implemented on web.
+  * Add ornament settings support: `compass`, `scaleBar`, `logo` and `attribution` are backed by the Mapbox GL JS controls and support partial updates, matching Android and iOS. Some fields have no GL JS counterpart and are stored and returned by `getSettings` without being applied; see each field's documentation. Note `LogoSettings.enabled` and `AttributionSettings.enabled` are a restricted API.
+  * Add `MapboxMap.snapshot()` support. It captures the map's current canvas as PNG-encoded bytes, matching Android and iOS.
+  * Add `loadStyleJson` support.
+  * Add `gestures.keyboard.gestureEvents`, delivering keyboard-driven camera changes (arrow keys, `+`/`-`, shift+arrows), and make keyboard input follow the same gesture settings as pointer/touch input: `GesturesSettings.scrollEnabled` gates arrow-key pan, and `.rotateEnabled`/`.pitchEnabled` independently gate Shift+arrow rotate and pitch.
+  * Add `GesturesSettings.scrollZoomEnabled`, `.boxZoomEnabled`, and `.pitchWithRotateEnabled` to control mouse-wheel/trackpad zoom, box zoom, and whether ctrl+drag combines rotate with pitch (web only; no effect on Android/iOS).
+  * `GesturesSettings.quickZoomEnabled` controls tap-and-drag zoom.
+  * Flutter widgets stacked over the map block clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath, matching how a widget stacked over a native view would behave.
+  * `MapWidget.styleUri` loads the requested style directly, without first loading a default style.
+  * Document how web keeps a GeoJSON feature id. GL JS keeps the id only if it is a number, or a string that holds a number. It removes all other string ids, and the feature then has no id on web. Use a number for these ids, or put the id in a feature property.
+  * Add `GeoJsonSource.dynamicData`, mapping to the `dynamic` option in the style specification. Set it to true for the source to accept `addGeoJSONSourceFeatures`, `updateGeoJSONSourceFeatures`, and `removeGeoJSONSourceFeatures`. No-op on Android and iOS, which accept feature updates on all GeoJSON sources regardless.
+  * Decode `rgb`, `hsl`, and `hsla` style-color expressions correctly. `rgba` expressions were already decoded correctly. gl-native (Android/iOS) folds these into `rgba` before Flutter reads them back, so mobile is not affected either way.
+* Split the plugin into federated packages: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
+* Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`), and the `OnMapTapListener` / `OnMapLongTapListener` typedefs (use the Interaction API).
 * [Android] Change the default platform-view hosting mode to Hybrid Composition (`AndroidPlatformViewHostingMode.HC`); it was previously Virtual Display. Set `MapWidget.androidHostingMode` explicitly to keep the old behaviour.
-* [web] Fix Flutter widgets stacked over the map on web not blocking clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath. The map now respects any Flutter widgets painted on top of it.
-* Remove the `OnMapTapListener` / `OnMapLongTapListener` typedefs, orphaned since the `MapboxMap.onMapTapListener` / `onMapLongTapListener` setters they typed were removed in favor of the Interaction API.
-* [web] Add `gestures.keyboard.gestureEvents`, delivering keyboard-driven camera changes (arrow keys, `+`/`-`, shift+arrows) that were previously not observable through the gesture event streams.
-
-### 3.0.0-alpha.1
-
-* Split the plugin into federated packages and add web support: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
+* [Android] Render the map into a `SurfaceView` by default instead of a `TextureView`, avoiding the per-frame copy a `TextureView` requires. Set `MapWidget.textureView` to `true` for a transparent background (`isOpaque: false`) and for the `VD` and `TLHC_VD` hosting modes, which cannot display a `SurfaceView`.
+* Introduce `StyleImage` (`.bytes` for PNG/JPEG/WebP, `.rgba` for premultiplied pixels) and prefer it via `addImage`, `updateImageForSource`, and `getImage`. Deprecate the `MbxImage`-based `addStyleImage`, `updateStyleImageSourceImage`, and `getStyleImage` wrappers. Style image add/has/remove is implemented on web; `getImage` and image-source updates remain mobile-only for now.
+* `getStyleImage` (and the deprecated `getStyleImage`/`getImage` wrappers built on it) now return raw premultiplied RGBA pixel data instead of a PNG-encoded image, matching Android's existing behavior. Code that decoded the returned `data` as PNG must decode it as raw RGBA instead.
+* `tileCover` and `Snapshotter.tileCover` are marked experimental and now return `OverscaledTileID` instead of `CanonicalTileID`, matching the native SDKs. `OverscaledTileID` keeps the canonical tile coordinate in its `canonical` field, and adds `overscaledZ` and `wrap` so callers can distinguish overscaled tiles from their canonical zoom level, and tiles that repeat across the antimeridian.
+* `RenderedQueryGeometry` is now a sealed class hierarchy (`ScreenCoordinateRenderedQueryGeometry`, `ScreenBoxRenderedQueryGeometry`, `ScreenCoordinateListRenderedQueryGeometry`) instead of an untyped `{value, type}` pair. Construct it the same way as before, via `fromScreenCoordinate()`/`fromScreenBox()`/`fromList()`. Use pattern matching on the subclasses to inspect it instead of the now-deprecated, read-only `value`/`type` accessors.
+* Fix `PointAnnotationManager.update()` not applying a new `image` on iOS and Android when the annotation's `iconImage` still named a previous registration ([#532](https://github.com/mapbox/mapbox-maps-flutter/issues/532)). If you leave `iconImage` unset, the SDK derives one from a hash of `image`, so a content change now applies automatically. Set `iconImage` yourself for full control of the style-image name: for example, to reuse one name across annotations, or to point at a style image added elsewhere without uploading `image`.
 
 ### 2.31.0
-
-### 2.31.0-rc.1
 
 * Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
 * Promote `SymbolLayer.symbolZOffset` to stable.
 * Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
 
 ### 2.30.1
+
+* Update Maps SDK to v11.30.1
 
 ### 2.30.0
 
