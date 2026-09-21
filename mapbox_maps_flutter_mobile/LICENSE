@@ -1,6 +1,6 @@
 ## License
 
-mapbox_maps_flutter_mobile version 2.32.0-SNAPSHOT-09-21--12-47.git-e3ebc9a
+mapbox_maps_flutter_mobile version 3.33.0
 Mapbox Maps Flutter SDK
 
 Copyright (c) 2022 - 2026 Mapbox, Inc. All rights reserved.
@@ -144,7 +144,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## License
 
-Mapbox Maps for iOS version 11.32.0-SNAPSHOT-09-21--12-47.git-e3ebc9a
+Mapbox Maps for iOS version 11.33.0
 Mapbox Maps iOS SDK
 
 Copyright &copy; 2021 - 2026 Mapbox, Inc. All rights reserved.
@@ -175,7 +175,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ---
 
-### MapboxCoreMaps,11.32.0-SNAPSHOT-09-21--12-47.git-e3ebc9a,Mapbox ToS,Mapbox,https://www.mapbox.com/
+### MapboxCoreMaps,11.33.0,Mapbox ToS,Mapbox,https://www.mapbox.com/
 
 ```
 Mapbox Core Maps version 11.0
@@ -2483,7 +2483,7 @@ DEALINGS IN THE SOFTWARE.
 
 ### License
 
-Mapbox Maps for Android version 11.32.0-SNAPSHOT-09-21--12-47.git-e3ebc9a
+Mapbox Maps for Android version 11.33.0
 Mapbox Maps Android SDK
 
 Copyright &copy; 2021 - 2026 Mapbox, Inc. All rights reserved.
