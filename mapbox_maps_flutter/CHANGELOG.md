@@ -1,5 +1,7 @@
 ### main
 
+### 3.0.0-rc.1
+
 > [!IMPORTANT]
 > On web, Mapbox GL JS is loaded automatically: the plugin injects the `<script>`/`<link>` tags for the GL JS version it pins into the page on first map use.
 >
