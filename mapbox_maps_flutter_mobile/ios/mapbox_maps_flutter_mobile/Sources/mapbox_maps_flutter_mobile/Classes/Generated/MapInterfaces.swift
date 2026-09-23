@@ -758,9 +758,13 @@ class MapInterfacesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable
 protocol _AnimationManager {
   func easeTo(cameraOptions: CameraOptions, mapAnimationOptions: MapAnimationOptions?) throws
   func flyTo(cameraOptions: CameraOptions, mapAnimationOptions: MapAnimationOptions?) throws
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   func pitchBy(pitch: Double, mapAnimationOptions: MapAnimationOptions?) throws
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   func scaleBy(amount: Double, screenCoordinate: ScreenCoordinate?, mapAnimationOptions: MapAnimationOptions?) throws
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   func moveBy(screenCoordinate: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?) throws
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   func rotateBy(first: ScreenCoordinate, second: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?) throws
   func cancelCameraAnimation() throws
 }
@@ -803,6 +807,7 @@ class _AnimationManagerSetup {
     } else {
       flyToChannel.setMessageHandler(nil)
     }
+    /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
     let pitchByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.pitchBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       pitchByChannel.setMessageHandler { message, reply in
@@ -819,6 +824,7 @@ class _AnimationManagerSetup {
     } else {
       pitchByChannel.setMessageHandler(nil)
     }
+    /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
     let scaleByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.scaleBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       scaleByChannel.setMessageHandler { message, reply in
@@ -836,6 +842,7 @@ class _AnimationManagerSetup {
     } else {
       scaleByChannel.setMessageHandler(nil)
     }
+    /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
     let moveByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.moveBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       moveByChannel.setMessageHandler { message, reply in
@@ -852,6 +859,7 @@ class _AnimationManagerSetup {
     } else {
       moveByChannel.setMessageHandler(nil)
     }
+    /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
     let rotateByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.rotateBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       rotateByChannel.setMessageHandler { message, reply in

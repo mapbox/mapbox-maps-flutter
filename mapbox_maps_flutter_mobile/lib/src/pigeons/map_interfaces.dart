@@ -804,6 +804,7 @@ class _AnimationManager {
     }
   }
 
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   Future<void> pitchBy(
     double pitch,
     MapAnimationOptions? mapAnimationOptions,
@@ -834,6 +835,7 @@ class _AnimationManager {
     }
   }
 
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   Future<void> scaleBy(
     double amount,
     ScreenCoordinate? screenCoordinate,
@@ -865,6 +867,7 @@ class _AnimationManager {
     }
   }
 
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   Future<void> moveBy(
     ScreenCoordinate screenCoordinate,
     MapAnimationOptions? mapAnimationOptions,
@@ -895,6 +898,7 @@ class _AnimationManager {
     }
   }
 
+  /// Supported on Android and web only. On iOS, this method throws a [PlatformException].
   Future<void> rotateBy(
     ScreenCoordinate first,
     ScreenCoordinate second,

@@ -1019,9 +1019,13 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
 interface _AnimationManager {
   fun easeTo(cameraOptions: CameraOptions, mapAnimationOptions: MapAnimationOptions?)
   fun flyTo(cameraOptions: CameraOptions, mapAnimationOptions: MapAnimationOptions?)
+  /** Supported on Android and web only. On iOS, this method throws a [PlatformException]. */
   fun pitchBy(pitch: Double, mapAnimationOptions: MapAnimationOptions?)
+  /** Supported on Android and web only. On iOS, this method throws a [PlatformException]. */
   fun scaleBy(amount: Double, screenCoordinate: ScreenCoordinate?, mapAnimationOptions: MapAnimationOptions?)
+  /** Supported on Android and web only. On iOS, this method throws a [PlatformException]. */
   fun moveBy(screenCoordinate: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?)
+  /** Supported on Android and web only. On iOS, this method throws a [PlatformException]. */
   fun rotateBy(first: ScreenCoordinate, second: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?)
   fun cancelCameraAnimation()
 

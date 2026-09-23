@@ -187,9 +187,15 @@ abstract interface class MapboxMapPlatformInterface
   );
 
   /// Pitches the camera by [pitch] degrees with optional animation.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> pitchBy(double pitch, MapAnimationOptions? mapAnimationOptions);
 
   /// Scales the camera by [amount] around an optional [anchor] point.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> scaleBy(
     double amount,
     ScreenCoordinate? anchor,
@@ -197,12 +203,18 @@ abstract interface class MapboxMapPlatformInterface
   );
 
   /// Moves the camera by a [screenCoordinate] offset.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> moveBy(
     ScreenCoordinate screenCoordinate,
     MapAnimationOptions? mapAnimationOptions,
   );
 
   /// Rotates the camera between two touch points.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> rotateBy(
     ScreenCoordinate first,
     ScreenCoordinate second,

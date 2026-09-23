@@ -22,19 +22,19 @@ final class AnimationController: _AnimationManager {
     }
 
     func pitchBy(pitch: Double, mapAnimationOptions: MapAnimationOptions?) throws {
-        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+        throw FlutterError(code: AnimationController.errorCode, message: "pitchBy is not supported on iOS.", details: nil)
     }
 
     func scaleBy(amount: Double, screenCoordinate: ScreenCoordinate?, mapAnimationOptions: MapAnimationOptions?) throws {
-        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+        throw FlutterError(code: AnimationController.errorCode, message: "scaleBy is not supported on iOS.", details: nil)
     }
 
     func moveBy(screenCoordinate: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?) throws {
-        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+        throw FlutterError(code: AnimationController.errorCode, message: "moveBy is not supported on iOS.", details: nil)
     }
 
     func rotateBy(first: ScreenCoordinate, second: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?) throws {
-        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+        throw FlutterError(code: AnimationController.errorCode, message: "rotateBy is not supported on iOS.", details: nil)
     }
 
     func cancelCameraAnimation() throws {

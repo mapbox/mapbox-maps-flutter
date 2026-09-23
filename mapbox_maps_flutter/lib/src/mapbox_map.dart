@@ -245,12 +245,18 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   ) => _impl.flyTo(cameraOptions, mapAnimationOptions);
 
   /// Pitches the camera by [pitch] degrees with optional animation.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> pitchBy(
     double pitch,
     MapAnimationOptions? mapAnimationOptions,
   ) => _impl.pitchBy(pitch, mapAnimationOptions);
 
   /// Scales the camera by [amount] around an optional [anchor] point.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> scaleBy(
     double amount,
     ScreenCoordinate? anchor,
@@ -258,12 +264,18 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   ) => _impl.scaleBy(amount, anchor, mapAnimationOptions);
 
   /// Moves the camera by a [screenCoordinate] offset.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> moveBy(
     ScreenCoordinate screenCoordinate,
     MapAnimationOptions? mapAnimationOptions,
   ) => _impl.moveBy(screenCoordinate, mapAnimationOptions);
 
   /// Rotates the camera between two touch points.
+  ///
+  /// Supported on Android and web only. On iOS, this method throws a
+  /// [PlatformException].
   Future<void> rotateBy(
     ScreenCoordinate first,
     ScreenCoordinate second,
