@@ -117,6 +117,16 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
           PolylineAnnotationInteractionContext.fromList(it)
         }
       }
+      149.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          IndoorFloor.fromList(it)
+        }
+      }
+      150.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          IndoorState.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -200,6 +210,14 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
       }
       is PolylineAnnotationInteractionContext -> {
         stream.write(148)
+        writeValue(stream, value.toList())
+      }
+      is IndoorFloor -> {
+        stream.write(149)
+        writeValue(stream, value.toList())
+      }
+      is IndoorState -> {
+        stream.write(150)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -305,6 +323,19 @@ abstract class PitchEventsStreamHandler : GestureListenersPigeonEventChannelWrap
         channelName += ".$instanceName"
       }
       val internalStreamHandler = GestureListenersPigeonStreamHandler<MapContentGestureContext>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class IndoorUpdatesStreamHandler : GestureListenersPigeonEventChannelWrapper<IndoorState> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: IndoorUpdatesStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._indoorUpdates"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<IndoorState>(streamHandler)
       EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
     }
   }

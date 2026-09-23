@@ -1,5 +1,7 @@
 ### main
 
+* Add experimental `MapboxMap.indoor` (`IndoorManager`): indoor floor state as a stream (`indoorUpdates`) and `selectFloor(floorId)`, on Android, iOS, and web. Also fix `MapboxMap.indoorSelector` on all three platforms: implemented on web, no longer throws on Android, and appears by default on iOS.
+
 ### 3.0.0-rc.1
 
 > [!IMPORTANT]

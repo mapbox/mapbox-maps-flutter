@@ -71,6 +71,12 @@ class _GestureListenersPigeonCodec extends StandardMessageCodec {
     } else if (value is PolylineAnnotationInteractionContext) {
       buffer.putUint8(148);
       writeValue(buffer, value.encode());
+    } else if (value is IndoorFloor) {
+      buffer.putUint8(149);
+      writeValue(buffer, value.encode());
+    } else if (value is IndoorState) {
+      buffer.putUint8(150);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -132,6 +138,10 @@ class _GestureListenersPigeonCodec extends StandardMessageCodec {
         return PolygonAnnotationInteractionContext.decode(readValue(buffer)!);
       case 148:
         return PolylineAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 149:
+        return IndoorFloor.decode(readValue(buffer)!);
+      case 150:
+        return IndoorState.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -208,5 +218,18 @@ Stream<MapContentGestureContext> _pitchEvents({String instanceName = ''}) {
   );
   return _pitchEventsChannel.receiveBroadcastStream().map((dynamic event) {
     return event as MapContentGestureContext;
+  });
+}
+
+Stream<IndoorState> _indoorUpdates({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _indoorUpdatesChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._indoorUpdates$instanceName',
+    pigeonMethodCodec,
+  );
+  return _indoorUpdatesChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as IndoorState;
   });
 }

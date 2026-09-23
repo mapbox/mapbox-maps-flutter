@@ -77,6 +77,15 @@ web.HTMLElement? logoElement(JSMap map) =>
 web.HTMLElement? logoRoot(JSMap map) =>
     logoElement(map)?.parentElement as web.HTMLElement?;
 
+/// Indoor selector toggle button inside [map]'s own container, or null.
+///
+/// Unlike the other ornaments, `IndoorControl` adds an empty group on
+/// attach and only renders this button once indoor floor data exists, so
+/// it stays null on a plain map with no indoor venue in view.
+web.HTMLElement? indoorToggleElement(JSMap map) =>
+    map.getContainer().querySelector('.mapboxgl-ctrl-indoor-toggle')
+        as web.HTMLElement?;
+
 /// Name of the corner container [element] sits in.
 String cornerOf(web.HTMLElement element) => element.parentElement!.className;
 

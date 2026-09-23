@@ -1,17 +1,8 @@
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
-import 'package:mapbox_maps_flutter_examples/platform.dart';
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'patrol.dart';
 import 'empty_map_widget.dart' as app;
-
-// Skipped on Android: MAPBOX_INDOOR_SELECTOR_PLUGIN_ID is not part of
-// MapInitOptions.defaultPluginList and the Flutter platform view factory
-// doesn't register it either, so `mapView.indoorSelector` throws a
-// NullPointerException there.
-final skipTests = kIsWeb || isAndroid;
 
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
@@ -57,7 +48,7 @@ void main() {
       reason:
           'marginRight should be preserved even though it is not active in BOTTOM_LEFT',
     );
-  }, skip: skipTests);
+  });
 
   patrolTest('margins are independently tracked across position changes', (
     $,
@@ -96,7 +87,7 @@ void main() {
       reason:
           'marginBottom should be preserved even though it is not active in TOP_RIGHT',
     );
-  }, skip: skipTests);
+  });
 
   patrolTest(
     'enabled, position and margins are preserved by an empty update',
@@ -124,7 +115,6 @@ void main() {
       expect(updatedSettings.marginRight, baseline.marginRight);
       expect(updatedSettings.marginTop, baseline.marginTop);
     },
-    skip: skipTests,
   );
 
   patrolTest(
@@ -151,6 +141,5 @@ void main() {
       expect(updatedSettings.position, baseline.position);
       expect(updatedSettings.marginTop, baseline.marginTop);
     },
-    skip: skipTests,
   );
 }

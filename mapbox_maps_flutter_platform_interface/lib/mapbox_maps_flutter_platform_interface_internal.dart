@@ -18,6 +18,7 @@ export 'src/internal/style_image_format.dart';
 export 'src/interfaces/annotations_interface.dart';
 export 'src/interfaces/circle_annotation_manager_interface.dart';
 export 'src/interfaces/http_service_interface.dart';
+export 'src/interfaces/indoor_interface.dart';
 export 'src/interfaces/location_settings_interface.dart';
 export 'src/interfaces/log_configuration_interface.dart';
 export 'src/interfaces/map_recorder_interface.dart';

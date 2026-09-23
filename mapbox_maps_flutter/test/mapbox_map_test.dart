@@ -67,6 +67,11 @@ class StubIndoorSelectorSettingsPlatformInterface
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
+class StubIndoorPlatformInterface implements IndoorPlatformInterface {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
+}
+
 class StubAnnotationManagerPlatformInterface
     implements AnnotationManagerPlatformInterface {
   @override
@@ -116,6 +121,8 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   final IndoorSelectorSettingsPlatformInterface indoorSelector =
       StubIndoorSelectorSettingsPlatformInterface();
+  @override
+  final IndoorPlatformInterface indoor = StubIndoorPlatformInterface();
   @override
   final AnnotationManagerPlatformInterface annotations =
       StubAnnotationManagerPlatformInterface();
@@ -896,6 +903,10 @@ void main() {
 
     test('indoorSelector returns an IndoorSelectorSettingsManager', () {
       expect(mapboxMap.indoorSelector, isA<IndoorSelectorSettingsManager>());
+    });
+
+    test('indoor returns an IndoorManager', () {
+      expect(mapboxMap.indoor, isA<IndoorManager>());
     });
 
     test('annotations returns an AnnotationManager', () {

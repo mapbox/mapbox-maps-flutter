@@ -3898,6 +3898,86 @@ class IndoorSelectorSettings {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// A single floor within an indoor venue.
+class IndoorFloor {
+  IndoorFloor({required this.id, required this.name});
+
+  String id;
+
+  String name;
+
+  List<Object?> _toList() {
+    return <Object?>[id, name];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static IndoorFloor decode(Object result) {
+    result as List<Object?>;
+    return IndoorFloor(id: result[0]! as String, name: result[1]! as String);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! IndoorFloor || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return id == other.id && name == other.name;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// The current indoor state: available floors and the selected floor.
+class IndoorState {
+  IndoorState({required this.floors, this.selectedFloorId});
+
+  List<IndoorFloor> floors;
+
+  String? selectedFloorId;
+
+  List<Object?> _toList() {
+    return <Object?>[floors, selectedFloorId];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static IndoorState decode(Object result) {
+    result as List<Object?>;
+    return IndoorState(
+      floors: (result[0] as List<Object?>?)!.cast<IndoorFloor>(),
+      selectedFloorId: result[1] as String?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! IndoorState || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(floors, other.floors) &&
+        selectedFloorId == other.selectedFloorId;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// A structure that defines additional information about map content gesture.
 class MapContentGestureContext {
   MapContentGestureContext({

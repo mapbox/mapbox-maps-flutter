@@ -15,6 +15,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
     private let interactionsController: InteractionsController?
+    private let indoorController: IndoorController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
 
@@ -79,6 +80,9 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: gesturesController, messageChannelSuffix: binaryMessenger.suffix)
 
         interactionsController = InteractionsController(withMapView: mapView)
+
+        indoorController = IndoorController(withMapboxMap: mapboxMap, messenger: binaryMessenger)
+        _IndoorMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: indoorController, messageChannelSuffix: binaryMessenger.suffix)
 
         let logoController = LogoController(withMapView: mapView)
         LogoSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: logoController, messageChannelSuffix: binaryMessenger.suffix)
@@ -225,6 +229,8 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         IndoorSelectorSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _IndoorMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        indoorController?.tearDown()
         annotationController?.tearDown()
         _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _PerformanceStatisticsApiSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)

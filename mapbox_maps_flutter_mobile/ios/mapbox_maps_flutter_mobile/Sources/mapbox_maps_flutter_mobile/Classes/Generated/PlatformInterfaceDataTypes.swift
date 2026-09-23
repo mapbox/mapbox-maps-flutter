@@ -2746,6 +2746,58 @@ struct IndoorSelectorSettings {
   }
 }
 
+/// A single floor within an indoor venue.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct IndoorFloor {
+  var id: String
+  var name: String
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> IndoorFloor? {
+    let id = pigeonVar_list[0] as! String
+    let name = pigeonVar_list[1] as! String
+
+    return IndoorFloor(
+      id: id,
+      name: name
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      name,
+    ]
+  }
+}
+
+/// The current indoor state: available floors and the selected floor.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct IndoorState {
+  var floors: [IndoorFloor]
+  var selectedFloorId: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> IndoorState? {
+    let floors = pigeonVar_list[0] as! [IndoorFloor]
+    let selectedFloorId: String? = nilOrValue(pigeonVar_list[1])
+
+    return IndoorState(
+      floors: floors,
+      selectedFloorId: selectedFloorId
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      floors,
+      selectedFloorId,
+    ]
+  }
+}
+
 /// A structure that defines additional information about map content gesture.
 ///
 /// Generated class from Pigeon that represents data sent in messages.

@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 @_spi(Experimental) @_spi(Restricted) import MapboxMaps
 
@@ -13,17 +14,18 @@ final class IndoorSelectorController: IndoorSelectorSettingsInterface {
             marginRight: settings.marginRight,
             marginBottom: settings.marginBottom,
             for: indoorSettings.position)
-        if let enabled = settings.enabled {
-            indoorSettings.visibility = enabled ? .visible : .hidden
-        }
         ornaments.options.indoorSelector = indoorSettings
+        if let settingsEnabled = settings.enabled {
+            enabled = settingsEnabled
+        }
+        applyVisibility()
     }
 
     func getSettings() throws -> IndoorSelectorSettings {
         let options = ornaments.options.indoorSelector
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
         return IndoorSelectorSettings(
-            enabled: options.visibility != .hidden,
+            enabled: enabled,
             position: position,
             marginLeft: margins.left,
             marginTop: margins.top,
@@ -34,9 +36,27 @@ final class IndoorSelectorController: IndoorSelectorSettingsInterface {
 
     private var ornaments: OrnamentsManager
     private var margins: OrnamentMargins
+    private var enabled = true
+    private var hasFloors = false
+    private var cancellable: AnyCancellable?
 
     init(withMapView mapView: MapView) {
         self.ornaments = mapView.ornaments
         self.margins = OrnamentMargins(seedingFrom: mapView.ornaments.options.indoorSelector.margins)
+
+        // Drive visibility off the same IndoorManager updates mapboxMap.indoor
+        // exposes, instead of relying on the ornament's own `.adaptive` mode:
+        // it defaults to `.hidden`, so this also handles the initial state.
+        cancellable = mapView.mapboxMap.indoor.onIndoorUpdated.sink { [weak self] state in
+            guard let self else { return }
+            hasFloors = !state.floors.isEmpty
+            applyVisibility()
+        }
+    }
+
+    private func applyVisibility() {
+        var indoorSettings = ornaments.options.indoorSelector
+        indoorSettings.visibility = (enabled && hasFloors) ? .visible : .hidden
+        ornaments.options.indoorSelector = indoorSettings
     }
 }

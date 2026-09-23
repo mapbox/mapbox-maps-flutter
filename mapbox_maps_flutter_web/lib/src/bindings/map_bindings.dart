@@ -5,6 +5,7 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart';
 
+import 'indoor_bindings.dart';
 import 'interaction_bindings.dart';
 import 'json_helpers.dart';
 import 'location_bindings.dart';
@@ -12,6 +13,7 @@ import 'ornament_bindings.dart';
 import 'viewport_bindings.dart';
 
 export 'camera_bindings.dart';
+export 'indoor_bindings.dart';
 export 'interaction_bindings.dart';
 export 'location_bindings.dart';
 export 'ornament_bindings.dart';
@@ -187,6 +189,8 @@ extension type JSMap._(JSObject _) implements JSObject {
 
   /// Loads a new style by URI (`mapbox://styles/...`) or inline JSON object.
   external void setStyle(JSAny style);
+
+  external JSStyle? get style;
 
   /// Returns whether the map's style is fully loaded.
   external bool isStyleLoaded();

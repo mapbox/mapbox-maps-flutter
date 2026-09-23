@@ -8,6 +8,7 @@ import '../public/interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
 import 'http_service_interface.dart';
+import 'indoor_interface.dart';
 import 'location_settings_interface.dart';
 import 'map_recorder_interface.dart';
 import '../public/performance_statistics_listener.dart';
@@ -50,6 +51,10 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Provides access to the indoor floor selector settings.
   IndoorSelectorSettingsPlatformInterface get indoorSelector;
+
+  /// Provides access to indoor floor state and selection.
+  @experimental
+  IndoorPlatformInterface get indoor;
 
   /// Provides access to annotation manager creation.
   AnnotationManagerPlatformInterface get annotations;
