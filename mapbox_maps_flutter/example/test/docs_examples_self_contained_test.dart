@@ -45,8 +45,9 @@ void main() {
       offenders,
       isEmpty,
       reason:
-          'These files back tutorials and must stay self-contained, so a '
-          'reader can copy one into their own app. Either drop the shared '
+          'These files back docs.mapbox.com examples and must stay '
+          'self-contained, so a reader can copy one into their own app. '
+          'Either drop the shared '
           'import, or move the example out of lib/docs and clear its '
           'docsUrl.\n${offenders.join('\n')}',
     );

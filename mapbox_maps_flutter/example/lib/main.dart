@@ -320,7 +320,7 @@ class _ExampleTile extends StatelessWidget {
                       ),
                       if (example.docsUrl != null) ...[
                         const SizedBox(width: 8),
-                        const _TutorialBadge(),
+                        const _ExampleBadge(),
                       ],
                     ],
                   ),
@@ -461,8 +461,8 @@ class _ExamplePage extends StatelessWidget {
 }
 
 /// Marks a catalog entry that a documentation page publishes.
-class _TutorialBadge extends StatelessWidget {
-  const _TutorialBadge();
+class _ExampleBadge extends StatelessWidget {
+  const _ExampleBadge();
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +474,7 @@ class _TutorialBadge extends StatelessWidget {
         border: Border.all(color: MapboxColors.blue60),
       ),
       child: const Text(
-        'TUTORIAL',
+        'EXAMPLE',
         style: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w700,
