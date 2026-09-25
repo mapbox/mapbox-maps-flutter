@@ -23,24 +23,25 @@ final class InteractionHandler {
     if (jsFeature == null) {
       interaction.action(null, context);
     } else {
-      final raw = _adaptFeature(jsFeature);
+      final raw = jsFeature.toFeaturesetFeature();
       interaction.action(interaction.featureFactory(raw), context);
     }
 
     return interaction.stopPropagation;
   }
+}
 
-  FeaturesetFeature _adaptFeature(JSTargetFeature jsFeature) {
-    final rawId = jsFeature.id?.toDart();
+extension JSTargetFeatureExtension on JSTargetFeature {
+  FeaturesetFeature toFeaturesetFeature() {
+    final rawId = id?.toDart();
     return FeaturesetFeature(
       id: rawId == null
           ? null
-          : FeaturesetFeatureId(id: rawId, namespace: jsFeature.namespace),
-      featureset:
-          jsFeature.target?.featuresetDescriptor ?? FeaturesetDescriptor(),
-      geometry: jsFeature.geometry?.toDart() ?? <String?, Object?>{},
-      properties: jsFeature.properties?.toDart() ?? <String, Object?>{},
-      state: jsFeature.state?.toDart() ?? <String, Object?>{},
+          : FeaturesetFeatureId(id: rawId, namespace: namespace),
+      featureset: target?.featuresetDescriptor ?? FeaturesetDescriptor(),
+      geometry: geometry?.toDart() ?? <String?, Object?>{},
+      properties: properties?.toDart() ?? <String, Object?>{},
+      state: state?.toDart() ?? <String, Object?>{},
     );
   }
 }

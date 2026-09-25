@@ -774,7 +774,28 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     required FeaturesetDescriptor featureset,
     RenderedQueryGeometry? geometry,
     String? filter,
-  }) => throw _ni('queryRenderedFeaturesForFeatureset');
+  }) async {
+    if (geometry case ScreenCoordinateListRenderedQueryGeometry(points: [])) {
+      return <FeaturesetFeature>[];
+    }
+
+    final normalizedFilter = filter?.trim();
+    final options = JSQueryRenderedFeaturesOptions(
+      target: featureset.toJSTargetDescriptor(),
+      filter: normalizedFilter != null && normalizedFilter.isNotEmpty
+          ? FilterSpecification.fromJson(normalizedFilter)
+          : null,
+    );
+
+    return _map
+        .queryRenderedFeaturesForTarget(
+          geometry?.toJS(),
+          options,
+        )
+        .toDart
+        .map((feature) => feature.toFeaturesetFeature())
+        .toList();
+  }
 
   // ===== Source-feature state (pre-Featureset shapes) =====
 
@@ -881,9 +902,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   @override
   Future<void> resetFeatureStatesForFeatureset(
     FeaturesetDescriptor featureset,
-  ) => throw UnimplementedError(
-    'resetFeatureStatesForFeatureset is not yet implemented on web.',
-  );
+  ) async => _map.resetFeatureStates(featureset.toJSTargetDescriptor());
 
   // ===== Debug options =====
 

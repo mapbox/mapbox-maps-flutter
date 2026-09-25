@@ -17,7 +17,7 @@ class _StandardStyleInteractionsState
     extends State<StandardStyleInteractionsExample> {
   /// Space the bottom panel takes, so it can be handed to the camera as
   /// padding: without it, the panel would cover whatever sits underneath it.
-  static const _controlsHeight = 178.0;
+  static const _controlsHeight = 226.0;
 
   /// Extra clearance above the panel: its own outer padding.
   static const _controlsClearance = 16.0;
@@ -40,61 +40,72 @@ class _StandardStyleInteractionsState
       AttributionSettings(marginBottom: ornamentMargin),
     );
 
-    // Tapping a POI in the Standard POIs featureset hides it. Without
-    // stopPropagation the tap also reaches the interactions added below.
+    // Tapping a POI hides it. Hidden icons can't be tapped again, so use
+    // Reset in the panel to restore them.
     mapboxMap.addInteraction(
-      TapInteraction(
-        StandardPOIs(),
-        (feature, _) {
-          mapboxMap.setFeatureStateForFeaturesetFeature(
-            feature,
-            StandardPOIsState(hide: true),
-          );
-          log("POI feature name: ${feature.name}");
-        },
-        radius: 10,
-        stopPropagation: false,
-      ),
+      TapInteraction(StandardPOIs(), (feature, _) {
+        _toggleFeatureState(
+          feature,
+          isOn: feature.stateSnapshot.hide == true,
+          stateKey: 'hide',
+          onState: StandardPOIsState(hide: true),
+        );
+        log("POI feature name: ${feature.name}");
+      }, radius: 10),
       interactionID: "tap_interaction_poi",
     );
 
-    // Tapping a building in the Standard Buildings featureset highlights it.
+    // Tapping a building highlights it; tap again to clear the highlight.
     mapboxMap.addInteraction(
       TapInteraction(StandardBuildings(), (feature, _) {
-        mapboxMap.setFeatureStateForFeaturesetFeature(
+        _toggleFeatureState(
           feature,
-          StandardBuildingsState(highlight: true),
+          isOn: feature.stateSnapshot.highlight == true,
+          stateKey: 'highlight',
+          onState: StandardBuildingsState(highlight: true),
         );
         log("Building group: ${feature.group}");
       }),
     );
 
-    // Tapping a place label in the Standard Place Labels featureset selects it.
+    // Tapping a place label selects it; tap again to deselect.
     mapboxMap.addInteraction(
       TapInteraction(StandardPlaceLabels(), (feature, _) {
-        mapboxMap.setFeatureStateForFeaturesetFeature(
+        _toggleFeatureState(
           feature,
-          StandardPlaceLabelsState(select: true),
+          isOn: feature.stateSnapshot.select == true,
+          stateKey: 'select',
+          onState: StandardPlaceLabelsState(select: true),
         );
         log("Place label: ${feature.name}");
       }),
     );
+  }
 
-    // On mobile, when the map is long-tapped print the screen coordinates of
-    // the tap and reset the state of all features in the Standard POIs,
-    // Buildings, and Place Labels featuresets. Long-tap isn't available on web.
-    if (!kIsWeb) {
-      mapboxMap.addInteraction(
-        LongTapInteraction.onMap((context) {
-          log(
-            "Long tap at: ${context.touchPosition.x}, ${context.touchPosition.y}",
-          );
-          mapboxMap.resetFeatureStatesForFeatureset(StandardPOIs());
-          mapboxMap.resetFeatureStatesForFeatureset(StandardBuildings());
-          mapboxMap.resetFeatureStatesForFeatureset(StandardPlaceLabels());
-        }),
+  void _toggleFeatureState(
+    FeaturesetFeature feature, {
+    required bool isOn,
+    required String stateKey,
+    required FeatureState onState,
+  }) {
+    final map = _mapboxMap;
+    if (map == null) return;
+    if (isOn) {
+      map.removeFeatureStateForFeaturesetFeature(
+        feature: feature,
+        stateKey: stateKey,
       );
+    } else {
+      map.setFeatureStateForFeaturesetFeature(feature, onState);
     }
+  }
+
+  void _resetFeatureStates() {
+    final map = _mapboxMap;
+    if (map == null) return;
+    map.resetFeatureStatesForFeatureset(StandardPOIs());
+    map.resetFeatureStatesForFeatureset(StandardBuildings());
+    map.resetFeatureStatesForFeatureset(StandardPlaceLabels());
   }
 
   // The Standard style's "basemap" import is only available once the style has
@@ -198,6 +209,18 @@ class _StandardStyleInteractionsState
                   theme = value;
                   _updateMapStyle();
                 }),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _resetFeatureStates,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    side: const BorderSide(color: Color(0x1FFFFFFF)),
+                  ),
+                  child: const Text('Reset'),
+                ),
               ),
             ],
           ),

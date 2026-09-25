@@ -13,7 +13,7 @@ const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
-  patrolTest('test_featureset_QRF', skip: kIsWeb, ($) async {
+  patrolTest('test_featureset_QRF', ($) async {
     final tester = $.tester;
     // load style and position camera
     final mapboxMap = await app.pumpMap(
@@ -118,7 +118,7 @@ void main() {
     expect(returnedFeatureState2, {});
   });
 
-  patrolTest('test_reset_featurestate_methods', skip: kIsWeb, ($) async {
+  patrolTest('test_reset_featurestate_methods', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: $.tester,
@@ -267,7 +267,7 @@ void main() {
     expect(poi.properties, expectedProperties);
   });
 
-  patrolTest('test_getFeaturesets', skip: kIsWeb, ($) async {
+  patrolTest('test_getFeaturesets', ($) async {
     final tester = $.tester;
     // load style and position camera
     final mapboxMap = await app.pumpMap(

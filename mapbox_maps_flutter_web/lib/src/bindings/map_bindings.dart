@@ -103,6 +103,13 @@ extension type JSScreenPoint._(JSObject _) implements JSObject {
   external double get y;
 }
 
+/// Geometry argument to `queryRenderedFeatures`: a [JSScreenPoint], or a
+/// two-element [JSArray] of [JSScreenPoint] forming a bounding box.
+extension type JSQueryGeometry._(JSAny _) implements JSAny {
+  JSQueryGeometry.fromPoint(JSScreenPoint point) : this._(point);
+  JSQueryGeometry.fromBox(JSArray<JSScreenPoint> box) : this._(box);
+}
+
 /// The root-level camera fields from a Mapbox style specification.
 @JS()
 @anonymous
@@ -243,6 +250,7 @@ extension type JSQueryRenderedFeaturesOptions._(JSObject _)
   external factory JSQueryRenderedFeaturesOptions({
     JSArray<JSString>? layers,
     FilterSpecification? filter,
+    JSTargetDescriptor? target,
   });
 }
 
@@ -306,8 +314,15 @@ extension JSMapQueryExtension on JSMap {
   /// [JSScreenPoint] forming a bounding box, or null to query the entire
   /// viewport.
   external JSArray<JSMapFeature> queryRenderedFeatures(
-    JSAny? geometry,
+    JSQueryGeometry? geometry,
     JSQueryRenderedFeaturesOptions? options,
+  );
+
+  /// Returns features rendered for a featureset or layer target.
+  @JS('queryRenderedFeatures')
+  external JSArray<JSTargetFeature> queryRenderedFeaturesForTarget(
+    JSQueryGeometry? geometry,
+    JSQueryRenderedFeaturesOptions options,
   );
 
   /// Returns features from the source identified by [sourceId].
@@ -329,6 +344,14 @@ extension JSMapQueryExtension on JSMap {
 
   /// Clears [key] from [feature]'s state, or all keys when [key] is null.
   external void removeFeatureState(JSFeatureStateFeature feature, String? key);
+
+  /// Clears the state of every feature in [target].
+  external void resetFeatureStates(JSTargetDescriptor target);
+
+  /// Returns featuresets in the root style, or in [importId] when supplied.
+  external JSArray<JSTargetDescriptor> getFeaturesetDescriptors([
+    String? importId,
+  ]);
 }
 
 // ===== Event names =====
