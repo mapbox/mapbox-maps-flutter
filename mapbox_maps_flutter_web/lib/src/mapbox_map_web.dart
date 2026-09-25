@@ -10,7 +10,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart'
     show GeometryObject, Point, Position, bbox, bearing;
-import 'package:web/web.dart' show Blob;
+import 'package:web/web.dart' show Blob, window;
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
@@ -545,8 +545,32 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     return completer.future;
   }
 
+  /// Builds the options from the live map state.
+  ///
+  /// GL JS has no API that returns its constructor options, so each field
+  /// comes from the value that GL JS uses:
+  ///
+  ///  * [MapOptions.size] is the size of the map container.
+  ///  * [MapOptions.pixelRatio] is the browser device pixel ratio, which GL
+  ///    JS uses to size its canvas.
+  ///  * [MapOptions.constrainMode] is [ConstrainMode.HEIGHT_ONLY], because GL
+  ///    JS always limits the latitude and wraps the longitude.
+  ///  * [MapOptions.crossSourceCollisions] is `true`. The map does not set
+  ///    this GL JS option, so the GL JS default applies.
+  ///  * [MapOptions.glyphsRasterizationOptions] is null. The map does not set
+  ///    the GL JS local font options, so the GL JS defaults apply.
+  ///  * [MapOptions.orientation] and [MapOptions.viewportMode] are the
+  ///    defaults, because GL JS cannot change them.
+  ///  * [MapOptions.contextMode] is null, because GL JS has no equivalent.
   @override
-  Future<MapOptions> getMapOptions() => throw _ni('getMapOptions');
+  Future<MapOptions> getMapOptions() async => MapOptions(
+    constrainMode: ConstrainMode.HEIGHT_ONLY,
+    viewportMode: ViewportMode.DEFAULT,
+    orientation: NorthOrientation.UPWARDS,
+    crossSourceCollisions: true,
+    size: await getSize(),
+    pixelRatio: window.devicePixelRatio,
+  );
 
   @override
   Future<Uint8List> snapshot() async {
@@ -628,16 +652,13 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Orientation =====
 
   @override
-  Future<void> setNorthOrientation(NorthOrientation orientation) =>
-      throw _ni('setNorthOrientation');
+  Future<void> setNorthOrientation(NorthOrientation orientation) async {}
 
   @override
-  Future<void> setConstrainMode(ConstrainMode mode) =>
-      throw _ni('setConstrainMode');
+  Future<void> setConstrainMode(ConstrainMode mode) async {}
 
   @override
-  Future<void> setViewportMode(ViewportMode mode) =>
-      throw _ni('setViewportMode');
+  Future<void> setViewportMode(ViewportMode mode) async {}
 
   // ===== Interactions =====
 

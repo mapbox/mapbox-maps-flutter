@@ -332,6 +332,14 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   Future<void> clearData() => _impl.clearData();
 
   /// Returns the configured `MapOptions` for this map.
+  ///
+  /// On web, the options come from the live GL JS map state. `size` is the
+  /// size of the map container, and `pixelRatio` is the browser device pixel
+  /// ratio. `constrainMode` is always `ConstrainMode.HEIGHT_ONLY`,
+  /// `orientation` is always `NorthOrientation.UPWARDS`, `viewportMode` is
+  /// always `ViewportMode.DEFAULT`, and `crossSourceCollisions` is always
+  /// `true`. `glyphsRasterizationOptions` is always null, and the GL JS default
+  /// local font options apply. `contextMode` is always null.
   Future<MapOptions> getMapOptions() => _impl.getMapOptions();
 
   /// Captures a snapshot of the current map view as PNG-encoded bytes.
@@ -402,14 +410,23 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   // ===== Map orientation =====
 
   /// Sets the map's north orientation.
+  ///
+  /// On web, this call has no effect. The north orientation is always
+  /// `NorthOrientation.UPWARDS`.
   Future<void> setNorthOrientation(NorthOrientation orientation) =>
       _impl.setNorthOrientation(orientation);
 
   /// Sets the map's constrain mode.
+  ///
+  /// On web, this call has no effect. The constrain mode is always
+  /// `ConstrainMode.HEIGHT_ONLY`.
   Future<void> setConstrainMode(ConstrainMode mode) =>
       _impl.setConstrainMode(mode);
 
   /// Sets the map's viewport mode.
+  ///
+  /// On web, this call has no effect. The viewport mode is always
+  /// `ViewportMode.DEFAULT`.
   Future<void> setViewportMode(ViewportMode mode) =>
       _impl.setViewportMode(mode);
 
