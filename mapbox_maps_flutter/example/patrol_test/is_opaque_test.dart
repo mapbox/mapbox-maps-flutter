@@ -42,19 +42,22 @@ void main() {
     $,
   ) async {
     final tester = $.tester;
-    final map = await app.pumpMap(
-      tester: tester,
-      isOpaque: false,
-      textureView: true,
-      background: const Color(0xFFFF0000),
-      styleJson: _emptyStyle,
-      viewport: CameraViewportState(
-        center: Point(coordinates: Position(0, 0)),
-        zoom: 1,
-      ),
-    );
-    await tester.pumpAndSettle();
-    await app.waitForEvent(tester, app.events.onMapIdle.future);
+    final map = await tester.retryOnTimeout(() async {
+      final map = await app.pumpMap(
+        tester: tester,
+        isOpaque: false,
+        textureView: true,
+        background: const Color(0xFFFF0000),
+        styleJson: _emptyStyle,
+        viewport: CameraViewportState(
+          center: Point(coordinates: Position(0, 0)),
+          zoom: 1,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await app.waitForEvent(tester, app.events.onMapIdle.future);
+      return map;
+    });
 
     final snapshot = await map.snapshot();
     final fraction = await _transparentFraction(snapshot);
@@ -69,19 +72,22 @@ void main() {
     $,
   ) async {
     final tester = $.tester;
-    final map = await app.pumpMap(
-      tester: tester,
-      isOpaque: true,
-      textureView: true,
-      background: const Color(0xFFFF0000),
-      styleJson: _emptyStyle,
-      viewport: CameraViewportState(
-        center: Point(coordinates: Position(0, 0)),
-        zoom: 1,
-      ),
-    );
-    await tester.pumpAndSettle();
-    await app.waitForEvent(tester, app.events.onMapIdle.future);
+    final map = await tester.retryOnTimeout(() async {
+      final map = await app.pumpMap(
+        tester: tester,
+        isOpaque: true,
+        textureView: true,
+        background: const Color(0xFFFF0000),
+        styleJson: _emptyStyle,
+        viewport: CameraViewportState(
+          center: Point(coordinates: Position(0, 0)),
+          zoom: 1,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await app.waitForEvent(tester, app.events.onMapIdle.future);
+      return map;
+    });
 
     final snapshot = await map.snapshot();
     final fraction = await _transparentFraction(snapshot);

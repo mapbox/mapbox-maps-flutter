@@ -86,10 +86,18 @@ void main() {
     final controller = await _pumpMap($.tester);
     await _addGeoJsonSource(controller, 'add-source', dynamicData: true);
 
-    await controller.style.addGeoJSONSourceFeatures('add-source', 'batch-1', [
-      _feature(1, 0, 0),
-    ]);
-    await $.tester.pumpAndSettle();
+    // querySourceFeatures only sees loaded tiles, and updateData's re-tile
+    // is async, so wait for the source's sourcedata/loaded event (attached
+    // before the mutation, so it can't miss a fast-resolving update) before
+    // querying.
+    await waitForSourceData(
+      $.tester,
+      currentMap($.tester)!,
+      'add-source',
+      () => controller.style.addGeoJSONSourceFeatures('add-source', 'batch-1', [
+        _feature(1, 0, 0),
+      ]),
+    );
 
     final features = await _sourceFeatures(controller, 'add-source');
     expect(features.map((f) => f['id']), contains('1'));
@@ -100,19 +108,28 @@ void main() {
   ) async {
     final controller = await _pumpMap($.tester);
     await _addGeoJsonSource(controller, 'update-source', dynamicData: true);
-    await controller.style.addGeoJSONSourceFeatures(
+    final map = currentMap($.tester)!;
+    await waitForSourceData(
+      $.tester,
+      map,
       'update-source',
-      'batch-1',
-      [_feature(1, 0, 0)],
+      () => controller.style.addGeoJSONSourceFeatures(
+        'update-source',
+        'batch-1',
+        [_feature(1, 0, 0)],
+      ),
     );
-    await $.tester.pumpAndSettle();
 
-    await controller.style.updateGeoJSONSourceFeatures(
+    await waitForSourceData(
+      $.tester,
+      map,
       'update-source',
-      'batch-2',
-      [_feature(1, 10, 10)],
+      () => controller.style.updateGeoJSONSourceFeatures(
+        'update-source',
+        'batch-2',
+        [_feature(1, 10, 10)],
+      ),
     );
-    await $.tester.pumpAndSettle();
 
     final features = await _sourceFeatures(controller, 'update-source');
     final feature = features.lastWhere((f) => f['id'] == '1');
@@ -127,19 +144,28 @@ void main() {
   patrolTest('removeGeoJSONSourceFeatures removes a feature by id', ($) async {
     final controller = await _pumpMap($.tester);
     await _addGeoJsonSource(controller, 'remove-source', dynamicData: true);
-    await controller.style.addGeoJSONSourceFeatures(
+    final map = currentMap($.tester)!;
+    await waitForSourceData(
+      $.tester,
+      map,
       'remove-source',
-      'batch-1',
-      [_feature(1, 0, 0), _feature(2, 1, 1)],
+      () => controller.style.addGeoJSONSourceFeatures(
+        'remove-source',
+        'batch-1',
+        [_feature(1, 0, 0), _feature(2, 1, 1)],
+      ),
     );
-    await $.tester.pumpAndSettle();
 
-    await controller.style.removeGeoJSONSourceFeatures(
+    await waitForSourceData(
+      $.tester,
+      map,
       'remove-source',
-      'batch-2',
-      ['1'],
+      () => controller.style.removeGeoJSONSourceFeatures(
+        'remove-source',
+        'batch-2',
+        ['1'],
+      ),
     );
-    await $.tester.pumpAndSettle();
 
     final ids = (await _sourceFeatures(
       controller,

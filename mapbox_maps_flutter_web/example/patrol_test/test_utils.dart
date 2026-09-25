@@ -27,6 +27,38 @@ Future<JSMap> waitForMap(WidgetTester tester) async {
   return map;
 }
 
+/// Runs [mutate] and waits for a `sourcedata` event reporting [sourceId] as
+/// loaded (`isSourceLoaded == true`).
+///
+/// The listener is attached *before* [mutate] runs, unlike `map.once('idle',
+/// ...)`: GL JS can go idle synchronously inside a data-only mutation like
+/// `GeoJSONSource.updateData`, before an `once('idle', ...)` call attached
+/// afterwards has a chance to observe it, which drops the wait into a
+/// timeout that never resolves.
+Future<void> waitForSourceData(
+  WidgetTester tester,
+  JSMap map,
+  String sourceId,
+  Future<void> Function() mutate,
+) async {
+  final completer = Completer<void>();
+  void onSourceData(JSMapDataEvent event) {
+    if (event.sourceId == sourceId && event.isSourceLoaded == true) {
+      completer.complete();
+    }
+  }
+
+  final listener = onSourceData.toJS;
+  map.on('sourcedata', listener);
+  try {
+    await mutate();
+    await completer.future;
+  } finally {
+    map.off('sourcedata', listener);
+  }
+  await tester.pumpAndSettle();
+}
+
 /// Pumps [build]'s widget tree, wiring [onCreated] to complete once the map
 /// controller is created, and waits for the map to go idle.
 ///
