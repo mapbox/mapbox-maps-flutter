@@ -32,6 +32,34 @@ class LocationController
   @override
   Future<LocationComponentSettings> getSettings() async => _current;
 
+  /// Not supported on web: GL JS's `GeolocateControl` owns the puck's
+  /// position and exposes no hook to supply one, so there is no provider to
+  /// override.
+  @override
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) async {
+    throw UnsupportedError(
+      'setExternalLocation is not supported on web: GL JS GeolocateControl '
+      'owns the puck position and exposes no location-provider override.',
+    );
+  }
+
+  /// Not supported on web. See [setExternalLocation].
+  @override
+  Future<void> clearExternalLocation() async {
+    throw UnsupportedError(
+      'clearExternalLocation is not supported on web: GL JS GeolocateControl '
+      'owns the puck position and exposes no location-provider override.',
+    );
+  }
+
   @override
   Future<void> updateSettings(LocationComponentSettings settings) async {
     _current = _merge(_current, settings);
