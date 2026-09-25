@@ -135,13 +135,15 @@ extension JSCameraOptionsMerge on JSCameraOptions {
 /// the whole viewport. An empty query area never means that. Callers must
 /// special-case an empty point list before calling [toJS].
 extension RenderedQueryGeometryToJS on RenderedQueryGeometry {
-  JSAny toJS() => switch (this) {
+  JSQueryGeometry toJS() => switch (this) {
     ScreenCoordinateRenderedQueryGeometry(:final point) =>
-      point.toJSScreenPoint(),
-    ScreenBoxRenderedQueryGeometry(:final box) => <JSScreenPoint>[
-      box.min.toJSScreenPoint(),
-      box.max.toJSScreenPoint(),
-    ].toJS,
+      JSQueryGeometry.fromPoint(point.toJSScreenPoint()),
+    ScreenBoxRenderedQueryGeometry(:final box) => JSQueryGeometry.fromBox(
+      <JSScreenPoint>[
+        box.min.toJSScreenPoint(),
+        box.max.toJSScreenPoint(),
+      ].toJS,
+    ),
     ScreenCoordinateListRenderedQueryGeometry(:final points) => _boundingBoxFor(
       points,
     ),
@@ -153,12 +155,12 @@ extension RenderedQueryGeometryToJS on RenderedQueryGeometry {
 ///
 /// Throws [ArgumentError] if [points] is empty. See
 /// [RenderedQueryGeometryToJS] for why.
-JSAny _boundingBoxFor(List<ScreenCoordinate> points) {
+JSQueryGeometry _boundingBoxFor(List<ScreenCoordinate> points) {
   if (points.isEmpty) {
     throw ArgumentError.value(points, 'points', 'must not be empty');
   }
   if (points.length == 1) {
-    return points[0].toJSScreenPoint();
+    return JSQueryGeometry.fromPoint(points[0].toJSScreenPoint());
   }
   double minX = double.infinity, minY = double.infinity;
   double maxX = double.negativeInfinity, maxY = double.negativeInfinity;
@@ -168,10 +170,9 @@ JSAny _boundingBoxFor(List<ScreenCoordinate> points) {
     if (p.x > maxX) maxX = p.x;
     if (p.y > maxY) maxY = p.y;
   }
-  return <JSScreenPoint>[
-    JSScreenPoint(minX, minY),
-    JSScreenPoint(maxX, maxY),
-  ].toJS;
+  return JSQueryGeometry.fromBox(
+    <JSScreenPoint>[JSScreenPoint(minX, minY), JSScreenPoint(maxX, maxY)].toJS,
+  );
 }
 
 extension JSMapFeatureToQueried on JSMapFeature {

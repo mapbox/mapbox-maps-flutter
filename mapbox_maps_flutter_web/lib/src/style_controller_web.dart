@@ -728,8 +728,29 @@ final class StyleController implements StylePlatformInterface {
       throw _ni('localizeLabels');
 
   @override
-  Future<List<FeaturesetDescriptor>> getFeaturesets() =>
-      throw _ni('getFeaturesets');
+  Future<List<FeaturesetDescriptor>> getFeaturesets() async => [
+    ..._map
+        .getFeaturesetDescriptors()
+        .toDart
+        .map(
+          (descriptor) => FeaturesetDescriptor(
+            featuresetId: descriptor.featuresetId,
+            importId: descriptor.importId,
+            layerId: descriptor.layerId,
+          ),
+        ),
+    for (final importId in _importIds())
+      ..._map
+          .getFeaturesetDescriptors(importId)
+          .toDart
+          .map(
+            (descriptor) => FeaturesetDescriptor(
+              featuresetId: descriptor.featuresetId,
+              importId: descriptor.importId,
+              layerId: descriptor.layerId,
+            ),
+          ),
+  ];
 
   // ===== Helpers =====
 
