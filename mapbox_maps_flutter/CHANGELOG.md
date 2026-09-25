@@ -1,5 +1,6 @@
 ### main
 
+* [Web] Add support for `MapboxMap.coordinateBoundsForCamera`, `coordinateBoundsForCameraUnwrapped`, `coordinateBoundsZoomForCamera`, and `coordinateBoundsZoomForCameraUnwrapped`. On web, the bounds cover only the area inside the camera padding, and they include the terrain elevation.
 * [Web] Add `MapboxMap.getMapOptions()` support. The options come from the live Mapbox GL JS map state: the map container size and the browser device pixel ratio. Options that GL JS cannot change return fixed values; see the method documentation.
 * Add experimental `MapboxMap.indoor` (`IndoorManager`): indoor floor state as a stream (`indoorUpdates`) and `selectFloor(floorId)`, on Android, iOS, and web. Also fix `MapboxMap.indoorSelector` on all three platforms: implemented on web, no longer throws on Android, and appears by default on iOS.
 

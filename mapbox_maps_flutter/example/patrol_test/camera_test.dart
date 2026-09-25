@@ -144,7 +144,7 @@ void main() {
     expect(camera.anchor, isNull);
   });
 
-  patrolTest('coordinateBoundsForCamera', skip: kIsWeb, ($) async {
+  patrolTest('coordinateBoundsForCamera', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -158,15 +158,10 @@ void main() {
     );
     var camera = await mapboxMap.coordinateBoundsForCamera(option);
     expect(camera.infiniteBounds, false);
-    final northeast = camera.northeast;
-    final southwest = camera.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
+    _expectBoundsAroundCenter(camera);
   });
 
-  patrolTest('coordinateBoundsForCameraUnwrapped', skip: kIsWeb, ($) async {
+  patrolTest('coordinateBoundsForCameraUnwrapped', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -180,15 +175,10 @@ void main() {
     );
     var camera = await mapboxMap.coordinateBoundsForCameraUnwrapped(option);
     expect(camera.infiniteBounds, false);
-    final northeast = camera.northeast;
-    final southwest = camera.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
+    _expectBoundsAroundCenter(camera);
   });
 
-  patrolTest('coordinateBoundsZoomForCamera', skip: kIsWeb, ($) async {
+  patrolTest('coordinateBoundsZoomForCamera', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -203,14 +193,9 @@ void main() {
     var coordinate = await mapboxMap.coordinateBoundsZoomForCamera(option);
     expect(coordinate.zoom, 10);
     expect(coordinate.bounds.infiniteBounds, false);
-    final northeast = coordinate.bounds.northeast;
-    final southwest = coordinate.bounds.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
+    _expectBoundsAroundCenter(coordinate.bounds);
   });
-  patrolTest('coordinateBoundsZoomForCameraUnwrapped', skip: kIsWeb, ($) async {
+  patrolTest('coordinateBoundsZoomForCameraUnwrapped', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -227,13 +212,137 @@ void main() {
     );
     expect(coordinate.zoom, 10);
     expect(coordinate.bounds.infiniteBounds, false);
-    final northeast = coordinate.bounds.northeast;
-    final southwest = coordinate.bounds.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
+    _expectBoundsAroundCenter(coordinate.bounds);
   });
+  patrolTest('coordinateBoundsForCamera on the globe', ($) async {
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleJson: _globeStyle,
+    );
+    await $.tester.pumpAndSettle();
+
+    // At a low zoom near the pole, the globe shows the North Pole, so the
+    // bounds go to latitude 90 and cover all longitudes.
+    final polar = await mapboxMap.coordinateBoundsForCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(0, 80)),
+        zoom: 1,
+        bearing: 0,
+        pitch: 0,
+        padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+      ),
+    );
+    expect(polar.northeast.coordinates.lat, closeTo(90, 1e-6));
+    expect(polar.southwest.coordinates.lng, closeTo(-180, 1e-6));
+    expect(polar.northeast.coordinates.lng, closeTo(180, 1e-6));
+
+    // The globe cannot show more than one hemisphere.
+    final equator = await mapboxMap.coordinateBoundsForCamera(
+      CameraOptions(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 1,
+        bearing: 0,
+        pitch: 0,
+        padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+      ),
+    );
+    expect(equator.southwest.coordinates.lng, greaterThanOrEqualTo(-90));
+    expect(equator.northeast.coordinates.lng, lessThanOrEqualTo(90));
+    expect(equator.southwest.coordinates.lat, greaterThanOrEqualTo(-90));
+    expect(equator.northeast.coordinates.lat, lessThanOrEqualTo(90));
+  });
+
+  patrolTest('coordinateBoundsForCamera matches the projected corners', (
+    $,
+  ) async {
+    final tester = $.tester;
+    // A style without terrain, because on web terrain changes the bounds.
+    // A fixed map size, because MapboxMap.getSize() is not supported on iOS.
+    final size = Size(width: 300, height: 400);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleJson: _flatStyle,
+      width: size.width,
+      height: size.height,
+    );
+    await tester.pumpAndSettle();
+
+    for (final pitch in [0.0, 45.0]) {
+      final camera = CameraOptions(
+        center: Point(coordinates: Position(24.94, 60.17)),
+        zoom: 12,
+        bearing: 30,
+        pitch: pitch,
+        padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+      );
+      await mapboxMap.setCamera(camera);
+      await tester.pumpAndSettle();
+
+      // Read the live camera next to the corners, so that a camera change
+      // between the two calls cannot make them disagree.
+      final state = await mapboxMap.getCameraState();
+      final bounds = await mapboxMap.coordinateBoundsForCamera(
+        CameraOptions(
+          center: state.center,
+          zoom: state.zoom,
+          bearing: state.bearing,
+          pitch: state.pitch,
+          padding: camera.padding,
+        ),
+      );
+      // The bottom corners are below the horizon for both pitches, so they
+      // must be inside the bounds. With no pitch, all four corners are
+      // on the map plane.
+      final corners = await mapboxMap.coordinatesForPixels([
+        ScreenCoordinate(x: 0, y: size.height),
+        ScreenCoordinate(x: size.width, y: size.height),
+        if (pitch == 0) ...[
+          ScreenCoordinate(x: 0, y: 0),
+          ScreenCoordinate(x: size.width, y: 0),
+        ],
+      ]);
+      const tolerance = 1e-4;
+      for (final corner in corners) {
+        final lng = corner.coordinates.lng.toDouble();
+        final lat = corner.coordinates.lat.toDouble();
+        expect(
+          lng,
+          inInclusiveRange(
+            bounds.southwest.coordinates.lng - tolerance,
+            bounds.northeast.coordinates.lng + tolerance,
+          ),
+        );
+        expect(
+          lat,
+          inInclusiveRange(
+            bounds.southwest.coordinates.lat - tolerance,
+            bounds.northeast.coordinates.lat + tolerance,
+          ),
+        );
+      }
+      if (pitch == 0) {
+        final lngs = corners.map((c) => c.coordinates.lng.toDouble());
+        final lats = corners.map((c) => c.coordinates.lat.toDouble());
+        expect(
+          bounds.southwest.coordinates.lng,
+          closeTo(lngs.reduce((a, b) => a < b ? a : b), tolerance),
+        );
+        expect(
+          bounds.northeast.coordinates.lng,
+          closeTo(lngs.reduce((a, b) => a > b ? a : b), tolerance),
+        );
+        expect(
+          bounds.southwest.coordinates.lat,
+          closeTo(lats.reduce((a, b) => a < b ? a : b), tolerance),
+        );
+        expect(
+          bounds.northeast.coordinates.lat,
+          closeTo(lats.reduce((a, b) => a > b ? a : b), tolerance),
+        );
+      }
+    }
+  });
+
   patrolTest('pixelForCoordinate', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
@@ -354,4 +463,21 @@ void main() {
     expect(northeast.coordinates.lat, 90);
     expect(bounds.bounds.infiniteBounds, true);
   });
+}
+
+/// Checks that [bounds] contain the center (1, 2) of the camera that the
+/// `coordinateBounds*ForCamera` tests use. At zoom 10, the view is less than
+/// one degree wide on all screen sizes that the tests use.
+const _flatStyle =
+    '{"version":8,"projection":{"name":"mercator"},"sources":{},"layers":[]}';
+const _globeStyle =
+    '{"version":8,"projection":{"name":"globe"},"sources":{},"layers":[]}';
+
+void _expectBoundsAroundCenter(CoordinateBounds bounds) {
+  final southwest = bounds.southwest.coordinates;
+  final northeast = bounds.northeast.coordinates;
+  expect(1.0, inInclusiveRange(southwest.lng, northeast.lng));
+  expect(2.0, inInclusiveRange(southwest.lat, northeast.lat));
+  expect(northeast.lng - southwest.lng, lessThan(1.5));
+  expect(northeast.lat - southwest.lat, lessThan(1.5));
 }

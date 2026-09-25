@@ -53,10 +53,6 @@ class _CameraExampleState extends State<CameraExample> {
   CameraState? _state;
   CoordinateBounds? _bounds;
 
-  /// Cleared when the platform has no `coordinateBoundsForCamera`, which is
-  /// the case on web.
-  bool _boundsSupported = true;
-
   /// Set while a slider drives the camera. The camera-change listener also
   /// fires for these writes, and must not move the thumb the user holds.
   bool _driving = false;
@@ -73,23 +69,14 @@ class _CameraExampleState extends State<CameraExample> {
     final map = _mapboxMap;
     if (map == null) return;
     final state = await map.getCameraState();
-    CoordinateBounds? bounds;
-    if (_boundsSupported) {
-      try {
-        bounds = await map.coordinateBoundsForCamera(
-          CameraOptions(
-            center: state.center,
-            zoom: state.zoom,
-            pitch: state.pitch,
-            bearing: state.bearing,
-          ),
-        );
-      } on UnimplementedError {
-        // Not available on web. The flag stays false, so the call is not
-        // retried on every camera change.
-        _boundsSupported = false;
-      }
-    }
+    final bounds = await map.coordinateBoundsForCamera(
+      CameraOptions(
+        center: state.center,
+        zoom: state.zoom,
+        pitch: state.pitch,
+        bearing: state.bearing,
+      ),
+    );
     if (!mounted) return;
     setState(() {
       _state = state;
@@ -172,9 +159,8 @@ class _CameraExampleState extends State<CameraExample> {
     await map.flyTo(camera, MapAnimationOptions(duration: 1200));
   }
 
-  /// One corner of the visible bounds, or why there is no value to show.
+  /// One corner of the visible bounds, or a dash before the first value.
   String _cornerLabel(Point? corner) {
-    if (!_boundsSupported) return 'n/a on web';
     if (corner == null) return '—';
     return '${corner.coordinates.lng.toStringAsFixed(3)}, '
         '${corner.coordinates.lat.toStringAsFixed(3)}';

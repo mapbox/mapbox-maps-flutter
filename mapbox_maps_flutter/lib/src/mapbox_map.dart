@@ -197,20 +197,49 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   ) => _impl.cameraForGeometry(geometry, padding, bearing, pitch);
 
   /// Returns the coordinate bounds that are visible for a given [camera].
+  ///
+  /// On Android and iOS, the bounds cover the full map view, including the
+  /// area under the camera padding. Terrain elevation has no effect. Fields that [camera] does not set come from the current
+  /// camera. [CameraOptions.anchor] has no effect.
+  ///
+  /// {@template coordinate_bounds_for_camera_web}
+  /// On web, the bounds cover only the area inside the camera padding, and
+  /// they include the terrain elevation. The bounds can be slightly different
+  /// from the bounds on Android and iOS.
+  /// {@endtemplate}
   Future<CoordinateBounds> coordinateBoundsForCamera(CameraOptions camera) =>
       _impl.coordinateBoundsForCamera(camera);
 
-  /// Returns the coordinate bounds (unwrapped) visible for a given [camera].
+  /// Returns the coordinate bounds that are visible for a given [camera],
+  /// without longitude wrapping.
+  ///
+  /// Longitudes can be less than -180 or more than 180, so bounds that cross
+  /// the antimeridian stay continuous. Otherwise this is the same as
+  /// [coordinateBoundsForCamera].
+  ///
+  /// {@macro coordinate_bounds_for_camera_web}
   Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
     CameraOptions camera,
   ) => _impl.coordinateBoundsForCameraUnwrapped(camera);
 
-  /// Returns the coordinate bounds and zoom for a given [camera].
+  /// Returns the coordinate bounds and the zoom level for a given [camera].
+  ///
+  /// The zoom level is the zoom of [camera] after the map applies its camera
+  /// constraints, for example the zoom limits. Otherwise this is the same as
+  /// [coordinateBoundsForCamera].
+  ///
+  /// {@macro coordinate_bounds_for_camera_web}
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
     CameraOptions camera,
   ) => _impl.coordinateBoundsZoomForCamera(camera);
 
-  /// Returns the coordinate bounds (unwrapped) and zoom for a given [camera].
+  /// Returns the coordinate bounds and the zoom level for a given [camera],
+  /// without longitude wrapping.
+  ///
+  /// See [coordinateBoundsZoomForCamera] and
+  /// [coordinateBoundsForCameraUnwrapped].
+  ///
+  /// {@macro coordinate_bounds_for_camera_web}
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
     CameraOptions camera,
   ) => _impl.coordinateBoundsZoomForCameraUnwrapped(camera);
