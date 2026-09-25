@@ -60,6 +60,7 @@ class _MapInterfaceExampleState extends State<MapInterfaceExample> {
   int _renderedCount = 0;
   int _sourceCount = 0;
   Size? _size;
+  MapOptions? _mapOptions;
 
   // Query-box state.
   bool _boxToolActive = false;
@@ -125,6 +126,8 @@ class _MapInterfaceExampleState extends State<MapInterfaceExample> {
       ),
     );
     _styleReady = true;
+    final options = await map.getMapOptions();
+    if (mounted) setState(() => _mapOptions = options);
     await _refreshCounts();
   }
 
@@ -390,6 +393,11 @@ class _MapInterfaceExampleState extends State<MapInterfaceExample> {
               : '${size.width.toStringAsFixed(0)}×'
                     '${size.height.toStringAsFixed(0)}',
         ),
+        MapHudRow(
+          'pixel ratio',
+          _mapOptions?.pixelRatio.toStringAsFixed(2) ?? '—',
+        ),
+        MapHudRow('constrain mode', _mapOptions?.constrainMode?.name ?? '—'),
       ],
     );
   }

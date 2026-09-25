@@ -1,5 +1,6 @@
 ### main
 
+* [Web] Add `MapboxMap.getMapOptions()` support. The options come from the live Mapbox GL JS map state: the map container size and the browser device pixel ratio. Options that GL JS cannot change return fixed values; see the method documentation.
 * Add experimental `MapboxMap.indoor` (`IndoorManager`): indoor floor state as a stream (`indoorUpdates`) and `selectFloor(floorId)`, on Android, iOS, and web. Also fix `MapboxMap.indoorSelector` on all three platforms: implemented on web, no longer throws on Android, and appears by default on iOS.
 
 ### 3.0.0-rc.1

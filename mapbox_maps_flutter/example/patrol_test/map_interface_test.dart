@@ -179,11 +179,11 @@ void main() {
     expect(prefetchZoomDelta, 10);
   });
 
-  patrolTest('MapOptions', skip: kIsWeb, ($) async {
+  patrolTest('MapOptions', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
-    var options = await mapboxMap.getMapOptions();
+    final options = await mapboxMap.getMapOptions();
     expect(options.orientation, NorthOrientation.UPWARDS);
     expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
     expect(options.contextMode, isNull);
@@ -192,14 +192,34 @@ void main() {
     expect(options.crossSourceCollisions, true);
     expect(options.pixelRatio, tester.view.devicePixelRatio);
     expect(options.glyphsRasterizationOptions, isNull);
-    expect(options.size!.width, isNotNull);
-    expect(options.size!.height, isNotNull);
+    expect(options.size!.width, greaterThan(0));
+    expect(options.size!.height, greaterThan(0));
+  });
+
+  patrolTest('MapOptions reflect setters', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+
+    if (kIsWeb) {
+      // GL JS cannot change these options, so the web setters have no effect
+      // and the options keep their fixed values.
+      await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
+      await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
+      await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
+
+      final options = await mapboxMap.getMapOptions();
+      expect(options.orientation, NorthOrientation.UPWARDS);
+      expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
+      expect(options.viewportMode, ViewportMode.DEFAULT);
+      return;
+    }
 
     await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
     await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
     await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
 
-    options = await mapboxMap.getMapOptions();
+    final options = await mapboxMap.getMapOptions();
     expect(options.orientation, NorthOrientation.DOWNWARDS);
     expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
     expect(options.viewportMode, ViewportMode.FLIPPED_Y);
