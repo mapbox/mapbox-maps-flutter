@@ -127,6 +127,14 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
       );
 
+  /// The interface to access indoor floor state and selection.
+  @experimental
+  @override
+  late final IndoorController indoor = IndoorController(
+    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
+  );
+
   @override
   late final MapboxHttpService httpService = MapboxHttpService(
     binaryMessenger: _mapboxMapsPlatform.binaryMessenger,

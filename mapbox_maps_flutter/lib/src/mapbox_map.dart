@@ -10,6 +10,7 @@ import 'attribution_settings.dart';
 import 'compass_settings.dart';
 import 'gestures_settings.dart';
 import 'http_service.dart';
+import 'indoor.dart';
 import 'indoor_selector_settings.dart';
 import 'location_settings.dart';
 import 'logo_settings.dart';
@@ -67,6 +68,10 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   /// Provides access to the indoor floor selector settings.
   late final IndoorSelectorSettingsManager indoorSelector =
       IndoorSelectorSettingsManager(_impl.indoorSelector);
+
+  /// Provides access to indoor floor state and selection.
+  @experimental
+  late final IndoorManager indoor = IndoorManager(_impl.indoor);
 
   /// Provides access to annotation manager creation.
   late final AnnotationManager annotations = AnnotationManager(

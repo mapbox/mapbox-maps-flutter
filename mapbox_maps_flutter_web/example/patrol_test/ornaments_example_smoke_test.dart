@@ -40,18 +40,17 @@ void main() {
     await platformMap.logo.updateSettings(LogoSettings(marginLeft: 6));
     expect((await platformMap.logo.getSettings()).marginLeft, 6);
 
-    // The indoor selector is the one settings sub-interface left
-    // unimplemented on web. Confirm that is still the case, so this starts
-    // failing once it lands rather than silently passing.
-    //
-    // The stub throws synchronously (`=> throw ...`) rather than returning a
-    // failed Future, so this catches rather than using `throwsA`, which only
-    // matches an async error. The example page relies on the same: its
-    // try/catch around `await` handles both shapes.
-    expect(
-      () => platformMap.indoorSelector.getSettings(),
-      throwsUnimplementedError,
+    // The indoor selector's `enabled` setting defaults to true like the
+    // other four, but unlike them it isn't visually on by default: its
+    // toggle button only renders once indoor floor data exists, and this
+    // plain map has no indoor venue in view.
+    expect((await platformMap.indoorSelector.getSettings()).enabled, isTrue);
+    expect(indoorToggleElement(map), isNull);
+
+    await platformMap.indoorSelector.updateSettings(
+      IndoorSelectorSettings(marginRight: 5),
     );
+    expect((await platformMap.indoorSelector.getSettings()).marginRight, 5);
 
     // The implemented ornaments keep working regardless.
     expect(scaleBarElement(map), isNotNull);

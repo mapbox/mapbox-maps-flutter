@@ -9,6 +9,7 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.module.telemetry.UiFramework
+import com.mapbox.maps.plugin.Plugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.platform.PlatformView
@@ -39,6 +40,7 @@ class MapboxMapFactory(
       mapOptions = mapOptions?.toMapOptions(context) ?: MapOptions.Builder()
         .applyDefaultParams(context).build(),
       cameraOptions = cameraOptions?.toCameraOptions(context),
+      plugins = MapInitOptions.defaultPluginList + Plugin.Mapbox(Plugin.MAPBOX_INDOOR_SELECTOR_PLUGIN_ID),
       textureView = textureView,
       styleUri = styleUri
     ).apply {

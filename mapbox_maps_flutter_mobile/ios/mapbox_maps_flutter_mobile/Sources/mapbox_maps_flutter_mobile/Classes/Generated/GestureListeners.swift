@@ -110,6 +110,10 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
       return PolygonAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
     case 148:
       return PolylineAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 149:
+      return IndoorFloor.fromList(self.readValue() as! [Any?])
+    case 150:
+      return IndoorState.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -177,6 +181,12 @@ private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? PolylineAnnotationInteractionContext {
       super.writeByte(148)
+      super.writeValue(value.toList())
+    } else if let value = value as? IndoorFloor {
+      super.writeByte(149)
+      super.writeValue(value.toList())
+    } else if let value = value as? IndoorState {
+      super.writeByte(150)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -315,6 +325,20 @@ class PitchEventsStreamHandler: PigeonEventChannelWrapper<MapContentGestureConte
       channelName += ".\(instanceName)"
     }
     let internalStreamHandler = PigeonStreamHandler<MapContentGestureContext>(wrapper: streamHandler)
+    let channel = FlutterEventChannel(name: channelName, binaryMessenger: messenger, codec: gestureListenersPigeonMethodCodec)
+    channel.setStreamHandler(internalStreamHandler)
+  }
+}
+      
+class IndoorUpdatesStreamHandler: PigeonEventChannelWrapper<IndoorState> {
+  static func register(with messenger: FlutterBinaryMessenger,
+                      instanceName: String = "",
+                      streamHandler: IndoorUpdatesStreamHandler) {
+    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._indoorUpdates"
+    if !instanceName.isEmpty {
+      channelName += ".\(instanceName)"
+    }
+    let internalStreamHandler = PigeonStreamHandler<IndoorState>(wrapper: streamHandler)
     let channel = FlutterEventChannel(name: channelName, binaryMessenger: messenger, codec: gestureListenersPigeonMethodCodec)
     channel.setStreamHandler(internalStreamHandler)
   }

@@ -25,6 +25,7 @@ import 'platform.dart' show isMobile, isWeb;
 import 'platform/debug_options_example.dart';
 import 'platform/map_interface_example.dart';
 import 'platform/map_recorder_example.dart';
+import 'styles/indoor_example.dart';
 import 'styles/model_comparison_example.dart';
 import 'styles/sources_example.dart';
 import 'styles/standard_style_import_example.dart';
@@ -82,6 +83,15 @@ final List<Example> examples = [
         'Toggle and reposition the compass, scale bar, logo and '
         'attribution.',
     builder: (_) => const OrnamentsExample(),
+  ),
+  Example(
+    slug: 'indoor',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.layers_outlined),
+    title: 'Indoor floors',
+    subtitle:
+        'Switch floors of a supported indoor venue with the built-in selector, and observe changes via mapboxMap.indoor.',
+    builder: (_) => const IndoorExample(),
   ),
   Example(
     slug: 'gestures',

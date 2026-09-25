@@ -3750,6 +3750,78 @@ data class IndoorSelectorSettings(
 }
 
 /**
+ * A single floor within an indoor venue.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IndoorFloor(
+  val id: String,
+  val name: String
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IndoorFloor {
+      val id = pigeonVar_list[0] as String
+      val name = pigeonVar_list[1] as String
+      return IndoorFloor(id, name)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      name,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is IndoorFloor) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return id == other.id &&
+      name == other.name
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * The current indoor state: available floors and the selected floor.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IndoorState(
+  val floors: List<IndoorFloor>,
+  val selectedFloorId: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IndoorState {
+      val floors = pigeonVar_list[0] as List<IndoorFloor>
+      val selectedFloorId = pigeonVar_list[1] as String?
+      return IndoorState(floors, selectedFloorId)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      floors,
+      selectedFloorId,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is IndoorState) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsPlatformInterfaceDataTypes(floors, other.floors) &&
+      selectedFloorId == other.selectedFloorId
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * A structure that defines additional information about map content gesture.
  *
  * Generated class from Pigeon that represents data sent in messages.

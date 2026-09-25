@@ -7,6 +7,7 @@ export 'src/attribution_settings.dart';
 export 'src/camera_state_extensions.dart';
 export 'src/compass_settings.dart';
 export 'src/gestures_settings.dart';
+export 'src/indoor.dart';
 export 'src/indoor_selector_settings.dart';
 export 'src/location_settings.dart';
 export 'src/logo_settings.dart';

@@ -16,6 +16,8 @@ import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 import 'bindings/style_bindings.dart';
 import 'gestures_controller.dart';
+import 'indoor/indoor_controller.dart';
+import 'indoor/indoor_selector_controller.dart';
 import 'interaction_handler.dart';
 import 'location/location_controller.dart';
 import 'ornaments/attribution_controller.dart';
@@ -36,8 +38,8 @@ import 'viewport/viewport_web.dart';
 /// yet" or [UnsupportedError] for "web does not support this by design".
 ///
 /// Sub-interfaces are backed by GL JS where they are implemented — style,
-/// gestures, location, the scale bar, the compass, attribution and the logo
-/// — and otherwise return the throwing stubs in
+/// gestures, location, the scale bar, the compass, attribution, the logo
+/// and indoor — and otherwise return the throwing stubs in
 /// [unsupported_sub_interfaces.dart].
 base class MapboxMapWeb implements MapboxMapPlatformInterface {
   final JSMap _map;
@@ -47,7 +49,8 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     // Every ornament is enabled by default, matching the mobile SDKs, so the
     // controllers are built here rather than on first use. A `late final`
     // field would leave the map without the ornaments `getSettings` reports
-    // until something touched the field.
+    // — or, for the indoor selector, without its `IndoorControl` ever being
+    // added — until something touched the field.
     //
     // GL JS builds the corner containers, the attribution control and the
     // logo in the `Map` constructor, so this is safe before the `load` event.
@@ -55,6 +58,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     compass;
     attribution;
     logo;
+    indoorSelector;
   }
 
   /// The GL JS map this wraps. For tests that need to assert on the DOM GL
@@ -98,8 +102,13 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     _map,
   ).addToDisposeBag(_disposables);
   @override
+  @experimental
+  late final IndoorPlatformInterface indoor = IndoorController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
   late final IndoorSelectorSettingsPlatformInterface indoorSelector =
-      UnsupportedIndoorSelectorSettingsWeb();
+      IndoorSelectorController(_map, indoor).addToDisposeBag(_disposables);
   @override
   late final AnnotationManagerPlatformInterface annotations =
       UnsupportedAnnotationManagerWeb();
