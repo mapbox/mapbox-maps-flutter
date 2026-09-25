@@ -311,23 +311,72 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   }
 
   @override
-  Future<CoordinateBounds> coordinateBoundsForCamera(CameraOptions camera) =>
-      throw _ni('coordinateBoundsForCamera');
+  Future<CoordinateBounds> coordinateBoundsForCamera(
+    CameraOptions camera,
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: true).bounds;
 
   @override
   Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
     CameraOptions camera,
-  ) => throw _ni('coordinateBoundsForCameraUnwrapped');
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: false).bounds;
 
   @override
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
     CameraOptions camera,
-  ) => throw _ni('coordinateBoundsZoomForCamera');
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: true);
 
   @override
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
     CameraOptions camera,
-  ) => throw _ni('coordinateBoundsZoomForCameraUnwrapped');
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: false);
+
+  /// GL JS can only report the bounds of the current camera, so [camera] is
+  /// applied to a copy of the map transform. Fields that [camera] leaves out
+  /// come from the current camera. The copy constrains the camera the same
+  /// as `jumpTo` does, and its zoom is the returned zoom.
+  CoordinateBoundsZoom _coordinateBoundsZoomForCamera(
+    CameraOptions camera, {
+    required bool wrapped,
+  }) {
+    final transform = _map.transform.clone();
+    if (camera.padding case final p?) transform.padding = p.toJSPadding();
+    if (camera.zoom case final z?) transform.zoom = z;
+    if (camera.center case final c?) transform.center = c.toJSLngLat();
+    if (camera.bearing case final b?) transform.bearing = b;
+    if (camera.pitch case final p?) transform.pitch = p;
+
+    final bounds = transform.getBounds();
+    var west = bounds.getSouthWest().lng;
+    var east = bounds.getNorthEast().lng;
+    if (wrapped) {
+      (west, east) = _wrapLongitudes(west, east);
+    }
+    return CoordinateBoundsZoom(
+      bounds: CoordinateBounds(
+        southwest: Point(
+          coordinates: Position(west, bounds.getSouthWest().lat),
+        ),
+        northeast: Point(
+          coordinates: Position(east, bounds.getNorthEast().lat),
+        ),
+        infiniteBounds: false,
+      ),
+      zoom: transform.zoom,
+    );
+  }
+
+  /// Moves the longitudes [west] and [east] into the range [-180, 180].
+  /// Bounds that cross the antimeridian become the full longitude range.
+  static (double, double) _wrapLongitudes(double west, double east) {
+    if (east - west >= 360) return (-180, 180);
+    final wrappedWest = _wrapLongitude(west);
+    final wrappedEast = _wrapLongitude(east);
+    if (wrappedWest > wrappedEast) return (-180, 180);
+    return (wrappedWest, wrappedEast);
+  }
+
+  static double _wrapLongitude(double lng) =>
+      lng == 180 ? lng : (lng + 180) % 360 - 180;
 
   // ===== Camera bounds =====
 

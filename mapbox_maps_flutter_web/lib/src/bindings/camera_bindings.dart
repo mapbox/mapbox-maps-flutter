@@ -78,4 +78,26 @@ extension MapCamera on JSMap {
   external double getMinPitch();
   external void setMaxPitch(double? pitch);
   external double getMaxPitch();
+
+  /// The camera state of the map.
+  external JSTransform get transform;
+}
+
+/// The GL JS `Transform`, which holds the camera state and geometry of a map.
+///
+/// This is not part of the documented GL JS API. The setters constrain the
+/// camera the same as `jumpTo` does.
+extension type JSTransform._(JSObject _) implements JSObject {
+  /// Returns a copy that changes without an effect on the map.
+  external JSTransform clone();
+
+  external double get zoom;
+  external set zoom(double value);
+  external set center(JSLngLat value);
+  external set bearing(double value);
+  external set pitch(double value);
+  external set padding(JSPadding value);
+
+  /// Returns the smallest bounds that contain the area inside the padding.
+  external JSLngLatBounds getBounds();
 }
