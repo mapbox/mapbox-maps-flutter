@@ -358,6 +358,28 @@ void main() {
     MapboxMapsOptions.setWorldview(null);
   });
 
+  patrolTest('MapboxMapsOptions language and worldview', ($) async {
+    addTearDown(() {
+      MapboxMapsOptions.setLanguage(null);
+      MapboxMapsOptions.setWorldview(null);
+    });
+
+    final language = "fi";
+    final worldview = "FI";
+
+    MapboxMapsOptions.setLanguage(language);
+    MapboxMapsOptions.setWorldview(worldview);
+
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+
+    await app.pumpMap(tester: $.tester);
+    await $.tester.pumpAndSettle();
+
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+  });
+
   patrolTest('queryRenderedFeatures', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);

@@ -72,6 +72,9 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
     bool? preserveDrawingBuffer,
     JSString? style,
   });
+
+  external set language(String value);
+  external set worldview(String value);
 }
 
 @JS('LngLat')
@@ -157,6 +160,23 @@ extension type JSMap._(JSObject _) implements JSObject {
 
   /// Returns the map's current pitch (tilt).
   external double getPitch();
+
+  /// Returns the language used for map labels and UI, if set.
+  external String? getLanguage();
+
+  /// Sets the language used for map labels and UI; reloads the sources that
+  /// carry localized labels.
+  ///
+  /// Omit [language] to clear it. Passing `null` is sent as JavaScript `null`,
+  /// which the scale bar cannot format.
+  external void setLanguage([String? language]);
+
+  /// Returns the map's worldview code, if set.
+  external String? getWorldview();
+
+  /// Sets the map's worldview; reloads the sources that carry worldview-
+  /// dependent features.
+  external void setWorldview(String? worldview);
 
   /// Returns the HTMLElement the map is rendered into.
   external HTMLElement getContainer();

@@ -1,3 +1,5 @@
+// ignore_for_file: experimental_member_use
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -58,6 +60,8 @@ class _StyleExampleState extends State<StyleExample> {
   var _scene = _Scene.basemap;
   var _styleUri = MapboxStyles.STANDARD;
   var _lightPreset = 'day';
+  var _language = '';
+  var _worldview = '';
   var _layerColorName = 'Blue';
   var _layerWidth = 8.0;
   var _layerAdded = false;
@@ -68,9 +72,26 @@ class _StyleExampleState extends State<StyleExample> {
   int _sourceCount = 0;
   var _styleSize = '—';
 
+  @override
+  void dispose() {
+    MapboxMapsOptions.setLanguage(null);
+    MapboxMapsOptions.setWorldview(null);
+    super.dispose();
+  }
+
   void _onMapCreated(MapboxMap mapboxMap) {
     applyCatalogOrnamentDefaults(context, mapboxMap);
     _mapboxMap = mapboxMap;
+  }
+
+  void _setLanguage(String language) {
+    MapboxMapsOptions.setLanguage(language.isEmpty ? null : language);
+    setState(() => _language = language);
+  }
+
+  void _setWorldview(String worldview) {
+    MapboxMapsOptions.setWorldview(worldview.isEmpty ? null : worldview);
+    setState(() => _worldview = worldview);
   }
 
   /// Re-reads what the style contains. A style swap replaces every layer, so
@@ -297,11 +318,38 @@ class _StyleExampleState extends State<StyleExample> {
           },
         ),
       ),
+    ControlRow(
+      label: 'Language',
+      child: ControlChoices<String>(
+        options: const {
+          '': 'Default',
+          'en': 'English',
+          'ja': 'Japanese',
+          'vi': 'Vietnamese',
+        },
+        value: _language,
+        onChanged: _setLanguage,
+      ),
+    ),
+    ControlRow(
+      label: 'Worldview',
+      child: ControlChoices<String>(
+        options: const {
+          '': 'Default',
+          'US': 'US',
+          'JP': 'Japan',
+          'IN': 'India',
+        },
+        value: _worldview,
+        onChanged: _setWorldview,
+      ),
+    ),
     const SizedBox(height: 4),
     const Text(
       'Each style is a different set of layers and sources — watch the counts '
       'change as you swap. The light preset is a config property of the '
-      'Standard style import, not a separate style.',
+      'Standard style import, not a separate style. Language and worldview '
+      'apply to every map, and reload the sources of the one on screen.',
       style: TextStyle(
         fontSize: 11,
         height: 1.35,
