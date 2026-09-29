@@ -19,6 +19,12 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     implements
         MapboxOptionsPlatformInterface,
         MapboxMapsOptionsPlatformInterface {
+  final _language = ValueNotifier<String?>(null);
+  final _worldview = ValueNotifier<String?>(null);
+
+  ValueListenable<String?> get language => _language;
+  ValueListenable<String?> get worldview => _worldview;
+
   /// Registers the platform implementation.
   static void registerWith(Registrar registrar) {
     MapboxMapsFlutterPlatform.instance = MapboxMapsFlutterWeb();
@@ -58,6 +64,8 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       viewport: viewport,
       viewportTransition: viewportTransition,
       viewportTransitionCompletion: viewportTransitionCompletion,
+      language: language,
+      worldview: worldview,
     );
   }
 
@@ -123,20 +131,16 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       );
 
   @override
-  Future<String?> getWorldview() =>
-      throw UnimplementedError('getWorldview() is not implemented on web.');
+  Future<String?> getWorldview() async => worldview.value;
 
   @override
-  void setWorldview(String? worldview) =>
-      throw UnimplementedError('setWorldview() is not implemented on web.');
+  void setWorldview(String? value) => _worldview.value = value;
 
   @override
-  Future<String?> getLanguage() =>
-      throw UnimplementedError('getLanguage() is not implemented on web.');
+  Future<String?> getLanguage() async => language.value;
 
   @override
-  void setLanguage(String? language) =>
-      throw UnimplementedError('setLanguage() is not implemented on web.');
+  void setLanguage(String? value) => _language.value = value;
 
   @override
   Future<void> clearData() {

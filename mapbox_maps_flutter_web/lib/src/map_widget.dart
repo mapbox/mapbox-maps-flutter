@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:js_interop';
 import 'dart:ui_web';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:web/web.dart';
@@ -20,6 +21,8 @@ class MapWebWidget extends StatefulWidget {
   final ViewportState? viewport;
   final ViewportTransition? viewportTransition;
   final void Function(bool)? viewportTransitionCompletion;
+  final ValueListenable<String?>? language;
+  final ValueListenable<String?>? worldview;
 
   const MapWebWidget({
     super.key,
@@ -29,6 +32,8 @@ class MapWebWidget extends StatefulWidget {
     this.viewport,
     this.viewportTransition,
     this.viewportTransitionCompletion,
+    this.language,
+    this.worldview,
   });
 
   @override
@@ -68,7 +73,21 @@ class _MapWebWidgetState extends State<MapWebWidget> {
         ..style.width = '100%';
       return _mapElement;
     });
+
+    widget.language?.addListener(_applyLanguage);
+    widget.worldview?.addListener(_applyWorldview);
   }
+
+  void _applyLanguage() {
+    final value = widget.language?.value;
+    if (value == null) {
+      _currentMap?.setLanguage();
+    } else {
+      _currentMap?.setLanguage(value);
+    }
+  }
+
+  void _applyWorldview() => _currentMap?.setWorldview(widget.worldview?.value);
 
   void _onPlatformViewCreated(int viewId) async {
     await ensureMapboxGlJsLoaded();
@@ -106,14 +125,17 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     // The style must be set here, not in a later `setStyle` call. gl-js
     // otherwise loads its empty default style and fires `style.load` for it,
     // then discards everything the caller added from that callback.
-    final nativeMap = JSMap(
-      JSMapOptions(
-        container: _mapElement,
-        minZoom: 0,
-        preserveDrawingBuffer: true,
-        style: widget.styleUri.toJS,
-      ),
+    final options = JSMapOptions(
+      container: _mapElement,
+      minZoom: 0,
+      preserveDrawingBuffer: true,
+      style: widget.styleUri.toJS,
     );
+    final languageValue = widget.language?.value;
+    if (languageValue != null) options.language = languageValue;
+    final worldviewValue = widget.worldview?.value;
+    if (worldviewValue != null) options.worldview = worldviewValue;
+    final nativeMap = JSMap(options);
     _currentMap = nativeMap;
 
     _hitTestGuard = HitTestGuard(
@@ -171,6 +193,8 @@ class _MapWebWidgetState extends State<MapWebWidget> {
 
   @override
   void dispose() {
+    widget.language?.removeListener(_applyLanguage);
+    widget.worldview?.removeListener(_applyWorldview);
     _hitTestGuard?.dispose();
     _hitTestGuard = null;
     _eventBridge?.dispose();

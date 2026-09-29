@@ -47,12 +47,22 @@ final class MapboxMapsOptions {
   static Future<String?> getWorldview() => _impl.getWorldview();
 
   /// Sets the worldview preference (ISO 3166-1 alpha-2 country code).
+  ///
+  /// Applies to every map, including the ones already on screen, whose
+  /// sources reload. On Android and iOS, an invalid worldview is reported
+  /// through [MapWidget.onMapLoadErrorListener]. On web, Mapbox GL JS does
+  /// not surface that through the same listener.
   static void setWorldview(String? worldview) => _impl.setWorldview(worldview);
 
   /// Language preference (BCP-47 tag), if set.
   static Future<String?> getLanguage() => _impl.getLanguage();
 
   /// Sets the language preference (BCP-47 tag).
+  ///
+  /// Applies to every map, including the ones already on screen, whose
+  /// sources reload. On Android and iOS, an invalid language is reported
+  /// through [MapWidget.onMapLoadErrorListener]. On web, Mapbox GL JS does
+  /// not surface that through the same listener.
   static void setLanguage(String? language) => _impl.setLanguage(language);
 
   /// Clears all temporary map data from the data path.
