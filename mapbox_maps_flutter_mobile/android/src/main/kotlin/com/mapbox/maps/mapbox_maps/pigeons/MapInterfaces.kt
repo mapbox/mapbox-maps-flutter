@@ -3823,6 +3823,8 @@ interface StyleManager {
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
   fun setStyleTerrainProperty(property: String, value: Any, callback: (Result<Unit>) -> Unit)
+  /** Removes the style terrain. */
+  fun removeStyleTerrain()
   /**
    * Get an `image` from the style.
    *
@@ -4933,6 +4935,22 @@ interface StyleManager {
                 reply.reply(wrapResult(null))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleTerrain$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              api.removeStyleTerrain()
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

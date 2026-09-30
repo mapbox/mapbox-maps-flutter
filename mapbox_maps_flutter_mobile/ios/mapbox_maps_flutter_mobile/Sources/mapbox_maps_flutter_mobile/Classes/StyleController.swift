@@ -310,6 +310,10 @@ final class StyleController: StyleManager {
         }
     }
 
+    func removeStyleTerrain() {
+        styleManager.removeTerrain()
+    }
+
     func getStyleImage(imageId: String, completion: @escaping (Result<StyleImageWireRgba?, Error>) -> Void) {
         guard let image = styleManager.image(withId: imageId) else {
             completion(.success(nil))

@@ -353,6 +353,13 @@ base class StyleManager {
   Future<void> setStyleTerrainProperty(String property, Object value) =>
       _impl.setStyleTerrainProperty(property, value);
 
+  /// Removes the style terrain.
+  ///
+  /// On web with the globe projection, terrain defined by the style's imports
+  /// applies again after removal. Android, iOS and web with other projections
+  /// disable all terrain.
+  Future<void> removeStyleTerrain() => _impl.removeStyleTerrain();
+
   // ===== Image lookup =====
 
   /// Returns a previously-added style image, or null when [imageId] is unknown.

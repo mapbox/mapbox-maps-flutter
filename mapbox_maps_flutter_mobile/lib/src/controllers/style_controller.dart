@@ -261,6 +261,9 @@ class StyleController implements StylePlatformInterface {
   Future<void> setStyleTerrainProperty(String property, Object value) =>
       _api.setStyleTerrainProperty(property, value);
 
+  @override
+  Future<void> removeStyleTerrain() => _api.removeStyleTerrain();
+
   // ===== Image lookup =====
 
   @override

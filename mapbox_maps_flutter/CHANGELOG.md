@@ -1,5 +1,7 @@
 ### main
 
+* [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
+* Add `StyleManager.removeStyleTerrain()` to remove the style terrain while keeping its source. On web with the globe projection, terrain defined by the style's imports applies again after removal.
 * [Web] Bump Mapbox GL JS to 3.32.0.
 * [Web] Add `MapboxMapsOptions` language and worldview support. As on the other platforms, both apply to the maps already on screen and to the ones created later.
 * [Web] Add support for `MapboxMap.coordinateBoundsForCamera`, `coordinateBoundsForCameraUnwrapped`, `coordinateBoundsZoomForCamera`, and `coordinateBoundsZoomForCameraUnwrapped`. On web, the bounds cover only the area inside the camera padding, and they include the terrain elevation.
