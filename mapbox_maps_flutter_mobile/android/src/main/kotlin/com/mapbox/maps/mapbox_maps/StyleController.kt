@@ -10,6 +10,7 @@ import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
+import com.mapbox.maps.extension.style.terrain.generated.removeTerrain
 import com.mapbox.maps.mapbox_maps.pigeons.AmbientLight
 import com.mapbox.maps.mapbox_maps.pigeons.CameraOptions
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
@@ -590,6 +591,10 @@ class StyleController(private val context: Context, private val styleManager: Ma
     } else {
       callback(Result.success(Unit))
     }
+  }
+
+  override fun removeStyleTerrain() {
+    styleManager.removeTerrain()
   }
 
   override fun getStyleImage(imageId: String, callback: (Result<StyleImageWireRgba?>) -> Unit) {

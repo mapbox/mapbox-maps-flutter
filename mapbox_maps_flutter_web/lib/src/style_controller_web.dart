@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:core';
+import 'dart:core' as core;
 import 'dart:developer';
 import 'dart:js_interop';
 
@@ -688,16 +690,37 @@ final class StyleController implements StylePlatformInterface {
   // ===== Terrain =====
 
   @override
-  Future<void> setStyleTerrain(String properties) async =>
-      throw _ni('setStyleTerrain');
+  Future<void> setStyleTerrain(String properties) async {
+    final Object? parsed = jsonDecode(properties);
+    if (parsed is! core.Map) {
+      throw ArgumentError.value(
+        properties,
+        'properties',
+        'Expected a JSON object.',
+      );
+    }
+    _map.setTerrain(parsed.jsify());
+  }
 
   @override
-  Future<StylePropertyValue> getStyleTerrainProperty(String property) async =>
-      throw _ni('getStyleTerrainProperty');
+  Future<StylePropertyValue> getStyleTerrainProperty(String property) async {
+    final terrain = _map.getTerrain()?.dartify();
+    if (terrain is! core.Map || !terrain.containsKey(property)) {
+      return StylePropertyValue(
+        value: null,
+        kind: StylePropertyValueKind.UNDEFINED,
+      );
+    }
+    return _wrap(terrain[property], property: property);
+  }
 
   @override
-  Future<void> setStyleTerrainProperty(String property, Object value) async =>
-      throw _ni('setStyleTerrainProperty');
+  Future<void> setStyleTerrainProperty(String property, Object value) async {
+    _map.setTerrain(<String, Object>{property: value}.jsify());
+  }
+
+  @override
+  Future<void> removeStyleTerrain() async => _map.setTerrain(null);
 
   // ===== Projection =====
 
@@ -837,11 +860,19 @@ final class StyleController implements StylePlatformInterface {
   /// extension-method dispatch inside the function resolves statically;
   /// callers that hand in a `dynamic` from a `Map<dynamic, dynamic>` get
   /// the implicit-cast for free.
-  StylePropertyValue _wrap(Object? value) {
+  StylePropertyValue _wrap(Object? value, {String? property}) {
     if (value == null) {
       return StylePropertyValue(
         value: null,
         kind: StylePropertyValueKind.UNDEFINED,
+      );
+    }
+    if (property != null &&
+        property.endsWith('-transition') &&
+        value is core.Map) {
+      return StylePropertyValue(
+        value: value,
+        kind: StylePropertyValueKind.TRANSITION,
       );
     }
     // A list is only an expression if its head is one of the style-spec

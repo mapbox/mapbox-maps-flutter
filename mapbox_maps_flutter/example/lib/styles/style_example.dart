@@ -234,6 +234,7 @@ class _StyleExampleState extends State<StyleExample> {
         json.encode({'source': _terrainSourceId, 'exaggeration': 1.5}),
       );
     } else if (await map.styleSourceExists(_terrainSourceId)) {
+      await map.removeStyleTerrain();
       await map.removeStyleSource(_terrainSourceId);
     }
     await _refresh();
@@ -418,8 +419,7 @@ class _StyleExampleState extends State<StyleExample> {
     ControlSwitch(
       label: 'Terrain exaggeration',
       value: _terrain,
-      // Terrain has no web implementation, so the switch is inert there.
-      onChanged: kIsWeb ? null : _setTerrain,
+      onChanged: _setTerrain,
     ),
     if (!kIsWeb)
       ControlAction(
@@ -430,7 +430,8 @@ class _StyleExampleState extends State<StyleExample> {
     const SizedBox(height: 4),
     Text(
       kIsWeb
-          ? 'Directional and ambient lights, and terrain, are native-only.'
+          ? 'Directional and ambient lights are native-only. Terrain lifts '
+                'the basemap into real elevation.'
           : 'Directional and ambient lights give finer control over shadow '
                 'direction and intensity. Terrain lifts the basemap into '
                 'real elevation.',

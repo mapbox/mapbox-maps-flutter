@@ -243,6 +243,9 @@ abstract interface class StylePlatformInterface {
   /// Sets a value on a single terrain property.
   Future<void> setStyleTerrainProperty(String property, Object value);
 
+  /// Removes the style terrain.
+  Future<void> removeStyleTerrain();
+
   // ===== Image lookup =====
 
   /// Returns a previously-added style image, or null if none exists for [imageId].

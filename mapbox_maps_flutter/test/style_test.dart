@@ -58,6 +58,7 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   int setStyleLightPropertyCallCount = 0;
   int getStyleTerrainPropertyCallCount = 0;
   int setStyleTerrainPropertyCallCount = 0;
+  int removeStyleTerrainCallCount = 0;
   int getStyleImageCallCount = 0;
   int invalidateStyleCustomGeometrySourceTileCallCount = 0;
   int invalidateStyleCustomGeometrySourceRegionCallCount = 0;
@@ -553,6 +554,11 @@ class MockStylePlatformInterface implements StylePlatformInterface {
     setStyleTerrainPropertyCallCount++;
     lastProperty = property;
     lastValue = value;
+  }
+
+  @override
+  Future<void> removeStyleTerrain() async {
+    removeStyleTerrainCallCount++;
   }
 
   @override
@@ -1053,6 +1059,12 @@ void main() {
       expect(mockImpl.setStyleTerrainPropertyCallCount, 1);
       expect(mockImpl.lastProperty, 'exaggeration');
       expect(mockImpl.lastValue, 1.5);
+    });
+
+    test('removeStyleTerrain delegates to interface', () async {
+      await style.removeStyleTerrain();
+
+      expect(mockImpl.removeStyleTerrainCallCount, 1);
     });
 
     // ===== Image lookup =====

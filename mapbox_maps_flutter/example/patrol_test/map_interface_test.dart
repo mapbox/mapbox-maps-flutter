@@ -113,6 +113,45 @@ void main() {
     }
   });
 
+  patrolTest('style terrain', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+
+    await mapboxMap.addSource(
+      RasterDemSource(
+        id: 'terrain-dem',
+        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        tileSize: 514,
+      ),
+    );
+    await mapboxMap.setStyleTerrain(
+      json.encode({'source': 'terrain-dem', 'exaggeration': 1.5}),
+    );
+
+    final source = await mapboxMap.getStyleTerrainProperty('source');
+    expect(source.kind, StylePropertyValueKind.CONSTANT);
+    expect(source.value, 'terrain-dem');
+
+    final exaggeration = await mapboxMap.getStyleTerrainProperty(
+      'exaggeration',
+    );
+    expect(exaggeration.kind, StylePropertyValueKind.CONSTANT);
+    expect(exaggeration.value, 1.5);
+
+    await mapboxMap.setStyleTerrainProperty('exaggeration', 2.0);
+    final updated = await mapboxMap.getStyleTerrainProperty('exaggeration');
+    expect(updated.value, 2.0);
+
+    await mapboxMap.removeStyleTerrain();
+    final removed = await mapboxMap.getStyleTerrainProperty('source');
+    // On web the style's own terrain (from its imports) takes over.
+    expect(removed.value, isNot('terrain-dem'));
+
+    await mapboxMap.removeStyleSource('terrain-dem');
+    expect(await mapboxMap.styleSourceExists('terrain-dem'), isFalse);
+  });
+
   patrolTest('clearData', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
