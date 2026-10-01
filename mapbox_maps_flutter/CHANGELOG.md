@@ -44,6 +44,8 @@
 * Promote `SymbolLayer.symbolZOffset` to stable.
 * Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
 
+### 2.30.4
+
 ### 2.30.3
 
 ### 2.30.2
