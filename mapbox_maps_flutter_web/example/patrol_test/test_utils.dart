@@ -96,8 +96,11 @@ Future<MapboxMapPlatformInterface> pumpMapTree(
     );
     await Future<void>.delayed(const Duration(milliseconds: 100));
   });
+  // onMapCreated fires only after the GL JS script loads, which
+  // waitForMap's pumpAndSettle doesn't wait for.
+  final platformMap = await created.future.timeout(const Duration(seconds: 30));
   await waitForMap(tester);
-  return created.future.timeout(const Duration(seconds: 5));
+  return platformMap;
 }
 
 /// Resolves the GL JS canvas container, the DOM node GL JS attaches its own
