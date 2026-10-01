@@ -1,5 +1,7 @@
 ### main
 
+### 3.0.0
+
 * [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
 * Add `StyleManager.removeStyleTerrain()` to remove the style terrain while keeping its source. On web with the globe projection, terrain defined by the style's imports applies again after removal.
 * [Web] Bump Mapbox GL JS to 3.32.0.
