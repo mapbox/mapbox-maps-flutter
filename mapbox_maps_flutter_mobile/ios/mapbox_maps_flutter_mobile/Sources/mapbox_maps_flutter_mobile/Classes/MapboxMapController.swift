@@ -145,7 +145,7 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
             interactionsController!.removeInteraction(methodCall: methodCall)
             result(nil)
         case "platform#releaseMethodChannels":
-            releaseMethodChannels()
+            dispose()
             result(nil)
         case "mapView#submitViewSizeHint":
             if let arguments = methodCall.arguments as? [String: Double],
@@ -214,8 +214,9 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         }
     }
 
-    private func releaseMethodChannels() {
+    private func dispose() {
         channel.setMethodCallHandler(nil)
+        eventHandler.dispose()
 
         StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _CameraManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)

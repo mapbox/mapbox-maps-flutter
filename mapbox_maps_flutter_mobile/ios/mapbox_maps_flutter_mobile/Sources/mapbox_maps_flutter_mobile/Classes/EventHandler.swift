@@ -63,6 +63,10 @@ final class MapboxEventHandler {
             .forEach(subscribeToEvent)
     }
 
+    func dispose() {
+        cancelables.removeAll()
+    }
+
     private func handleMethodCall(_ methodCall: FlutterMethodCall, result: FlutterResult) {
         switch (methodCall.method, methodCall.arguments) {
         case ("subscribeToEvents", let rawEventTypes as [Int]):
