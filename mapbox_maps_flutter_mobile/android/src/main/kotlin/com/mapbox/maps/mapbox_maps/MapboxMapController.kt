@@ -225,6 +225,10 @@ class MapboxMapController(
     _AnimationManager.setUp(messenger, animationController, this.channelSuffix)
     annotationController.setup()
     _LocationComponentSettingsInterface.setUp(messenger, locationComponentController, this.channelSuffix)
+    // Hand-written channel (not Pigeon-generated, see
+    // LocationComponentController.setUpExternalLocationChannel) for the
+    // native location-provider override.
+    locationComponentController.setUpExternalLocationChannel(messenger, this.channelSuffix)
     LogoSettingsInterface.setUp(messenger, logoController, this.channelSuffix)
     GesturesSettingsInterface.setUp(messenger, gestureController, this.channelSuffix)
     AttributionSettingsInterface.setUp(messenger, attributionController, this.channelSuffix)
@@ -301,6 +305,7 @@ class MapboxMapController(
     _AnimationManager.setUp(messenger, null, channelSuffix)
     annotationController.dispose()
     _LocationComponentSettingsInterface.setUp(messenger, null, channelSuffix)
+    locationComponentController.disposeExternalLocationChannel()
     LogoSettingsInterface.setUp(messenger, null, channelSuffix)
     GesturesSettingsInterface.setUp(messenger, null, channelSuffix)
     CompassSettingsInterface.setUp(messenger, null, channelSuffix)

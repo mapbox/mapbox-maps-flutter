@@ -56,8 +56,115 @@ final class LocationController: _LocationComponentSettingsInterface {
 
     private let mapView: MapView
 
+    // Native location-provider override, so the puck can be driven by an
+    // externally-supplied combined GPS+indoor location provider instead of
+    // Mapbox's default `AppleLocationProvider`.
+    private let externalLocationProvider = ExternalLocationProvider()
+    private var isOverrideActive = false
+    private var externalLocationChannel: FlutterMethodChannel?
+
     init(withMapView mapView: MapView) {
         self.mapView = mapView
+    }
+
+    /// Sets up the plain `FlutterMethodChannel` for `setExternalLocation`/
+    /// `clearExternalLocation`. Deliberately not Pigeon-generated — Mapbox
+    /// doesn't ship the Pigeon input specs for this plugin publicly, only the
+    /// generated output, so this is a small hand-written channel kept
+    /// isolated from the generated code to stay easy to rebase.
+    func setUpExternalLocationChannel(binaryMessenger: FlutterBinaryMessenger, channelSuffix: String) {
+        let channel = FlutterMethodChannel(
+            name: "plugins.flutter.io.mapbox_maps_flutter.externalLocation.\(channelSuffix)",
+            binaryMessenger: binaryMessenger)
+        channel.setMethodCallHandler { [weak self] call, result in
+            self?.handleExternalLocationCall(call, result: result)
+        }
+        externalLocationChannel = channel
+    }
+
+    private func handleExternalLocationCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "setExternalLocation":
+            setExternalLocation(arguments: call.arguments, result: result)
+        case "clearExternalLocation":
+            clearExternalLocation(result: result)
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
+
+    private func setExternalLocation(arguments: Any?, result: @escaping FlutterResult) {
+        guard let args = arguments as? [String: Any],
+              let latitude = args["latitude"] as? Double,
+              let longitude = args["longitude"] as? Double else {
+            result(FlutterError(
+                code: "invalid_args",
+                message: "setExternalLocation requires latitude and longitude",
+                details: nil))
+            return
+        }
+
+        let timestampMs = args["timestamp"] as? Double
+        // `Location`'s `timestamp` is milliseconds since epoch as `UInt64`,
+        // not a `Date` — see MapboxCommon's `MBXLocation`.
+        let timestampMillis = UInt64(timestampMs ?? (Date().timeIntervalSince1970 * 1000))
+        let accuracy = args["accuracy"] as? Double
+        let heading = args["heading"] as? Double
+        let headingAccuracy = args["headingAccuracy"] as? Double
+        let floor = args["floor"] as? Int
+        // Used below to build the `Heading` update, which takes a `Date`
+        // (unlike `Location`, which takes raw millis).
+        let timestampDate = Date(timeIntervalSince1970: Double(timestampMillis) / 1000)
+
+        let location = Location(
+            __latitude: latitude,
+            longitude: longitude,
+            timestamp: timestampMillis,
+            monotonicTimestamp: nil,
+            altitude: nil,
+            horizontalAccuracy: accuracy.map(NSNumber.init(value:)),
+            verticalAccuracy: nil,
+            speed: nil,
+            speedAccuracy: nil,
+            bearing: heading.map(NSNumber.init(value:)),
+            bearingAccuracy: headingAccuracy.map(NSNumber.init(value:)),
+            floor: floor.map(NSNumber.init(value:)),
+            source: "external-override",
+            extra: nil)
+
+        activateOverrideIfNeeded()
+        externalLocationProvider.update(location: location)
+
+        if let heading {
+            externalLocationProvider.update(heading: Heading(
+                direction: heading,
+                accuracy: headingAccuracy ?? 0,
+                timestamp: timestampDate))
+        }
+
+        result(nil)
+    }
+
+    /// Restores Mapbox's default `AppleLocationProvider` — "clear" means
+    /// "go back to normal GPS." Intended usage: call this on a
+    /// location-stream error, where presenting a stale synthetic position
+    /// would be worse than falling back to GPS.
+    private func clearExternalLocation(result: @escaping FlutterResult) {
+        externalLocationProvider.clear()
+        if isOverrideActive {
+            isOverrideActive = false
+            mapView.location.override(provider: AppleLocationProvider())
+        }
+        result(nil)
+    }
+
+    /// Registers `externalLocationProvider` with Mapbox on first use only —
+    /// until `setExternalLocation` is called at least once, the map behaves
+    /// exactly as it does today (default `AppleLocationProvider`).
+    private func activateOverrideIfNeeded() {
+        guard !isOverrideActive else { return }
+        isOverrideActive = true
+        mapView.location.override(provider: externalLocationProvider)
     }
 }
 
