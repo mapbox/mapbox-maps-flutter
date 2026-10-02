@@ -7,6 +7,8 @@ class MockLocationSettingsPlatformInterface implements LocationSettingsPlatformI
   LocationComponentSettings settingsToReturn = LocationComponentSettings();
   int getSettingsCallCount = 0;
   int updateSettingsCallCount = 0;
+  Map<String, Object?>? lastExternalLocation;
+  int clearExternalLocationCallCount = 0;
 
   @override
   Future<LocationComponentSettings> getSettings() async {
@@ -18,6 +20,32 @@ class MockLocationSettingsPlatformInterface implements LocationSettingsPlatformI
   Future<void> updateSettings(LocationComponentSettings settings) async {
     updateSettingsCallCount++;
     lastUpdatedSettings = settings;
+  }
+
+  @override
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) async {
+    lastExternalLocation = {
+      'latitude': latitude,
+      'longitude': longitude,
+      'accuracy': accuracy,
+      'heading': heading,
+      'headingAccuracy': headingAccuracy,
+      'floor': floor,
+      'timestamp': timestamp,
+    };
+  }
+
+  @override
+  Future<void> clearExternalLocation() async {
+    clearExternalLocationCallCount++;
   }
 }
 
@@ -77,6 +105,36 @@ void main() {
       expect(updated.pulsingMaxRadius, 10.0);
       expect(updated.showAccuracyRing, true);
       expect(updated.puckBearingEnabled, true);
+    });
+
+    test('setExternalLocation delegates every field to interface', () async {
+      final timestamp = DateTime.utc(2026, 1, 1, 12);
+
+      await locationSettings.setExternalLocation(
+        latitude: 1.5,
+        longitude: 2.5,
+        accuracy: 5.0,
+        heading: 90.0,
+        headingAccuracy: 3.0,
+        floor: 2,
+        timestamp: timestamp,
+      );
+
+      expect(mockImpl.lastExternalLocation, {
+        'latitude': 1.5,
+        'longitude': 2.5,
+        'accuracy': 5.0,
+        'heading': 90.0,
+        'headingAccuracy': 3.0,
+        'floor': 2,
+        'timestamp': timestamp,
+      });
+    });
+
+    test('clearExternalLocation delegates to interface', () async {
+      await locationSettings.clearExternalLocation();
+
+      expect(mockImpl.clearExternalLocationCallCount, 1);
     });
   });
 }
