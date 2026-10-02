@@ -471,7 +471,7 @@ base class StyleManager {
   /// forwards to [StylePlatformInterface.addStyleLayer].
   Future<void> addLayer(Layer layer, [LayerPosition? position]) async {
     final encoded = await layer.encode();
-    return _impl.addStyleLayer(encoded, null);
+    return _impl.addStyleLayer(encoded, position);
   }
 
   /// Adds a persistent [Layer] to the current style. Persistent layers
@@ -484,7 +484,7 @@ base class StyleManager {
     LayerPosition? position,
   ]) async {
     final encoded = await layer.encode();
-    return _impl.addPersistentStyleLayer(encoded, null);
+    return _impl.addPersistentStyleLayer(encoded, position);
   }
 
   /// Updates an existing layer. Serializes the layer to JSON and forwards
