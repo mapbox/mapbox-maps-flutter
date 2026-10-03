@@ -255,6 +255,35 @@ Future<MapboxMap?> _pumpMapApp({
 Future<void> runEmpty(WidgetTester tester) =>
     tester.pumpWidget(const MaterialApp());
 
+extension RetryOnTimeout on WidgetTester {
+  /// Retries [attempt] up to [maxAttempts] times, tearing the widget tree
+  /// down to empty between attempts, when it throws [TimeoutException].
+  ///
+  /// Android's hybrid-composition platform-view attach has a rare Flutter
+  /// engine race (a throwaway probe ImageReader gets abandoned before the
+  /// real MapView surface swaps in) that wedges surface delivery forever, so
+  /// onMapCreated/onMapIdle never fire and [waitForEvent] times out. A retry
+  /// with a fresh platform view avoids the flake without masking a real one:
+  /// a second consecutive timeout still fails the test.
+  Future<T> retryOnTimeout<T>(
+    Future<T> Function() attempt, {
+    int maxAttempts = 2,
+  }) async {
+    for (var attemptNumber = 1; ; attemptNumber++) {
+      try {
+        return await attempt();
+      } on TimeoutException {
+        if (attemptNumber >= maxAttempts) rethrow;
+        await runEmpty(this);
+        await WidgetsBinding.instance.endOfFrame.timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {},
+        );
+      }
+    }
+  }
+}
+
 /// Awaits [future] while pumping frames.
 ///
 /// Use this instead of directly awaiting a map-event future ([Events]). On
