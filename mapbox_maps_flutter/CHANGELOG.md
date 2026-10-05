@@ -1,5 +1,7 @@
 ### main
 
+* Add `MapboxMap.location.setExternalLocation`/`.clearExternalLocation` (Android and iOS; web throws `UnsupportedError`/no-ops), letting apps drive the location puck from a location source other than the platform's default GPS-based provider (e.g. an indoor-positioning SDK). Resolves [#1085](https://github.com/mapbox/mapbox-maps-flutter/issues/1085).
+
 ### 3.0.0
 
 * [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
