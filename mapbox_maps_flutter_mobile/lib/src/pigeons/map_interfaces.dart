@@ -2611,9 +2611,6 @@ class _MapInterface {
   /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
   /// retain its previous value.
   ///
-  /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getStateFeature`.
-  ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be updated.
@@ -2726,9 +2723,6 @@ class _MapInterface {
   }
 
   /// Gets the state map of a feature within a style source.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
-  /// immediately visible.
   ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
@@ -2858,9 +2852,6 @@ class _MapInterface {
   /// Remove a specified property or all property from a feature's state object, depending on the value of
   /// `stateKey`.
   ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getFeatureState`.
-  ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be removed.
@@ -2970,9 +2961,6 @@ class _MapInterface {
   }
 
   /// Reset all the feature states within a featureset.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using ``MapboxMap/getFeatureState()``.
   ///
   /// @param featureset A featureset descriptor
   Future<void> resetFeatureStatesForFeatureset(

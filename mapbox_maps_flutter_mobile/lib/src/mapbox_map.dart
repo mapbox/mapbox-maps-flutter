@@ -503,9 +503,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Update entries in the `state` object of a given feature within a style source. Only properties of the
   /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
   /// retain its previous value.
-  ///
-  /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getStateFeature`.
   @override
   Future<void> setFeatureState(
     String sourceId,
@@ -539,9 +536,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ) => _mapInterface.setFeatureStateForFeaturesetFeature(feature, state.map);
 
   /// Gets the state map of a feature within a style source.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
-  /// immediately visible.
   @override
   Future<String> getFeatureState(
     String sourceId,
@@ -569,9 +563,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ///
   /// Remove a specified property or all property from a feature's state object, depending on the value of
   /// `stateKey`.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getStateFeature`.
   @override
   Future<void> removeFeatureState(
     String sourceId,
@@ -607,9 +598,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   }) => _mapInterface.removeFeatureStateForFeaturesetFeature(feature, stateKey);
 
   /// Reset all the feature states within a featureset.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
   @override
   Future<void> resetFeatureStatesForFeatureset(
     FeaturesetDescriptor featureset,

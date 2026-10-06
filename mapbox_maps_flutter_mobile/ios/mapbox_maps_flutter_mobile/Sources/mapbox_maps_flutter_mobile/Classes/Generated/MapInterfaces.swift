@@ -1621,9 +1621,6 @@ protocol _MapInterface {
   /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
   /// retain its previous value.
   ///
-  /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getStateFeature`.
-  ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be updated.
@@ -1646,9 +1643,6 @@ protocol _MapInterface {
   /// @param state Map of entries to update with their respective new values
   func setFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
   /// Gets the state map of a feature within a style source.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
-  /// immediately visible.
   ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
@@ -1674,9 +1668,6 @@ protocol _MapInterface {
   /// Remove a specified property or all property from a feature's state object, depending on the value of
   /// `stateKey`.
   ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getFeatureState`.
-  ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be removed.
@@ -1696,9 +1687,6 @@ protocol _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void)
   /// Reset all the feature states within a featureset.
-  ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using ``MapboxMap/getFeatureState()``.
   ///
   /// @param featureset A featureset descriptor
   func resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -2224,9 +2212,6 @@ class _MapInterfaceSetup {
     /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
     /// retain its previous value.
     ///
-    /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
-    /// immediately visible using `getStateFeature`.
-    ///
     /// @param sourceId The style source identifier.
     /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
     /// @param featureId The feature identifier of the feature whose state should be updated.
@@ -2304,9 +2289,6 @@ class _MapInterfaceSetup {
     }
     /// Gets the state map of a feature within a style source.
     ///
-    /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
-    /// immediately visible.
-    ///
     /// @param sourceId The style source identifier.
     /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
     /// @param featureId The feature identifier of the feature whose state should be queried.
@@ -2382,9 +2364,6 @@ class _MapInterfaceSetup {
     /// Remove a specified property or all property from a feature's state object, depending on the value of
     /// `stateKey`.
     ///
-    /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-    /// immediately visible using `getFeatureState`.
-    ///
     /// @param sourceId The style source identifier.
     /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
     /// @param featureId The feature identifier of the feature whose state should be removed.
@@ -2458,9 +2437,6 @@ class _MapInterfaceSetup {
       removeFeatureStateForFeaturesetFeatureChannel.setMessageHandler(nil)
     }
     /// Reset all the feature states within a featureset.
-    ///
-    /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-    /// immediately visible using ``MapboxMap/getFeatureState()``.
     ///
     /// @param featureset A featureset descriptor
     let resetFeatureStatesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
