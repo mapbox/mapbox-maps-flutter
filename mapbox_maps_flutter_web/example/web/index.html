@@ -9,6 +9,14 @@
 </head>
 
 <body>
+  <!-- Loads GL JS built from source when the buildFromSource web-define is set. -->
+  <script>
+    if ('{{buildFromSource}}' === 'true') {
+      document.write(
+        '<link rel="stylesheet" href="mapbox-gl-dev.css">' +
+        '<scr' + 'ipt src="mapbox-gl-dev.js"></scr' + 'ipt>');
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 
