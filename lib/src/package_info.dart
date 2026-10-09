@@ -1,3 +1,3 @@
 part of mapbox_maps_flutter;
 
-const String mapboxPluginVersion = '2.30.5';
+const String mapboxPluginVersion = '2.30.4';
