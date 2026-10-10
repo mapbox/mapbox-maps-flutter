@@ -1,6 +1,6 @@
 name: mapbox_maps_flutter_platform_interface
 description: "A common platform interface for the Mapbox Maps Flutter SDK, defining shared interfaces and data types."
-version: 3.34.0-SNAPSHOT-10-09--01-51.git-002525c
+version: 3.34.0-SNAPSHOT-10-10--01-48.git-f664e09
 homepage: https://www.mapbox.com/maps
 repository: https://github.com/mapbox/mapbox-maps-flutter
 issue_tracker: https://github.com/mapbox/mapbox-maps-flutter/issues
