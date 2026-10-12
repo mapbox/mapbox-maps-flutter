@@ -2,6 +2,8 @@
 
 ### 3.33.0-rc.1
 
+### 3.0.1
+
 ### 3.0.0
 
 * [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
