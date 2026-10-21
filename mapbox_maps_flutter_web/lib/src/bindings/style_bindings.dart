@@ -96,6 +96,113 @@ extension type JSImportSpecification._(JSObject _) implements JSObject {
   });
 }
 
+/// Mirrors gl-js's `TransitionSpecification`.
+///
+/// Set only the values that exist. GL JS validation rejects a `null` value.
+extension type JSTransitionSpecification._(JSObject _) implements JSObject {
+  JSTransitionSpecification() : _ = JSObject();
+
+  external set duration(int value);
+  external set delay(int value);
+}
+
+/// Mirrors gl-js's `LightsSpecification`: an ambient, directional or flat
+/// light.
+@JS()
+@anonymous
+extension type JSLightSpecification._(JSObject _) implements JSObject {
+  external factory JSLightSpecification({
+    required String id,
+    required String type,
+    JSObject? properties,
+  });
+
+  external String get id;
+  external String get type;
+  external JSObject? get properties;
+}
+
+/// The `properties` of a flat light.
+///
+/// Set only the values that exist. GL JS validation rejects a `null` value.
+extension type JSFlatLightProperties._(JSObject _) implements JSObject {
+  JSFlatLightProperties() : _ = JSObject();
+
+  external set anchor(String value);
+  external set color(String value);
+  @JS('color-transition')
+  external set colorTransition(JSTransitionSpecification value);
+  external set intensity(double value);
+  @JS('intensity-transition')
+  external set intensityTransition(JSTransitionSpecification value);
+  external set position(JSArray<JSNumber> value);
+  @JS('position-transition')
+  external set positionTransition(JSTransitionSpecification value);
+}
+
+/// The `properties` of an ambient light.
+///
+/// Set only the values that exist. GL JS validation rejects a `null` value.
+extension type JSAmbientLightProperties._(JSObject _) implements JSObject {
+  JSAmbientLightProperties() : _ = JSObject();
+
+  external set color(String value);
+  @JS('color-transition')
+  external set colorTransition(JSTransitionSpecification value);
+  external set intensity(double value);
+  @JS('intensity-transition')
+  external set intensityTransition(JSTransitionSpecification value);
+}
+
+/// The `properties` of a directional light.
+///
+/// Set only the values that exist. GL JS validation rejects a `null` value.
+extension type JSDirectionalLightProperties._(JSObject _) implements JSObject {
+  JSDirectionalLightProperties() : _ = JSObject();
+
+  @JS('cast-shadows')
+  external set castShadows(bool value);
+  external set color(String value);
+  @JS('color-transition')
+  external set colorTransition(JSTransitionSpecification value);
+  external set direction(JSArray<JSNumber> value);
+  @JS('direction-transition')
+  external set directionTransition(JSTransitionSpecification value);
+  external set intensity(double value);
+  @JS('intensity-transition')
+  external set intensityTransition(JSTransitionSpecification value);
+  @JS('shadow-draw-before-layer')
+  external set shadowDrawBeforeLayer(String value);
+  @JS('shadow-intensity')
+  external set shadowIntensity(double value);
+  @JS('shadow-intensity-transition')
+  external set shadowIntensityTransition(JSTransitionSpecification value);
+}
+
+extension StyleFlatLight on JSStyle {
+  /// The flat light. GL JS has one for each style, also if the style JSON
+  /// has no light. `Map.getLight` gives the same properties, but it is
+  /// deprecated and logs a warning.
+  external JSFlatLight get light;
+
+  /// The style JSON that GL JS loaded. `Map.setLights` does not change it.
+  external JSStyleSpecification get stylesheet;
+}
+
+/// The lights of a style JSON.
+extension type JSStyleSpecification._(JSObject _) implements JSObject {
+  external JSObject? get light;
+  external JSArray<JSLightSpecification>? get lights;
+}
+
+/// The flat light of a style.
+extension type JSFlatLight._(JSObject _) implements JSObject {
+  external String get id;
+
+  /// Returns the properties that have a value.
+  external JSObject getLight();
+}
+
 // ===== Style API surface on JSMap =====
 
 extension Style on JSMap {
@@ -137,8 +244,11 @@ extension Style on JSMap {
   external bool hasModel(String id);
 
   // ----- Lights / terrain / projection -----
-  external void setLights(JSArray<JSObject> lights);
-  external JSArray<JSObject>? getLights();
+  external void setLights(JSArray<JSLightSpecification>? lights);
+
+  /// Returns the ambient and directional lights. Without them, returns only
+  /// the flat light, which GL JS always has.
+  external JSArray<JSLightSpecification>? getLights();
   external void setTerrain(JSAny? terrain);
   external JSAny? getTerrain();
   external void setProjection(JSAny projection);

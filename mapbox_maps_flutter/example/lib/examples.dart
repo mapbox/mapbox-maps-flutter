@@ -26,6 +26,7 @@ import 'platform/debug_options_example.dart';
 import 'platform/map_interface_example.dart';
 import 'platform/map_recorder_example.dart';
 import 'styles/indoor_example.dart';
+import 'styles/light_example.dart';
 import 'styles/model_comparison_example.dart';
 import 'styles/sources_example.dart';
 import 'styles/standard_style_import_example.dart';
@@ -126,6 +127,16 @@ final List<Example> examples = [
     title: 'Style interface',
     subtitle: 'Swap the basemap, restyle your own layer, light a 3D scene.',
     builder: (_) => const StyleExample(),
+  ),
+  Example(
+    slug: 'lights',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.wb_sunny_outlined),
+    title: 'Lights & shadows',
+    subtitle:
+        'Real sun and moon light for any place and time, plus every light '
+        'property by hand.',
+    builder: (_) => const LightExample(),
   ),
   Example(
     slug: 'style_images',

@@ -7,6 +7,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 import 'package:turf/turf.dart';
 import 'package:web/web.dart' as web;
 
+import '../utils/color.dart';
 import 'map_bindings.dart';
 import 'style_bindings.dart';
 
@@ -264,4 +265,78 @@ extension ImageContentToJS on ImageContent {
   /// `[left, top, right, bottom]` for gl-js `addImage` content.
   JSArray<JSNumber> toJS() =>
       <JSNumber>[left.toJS, top.toJS, right.toJS, bottom.toJS].toJS;
+}
+
+extension TransitionOptionsToJS on TransitionOptions {
+  JSTransitionSpecification toJSTransition() {
+    final transition = JSTransitionSpecification();
+    if (duration case final duration?) transition.duration = duration;
+    if (delay case final delay?) transition.delay = delay;
+    return transition;
+  }
+}
+
+JSArray<JSNumber> _toJSNumbers(List<double?> values) =>
+    [for (final value in values.nonNulls) value.toJS].toJS;
+
+extension FlatLightToJS on FlatLight {
+  JSFlatLightProperties toJSProperties() {
+    final properties = JSFlatLightProperties();
+    if (anchor case final value?) properties.anchor = value.name.toLowerCase();
+    if (color case final value?) properties.color = cssColor(value);
+    if (colorTransition case final value?) {
+      properties.colorTransition = value.toJSTransition();
+    }
+    if (intensity case final value?) properties.intensity = value;
+    if (intensityTransition case final value?) {
+      properties.intensityTransition = value.toJSTransition();
+    }
+    if (position case final value?) properties.position = _toJSNumbers(value);
+    if (positionTransition case final value?) {
+      properties.positionTransition = value.toJSTransition();
+    }
+    return properties;
+  }
+}
+
+extension AmbientLightToJS on AmbientLight {
+  JSAmbientLightProperties toJSProperties() {
+    final properties = JSAmbientLightProperties();
+    if (color case final value?) properties.color = cssColor(value);
+    if (colorTransition case final value?) {
+      properties.colorTransition = value.toJSTransition();
+    }
+    if (intensity case final value?) properties.intensity = value;
+    if (intensityTransition case final value?) {
+      properties.intensityTransition = value.toJSTransition();
+    }
+    return properties;
+  }
+}
+
+extension DirectionalLightToJS on DirectionalLight {
+  JSDirectionalLightProperties toJSProperties() {
+    final properties = JSDirectionalLightProperties();
+    if (castShadows case final value?) properties.castShadows = value;
+    if (color case final value?) properties.color = cssColor(value);
+    if (colorTransition case final value?) {
+      properties.colorTransition = value.toJSTransition();
+    }
+    if (direction case final value?) properties.direction = _toJSNumbers(value);
+    if (directionTransition case final value?) {
+      properties.directionTransition = value.toJSTransition();
+    }
+    if (intensity case final value?) properties.intensity = value;
+    if (intensityTransition case final value?) {
+      properties.intensityTransition = value.toJSTransition();
+    }
+    if (shadowDrawBeforeLayer case final value?) {
+      properties.shadowDrawBeforeLayer = value;
+    }
+    if (shadowIntensity case final value?) properties.shadowIntensity = value;
+    if (shadowIntensityTransition case final value?) {
+      properties.shadowIntensityTransition = value.toJSTransition();
+    }
+    return properties;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 import '../bindings/map_bindings.dart';
+import '../utils/color.dart';
 import 'ornament_css.dart';
 
 /// Web scale bar backed by GL JS's `ScaleControl`.

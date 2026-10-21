@@ -13,19 +13,6 @@ JSControlPosition toJSControlPosition(OrnamentPosition? position) =>
       null => JSControlPosition.topLeft,
     };
 
-/// Formats an ARGB integer as a CSS color.
-///
-/// The settings APIs carry colors as `0xAARRGGBB`, matching the value of
-/// Flutter's `Color`.
-String cssColor(int argb) {
-  final alpha = (argb >> 24) & 0xFF;
-  final red = (argb >> 16) & 0xFF;
-  final green = (argb >> 8) & 0xFF;
-  final blue = argb & 0xFF;
-  final opacity = (alpha / 255 * 100).round();
-  return 'rgb($red $green $blue / $opacity%)';
-}
-
 /// Applies the four per-side margins to [element] as CSS margins.
 ///
 /// GL JS stacks controls inside a per-corner container, so a control's

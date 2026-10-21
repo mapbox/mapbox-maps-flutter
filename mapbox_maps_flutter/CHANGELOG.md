@@ -1,5 +1,7 @@
 ### main
 
+* [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
+
 ### 3.33.0
 
 ### 3.33.0-rc.1

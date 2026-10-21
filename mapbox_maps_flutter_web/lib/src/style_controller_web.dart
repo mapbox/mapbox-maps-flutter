@@ -5,6 +5,7 @@ import 'dart:core' as core;
 import 'dart:developer';
 import 'dart:js_interop';
 
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart' show Feature, Point, Position;
 
@@ -12,6 +13,7 @@ import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 import 'bindings/style_bindings.dart';
 import 'style/expression_operators.dart';
+import 'style/lights.dart';
 
 /// Web [StylePlatformInterface] implementation backed by Mapbox GL JS.
 final class StyleController implements StylePlatformInterface {
@@ -659,33 +661,159 @@ final class StyleController implements StylePlatformInterface {
       _map.removeModel(modelId);
 
   // ===== Lights =====
-  //
-  // GL JS replaced the flat-light API with a single `setLights([...])`
-  // array. Mapping the platform-interface FlatLight / Ambient + Directional
-  // shapes into that array is web-parity follow-up work.
+
+  /// The style in which [setLight] set the flat light. GL JS does not add
+  /// this light to the style JSON.
+  JSStyle? _flatLightStyle;
+
+  /// Returns the flat light, or null if the style does not set one.
+  ///
+  /// GL JS always has a flat light and uses a default one when the style
+  /// does not set it. Android and iOS have a flat light only after the style
+  /// JSON or [setLight] sets one. Thus the default flat light of GL JS is
+  /// returned as null, to agree with Android and iOS.
+  JSFlatLight? _flatLight() {
+    final style = _map.style;
+    if (style == null) return null;
+    final isSet =
+        (_flatLightStyle?.strictEquals(style).toDart ?? false) ||
+        _hasFlatLight(style.stylesheet);
+    return isSet ? style.light : null;
+  }
+
+  static bool _hasFlatLight(JSStyleSpecification stylesheet) =>
+      stylesheet.light != null ||
+      (stylesheet.lights?.toDart.any((light) => light.type == 'flat') ?? false);
 
   @override
-  Future<List<StyleObjectInfo?>> getStyleLights() =>
-      throw _ni('getStyleLights');
+  Future<List<StyleObjectInfo?>> getStyleLights() async => [
+    for (final light in _lights3D())
+      StyleObjectInfo(id: light.id, type: light.type),
+    if (_flatLight() case final flat?)
+      StyleObjectInfo(id: flat.id, type: 'flat'),
+  ];
 
+  /// Replaces the flat light.
+  ///
+  /// GL JS merges new light properties into the old ones, but Android and iOS
+  /// replace the light. Thus each property without a value gets its
+  /// style-spec default, to remove the old value as Android and iOS do.
   @override
-  Future<void> setLight(FlatLight flatLight) => throw _ni('setLight');
+  Future<void> setLight(FlatLight flatLight) async {
+    _map.setLights(
+      [
+        JSLightSpecification(
+          id: flatLight.id,
+          type: 'flat',
+          properties:
+              {
+                    ...flatLightResetValues,
+                    ..._dartProperties(flatLight.toJSProperties()),
+                  }.jsify()
+                  as JSObject,
+        ),
+      ].toJS,
+    );
+    _flatLightStyle = _map.style;
+  }
+
   @override
   Future<void> setLights(
     AmbientLight ambientLight,
     DirectionalLight directionalLight,
-  ) => throw _ni('setLights');
+  ) async {
+    // Remove the old lights, so that their properties do not merge into the
+    // new lights. Android and iOS also replace the lights.
+    _map.setLights(null);
+    _map.setLights(
+      [
+        JSLightSpecification(
+          id: ambientLight.id,
+          type: 'ambient',
+          properties: ambientLight.toJSProperties(),
+        ),
+        JSLightSpecification(
+          id: directionalLight.id,
+          type: 'directional',
+          properties: directionalLight.toJSProperties(),
+        ),
+      ].toJS,
+    );
+  }
+
   @override
   Future<StylePropertyValue> getStyleLightProperty(
     String id,
     String property,
-  ) => throw _ni('getStyleLightProperty');
+  ) async => _wrap(
+    _normalizeColors(_lightPropertyValue(id, property)),
+    property: property,
+  );
+
   @override
   Future<void> setStyleLightProperty(
     String id,
     String property,
     Object value,
-  ) => throw _ni('setStyleLightProperty');
+  ) async {
+    // Throw the gl-native errors, as Android and iOS do. GL JS only warns
+    // about an unknown property.
+    final lights = _lights3D();
+    if (lights.isEmpty && _flatLight()?.id != id) {
+      throw _lightError('Style lights are not set');
+    }
+    // Like Android and iOS, ignore an unknown id while the ambient and
+    // directional lights exist.
+    final type = lights.isEmpty
+        ? 'flat'
+        : lights.where((light) => light.id == id).firstOrNull?.type;
+    if (type == null) return;
+    if (!lightPropertyNames[type]!.contains(property)) {
+      final light = type == 'flat' ? 'light' : '$type light';
+      throw _lightError("$light doesn't support this property: $property");
+    }
+    // GL JS merges the given properties into the light, so the other
+    // properties keep their values.
+    _map.setLights(
+      [
+        JSLightSpecification(
+          id: id,
+          type: type,
+          properties: {property: value}.jsify() as JSObject,
+        ),
+      ].toJS,
+    );
+  }
+
+  /// Returns the ambient and the directional light, or no lights.
+  ///
+  /// The ambient light is first, as on Android and iOS. GL JS returns the
+  /// directional light first.
+  List<JSLightSpecification> _lights3D() {
+    final lights = _map.getLights()?.toDart ?? const [];
+    return [
+      for (final type in const ['ambient', 'directional'])
+        ...lights.where((light) => light.type == type),
+    ];
+  }
+
+  Object? _lightPropertyValue(String id, String property) {
+    for (final light in _lights3D()) {
+      if (light.id == id) return _dartProperties(light.properties)[property];
+    }
+    final flat = _flatLight();
+    if (flat == null || flat.id != id) return null;
+    return _dartProperties(flat.getLight())[property];
+  }
+
+  static Map<String, Object> _dartProperties(JSObject? properties) => {
+    for (final MapEntry(:key, :value)
+        in (properties.dartify() as Map? ?? const {}).entries)
+      '$key': ?value,
+  };
+
+  static PlatformException _lightError(String message) =>
+      PlatformException(code: 'light-error', message: message);
 
   // ===== Terrain =====
 
@@ -752,16 +880,13 @@ final class StyleController implements StylePlatformInterface {
 
   @override
   Future<List<FeaturesetDescriptor>> getFeaturesets() async => [
-    ..._map
-        .getFeaturesetDescriptors()
-        .toDart
-        .map(
-          (descriptor) => FeaturesetDescriptor(
-            featuresetId: descriptor.featuresetId,
-            importId: descriptor.importId,
-            layerId: descriptor.layerId,
-          ),
-        ),
+    ..._map.getFeaturesetDescriptors().toDart.map(
+      (descriptor) => FeaturesetDescriptor(
+        featuresetId: descriptor.featuresetId,
+        importId: descriptor.importId,
+        layerId: descriptor.layerId,
+      ),
+    ),
     for (final importId in _importIds())
       ..._map
           .getFeaturesetDescriptors(importId)

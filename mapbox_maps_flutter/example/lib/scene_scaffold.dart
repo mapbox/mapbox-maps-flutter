@@ -705,6 +705,9 @@ class _OptionsSheetBodyState extends State<_OptionsSheetBody> {
 
   final _sheetController = DraggableScrollableController();
 
+  /// One instance: a new list on each rebuild resets the sheet snap.
+  late final _snapSizes = [widget.sheetSize.initial];
+
   @override
   void initState() {
     super.initState();
@@ -766,7 +769,7 @@ class _OptionsSheetBodyState extends State<_OptionsSheetBody> {
       maxChildSize: widget.sheetSize.max,
       expand: false,
       snap: true,
-      snapSizes: [widget.sheetSize.initial],
+      snapSizes: _snapSizes,
       // Opaque, not glass: a blurred panel does not composite over the map's
       // platform view, so the map would show through the controls.
       builder: (context, scrollController) => DecoratedBox(
@@ -1275,7 +1278,8 @@ class ControlRow extends StatelessWidget {
   }
 }
 
-/// Grid of selectable option tiles.
+/// Grid of selectable option tiles that wraps to more rows when the labels
+/// do not fit in [columns].
 class ControlChoices<T> extends StatelessWidget {
   const ControlChoices({
     super.key,
@@ -1302,8 +1306,13 @@ class ControlChoices<T> extends StatelessWidget {
           runSpacing: gap,
           children: [
             for (final entry in entries)
-              SizedBox(
-                width: width,
+              // A label wider than its column makes the tile grow, and the
+              // tile moves to the next row instead of wrapping its text.
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: width,
+                  maxWidth: constraints.maxWidth,
+                ),
                 child: _ChoiceTile(
                   label: entry.value,
                   selected: entry.key == value,
@@ -1338,7 +1347,7 @@ class _ChoiceTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: radius,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 7),
           decoration: BoxDecoration(
             borderRadius: radius,
             border: Border.all(
@@ -1347,6 +1356,8 @@ class _ChoiceTile extends StatelessWidget {
           ),
           child: Text(
             label,
+            maxLines: 1,
+            softWrap: false,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
@@ -1421,6 +1432,7 @@ class ControlSlider extends StatelessWidget {
     required this.onChanged,
     this.fractionDigits = 1,
     this.unit = '',
+    this.valueText,
   });
 
   final String label;
@@ -1434,6 +1446,9 @@ class ControlSlider extends StatelessWidget {
 
   /// Suffix for the trailing value, for example `°`.
   final String unit;
+
+  /// Trailing text to show instead of the number, for example `13:30`.
+  final String? valueText;
 
   @override
   Widget build(BuildContext context) {
@@ -1456,7 +1471,7 @@ class ControlSlider extends StatelessWidget {
                 ),
               ),
               Text(
-                '${value.toStringAsFixed(fractionDigits)}$unit',
+                valueText ?? '${value.toStringAsFixed(fractionDigits)}$unit',
                 style: const TextStyle(
                   color: MapboxGlass.label,
                   fontSize: 11,
