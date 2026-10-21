@@ -36,10 +36,15 @@ class _ProjectionExampleState extends State<ProjectionExample> {
   double? _metersPerPixel;
   double _zoom = 11;
 
-  Future<void> _onMapCreated(MapboxMap mapboxMap) async {
+  void _onMapCreated(MapboxMap mapboxMap) {
     applyCatalogOrnamentDefaults(context, mapboxMap);
     _mapboxMap = mapboxMap;
     mapboxMap.addInteraction(TapInteraction.onMap(_onTap));
+  }
+
+  Future<void> _onStyleLoaded(StyleLoadedEventData data) async {
+    final mapboxMap = _mapboxMap;
+    if (mapboxMap == null) return;
     await mapboxMap.addSource(
       GeoJsonSource(id: _markerSourceId, data: _emptyCollection),
     );
@@ -141,6 +146,7 @@ class _ProjectionExampleState extends State<ProjectionExample> {
               zoom: 11,
             ),
             onMapCreated: _onMapCreated,
+            onStyleLoadedListener: _onStyleLoaded,
           ),
           MapHud(
             title: point == null ? 'Tap the map' : 'One point, four spaces',
