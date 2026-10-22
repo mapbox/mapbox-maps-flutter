@@ -58,7 +58,12 @@ final class GeoJsonSource extends Source {
 
   String? _data;
 
-  /// A URL to a GeoJSON file, or inline GeoJSON.
+  /// The URL this source loads its GeoJSON from.
+  ///
+  /// Returns null if you passed inline GeoJSON. The map does not keep a copy of
+  /// inline data, so keep your own copy if you need it later. To read the
+  /// features back from the map, use [MapboxMap.querySourceFeatures] or
+  /// [MapboxMap.queryRenderedFeatures].
   Future<String?> get data async {
     final localStyle = style;
     if (localStyle == null) return null;
