@@ -302,11 +302,14 @@ abstract interface class MapboxMapPlatformInterface
   @experimental
   Future<void> setSnapshotLegacyMode(bool enabled);
 
-  /// Returns the runtime glyph URL used for text labels.
+  /// Returns the glyph URL template that text labels use. Never empty: an
+  /// unset or empty URL resolves through the first style import, then the
+  /// default Mapbox glyph URL.
   @experimental
   Future<String> styleGlyphURL();
 
-  /// Sets the runtime glyph URL used for text labels.
+  /// Sets the glyph URL template that text labels use. A new style load
+  /// resets it. An empty string removes the custom URL.
   @experimental
   Future<void> setStyleGlyphURL(String glyphURL);
 

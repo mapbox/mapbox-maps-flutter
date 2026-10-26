@@ -1,3 +1,5 @@
+// ignore_for_file: experimental_member_use
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart' hide Visibility;
@@ -14,7 +16,7 @@ class SourcesExample extends StatefulWidget {
   State<SourcesExample> createState() => _SourcesExampleState();
 }
 
-enum _Source { geojson, vector, raster, image, cluster, traffic }
+enum _Source { geojson, vector, raster, image, cluster, traffic, glyphs }
 
 const _scenes = [
   Scene(
@@ -53,7 +55,26 @@ const _scenes = [
     subtitle: 'Live congestion on a vector tileset',
     icon: Icons.traffic_outlined,
   ),
+  Scene(
+    id: 'glyphs',
+    title: 'Glyph URL',
+    subtitle: 'One font for every map label',
+    icon: Icons.text_fields,
+  ),
 ];
+
+/// Glyph URL templates on the Mapbox fonts API. Each template loads one
+/// font for all labels. The fonts API ignores the `ignore` query
+/// parameter, which keeps the required `{fontstack}` token in the template.
+/// An empty string removes the custom URL.
+const _glyphURLs = {
+  '': 'Style',
+  'mapbox://fonts/mapbox/Open Sans Bold/{range}.pbf?ignore={fontstack}':
+      'Open Sans',
+  'mapbox://fonts/mapbox/DIN Pro Italic/{range}.pbf?ignore={fontstack}':
+      'DIN Pro',
+  'mapbox://fonts/mapbox/Roboto Black/{range}.pbf?ignore={fontstack}': 'Roboto',
+};
 
 class _SourcesExampleState extends State<SourcesExample> {
   static const _sourceId = 'example-source';
@@ -91,12 +112,18 @@ class _SourcesExampleState extends State<SourcesExample> {
       ),
       zoom: 12,
     ),
+    _Source.glyphs: CameraOptions(
+      center: Point(coordinates: Position(10, 50)),
+      zoom: 4,
+    ),
   };
 
   MapboxMap? _mapboxMap;
   var _source = _Source.geojson;
   var _lightPreset = 'day';
   var _styleLoaded = false;
+  var _glyphURL = _glyphURLs.keys.first;
+  String? _resolvedGlyphURL;
 
   void _onMapCreated(MapboxMap mapboxMap) {
     applyCatalogOrnamentDefaults(context, mapboxMap);
@@ -142,6 +169,7 @@ class _SourcesExampleState extends State<SourcesExample> {
     if (await map.styleSourceExists(_sourceId)) {
       await map.removeStyleSource(_sourceId);
     }
+    await map.setStyleGlyphURL('');
   }
 
   Future<void> _showSource() async {
@@ -169,6 +197,8 @@ class _SourcesExampleState extends State<SourcesExample> {
           await _addCluster(map);
         case _Source.traffic:
           await _addTraffic(map);
+        case _Source.glyphs:
+          await _applyGlyphURL();
       }
     } on Object catch (error) {
       _report('Could not add the source: $error');
@@ -398,6 +428,15 @@ class _SourcesExampleState extends State<SourcesExample> {
     );
   }
 
+  /// Sets the selected glyph URL, then shows the URL that the map uses.
+  Future<void> _applyGlyphURL() async {
+    final map = _mapboxMap;
+    if (map == null) return;
+    await map.setStyleGlyphURL(_glyphURL);
+    final resolved = await map.styleGlyphURL();
+    if (mounted) setState(() => _resolvedGlyphURL = resolved);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SceneScaffold(
@@ -444,6 +483,27 @@ class _SourcesExampleState extends State<SourcesExample> {
             },
           ),
         ),
+        if (_source == _Source.glyphs) ...[
+          ControlRow(
+            label: 'Font',
+            child: ControlChoices<String>(
+              options: _glyphURLs,
+              value: _glyphURL,
+              onChanged: (value) {
+                setState(() => _glyphURL = value);
+                _applyGlyphURL();
+              },
+            ),
+          ),
+          Text(
+            'Glyph URL: ${_resolvedGlyphURL ?? '-'}',
+            style: const TextStyle(
+              fontSize: 11,
+              height: 1.35,
+              color: MapboxGlass.labelFaint,
+            ),
+          ),
+        ],
         ControlAction(
           label: 'Reload source',
           icon: Icons.refresh,

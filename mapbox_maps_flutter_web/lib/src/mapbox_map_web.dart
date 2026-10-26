@@ -691,12 +691,38 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<void> setSnapshotLegacyMode(bool enabled) =>
       throw _ni('setSnapshotLegacyMode');
 
-  @override
-  Future<String> styleGlyphURL() => throw _ni('styleGlyphURL');
+  /// The glyph URL that gl-native and GL JS use when no style sets one.
+  static const _fallbackGlyphURL =
+      'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
 
+  // GL JS returns only the glyph URL of the root style. gl-native resolves
+  // an empty URL through the first import, then the fallback URL.
   @override
-  Future<void> setStyleGlyphURL(String glyphURL) =>
-      throw _ni('setStyleGlyphURL');
+  Future<String> styleGlyphURL() async {
+    final rootURL = _map.getGlyphsUrl();
+    if (rootURL != null && rootURL.isNotEmpty) return rootURL;
+    return _resolveImportGlyphURL();
+  }
+
+  String _resolveImportGlyphURL() =>
+      _resolveGlyphURL(_firstImportStyle(_map.getStyle()));
+
+  String _resolveGlyphURL(JSStyleSpec? style) {
+    if (style == null) return _fallbackGlyphURL;
+    final glyphs = style.glyphs;
+    if (glyphs != null && glyphs.isNotEmpty) return glyphs;
+    return _resolveGlyphURL(_firstImportStyle(style));
+  }
+
+  JSStyleSpec? _firstImportStyle(JSStyleSpec style) =>
+      (style.imports?.toDart.firstOrNull as JSImportSpec?)?.data;
+
+  // For an empty URL, GL JS loads glyphs from its fallback URL and ignores
+  // the imports. gl-native loads them from the URL that [styleGlyphURL]
+  // returns, so set that URL.
+  @override
+  Future<void> setStyleGlyphURL(String glyphURL) async =>
+      _map.setGlyphsUrl(glyphURL.isEmpty ? _resolveImportGlyphURL() : glyphURL);
 
   // ===== Orientation =====
 
@@ -858,10 +884,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     );
 
     return _map
-        .queryRenderedFeaturesForTarget(
-          geometry?.toJS(),
-          options,
-        )
+        .queryRenderedFeaturesForTarget(geometry?.toJS(), options)
         .toDart
         .map((feature) => feature.toFeaturesetFeature())
         .toList();

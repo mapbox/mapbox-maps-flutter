@@ -278,6 +278,14 @@ extension StyleSpecAccessors on JSStyleSpec {
   external JSArray<JSLayer>? get layers;
   external JSObject? get sources;
   external JSArray<JSObject>? get imports;
+  external String? get glyphs;
+}
+
+/// An entry of the style `imports` array. GL JS sets [data] to the
+/// serialized style of the import.
+extension type JSImportSpec._(JSObject _) implements JSObject {
+  external String get id;
+  external JSStyleSpec? get data;
 }
 
 // TODO(roman.laitarenko): remove this after get/setLayerProperty is available in GL JS

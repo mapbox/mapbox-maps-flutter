@@ -12,11 +12,13 @@ import 'package:turf/turf.dart' show Point, Position;
 import 'empty_map_widget.dart' as app;
 
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+const _fallbackGlyphURL = 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
+const _importGlyphURL = 'test://import/{fontstack}/{range}.pbf';
 
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
-  patrolTest('styleGlyphURL', skip: kIsWeb, ($) async {
+  patrolTest('styleGlyphURL', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -24,6 +26,60 @@ void main() {
 
     await mapboxMap.setStyleGlyphURL(styleGlyphURL);
     expect(await mapboxMap.styleGlyphURL(), styleGlyphURL);
+  });
+
+  patrolTest('styleGlyphURL resolves an empty URL', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+
+    await mapboxMap.setStyleGlyphURL('');
+    expect(await mapboxMap.styleGlyphURL(), _fallbackGlyphURL);
+  });
+
+  patrolTest('styleGlyphURL uses the URL of the first import', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleJson: jsonEncode({
+        'version': 8,
+        'sources': {},
+        'layers': [],
+        'imports': [
+          {
+            'id': 'nested',
+            'url': 'test://styles/nested',
+            'data': {
+              'version': 8,
+              'glyphs': _importGlyphURL,
+              'sources': {},
+              'layers': [],
+            },
+          },
+        ],
+      }),
+    );
+    await tester.pumpAndSettle();
+
+    expect(await mapboxMap.styleGlyphURL(), _importGlyphURL);
+
+    await mapboxMap.setStyleGlyphURL('test://root/{fontstack}/{range}.pbf');
+    await mapboxMap.setStyleGlyphURL('');
+    expect(await mapboxMap.styleGlyphURL(), _importGlyphURL);
+  });
+
+  patrolTest('styleGlyphURL resets on style load', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    await mapboxMap.setStyleGlyphURL(_importGlyphURL);
+    app.events.resetOnStyleLoaded();
+    await mapboxMap.loadStyleJson(
+      jsonEncode({'version': 8, 'sources': {}, 'layers': []}),
+    );
+    await app.events.onStyleLoaded.future;
+
+    expect(await mapboxMap.styleGlyphURL(), _fallbackGlyphURL);
   });
 
   patrolTest('loadStyleURI', skip: kIsWeb, ($) async {

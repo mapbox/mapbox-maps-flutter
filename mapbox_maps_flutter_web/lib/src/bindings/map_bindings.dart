@@ -219,6 +219,12 @@ extension type JSMap._(JSObject _) implements JSObject {
 
   external JSStyle? get style;
 
+  /// Returns the glyphs URL of the root style, if the root style sets one.
+  external String? getGlyphsUrl();
+
+  /// Sets the glyphs URL of the root style.
+  external void setGlyphsUrl(String url);
+
   /// Returns whether the map's style is fully loaded.
   external bool isStyleLoaded();
 

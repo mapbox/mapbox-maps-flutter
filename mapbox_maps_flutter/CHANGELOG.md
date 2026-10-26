@@ -1,6 +1,7 @@
 ### main
 
 * [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
+* [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.
 
 ### 3.33.0
 

@@ -427,11 +427,34 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   Future<void> setSnapshotLegacyMode(bool enabled) =>
       _impl.setSnapshotLegacyMode(enabled);
 
-  /// Returns the runtime glyph URL used for text labels.
+  /// Returns the glyph URL template that text labels use.
+  ///
+  /// {@template mapbox_map_style_glyph_url_resolution}
+  /// If the root style does not set a glyph URL, or the URL is an empty
+  /// string, the map uses the URL that the first style import resolves to.
+  /// If no style sets a URL, the map uses the default Mapbox glyph URL
+  /// `mapbox://fonts/mapbox/{fontstack}/{range}.pbf`. The returned URL is
+  /// never empty.
+  /// {@endtemplate}
   @experimental
   Future<String> styleGlyphURL() => _impl.styleGlyphURL();
 
-  /// Sets the runtime glyph URL used for text labels.
+  /// Sets the glyph URL template that text labels use, without a change to
+  /// the base style.
+  ///
+  /// The template must contain the `{fontstack}` and `{range}` tokens. You
+  /// can use `mapbox://` URLs. The map does not validate the URL. If the
+  /// map cannot load glyphs from the URL, labels do not show.
+  ///
+  /// Set the URL after the style loads. When the map loads a new style with
+  /// [loadStyleURI] or [loadStyleJson], the map uses the glyph URL of the new
+  /// style again. To keep a custom URL, set it again in the style loaded
+  /// callback.
+  ///
+  /// An empty string removes the custom URL. [styleGlyphURL] then returns the
+  /// URL that the map uses instead, never an empty string:
+  ///
+  /// {@macro mapbox_map_style_glyph_url_resolution}
   @experimental
   Future<void> setStyleGlyphURL(String glyphURL) =>
       _impl.setStyleGlyphURL(glyphURL);
