@@ -155,7 +155,7 @@ final List<Example> examples = [
     title: 'Data sources',
     subtitle:
         'GeoJSON, vector tiles, raster tiles, an image source, clustered '
-        'points and live traffic.',
+        'points, a heatmap and live traffic.',
     builder: (_) => const SourcesExample(),
   ),
   Example(
