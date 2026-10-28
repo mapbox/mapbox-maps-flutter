@@ -1,24 +1,30 @@
 #!/usr/bin/env bash
 #
-# Diff the local mapbox_maps_flutter package against the latest stable on
+# Diff the local mapbox_maps_flutter package against a released version on
 # pub.dev and report breaking changes that aren't in
 # scripts/allowed_breaking_changes.json.
 #
 # Usage:
-#   scripts/check_api_breakage.sh           # human-readable report on stdout
-#   scripts/check_api_breakage.sh --count   # only the unapproved count on
-#                                           # stdout; everything else (logs,
-#                                           # banner, list) goes to stderr.
-#                                           # Always exits 0 unless the
-#                                           # tooling itself fails.
+#   scripts/check_api_breakage.sh <version>           # human-readable report
+#   scripts/check_api_breakage.sh <version> --count   # unapproved count only
+#
+# <version> is the pub.dev release to compare against. With --count, stdout
+# gets only the unapproved count and everything else (logs, banner, list)
+# goes to stderr; it always exits 0 unless the tooling itself fails.
 #
 # validate.sh's api-breakage stage uses --count to feed the regression
 # detector — keep stdout in --count mode to a single integer.
 
 set -e
 
+PACKAGE_VERSION="${1:-}"
+if [[ -z "$PACKAGE_VERSION" || "$PACKAGE_VERSION" == --* ]]; then
+  echo "Usage: $0 <version> [--count]" >&2
+  exit 1
+fi
+
 COUNT_ONLY=0
-if [[ "${1:-}" == "--count" ]]; then
+if [[ "${2:-}" == "--count" ]]; then
   COUNT_ONLY=1
 fi
 
@@ -49,16 +55,8 @@ if ! command -v jq &> /dev/null; then
   exit 1
 fi
 
-# Get the current stable version of mapbox_maps_flutter on pub.dev
 PACKAGE_NAME="mapbox_maps_flutter"
-PACKAGE_VERSION=$(curl -s "https://pub.dev/api/packages/$PACKAGE_NAME" | jq -r .latest.version)
-
-if [ -z "$PACKAGE_VERSION" ] || [ "$PACKAGE_VERSION" = "null" ]; then
-  echo "Failed to fetch current stable version from pub.dev"
-  exit 1
-fi
-
-echo "Current stable version of mapbox_maps_flutter: $PACKAGE_VERSION"
+echo "Baseline version of mapbox_maps_flutter: $PACKAGE_VERSION"
 
 # Get the path of local mapbox-maps-flutter
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
