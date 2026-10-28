@@ -56,6 +56,8 @@ class FlutterMapView : MapView {
   // DOWN -> MOVE(3-5 events) -> POINTER_DOWN -> MOVE(duplicates of previous move events) -> MOVE(new move events) -> POINTER_UP -> UP
   // While the correct sequence is:
   // DOWN -> POINTER_DOWN -> MOVE -> POINTER_UP -> UP
+  // Fixed in Flutter 3.41.0 (https://github.com/flutter/flutter/issues/176574).
+  // Remove this workaround once the minimum supported Flutter version is 3.41.0 or later.
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
     val actionMasked = event.actionMasked
@@ -85,7 +87,16 @@ class FlutterMapView : MapView {
       }
     }
 
-    return super.onTouchEvent(event)
+    // Flutter can forward pointers with inconsistent ids, which makes the gesture detectors throw
+    // (https://github.com/flutter/flutter/issues/195431). Drop the event; the detectors recover
+    // on later events.
+    return try {
+      super.onTouchEvent(event)
+    } catch (e: RuntimeException) {
+      if (e !is IllegalArgumentException && e !is NullPointerException) throw e
+      Log.w("FlutterMapView", "Ignoring inconsistent touch event: $e")
+      false
+    }
   }
 }
 
