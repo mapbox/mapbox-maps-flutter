@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
+#
+# Diff the local mapbox_maps_flutter package against a released version on
+# pub.dev and report breaking changes that aren't in
+# scripts/allowed_breaking_changes.txt.
+#
+# Usage: scripts/check_api_breakage.sh <version>
+
 set -e
+
+PACKAGE_VERSION="${1:-}"
+if [ -z "$PACKAGE_VERSION" ]; then
+  echo "Usage: $0 <version>" >&2
+  exit 1
+fi
 
 # Cleanup temp file on exit
 TEMP_OUTPUT=""
@@ -16,22 +29,8 @@ if ! dart pub global list | grep -q 'dart_apitool'; then
   exit 1
 fi
 
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-  echo "jq is required but not installed. Please install it: brew install jq"
-  exit 1
-fi
-
-# Get the current stable version of mapbox_maps_flutter on pub.dev
 PACKAGE_NAME="mapbox_maps_flutter"
-PACKAGE_VERSION=$(curl -s "https://pub.dev/api/packages/$PACKAGE_NAME" | jq -r .latest.version)
-
-if [ -z "$PACKAGE_VERSION" ] || [ "$PACKAGE_VERSION" = "null" ]; then
-  echo "Failed to fetch current stable version from pub.dev"
-  exit 1
-fi
-
-echo "Current stable version of mapbox_maps_flutter: $PACKAGE_VERSION"
+echo "Baseline version of mapbox_maps_flutter: $PACKAGE_VERSION"
 
 # Get the path of local mapbox-maps-flutter
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
