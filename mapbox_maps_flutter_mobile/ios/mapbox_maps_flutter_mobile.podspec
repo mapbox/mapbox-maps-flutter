@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'mapbox_maps_flutter_mobile'
-  s.version          = '3.34.0-rc.1-SNAPSHOT-10-28--09-54.git-889d731'
+  s.version          = '3.34.1-rc.1'
 
   s.summary          = 'Mapbox Maps SDK Flutter Plugin.'
   s.description      = 'An officially developed solution from Mapbox that enables use of our latest Maps SDK product.'

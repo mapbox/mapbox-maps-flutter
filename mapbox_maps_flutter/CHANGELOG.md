@@ -1,5 +1,7 @@
 ### main
 
+* Version 3.34.0 is skipped: it was published to pub.dev by mistake on 2026-10-05 and retracted, so this release ships as 3.34.1.
+
 ### 3.34.0-rc.1
 
 ### 3.33.0
