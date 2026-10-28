@@ -268,6 +268,9 @@ stage_api_breakage() {
     pushed_path=1
   fi
 
+  local api_version
+  api_version=$("$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/scripts/version.py" get maps-flutter stable) || return 1
+
   local baseline_file="$SCRIPT_DIR/breakage_baseline.txt"
   local baseline
   if [[ -f "$baseline_file" ]]; then
@@ -275,7 +278,7 @@ stage_api_breakage() {
   else
     echo "❌ missing $baseline_file — required for the regression check"
     echo "   Seed it with the current unapproved count: run"
-    echo "     scripts/check_api_breakage.sh --count"
+    echo "     scripts/check_api_breakage.sh $api_version --count"
     echo "   and write its single-line stdout into scripts/breakage_baseline.txt"
     return 1
   fi
@@ -288,7 +291,7 @@ stage_api_breakage() {
   # Informational logs and the dart-apitool noise go to stderr, which we
   # let pass through to the user.
   local current
-  current=$("$SCRIPT_DIR/check_api_breakage.sh" --count)
+  current=$("$SCRIPT_DIR/check_api_breakage.sh" "$api_version" --count)
   local inner_exit=$?
 
   # Restore PATH so subsequent stages see the env they started with.
@@ -312,7 +315,7 @@ stage_api_breakage() {
   if (( current > baseline )); then
     local delta=$(( current - baseline ))
     echo "❌ api-breakage regressed: +$delta new unapproved breaking change(s)"
-    echo "   Run 'scripts/check_api_breakage.sh' (without --count) for the full diff."
+    echo "   Run 'scripts/check_api_breakage.sh $api_version' (without --count) for the full diff."
     return 1
   fi
 
