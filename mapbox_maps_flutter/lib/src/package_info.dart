@@ -1,4 +1,4 @@
 // This file is generated
 
 /// Version of the `mapbox_maps_flutter` plugin.
-const String mapboxPluginVersion = '3.34.1-alpha.1';
+const String mapboxPluginVersion = '3.34.1-rc.1-SNAPSHOT-10-29--07-57.git-f3d1657';
