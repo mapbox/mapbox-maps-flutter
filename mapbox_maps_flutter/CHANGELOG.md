@@ -1,8 +1,10 @@
 ### main
 
-* [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
-* [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.
-* [Android] Fix `PlatformException`s (`IllegalArgumentException: invalid pointerIndex -1` or `NullPointerException`) during multi-finger gestures ([#1146](https://github.com/mapbox/mapbox-maps-flutter/issues/1146)). Flutter can forward touch events with inconsistent pointer ids ([flutter/flutter#195431](https://github.com/flutter/flutter/issues/195431)); the map now ignores such events instead of throwing.
+### 3.34.1
+
+* Version 3.34.0 is skipped: it was published to pub.dev by mistake on 2026-10-05 and retracted, so this release ships as 3.34.1.
+
+### 3.34.0-rc.1
 
 ### 3.33.0
 
