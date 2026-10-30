@@ -1,28 +1,18 @@
 ### main
 
+* [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
+* [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.
+* [Android] Fix `PlatformException`s (`IllegalArgumentException: invalid pointerIndex -1` or `NullPointerException`) during multi-finger gestures ([#1146](https://github.com/mapbox/mapbox-maps-flutter/issues/1146)). Flutter can forward touch events with inconsistent pointer ids ([flutter/flutter#195431](https://github.com/flutter/flutter/issues/195431)); the map now ignores such events instead of throwing.
+
 ### 3.34.1
 
 * Version 3.34.0 is skipped: it was published to pub.dev by mistake on 2026-10-05 and retracted, so this release ships as 3.34.1.
 
-### 3.34.0-rc.1
-
 ### 3.33.0
-
-### 3.33.0-rc.1
 
 ### 3.0.1
 
 ### 3.0.0
-
-* [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
-* Add `StyleManager.removeStyleTerrain()` to remove the style terrain while keeping its source. On web with the globe projection, terrain defined by the style's imports applies again after removal.
-* [Web] Bump Mapbox GL JS to 3.32.0.
-* [Web] Add `MapboxMapsOptions` language and worldview support. As on the other platforms, both apply to the maps already on screen and to the ones created later.
-* [Web] Add support for `MapboxMap.coordinateBoundsForCamera`, `coordinateBoundsForCameraUnwrapped`, `coordinateBoundsZoomForCamera`, and `coordinateBoundsZoomForCameraUnwrapped`. On web, the bounds cover only the area inside the camera padding, and they include the terrain elevation.
-* [Web] Add `MapboxMap.getMapOptions()` support. The options come from the live Mapbox GL JS map state: the map container size and the browser device pixel ratio. Options that GL JS cannot change return fixed values; see the method documentation.
-* Add experimental `MapboxMap.indoor` (`IndoorManager`): indoor floor state as a stream (`indoorUpdates`) and `selectFloor(floorId)`, on Android, iOS, and web. Also fix `MapboxMap.indoorSelector` on all three platforms: implemented on web, no longer throws on Android, and appears by default on iOS.
-
-### 3.0.0-rc.1
 
 > [!IMPORTANT]
 > On web, Mapbox GL JS is loaded automatically: the plugin injects the `<script>`/`<link>` tags for the GL JS version it pins into the page on first map use.
@@ -44,6 +34,13 @@
   * Decode `rgb`, `hsl`, and `hsla` style-color expressions correctly. `rgba` expressions were already decoded correctly. gl-native (Android/iOS) folds these into `rgba` before Flutter reads them back, so mobile is not affected either way.
 * Split the plugin into federated packages: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
 * Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`), and the `OnMapTapListener` / `OnMapLongTapListener` typedefs (use the Interaction API).
+* [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
+* Add `StyleManager.removeStyleTerrain()` to remove the style terrain while keeping its source. On web with the globe projection, terrain defined by the style's imports applies again after removal.
+* [Web] Bump Mapbox GL JS to 3.32.0.
+* [Web] Add `MapboxMapsOptions` language and worldview support. As on the other platforms, both apply to the maps already on screen and to the ones created later.
+* [Web] Add support for `MapboxMap.coordinateBoundsForCamera`, `coordinateBoundsForCameraUnwrapped`, `coordinateBoundsZoomForCamera`, and `coordinateBoundsZoomForCameraUnwrapped`. On web, the bounds cover only the area inside the camera padding, and they include the terrain elevation.
+* [Web] Add `MapboxMap.getMapOptions()` support. The options come from the live Mapbox GL JS map state: the map container size and the browser device pixel ratio. Options that GL JS cannot change return fixed values; see the method documentation.
+* Add experimental `MapboxMap.indoor` (`IndoorManager`): indoor floor state as a stream (`indoorUpdates`) and `selectFloor(floorId)`, on Android, iOS, and web. Also fix `MapboxMap.indoorSelector` on all three platforms: implemented on web, no longer throws on Android, and appears by default on iOS.
 * [Android] Change the default platform-view hosting mode to Hybrid Composition (`AndroidPlatformViewHostingMode.HC`); it was previously Virtual Display. Set `MapWidget.androidHostingMode` explicitly to keep the old behaviour.
 * [Android] Render the map into a `SurfaceView` by default instead of a `TextureView`, avoiding the per-frame copy a `TextureView` requires. Set `MapWidget.textureView` to `true` for a transparent background (`isOpaque: false`) and for the `VD` and `TLHC_VD` hosting modes, which cannot display a `SurfaceView`.
 * Introduce `StyleImage` (`.bytes` for PNG/JPEG/WebP, `.rgba` for premultiplied pixels) and prefer it via `addImage`, `updateImageForSource`, and `getImage`. Deprecate the `MbxImage`-based `addStyleImage`, `updateStyleImageSourceImage`, and `getStyleImage` wrappers. Style image add/has/remove is implemented on web; `getImage` and image-source updates remain mobile-only for now.
