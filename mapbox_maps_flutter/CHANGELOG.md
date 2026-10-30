@@ -1,5 +1,9 @@
 ### main
 
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
 * [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
 * [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.
 * [Android] Fix `PlatformException`s (`IllegalArgumentException: invalid pointerIndex -1` or `NullPointerException`) during multi-finger gestures ([#1146](https://github.com/mapbox/mapbox-maps-flutter/issues/1146)). Flutter can forward touch events with inconsistent pointer ids ([flutter/flutter#195431](https://github.com/flutter/flutter/issues/195431)); the map now ignores such events instead of throwing.
