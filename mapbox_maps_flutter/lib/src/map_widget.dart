@@ -128,6 +128,12 @@ class MapWidget extends StatelessWidget {
 
   /// How the underlying Android `MapView` is hosted by Flutter. Has no
   /// effect on iOS or web.
+  ///
+  /// With [AndroidPlatformViewHostingMode.HC] (the default), the map starts,
+  /// and loads its style, only when it is first shown on screen. A map that
+  /// is built but not shown, such as one in an inactive tab, does not load
+  /// its style until it is shown. Use [AndroidPlatformViewHostingMode.VD]
+  /// with [textureView] `true` to load it right away.
   @experimental
   final AndroidPlatformViewHostingMode androidHostingMode;
 
