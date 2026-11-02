@@ -20,7 +20,7 @@ class MapWidget extends StatefulWidget {
   const MapWidget({
     super.key,
     this.mapOptions,
-    this.textureView = false,
+    this.textureView,
     required this.androidHostingMode,
     this.gestureRecognizers,
     this.onMapCreated,
@@ -45,7 +45,7 @@ class MapWidget extends StatefulWidget {
     this.isOpaque = true,
   }) : _styleUri = styleUri,
        assert(
-         isOpaque != false || textureView,
+         isOpaque != false || textureView == true,
          'isOpaque: false requires textureView: true on Android. '
          'SurfaceView cannot render a transparent background.',
        );
@@ -56,12 +56,14 @@ class MapWidget extends StatefulWidget {
   /// Flag indicating to use a TextureView as render surface for the MapWidget.
   /// Only works for Android.
   ///
-  /// Defaults to `false`: a SurfaceView renders directly, without the per-frame
+  /// When unset, a SurfaceView is used on Android 14+ and a TextureView on
+  /// older versions, where a SurfaceView can draw over Flutter UI after the
+  /// app resumes. A SurfaceView renders directly, without the per-frame
   /// SurfaceTexture copy a TextureView requires. Set it to `true` for a
   /// transparent background ([isOpaque] `false`) and for the hosting modes that
   /// cannot display a SurfaceView ([AndroidPlatformViewHostingMode.VD] and
   /// [AndroidPlatformViewHostingMode.TLHC_VD]), which both need a TextureView.
-  final bool textureView;
+  final bool? textureView;
 
   /// Controls the way the underlying MapView is being hosted by Flutter on Android.
   /// This setting has no effect on iOS.

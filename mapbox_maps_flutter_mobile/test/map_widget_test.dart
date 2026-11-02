@@ -23,6 +23,16 @@ void main() {
       );
     });
 
+    test('throws when isOpaque:false and textureView is unset', () {
+      expect(
+        () => MapWidget(
+          isOpaque: false,
+          androidHostingMode: AndroidPlatformViewHostingMode.HC,
+        ),
+        throwsAssertionError,
+      );
+    });
+
     test('allows isOpaque:false with textureView:true', () {
       expect(
         () => MapWidget(

@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import com.mapbox.common.FeatureTelemetryCounter
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapOptions
@@ -30,7 +31,9 @@ class MapboxMapFactory(
     val mapOptions = params["mapOptions"] as com.mapbox.maps.mapbox_maps.pigeons.MapOptions?
     val cameraOptions = params["cameraOptions"] as com.mapbox.maps.mapbox_maps.pigeons.CameraOptions?
     val channelSuffix = params["channelSuffix"] as Long
-    val textureView = params["textureView"] as? Boolean ?: false
+    // SurfaceView can draw over Flutter UI after resume before Android 14.
+    val textureView = params["textureView"] as? Boolean
+      ?: (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     val styleUri = params["styleUri"] as? String ?: Style.STANDARD
     val pluginVersion = params["mapboxPluginVersion"] as String
     val eventTypes = params["eventTypes"] as List<Long>

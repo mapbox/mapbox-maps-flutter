@@ -118,8 +118,10 @@ class MapWidget extends StatelessWidget {
   /// Whether to use a `TextureView` as the Android render surface. Has no
   /// effect on iOS or web.
   ///
-  /// When unset a `SurfaceView` is used, which renders directly, without the
-  /// per-frame `SurfaceTexture` copy a `TextureView` requires. Set it to `true`
+  /// When unset, a `SurfaceView` is used on Android 14+ and a `TextureView` on
+  /// older versions, where a `SurfaceView` can draw over Flutter UI after the
+  /// app resumes. A `SurfaceView` renders directly, without the per-frame
+  /// `SurfaceTexture` copy a `TextureView` requires. Set it to `true`
   /// for a transparent background ([isOpaque] `false`) and for the hosting
   /// modes that cannot display a `SurfaceView`
   /// ([AndroidPlatformViewHostingMode.VD] and
