@@ -133,6 +133,55 @@ void main() {
       expect(dynamicData, true);
     }
   });
+
+  // GL JS has no equivalent tile loading setting.
+  patrolTest(
+    'Set prefetch-zoom-delta after adding GeoJsonSource',
+    skip: kIsWeb,
+    ($) async {
+      final mapboxMap = await app.pumpMap(tester: $.tester);
+      await $.tester.pumpAndSettle();
+      await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+      await mapboxMap.addSource(GeoJsonSource(id: "source"));
+      await mapboxMap.setStyleSourceProperty(
+        'source',
+        'prefetch-zoom-delta',
+        2.0,
+      );
+
+      var source = await mapboxMap.getSource('source') as GeoJsonSource;
+      var prefetchZoomDelta = await source.prefetchZoomDelta;
+      expect(prefetchZoomDelta, 2.0);
+    },
+  );
+
+  // GL JS has no equivalent tile loading setting.
+  patrolTest('Set tile-cache-budget after adding GeoJsonSource', skip: kIsWeb, (
+    $,
+  ) async {
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await $.tester.pumpAndSettle();
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    await mapboxMap.addSource(GeoJsonSource(id: "source"));
+    await mapboxMap.setStyleSourceProperty(
+      'source',
+      'tile-cache-budget',
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).toJson(),
+    );
+
+    var source = await mapboxMap.getSource('source') as GeoJsonSource;
+    var tileCacheBudget = await source.tileCacheBudget;
+    expect(
+      tileCacheBudget?.size,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+    );
+    expect(
+      tileCacheBudget?.type,
+      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+    );
+  });
 }
 
 // End of generated file.

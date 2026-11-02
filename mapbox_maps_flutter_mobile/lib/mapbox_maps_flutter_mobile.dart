@@ -15,6 +15,7 @@ import 'package:turf/turf.dart' show Feature, LineString, Point, Polygon;
 
 import 'src/internal/style_image_wire.dart';
 import 'src/package_info.dart';
+import 'src/style/source_properties.dart';
 
 export 'src/package_info.dart';
 

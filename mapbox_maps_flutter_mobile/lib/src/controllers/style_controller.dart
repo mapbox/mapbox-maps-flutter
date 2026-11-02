@@ -337,11 +337,57 @@ class StyleController implements StylePlatformInterface {
     String sourceId,
     String property,
     Object value,
-  ) => _api.setStyleSourceProperty(sourceId, property, value);
+  ) async {
+    await _checkNativeSupportedSourceProperties(
+      'setStyleSourceProperty',
+      sourceId,
+      [property],
+    );
+    return _api.setStyleSourceProperty(sourceId, property, value);
+  }
 
   @override
-  Future<void> setStyleSourceProperties(String sourceId, String properties) =>
-      _api.setStyleSourceProperties(sourceId, properties);
+  Future<void> setStyleSourceProperties(
+    String sourceId,
+    String properties,
+  ) async {
+    final parsed = jsonDecode(properties);
+    if (parsed is Map) {
+      await _checkNativeSupportedSourceProperties(
+        'setStyleSourceProperties',
+        sourceId,
+        parsed.keys.map((key) => key.toString()),
+      );
+    }
+    return _api.setStyleSourceProperties(sourceId, properties);
+  }
+
+  /// Throws an [UnimplementedError] with the reason if Android and iOS cannot
+  /// set one of [properties] of the source, but GL JS can. The source type is
+  /// read only for such property names.
+  Future<void> _checkNativeSupportedSourceProperties(
+    String method,
+    String sourceId,
+    Iterable<String> properties,
+  ) async {
+    final nativeUnsupportedNames = properties.where(
+      (property) => nativeUnsupportedLiveSourceProperties.values.any(
+        (unsupported) => unsupported.containsKey(property),
+      ),
+    );
+    if (nativeUnsupportedNames.isEmpty) return;
+    final type =
+        (await _api.getStyleSourceProperty(sourceId, 'type')).value as String;
+    for (final property in nativeUnsupportedNames) {
+      final reason = nativeUnsupportedLiveSourceProperties[type]?[property];
+      if (reason != null) {
+        throw UnimplementedError(
+          'Style.$method($property) on source type "$type" '
+          'is not supported on Android and iOS. $reason',
+        );
+      }
+    }
+  }
 
   @override
   Future<void> setStyleImportConfigProperty(

@@ -38,33 +38,33 @@ extension type JSGeoJSONSource._(JSObject _) implements JSSource {
   bool get isDynamic => (serialize() as JSGeoJSONSourceSpec).dynamic ?? false;
 }
 
+/// Runtime `ImageSource` instance returned by [Style.getSource].
 extension type JSImageSource._(JSObject _) implements JSSource {
-  /// Current image URL. Needed so coordinates-only updates can pass the
-  /// previously-set url back through [updateImage] (which requires it).
-  external String get url;
   external void updateImage(JSImageSourceUpdateOptions update);
+  external void setCoordinates(JSArray<JSLngLatPair> coordinates);
 }
 
-/// Options object accepted by `ImageSource.updateImage`. gl-js requires
-/// [url] on every call (even when only the corners change); pass the
-/// source's current [JSImageSource.url] through for coordinates-only
-/// updates.
-///
-/// [coordinates] is the optional quad of corner positions clockwise from
-/// top-left, each corner a `[longitude, latitude]` pair — exactly four
-/// pairs when supplied.
+/// Options object accepted by `ImageSource.updateImage`.
 @JS()
 @anonymous
 extension type JSImageSourceUpdateOptions._(JSObject _) implements JSObject {
-  external factory JSImageSourceUpdateOptions({
-    required String url,
-    JSArray<JSLngLatPair>? coordinates,
-  });
+  external factory JSImageSourceUpdateOptions({required String url});
 }
 
+/// Runtime tile source instance returned by [Style.getSource]. GL JS
+/// raster, raster-dem, raster-array and vector sources share these setters.
 extension type JSRasterTileSource._(JSObject _) implements JSSource {
   external void setUrl(JSString url);
   external void setTiles(JSAny tiles);
+  external void setMinzoom(double minzoom);
+  external void setMaxzoom(double maxzoom);
+}
+
+/// Runtime `ModelSource` instance returned by [Style.getSource].
+///
+/// [setModels] takes an object of model specifications by model id.
+extension type JSModelSource._(JSObject _) implements JSSource {
+  external void setModels(JSAny models);
 }
 
 // ===== addImage options =====

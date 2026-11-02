@@ -14,6 +14,7 @@ import 'bindings/map_bindings.dart';
 import 'bindings/style_bindings.dart';
 import 'style/expression_operators.dart';
 import 'style/lights.dart';
+import 'style/source_properties.dart';
 
 /// Web [StylePlatformInterface] implementation backed by Mapbox GL JS.
 final class StyleController implements StylePlatformInterface {
@@ -456,60 +457,67 @@ final class StyleController implements StylePlatformInterface {
       throw StateError('Style source "$sourceId" not found.');
     }
     final type = source.type;
-    if (type == 'geojson' && property == 'data') {
-      // The platform interface ships GeoJSON `data` as a Dart String. gl-js
-      // accepts either a URL string or a parsed FeatureCollection / Feature
-      // object — if we pass the raw JSON string through `setData`, gl-js
-      // treats it as a URL and fails with a fetch error. Detect a JSON
-      // payload by the leading character and feed gl-js the parsed object.
-      Object payload = value;
-      if (value is String) {
-        final trimmed = value.trimLeft();
-        if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-          payload = jsonDecode(value) as Object;
+    switch ((type, property)) {
+      case ('geojson', 'data'):
+        // The platform interface ships GeoJSON `data` as a Dart String. gl-js
+        // accepts either a URL string or a parsed FeatureCollection / Feature
+        // object — if we pass the raw JSON string through `setData`, gl-js
+        // treats it as a URL and fails with a fetch error. Detect a JSON
+        // payload by the leading character and feed gl-js the parsed object.
+        Object payload = value;
+        if (value is String) {
+          final trimmed = value.trimLeft();
+          if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+            payload = jsonDecode(value) as Object;
+          }
         }
-      }
-      (source as JSGeoJSONSource).setData(payload.jsify()!);
-      return;
-    }
-    if (type == 'image' && (property == 'url' || property == 'coordinates')) {
-      final imageSource = source as JSImageSource;
-      if (property == 'url') {
-        imageSource.updateImage(
+        (source as JSGeoJSONSource).setData(payload.jsify()!);
+      case ('image', 'url'):
+        (source as JSImageSource).updateImage(
           JSImageSourceUpdateOptions(url: value as String),
         );
-      } else {
-        // gl-js requires `url` on every updateImage call; pass the source's
-        // current url through unchanged so the engine treats this as a
-        // coordinates-only update.
-        final coords = [
-          for (final pair in value as List)
-            JSLngLatPair(
-              ((pair as List)[0] as num).toDouble(),
-              (pair[1] as num).toDouble(),
-            ),
-        ].toJS;
-        imageSource.updateImage(
-          JSImageSourceUpdateOptions(url: imageSource.url, coordinates: coords),
-        );
-      }
-      return;
+      case ('image', 'coordinates'):
+        (source as JSImageSource).setCoordinates(_lngLatPairs(value));
+      case (final type, 'tiles') when _tileSourceTypes.contains(type):
+        (source as JSRasterTileSource).setTiles(value.jsify()!);
+      case (final type, 'url') when _tileSourceTypes.contains(type):
+        (source as JSRasterTileSource).setUrl((value as String).toJS);
+      case (final type, 'minzoom') when _tileSourceTypes.contains(type):
+        (source as JSRasterTileSource).setMinzoom((value as num).toDouble());
+      case (final type, 'maxzoom') when _tileSourceTypes.contains(type):
+        (source as JSRasterTileSource).setMaxzoom((value as num).toDouble());
+      case ('model', 'models'):
+        (source as JSModelSource).setModels(value.jsify()!);
+      default:
+        final specType = type == 'batched-model' ? 'model' : type;
+        final unsupportedReason =
+            webUnsupportedLiveSourceProperties[specType]?[property];
+        if (unsupportedReason != null) {
+          throw UnimplementedError(
+            'Style.setStyleSourceProperty($property) on source type "$type" '
+            'is not supported on web. $unsupportedReason',
+          );
+        }
+        throw _ni('setStyleSourceProperty($property) on source type "$type"');
     }
-
-    if (type == 'raster' || type == 'vector') {
-      final tileSource = source as JSRasterTileSource;
-      if (property == 'tiles') {
-        tileSource.setTiles(value.jsify()!);
-        return;
-      }
-      if (property == 'url') {
-        tileSource.setUrl((value as String).toJS);
-        return;
-      }
-    }
-
-    throw _ni('setStyleSourceProperty($property) on source type "$type"');
   }
+
+  /// The source types that share the gl-js tile source setters.
+  static const _tileSourceTypes = {
+    'raster',
+    'raster-dem',
+    'raster-array',
+    'vector',
+  };
+
+  /// Converts `[[lng, lat], ...]` corner coordinates to gl-js pairs.
+  JSArray<JSLngLatPair> _lngLatPairs(Object coordinates) => [
+    for (final pair in coordinates as List)
+      JSLngLatPair(
+        ((pair as List)[0] as num).toDouble(),
+        (pair[1] as num).toDouble(),
+      ),
+  ].toJS;
 
   @override
   Future<void> setStyleSourceProperties(
@@ -518,8 +526,9 @@ final class StyleController implements StylePlatformInterface {
   ) async {
     final parsed = jsonDecode(properties);
     if (parsed is! Map) return;
-    // gl-js only exposes live setters for `data` / `url` / `tiles` /
-    // `coordinates`; the rest of the source spec is fixed at addSource time.
+    // gl-js only exposes live setters for `data`, `url`, `tiles`,
+    // `minzoom`, `maxzoom`, `coordinates` and `models`; the rest of the
+    // source spec is fixed at addSource time.
     // Callers (e.g. the generated source update tests) hand in the full
     // spec, so skip keys the singular setter doesn't handle instead of
     // erroring out on the first immutable property.

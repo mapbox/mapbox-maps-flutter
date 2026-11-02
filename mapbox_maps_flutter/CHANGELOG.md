@@ -7,6 +7,7 @@
 * [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
 * [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.
 * [Android] Fix `PlatformException`s (`IllegalArgumentException: invalid pointerIndex -1` or `NullPointerException`) during multi-finger gestures ([#1146](https://github.com/mapbox/mapbox-maps-flutter/issues/1146)). Flutter can forward touch events with inconsistent pointer ids ([flutter/flutter#195431](https://github.com/flutter/flutter/issues/195431)); the map now ignores such events instead of throwing.
+* [Web] `setStyleSourceProperty` and `setStyleSourceProperties` can now change `tiles` and `url` of raster-dem and raster-array sources, `minzoom` and `maxzoom` of raster, raster-dem, raster-array and vector sources, and `models` of model sources. For a property that GL JS cannot change, the error message now gives the reason.
 
 ### 3.34.1
 

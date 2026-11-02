@@ -1430,6 +1430,7 @@ class ControlSlider extends StatelessWidget {
     required this.min,
     required this.max,
     required this.onChanged,
+    this.onChangeEnd,
     this.fractionDigits = 1,
     this.unit = '',
     this.valueText,
@@ -1440,6 +1441,10 @@ class ControlSlider extends StatelessWidget {
   final double min;
   final double max;
   final ValueChanged<double> onChanged;
+
+  /// Called once when the user releases the slider, for changes that are
+  /// too expensive to apply on every drag step.
+  final ValueChanged<double>? onChangeEnd;
 
   /// Decimals shown in the trailing value.
   final int fractionDigits;
@@ -1494,6 +1499,7 @@ class ControlSlider extends StatelessWidget {
               min: min,
               max: max,
               onChanged: onChanged,
+              onChangeEnd: onChangeEnd,
             ),
           ),
         ],

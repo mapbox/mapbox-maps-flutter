@@ -28,6 +28,7 @@ import 'platform/map_recorder_example.dart';
 import 'styles/indoor_example.dart';
 import 'styles/light_example.dart';
 import 'styles/model_comparison_example.dart';
+import 'styles/source_properties_example.dart';
 import 'styles/sources_example.dart';
 import 'styles/standard_style_import_example.dart';
 import 'styles/style_example.dart';
@@ -157,6 +158,16 @@ final List<Example> examples = [
         'GeoJSON, vector tiles, raster tiles, an image source, clustered '
         'points, a heatmap and live traffic.',
     builder: (_) => const SourcesExample(),
+  ),
+  Example(
+    slug: 'source_properties',
+    category: ExampleCategory.styles,
+    leading: const Icon(Icons.tune),
+    title: 'Change source properties',
+    subtitle:
+        'Change the tiles, zoom range, data, image and models of a source '
+        'after you add it.',
+    builder: (_) => const SourcePropertiesExample(),
   ),
   Example(
     slug: 'geojson_line',
