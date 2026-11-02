@@ -14,3 +14,8 @@ workspace:
   - mapbox_maps_flutter_platform_interface/example
   - mapbox_maps_flutter_web
   - mapbox_maps_flutter_web/example
+
+flutter:
+  # The iOS plugin is SPM-only. SPM is off by default before Flutter 3.44.
+  config:
+    enable-swift-package-manager: true
