@@ -82,15 +82,6 @@ update_ios_dependency() {
         exit 1
     fi
 
-    if [ -f "$PODSPEC_FILE" ]; then
-        echo "Updating iOS CocoaPods dependency in $PODSPEC_FILE"
-        # Update MapboxMaps version
-        sed -i '' "s/s\.dependency 'MapboxMaps', '[^']*'/s.dependency 'MapboxMaps', '$version'/" "$PODSPEC_FILE"
-
-        echo "Updated iOS CocoaPods MapboxMaps dependency to $version"
-    else
-        echo "Error: Podspec not found at $PODSPEC_FILE"
-    fi
 }
 
 # Function to update Android dependency
@@ -117,7 +108,6 @@ if [ $# -eq 0 ]; then
 fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-PODSPEC_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter.podspec"
 PACKAGE_SWIFT_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter/Package.swift"
 BUILD_GRADLE_FILE="$SCRIPT_DIR/../android/build.gradle"
 
