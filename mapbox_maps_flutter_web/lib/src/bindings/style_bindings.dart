@@ -34,6 +34,16 @@ extension type JSGeoJSONSource._(JSObject _) implements JSSource {
   external void setData(JSAny data);
   external void updateData(JSAny data);
 
+  /// Each cluster query calls [callback] with `(error, result)`.
+  external void getClusterLeaves(
+    int clusterId,
+    int limit,
+    int offset,
+    JSFunction callback,
+  );
+  external void getClusterChildren(int clusterId, JSFunction callback);
+  external void getClusterExpansionZoom(int clusterId, JSFunction callback);
+
   /// Whether the source spec declared `dynamic: true`, required by [updateData].
   bool get isDynamic => (serialize() as JSGeoJSONSourceSpec).dynamic ?? false;
 }

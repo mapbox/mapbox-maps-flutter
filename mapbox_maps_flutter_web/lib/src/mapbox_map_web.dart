@@ -15,6 +15,7 @@ import 'package:web/web.dart' show Blob, window;
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
 import 'bindings/style_bindings.dart';
+import 'cluster_queries.dart';
 import 'gestures_controller.dart';
 import 'indoor/indoor_controller.dart';
 import 'indoor/indoor_selector_controller.dart';
@@ -851,19 +852,90 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     Map<String?, Object?> cluster,
     int? limit,
     int? offset,
-  ) => throw _ni('getGeoJsonClusterLeaves');
+  ) async {
+    final features = await _clusterQuery<JSArray<JSObject>>(
+      sourceIdentifier,
+      cluster,
+      (source, clusterId, callback) => source.getClusterLeaves(
+        clusterId,
+        limit ?? defaultClusterLeavesLimit,
+        offset ?? defaultClusterLeavesOffset,
+        callback,
+      ),
+    );
+    return FeatureExtensionValue(featureCollection: _featureList(features));
+  }
 
   @override
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
-  ) => throw _ni('getGeoJsonClusterChildren');
+  ) async {
+    final features = await _clusterQuery<JSArray<JSObject>>(
+      sourceIdentifier,
+      cluster,
+      (source, clusterId, callback) =>
+          source.getClusterChildren(clusterId, callback),
+    );
+    return FeatureExtensionValue(featureCollection: _featureList(features));
+  }
 
   @override
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
-  ) => throw _ni('getGeoJsonClusterExpansionZoom');
+  ) async {
+    final zoom = await _clusterQuery<JSNumber>(
+      sourceIdentifier,
+      cluster,
+      (source, clusterId, callback) =>
+          source.getClusterExpansionZoom(clusterId, callback),
+    );
+    return FeatureExtensionValue(
+      value: zoom != null
+          ? formatClusterExpansionZoom(zoom.toDartDouble)
+          : null,
+    );
+  }
+
+  /// Runs a GL JS cluster query on the source [sourceId].
+  ///
+  /// Matches the mobile SDKs: a missing source is an error, but a source that
+  /// is not GeoJSON, a feature without `cluster_id` and an unknown cluster id
+  /// all give a `null` result.
+  Future<T?> _clusterQuery<T extends JSAny>(
+    String sourceId,
+    Map<String?, Object?> cluster,
+    void Function(JSGeoJSONSource source, int clusterId, JSFunction callback)
+    query,
+  ) {
+    final source = _map.getSource(sourceId);
+    if (source == null) {
+      throw PlatformException(
+        code: 'source-error',
+        message: "Source '$sourceId' does not exist.",
+      );
+    }
+    final clusterId = clusterIdOf(cluster);
+    if (source.type != 'geojson' || clusterId == null) {
+      return Future.value();
+    }
+    final completer = Completer<T?>();
+    query(
+      source as JSGeoJSONSource,
+      clusterId,
+      ((JSAny? error, JSAny? result) {
+        completer.complete(error == null ? result as T? : null);
+      }).toJS,
+    );
+    return completer.future;
+  }
+
+  static List<Map<String?, Object?>?>? _featureList(
+    JSArray<JSObject>? features,
+  ) => features?.toDart
+      .map((f) => (f.dartify() as Map).cast<String?, Object?>())
+      .toList();
 
   @override
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({

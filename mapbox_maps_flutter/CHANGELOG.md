@@ -1,5 +1,7 @@
 ### main
 
+* [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
+
 ### 3.35.0-rc.1
 
 > [!IMPORTANT]

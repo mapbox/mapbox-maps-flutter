@@ -593,7 +593,7 @@ void main() {
     expect(query[0]!.queriedFeature.feature['id'], 'point');
   });
 
-  patrolTest('queryFeatureExtensions', skip: kIsWeb, ($) async {
+  patrolTest('queryFeatureExtensions', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await tester.pumpAndSettle();
@@ -627,20 +627,28 @@ void main() {
     );
     await app.events.onMapIdle.future;
 
-    var feature = {
-      "id": 1249,
-      "properties": {
-        "point_count_abbreviated": "10",
-        "cluster_id": 1249,
-        "cluster": true,
-        "point_count": 10,
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-29.794921875, 59.220934076150456],
-      },
-      "type": "Feature",
-    };
+    // The queried clusters come from the tiles at the camera zoom. Zoom 0
+    // gives the clusters that GL Native and GL JS make at zoom 0.
+    app.events.resetOnMapIdle();
+    await mapboxMap.setCamera(CameraOptions(zoom: 0));
+    await app.events.onMapIdle.future;
+
+    // GL Native and GL JS number clusters differently, so the test finds
+    // the cluster by its position and size, not by a fixed `cluster_id`.
+    final clusters = await mapboxMap.querySourceFeatures(
+      'earthquakes',
+      SourceQueryOptions(filter: jsonEncode(['has', 'point_count'])),
+    );
+    final feature = clusters
+        .map((c) => c!.queriedFeature.feature)
+        .where((f) => (f['properties'] as Map)['point_count'] == 10)
+        .reduce(
+          (a, b) =>
+              _distanceTo(a, -29.794921875, 59.220934076150456) <=
+                  _distanceTo(b, -29.794921875, 59.220934076150456)
+              ? a
+              : b,
+        );
 
     var clusterLeaves = await mapboxMap.getGeoJsonClusterLeaves(
       'earthquakes',
@@ -733,4 +741,12 @@ String _describeMapLoadingErrors(app.Events events) {
       .map((e) => '${e.type}: ${e.message}')
       .toList()
       .toString();
+}
+
+/// The squared distance in degrees from the point [feature] to [lng], [lat].
+double _distanceTo(Map<String?, Object?> feature, double lng, double lat) {
+  final coordinates = (feature['geometry'] as Map)['coordinates'] as List;
+  final dx = (coordinates[0] as num) - lng;
+  final dy = (coordinates[1] as num) - lat;
+  return (dx * dx + dy * dy).toDouble();
 }

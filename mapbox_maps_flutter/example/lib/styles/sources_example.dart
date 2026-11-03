@@ -55,7 +55,7 @@ const _scenes = [
   Scene(
     id: 'cluster',
     title: 'Clustered points',
-    subtitle: 'Earthquakes grouped by count',
+    subtitle: 'Earthquakes grouped by count. Tap a cluster to expand it',
     icon: Icons.bubble_chart_outlined,
   ),
   Scene(
@@ -147,6 +147,50 @@ class _SourcesExampleState extends State<SourcesExample> {
   void _onMapCreated(MapboxMap mapboxMap) {
     applyCatalogOrnamentDefaults(context, mapboxMap);
     _mapboxMap = mapboxMap;
+    mapboxMap.addInteraction(
+      TapInteraction(
+        FeaturesetDescriptor(layerId: _layerIds[1]),
+        (feature, _) => _onClusterTap(feature),
+      ),
+      interactionID: 'tap_cluster',
+    );
+  }
+
+  /// Zooms in to where a tapped cluster splits, and shows how many of its
+  /// points the leaves query returns.
+  Future<void> _onClusterTap(FeaturesetFeature feature) async {
+    final map = _mapboxMap;
+    if (map == null) return;
+    final cluster = <String?, Object?>{
+      'type': 'Feature',
+      'properties': feature.properties,
+      'geometry': feature.geometry,
+    };
+    try {
+      final zoom = await map.getGeoJsonClusterExpansionZoom(_sourceId, cluster);
+      final leaves = await map.getGeoJsonClusterLeaves(
+        _sourceId,
+        cluster,
+        null,
+        null,
+      );
+      final children = await map.getGeoJsonClusterChildren(_sourceId, cluster);
+      _report(
+        'Cluster of ${feature.properties['point_count']} points: '
+        '${children.featureCollection?.length ?? 0} children, first '
+        '${leaves.featureCollection?.length ?? 0} leaves, expands at zoom '
+        '${zoom.value}.',
+      );
+      await map.easeTo(
+        CameraOptions(
+          center: Point.fromJson(feature.geometry.cast<String, dynamic>()),
+          zoom: double.tryParse(zoom.value ?? ''),
+        ),
+        MapAnimationOptions(duration: 600),
+      );
+    } on Object catch (error) {
+      _report('Could not query the cluster: $error');
+    }
   }
 
   Future<void> _onStyleLoaded(StyleLoadedEventData _) async {

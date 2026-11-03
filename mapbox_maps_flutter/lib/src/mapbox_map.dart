@@ -521,6 +521,17 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   ) => _impl.querySourceFeatures(sourceId, options);
 
   /// Returns the leaves (original points) of a cluster from a GeoJSON source.
+  ///
+  /// [cluster] is a cluster feature with a `cluster_id` property. [limit] is
+  /// the maximum number of leaves to return and defaults to 10. [offset] is
+  /// the number of leaves to skip, for pagination, and defaults to 0. The
+  /// leaves are in [FeatureExtensionValue.featureCollection].
+  ///
+  /// {@template cluster_query_result}
+  /// Completes with an error if the source does not exist. If the source is
+  /// not a clustered GeoJSON source, or [cluster] is not a cluster of it, the
+  /// result has no value.
+  /// {@endtemplate}
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
@@ -528,13 +539,24 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
     int? offset,
   ) => _impl.getGeoJsonClusterLeaves(sourceIdentifier, cluster, limit, offset);
 
-  /// Returns the children of a cluster from a GeoJSON source.
+  /// Returns the children of a cluster from a GeoJSON source: the clusters
+  /// and points that it splits into on the next zoom level.
+  ///
+  /// [cluster] is a cluster feature with a `cluster_id` property. The
+  /// children are in [FeatureExtensionValue.featureCollection].
+  ///
+  /// {@macro cluster_query_result}
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
   ) => _impl.getGeoJsonClusterChildren(sourceIdentifier, cluster);
 
   /// Returns the zoom at which a cluster expands into multiple children.
+  ///
+  /// [cluster] is a cluster feature with a `cluster_id` property. The zoom is
+  /// in [FeatureExtensionValue.value], as a string such as `"1"`.
+  ///
+  /// {@macro cluster_query_result}
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
     String sourceIdentifier,
     Map<String?, Object?> cluster,
