@@ -58,6 +58,12 @@
 * [Android] Fix `PlatformException`s (`IllegalArgumentException: invalid pointerIndex -1` or `NullPointerException`) during multi-finger gestures ([#1146](https://github.com/mapbox/mapbox-maps-flutter/issues/1146)). Flutter can forward touch events with inconsistent pointer ids ([flutter/flutter#195431](https://github.com/flutter/flutter/issues/195431)); the map now ignores such events instead of throwing.
 * [Web] `setStyleSourceProperty` and `setStyleSourceProperties` can now change `tiles` and `url` of raster-dem and raster-array sources, `minzoom` and `maxzoom` of raster, raster-dem, raster-array and vector sources, and `models` of model sources. For a property that GL JS cannot change, the error message now gives the reason.
 
+### 3.34.2
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
 ### 3.34.1
 
 * Version 3.34.0 is skipped: it was published to pub.dev by mistake on 2026-10-05 and retracted, so this release ships as 3.34.1.
