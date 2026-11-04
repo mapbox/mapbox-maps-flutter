@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../interfaces/geofencing_interface.dart';
 import '../interfaces/log_configuration_interface.dart';
 import '../interfaces/mapbox_map_interface.dart';
 import '../interfaces/mapbox_maps_options_interface.dart';
@@ -51,6 +52,7 @@ abstract base class MapboxMapsFlutterPlatform {
   MapboxOptionsPlatformInterface get mapboxOptions;
   MapboxMapsOptionsPlatformInterface get mapboxMapsOptions;
   LogConfigurationPlatformInterface get logConfiguration;
+  GeofencingPlatformInterface get geofencing;
 
   // ===== Offline Interfaces =====
 

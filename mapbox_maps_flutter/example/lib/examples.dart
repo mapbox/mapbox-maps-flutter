@@ -23,6 +23,7 @@ import 'interaction/gestures_example.dart';
 import 'interaction/overlay_playground_example.dart';
 import 'platform.dart' show isMobile, isWeb;
 import 'platform/debug_options_example.dart';
+import 'platform/geofencing_example.dart';
 import 'platform/map_interface_example.dart';
 import 'platform/map_recorder_example.dart';
 import 'styles/indoor_example.dart';
@@ -323,6 +324,14 @@ final List<Example> examples = [
       title: 'Map recorder',
       subtitle: 'Record and replay map sessions.',
       builder: (_) => const MapRecorderExample(),
+    ),
+    Example(
+      slug: 'geofencing',
+      category: ExampleCategory.platform,
+      leading: const Icon(Icons.share_location),
+      title: 'Geofencing',
+      subtitle: 'Tap to add geofences and observe entry, dwell and exit.',
+      builder: (_) => const GeofencingExample(),
     ),
     Example(
       slug: 'projection',

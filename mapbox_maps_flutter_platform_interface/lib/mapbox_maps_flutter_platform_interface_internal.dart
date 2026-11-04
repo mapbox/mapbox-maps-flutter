@@ -16,6 +16,7 @@ export 'src/internal/style_image_conversions.dart';
 export 'src/internal/style_image_format.dart';
 
 export 'src/interfaces/annotations_interface.dart';
+export 'src/interfaces/geofencing_interface.dart';
 export 'src/interfaces/circle_annotation_manager_interface.dart';
 export 'src/interfaces/http_service_interface.dart';
 export 'src/interfaces/indoor_interface.dart';

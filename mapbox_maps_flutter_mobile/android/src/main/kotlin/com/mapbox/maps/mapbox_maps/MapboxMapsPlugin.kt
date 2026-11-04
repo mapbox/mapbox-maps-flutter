@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.offline.OfflineMapInstanceManager
 import com.mapbox.maps.mapbox_maps.offline.OfflineSwitch
+import com.mapbox.maps.mapbox_maps.pigeons._GeofencingMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
 import com.mapbox.maps.mapbox_maps.pigeons._OfflineMapInstanceManager
@@ -21,6 +22,7 @@ import io.flutter.plugin.common.BinaryMessenger
 /** MapboxMapsPlugin */
 class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private var lifecycle: Lifecycle? = null
+  private var geofencingController: GeofencingController? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     flutterPluginBinding
@@ -38,6 +40,10 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
         )
       )
     setupStaticChannels(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger, flutterPluginBinding.flutterAssets)
+
+    geofencingController = GeofencingController(flutterPluginBinding.binaryMessenger).also {
+      _GeofencingMessenger.setUp(flutterPluginBinding.binaryMessenger, it)
+    }
   }
 
   private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger, flutterAssets: FlutterAssets) {
@@ -57,6 +63,8 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    geofencingController?.dispose()
+    geofencingController = null
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {

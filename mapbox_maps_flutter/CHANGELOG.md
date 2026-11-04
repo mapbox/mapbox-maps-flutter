@@ -7,6 +7,8 @@
 > [!IMPORTANT]
 > ⚠️ Breaking changes
 > * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
+* Add geofencing on Android and iOS through `GeofencingService` and `GeofencingUtils`. `addFeature` monitors a GeoJSON feature. Entry, dwell, and exit events are delivered as streams.
 * [Android] Fix the map drawing over Flutter UI after the app resumes from the background on Android 13 and older ([#1147](https://github.com/mapbox/mapbox-maps-flutter/issues/1147)). When `MapWidget.textureView` is unset, the map now uses a `TextureView` below Android 14 and a `SurfaceView` on Android 14+.
 * [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
 * [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.

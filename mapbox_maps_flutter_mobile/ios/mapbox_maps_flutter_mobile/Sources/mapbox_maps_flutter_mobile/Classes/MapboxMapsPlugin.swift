@@ -25,5 +25,9 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
         _OfflineSwitchSetup.setUp(binaryMessenger: binaryMessenger, api: OfflineSwitch.shared)
 
         LoggingController.setup(binaryMessenger)
+        _GeofencingMessengerSetup.setUp(
+            binaryMessenger: binaryMessenger,
+            api: GeofencingController(binaryMessenger: binaryMessenger)
+        )
     }
 }

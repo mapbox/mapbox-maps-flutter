@@ -4,6 +4,117 @@
 
 part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
+/// Wire representation for a geofencing observer callback. Errors are sent as
+/// stream errors.
+sealed class GeofencingEventWire {}
+
+class GeofencingEventWireEntry extends GeofencingEventWire {
+  GeofencingEventWireEntry({required this.event});
+
+  GeofencingEvent event;
+
+  List<Object?> _toList() {
+    return <Object?>[event];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GeofencingEventWireEntry decode(Object result) {
+    result as List<Object?>;
+    return GeofencingEventWireEntry(event: result[0]! as GeofencingEvent);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GeofencingEventWireEntry ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return event == other.event;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+class GeofencingEventWireDwell extends GeofencingEventWire {
+  GeofencingEventWireDwell({required this.event});
+
+  GeofencingEvent event;
+
+  List<Object?> _toList() {
+    return <Object?>[event];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GeofencingEventWireDwell decode(Object result) {
+    result as List<Object?>;
+    return GeofencingEventWireDwell(event: result[0]! as GeofencingEvent);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GeofencingEventWireDwell ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return event == other.event;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+class GeofencingEventWireExit extends GeofencingEventWire {
+  GeofencingEventWireExit({required this.event});
+
+  GeofencingEvent event;
+
+  List<Object?> _toList() {
+    return <Object?>[event];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GeofencingEventWireExit decode(Object result) {
+    result as List<Object?>;
+    return GeofencingEventWireExit(event: result[0]! as GeofencingEvent);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GeofencingEventWireExit || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return event == other.event;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class _GestureListenersPigeonCodec extends StandardMessageCodec {
   const _GestureListenersPigeonCodec();
   @override
@@ -77,6 +188,18 @@ class _GestureListenersPigeonCodec extends StandardMessageCodec {
     } else if (value is IndoorState) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
+    } else if (value is GeofencingEvent) {
+      buffer.putUint8(151);
+      writeValue(buffer, value.encode());
+    } else if (value is GeofencingEventWireEntry) {
+      buffer.putUint8(152);
+      writeValue(buffer, value.encode());
+    } else if (value is GeofencingEventWireDwell) {
+      buffer.putUint8(153);
+      writeValue(buffer, value.encode());
+    } else if (value is GeofencingEventWireExit) {
+      buffer.putUint8(154);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -142,6 +265,14 @@ class _GestureListenersPigeonCodec extends StandardMessageCodec {
         return IndoorFloor.decode(readValue(buffer)!);
       case 150:
         return IndoorState.decode(readValue(buffer)!);
+      case 151:
+        return GeofencingEvent.decode(readValue(buffer)!);
+      case 152:
+        return GeofencingEventWireEntry.decode(readValue(buffer)!);
+      case 153:
+        return GeofencingEventWireDwell.decode(readValue(buffer)!);
+      case 154:
+        return GeofencingEventWireExit.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -231,5 +362,33 @@ Stream<IndoorState> _indoorUpdates({String instanceName = ''}) {
   );
   return _indoorUpdatesChannel.receiveBroadcastStream().map((dynamic event) {
     return event as IndoorState;
+  });
+}
+
+Stream<GeofencingEventWire> _geofencingEvents({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _geofencingEventsChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._geofencingEvents$instanceName',
+    pigeonMethodCodec,
+  );
+  return _geofencingEventsChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as GeofencingEventWire;
+  });
+}
+
+Stream<bool> _geofencingConsentChanges({String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _geofencingConsentChangesChannel = EventChannel(
+    'dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._geofencingConsentChanges$instanceName',
+    pigeonMethodCodec,
+  );
+  return _geofencingConsentChangesChannel.receiveBroadcastStream().map((
+    dynamic event,
+  ) {
+    return event as bool;
   });
 }

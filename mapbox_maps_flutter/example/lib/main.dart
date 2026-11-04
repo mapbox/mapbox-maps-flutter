@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // The SDK exports its own Size type, which shadows the Flutter geometry Size
 // used by CustomPainter and PreferredSize below.
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' hide Size;
@@ -7,12 +8,42 @@ import 'package:url_launcher/url_launcher.dart';
 import 'embed_url_strategy.dart';
 import 'example.dart';
 import 'examples.dart';
+import 'platform.dart';
 import 'theme.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   installEmbedAwareUrlStrategy();
   MapboxOptions.setAccessToken(const String.fromEnvironment('ACCESS_TOKEN'));
+  // Listen before runApp to get geofencing events after a background launch.
+  if (isMobile) {
+    final notifications = FlutterLocalNotificationsPlugin();
+    // Permission is requested by the geofencing example.
+    await notifications.initialize(
+      settings: const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        ),
+      ),
+    );
+    var id = 0;
+    void notify(String type, GeofencingEvent event) => notifications.show(
+      id: id++,
+      title: 'Geofence $type',
+      body: '${event.feature.id}',
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails('geofencing', 'Geofencing'),
+      ),
+    );
+    final geofencing = GeofencingService.instance;
+    geofencing.entryEvents.listen((e) => notify('entry', e));
+    geofencing.dwellEvents.listen((e) => notify('dwell', e));
+    geofencing.exitEvents.listen((e) => notify('exit', e));
+    geofencing.errors.listen((error) => debugPrint('$error'));
+  }
   runApp(const ExampleApp());
 }
 

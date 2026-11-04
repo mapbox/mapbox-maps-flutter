@@ -176,6 +176,10 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       );
 
   @override
+  GeofencingPlatformInterface get geofencing =>
+      throw UnsupportedError('Geofencing is not supported on web.');
+
+  @override
   Future<OfflineManagerPlatformInterface> createOfflineManager() =>
       throw UnsupportedError(
         'Offline functionalities are not supported on web.',

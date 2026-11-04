@@ -4,9 +4,11 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
+import com.mapbox.common.geofencing.GeofencingEvent
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
+import com.mapbox.maps.mapbox_maps.mapping.geofencing.*
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -14,6 +16,98 @@ import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.common.StandardMethodCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
+
+/**
+ * Wire representation for a geofencing observer callback. Errors are sent as
+ * stream errors.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ * This class should not be extended by any user class outside of the generated file.
+ */
+sealed class GeofencingEventWire
+/** Generated class from Pigeon that represents data sent in messages. */
+data class GeofencingEventWireEntry(
+  val event: GeofencingEvent
+) : GeofencingEventWire() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GeofencingEventWireEntry {
+      val event = pigeonVar_list[0] as GeofencingEvent
+      return GeofencingEventWireEntry(event)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      event,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is GeofencingEventWireEntry) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return event == other.event
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class GeofencingEventWireDwell(
+  val event: GeofencingEvent
+) : GeofencingEventWire() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GeofencingEventWireDwell {
+      val event = pigeonVar_list[0] as GeofencingEvent
+      return GeofencingEventWireDwell(event)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      event,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is GeofencingEventWireDwell) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return event == other.event
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class GeofencingEventWireExit(
+  val event: GeofencingEvent
+) : GeofencingEventWire() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GeofencingEventWireExit {
+      val event = pigeonVar_list[0] as GeofencingEvent
+      return GeofencingEventWireExit(event)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      event,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is GeofencingEventWireExit) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return event == other.event
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class GestureListenersPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -127,6 +221,26 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
           IndoorState.fromList(it)
         }
       }
+      151.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          GeofencingEventDecoder.fromList(it)
+        }
+      }
+      152.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          GeofencingEventWireEntry.fromList(it)
+        }
+      }
+      153.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          GeofencingEventWireDwell.fromList(it)
+        }
+      }
+      154.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          GeofencingEventWireExit.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -218,6 +332,22 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
       }
       is IndoorState -> {
         stream.write(150)
+        writeValue(stream, value.toList())
+      }
+      is GeofencingEvent -> {
+        stream.write(151)
+        writeValue(stream, value.toList())
+      }
+      is GeofencingEventWireEntry -> {
+        stream.write(152)
+        writeValue(stream, value.toList())
+      }
+      is GeofencingEventWireDwell -> {
+        stream.write(153)
+        writeValue(stream, value.toList())
+      }
+      is GeofencingEventWireExit -> {
+        stream.write(154)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -336,6 +466,32 @@ abstract class IndoorUpdatesStreamHandler : GestureListenersPigeonEventChannelWr
         channelName += ".$instanceName"
       }
       val internalStreamHandler = GestureListenersPigeonStreamHandler<IndoorState>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class GeofencingEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<GeofencingEventWire> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: GeofencingEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._geofencingEvents"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<GeofencingEventWire>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+}
+
+abstract class GeofencingConsentChangesStreamHandler : GestureListenersPigeonEventChannelWrapper<Boolean> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: GeofencingConsentChangesStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._geofencingConsentChanges"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<Boolean>(streamHandler)
       EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
     }
   }

@@ -11,6 +11,7 @@ import Foundation
   #error("Unsupported platform.")
 #endif
 import Turf
+import MapboxCommon
 
 /// Error class for passing custom error details to Dart side.
 final class GestureListenersError: Error {
@@ -37,6 +38,75 @@ private func isNullish(_ value: Any?) -> Bool {
 private func nilOrValue<T>(_ value: Any?) -> T? {
   if value is NSNull { return nil }
   return value as! T?
+}
+
+/// Wire representation for a geofencing observer callback. Errors are sent as
+/// stream errors.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+/// This protocol should not be extended by any user class outside of the generated file.
+protocol GeofencingEventWire {
+
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct GeofencingEventWireEntry: GeofencingEventWire {
+  var event: GeofencingEvent
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GeofencingEventWireEntry? {
+    let event = pigeonVar_list[0] as! GeofencingEvent
+
+    return GeofencingEventWireEntry(
+      event: event
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      event
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct GeofencingEventWireDwell: GeofencingEventWire {
+  var event: GeofencingEvent
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GeofencingEventWireDwell? {
+    let event = pigeonVar_list[0] as! GeofencingEvent
+
+    return GeofencingEventWireDwell(
+      event: event
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      event
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct GeofencingEventWireExit: GeofencingEventWire {
+  var event: GeofencingEvent
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GeofencingEventWireExit? {
+    let event = pigeonVar_list[0] as! GeofencingEvent
+
+    return GeofencingEventWireExit(
+      event: event
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      event
+    ]
+  }
 }
 
 private class GestureListenersPigeonCodecReader: FlutterStandardReader {
@@ -114,6 +184,14 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
       return IndoorFloor.fromList(self.readValue() as! [Any?])
     case 150:
       return IndoorState.fromList(self.readValue() as! [Any?])
+    case 151:
+      return GeofencingEvent.fromList(self.readValue() as! [Any?])
+    case 152:
+      return GeofencingEventWireEntry.fromList(self.readValue() as! [Any?])
+    case 153:
+      return GeofencingEventWireDwell.fromList(self.readValue() as! [Any?])
+    case 154:
+      return GeofencingEventWireExit.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -187,6 +265,18 @@ private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? IndoorState {
       super.writeByte(150)
+      super.writeValue(value.toList())
+    } else if let value = value as? GeofencingEvent {
+      super.writeByte(151)
+      super.writeValue(value.toList())
+    } else if let value = value as? GeofencingEventWireEntry {
+      super.writeByte(152)
+      super.writeValue(value.toList())
+    } else if let value = value as? GeofencingEventWireDwell {
+      super.writeByte(153)
+      super.writeValue(value.toList())
+    } else if let value = value as? GeofencingEventWireExit {
+      super.writeByte(154)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -339,6 +429,34 @@ class IndoorUpdatesStreamHandler: PigeonEventChannelWrapper<IndoorState> {
       channelName += ".\(instanceName)"
     }
     let internalStreamHandler = PigeonStreamHandler<IndoorState>(wrapper: streamHandler)
+    let channel = FlutterEventChannel(name: channelName, binaryMessenger: messenger, codec: gestureListenersPigeonMethodCodec)
+    channel.setStreamHandler(internalStreamHandler)
+  }
+}
+      
+class GeofencingEventsStreamHandler: PigeonEventChannelWrapper<GeofencingEventWire> {
+  static func register(with messenger: FlutterBinaryMessenger,
+                      instanceName: String = "",
+                      streamHandler: GeofencingEventsStreamHandler) {
+    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._geofencingEvents"
+    if !instanceName.isEmpty {
+      channelName += ".\(instanceName)"
+    }
+    let internalStreamHandler = PigeonStreamHandler<GeofencingEventWire>(wrapper: streamHandler)
+    let channel = FlutterEventChannel(name: channelName, binaryMessenger: messenger, codec: gestureListenersPigeonMethodCodec)
+    channel.setStreamHandler(internalStreamHandler)
+  }
+}
+      
+class GeofencingConsentChangesStreamHandler: PigeonEventChannelWrapper<Bool> {
+  static func register(with messenger: FlutterBinaryMessenger,
+                      instanceName: String = "",
+                      streamHandler: GeofencingConsentChangesStreamHandler) {
+    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter.MapEventChannel._geofencingConsentChanges"
+    if !instanceName.isEmpty {
+      channelName += ".\(instanceName)"
+    }
+    let internalStreamHandler = PigeonStreamHandler<Bool>(wrapper: streamHandler)
     let channel = FlutterEventChannel(name: channelName, binaryMessenger: messenger, codec: gestureListenersPigeonMethodCodec)
     channel.setStreamHandler(internalStreamHandler)
   }
