@@ -21,6 +21,7 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: tester,
+      styleUri: MapboxStyles.STANDARD,
       viewport: _orlyViewport,
     );
     await tester.pumpAndSettle();

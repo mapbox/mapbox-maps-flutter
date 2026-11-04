@@ -1,11 +1,15 @@
 // This file is generated.
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../patrol.dart';
+
 import 'package:turf/turf.dart' show Position;
+
 import '../../empty_map_widget.dart' as app;
 
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
@@ -134,54 +138,47 @@ void main() {
     }
   });
 
-  // GL JS has no equivalent tile loading setting.
-  patrolTest(
-    'Set prefetch-zoom-delta after adding GeoJsonSource',
-    skip: kIsWeb,
-    ($) async {
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await $.tester.pumpAndSettle();
-      await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-      await mapboxMap.addSource(GeoJsonSource(id: "source"));
-      await mapboxMap.setStyleSourceProperty(
-        'source',
-        'prefetch-zoom-delta',
-        2.0,
-      );
-
-      var source = await mapboxMap.getSource('source') as GeoJsonSource;
-      var prefetchZoomDelta = await source.prefetchZoomDelta;
-      expect(prefetchZoomDelta, 2.0);
-    },
-  );
-
-  // GL JS has no equivalent tile loading setting.
-  patrolTest('Set tile-cache-budget after adding GeoJsonSource', skip: kIsWeb, (
-    $,
-  ) async {
+  patrolTest('Set properties after adding GeoJsonSource', ($) async {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await $.tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.addSource(GeoJsonSource(id: "source"));
-    await mapboxMap.setStyleSourceProperty(
-      'source',
-      'tile-cache-budget',
-      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).toJson(),
-    );
+    // GL JS has no equivalent tile loading setting.
+    if (!kIsWeb) {
+      const id = 'source-prefetch-zoom-delta';
+      await mapboxMap.addSource(GeoJsonSource(id: id));
+      await mapboxMap.setStyleSourceProperty(id, 'prefetch-zoom-delta', 2.0);
 
-    var source = await mapboxMap.getSource('source') as GeoJsonSource;
-    var tileCacheBudget = await source.tileCacheBudget;
-    expect(
-      tileCacheBudget?.size,
-      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
-    );
-    expect(
-      tileCacheBudget?.type,
-      TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
-    );
+      final source = await mapboxMap.getSource(id) as GeoJsonSource;
+      final prefetchZoomDelta = await source.prefetchZoomDelta;
+      expect(prefetchZoomDelta, 2.0, reason: 'prefetch-zoom-delta');
+    }
+
+    // GL JS has no equivalent tile loading setting.
+    if (!kIsWeb) {
+      const id = 'source-tile-cache-budget';
+      await mapboxMap.addSource(GeoJsonSource(id: id));
+      await mapboxMap.setStyleSourceProperty(
+        id,
+        'tile-cache-budget',
+        TileCacheBudget.inMegabytes(
+          TileCacheBudgetInMegabytes(size: 3),
+        ).toJson(),
+      );
+
+      final source = await mapboxMap.getSource(id) as GeoJsonSource;
+      final tileCacheBudget = await source.tileCacheBudget;
+      expect(
+        tileCacheBudget?.size,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+        reason: 'tile-cache-budget',
+      );
+      expect(
+        tileCacheBudget?.type,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+        reason: 'tile-cache-budget',
+      );
+    }
   });
 }
-
 // End of generated file.

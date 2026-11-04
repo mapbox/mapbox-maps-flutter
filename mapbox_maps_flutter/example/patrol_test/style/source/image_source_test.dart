@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../patrol.dart';
 import '../../empty_map_widget.dart' as app;
 
@@ -50,95 +51,89 @@ void main() {
     }
   });
 
-  patrolTest('Set url after adding ImageSource', ($) async {
+  patrolTest('Set properties after adding ImageSource', ($) async {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await $.tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.addSource(
-      ImageSource(
-        id: "source",
-        coordinates: [
-          [0.0, 1.0],
-          [0.0, 1.0],
-          [0.0, 1.0],
-          [0.0, 1.0],
-        ],
-      ),
-    );
-    await mapboxMap.setStyleSourceProperty(
-      'source',
-      'url',
-      "https://docs.mapbox.com/mapbox-gl-js/assets/radar.gif",
-    );
+    {
+      const id = 'source-url';
+      await mapboxMap.addSource(
+        ImageSource(
+          id: id,
+          coordinates: [
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+          ],
+        ),
+      );
+      await mapboxMap.setStyleSourceProperty(
+        id,
+        'url',
+        "https://docs.mapbox.com/mapbox-gl-js/assets/radar.gif",
+      );
 
-    var source = await mapboxMap.getSource('source') as ImageSource;
-    var url = await source.url;
-    expect(url, "https://docs.mapbox.com/mapbox-gl-js/assets/radar.gif");
-  });
+      final source = await mapboxMap.getSource(id) as ImageSource;
+      final url = await source.url;
+      expect(
+        url,
+        "https://docs.mapbox.com/mapbox-gl-js/assets/radar.gif",
+        reason: 'url',
+      );
+    }
 
-  patrolTest('Set coordinates after adding ImageSource', ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+    {
+      const id = 'source-coordinates';
+      await mapboxMap.addSource(
+        ImageSource(
+          id: id,
+          coordinates: [
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+          ],
+        ),
+      );
+      await mapboxMap.setStyleSourceProperty(id, 'coordinates', [
+        [0.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 1.0],
+      ]);
 
-    await mapboxMap.addSource(
-      ImageSource(
-        id: "source",
-        coordinates: [
-          [0.0, 1.0],
-          [0.0, 1.0],
-          [0.0, 1.0],
-          [0.0, 1.0],
-        ],
-      ),
-    );
-    await mapboxMap.setStyleSourceProperty('source', 'coordinates', [
-      [0.0, 1.0],
-      [0.0, 1.0],
-      [0.0, 1.0],
-      [0.0, 1.0],
-    ]);
+      final source = await mapboxMap.getSource(id) as ImageSource;
+      final coordinates = await source.coordinates;
+      expect(coordinates, [
+        [0.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 1.0],
+      ], reason: 'coordinates');
+    }
 
-    var source = await mapboxMap.getSource('source') as ImageSource;
-    var coordinates = await source.coordinates;
-    expect(coordinates, [
-      [0.0, 1.0],
-      [0.0, 1.0],
-      [0.0, 1.0],
-      [0.0, 1.0],
-    ]);
-  });
+    // GL JS has no equivalent tile loading setting.
+    if (!kIsWeb) {
+      const id = 'source-prefetch-zoom-delta';
+      await mapboxMap.addSource(
+        ImageSource(
+          id: id,
+          coordinates: [
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+          ],
+        ),
+      );
+      await mapboxMap.setStyleSourceProperty(id, 'prefetch-zoom-delta', 2.0);
 
-  // GL JS has no equivalent tile loading setting.
-  patrolTest('Set prefetch-zoom-delta after adding ImageSource', skip: kIsWeb, (
-    $,
-  ) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-    await mapboxMap.addSource(
-      ImageSource(
-        id: "source",
-        coordinates: [
-          [0.0, 1.0],
-          [0.0, 1.0],
-          [0.0, 1.0],
-          [0.0, 1.0],
-        ],
-      ),
-    );
-    await mapboxMap.setStyleSourceProperty(
-      'source',
-      'prefetch-zoom-delta',
-      2.0,
-    );
-
-    var source = await mapboxMap.getSource('source') as ImageSource;
-    var prefetchZoomDelta = await source.prefetchZoomDelta;
-    expect(prefetchZoomDelta, 2.0);
+      final source = await mapboxMap.getSource(id) as ImageSource;
+      final prefetchZoomDelta = await source.prefetchZoomDelta;
+      expect(prefetchZoomDelta, 2.0, reason: 'prefetch-zoom-delta');
+    }
   });
 }
-
 // End of generated file.

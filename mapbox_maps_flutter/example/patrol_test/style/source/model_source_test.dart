@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../patrol.dart';
 import '../../empty_map_widget.dart' as app;
 
@@ -82,72 +83,66 @@ void main() {
     );
   });
 
-  // GL JS cannot change the tiles of a model source after it is added.
-  patrolTest('Set url after adding ModelSource', skip: kIsWeb, ($) async {
+  patrolTest('Set properties after adding ModelSource', ($) async {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await $.tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.addSource(
-      ModelSource(id: "source", batched: true, tiles: ["a"]),
-    );
-    await mapboxMap.setStyleSourceProperty(
-      'source',
-      'url',
-      "mapbox://mapbox.mapbox-3dbuildings-v1",
-    );
+    // GL JS cannot change the tiles of a model source after it is added.
+    if (!kIsWeb) {
+      const id = 'source-url';
+      await mapboxMap.addSource(
+        ModelSource(id: id, batched: true, tiles: ["a"]),
+      );
+      await mapboxMap.setStyleSourceProperty(
+        id,
+        'url',
+        "mapbox://mapbox.mapbox-3dbuildings-v1",
+      );
 
-    var source = await mapboxMap.getSource('source') as ModelSource;
-    var url = await source.url;
-    expect(url, "mapbox://mapbox.mapbox-3dbuildings-v1");
-  });
+      final source = await mapboxMap.getSource(id) as ModelSource;
+      final url = await source.url;
+      expect(url, "mapbox://mapbox.mapbox-3dbuildings-v1", reason: 'url');
+    }
 
-  // GL JS cannot change the zoom range of a model source after it is added.
-  patrolTest('Set maxzoom after adding ModelSource', skip: kIsWeb, ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+    // GL JS cannot change the zoom range of a model source after it is added.
+    if (!kIsWeb) {
+      const id = 'source-maxzoom';
+      await mapboxMap.addSource(
+        ModelSource(id: id, batched: true, tiles: ["a"]),
+      );
+      await mapboxMap.setStyleSourceProperty(id, 'maxzoom', 2.0);
 
-    await mapboxMap.addSource(
-      ModelSource(id: "source", batched: true, tiles: ["a"]),
-    );
-    await mapboxMap.setStyleSourceProperty('source', 'maxzoom', 2.0);
+      final source = await mapboxMap.getSource(id) as ModelSource;
+      final maxzoom = await source.maxzoom;
+      expect(maxzoom, 2.0, reason: 'maxzoom');
+    }
 
-    var source = await mapboxMap.getSource('source') as ModelSource;
-    var maxzoom = await source.maxzoom;
-    expect(maxzoom, 2.0);
-  });
+    // GL JS cannot change the zoom range of a model source after it is added.
+    if (!kIsWeb) {
+      const id = 'source-minzoom';
+      await mapboxMap.addSource(
+        ModelSource(id: id, batched: true, tiles: ["a"]),
+      );
+      await mapboxMap.setStyleSourceProperty(id, 'minzoom', 2.0);
 
-  // GL JS cannot change the zoom range of a model source after it is added.
-  patrolTest('Set minzoom after adding ModelSource', skip: kIsWeb, ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+      final source = await mapboxMap.getSource(id) as ModelSource;
+      final minzoom = await source.minzoom;
+      expect(minzoom, 2.0, reason: 'minzoom');
+    }
 
-    await mapboxMap.addSource(
-      ModelSource(id: "source", batched: true, tiles: ["a"]),
-    );
-    await mapboxMap.setStyleSourceProperty('source', 'minzoom', 2.0);
+    // GL JS cannot change the tiles of a model source after it is added.
+    if (!kIsWeb) {
+      const id = 'source-tiles';
+      await mapboxMap.addSource(
+        ModelSource(id: id, batched: true, tiles: ["a"]),
+      );
+      await mapboxMap.setStyleSourceProperty(id, 'tiles', ["a", "b", "c"]);
 
-    var source = await mapboxMap.getSource('source') as ModelSource;
-    var minzoom = await source.minzoom;
-    expect(minzoom, 2.0);
-  });
-
-  // GL JS cannot change the tiles of a model source after it is added.
-  patrolTest('Set tiles after adding ModelSource', skip: kIsWeb, ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-    await mapboxMap.addSource(
-      ModelSource(id: "source", batched: true, tiles: ["a"]),
-    );
-    await mapboxMap.setStyleSourceProperty('source', 'tiles', ["a", "b", "c"]);
-
-    var source = await mapboxMap.getSource('source') as ModelSource;
-    var tiles = await source.tiles;
-    expect(tiles, ["a", "b", "c"]);
+      final source = await mapboxMap.getSource(id) as ModelSource;
+      final tiles = await source.tiles;
+      expect(tiles, ["a", "b", "c"], reason: 'tiles');
+    }
   });
 
   patrolTest('Set models after adding ModelSource', ($) async {
@@ -204,5 +199,4 @@ void main() {
     expect(tiles, ["a", "b", "c"]);
   });
 }
-
 // End of generated file.
