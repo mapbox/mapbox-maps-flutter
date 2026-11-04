@@ -34,9 +34,15 @@ void main() {
     expect(await mapboxMap.styleLayerExists(id), isTrue);
     expect(await mapboxMap.styleSourceExists(id), isTrue);
     expect(manager.id, id);
-    final layers = await mapboxMap.getStyleLayers();
-    expect(layers.first?.id, id);
-    expect(layers.last?.id, dummyLayer.id);
+    final layerIds = (await mapboxMap.getStyleLayers())
+        .map((layer) => layer?.id)
+        .toList();
+    expect(
+      layerIds.indexOf(id),
+      lessThan(layerIds.indexOf(dummyLayer.id)),
+      reason: 'The manager layer must be below dummyLayer.',
+    );
+    expect(layerIds.last, dummyLayer.id);
   });
 
   patrolTest('create PolylineAnnotation_manager ', skip: kIsWeb, ($) async {
@@ -167,5 +173,4 @@ void main() {
     expect(1.0, lineWidth);
   });
 }
-
 // End of generated file.

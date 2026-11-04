@@ -49,6 +49,16 @@ class Events {
 
 var events = Events();
 
+/// Default test style: one background layer and no sources, so the map loads
+/// fast and needs no tiles. Pass [MapboxStyles.STANDARD] to tests that use
+/// Standard features, such as featuresets, imports, slots, lights or terrain.
+const testStyleJson =
+    '{"version":8,'
+    '"glyphs":"mapbox://fonts/mapbox/{fontstack}/{range}.pbf",'
+    '"sources":{},'
+    '"layers":[{"id":"background","type":"background",'
+    '"paint":{"background-color":"#f0f0f0"}}]}';
+
 // Named pumpMap (not `main`) because Dart forbids required named parameters
 // on a `main` entrypoint.
 Future<MapboxMap> pumpMap({
@@ -61,7 +71,7 @@ Future<MapboxMap> pumpMap({
   double? height,
   ViewportState? viewport,
   Alignment alignment = Alignment.topLeft,
-  String styleUri = MapboxStyles.STANDARD,
+  String? styleUri,
   String? styleJson,
   bool isOpaque = true,
   bool textureView = true,
@@ -96,7 +106,7 @@ Future<void> pumpMapUpdate({
   double? height,
   ViewportState? viewport,
   Alignment alignment = Alignment.topLeft,
-  String styleUri = MapboxStyles.STANDARD,
+  String? styleUri,
   String? styleJson,
   bool isOpaque = true,
   bool textureView = true,
@@ -121,7 +131,8 @@ Future<MapboxMap?> _pumpMapApp({
   double? height,
   ViewportState? viewport,
   Alignment alignment = Alignment.topLeft,
-  String styleUri = MapboxStyles.STANDARD,
+  // Without a style URI or style JSON, the map uses [testStyleJson].
+  String? styleUri,
   // Raw style JSON applied in onMapCreated instead of [styleUri], so no
   // default style flashes before it loads.
   String? styleJson,
@@ -133,6 +144,9 @@ Future<MapboxMap?> _pumpMapApp({
   required bool waitForLoad,
 }) async {
   final completer = Completer<MapboxMap>();
+  if (styleUri == null) {
+    styleJson ??= testStyleJson;
+  }
 
   events = Events();
 
@@ -162,7 +176,7 @@ Future<MapboxMap?> _pumpMapApp({
   final mapWidget = MapWidget(
     key: const ValueKey("mapWidget"),
     viewport: viewport,
-    styleUri: styleJson == null ? styleUri : '',
+    styleUri: styleJson == null ? styleUri! : '',
     isOpaque: isOpaque,
     textureView: textureView,
     onMapCreated: (MapboxMap mapboxMap) async {
@@ -250,6 +264,52 @@ Future<MapboxMap?> _pumpMapApp({
         '${events.mapLoadingErrorSummary}',
   );
   return results.first as MapboxMap;
+}
+
+/// Loads [styleJson] and waits until the map is idle with it, so that queries,
+/// feature states and interactions see the new style.
+Future<void> loadStyleJsonAndWait(
+  WidgetTester tester,
+  MapboxMap mapboxMap,
+  String styleJson,
+) async {
+  events.resetOnStyleLoaded();
+  // An idle event of the old style can arrive before the new style loads, so
+  // reset onMapIdle when the new style loads. The callback runs before the
+  // next platform event, so the first idle event of the new style still counts.
+  final idle = events.onStyleLoaded.future.then((_) {
+    events.resetOnMapIdle();
+    return events.onMapIdle.future;
+  });
+  await mapboxMap.setStyleJSON(styleJson);
+  await waitForEvent(
+    tester,
+    idle,
+    description: () =>
+        'loadStyleJsonAndWait timed out '
+        '(onStyleLoaded=${events.onStyleLoaded.isCompleted}, '
+        'onMapIdle=${events.onMapIdle.isCompleted})'
+        '${events.mapLoadingErrorSummary}',
+  );
+}
+
+/// Pumps frames until [condition] is true. Use it instead of a fixed delay
+/// to wait for a callback.
+Future<void> waitUntil(
+  WidgetTester tester,
+  bool Function() condition, {
+  Duration timeout = const Duration(seconds: 10),
+  String? description,
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (!condition()) {
+    if (DateTime.now().isAfter(deadline)) {
+      throw TimeoutException(
+        description ?? 'waitUntil timed out after $timeout',
+      );
+    }
+    await tester.pump(const Duration(milliseconds: 50));
+  }
 }
 
 Future<void> runEmpty(WidgetTester tester) =>

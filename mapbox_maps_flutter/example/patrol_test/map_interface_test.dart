@@ -20,7 +20,10 @@ void main() {
 
   patrolTest('styleGlyphURL', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     final styleGlyphURL = 'test://test/test/{fontstack}/{range}.pbf';
 
@@ -30,7 +33,10 @@ void main() {
 
   patrolTest('styleGlyphURL resolves an empty URL', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.setStyleGlyphURL('');
@@ -70,7 +76,10 @@ void main() {
 
   patrolTest('styleGlyphURL resets on style load', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.setStyleGlyphURL(_importGlyphURL);
     app.events.resetOnStyleLoaded();
@@ -84,7 +93,10 @@ void main() {
 
   patrolTest('loadStyleURI', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.loadStyleURI(MapboxStyles.DARK);
     var style = await mapboxMap.getStyleURI();
@@ -93,7 +105,10 @@ void main() {
 
   patrolTest('loadStyleJson', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/style.json');
     app.events.resetOnStyleLoaded();
@@ -110,7 +125,10 @@ void main() {
 
   patrolTest('loadRasterArray', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString(
       'assets/raster_array_layers.json',
@@ -171,7 +189,10 @@ void main() {
 
   patrolTest('style terrain', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.addSource(
@@ -210,14 +231,20 @@ void main() {
 
   patrolTest('clearData', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     mapboxMap.clearData();
   });
 
   patrolTest('setTileCacheBudget', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     mapboxMap.setTileCacheBudget(TileCacheBudgetInMegabytes(size: 100), null);
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
@@ -225,7 +252,10 @@ void main() {
 
   patrolTest('getSize', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
@@ -252,7 +282,10 @@ void main() {
 
   patrolTest('reduceMemoryUse', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.reduceMemoryUse();
@@ -260,14 +293,20 @@ void main() {
 
   patrolTest('triggerRepaint', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.triggerRepaint();
   });
 
   patrolTest('PrefetchZoomDelta', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.setPrefetchZoomDelta(10);
     var prefetchZoomDelta = await mapboxMap.getPrefetchZoomDelta();
@@ -276,7 +315,10 @@ void main() {
 
   patrolTest('MapOptions', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     final options = await mapboxMap.getMapOptions();
     expect(options.orientation, NorthOrientation.UPWARDS);
@@ -293,7 +335,10 @@ void main() {
 
   patrolTest('MapOptions reflect setters', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     if (kIsWeb) {
@@ -322,7 +367,10 @@ void main() {
 
   patrolTest('isGestureInProgress', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     expect(await mapboxMap.isGestureInProgress(), false);
@@ -333,7 +381,10 @@ void main() {
 
   patrolTest('isUserAnimationInProgress', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     expect(await mapboxMap.isUserAnimationInProgress(), false);
@@ -344,7 +395,10 @@ void main() {
 
   patrolTest('debugOptions', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.setDebugOptions([MapWidgetDebugOptions.tileBorders]);
     var debugOptions = await mapboxMap.getDebugOptions();
@@ -354,7 +408,10 @@ void main() {
 
   patrolTest('featureState', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
@@ -386,7 +443,10 @@ void main() {
 
   patrolTest('MapboxMapsOptions default values', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final _ = await app.pumpMap(tester: $.tester);
+    final _ = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     expect(await MapboxOptions.accessToken, isNotNull);
@@ -401,7 +461,10 @@ void main() {
 
   patrolTest('MapboxMapsOptions read and update', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final _ = await app.pumpMap(tester: $.tester);
+    final _ = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     final originalAccessToken = await MapboxOptions.accessToken;
@@ -468,7 +531,7 @@ void main() {
     expect(await MapboxMapsOptions.getLanguage(), language);
     expect(await MapboxMapsOptions.getWorldview(), worldview);
 
-    await app.pumpMap(tester: $.tester);
+    await app.pumpMap(tester: $.tester, styleUri: MapboxStyles.STANDARD);
     await $.tester.pumpAndSettle();
 
     expect(await MapboxMapsOptions.getLanguage(), language);
@@ -477,7 +540,10 @@ void main() {
 
   patrolTest('queryRenderedFeatures', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var options = CameraOptions(
       center: Point(coordinates: Position(-77.032667, 38.913175)),
@@ -559,7 +625,10 @@ void main() {
   // feature ids through querySourceFeatures.
   patrolTest('querySourceFeatures', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var options = CameraOptions(
       center: Point(coordinates: Position(-77.032667, 38.913175)),
@@ -595,7 +664,10 @@ void main() {
 
   patrolTest('queryFeatureExtensions', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var source = await rootBundle.loadString(
       'assets/cluster/cluster_source.json',
@@ -673,7 +745,10 @@ void main() {
 
   patrolTest('addImage StyleImage.rgba', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     const imageId = 'rgba-pixel';
@@ -697,7 +772,10 @@ void main() {
 
   patrolTest('snapshot', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.loadStyleURI(MapboxStyles.DARK);
     await app.waitForEvent($.tester, app.events.onMapIdle.future);

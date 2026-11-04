@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../patrol.dart';
 import '../../empty_map_widget.dart' as app;
 
@@ -73,108 +74,91 @@ void main() {
     }
   });
 
-  patrolTest('Set url after adding RasterArraySource', ($) async {
+  patrolTest('Set properties after adding RasterArraySource', ($) async {
     final mapboxMap = await app.pumpMap(tester: $.tester);
     await $.tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
-    await mapboxMap.addSource(RasterArraySource(id: "source", tiles: ["a"]));
-    await mapboxMap.setStyleSourceProperty(
-      'source',
-      'url',
-      "mapbox://mapbox.gfs-winds",
-    );
-
-    var source = await mapboxMap.getSource('source') as RasterArraySource;
-    var url = await source.url;
-    expect(url, "mapbox://mapbox.gfs-winds");
-  });
-
-  patrolTest('Set tiles after adding RasterArraySource', ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-    await mapboxMap.addSource(RasterArraySource(id: "source", tiles: ["a"]));
-    await mapboxMap.setStyleSourceProperty('source', 'tiles', ["a", "b", "c"]);
-
-    var source = await mapboxMap.getSource('source') as RasterArraySource;
-    var tiles = await source.tiles;
-    expect(tiles, ["a", "b", "c"]);
-  });
-
-  patrolTest('Set minzoom after adding RasterArraySource', ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-    await mapboxMap.addSource(RasterArraySource(id: "source", tiles: ["a"]));
-    await mapboxMap.setStyleSourceProperty('source', 'minzoom', 2.0);
-
-    var source = await mapboxMap.getSource('source') as RasterArraySource;
-    var minzoom = await source.minzoom;
-    expect(minzoom, 2.0);
-  });
-
-  patrolTest('Set maxzoom after adding RasterArraySource', ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-    await mapboxMap.addSource(RasterArraySource(id: "source", tiles: ["a"]));
-    await mapboxMap.setStyleSourceProperty('source', 'maxzoom', 2.0);
-
-    var source = await mapboxMap.getSource('source') as RasterArraySource;
-    var maxzoom = await source.maxzoom;
-    expect(maxzoom, 2.0);
-  });
-
-  // GL JS does not cache tiles locally.
-  patrolTest('Set volatile after adding RasterArraySource', skip: kIsWeb, (
-    $,
-  ) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
-    await $.tester.pumpAndSettle();
-    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-    await mapboxMap.addSource(RasterArraySource(id: "source", tiles: ["a"]));
-    await mapboxMap.setStyleSourceProperty('source', 'volatile', true);
-
-    var source = await mapboxMap.getSource('source') as RasterArraySource;
-    var volatile = await source.volatile;
-    expect(volatile, true);
-  });
-
-  // GL JS has no equivalent tile loading setting.
-  patrolTest(
-    'Set tile-cache-budget after adding RasterArraySource',
-    skip: kIsWeb,
-    ($) async {
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await $.tester.pumpAndSettle();
-      await app.waitForEvent($.tester, app.events.onMapLoaded.future);
-
-      await mapboxMap.addSource(RasterArraySource(id: "source", tiles: ["a"]));
+    {
+      const id = 'source-url';
+      await mapboxMap.addSource(RasterArraySource(id: id, tiles: ["a"]));
       await mapboxMap.setStyleSourceProperty(
-        'source',
+        id,
+        'url',
+        "mapbox://mapbox.gfs-winds",
+      );
+
+      final source = await mapboxMap.getSource(id) as RasterArraySource;
+      final url = await source.url;
+      expect(url, "mapbox://mapbox.gfs-winds", reason: 'url');
+    }
+
+    {
+      const id = 'source-tiles';
+      await mapboxMap.addSource(RasterArraySource(id: id, tiles: ["a"]));
+      await mapboxMap.setStyleSourceProperty(id, 'tiles', ["a", "b", "c"]);
+
+      final source = await mapboxMap.getSource(id) as RasterArraySource;
+      final tiles = await source.tiles;
+      expect(tiles, ["a", "b", "c"], reason: 'tiles');
+    }
+
+    {
+      const id = 'source-minzoom';
+      await mapboxMap.addSource(RasterArraySource(id: id, tiles: ["a"]));
+      await mapboxMap.setStyleSourceProperty(id, 'minzoom', 2.0);
+
+      final source = await mapboxMap.getSource(id) as RasterArraySource;
+      final minzoom = await source.minzoom;
+      expect(minzoom, 2.0, reason: 'minzoom');
+    }
+
+    {
+      const id = 'source-maxzoom';
+      await mapboxMap.addSource(RasterArraySource(id: id, tiles: ["a"]));
+      await mapboxMap.setStyleSourceProperty(id, 'maxzoom', 2.0);
+
+      final source = await mapboxMap.getSource(id) as RasterArraySource;
+      final maxzoom = await source.maxzoom;
+      expect(maxzoom, 2.0, reason: 'maxzoom');
+    }
+
+    // GL JS does not cache tiles locally.
+    if (!kIsWeb) {
+      const id = 'source-volatile';
+      await mapboxMap.addSource(RasterArraySource(id: id, tiles: ["a"]));
+      await mapboxMap.setStyleSourceProperty(id, 'volatile', true);
+
+      final source = await mapboxMap.getSource(id) as RasterArraySource;
+      final volatile = await source.volatile;
+      expect(volatile, true, reason: 'volatile');
+    }
+
+    // GL JS has no equivalent tile loading setting.
+    if (!kIsWeb) {
+      const id = 'source-tile-cache-budget';
+      await mapboxMap.addSource(RasterArraySource(id: id, tiles: ["a"]));
+      await mapboxMap.setStyleSourceProperty(
+        id,
         'tile-cache-budget',
         TileCacheBudget.inMegabytes(
           TileCacheBudgetInMegabytes(size: 3),
         ).toJson(),
       );
 
-      var source = await mapboxMap.getSource('source') as RasterArraySource;
-      var tileCacheBudget = await source.tileCacheBudget;
+      final source = await mapboxMap.getSource(id) as RasterArraySource;
+      final tileCacheBudget = await source.tileCacheBudget;
       expect(
         tileCacheBudget?.size,
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size,
+        reason: 'tile-cache-budget',
       );
       expect(
         tileCacheBudget?.type,
         TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type,
+        reason: 'tile-cache-budget',
       );
-    },
-  );
+    }
+  });
 }
-
 // End of generated file.

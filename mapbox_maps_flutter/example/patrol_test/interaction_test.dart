@@ -17,7 +17,10 @@ void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
   patrolTest('TapInteraction.onMap fires on dispatched click', ($) async {
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await $.tester.pumpAndSettle();
 
     final completer = Completer<MapContentGestureContext>();
@@ -44,7 +47,10 @@ void main() {
     'LongTapInteraction.onMap fires on dispatched longClick',
     skip: kIsWeb,
     ($) async {
-      final mapboxMap = await app.pumpMap(tester: $.tester);
+      final mapboxMap = await app.pumpMap(
+        tester: $.tester,
+        styleUri: MapboxStyles.STANDARD,
+      );
       await $.tester.pumpAndSettle();
 
       final completer = Completer<MapContentGestureContext>();

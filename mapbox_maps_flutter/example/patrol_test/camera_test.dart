@@ -19,7 +19,10 @@ void main() {
 
   patrolTest('cameraForCoordinatesPadding', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     var reference = CameraOptions(
@@ -52,7 +55,10 @@ void main() {
 
   patrolTest('cameraForCoordinateBounds', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     var camera = await mapboxMap.cameraForCoordinateBounds(
@@ -78,7 +84,10 @@ void main() {
 
   patrolTest('cameraForCoordinatesCameraOptions', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -123,7 +132,10 @@ void main() {
 
   patrolTest('cameraForGeometry', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var camera = await mapboxMap.cameraForGeometry(
       {
@@ -146,7 +158,10 @@ void main() {
 
   patrolTest('coordinateBoundsForCamera', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var option = CameraOptions(
       center: Point(coordinates: Position(1.0, 2.0)),
@@ -163,7 +178,10 @@ void main() {
 
   patrolTest('coordinateBoundsForCameraUnwrapped', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var option = CameraOptions(
       center: Point(coordinates: Position(1.0, 2.0)),
@@ -180,7 +198,10 @@ void main() {
 
   patrolTest('coordinateBoundsZoomForCamera', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var option = CameraOptions(
       center: Point(coordinates: Position(1.0, 2.0)),
@@ -197,7 +218,10 @@ void main() {
   });
   patrolTest('coordinateBoundsZoomForCameraUnwrapped', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var option = CameraOptions(
       center: Point(coordinates: Position(1.0, 2.0)),
@@ -345,7 +369,10 @@ void main() {
 
   patrolTest('pixelForCoordinate', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     var pixel = await mapboxMap.pixelForCoordinate(
@@ -356,7 +383,10 @@ void main() {
   });
   patrolTest('pixelsForCoordinates', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     var pixels = await mapboxMap.pixelsForCoordinates([
@@ -372,7 +402,10 @@ void main() {
 
   patrolTest('coordinateForPixel', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     final point = await mapboxMap.coordinateForPixel(
@@ -382,7 +415,10 @@ void main() {
   });
   patrolTest('coordinatesForPixels', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     final coordinates = await mapboxMap.coordinatesForPixels([
@@ -394,7 +430,10 @@ void main() {
 
   patrolTest('setCamera', skip: kIsWeb, ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var option = CameraOptions(
       center: Point(coordinates: Position(1.0, 2.0)),
@@ -411,6 +450,7 @@ void main() {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
       viewport: initialViewport,
     );
     await tester.pumpAndSettle();
@@ -429,7 +469,10 @@ void main() {
   });
   patrolTest('setBounds', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     await mapboxMap.setBounds(
       CameraBoundsOptions(
@@ -447,7 +490,10 @@ void main() {
   });
   patrolTest('getBounds', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     var bounds = await mapboxMap.getBounds();
     expect(bounds.maxPitch, 85);
