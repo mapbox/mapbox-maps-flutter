@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -19,7 +20,11 @@ void main() {
   // may still be skipped separately by the template.
   patrolTest('Add RasterLayer', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    // Standard has the slot that the layer uses.
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.addSource(
@@ -84,7 +89,11 @@ void main() {
 
   patrolTest('Add RasterLayer with expressions', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    // Standard has the slot that the layer uses.
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.addSource(
@@ -163,5 +172,4 @@ void main() {
     expect(layer.rasterSaturation, 1.0);
   });
 }
-
 // End of generated file.

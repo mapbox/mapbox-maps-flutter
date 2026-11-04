@@ -11,7 +11,10 @@ void main() {
 
   patrolTest('IndoorSelector settings', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     final indoorSelector = mapboxMap.indoorSelector;
     var settings = IndoorSelectorSettings(
@@ -54,7 +57,10 @@ void main() {
     $,
   ) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     final indoorSelector = mapboxMap.indoorSelector;
 
@@ -89,39 +95,44 @@ void main() {
     );
   });
 
-  patrolTest(
-    'enabled, position and margins are preserved by an empty update',
-    ($) async {
-      final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await tester.pumpAndSettle();
-      final indoorSelector = mapboxMap.indoorSelector;
+  patrolTest('enabled, position and margins are preserved by an empty update', (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    final indoorSelector = mapboxMap.indoorSelector;
 
-      final baseline = IndoorSelectorSettings(
-        enabled: false,
-        position: OrnamentPosition.TOP_RIGHT,
-        marginRight: 11,
-        marginTop: 22,
-      );
-      await indoorSelector.updateSettings(baseline);
-      var updatedSettings = await indoorSelector.getSettings();
-      expect(updatedSettings.enabled, baseline.enabled);
-      expect(updatedSettings.position, baseline.position);
+    final baseline = IndoorSelectorSettings(
+      enabled: false,
+      position: OrnamentPosition.TOP_RIGHT,
+      marginRight: 11,
+      marginTop: 22,
+    );
+    await indoorSelector.updateSettings(baseline);
+    var updatedSettings = await indoorSelector.getSettings();
+    expect(updatedSettings.enabled, baseline.enabled);
+    expect(updatedSettings.position, baseline.position);
 
-      await indoorSelector.updateSettings(IndoorSelectorSettings());
-      updatedSettings = await indoorSelector.getSettings();
-      expect(updatedSettings.enabled, baseline.enabled);
-      expect(updatedSettings.position, baseline.position);
-      expect(updatedSettings.marginRight, baseline.marginRight);
-      expect(updatedSettings.marginTop, baseline.marginTop);
-    },
-  );
+    await indoorSelector.updateSettings(IndoorSelectorSettings());
+    updatedSettings = await indoorSelector.getSettings();
+    expect(updatedSettings.enabled, baseline.enabled);
+    expect(updatedSettings.position, baseline.position);
+    expect(updatedSettings.marginRight, baseline.marginRight);
+    expect(updatedSettings.marginTop, baseline.marginTop);
+  });
 
   patrolTest(
     'enabled and position are preserved by a partial update that only changes a margin',
     ($) async {
       final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
+      final mapboxMap = await app.pumpMap(
+        tester: $.tester,
+        styleUri: MapboxStyles.STANDARD,
+      );
       await tester.pumpAndSettle();
       final indoorSelector = mapboxMap.indoorSelector;
 

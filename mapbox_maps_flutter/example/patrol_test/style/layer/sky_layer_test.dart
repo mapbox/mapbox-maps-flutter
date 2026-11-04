@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -19,7 +20,11 @@ void main() {
   // may still be skipped separately by the template.
   patrolTest('Add SkyLayer', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    // Standard has the slot that the layer uses.
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.addLayer(
@@ -58,7 +63,11 @@ void main() {
 
   patrolTest('Add SkyLayer with expressions', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    // Standard has the slot that the layer uses.
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     await mapboxMap.addLayer(
@@ -117,5 +126,4 @@ void main() {
     expect(layer.skyType, SkyType.GRADIENT);
   });
 }
-
 // End of generated file.

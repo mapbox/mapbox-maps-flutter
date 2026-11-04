@@ -28,9 +28,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
-
-    await Future.delayed(Duration(seconds: 4));
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
 
     // test queryRenderedFeaturesForFeatureset
     var coord = await mapboxMap.pixelForCoordinate(
@@ -89,7 +87,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -132,7 +130,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -145,7 +143,6 @@ void main() {
     );
     var state = FeatureState(map: {"highlight": true});
 
-    await Future.delayed(Duration(seconds: 5));
     await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
     var returnedFeatureState = await mapboxMap
         .getFeatureStateForFeaturesetFeature(feature);
@@ -174,7 +171,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -184,8 +181,6 @@ void main() {
     );
     var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
     var state = FeatureState(map: {"highlight": true});
-
-    await Future.delayed(Duration(seconds: 1));
 
     // test set and get featurestate
     await mapboxMap.setFeatureStateForFeaturesetDescriptor(
@@ -229,7 +224,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -282,7 +277,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
 
     await app.waitForEvent($.tester, app.events.onMapLoaded.future);
 
@@ -339,7 +334,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -359,14 +354,13 @@ void main() {
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
-    await Future.delayed(Duration(seconds: 3));
     var point = await mapboxMap.pixelForCoordinate(
       Point(coordinates: Position(0, 0)),
     );
     mapboxMap.dispatch("click", point);
 
     // Test the expected feature and context
-    await Future.delayed(Duration(seconds: 3));
+    await app.waitUntil($.tester, () => expectedFeature != null);
     expect(expectedFeature?.featureset.layerId, "circle-1");
     expect(expectedFeature?.id?.id, "1");
     expect(expectedFeature?.properties["foo"], 1);
@@ -392,7 +386,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -415,14 +409,13 @@ void main() {
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
-    await Future.delayed(Duration(seconds: 1));
     var point = await mapboxMap.pixelForCoordinate(
       Point(coordinates: Position(0.01, 0.01)),
     );
     mapboxMap.dispatch("click", point);
 
     // Test the expected feature and context
-    await Future.delayed(Duration(seconds: 1));
+    await app.waitUntil($.tester, () => expectedFeature != null);
     expect(expectedFeature?.featureset.featuresetId, "poi");
     expect(expectedFeature?.featureset.importId, "nested");
     expect(expectedFeature?.id?.id, "12");
@@ -452,7 +445,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     MapContentGestureContext? expectedContext;
 
     // Add the tap interaction
@@ -472,7 +465,7 @@ void main() {
     mapboxMap.dispatch("click", point);
 
     // Test the expected context
-    await Future.delayed(Duration(seconds: 1));
+    await app.waitUntil($.tester, () => expectedContext != null);
     expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(-0.01, 1e-4));
@@ -496,7 +489,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     int count = 0;
 
     // Add the tap interaction
@@ -516,7 +509,6 @@ void main() {
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
-    await Future.delayed(Duration(seconds: 1));
     var point = await mapboxMap.pixelForCoordinate(
       Point(coordinates: Position(0.01, 0.01)),
     );
@@ -530,7 +522,7 @@ void main() {
     point.x += 8;
     mapboxMap.dispatch("click", point);
 
-    // Test the expected feature and context
+    // A fixed wait, because the click outside the radius must not count.
     await Future.delayed(Duration(seconds: 1));
     expect(count, 2);
   });
@@ -552,7 +544,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -576,14 +568,13 @@ void main() {
     mapboxMap.addInteraction(tapInteraction);
 
     // Tap on the map
-    await Future.delayed(Duration(seconds: 1));
     var point = await mapboxMap.pixelForCoordinate(
       Point(coordinates: Position(0.01, 0.01)),
     );
     mapboxMap.dispatch("click", point);
 
     // Test the expected feature and context
-    await Future.delayed(Duration(seconds: 1));
+    await app.waitUntil($.tester, () => expectedFeature != null);
     expect(expectedFeature?.featureset.featuresetId, "poi");
     expect(expectedFeature?.featureset.importId, "nested");
     expect(expectedFeature?.id?.id, "11");
@@ -613,7 +604,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -633,14 +624,13 @@ void main() {
     mapboxMap.addInteraction(longTapInteraction);
 
     // Long tap on the map
-    await Future.delayed(Duration(seconds: 2));
     var point = await mapboxMap.pixelForCoordinate(
       Point(coordinates: Position(0, 0)),
     );
     mapboxMap.dispatch("longClick", point);
 
     // Test the expected feature and context
-    await Future.delayed(Duration(seconds: 2));
+    await app.waitUntil($.tester, () => expectedFeature != null);
     expect(expectedFeature?.featureset.layerId, "circle-1");
     expect(expectedFeature?.id?.id, "1");
     expect(expectedFeature?.properties["foo"], 1);
@@ -666,7 +656,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     FeaturesetFeature? expectedFeature;
     MapContentGestureContext? expectedContext;
 
@@ -689,14 +679,13 @@ void main() {
     mapboxMap.addInteraction(longTapInteraction);
 
     // Long tap on the map
-    await Future.delayed(Duration(seconds: 1));
     var point = await mapboxMap.pixelForCoordinate(
       Point(coordinates: Position(0.01, 0.01)),
     );
     mapboxMap.dispatch("longClick", point);
 
     // Test the expected feature and context
-    await Future.delayed(Duration(seconds: 1));
+    await app.waitUntil($.tester, () => expectedFeature != null);
     expect(expectedFeature?.featureset.featuresetId, "poi");
     expect(expectedFeature?.featureset.importId, "nested");
     expect(expectedFeature?.id?.id, "12");
@@ -726,7 +715,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     MapContentGestureContext? expectedContext;
 
     // Add the long tap interaction
@@ -746,7 +735,7 @@ void main() {
     mapboxMap.dispatch("longClick", point);
 
     // Test the expected context
-    await Future.delayed(Duration(seconds: 1));
+    await app.waitUntil($.tester, () => expectedContext != null);
     expect(expectedContext?.touchPosition.x, closeTo(point.x, 1e-4));
     expect(expectedContext?.touchPosition.y, closeTo(point.y, 1e-4));
     expect(expectedContext?.point.coordinates.lat, closeTo(-0.01, 1e-4));
@@ -768,7 +757,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.setStyleJSON(styleJson);
+    await app.loadStyleJsonAndWait($.tester, mapboxMap, styleJson);
     int count = 0;
 
     // Add the tap interaction
@@ -788,14 +777,13 @@ void main() {
     mapboxMap.dispatch("click", point);
 
     // Remove the tap interaction
-    await Future.delayed(Duration(seconds: 1));
+    await app.waitUntil($.tester, () => count == 1);
     mapboxMap.removeInteraction("tapInteraction");
 
     // Tap on the map
-    await Future.delayed(Duration(seconds: 1));
     mapboxMap.dispatch("click", point);
 
-    // Test the expected count
+    // A fixed wait, because the removed interaction must not count the click.
     await Future.delayed(Duration(seconds: 1));
     expect(count, 1);
   });

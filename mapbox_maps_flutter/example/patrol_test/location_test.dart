@@ -15,7 +15,10 @@ void main() {
 
   patrolTest('Location is updated puck 2d', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
     final location = mapboxMap.location;
     // The low-zoom stop must stay above 0. The map defaults to zoom 0, so a
@@ -112,7 +115,10 @@ void main() {
 
   patrolTest('Location is updated puck 3d', ($) async {
     final tester = $.tester;
-    final mapboxMap = await app.pumpMap(tester: $.tester);
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
     await tester.pumpAndSettle();
 
     if (isAndroid) {
