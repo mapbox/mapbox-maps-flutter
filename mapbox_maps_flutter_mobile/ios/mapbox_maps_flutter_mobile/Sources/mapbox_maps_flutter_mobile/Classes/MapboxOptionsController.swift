@@ -70,10 +70,7 @@ final class MapboxOptionsController: _MapboxOptions, _MapboxMapsOptions {
     }
 
     func getWorldview() throws -> String? {
-        return try? settingsService.get(
-            key: MapboxCommonSettings.worldview,
-            type: String.self)
-        .get()
+        return try? CombinedSettings.get(key: MapboxCommonSettings.worldview, type: String.self).get()
     }
 
     func setWorldview(worldview: String?) throws {
@@ -81,10 +78,7 @@ final class MapboxOptionsController: _MapboxOptions, _MapboxMapsOptions {
     }
 
     func getLanguage() throws -> String? {
-        return try? settingsService.get(
-            key: MapboxCommonSettings.language,
-            type: String.self)
-        .get()
+        return try? CombinedSettings.get(key: MapboxCommonSettings.language, type: String.self).get()
     }
 
     func setLanguage(language: String?) throws {
