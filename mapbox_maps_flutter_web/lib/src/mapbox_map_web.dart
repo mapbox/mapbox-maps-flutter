@@ -174,6 +174,14 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
       ),
   );
 
+  @override
+  Future<FreeCameraOptions> getFreeCameraOptions() async =>
+      _map.getFreeCameraOptions().toFreeCameraOptions();
+
+  @override
+  Future<void> setFreeCameraOptions(FreeCameraOptions options) async =>
+      _map.setFreeCameraOptions(options.toJSFreeCameraOptions());
+
   // ===== Camera convenience =====
 
   @override

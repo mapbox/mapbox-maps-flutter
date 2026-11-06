@@ -3,6 +3,8 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.Vec3
+import com.mapbox.maps.Vec4
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.animation.*
 
@@ -132,6 +134,26 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
 
   override fun getCameraState(): CameraState {
     return mapboxMap.cameraState.toCameraState(context)
+  }
+
+  override fun getFreeCameraOptions(): FreeCameraOptionsWire {
+    val options = mapboxMap.getFreeCameraOptions()
+    return FreeCameraOptionsWire(
+      position = options.position?.let { listOf(it.x, it.y, it.z) },
+      orientation = options.orientation?.let { listOf(it.x, it.y, it.z, it.w) }
+    )
+  }
+
+  override fun setFreeCameraOptions(options: FreeCameraOptionsWire) {
+    // Native options cannot be created empty, so start from the current camera.
+    val freeCameraOptions = mapboxMap.getFreeCameraOptions()
+    options.position?.let {
+      freeCameraOptions.position = Vec3(it[0], it[1], it[2])
+    }
+    options.orientation?.let {
+      freeCameraOptions.orientation = Vec4(it[0], it[1], it[2], it[3])
+    }
+    mapboxMap.setCamera(freeCameraOptions)
   }
 
   override fun setBounds(options: CameraBoundsOptions) {

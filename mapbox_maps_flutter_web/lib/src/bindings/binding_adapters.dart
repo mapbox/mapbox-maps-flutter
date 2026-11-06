@@ -52,6 +52,42 @@ extension JSMapCameraState on JSMap {
   );
 }
 
+/// Bridges the public [FreeCameraOptions] to the GL JS free camera options.
+extension FreeCameraOptionsToJS on FreeCameraOptions {
+  /// Converts to [JSFreeCameraOptions]. Unset values stay unset.
+  JSFreeCameraOptions toJSFreeCameraOptions() => JSFreeCameraOptions(
+    position: switch (position) {
+      final p? => JSMercatorPosition(x: p.x, y: p.y, z: p.z),
+      null => null,
+    },
+    orientation: switch (orientation) {
+      final q? => [q.x.toJS, q.y.toJS, q.z.toJS, q.w.toJS].toJS,
+      null => null,
+    },
+  );
+}
+
+/// Bridges the GL JS free camera options to the public [FreeCameraOptions].
+extension JSFreeCameraOptionsToFreeCameraOptions on JSFreeCameraOptions {
+  /// Converts to [FreeCameraOptions]. An orientation with the wrong length
+  /// reads as unset.
+  FreeCameraOptions toFreeCameraOptions() => FreeCameraOptions(
+    position: switch (position) {
+      final p? => FreeCameraPosition(x: p.x, y: p.y, z: p.z),
+      null => null,
+    },
+    orientation: switch (orientation?.toDart) {
+      [final x, final y, final z, final w] => FreeCameraOrientation(
+        x: x.toDartDouble,
+        y: y.toDartDouble,
+        z: z.toDartDouble,
+        w: w.toDartDouble,
+      ),
+      _ => null,
+    },
+  );
+}
+
 extension CoordinateBoundsToJSLngLatBounds on CoordinateBounds {
   JSLngLatBounds toJSLngLatBounds() =>
       JSLngLatBounds(southwest.toJSLngLat(), northeast.toJSLngLat());

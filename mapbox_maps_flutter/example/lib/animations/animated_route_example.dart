@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart'
     as geolocator
@@ -10,6 +11,8 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../scene_scaffold.dart';
 import '../utils.dart';
+import '../utils/camera_director.dart';
+import '../utils/track_path.dart';
 
 /// The route-line trim animation, in three scenes sharing one map and camera:
 ///
@@ -18,6 +21,8 @@ import '../utils.dart';
 ///    position, and need geolocation.
 ///  * **Rainbow road** — animates `LineLayer.lineBorderGradient` along a
 ///    fixed circuit instead of routing from a tap.
+///  * **Free camera drive** — drives a 3D car around the same circuit and
+///    moves the camera on every frame with `setFreeCameraOptions`.
 ///
 /// A scene switch flies the camera instead of recreating the map, and removes
 /// the previous scene's layers and sources first.
@@ -28,7 +33,7 @@ class AnimatedRouteExample extends StatefulWidget {
   State<AnimatedRouteExample> createState() => _AnimatedRouteExampleState();
 }
 
-enum _Mode { fixed, own, rainbow }
+enum _Mode { fixed, own, rainbow, drive }
 
 const _scenes = [
   Scene(
@@ -48,6 +53,12 @@ const _scenes = [
     title: 'Rainbow road',
     subtitle: 'Animate a gradient border along the Circuit de Monaco',
     icon: Icons.gradient,
+  ),
+  Scene(
+    id: 'drive',
+    title: 'Free camera drive',
+    subtitle: 'Follow a car around the Circuit de Monaco',
+    icon: Icons.directions_car,
   ),
 ];
 
@@ -73,6 +84,7 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
   var _rainbowAnimating = true;
   var _rainbowSpeed = 0.03;
   List<Point>? _rainbowTrackCoordinates;
+  _MonacoDrive? _drive;
 
   var _mode = _Mode.fixed;
   var _busy = false;
@@ -86,6 +98,7 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
   void dispose() {
     _controller?.dispose();
     _rainbowTimer?.cancel();
+    _drive?.dispose();
     super.dispose();
   }
 
@@ -99,6 +112,7 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
     await _addRouteLineLayerAndSource();
     await _addMarkerLayerAndSource();
     await _addRainbowLayerAndSource();
+    await _addDriveScene();
     await _mapboxMap?.setStyleImportConfigProperty(
       'basemap',
       'theme',
@@ -178,6 +192,9 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
       LineLayer(
         id: _rainbowLayerId,
         sourceId: _rainbowSourceId,
+        // Where a 3D bridge or building stands in front of the track, it
+        // hides the line, so the line looks like it lies on the street.
+        lineOcclusionOpacity: 0,
         lineCap: LineCap.ROUND,
         lineJoin: LineJoin.ROUND,
         lineColor: Colors.grey.shade800.toARGB32(),
@@ -189,6 +206,19 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
     if (_mode == _Mode.rainbow) {
       _startRainbowAnimation();
     }
+  }
+
+  Future<void> _addDriveScene() async {
+    final map = _mapboxMap;
+    final coordinates = _rainbowTrackCoordinates;
+    if (map == null || coordinates == null) return;
+    await _MonacoDrive.addToStyle(map);
+    _drive?.dispose();
+    _drive = _MonacoDrive(
+      map: map,
+      track: TrackPath([for (final point in coordinates) point.coordinates]),
+      vsync: this,
+    );
   }
 
   void _startRainbowAnimation() {
@@ -256,16 +286,26 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
     } else {
       _rainbowTimer?.cancel();
     }
+    if (_mode != _Mode.drive) _drive?.stop();
+    // The drive reads better in color; the route scenes use a calm,
+    // monochrome basemap.
+    _mapboxMap?.setStyleImportConfigProperty(
+      'basemap',
+      'theme',
+      _mode == _Mode.drive ? 'default' : 'monochrome',
+    );
     _goToModeStart();
   }
 
   /// Clears the route and markers, then flies to the new scene's start point.
   ///
   /// Runs under the same [_busy] guard as [_showRoute], so a tap during an
-  /// unresolved switch cannot draw a route the switch then clears.
+  /// unresolved switch cannot draw a route the switch then clears. If the
+  /// scene changes while a switch runs, the new scene starts after it.
   Future<void> _goToModeStart() async {
     final map = _mapboxMap;
     if (map == null || _busy) return;
+    final mode = _mode;
     setState(() => _busy = true);
     try {
       await _clearRoute();
@@ -274,6 +314,7 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+    if (mounted && _mode != mode) await _goToModeStart();
   }
 
   Future<void> _goToModeStartBody(MapboxMap map) async {
@@ -319,6 +360,8 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
           null,
         );
         await map.flyTo(camera, MapAnimationOptions(duration: 1200));
+      case _Mode.drive:
+        await _drive?.start();
     }
   }
 
@@ -364,6 +407,7 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
       case _Mode.own:
         return _ownLocation;
       case _Mode.rainbow:
+      case _Mode.drive:
         return null;
     }
   }
@@ -371,6 +415,7 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
   Future<void> _showRoute(Position start, Position end) async {
     final map = _mapboxMap;
     if (map == null || _busy) return;
+    final mode = _mode;
     setState(() => _busy = true);
     try {
       await _setMarkers([start, end]);
@@ -390,6 +435,8 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+    // A scene picked while the route loaded starts now and clears the route.
+    if (mounted && _mode != mode) await _goToModeStart();
   }
 
   Future<void> _drawRouteLine(List<Position> polyline) async {
@@ -488,6 +535,35 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
             ),
           ),
         ];
+      case _Mode.drive:
+        final drive = _drive;
+        if (drive == null) return const [];
+        return [
+          ControlAction(
+            label: drive.paused ? 'Play' : 'Pause',
+            icon: drive.paused ? Icons.play_arrow : Icons.pause,
+            onPressed: () => setState(() => drive.paused = !drive.paused),
+          ),
+          ControlSlider(
+            label: 'Speed',
+            value: drive.timeScale,
+            min: 0.25,
+            max: 1.5,
+            fractionDigits: 2,
+            unit: '×',
+            onChanged: (value) => setState(() => drive.timeScale = value),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'setFreeCameraOptions moves the camera on every frame. While '
+            'paused, drag the map to look around.',
+            style: TextStyle(
+              fontSize: 11,
+              height: 1.35,
+              color: MapboxGlass.labelFaint,
+            ),
+          ),
+        ];
     }
   }
 
@@ -497,7 +573,11 @@ class _AnimatedRouteExampleState extends State<AnimatedRouteExample>
       scenes: _scenes,
       selectedSceneId: _mode.name,
       onSceneSelected: _selectMode,
-      controlsTitle: _mode == _Mode.rainbow ? 'Rainbow road' : 'Route',
+      controlsTitle: switch (_mode) {
+        _Mode.rainbow => 'Rainbow road',
+        _Mode.drive => 'Free camera drive',
+        _ => 'Route',
+      },
       controlsSheetSize: ControlsSheetSize.small,
       onSheetExtentChanged: SceneScaffold.defaultOnSheetExtentChanged(
         _mapboxMap,
@@ -544,3 +624,272 @@ List<Object> _rainbowExpression(double phase) {
     ...stops,
   ];
 }
+
+/// Drives a 3D car around the Circuit de Monaco and moves the camera with it
+/// on every frame with `setFreeCameraOptions`.
+class _MonacoDrive {
+  _MonacoDrive({
+    required MapboxMap map,
+    required TrackPath track,
+    required TickerProvider vsync,
+  }) : _map = map,
+       _track = track,
+       _director = CameraDirector(track: track, zones: _monacoShotZones) {
+    _ticker = vsync.createTicker(_onTick);
+  }
+
+  static const _modelId = 'drive-car';
+  static const _sourceId = 'drive-car-source';
+  static const _layerId = 'drive-car-layer';
+  static const _modelUri =
+      'https://docs.mapbox.com/mapbox-gl-js/assets/ego_car.glb';
+
+  static const _minSpeed = 13.5;
+  static const _maxSpeed = 57.0;
+  static const _maxLateralAcceleration = 31.5;
+
+  /// How fast the car speeds up and slows down, in meters per second
+  /// squared.
+  static const _acceleration = 15.75;
+  static const _braking = 31.5;
+
+  /// Highest zoom level during the drive.
+  static const _maxZoom = 25.5;
+
+  /// Adds the car source and layer to the style, hidden.
+  ///
+  /// The car is a model source model, not a GeoJSON feature: the map
+  /// applies a new model position at once, but parses GeoJSON in the
+  /// background, so a GeoJSON car would trail the camera.
+  static Future<void> addToStyle(MapboxMap map) async {
+    await map.addSource(ModelSource(id: _sourceId));
+    await map.addLayer(
+      ModelLayer(id: _layerId, sourceId: _sourceId)
+        ..modelType = ModelType.COMMON_3D
+        ..modelScale = [1.4, 1.4, 1.4]
+        ..visibility = Visibility.NONE,
+    );
+  }
+
+  final MapboxMap _map;
+  final TrackPath _track;
+  final CameraDirector _director;
+  late final Ticker _ticker;
+
+  /// Whether the car stands still. While paused, the scene does not move
+  /// the camera, so map gestures can place it.
+  bool paused = false;
+
+  /// How fast the scene plays, where 1 is real time.
+  double timeScale = 1;
+
+  /// Whether the scene shows. A [stop] during [start] cancels the start.
+  var _active = false;
+  var _distance = 0.0;
+  var _speed = 0.0;
+
+  /// Scene seconds since the last frame that reached the map.
+  var _frameDt = 0.0;
+  Duration? _lastElapsed;
+  var _frameInFlight = false;
+  double? _previousMaxZoom;
+
+  /// The last known terrain height under the car. The map returns no height
+  /// while the terrain under the car is still loading.
+  var _groundElevation = 0.0;
+
+  /// Shows the car and continues the drive from where it stopped.
+  Future<void> start() async {
+    _active = true;
+    // The close chase camera needs zoom levels above 22, the default
+    // maximum on web. 25.5 is the default maximum on Android and iOS.
+    _previousMaxZoom ??= (await _map.getBounds()).maxZoom;
+    if (!_active) return;
+    await _map.setBounds(CameraBoundsOptions(maxZoom: _maxZoom));
+    await _map.setStyleLayerProperty(_layerId, 'visibility', 'visible');
+    if (!_active || _ticker.isActive) return;
+    _lastElapsed = null;
+    _ticker.start();
+  }
+
+  /// Stops the drive and hides the car.
+  Future<void> stop() async {
+    _active = false;
+    _ticker.stop();
+    await _map.setStyleLayerProperty(_layerId, 'visibility', 'none');
+    final previousMaxZoom = _previousMaxZoom;
+    if (previousMaxZoom != null) {
+      _previousMaxZoom = null;
+      await _map.setBounds(CameraBoundsOptions(maxZoom: previousMaxZoom));
+    }
+  }
+
+  void dispose() => _ticker.dispose();
+
+  void _onTick(Duration elapsed) {
+    final last = _lastElapsed ?? elapsed;
+    _lastElapsed = elapsed;
+    final dt =
+        ((elapsed - last).inMicroseconds / 1e6).clamp(0.0, 0.1) * timeScale;
+
+    if (!paused) {
+      final target = _track.cornerSpeedAt(
+        _distance,
+        minSpeed: _minSpeed,
+        maxSpeed: _maxSpeed,
+        maxLateralAcceleration: _maxLateralAcceleration,
+      );
+      _speed += (target - _speed).clamp(-_braking * dt, _acceleration * dt);
+      _distance = (_distance + _speed * dt) % _track.length;
+    }
+    _frameDt += dt;
+
+    // Skip a frame while the previous one is still on its way to the map,
+    // so the calls do not queue up.
+    if (_frameInFlight) return;
+    unawaited(_renderFrame(_distance, _frameDt));
+    _frameDt = 0;
+  }
+
+  Future<void> _renderFrame(double distance, double dt) async {
+    final car = _track.sample(distance);
+    _frameInFlight = true;
+    try {
+      // The calls do not wait for each other, so a frame waits for one round
+      // trip to the map, not three. The camera uses the ground height from
+      // the previous frame.
+      await Future.wait([
+        _map.setStyleSourceProperty(_sourceId, 'models', {
+          _modelId: ModelSourceModel(
+            id: _modelId,
+            uri: _modelUri,
+            position: [
+              car.position.lng.toDouble(),
+              car.position.lat.toDouble(),
+            ],
+            orientation: [0, 0, car.heading],
+          ).toJson(),
+        }),
+        _map.getElevation(Point(coordinates: car.position)).then((elevation) {
+          if (elevation != null) _groundElevation = elevation;
+        }),
+        if (!paused && _active)
+          _map.setFreeCameraOptions(
+            _director.update(distance, dt, groundElevation: _groundElevation),
+          ),
+      ]);
+    } finally {
+      _frameInFlight = false;
+    }
+  }
+}
+
+/// The shots for the Circuit de Monaco, by distance along the track. The
+/// track data starts in Casino Square, and the car drives clockwise.
+///
+/// Tight corners between buildings get the close shots, hairpins get a
+/// trackside camera, and the open stretches by the harbor get the wide
+/// shots.
+final _monacoShotZones = [
+  // Out of Casino Square and down to Mirabeau Haute. Low and straight
+  // behind the car, so the long building on the left does not hide it.
+  const ShotZone(
+    start: 30,
+    shot: CameraShot.chase,
+    back: 50,
+    right: 0,
+    up: 6.6,
+    aim: 0,
+  ),
+  // Mirabeau Haute. A crane move over the car down to the exit of the
+  // corner, then the camera follows the car through it.
+  ShotZone(
+    start: 90,
+    shot: CameraShot.trackside,
+    camera: Position(7.42895, 43.74139),
+    up: 17,
+    blendSeconds: 3,
+    arc: 90,
+  ),
+  // The Fairmont hairpin, the slowest corner of the lap. The camera is low
+  // at the bottom of the hairpin, in front of the building behind it, and
+  // turns to follow the car around it. The cut passes on the car's right,
+  // over the trees.
+  ShotZone(
+    start: 304,
+    shot: CameraShot.trackside,
+    camera: Position(7.429633, 43.740122),
+    up: 8,
+    passRight: true,
+    arc: 35,
+  ),
+  // Mirabeau Bas, in a narrow street. High and straight behind, between the
+  // buildings on both sides. It turns with the car, so the building on the
+  // left does not cut in before the corner.
+  const ShotZone(
+    start: 417,
+    shot: CameraShot.chase,
+    back: 33,
+    right: -2,
+    up: 24,
+    aim: 0.1,
+    followsHeading: true,
+  ),
+  // Portier and the tunnel. The hood camera is the only shot that the
+  // tunnel walls and roof do not block.
+  const ShotZone(start: 560, shot: CameraShot.hood),
+  // Out of the tunnel and down to the Nouvelle Chicane.
+  const ShotZone(start: 1010, shot: CameraShot.chase),
+  // The Nouvelle Chicane. Nothing stands next to the road here, so a high
+  // camera shows the chicane and the harbor.
+  const ShotZone(start: 1135, shot: CameraShot.overhead),
+  // The open run along the harbor to Tabac, filmed from the side to show the
+  // speed.
+  const ShotZone(start: 1275, shot: CameraShot.side),
+  // Tabac and the entry to the first Swimming Pool chicane.
+  const ShotZone(start: 1450, shot: CameraShot.chase),
+  // The Swimming Pool chicanes. A high camera shows the left-right shape of
+  // the corners.
+  const ShotZone(start: 1700, shot: CameraShot.overhead),
+  // The exit of the second Swimming Pool chicane, toward La Rascasse.
+  const ShotZone(start: 1860, shot: CameraShot.chase),
+  // La Rascasse. Above the roofs outside the corner, so both legs of it
+  // show.
+  ShotZone(
+    start: 1960,
+    shot: CameraShot.trackside,
+    camera: Position(7.423537, 43.731975),
+    up: 95,
+  ),
+  // Anthony Noghes and the start and finish straight. The hood camera
+  // shows the speed on the longest straight of the lap.
+  const ShotZone(start: 2200, shot: CameraShot.hood),
+  // Braking for Sainte Dévote.
+  const ShotZone(start: 2560, shot: CameraShot.chase),
+  // The climb up Beau Rivage. A wide camera shows the hill and the harbor
+  // behind it.
+  const ShotZone(start: 2700, shot: CameraShot.wide),
+  // The top of Beau Rivage. A side camera, higher than usual, so the low
+  // buildings on the right do not hide the car.
+  const ShotZone(
+    start: 2875,
+    shot: CameraShot.side,
+    back: 8.5,
+    right: 22,
+    up: 13.7,
+  ),
+  // The long left turn of Massenet.
+  const ShotZone(start: 3100, shot: CameraShot.chase),
+  // The exit of Massenet. Close behind the car, so the cut into the hood
+  // camera does not pass through the building at the corner.
+  const ShotZone(
+    start: 3200,
+    shot: CameraShot.chase,
+    back: 15,
+    right: 5,
+    up: 8,
+    aim: 0.1,
+  ),
+  // Into Casino Square. The hood camera continues into the next lap.
+  const ShotZone(start: 3258, shot: CameraShot.hood),
+];

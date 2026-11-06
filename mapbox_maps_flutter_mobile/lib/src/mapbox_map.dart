@@ -321,6 +321,14 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   @override
   Future<CameraState> getCameraState() => _cameraManager.getCameraState();
 
+  @override
+  Future<FreeCameraOptions> getFreeCameraOptions() async =>
+      (await _cameraManager.getFreeCameraOptions()).toFreeCameraOptions();
+
+  @override
+  Future<void> setFreeCameraOptions(FreeCameraOptions options) =>
+      _cameraManager.setFreeCameraOptions(options.toWire());
+
   /// Sets the `camera bounds options` of the map. The map will retain its current values for any
   /// details not passed via the camera bounds options arguments.
   /// When camera bounds options are set, the camera center is constrained by these bounds, as well as the minimum

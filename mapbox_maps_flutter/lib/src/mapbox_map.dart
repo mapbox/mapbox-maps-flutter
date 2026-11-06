@@ -138,6 +138,47 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   Future<void> setCamera(CameraOptions cameraOptions) =>
       _impl.setCamera(cameraOptions);
 
+  /// Returns the position and orientation of the camera.
+  ///
+  /// On the globe projection, the result is the equivalent camera on the
+  /// flat mercator map.
+  Future<FreeCameraOptions> getFreeCameraOptions() =>
+      _impl.getFreeCameraOptions();
+
+  /// Sets the position and orientation of the camera without animation.
+  ///
+  /// The camera keeps its current value for each field of [options] that is
+  /// null. The map uses only the pitch and the bearing of the orientation,
+  /// and ignores a roll. The map can clamp the result:
+  ///
+  /// * The pitch has an upper limit.
+  /// * An orientation that turns the camera upside down is ignored.
+  /// * The distance from the camera to the center of the map is kept in the
+  ///   range of the minimum and the maximum zoom. A low camera that looks
+  ///   at a near target can need a higher maximum zoom. Set it with
+  ///   [setBounds]. The default maximum zoom is 25.5 on Android and iOS,
+  ///   and 22 on web.
+  ///
+  /// Use it with [FreeCameraOptionsGeography.lookingAt] to follow a moving
+  /// object. On terrain, pass the ground height as the target altitude:
+  ///
+  /// ```dart
+  /// final camera = (await mapboxMap.getFreeCameraOptions())
+  ///     .withLocation(cameraLocation, altitude: 400)
+  ///     .lookingAt(
+  ///       target,
+  ///       altitude: await mapboxMap.getElevation(target) ?? 0,
+  ///     );
+  /// await mapboxMap.setFreeCameraOptions(camera);
+  /// ```
+  ///
+  /// A viewport state that follows a target, such as
+  /// [FollowPuckViewportState], also moves the camera and overrides these
+  /// options. Use [IdleViewportState] or a static state such as
+  /// [CameraViewportState] while you set the free camera.
+  Future<void> setFreeCameraOptions(FreeCameraOptions options) =>
+      _impl.setFreeCameraOptions(options);
+
   // ===== Camera convenience =====
 
   /// Returns camera options that fit the given [coordinates] with optional padding, max zoom and offset.

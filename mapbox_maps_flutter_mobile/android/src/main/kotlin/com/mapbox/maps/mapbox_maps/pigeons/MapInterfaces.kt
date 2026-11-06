@@ -359,6 +359,44 @@ data class _RenderedQueryGeometry(
 
   override fun hashCode(): Int = toList().hashCode()
 }
+
+/**
+ * Wire representation of `FreeCameraOptions` for the mobile platform channel.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FreeCameraOptionsWire(
+  /** Camera position `[x, y, z]` in normalized mercator coordinates. */
+  val position: List<Double>? = null,
+  /** Camera orientation as a unit quaternion `[x, y, z, w]`. */
+  val orientation: List<Double>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FreeCameraOptionsWire {
+      val position = pigeonVar_list[0] as List<Double>?
+      val orientation = pigeonVar_list[1] as List<Double>?
+      return FreeCameraOptionsWire(position, orientation)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      position,
+      orientation,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is FreeCameraOptionsWire) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return deepEqualsMapInterfaces(position, other.position) &&
+      deepEqualsMapInterfaces(orientation, other.orientation)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -717,6 +755,11 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
           StyleImageWireRgba.fromList(it)
         }
       }
+      200.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          FreeCameraOptionsWire.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -1004,6 +1047,10 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       is StyleImageWireRgba -> {
         stream.write(199)
+        writeValue(stream, value.toList())
+      }
+      is FreeCameraOptionsWire -> {
+        stream.write(200)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1351,6 +1398,13 @@ interface _CameraManager {
    * @return The current `camera state`.
    */
   fun getCameraState(): CameraState
+  /** Returns the position and orientation of the camera. */
+  fun getFreeCameraOptions(): FreeCameraOptionsWire
+  /**
+   * Sets the position and orientation of the camera without an animated transition.
+   * The camera keeps its current value for each field that is not set.
+   */
+  fun setFreeCameraOptions(options: FreeCameraOptionsWire)
   /**
    * Sets the `camera bounds options` of the map. The map will retain its current values for any
    * details not passed via the camera bounds options arguments.
@@ -1639,6 +1693,39 @@ interface _CameraManager {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.getCameraState())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getFreeCameraOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getFreeCameraOptions())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setFreeCameraOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as FreeCameraOptionsWire
+            val wrapped: List<Any?> = try {
+              api.setFreeCameraOptions(optionsArg)
+              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }

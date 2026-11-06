@@ -6,6 +6,7 @@ export 'package:turf/turf.dart';
 export 'src/attribution_settings.dart';
 export 'src/camera_state_extensions.dart';
 export 'src/compass_settings.dart';
+export 'src/free_camera_options_extensions.dart';
 export 'src/gestures_settings.dart';
 export 'src/geofencing.dart';
 export 'src/indoor.dart';

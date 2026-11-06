@@ -274,6 +274,34 @@ struct _RenderedQueryGeometry {
   }
 }
 
+/// Wire representation of `FreeCameraOptions` for the mobile platform channel.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FreeCameraOptionsWire {
+  /// Camera position `[x, y, z]` in normalized mercator coordinates.
+  var position: [Double]? = nil
+  /// Camera orientation as a unit quaternion `[x, y, z, w]`.
+  var orientation: [Double]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FreeCameraOptionsWire? {
+    let position: [Double]? = nilOrValue(pigeonVar_list[0])
+    let orientation: [Double]? = nilOrValue(pigeonVar_list[1])
+
+    return FreeCameraOptionsWire(
+      position: position,
+      orientation: orientation
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      position,
+      orientation,
+    ]
+  }
+}
+
 private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -511,6 +539,8 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
       return StyleImageWireBytes.fromList(self.readValue() as! [Any?])
     case 199:
       return StyleImageWireRgba.fromList(self.readValue() as! [Any?])
+    case 200:
+      return FreeCameraOptionsWire.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -731,6 +761,9 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? StyleImageWireRgba {
       super.writeByte(199)
+      super.writeValue(value.toList())
+    } else if let value = value as? FreeCameraOptionsWire {
+      super.writeByte(200)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1038,6 +1071,11 @@ protocol _CameraManager {
   ///
   /// @return The current `camera state`.
   func getCameraState() throws -> CameraState
+  /// Returns the position and orientation of the camera.
+  func getFreeCameraOptions() throws -> FreeCameraOptionsWire
+  /// Sets the position and orientation of the camera without an animated transition.
+  /// The camera keeps its current value for each field that is not set.
+  func setFreeCameraOptions(options: FreeCameraOptionsWire) throws
   /// Sets the `camera bounds options` of the map. The map will retain its current values for any
   /// details not passed via the camera bounds options arguments.
   /// When camera bounds options are set, the camera center is constrained by these bounds, as well as the minimum
@@ -1424,6 +1462,37 @@ class _CameraManagerSetup {
       }
     } else {
       getCameraStateChannel.setMessageHandler(nil)
+    }
+    /// Returns the position and orientation of the camera.
+    let getFreeCameraOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getFreeCameraOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFreeCameraOptionsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getFreeCameraOptions()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getFreeCameraOptionsChannel.setMessageHandler(nil)
+    }
+    /// Sets the position and orientation of the camera without an animated transition.
+    /// The camera keeps its current value for each field that is not set.
+    let setFreeCameraOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setFreeCameraOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFreeCameraOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! FreeCameraOptionsWire
+        do {
+          try api.setFreeCameraOptions(options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setFreeCameraOptionsChannel.setMessageHandler(nil)
     }
     /// Sets the `camera bounds options` of the map. The map will retain its current values for any
     /// details not passed via the camera bounds options arguments.

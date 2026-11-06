@@ -79,8 +79,48 @@ extension MapCamera on JSMap {
   external void setMaxPitch(double? pitch);
   external double getMaxPitch();
 
+  /// Returns the position and orientation of the camera.
+  external JSFreeCameraOptions getFreeCameraOptions();
+
+  /// Sets the position and orientation of the camera without animation.
+  external void setFreeCameraOptions(JSFreeCameraOptions options);
+
   /// The camera state of the map.
   external JSTransform get transform;
+}
+
+/// The position and orientation of the camera, as `mapboxgl.FreeCameraOptions`
+/// reads them. GL JS also accepts a plain object with these fields.
+@JS()
+@anonymous
+extension type JSFreeCameraOptions._(JSObject _) implements JSObject {
+  external factory JSFreeCameraOptions({
+    JSMercatorPosition? position,
+    JSArray<JSNumber>? orientation,
+  });
+
+  /// The camera position, or null if it is not set.
+  external JSMercatorPosition? get position;
+
+  /// The camera orientation as a unit quaternion `[x, y, z, w]`, or null if it
+  /// is not set.
+  external JSArray<JSNumber>? get orientation;
+}
+
+/// A position in normalized mercator coordinates, the shape of
+/// `mapboxgl.MercatorCoordinate`.
+@JS()
+@anonymous
+extension type JSMercatorPosition._(JSObject _) implements JSObject {
+  external factory JSMercatorPosition({
+    required double x,
+    required double y,
+    required double z,
+  });
+
+  external double get x;
+  external double get y;
+  external double get z;
 }
 
 /// The GL JS `Transform`, which holds the camera state and geometry of a map.

@@ -30,6 +30,7 @@ part 'src/controllers/indoor_controller.dart';
 part 'src/controllers/location_settings.dart';
 part 'src/controllers/style_controller.dart';
 part 'src/map_widget.dart';
+part 'src/internal/free_camera_options_conversions.dart';
 part 'src/internal/style_image_conversions.dart';
 part 'src/internal/point_annotation_icon_image.dart';
 part 'src/mapbox_map.dart';

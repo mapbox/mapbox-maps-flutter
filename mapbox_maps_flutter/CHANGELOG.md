@@ -1,5 +1,6 @@
 ### main
 
+* Add `MapboxMap.getFreeCameraOptions` and `MapboxMap.setFreeCameraOptions` to control the camera position and orientation directly, for example to follow a moving object ([#691](https://github.com/mapbox/mapbox-maps-flutter/issues/691)). The `FreeCameraOptionsGeography` extension adds the `location` and `altitude` getters and the `withLocation`, `withAltitude`, `withPitchBearing` and `lookingAt` helpers. The helpers give the same result on Android, iOS and web.
 * [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
 
 ### 3.35.0-rc.1

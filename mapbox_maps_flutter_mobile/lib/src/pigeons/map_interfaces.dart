@@ -322,6 +322,50 @@ class _RenderedQueryGeometry {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Wire representation of `FreeCameraOptions` for the mobile platform channel.
+class FreeCameraOptionsWire {
+  FreeCameraOptionsWire({this.position, this.orientation});
+
+  /// Camera position `[x, y, z]` in normalized mercator coordinates.
+  List<double>? position;
+
+  /// Camera orientation as a unit quaternion `[x, y, z, w]`.
+  List<double>? orientation;
+
+  List<Object?> _toList() {
+    return <Object?>[position, orientation];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static FreeCameraOptionsWire decode(Object result) {
+    result as List<Object?>;
+    return FreeCameraOptionsWire(
+      position: (result[0] as List<Object?>?)?.cast<double>(),
+      orientation: (result[1] as List<Object?>?)?.cast<double>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! FreeCameraOptionsWire || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(position, other.position) &&
+        _deepEquals(orientation, other.orientation);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class _MapInterfacesPigeonCodec extends StandardMessageCodec {
   const _MapInterfacesPigeonCodec();
   @override
@@ -542,6 +586,9 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
     } else if (value is StyleImageWireRgba) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
+    } else if (value is FreeCameraOptionsWire) {
+      buffer.putUint8(200);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -719,6 +766,8 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
         return StyleImageWireBytes.decode(readValue(buffer)!);
       case 199:
         return StyleImageWireRgba.decode(readValue(buffer)!);
+      case 200:
+        return FreeCameraOptionsWire.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -1612,6 +1661,66 @@ class _CameraManager {
       );
     } else {
       return (pigeonVar_replyList[0] as CameraState?)!;
+    }
+  }
+
+  /// Returns the position and orientation of the camera.
+  Future<FreeCameraOptionsWire> getFreeCameraOptions() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getFreeCameraOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as FreeCameraOptionsWire?)!;
+    }
+  }
+
+  /// Sets the position and orientation of the camera without an animated transition.
+  /// The camera keeps its current value for each field that is not set.
+  Future<void> setFreeCameraOptions(FreeCameraOptionsWire options) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setFreeCameraOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 

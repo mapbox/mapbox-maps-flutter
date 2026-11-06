@@ -106,6 +106,28 @@ final class CameraController: _CameraManager {
         return mapboxMap.cameraState.toFLTCameraState()
     }
 
+    func getFreeCameraOptions() throws -> FreeCameraOptionsWire {
+        let options = mapboxMap.freeCameraOptions
+        return FreeCameraOptionsWire(
+            position: options.getPosition().map { [$0.x, $0.y, $0.z] },
+            orientation: options.getOrientation().map { [$0.x, $0.y, $0.z, $0.w] }
+        )
+    }
+
+    func setFreeCameraOptions(options: FreeCameraOptionsWire) throws {
+        // Native options cannot be created empty, so start from the current camera.
+        let freeCameraOptions = mapboxMap.freeCameraOptions
+        if let position = options.position {
+            freeCameraOptions.setPositionForPosition(Vec3(x: position[0], y: position[1], z: position[2]))
+        }
+        if let orientation = options.orientation {
+            freeCameraOptions.setOrientationForOrientation(
+                Vec4(x: orientation[0], y: orientation[1], z: orientation[2], w: orientation[3])
+            )
+        }
+        mapboxMap.freeCameraOptions = freeCameraOptions
+    }
+
     func setBounds(options: CameraBoundsOptions) throws {
         do {
             try self.mapboxMap.setCameraBounds(with: options.toCameraBoundsOptions())

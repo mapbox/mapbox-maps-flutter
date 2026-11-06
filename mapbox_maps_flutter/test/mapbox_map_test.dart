@@ -141,6 +141,8 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   int loadStyleJsonCallCount = 0;
   int getCameraStateCallCount = 0;
   int setCameraCallCount = 0;
+  int getFreeCameraOptionsCallCount = 0;
+  int setFreeCameraOptionsCallCount = 0;
   int cameraForCoordinatesPaddingCallCount = 0;
   int cameraForCoordinateBoundsCallCount = 0;
   int cameraForCoordinatesCallCount = 0;
@@ -220,6 +222,10 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   String? lastStyleURI;
   String? lastStyleJson;
   CameraOptions? lastCameraOptions;
+  FreeCameraOptions? lastFreeCameraOptions;
+  FreeCameraOptions freeCameraOptionsToReturn = FreeCameraOptions(
+    position: const FreeCameraPosition(x: 0.5, y: 0.5, z: 0.001),
+  );
   CameraBoundsOptions? lastCameraBoundsOptions;
   MapAnimationOptions? lastMapAnimationOptions;
   List<Point>? lastCoordinates;
@@ -303,6 +309,18 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   Future<void> setCamera(CameraOptions cameraOptions) async {
     setCameraCallCount++;
     lastCameraOptions = cameraOptions;
+  }
+
+  @override
+  Future<FreeCameraOptions> getFreeCameraOptions() async {
+    getFreeCameraOptionsCallCount++;
+    return freeCameraOptionsToReturn;
+  }
+
+  @override
+  Future<void> setFreeCameraOptions(FreeCameraOptions options) async {
+    setFreeCameraOptionsCallCount++;
+    lastFreeCameraOptions = options;
   }
 
   @override
@@ -962,6 +980,21 @@ void main() {
 
       expect(mockImpl.setCameraCallCount, 1);
       expect(mockImpl.lastCameraOptions, same(options));
+    });
+
+    test('getFreeCameraOptions delegates to interface', () async {
+      final result = await mapboxMap.getFreeCameraOptions();
+
+      expect(mockImpl.getFreeCameraOptionsCallCount, 1);
+      expect(result, same(mockImpl.freeCameraOptionsToReturn));
+    });
+
+    test('setFreeCameraOptions delegates to interface', () async {
+      final options = const FreeCameraOptions().withPitchBearing(30, 90);
+      await mapboxMap.setFreeCameraOptions(options);
+
+      expect(mockImpl.setFreeCameraOptionsCallCount, 1);
+      expect(mockImpl.lastFreeCameraOptions, same(options));
     });
 
     // ===== Camera convenience =====

@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:turf/turf.dart';
 
 import '../public/debug_options.dart';
+import '../public/free_camera_options.dart';
 import '../public/interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
@@ -100,6 +101,12 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Sets the camera to the given [CameraOptions] without animation.
   Future<void> setCamera(CameraOptions cameraOptions);
+
+  /// Returns the position and orientation of the camera.
+  Future<FreeCameraOptions> getFreeCameraOptions();
+
+  /// Sets the position and orientation of the camera without animation.
+  Future<void> setFreeCameraOptions(FreeCameraOptions options);
 
   // ===== Camera convenience =====
 

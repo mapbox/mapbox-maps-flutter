@@ -14,6 +14,7 @@ export 'src/public/cancelable.dart';
 export 'src/public/debug_options.dart';
 export 'src/public/default_location_puck_2d.dart';
 export 'src/public/events.dart';
+export 'src/public/free_camera_options.dart';
 export 'src/public/geofencing.dart';
 export 'src/public/interactive_features.dart';
 export 'src/public/log_writer_backend.dart';
