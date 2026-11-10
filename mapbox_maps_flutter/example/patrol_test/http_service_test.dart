@@ -1,93 +1,59 @@
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'patrol.dart';
-import 'empty_map_widget.dart' as app;
 
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
+  final httpService = MapboxHttpService.instance;
+
   group('MapboxHttpService.setMaxRequestsPerHost', () {
-    patrolTest('accepts valid values across the supported range', skip: kIsWeb, (
-      $,
-    ) async {
-      final widgetTester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await widgetTester.pumpAndSettle();
-
-      // Reasonable mid-range value.
-      await mapboxMap.httpService.setMaxRequestsPerHost(2);
-
-      // Boundary values (1..255 maps to uint8 on the native side).
-      await mapboxMap.httpService.setMaxRequestsPerHost(1);
-      await mapboxMap.httpService.setMaxRequestsPerHost(255);
-
-      // Repeated calls should not throw — setting is idempotent / overwriting.
-      await mapboxMap.httpService.setMaxRequestsPerHost(8);
-      await mapboxMap.httpService.setMaxRequestsPerHost(8);
+    patrolTest('accepts any value without a map', ($) async {
+      for (final max in [0, 1, 2, 127, 128, 255, 256, 8]) {
+        await httpService.setMaxRequestsPerHost(max);
+      }
     });
   });
 
   group('MapboxHttpService.setCustomHeadersForHost', () {
     patrolTest(
-      'sets, accumulates, replaces and removes host-scoped headers',
-      skip: kIsWeb,
+      'sets, accumulates, replaces and removes host-scoped headers without a map',
       ($) async {
-        final widgetTester = $.tester;
-        final mapboxMap = await app.pumpMap(tester: $.tester);
-        await widgetTester.pumpAndSettle();
-
-        // Scope headers to a single host.
-        await mapboxMap.httpService.setCustomHeadersForHost(
-          'tiles.example.com',
-          {'X-Custom-Header': 'value'},
-        );
-
-        // Different hosts accumulate.
-        await mapboxMap.httpService.setCustomHeadersForHost('api.example.org', {
+        await httpService.setCustomHeadersForHost('tiles.example.com', {
+          'X-Custom-Header': 'value',
+        });
+        await httpService.setCustomHeadersForHost('api.example.org', {
           'X-Other': '1',
           'X-More': '2',
         });
-
-        // Re-setting the same host replaces its headers.
-        await mapboxMap.httpService.setCustomHeadersForHost(
-          'tiles.example.com',
-          {'X-Custom-Header': 'updated'},
-        );
-
-        // An empty map removes the entry for that host.
-        await mapboxMap.httpService.setCustomHeadersForHost(
-          'tiles.example.com',
-          {},
-        );
+        await httpService.setCustomHeadersForHost('tiles.example.com', {
+          'X-Custom-Header': 'updated',
+        });
+        await httpService.setCustomHeadersForHost('tiles.example.com', {});
+        await httpService.clearCustomHeaders();
       },
     );
+
+    patrolTest('rejects an empty host', ($) async {
+      await expectLater(
+        httpService.setCustomHeadersForHost('', {'X-Custom-Header': 'value'}),
+        throwsA(kIsWeb ? isA<ArgumentError>() : isA<PlatformException>()),
+      );
+    });
   });
 
   group('MapboxHttpService.clearCustomHeaders', () {
-    patrolTest(
-      'removes host-scoped and global headers, and is idempotent',
-      skip: kIsWeb,
-      ($) async {
-        final widgetTester = $.tester;
-        final mapboxMap = await app.pumpMap(tester: $.tester);
-        await widgetTester.pumpAndSettle();
-
-        await mapboxMap.httpService.setCustomHeadersForHost(
-          'tiles.example.com',
-          {'X-Custom-Header': 'value'},
-        );
-        await mapboxMap.httpService.setCustomHeadersForHost('api.example.org', {
-          'X-Global': 'g',
-        });
-
-        // Clearing everything should not throw and should be idempotent.
-        await mapboxMap.httpService.clearCustomHeaders();
-        await mapboxMap.httpService.clearCustomHeaders();
-      },
-    );
+    patrolTest('is idempotent', ($) async {
+      await httpService.setCustomHeadersForHost('tiles.example.com', {
+        'X-Custom-Header': 'value',
+      });
+      await httpService.clearCustomHeaders();
+      await httpService.clearCustomHeaders();
+    });
   });
 }

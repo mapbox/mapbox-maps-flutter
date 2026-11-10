@@ -29,5 +29,6 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
             binaryMessenger: binaryMessenger,
             api: GeofencingController(binaryMessenger: binaryMessenger)
         )
+        _HttpServiceMessengerSetup.setUp(binaryMessenger: binaryMessenger, api: HttpServiceController())
     }
 }

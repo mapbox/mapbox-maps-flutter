@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.offline.OfflineMapInstanceManager
 import com.mapbox.maps.mapbox_maps.offline.OfflineSwitch
 import com.mapbox.maps.mapbox_maps.pigeons._GeofencingMessenger
+import com.mapbox.maps.mapbox_maps.pigeons._HttpServiceMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
 import com.mapbox.maps.mapbox_maps.pigeons._OfflineMapInstanceManager
@@ -60,6 +61,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
     _TileStoreInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
     _OfflineSwitch.setUp(binaryMessenger, offlineSwitch)
     LoggingController.setup(binaryMessenger)
+    _HttpServiceMessenger.setUp(binaryMessenger, HttpServiceController())
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

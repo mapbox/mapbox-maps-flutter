@@ -79,9 +79,13 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   );
 
   /// Provides access to HTTP request configuration.
-  late final MapboxHttpService httpService = MapboxHttpService(
-    _impl.httpService,
-  );
+  ///
+  /// The settings are process-wide and apply to all maps.
+  @Deprecated(
+    'Use MapboxHttpService.instance. The settings apply to all maps, and a '
+    'map is not necessary. This getter will be removed in v4.',
+  )
+  MapboxHttpService get httpService => MapboxHttpService.instance;
 
   /// Provides access to Spherical Mercator projection math.
   late final Projection projection = Projection(_impl.projection);

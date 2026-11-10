@@ -44,6 +44,7 @@ part 'src/pigeons/map_interfaces.dart';
 part 'src/pigeons/settings.dart';
 part 'src/pigeons/gesture_listeners.dart';
 part 'src/pigeons/geofencing_messenger.dart';
+part 'src/pigeons/http_service_messenger.dart';
 part 'src/pigeons/indoor.dart';
 part 'src/pigeons/map_recorder_messenger.dart';
 part 'src/snapshotter/snapshotter_messenger.dart';
@@ -70,6 +71,6 @@ part 'src/viewport/transitions/viewport_transition.dart';
 part 'src/viewport/transitions/default_viewport_transition.dart';
 part 'src/viewport/transitions/fly_viewport_transition.dart';
 part 'src/viewport/transitions/easing_viewport_transition.dart';
-part 'src/http/http_service.dart';
+part 'src/http/http_service_mobile.dart';
 
 part 'src/mapbox_maps_flutter_mobile.dart';

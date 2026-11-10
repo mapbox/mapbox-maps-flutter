@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:mapbox_maps_flutter_web/src/gl_js_loader.dart';
+import 'package:mapbox_maps_flutter_web/src/http_service_web.dart';
 
 import '../mapbox_maps_flutter_web.dart';
 
@@ -178,6 +179,9 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
   @override
   GeofencingPlatformInterface get geofencing =>
       throw UnsupportedError('Geofencing is not supported on web.');
+
+  @override
+  late final MapboxHttpServicePlatformInterface httpService = HttpServiceWeb();
 
   @override
   Future<OfflineManagerPlatformInterface> createOfflineManager() =>

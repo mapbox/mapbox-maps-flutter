@@ -1,5 +1,8 @@
 ### main
 
+* Add `MapboxHttpService.instance` to configure the HTTP requests of the Mapbox SDK without a map, so custom headers also apply to the first style request. The settings are process-wide. `MapboxMap.httpService` is deprecated; it returns `MapboxHttpService.instance`.
+* `MapboxHttpService.setMaxRequestsPerHost` clamps the value to the range that the platform supports: 1..255, and 1..127 on Android. Before, Android sent values above 127 as negative numbers, which made HTTP requests fail.
+* [Web] Add support for `MapboxHttpService.setCustomHeadersForHost` and `clearCustomHeaders`. The server must allow the custom headers in CORS, and the Mapbox tile endpoints do not allow them. `setMaxRequestsPerHost` has no effect on web.
 * Add `MapboxMap.getFreeCameraOptions` and `MapboxMap.setFreeCameraOptions` to control the camera position and orientation directly, for example to follow a moving object ([#691](https://github.com/mapbox/mapbox-maps-flutter/issues/691)). The `FreeCameraOptionsGeography` extension adds the `location` and `altitude` getters and the `withLocation`, `withAltitude`, `withPitchBearing` and `lookingAt` helpers. The helpers give the same result on Android, iOS and web.
 * [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
 

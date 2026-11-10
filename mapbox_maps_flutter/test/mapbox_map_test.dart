@@ -94,6 +94,16 @@ class StubMapRecorderPlatformInterface implements MapRecorderPlatformInterface {
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
+/// Provides only the process-wide HTTP service.
+base class FakeMapboxMapsFlutterPlatform extends MapboxMapsFlutterPlatform {
+  @override
+  final MapboxHttpServicePlatformInterface httpService =
+      StubMapboxHttpServicePlatformInterface();
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 // ===== Mock MapboxMapPlatformInterface =====
 
 class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
@@ -126,9 +136,6 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   final AnnotationManagerPlatformInterface annotations =
       StubAnnotationManagerPlatformInterface();
-  @override
-  final MapboxHttpServicePlatformInterface httpService =
-      StubMapboxHttpServicePlatformInterface();
   @override
   final ProjectionPlatformInterface projection =
       StubProjectionPlatformInterface();
@@ -939,8 +946,14 @@ void main() {
       expect(mapboxMap.recorder, isA<MapRecorder>());
     });
 
-    test('httpService returns a MapboxHttpService', () {
-      expect(mapboxMap.httpService, isA<MapboxHttpService>());
+    test('deprecated httpService returns the process-wide instance', () {
+      MapboxMapsFlutterPlatform.instance = FakeMapboxMapsFlutterPlatform();
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(
+        identical(mapboxMap.httpService, MapboxHttpService.instance),
+        isTrue,
+      );
     });
 
     test('sub-interfaces are cached (late final)', () {

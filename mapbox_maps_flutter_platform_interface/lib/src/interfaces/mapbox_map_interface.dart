@@ -8,7 +8,6 @@ import '../public/free_camera_options.dart';
 import '../public/interactive_features.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import 'annotations_interface.dart';
-import 'http_service_interface.dart';
 import 'indoor_interface.dart';
 import 'location_settings_interface.dart';
 import 'map_recorder_interface.dart';
@@ -59,9 +58,6 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Provides access to annotation manager creation.
   AnnotationManagerPlatformInterface get annotations;
-
-  /// Provides access to HTTP request configuration.
-  MapboxHttpServicePlatformInterface get httpService;
 
   /// Provides access to Spherical Mercator projection math.
   ProjectionPlatformInterface get projection;

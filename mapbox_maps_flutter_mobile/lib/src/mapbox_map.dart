@@ -136,12 +136,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   );
 
   @override
-  late final MapboxHttpService httpService = MapboxHttpService(
-    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-    channelSuffix: _mapboxMapsPlatform.channelSuffix,
-  );
-
-  @override
   void dispose() {
     _mapboxMapsPlatform.dispose();
     _PerformanceStatisticsListenerApi.setUp(

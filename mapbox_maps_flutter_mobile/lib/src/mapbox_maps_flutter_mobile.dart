@@ -121,6 +121,10 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
   late final GeofencingPlatformInterface geofencing = _GeofencingMobile();
 
   @override
+  late final MapboxHttpServicePlatformInterface httpService =
+      _HttpServiceMobile();
+
+  @override
   OfflineSwitchPlatformInterface get offlineSwitch => OfflineSwitch.shared;
 
   @override

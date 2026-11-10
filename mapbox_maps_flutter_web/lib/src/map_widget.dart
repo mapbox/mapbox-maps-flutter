@@ -10,8 +10,10 @@ import 'package:web/web.dart';
 import 'bindings/map_bindings.dart';
 import 'hit_test_guard.dart';
 import 'event_adapters.dart';
+import 'http_headers_registry.dart';
 import 'gl_js_loader.dart';
 import 'mapbox_map_web.dart';
+import 'request_parameters.dart';
 import 'viewport/viewport_web.dart';
 
 class MapWebWidget extends StatefulWidget {
@@ -130,6 +132,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
       minZoom: 0,
       preserveDrawingBuffer: true,
       style: widget.styleUri.toJS,
+      transformRequest: _transformRequest.toJS,
     );
     final languageValue = widget.language?.value;
     if (languageValue != null) options.language = languageValue;
@@ -218,3 +221,10 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     );
   }
 }
+
+/// Adds the registered custom headers to a GL JS request.
+///
+/// GL JS calls this for each request of every map. It reads the registry on
+/// each call, so header changes apply to the next request.
+JSRequestParameters _transformRequest(String url, JSAny? resourceType) =>
+    requestParametersFor(url, HttpHeadersRegistry.instance);

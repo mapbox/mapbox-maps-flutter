@@ -114,9 +114,6 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   late final AnnotationManagerPlatformInterface annotations =
       UnsupportedAnnotationManagerWeb();
   @override
-  late final MapboxHttpServicePlatformInterface httpService =
-      UnsupportedHttpServiceWeb();
-  @override
   late final ProjectionPlatformInterface projection =
       UnsupportedProjectionWeb();
   @override

@@ -71,10 +71,18 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
     double? minZoom,
     bool? preserveDrawingBuffer,
     JSString? style,
+    JSFunction? transformRequest,
   });
 
   external set language(String value);
   external set worldview(String value);
+}
+
+/// GL JS `RequestParameters`, returned from the `transformRequest` option.
+@JS()
+@anonymous
+extension type JSRequestParameters._(JSObject _) implements JSObject {
+  external factory JSRequestParameters({required String url, JSAny? headers});
 }
 
 @JS('LngLat')

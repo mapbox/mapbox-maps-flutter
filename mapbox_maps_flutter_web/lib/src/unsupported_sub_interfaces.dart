@@ -55,26 +55,6 @@ class UnsupportedAnnotationManagerWeb
       throw _unimplemented('removeAnnotationManagerById', 'AnnotationManager');
 }
 
-class UnsupportedHttpServiceWeb implements MapboxHttpServicePlatformInterface {
-  @override
-  Future<void> setCustomHeaders(Map<String, String> headers) =>
-      throw _unimplemented('setCustomHeaders', 'HttpService');
-
-  @override
-  Future<void> setCustomHeadersForHost(
-    String host,
-    Map<String, String> headers,
-  ) => throw _unimplemented('setCustomHeadersForHost', 'HttpService');
-
-  @override
-  Future<void> clearCustomHeaders() =>
-      throw _unimplemented('clearCustomHeaders', 'HttpService');
-
-  @override
-  Future<void> setMaxRequestsPerHost(int max) =>
-      throw _unimplemented('setMaxRequestsPerHost', 'HttpService');
-}
-
 class UnsupportedProjectionWeb implements ProjectionPlatformInterface {
   @override
   Future<double> getMetersPerPixelAtLatitude(double latitude, double zoom) =>

@@ -48,6 +48,17 @@ class MockMapboxHttpServicePlatformInterface
   }
 }
 
+/// Provides only the process-wide HTTP service.
+base class FakeMapboxMapsFlutterPlatform extends MapboxMapsFlutterPlatform {
+  FakeMapboxMapsFlutterPlatform(this.httpService);
+
+  @override
+  final MapboxHttpServicePlatformInterface httpService;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 void main() {
   late MockMapboxHttpServicePlatformInterface mockImpl;
   late MapboxHttpService httpService;
@@ -72,58 +83,71 @@ void main() {
       expect(mockImpl.setMaxRequestsPerHostCallCount, 2);
       expect(mockImpl.lastMax, 16);
     });
-  });
 
-  group('MapboxHttpService.setCustomHeadersForHost', () {
-    test('sets, accumulates, replaces and removes host-scoped headers',
-        () async {
-      // Scope headers to a single host.
-      await httpService.setCustomHeadersForHost(
-        'tiles.example.com',
-        {'X-Custom-Header': 'value'},
-      );
+    test('setMaxRequestsPerHost accepts the range limits', () async {
+      await httpService.setMaxRequestsPerHost(1);
+      await httpService.setMaxRequestsPerHost(255);
 
-      // Different hosts accumulate.
-      await httpService.setCustomHeadersForHost(
-        'api.example.org',
-        {'X-Other': '1', 'X-More': '2'},
-      );
+      expect(mockImpl.setMaxRequestsPerHostCallCount, 2);
+    });
 
-      expect(mockImpl.hostHeaders['tiles.example.com'],
-          {'X-Custom-Header': 'value'});
-      expect(mockImpl.hostHeaders['api.example.org'],
-          {'X-Other': '1', 'X-More': '2'});
+    test('setMaxRequestsPerHost clamps values outside 1..255', () async {
+      await httpService.setMaxRequestsPerHost(0);
+      expect(mockImpl.lastMax, 1);
 
-      // Re-setting the same host replaces its headers.
-      await httpService.setCustomHeadersForHost(
-        'tiles.example.com',
-        {'X-Custom-Header': 'updated'},
-      );
-      expect(mockImpl.hostHeaders['tiles.example.com'],
-          {'X-Custom-Header': 'updated'});
-
-      // An empty map removes the entry for that host.
-      await httpService.setCustomHeadersForHost(
-        'tiles.example.com',
-        {},
-      );
-      expect(mockImpl.hostHeaders.containsKey('tiles.example.com'), false);
-
-      expect(mockImpl.setCustomHeadersForHostCallCount, 4);
+      await httpService.setMaxRequestsPerHost(1000);
+      expect(mockImpl.lastMax, 255);
     });
   });
 
+  group('MapboxHttpService.setCustomHeadersForHost', () {
+    test(
+      'sets, accumulates, replaces and removes host-scoped headers',
+      () async {
+        // Scope headers to a single host.
+        await httpService.setCustomHeadersForHost('tiles.example.com', {
+          'X-Custom-Header': 'value',
+        });
+
+        // Different hosts accumulate.
+        await httpService.setCustomHeadersForHost('api.example.org', {
+          'X-Other': '1',
+          'X-More': '2',
+        });
+
+        expect(mockImpl.hostHeaders['tiles.example.com'], {
+          'X-Custom-Header': 'value',
+        });
+        expect(mockImpl.hostHeaders['api.example.org'], {
+          'X-Other': '1',
+          'X-More': '2',
+        });
+
+        // Re-setting the same host replaces its headers.
+        await httpService.setCustomHeadersForHost('tiles.example.com', {
+          'X-Custom-Header': 'updated',
+        });
+        expect(mockImpl.hostHeaders['tiles.example.com'], {
+          'X-Custom-Header': 'updated',
+        });
+
+        // An empty map removes the entry for that host.
+        await httpService.setCustomHeadersForHost('tiles.example.com', {});
+        expect(mockImpl.hostHeaders.containsKey('tiles.example.com'), false);
+
+        expect(mockImpl.setCustomHeadersForHostCallCount, 4);
+      },
+    );
+  });
+
   group('MapboxHttpService.clearCustomHeaders', () {
-    test('removes host-scoped and global headers, and is idempotent',
-        () async {
-      await httpService.setCustomHeadersForHost(
-        'tiles.example.com',
-        {'X-Custom-Header': 'value'},
-      );
-      await httpService.setCustomHeadersForHost(
-        'api.example.org',
-        {'X-Global': 'g'},
-      );
+    test('removes host-scoped and global headers, and is idempotent', () async {
+      await httpService.setCustomHeadersForHost('tiles.example.com', {
+        'X-Custom-Header': 'value',
+      });
+      await httpService.setCustomHeadersForHost('api.example.org', {
+        'X-Global': 'g',
+      });
 
       // Clearing everything should not throw and should be idempotent.
       await httpService.clearCustomHeaders();
@@ -131,6 +155,24 @@ void main() {
 
       expect(mockImpl.hostHeaders, isEmpty);
       expect(mockImpl.clearCustomHeadersCallCount, 2);
+    });
+  });
+
+  group('MapboxHttpService.instance', () {
+    test('sends calls to the platform HTTP service without a map', () async {
+      final platformImpl = MockMapboxHttpServicePlatformInterface();
+      MapboxMapsFlutterPlatform.instance = FakeMapboxMapsFlutterPlatform(
+        platformImpl,
+      );
+
+      await MapboxHttpService.instance.setCustomHeadersForHost(
+        'tiles.example.com',
+        {'Authorization': 'Basic dXNlcjpwYXNz'},
+      );
+
+      expect(platformImpl.hostHeaders, {
+        'tiles.example.com': {'Authorization': 'Basic dXNlcjpwYXNz'},
+      });
     });
   });
 }
