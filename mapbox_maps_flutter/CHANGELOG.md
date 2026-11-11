@@ -1,5 +1,6 @@
 ### main
 
+* Add `MapboxMap.location.setExternalLocation`/`.clearExternalLocation` (Android and iOS; web throws `UnsupportedError`/no-ops), letting apps drive the location puck from a location source other than the platform's default GPS-based provider (e.g. an indoor-positioning SDK). Resolves [#1085](https://github.com/mapbox/mapbox-maps-flutter/issues/1085).
 * Add `MapboxHttpService.instance` to configure the HTTP requests of the Mapbox SDK without a map, so custom headers also apply to the first style request. The settings are process-wide. `MapboxMap.httpService` is deprecated; it returns `MapboxHttpService.instance`.
 * `MapboxHttpService.setMaxRequestsPerHost` clamps the value to the range that the platform supports: 1..255, and 1..127 on Android. Before, Android sent values above 127 as negative numbers, which made HTTP requests fail.
 * [Web] Add support for `MapboxHttpService.setCustomHeadersForHost` and `clearCustomHeaders`. The server must allow the custom headers in CORS, and the Mapbox tile endpoints do not allow them. `setMaxRequestsPerHost` has no effect on web.

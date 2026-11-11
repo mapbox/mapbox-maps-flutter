@@ -35,6 +35,49 @@ class LocationSettingsManager {
   /// ```
   Future<void> updateSettings(LocationComponentSettings settings) =>
       _impl.updateSettings(settings);
+
+  /// Pushes an externally-sourced location into the native location-provider
+  /// override, replacing whatever Mapbox's default location provider (GPS)
+  /// would otherwise show. Registers the override on first call; the map
+  /// behaves exactly as stock `mapbox_maps_flutter` until this is called at
+  /// least once.
+  ///
+  /// [timestamp] defaults to now if omitted. [floor] is only meaningful on
+  /// iOS (Mapbox's native `Location` type carries it; the Android
+  /// `LocationConsumer` API has no floor concept, so it is dropped there).
+  ///
+  /// Amuse fork addition. Android and iOS only; throws [UnsupportedError] on
+  /// web.
+  ///
+  /// ```dart
+  /// mapboxMap.location.setExternalLocation(
+  ///   latitude: 37.775,
+  ///   longitude: -122.418,
+  ///   heading: 90.0,
+  ///   accuracy: 5.0,
+  /// );
+  /// ```
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) => _impl.setExternalLocation(
+    latitude: latitude,
+    longitude: longitude,
+    accuracy: accuracy,
+    heading: heading,
+    headingAccuracy: headingAccuracy,
+    floor: floor,
+    timestamp: timestamp,
+  );
+
+  /// Clears the override and restores Mapbox's default location provider
+  /// (back to normal GPS). Amuse fork addition.
+  Future<void> clearExternalLocation() => _impl.clearExternalLocation();
 }
 
 /// Deprecated: Use [LocationSettingsManager] instead.
