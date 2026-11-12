@@ -1,6 +1,6 @@
 ### main
 
-### 3.35.0-rc.1
+### 3.35.0
 
 > [!IMPORTANT]
 > ⚠️ Breaking changes
