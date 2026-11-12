@@ -2,8 +2,7 @@ part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
-  MapboxMap._({required _MapboxMapsPlatform mapboxMapsPlatform})
-    : _mapboxMapsPlatform = mapboxMapsPlatform {
+  MapboxMap._({required this._mapboxMapsPlatform}) {
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
   }
 

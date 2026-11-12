@@ -2,7 +2,6 @@ group 'com.mapbox.maps.mapbox_maps'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.8.22'
     repositories {
         google()
         mavenCentral()
@@ -10,7 +9,6 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:8.10.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -35,13 +33,6 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
-
-// Kotlin is built into AGP 9+. For older AGP (Flutter < 3.44) the
-// 'kotlin-android' plugin must still be applied explicitly.
-def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0] as int
-if (agpMajor < 9) {
-    apply plugin: 'kotlin-android'
-}
 
 android {
     compileSdk flutter.compileSdkVersion

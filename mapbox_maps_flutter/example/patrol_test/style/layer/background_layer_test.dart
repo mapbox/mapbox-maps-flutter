@@ -104,4 +104,5 @@ void main() {
     expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
   });
 }
+
 // End of generated file.

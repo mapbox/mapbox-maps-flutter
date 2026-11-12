@@ -121,4 +121,5 @@ void main() {
     expect(layer.clipLayerTypes, ["model", "symbol"]);
   });
 }
+
 // End of generated file.

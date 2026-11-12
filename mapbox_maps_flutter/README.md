@@ -11,7 +11,7 @@ This is the app-facing plugin package. It endorses:
 
 ## Requirements
 
-- Flutter 3.38.1 / Dart 3.10.0 or higher
+- Flutter 3.44.2 / Dart 3.12.0 or higher
 - Android: minSdk 21 or higher
 - iOS: 14 or higher
 

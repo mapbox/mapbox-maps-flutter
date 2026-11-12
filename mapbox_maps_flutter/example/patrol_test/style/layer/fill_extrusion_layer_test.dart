@@ -244,4 +244,5 @@ void main() {
     expect(layer.fillExtrusionVerticalScale, 1.0);
   });
 }
+
 // End of generated file.

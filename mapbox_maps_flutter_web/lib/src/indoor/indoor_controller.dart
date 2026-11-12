@@ -70,7 +70,8 @@ extension on JSIndoorControlModel {
     // (see IndoorActiveFloorStrategy), so getControlState().selectedFloorId
     // doesn't actually go back to null when clearing the selection.
     // activeFloorsVisible is the reliable signal for "nothing selected".
-    final hasSelection = activeFloorsVisible && floorId != null && floorId.isNotEmpty;
+    final hasSelection =
+        activeFloorsVisible && floorId != null && floorId.isNotEmpty;
     return IndoorState(
       floors: floors.toDart
           .map((f) => IndoorFloor(id: f.id, name: f.name))

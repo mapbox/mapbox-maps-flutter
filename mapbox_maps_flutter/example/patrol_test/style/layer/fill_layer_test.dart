@@ -167,4 +167,5 @@ void main() {
     expect(layer.fillZOffset, 1.0);
   });
 }
+
 // End of generated file.

@@ -128,4 +128,5 @@ void main() {
     expect(layer.heatmapWeight, 1.0);
   });
 }
+
 // End of generated file.

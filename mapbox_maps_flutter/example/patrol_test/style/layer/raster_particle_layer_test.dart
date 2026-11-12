@@ -120,4 +120,5 @@ void main() {
     expect(layer.rasterParticleSpeedFactor, 1.0);
   });
 }
+
 // End of generated file.
