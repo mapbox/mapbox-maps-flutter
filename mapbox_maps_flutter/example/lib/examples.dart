@@ -26,6 +26,7 @@ import 'platform/debug_options_example.dart';
 import 'platform/geofencing_example.dart';
 import 'platform/map_interface_example.dart';
 import 'platform/map_recorder_example.dart';
+import 'platform/performance_statistics_example.dart';
 import 'styles/indoor_example.dart';
 import 'styles/light_example.dart';
 import 'styles/model_comparison_example.dart';
@@ -297,6 +298,16 @@ final List<Example> examples = [
           'to exercise web hit-testing.',
       builder: (_) => const OverlayPlaygroundExample(),
     ),
+  Example(
+    slug: 'performance_statistics',
+    category: ExampleCategory.platform,
+    leading: const Icon(Icons.speed),
+    title: 'Performance statistics',
+    subtitle:
+        'Collect render timings, top layers and GPU resource counters, '
+        'live.',
+    builder: (_) => const PerformanceStatisticsExample(),
+  ),
   // These APIs have no web implementation.
   if (isMobile) ...[
     Example(

@@ -5,6 +5,9 @@
 * [Web] Add support for `MapboxHttpService.setCustomHeadersForHost` and `clearCustomHeaders`. The server must allow the custom headers in CORS, and the Mapbox tile endpoints do not allow them. `setMaxRequestsPerHost` has no effect on web.
 * Add `MapboxMap.getFreeCameraOptions` and `MapboxMap.setFreeCameraOptions` to control the camera position and orientation directly, for example to follow a moving object ([#691](https://github.com/mapbox/mapbox-maps-flutter/issues/691)). The `FreeCameraOptionsGeography` extension adds the `location` and `altitude` getters and the `withLocation`, `withAltitude`, `withPitchBearing` and `lookingAt` helpers. The helpers give the same result on Android, iOS and web.
 * [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
+* [Web] Add support for `MapboxMap.startPerformanceStatisticsCollection` and `stopPerformanceStatisticsCollection`.
+* [iOS] Fix `MapboxMap.startPerformanceStatisticsCollection` when collection is already active. The second call stopped the collection. Now it starts a new collection.
+* `MapboxMap.startPerformanceStatisticsCollection` throws an `ArgumentError` for a negative sampling duration. Before, the call did nothing.
 
 ### 3.35.0-rc.1
 

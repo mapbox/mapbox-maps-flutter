@@ -791,8 +791,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// or omitting the callback function will result in no operation, which will be logged for visibility.
   ///
   /// In order to stop the collection process, call [stopPerformanceStatisticsCollection].
-  /// After calling [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
-  /// restarted.
+  /// Calling [startPerformanceStatisticsCollection] while collection is active stops that collection and starts a new one.
   @override
   @experimental
   void startPerformanceStatisticsCollection(
@@ -810,9 +809,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
 
   /// Disable performance statistics collection.
   ///
-  /// Calling [stopPerformanceStatisticsCollection] when no collection is enabled is a no-op. After calling
-  /// [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
-  /// restarted.
+  /// Calling [stopPerformanceStatisticsCollection] when no collection is enabled is a no-op.
   @override
   @experimental
   void stopPerformanceStatisticsCollection() {

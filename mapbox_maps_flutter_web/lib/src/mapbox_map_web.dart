@@ -14,6 +14,7 @@ import 'package:web/web.dart' show Blob, window;
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
+import 'bindings/performance_statistics_bindings.dart';
 import 'bindings/style_bindings.dart';
 import 'cluster_queries.dart';
 import 'gestures_controller.dart';
@@ -25,6 +26,7 @@ import 'ornaments/attribution_controller.dart';
 import 'ornaments/compass_controller.dart';
 import 'ornaments/logo_controller.dart';
 import 'ornaments/scale_bar_controller.dart';
+import 'performance_statistics_web.dart';
 import 'style_controller_web.dart';
 import 'unsupported_sub_interfaces.dart';
 import 'viewport/viewport_web.dart';
@@ -122,22 +124,29 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
       UnsupportedMapRecorderWeb();
 
   // ===== Performance statistics =====
-  //
-  // GL JS exposes a performance API but wiring it up sits in the
-  // web-parity follow-up epic; throw until then.
+
+  var _collectingPerformanceStatistics = false;
 
   @override
   void startPerformanceStatisticsCollection(
     PerformanceStatisticsOptions options,
     PerformanceStatisticsListener listener,
-  ) => throw UnimplementedError(
-    'startPerformanceStatisticsCollection is not yet implemented on web.',
-  );
+  ) {
+    _map.startPerformanceStatisticsCollection(
+      options.toJS(),
+      ((JSPerformanceStatistics statistics) =>
+              listener.onPerformanceStatisticsCollected(statistics.toDart()))
+          .toJS,
+    );
+    _collectingPerformanceStatistics = true;
+  }
 
   @override
-  void stopPerformanceStatisticsCollection() => throw UnimplementedError(
-    'stopPerformanceStatisticsCollection is not yet implemented on web.',
-  );
+  void stopPerformanceStatisticsCollection() {
+    if (!_collectingPerformanceStatistics) return;
+    _map.stopPerformanceStatisticsCollection();
+    _collectingPerformanceStatistics = false;
+  }
 
   // ===== Style loading =====
 
@@ -1090,6 +1099,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   void dispose() {
     // The JSMap instance is owned by `_MapWebWidgetState` and torn down in
     // its own `dispose()` (see map_widget.dart).
+    stopPerformanceStatisticsCollection();
     _disposables.dispose();
   }
 }

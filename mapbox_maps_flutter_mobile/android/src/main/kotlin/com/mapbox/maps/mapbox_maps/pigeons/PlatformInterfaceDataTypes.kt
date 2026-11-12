@@ -1939,8 +1939,13 @@ data class PerformanceStatisticsOptions(
    * It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
    * The effective collection interval can be observed through the `PerformanceStatistics` instance.
    * Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
+   * The value is truncated to whole milliseconds.
    *
-   * A negative sampling duration is an error and results in no operation.
+   * A sampling window closes only when the map renders a frame. A map that does not render does not
+   * deliver statistics.
+   *
+   * A negative sampling duration is an error: `MapboxMap.startPerformanceStatisticsCollection` throws an
+   * [ArgumentError].
    */
   val samplingDurationMillis: Double
 ) {
@@ -2007,17 +2012,36 @@ data class DurationStatistics(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class CumulativeRenderingStatistics(
-  /** The number of draw calls at the end of the collection window. */
+  /**
+   * The number of draw calls in the last frame of the collection window.
+   * This value is not a total. It can decrease between two snapshots.
+   */
   val drawCalls: Long? = null,
-  /** The amount of texture memory in use at the end of the collection window. */
+  /**
+   * The amount of texture memory in use at the end of the collection window.
+   * The value is null on iOS and web.
+   */
   val textureBytes: Long? = null,
-  /** The amount of vertex memory (array and index buffer memory) in use at the end of the collection window. */
+  /**
+   * The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
+   * The value is null on iOS and web.
+   */
   val vertexBytes: Long? = null,
-  /** The number of graphics pipeline programs created. */
+  /**
+   * The number of graphics pipeline programs created since the renderer started.
+   * The value does not reset when collection stops or starts again.
+   */
   val graphicsPrograms: Long? = null,
-  /** The total amount of time spent on all graphics pipeline program creation, in milliseconds. */
+  /**
+   * The total amount of time spent on all graphics pipeline program creation since the renderer started,
+   * in milliseconds. On web, the time counts from the start of collection.
+   */
   val graphicsProgramsCreationTimeMillis: Double? = null,
-  /** The number of FBO switches. */
+  /**
+   * The number of FBO switches since the renderer started.
+   * The value does not reset when collection stops or starts again.
+   * On web, the count starts from zero when collection starts.
+   */
   val fboSwitchCount: Long? = null
 ) {
   companion object {
@@ -2061,7 +2085,7 @@ data class CumulativeRenderingStatistics(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class GroupPerformanceStatistics(
-  /** The duration of the group or layer on the CPU timeline. */
+  /** The longest duration of the group or layer in one frame of the sampling window, on the CPU timeline. */
   val durationMillis: Double,
   /** The name of the group or layer. */
   val name: String
@@ -2095,11 +2119,18 @@ data class GroupPerformanceStatistics(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PerFrameRenderingStatistics(
-  /** The CPU timeline duration statistics of each render group, in descending order by duration. */
+  /**
+   * The 10 slowest render groups and layers, in descending order by duration.
+   * Group names are renderer internals and can change between releases.
+   */
   val topRenderGroups: List<GroupPerformanceStatistics>,
-  /** The CPU timeline duration statistics of each layer, in descending order by duration. */
+  /** The 10 slowest layers, in descending order by duration. */
   val topRenderLayers: List<GroupPerformanceStatistics>,
-  /** The CPU timeline duration of the shadowmap render pass. */
+  /**
+   * The CPU timeline duration of the shadowmap render pass.
+   * On Android and iOS, the renderer currently reports 0 for this value. To see the shadow map passes
+   * there, read the `shadowmap` entries in [topRenderGroups].
+   */
   val shadowMapDurationStatistics: DurationStatistics,
   /** The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass. */
   val uploadDurationStatistics: DurationStatistics

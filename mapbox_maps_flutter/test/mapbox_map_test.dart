@@ -1323,6 +1323,25 @@ void main() {
       expect(mockImpl.lastPerfStatsListener, listener);
     });
 
+    test(
+      'startPerformanceStatisticsCollection rejects a negative duration',
+      () {
+        final options = PerformanceStatisticsOptions(
+          samplerOptions: [PerformanceSamplerOptions.CUMULATIVE],
+          samplingDurationMillis: -1,
+        );
+
+        expect(
+          () => mapboxMap.startPerformanceStatisticsCollection(
+            options,
+            _RecordingPerformanceStatisticsListener(),
+          ),
+          throwsArgumentError,
+        );
+        expect(mockImpl.startPerformanceStatisticsCollectionCallCount, 0);
+      },
+    );
+
     test('stopPerformanceStatisticsCollection delegates to interface', () {
       mapboxMap.stopPerformanceStatisticsCollection();
 
