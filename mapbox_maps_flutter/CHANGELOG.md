@@ -12,6 +12,10 @@
 * [Web] Add support for `MapboxMap.startPerformanceStatisticsCollection` and `stopPerformanceStatisticsCollection`.
 * [iOS] Fix `MapboxMap.startPerformanceStatisticsCollection` when collection is already active. The second call stopped the collection. Now it starts a new collection.
 * `MapboxMap.startPerformanceStatisticsCollection` throws an `ArgumentError` for a negative sampling duration. Before, the call did nothing.
+* [Web] Fix `moveBy`, which moved the camera in the wrong direction, and `rotateBy`, which set an absolute bearing. Both now move the map by the same amount as on Android.
+* [Web] `CameraState.padding` now reports the current camera padding in `getCameraState`, `onCameraChanged` and gesture contexts. Before, it was always zero.
+* [Web] `onSourceDataLoaded` now sends a `TILE` event with the tile ID for each loaded tile, and a `METADATA` event when the source metadata loads. As on Android and iOS, events for sources of imported styles are not sent.
+* [Web] Fix map event listeners after a rebuild of `MapWidget`. Before, web called the listeners of the first build, and a listener added later got no events.
 
 ### 3.35.0-rc.1
 

@@ -8,8 +8,7 @@ import 'package:flutter/foundation.dart' show UniqueKey;
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
-import 'package:turf/turf.dart'
-    show GeometryObject, Point, Position, bbox, bearing;
+import 'package:turf/turf.dart' show GeometryObject, Point, Position, bbox;
 import 'package:web/web.dart' show Blob, window;
 
 import 'bindings/binding_adapters.dart';
@@ -27,6 +26,7 @@ import 'ornaments/compass_controller.dart';
 import 'ornaments/logo_controller.dart';
 import 'ornaments/scale_bar_controller.dart';
 import 'performance_statistics_web.dart';
+import 'rotate_by_math.dart';
 import 'style_controller_web.dart';
 import 'unsupported_sub_interfaces.dart';
 import 'viewport/viewport_web.dart';
@@ -515,7 +515,8 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     ScreenCoordinate screenCoordinate,
     MapAnimationOptions? mapAnimationOptions,
   ) async => _map.panBy(
-    JSScreenPoint(screenCoordinate.x, screenCoordinate.y),
+    // GL JS moves the camera by the offset; the native SDKs move the content.
+    JSScreenPoint(-screenCoordinate.x, -screenCoordinate.y),
     JSCameraOptions()
       ..essential = true
       ..withDurationMs(mapAnimationOptions?.duration),
@@ -527,14 +528,17 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     ScreenCoordinate second,
     MapAnimationOptions? mapAnimationOptions,
   ) async {
-    final lngLat1 = _map.unproject(JSScreenPoint(first.x, first.y));
-    final lngLat2 = _map.unproject(JSScreenPoint(second.x, second.y));
-    final p1 = Point(coordinates: Position(lngLat1.lng, lngLat1.lat));
-    final p2 = Point(coordinates: Position(lngLat2.lng, lngLat2.lat));
-    _map.rotateTo(
-      bearing(p1, p2).toDouble(),
+    final centre = _map.project(_map.getCenter());
+    final delta = rotateByBearingDelta(
+      first: math.Point(first.x, first.y),
+      second: math.Point(second.x, second.y),
+      centre: math.Point(centre.x.toDouble(), centre.y.toDouble()),
+      pixelRatio: window.devicePixelRatio,
+    );
+    _map.easeTo(
       JSCameraOptions()
         ..essential = true
+        ..bearing = _map.getBearing() + delta
         ..withDurationMs(mapAnimationOptions?.duration),
     );
   }

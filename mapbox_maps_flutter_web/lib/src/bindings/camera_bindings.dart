@@ -43,6 +43,9 @@ extension MapCamera on JSMap {
   /// geographical coordinate.
   external JSLngLat unproject(JSScreenPoint point);
 
+  /// Returns the current viewport padding in pixels.
+  external JSPadding getPadding();
+
   /// Animates the camera by a screen-pixel offset.
   external void panBy(JSScreenPoint offset, JSCameraOptions? options);
 

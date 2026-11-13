@@ -438,13 +438,57 @@ extension type JSMapMoveEvent._(JSObject _) implements JSObject {
 @JS()
 @anonymous
 extension type JSMapDataEvent._(JSObject _) implements JSObject {
+  /// `'source'` for a change of a source, `'style'` for a change of the
+  /// whole style.
+  external String? get dataType;
+
   /// Source id the event relates to, when `dataType == 'source'`.
   external String? get sourceId;
 
-  /// True once the source has finished its initial load. Per
-  /// `gl-js/src/ui/events.ts`, transitions to `true` on metadata-complete
-  /// and stays true for subsequent content updates.
+  /// True when every tile cache of the source has loaded its tiles.
   external bool? get isSourceLoaded;
+
+  /// `'metadata'` when the source's spec or TileJSON loaded, `'content'`,
+  /// `'visibility'` or `'error'` for other changes. Unset on a per-tile
+  /// event.
+  external String? get sourceDataType;
+
+  /// The loaded tile when `dataType` is `'source'` and the event relates to
+  /// the load of a tile, else null.
+  external JSOverscaledTileID? get coord;
+
+  /// The tile cache that loaded [coord]. One source can have several caches.
+  external String? get sourceCacheId;
+
+  /// The style that fired the event. Its scope is empty for the root style
+  /// and set for an imported style.
+  external JSEventStyle? get style;
+}
+
+/// GL JS `OverscaledTileID`.
+@JS()
+@anonymous
+extension type JSOverscaledTileID._(JSObject _) implements JSObject {
+  /// A number that identifies the tile, unique within a tile cache.
+  external double get key;
+
+  external JSCanonicalTileID get canonical;
+}
+
+/// GL JS `CanonicalTileID`.
+@JS()
+@anonymous
+extension type JSCanonicalTileID._(JSObject _) implements JSObject {
+  external int get z;
+  external int get x;
+  external int get y;
+}
+
+/// The `style` field of a GL JS data event.
+@JS()
+@anonymous
+extension type JSEventStyle._(JSObject _) implements JSObject {
+  external String? get scope;
 }
 
 /// Payload of camera-surface gesture events (`drag*` / `zoom*` / `rotate*`

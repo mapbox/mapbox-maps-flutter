@@ -4,6 +4,7 @@ import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platf
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
+import 'bindings/style_bindings.dart';
 
 /// Bridges Mapbox GL JS events to platform-interface [MapEvent] subclasses.
 ///
@@ -32,6 +33,9 @@ class MapEventBridge {
   final JSMap _map;
   final void Function(MapEvent) _onMapEvent;
   final List<_Subscription> _subscriptions = [];
+  final Map<String, ({String loadKey, DateTime time})> _lastTileEvents = {};
+
+  static const _tileCopyWindow = Duration(seconds: 1);
 
   MapEventBridge(this._map, this._onMapEvent) {
     // GL JS `data` is filtered by the Map into `styledata` and `sourcedata`
@@ -64,18 +68,56 @@ class MapEventBridge {
 
   void _handleSourceData(JSAny event) {
     final data = event as JSMapDataEvent;
+    if (data.dataType != 'source') return;
     final sourceId = data.sourceId;
     if (sourceId == null) return;
+    // The native SDKs do not report sources of imported styles.
+    if (data.style?.scope?.isNotEmpty ?? false) return;
 
-    // Mapbox GL JS fires sourcedata twice per load: once with
-    // sourceDataType='metadata' (initial spec/JSON download), then once with
-    // 'content' once the actual data body is available. `isSourceLoaded`
-    // transitions to true on metadata-complete and stays true on subsequent
-    // updates. Either signal is "data has loaded enough to be useful", which
-    // is the closest analogue to the native onSourceDataLoaded event.
-    if (data.isSourceLoaded == true) {
-      _onMapEvent(_adaptSourceDataLoaded(data));
+    if (data.coord case final coord?) {
+      // Keep a copy that reports the end of the source load, so that the
+      // `loaded` flag still becomes true.
+      final isCopy = _isTileCopy(sourceId, coord, data.sourceCacheId);
+      if (isCopy && data.isSourceLoaded != true) return;
+      _onMapEvent(_adaptTileLoaded(sourceId, coord.canonical, data));
+    } else if (_isMetadataLoad(sourceId, data.sourceDataType)) {
+      _onMapEvent(_adaptMetadataLoaded(sourceId));
     }
+  }
+
+  /// GL JS sends `'metadata'` for the first load of a source only. GeoJSON
+  /// and image sources send later data updates as `'content'`, which the
+  /// native SDKs report as a metadata load. Other sources send `'content'`
+  /// together with the first `'metadata'`, so it is not sent again.
+  bool _isMetadataLoad(String sourceId, String? sourceDataType) {
+    if (sourceDataType == 'metadata') return true;
+    if (sourceDataType != 'content') return false;
+    final type = _map.getSource(sourceId)?.type;
+    return type == 'geojson' || type == 'image';
+  }
+
+  /// GL JS can keep up to three tile caches for one source, and each cache
+  /// sends its own event for a tile. It also loads the same tile again for
+  /// each copy of the world that is in view. The native SDKs send one event
+  /// for each tile, so an event for the same tile from a different cache or
+  /// world copy shortly after the first is a copy. GL JS sets
+  /// `isSourceLoaded` only on the last of these events.
+  bool _isTileCopy(String sourceId, JSOverscaledTileID coord, String? cacheId) {
+    final tile = coord.canonical;
+    final tileKey = '$sourceId/${tile.z}/${tile.x}/${tile.y}';
+    final loadKey = '$cacheId/${coord.key}';
+    final now = DateTime.now();
+    final last = _lastTileEvents[tileKey];
+    _lastTileEvents.removeWhere(
+      (_, event) => now.difference(event.time) > _tileCopyWindow,
+    );
+    if (last != null &&
+        last.loadKey != loadKey &&
+        now.difference(last.time) <= _tileCopyWindow) {
+      return true;
+    }
+    _lastTileEvents[tileKey] = (loadKey: loadKey, time: now);
+    return false;
   }
 
   // ===== Adapters =====
@@ -118,13 +160,25 @@ class MapEventBridge {
         placementChanged: false,
       );
 
-  SourceDataLoadedEventData _adaptSourceDataLoaded(JSMapDataEvent data) =>
+  SourceDataLoadedEventData _adaptTileLoaded(
+    String sourceId,
+    JSCanonicalTileID tile,
+    JSMapDataEvent data,
+  ) => SourceDataLoadedEventData(
+    id: sourceId,
+    type: SourceDataType.TILE,
+    loaded: data.isSourceLoaded,
+    tileID: TileID(z: tile.z, x: tile.x, y: tile.y),
+    // GL JS has no data ids for GeoJSON updates.
+    dataId: null,
+    timeInterval: _nowInterval(),
+  );
+
+  SourceDataLoadedEventData _adaptMetadataLoaded(String sourceId) =>
       SourceDataLoadedEventData(
-        id: data.sourceId!,
-        // GL JS sourcedata events do not carry a tile payload on this path;
-        // metadata is the only bucket we can defensibly distinguish.
+        id: sourceId,
         type: SourceDataType.METADATA,
-        loaded: data.isSourceLoaded,
+        loaded: null,
         tileID: null,
         dataId: null,
         timeInterval: _nowInterval(),

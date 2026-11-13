@@ -215,7 +215,7 @@ Future<MapboxMap?> _pumpMapApp({
     },
     onCameraChangeListener: (CameraChangedEventData data) {
       if (!events.onCameraChanged.isCompleted) {
-        events.onCameraChanged.complete();
+        events.onCameraChanged.complete(data);
       }
     },
     onMapIdleListener: (MapIdleEventData data) {

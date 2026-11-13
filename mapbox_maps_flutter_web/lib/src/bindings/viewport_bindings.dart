@@ -45,6 +45,11 @@ extension type JSPadding._(JSObject _) implements JSObject {
     double left,
     double right,
   });
+
+  external double get top;
+  external double get bottom;
+  external double get left;
+  external double get right;
 }
 
 /// Mapbox GL JS fitBounds options.
