@@ -1,5 +1,7 @@
 ### main
 
+### 3.36.0-rc.1
+
 > [!IMPORTANT]
 > * The minimum supported SDK version is now Flutter 3.44.2 / Dart 3.12.0.
 > * [Android] The plugin uses built-in Kotlin and no longer applies the Kotlin Gradle Plugin. This fixes the `Could not find method kotlin()` build error with AGP 9 and `android.builtInKotlin=false` ([#1149](https://github.com/mapbox/mapbox-maps-flutter/issues/1149)).
