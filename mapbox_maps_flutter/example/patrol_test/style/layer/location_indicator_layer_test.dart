@@ -152,4 +152,5 @@ void main() {
     expect(layer.topImageSize, 1.0);
   }, skip: kIsWeb);
 }
+
 // End of generated file.

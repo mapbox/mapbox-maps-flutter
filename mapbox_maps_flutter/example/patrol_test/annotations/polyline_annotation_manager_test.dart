@@ -173,4 +173,5 @@ void main() {
     expect(1.0, lineWidth);
   });
 }
+
 // End of generated file.

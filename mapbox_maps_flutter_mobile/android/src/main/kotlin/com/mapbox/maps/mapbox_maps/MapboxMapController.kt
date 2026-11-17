@@ -46,46 +46,8 @@ class FlutterMapView : MapView {
   constructor(context: Context, mapInitOptions: MapInitOptions) : super(context, mapInitOptions)
   constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-  // Track expected pointer count to detect wrong events
-  private var expectedPointerCount = 0
-
-  // Here we have workaround for issue introduced in Flutter SDK 3.19,
-  // when map widget is nested inside a gesture detector with e.g. long press callbacks,
-  // then platform view receives following motion event sequence for a zoom(pinch) gesture:
-  // DOWN -> MOVE(3-5 events) -> POINTER_DOWN -> MOVE(duplicates of previous move events) -> MOVE(new move events) -> POINTER_UP -> UP
-  // While the correct sequence is:
-  // DOWN -> POINTER_DOWN -> MOVE -> POINTER_UP -> UP
-  // Fixed in Flutter 3.41.0 (https://github.com/flutter/flutter/issues/176574).
-  // Remove this workaround once the minimum supported Flutter version is 3.41.0 or later.
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    val actionMasked = event.actionMasked
-    val actionString = MotionEvent.actionToString(event.action)
-    val pointerCount = event.pointerCount
-
-    // For MOVE events, check if pointer count matches expected
-    // This filters out both the early MOVE events AND their duplicates
-    if (actionMasked == MotionEvent.ACTION_MOVE && expectedPointerCount > 0 && pointerCount != expectedPointerCount) {
-      Log.d("NativeView", "✗ Filtered: $actionString, Expected: $expectedPointerCount, Got: $pointerCount, Time: ${event.eventTime}")
-      return false // Skip wrong count
-    }
-
-    // Update expected pointer count based on action
-    when (actionMasked) {
-      MotionEvent.ACTION_DOWN -> {
-        expectedPointerCount = 1
-      }
-      MotionEvent.ACTION_POINTER_DOWN -> {
-        expectedPointerCount = pointerCount
-      }
-      MotionEvent.ACTION_POINTER_UP -> {
-        expectedPointerCount = pointerCount - 1
-      }
-      MotionEvent.ACTION_UP -> {
-        expectedPointerCount = 0
-      }
-    }
-
     // Flutter can forward pointers with inconsistent ids, which makes the gesture detectors throw
     // (https://github.com/flutter/flutter/issues/195431). Drop the event; the detectors recover
     // on later events.

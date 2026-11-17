@@ -5,8 +5,8 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.10.0 <4.0.0"
-  flutter: ">=3.38.1"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.2"
 
 resolution: workspace
 
@@ -36,12 +36,6 @@ dev_dependencies:
   patrol: ^4.7.0
 
 flutter:
-  # Flutter 3.38.x ships Swift Package Manager off by default (default-on lands
-  # in 3.44). Opt in per-project so the iOS build uses SPM — which the Patrol
-  # RunnerUITests target requires (it links FlutterGeneratedPluginSwiftPackage)
-  # — regardless of the machine-global `flutter config` flag or CI step order.
-  config:
-    enable-swift-package-manager: true
   uses-material-design: true
   assets:
     - assets/

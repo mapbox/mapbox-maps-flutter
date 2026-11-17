@@ -124,4 +124,5 @@ void main() {
     expect(layer.hillshadeShadowColorExpression, ['rgba', 255, 0, 0, 1]);
   });
 }
+
 // End of generated file.

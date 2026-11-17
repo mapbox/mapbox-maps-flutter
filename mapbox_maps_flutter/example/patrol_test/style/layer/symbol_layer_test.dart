@@ -422,4 +422,5 @@ void main() {
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);
   });
 }
+
 // End of generated file.

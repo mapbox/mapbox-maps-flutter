@@ -108,4 +108,5 @@ void main() {
     expect(CircleTranslateAnchor.MAP, circleTranslateAnchor);
   });
 }
+
 // End of generated file.

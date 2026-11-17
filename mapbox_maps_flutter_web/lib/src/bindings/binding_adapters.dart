@@ -39,13 +39,15 @@ extension JSLngLatToPoint on JSLngLat {
   Point toPoint() => Point(coordinates: Position(lng, lat));
 }
 
+extension JSPaddingToMbx on JSPadding {
+  MbxEdgeInsets toMbxEdgeInsets() =>
+      MbxEdgeInsets(top: top, left: left, bottom: bottom, right: right);
+}
+
 extension JSMapCameraState on JSMap {
   CameraState getCameraState() => CameraState(
     center: getCenter().toPoint(),
-    // GL JS manages viewport padding per camera command (jumpTo/easeTo) and
-    // does not expose a "current padding" getter; zero matches how a
-    // non-padded camera is modelled on the native side.
-    padding: MbxEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+    padding: getPadding().toMbxEdgeInsets(),
     zoom: getZoom(),
     bearing: getBearing(),
     pitch: getPitch(),

@@ -19,8 +19,8 @@ This guide helps you upgrade from **mapbox_maps_flutter v2.x** to **v3.x**.
 
 | | v2 (latest) | v3 |
 |---|---|---|
-| Flutter | ≥ 3.27.0 | ≥ **3.38.1** |
-| Dart | ≥ 3.4.4 | ≥ **3.10.0** |
+| Flutter | ≥ 3.27.0 | ≥ **3.44.2** |
+| Dart | ≥ 3.4.4 | ≥ **3.12.0** |
 | Android minSdk | 21 | 21 |
 | iOS | 14+ | 14+ |
 | Web | Not supported | Mapbox GL JS required |
@@ -415,7 +415,7 @@ You only need a direct `mapbox_maps_flutter_platform_interface` dependency if yo
 Use this as a final pass before shipping:
 
 - [ ] Bump `mapbox_maps_flutter` to the latest v3 public preview
-- [ ] Upgrade Flutter to ≥ 3.38.1 and Dart to ≥ 3.10.0
+- [ ] Upgrade Flutter to ≥ 3.44.2 and Dart to ≥ 3.12.0
 - [ ] Replace `cameraOptions` with `viewport` on `MapWidget`
 - [ ] Replace `setStateWithViewportAnimation` with `ViewportController`
 - [ ] Replace tap/long-tap listeners with `addInteraction`

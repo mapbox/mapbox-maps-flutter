@@ -126,4 +126,5 @@ void main() {
     expect(layer.skyType, SkyType.GRADIENT);
   });
 }
+
 // End of generated file.

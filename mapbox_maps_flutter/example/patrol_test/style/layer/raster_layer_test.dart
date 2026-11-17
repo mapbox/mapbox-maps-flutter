@@ -172,4 +172,5 @@ void main() {
     expect(layer.rasterSaturation, 1.0);
   });
 }
+
 // End of generated file.

@@ -731,13 +731,36 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
 
   /// Starts collecting CPU/GPU render performance statistics with the
   /// given [options], delivering each sampled snapshot to [listener].
-  /// Calling this while collection is already active replaces the previous
-  /// listener; call [stopPerformanceStatisticsCollection] before restarting.
+  /// Calling this while collection is already active stops that collection
+  /// and starts a new one with [options] and [listener].
+  ///
+  /// The map delivers a snapshot at the end of the first rendered frame
+  /// after [PerformanceStatisticsOptions.samplingDurationMillis] has
+  /// elapsed. A map that does not render delivers no snapshots.
+  ///
+  /// Platform differences:
+  /// - iOS and web: [CumulativeRenderingStatistics.textureBytes] and
+  ///   [CumulativeRenderingStatistics.vertexBytes] are null.
+  /// - Web: render times are measured on the browser main thread. Web
+  ///   reports fewer render groups than Android and iOS: `upload`,
+  ///   `shadowmap`, `opaque` and `translucent`.
+  ///
+  /// Throws an [ArgumentError] if
+  /// [PerformanceStatisticsOptions.samplingDurationMillis] is negative.
   @experimental
   void startPerformanceStatisticsCollection(
     PerformanceStatisticsOptions options,
     PerformanceStatisticsListener listener,
-  ) => _impl.startPerformanceStatisticsCollection(options, listener);
+  ) {
+    if (options.samplingDurationMillis < 0) {
+      throw ArgumentError.value(
+        options.samplingDurationMillis,
+        'options.samplingDurationMillis',
+        'Must not be negative',
+      );
+    }
+    _impl.startPerformanceStatisticsCollection(options, listener);
+  }
 
   /// Stops collection started by [startPerformanceStatisticsCollection].
   /// No-op when no collection is active.

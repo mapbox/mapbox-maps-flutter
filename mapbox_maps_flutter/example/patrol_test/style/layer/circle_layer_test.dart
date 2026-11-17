@@ -167,4 +167,5 @@ void main() {
     expect(layer.circleTranslateAnchor, CircleTranslateAnchor.MAP);
   });
 }
+
 // End of generated file.

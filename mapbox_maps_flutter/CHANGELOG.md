@@ -1,13 +1,29 @@
 ### main
 
-* Fix `StyleManager.addLayer` and `addPersistentLayer` ignoring their `position` argument (it was never forwarded to the platform).
+* Fix `StyleManager.addLayer` and `addPersistentLayer` ignoring their `position` argument.
+
+### 3.36.0-rc.1
+
+> [!IMPORTANT]
+> * The minimum supported SDK version is now Flutter 3.44.2 / Dart 3.12.0.
+> * [Android] The plugin uses built-in Kotlin and no longer applies the Kotlin Gradle Plugin. This fixes the `Could not find method kotlin()` build error with AGP 9 and `android.builtInKotlin=false` ([#1149](https://github.com/mapbox/mapbox-maps-flutter/issues/1149)).
+
 * Add `MapboxHttpService.instance` to configure the HTTP requests of the Mapbox SDK without a map, so custom headers also apply to the first style request. The settings are process-wide. `MapboxMap.httpService` is deprecated; it returns `MapboxHttpService.instance`.
 * `MapboxHttpService.setMaxRequestsPerHost` clamps the value to the range that the platform supports: 1..255, and 1..127 on Android. Before, Android sent values above 127 as negative numbers, which made HTTP requests fail.
 * [Web] Add support for `MapboxHttpService.setCustomHeadersForHost` and `clearCustomHeaders`. The server must allow the custom headers in CORS, and the Mapbox tile endpoints do not allow them. `setMaxRequestsPerHost` has no effect on web.
 * Add `MapboxMap.getFreeCameraOptions` and `MapboxMap.setFreeCameraOptions` to control the camera position and orientation directly, for example to follow a moving object ([#691](https://github.com/mapbox/mapbox-maps-flutter/issues/691)). The `FreeCameraOptionsGeography` extension adds the `location` and `altitude` getters and the `withLocation`, `withAltitude`, `withPitchBearing` and `lookingAt` helpers. The helpers give the same result on Android, iOS and web.
 * [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
+* [Web] Add support for `MapboxMap.startPerformanceStatisticsCollection` and `stopPerformanceStatisticsCollection`.
+* [iOS] Fix `MapboxMap.startPerformanceStatisticsCollection` when collection is already active. The second call stopped the collection. Now it starts a new collection.
+* `MapboxMap.startPerformanceStatisticsCollection` throws an `ArgumentError` for a negative sampling duration. Before, the call did nothing.
+* [Web] Fix `moveBy`, which moved the camera in the wrong direction, and `rotateBy`, which set an absolute bearing. Both now move the map by the same amount as on Android.
+* [Web] `CameraState.padding` now reports the current camera padding in `getCameraState`, `onCameraChanged` and gesture contexts. Before, it was always zero.
+* [Web] `onSourceDataLoaded` now sends a `TILE` event with the tile ID for each loaded tile, and a `METADATA` event when the source metadata loads. As on Android and iOS, events for sources of imported styles are not sent.
+* [Web] Fix map event listeners after a rebuild of `MapWidget`. Before, web called the listeners of the first build, and a listener added later got no events.
 
 ### 3.35.0-rc.1
+
+### 3.35.0
 
 > [!IMPORTANT]
 > ⚠️ Breaking changes

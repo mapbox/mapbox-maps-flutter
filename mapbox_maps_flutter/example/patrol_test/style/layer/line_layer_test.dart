@@ -261,4 +261,5 @@ void main() {
     expect(layer.lineWidth, 1.0);
   });
 }
+
 // End of generated file.
