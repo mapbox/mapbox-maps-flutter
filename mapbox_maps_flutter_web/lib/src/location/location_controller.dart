@@ -32,6 +32,25 @@ class LocationController
   @override
   Future<LocationComponentSettings> getSettings() async => _current;
 
+  /// Amuse fork addition: the native location-provider override has no GL JS
+  /// equivalent (the puck is driven by the browser's `GeolocateControl`).
+  @override
+  Future<void> setExternalLocation({
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    double? heading,
+    double? headingAccuracy,
+    int? floor,
+    DateTime? timestamp,
+  }) => Future.error(
+    UnsupportedError('setExternalLocation is not supported on web.'),
+  );
+
+  /// Nothing to clear on web: no override can be active.
+  @override
+  Future<void> clearExternalLocation() async {}
+
   @override
   Future<void> updateSettings(LocationComponentSettings settings) async {
     _current = _merge(_current, settings);
