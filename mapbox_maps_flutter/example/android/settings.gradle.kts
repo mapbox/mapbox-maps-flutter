@@ -19,10 +19,8 @@ pluginManagement {
 
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
-    // Keep AGP 8 and Gradle 8. The build from source includes the Android SDK builds,
-    // which do not support Gradle 9 yet.
-    id("com.android.application") version "8.10.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+    id("com.android.application") version "9.1.1" apply false
+    id("org.jetbrains.kotlin.android") version "2.4.10" apply false
 }
 
 // Optional local dependency setup. Not present in every checkout.
