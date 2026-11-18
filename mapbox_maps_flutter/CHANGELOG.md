@@ -103,6 +103,12 @@
 * `RenderedQueryGeometry` is now a sealed class hierarchy (`ScreenCoordinateRenderedQueryGeometry`, `ScreenBoxRenderedQueryGeometry`, `ScreenCoordinateListRenderedQueryGeometry`) instead of an untyped `{value, type}` pair. Construct it the same way as before, via `fromScreenCoordinate()`/`fromScreenBox()`/`fromList()`. Use pattern matching on the subclasses to inspect it instead of the now-deprecated, read-only `value`/`type` accessors.
 * Fix `PointAnnotationManager.update()` not applying a new `image` on iOS and Android when the annotation's `iconImage` still named a previous registration ([#532](https://github.com/mapbox/mapbox-maps-flutter/issues/532)). If you leave `iconImage` unset, the SDK derives one from a hash of `image`, so a content change now applies automatically. Set `iconImage` yourself for full control of the style-image name: for example, to reuse one name across annotations, or to point at a style image added elsewhere without uploading `image`.
 
+### 2.31.2
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
 ### 2.31.0
 
 * Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
