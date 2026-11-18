@@ -1,5 +1,7 @@
 ### main
 
+* Fix `StyleManager.addLayer` and `addPersistentLayer` ignoring their `position` argument.
+
 ### 3.36.0-rc.1
 
 > [!IMPORTANT]

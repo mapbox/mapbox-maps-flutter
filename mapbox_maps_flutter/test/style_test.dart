@@ -814,6 +814,30 @@ void main() {
       expect(mockImpl.lastLayerPosition, null);
     });
 
+    test('addLayer forwards the layer position to the interface', () async {
+      final position = LayerPosition(below: 'water');
+
+      await style.addLayer(BackgroundLayer(id: 'layer-1'), position);
+
+      expect(mockImpl.addStyleLayerCallCount, 1);
+      expect(mockImpl.lastLayerPosition, position);
+    });
+
+    test(
+      'addPersistentLayer forwards the layer position to the interface',
+      () async {
+        final position = LayerPosition(above: 'roads');
+
+        await style.addPersistentLayer(
+          BackgroundLayer(id: 'layer-1'),
+          position,
+        );
+
+        expect(mockImpl.addPersistentStyleLayerCallCount, 1);
+        expect(mockImpl.lastLayerPosition, position);
+      },
+    );
+
     test('addPersistentStyleLayer delegates to interface', () async {
       await style.addPersistentStyleLayer('{"id": "layer-1"}', null);
 
