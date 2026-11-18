@@ -39,12 +39,11 @@ class MapWidget extends StatefulWidget {
     this.onStyleImageUnusedListener,
     this.onResourceRequestListener,
     this.viewport,
-    String? styleUri,
+    this._styleUri,
     this.viewportTransition,
     this.viewportTransitionCompletion,
     this.isOpaque = true,
-  }) : _styleUri = styleUri,
-       assert(
+  }) : assert(
          isOpaque != false || textureView == true,
          'isOpaque: false requires textureView: true on Android. '
          'SurfaceView cannot render a transparent background.',

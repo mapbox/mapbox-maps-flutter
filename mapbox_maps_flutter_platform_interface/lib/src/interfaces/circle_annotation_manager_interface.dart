@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../pigeons/annotation_data_types.dart';
 import '../pigeons/platform_interface_data_types.dart';
+import '../public/color_theme.dart';
 import 'annotations_interface.dart';
 
 /// Abstract interface for managing circle annotations.
@@ -134,6 +135,24 @@ abstract interface class CircleAnnotationManagerPlatformInterface
 
   /// Controls the frame of reference for `circle-translate`. Default value: "map".
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor();
+
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  @experimental
+  Future<void> setCircleColorUseTheme(ColorUseTheme circleColorUseTheme);
+
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getCircleColorUseTheme();
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  @experimental
+  Future<void> setCircleStrokeColorUseTheme(
+    ColorUseTheme circleStrokeColorUseTheme,
+  );
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getCircleStrokeColorUseTheme();
 }
 
 // End of generated file.

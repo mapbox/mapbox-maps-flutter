@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -51,6 +50,7 @@ void main() {
         rasterBrightnessMax: 1.0,
         rasterBrightnessMin: 1.0,
         rasterColor: Colors.red.value,
+        rasterColorUseTheme: ColorUseTheme.none,
         rasterColorMix: [0.0, 1.0, 2.0, 3.0],
         rasterColorRange: [0.0, 1.0],
         rasterColorScale: RasterColorScale.LINEAR,
@@ -74,6 +74,7 @@ void main() {
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
     expect(layer.rasterColor, Colors.red.value);
+    expect(layer.rasterColorUseTheme, ColorUseTheme.none);
     expect(layer.rasterColorMix, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.rasterColorRange, [0.0, 1.0]);
     expect(layer.rasterColorScale, RasterColorScale.LINEAR);
@@ -125,6 +126,8 @@ void main() {
         rasterBrightnessMaxExpression: ['number', 1.0],
         rasterBrightnessMinExpression: ['number', 1.0],
         rasterColorExpression: ['rgba', 255, 0, 0, 1],
+        rasterColorUseTheme: ColorUseTheme.useDefault,
+        rasterColorUseThemeExpression: ['string', 'none'],
         rasterColorMixExpression: [
           'literal',
           [0.0, 1.0, 2.0, 3.0],
@@ -159,6 +162,10 @@ void main() {
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
     expect(layer.rasterColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.rasterColorUseThemeExpression ?? layer.rasterColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.rasterColorMix, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.rasterColorRange, [0.0, 1.0]);
     expect(layer.rasterColorScale, RasterColorScale.LINEAR);
@@ -172,4 +179,5 @@ void main() {
     expect(layer.rasterSaturation, 1.0);
   });
 }
+
 // End of generated file.

@@ -322,6 +322,23 @@ void main() {
     await manager.setTextTranslateAnchor(TextTranslateAnchor.MAP);
     var textTranslateAnchor = await manager.getTextTranslateAnchor();
     expect(TextTranslateAnchor.MAP, textTranslateAnchor);
+
+    await manager.setIconColorUseTheme(ColorUseTheme.none);
+    var iconColorUseTheme = await manager.getIconColorUseTheme();
+    expect(ColorUseTheme.none, iconColorUseTheme);
+
+    await manager.setIconHaloColorUseTheme(ColorUseTheme.none);
+    var iconHaloColorUseTheme = await manager.getIconHaloColorUseTheme();
+    expect(ColorUseTheme.none, iconHaloColorUseTheme);
+
+    await manager.setTextColorUseTheme(ColorUseTheme.none);
+    var textColorUseTheme = await manager.getTextColorUseTheme();
+    expect(ColorUseTheme.none, textColorUseTheme);
+
+    await manager.setTextHaloColorUseTheme(ColorUseTheme.none);
+    var textHaloColorUseTheme = await manager.getTextHaloColorUseTheme();
+    expect(ColorUseTheme.none, textHaloColorUseTheme);
   });
 }
+
 // End of generated file.

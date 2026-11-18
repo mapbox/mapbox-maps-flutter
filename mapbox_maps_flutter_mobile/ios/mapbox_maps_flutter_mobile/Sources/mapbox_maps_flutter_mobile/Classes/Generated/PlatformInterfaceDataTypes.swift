@@ -1285,8 +1285,13 @@ struct PerformanceStatisticsOptions {
   /// It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
   /// The effective collection interval can be observed through the `PerformanceStatistics` instance.
   /// Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
+  /// The value is truncated to whole milliseconds.
   ///
-  /// A negative sampling duration is an error and results in no operation.
+  /// A sampling window closes only when the map renders a frame. A map that does not render does not
+  /// deliver statistics.
+  ///
+  /// A negative sampling duration is an error: `MapboxMap.startPerformanceStatisticsCollection` throws an
+  /// [ArgumentError].
   var samplingDurationMillis: Double
 
 
@@ -1336,17 +1341,24 @@ struct DurationStatistics {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct CumulativeRenderingStatistics {
-  /// The number of draw calls at the end of the collection window.
+  /// The number of draw calls in the last frame of the collection window.
+  /// This value is not a total. It can decrease between two snapshots.
   var drawCalls: Int64? = nil
   /// The amount of texture memory in use at the end of the collection window.
+  /// The value is null on iOS and web.
   var textureBytes: Int64? = nil
   /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
+  /// The value is null on iOS and web.
   var vertexBytes: Int64? = nil
-  /// The number of graphics pipeline programs created.
+  /// The number of graphics pipeline programs created since the renderer started.
+  /// The value does not reset when collection stops or starts again.
   var graphicsPrograms: Int64? = nil
-  /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
+  /// The total amount of time spent on all graphics pipeline program creation since the renderer started,
+  /// in milliseconds. On web, the time counts from the start of collection.
   var graphicsProgramsCreationTimeMillis: Double? = nil
-  /// The number of FBO switches.
+  /// The number of FBO switches since the renderer started.
+  /// The value does not reset when collection stops or starts again.
+  /// On web, the count starts from zero when collection starts.
   var fboSwitchCount: Int64? = nil
 
 
@@ -1382,7 +1394,7 @@ struct CumulativeRenderingStatistics {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct GroupPerformanceStatistics {
-  /// The duration of the group or layer on the CPU timeline.
+  /// The longest duration of the group or layer in one frame of the sampling window, on the CPU timeline.
   var durationMillis: Double
   /// The name of the group or layer.
   var name: String
@@ -1408,11 +1420,14 @@ struct GroupPerformanceStatistics {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct PerFrameRenderingStatistics {
-  /// The CPU timeline duration statistics of each render group, in descending order by duration.
+  /// The 10 slowest render groups and layers, in descending order by duration.
+  /// Group names are renderer internals and can change between releases.
   var topRenderGroups: [GroupPerformanceStatistics]
-  /// The CPU timeline duration statistics of each layer, in descending order by duration.
+  /// The 10 slowest layers, in descending order by duration.
   var topRenderLayers: [GroupPerformanceStatistics]
   /// The CPU timeline duration of the shadowmap render pass.
+  /// On Android and iOS, the renderer currently reports 0 for this value. To see the shadow map passes
+  /// there, read the `shadowmap` entries in [topRenderGroups].
   var shadowMapDurationStatistics: DurationStatistics
   /// The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass.
   var uploadDurationStatistics: DurationStatistics
@@ -1638,6 +1653,8 @@ struct FlatLight {
   var position: [Double?]? = nil
   /// Transition property for `position`
   var positionTransition: TransitionOptions? = nil
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  var colorUseTheme: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1650,6 +1667,7 @@ struct FlatLight {
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[5])
     let position: [Double?]? = nilOrValue(pigeonVar_list[6])
     let positionTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
+    let colorUseTheme: String? = nilOrValue(pigeonVar_list[8])
 
     return FlatLight(
       id: id,
@@ -1659,7 +1677,8 @@ struct FlatLight {
       intensity: intensity,
       intensityTransition: intensityTransition,
       position: position,
-      positionTransition: positionTransition
+      positionTransition: positionTransition,
+      colorUseTheme: colorUseTheme
     )
   }
   func toList() -> [Any?] {
@@ -1672,6 +1691,7 @@ struct FlatLight {
       intensityTransition,
       position,
       positionTransition,
+      colorUseTheme,
     ]
   }
 }
@@ -1704,6 +1724,8 @@ struct DirectionalLight {
   var shadowIntensityTransition: TransitionOptions? = nil
   /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
   var shadowDrawBeforeLayer: String? = nil
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  var colorUseTheme: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1719,6 +1741,7 @@ struct DirectionalLight {
     let shadowIntensity: Double? = nilOrValue(pigeonVar_list[8])
     let shadowIntensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[9])
     let shadowDrawBeforeLayer: String? = nilOrValue(pigeonVar_list[10])
+    let colorUseTheme: String? = nilOrValue(pigeonVar_list[11])
 
     return DirectionalLight(
       id: id,
@@ -1731,7 +1754,8 @@ struct DirectionalLight {
       intensityTransition: intensityTransition,
       shadowIntensity: shadowIntensity,
       shadowIntensityTransition: shadowIntensityTransition,
-      shadowDrawBeforeLayer: shadowDrawBeforeLayer
+      shadowDrawBeforeLayer: shadowDrawBeforeLayer,
+      colorUseTheme: colorUseTheme
     )
   }
   func toList() -> [Any?] {
@@ -1747,6 +1771,7 @@ struct DirectionalLight {
       shadowIntensity,
       shadowIntensityTransition,
       shadowDrawBeforeLayer,
+      colorUseTheme,
     ]
   }
 }
@@ -1767,6 +1792,8 @@ struct AmbientLight {
   var intensity: Double? = nil
   /// Transition property for `intensity`
   var intensityTransition: TransitionOptions? = nil
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  var colorUseTheme: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1776,13 +1803,15 @@ struct AmbientLight {
     let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[2])
     let intensity: Double? = nilOrValue(pigeonVar_list[3])
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[4])
+    let colorUseTheme: String? = nilOrValue(pigeonVar_list[5])
 
     return AmbientLight(
       id: id,
       color: color,
       colorTransition: colorTransition,
       intensity: intensity,
-      intensityTransition: intensityTransition
+      intensityTransition: intensityTransition,
+      colorUseTheme: colorUseTheme
     )
   }
   func toList() -> [Any?] {
@@ -1792,6 +1821,7 @@ struct AmbientLight {
       colorTransition,
       intensity,
       intensityTransition,
+      colorUseTheme,
     ]
   }
 }
@@ -3570,6 +3600,11 @@ struct FeaturesetFeature {
   ///
   /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
   /// In this case it's impossible to set a feature state for an individual feature.
+  ///
+  /// On web, GL JS keeps a GeoJSON feature id only if it is a number, or a
+  /// string that holds a number. It removes all other string ids, and this
+  /// field is then null. Android and iOS keep the id. For an id on all
+  /// platforms, use a number, or copy the id into [properties].
   var id: FeaturesetFeatureId? = nil
   /// A featureset descriptor denoting the featureset this feature belongs to.
   var featureset: FeaturesetDescriptor

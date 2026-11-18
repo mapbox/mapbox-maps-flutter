@@ -604,6 +604,60 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
             completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
+
+    func getLineBorderColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.lineBorderColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineBorderColorUseTheme(managerId: String, lineBorderColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: lineBorderColorUseTheme)
+            try set(\.lineBorderColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.lineColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineColorUseTheme(managerId: String, lineColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: lineColorUseTheme)
+            try set(\.lineColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineTrimColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.lineTrimColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineTrimColorUseTheme(managerId: String, lineTrimColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: lineTrimColorUseTheme)
+            try set(\.lineTrimColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 }
 
 extension PolylineAnnotationOptions {
@@ -651,6 +705,12 @@ extension PolylineAnnotationOptions {
         }
         if let lineWidth {
             annotation.lineWidth = lineWidth
+        }
+        if let lineBorderColorUseTheme {
+            annotation.lineBorderColorUseTheme = ColorUseTheme(rawValue: lineBorderColorUseTheme)
+        }
+        if let lineColorUseTheme {
+            annotation.lineColorUseTheme = ColorUseTheme(rawValue: lineColorUseTheme)
         }
         if let isDraggable {
             annotation.isDraggable = isDraggable
@@ -708,6 +768,12 @@ extension PolylineAnnotation {
         if let lineWidth {
             annotation.lineWidth = lineWidth
         }
+        if let lineBorderColorUseTheme {
+            annotation.lineBorderColorUseTheme = ColorUseTheme(rawValue: lineBorderColorUseTheme)
+        }
+        if let lineColorUseTheme {
+            annotation.lineColorUseTheme = ColorUseTheme(rawValue: lineColorUseTheme)
+        }
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
@@ -737,6 +803,8 @@ extension MapboxMaps.PolylineAnnotation {
             lineOpacity: lineOpacity,
             linePattern: linePattern,
             lineWidth: lineWidth,
+            lineBorderColorUseTheme: lineBorderColorUseTheme?.rawValue,
+            lineColorUseTheme: lineColorUseTheme?.rawValue,
             isDraggable: isDraggable,
             customData: customData.compactMapValues { $0?.toAny }
         )

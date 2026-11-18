@@ -41,6 +41,10 @@ void main() {
       fillPattern: "abc",
       fillTunnelStructureColor: Colors.red.value,
       fillZOffset: 1.0,
+      fillBridgeGuardRailColorUseTheme: ColorUseTheme.none.value,
+      fillColorUseTheme: ColorUseTheme.none.value,
+      fillOutlineColorUseTheme: ColorUseTheme.none.value,
+      fillTunnelStructureColorUseTheme: ColorUseTheme.none.value,
       customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(polygonAnnotationOptions);
@@ -61,6 +65,16 @@ void main() {
     expect("abc", annotation.fillPattern);
     expect(Colors.red.value, annotation.fillTunnelStructureColor);
     expect(1.0, annotation.fillZOffset);
+    expect(
+      ColorUseTheme.none.value,
+      annotation.fillBridgeGuardRailColorUseTheme,
+    );
+    expect(ColorUseTheme.none.value, annotation.fillColorUseTheme);
+    expect(ColorUseTheme.none.value, annotation.fillOutlineColorUseTheme);
+    expect(
+      ColorUseTheme.none.value,
+      annotation.fillTunnelStructureColorUseTheme,
+    );
     expect({'foo': 'bar'}, annotation.customData);
   });
 
@@ -90,7 +104,18 @@ void main() {
           .toList(),
     );
     annotation.geometry = newPolygon;
+    annotation.fillBridgeGuardRailColorUseTheme = ColorUseTheme.none.value;
+    annotation.fillColorUseTheme = ColorUseTheme.none.value;
+    annotation.fillOutlineColorUseTheme = ColorUseTheme.none.value;
+    annotation.fillTunnelStructureColorUseTheme = ColorUseTheme.none.value;
     await manager.update(annotation);
+    final updated = (await manager.getAnnotations()).firstWhere(
+      (a) => a.id == annotation.id,
+    );
+    expect(updated.fillBridgeGuardRailColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.fillColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.fillOutlineColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.fillTunnelStructureColorUseTheme, ColorUseTheme.none.value);
     await manager.delete(annotation);
 
     for (var i = 0; i < 10; i++) {

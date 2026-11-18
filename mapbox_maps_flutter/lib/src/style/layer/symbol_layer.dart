@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -114,6 +114,8 @@ final class SymbolLayer extends Layer {
     this.textWritingModeExpression,
     this.iconColor,
     this.iconColorExpression,
+    this.iconColorUseTheme,
+    this.iconColorUseThemeExpression,
     this.iconColorBrightnessMax,
     this.iconColorBrightnessMaxExpression,
     this.iconColorBrightnessMin,
@@ -128,6 +130,8 @@ final class SymbolLayer extends Layer {
     this.iconHaloBlurExpression,
     this.iconHaloColor,
     this.iconHaloColorExpression,
+    this.iconHaloColorUseTheme,
+    this.iconHaloColorUseThemeExpression,
     this.iconHaloWidth,
     this.iconHaloWidthExpression,
     this.iconImageCrossFade,
@@ -146,12 +150,16 @@ final class SymbolLayer extends Layer {
     this.symbolZOffsetExpression,
     this.textColor,
     this.textColorExpression,
+    this.textColorUseTheme,
+    this.textColorUseThemeExpression,
     this.textEmissiveStrength,
     this.textEmissiveStrengthExpression,
     this.textHaloBlur,
     this.textHaloBlurExpression,
     this.textHaloColor,
     this.textHaloColorExpression,
+    this.textHaloColorUseTheme,
+    this.textHaloColorUseThemeExpression,
     this.textHaloWidth,
     this.textHaloWidthExpression,
     this.textOcclusionOpacity,
@@ -537,6 +545,14 @@ final class SymbolLayer extends Layer {
   /// Default value: "#000000".
   List<Object>? iconColorExpression;
 
+  /// Sets if the color theme of the style changes `iconColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? iconColorUseTheme;
+
+  /// Sets if the color theme of the style changes `iconColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? iconColorUseThemeExpression;
+
   /// Increase or reduce the brightness of the symbols. The value is the maximum brightness.
   /// Default value: 1. Value range: [0, 1]
   double? iconColorBrightnessMax;
@@ -592,6 +608,14 @@ final class SymbolLayer extends Layer {
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? iconHaloColorExpression;
+
+  /// Sets if the color theme of the style changes `iconHaloColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? iconHaloColorUseTheme;
+
+  /// Sets if the color theme of the style changes `iconHaloColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? iconHaloColorUseThemeExpression;
 
   /// Distance of halo to the icon outline.
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
@@ -653,12 +677,12 @@ final class SymbolLayer extends Layer {
   /// Supported platforms: Android, iOS.
   List<Object>? occlusionOpacityModeExpression;
 
-  /// Specifies an uniform elevation from the ground, in meters.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation from the ground.
+  /// Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   double? symbolZOffset;
 
-  /// Specifies an uniform elevation from the ground, in meters.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation from the ground.
+  /// Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   List<Object>? symbolZOffsetExpression;
 
   /// The color with which the text will be drawn.
@@ -668,6 +692,14 @@ final class SymbolLayer extends Layer {
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
   List<Object>? textColorExpression;
+
+  /// Sets if the color theme of the style changes `textColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? textColorUseTheme;
+
+  /// Sets if the color theme of the style changes `textColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? textColorUseThemeExpression;
 
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
@@ -692,6 +724,14 @@ final class SymbolLayer extends Layer {
   /// The color of the text's halo, which helps it stand out from backgrounds.
   /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? textHaloColorExpression;
+
+  /// Sets if the color theme of the style changes `textHaloColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? textHaloColorUseTheme;
+
+  /// Sets if the color theme of the style changes `textHaloColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? textHaloColorUseThemeExpression;
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
   /// Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
@@ -1099,6 +1139,12 @@ final class SymbolLayer extends Layer {
       paint["icon-color"] = iconColor?.toRGBA();
     }
 
+    if (iconColorUseThemeExpression != null) {
+      paint["icon-color-use-theme"] = iconColorUseThemeExpression;
+    } else if (iconColorUseTheme != null) {
+      paint["icon-color-use-theme"] = iconColorUseTheme?.value;
+    }
+
     if (iconColorBrightnessMaxExpression != null) {
       paint["icon-color-brightness-max"] = iconColorBrightnessMaxExpression;
     } else if (iconColorBrightnessMax != null) {
@@ -1139,6 +1185,12 @@ final class SymbolLayer extends Layer {
       paint["icon-halo-color"] = iconHaloColorExpression;
     } else if (iconHaloColor != null) {
       paint["icon-halo-color"] = iconHaloColor?.toRGBA();
+    }
+
+    if (iconHaloColorUseThemeExpression != null) {
+      paint["icon-halo-color-use-theme"] = iconHaloColorUseThemeExpression;
+    } else if (iconHaloColorUseTheme != null) {
+      paint["icon-halo-color-use-theme"] = iconHaloColorUseTheme?.value;
     }
 
     if (iconHaloWidthExpression != null) {
@@ -1199,6 +1251,12 @@ final class SymbolLayer extends Layer {
       paint["text-color"] = textColor?.toRGBA();
     }
 
+    if (textColorUseThemeExpression != null) {
+      paint["text-color-use-theme"] = textColorUseThemeExpression;
+    } else if (textColorUseTheme != null) {
+      paint["text-color-use-theme"] = textColorUseTheme?.value;
+    }
+
     if (textEmissiveStrengthExpression != null) {
       paint["text-emissive-strength"] = textEmissiveStrengthExpression;
     } else if (textEmissiveStrength != null) {
@@ -1215,6 +1273,12 @@ final class SymbolLayer extends Layer {
       paint["text-halo-color"] = textHaloColorExpression;
     } else if (textHaloColor != null) {
       paint["text-halo-color"] = textHaloColor?.toRGBA();
+    }
+
+    if (textHaloColorUseThemeExpression != null) {
+      paint["text-halo-color-use-theme"] = textHaloColorUseThemeExpression;
+    } else if (textHaloColorUseTheme != null) {
+      paint["text-halo-color-use-theme"] = textHaloColorUseTheme?.value;
     }
 
     if (textHaloWidthExpression != null) {
@@ -1565,8 +1629,14 @@ final class SymbolLayer extends Layer {
       textWritingModeExpression: styleOptionalCastList(
         map["layout"]["text-writing-mode"],
       ),
-      iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
+      iconColor: styleColorFromJson(map["paint"]["icon-color"]),
       iconColorExpression: styleOptionalCastList(map["paint"]["icon-color"]),
+      iconColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["icon-color-use-theme"],
+      ),
+      iconColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["icon-color-use-theme"],
+      ),
       iconColorBrightnessMax: styleOptionalCast(
         map["paint"]["icon-color-brightness-max"],
       ),
@@ -1599,9 +1669,15 @@ final class SymbolLayer extends Layer {
       iconHaloBlurExpression: styleOptionalCastList(
         map["paint"]["icon-halo-blur"],
       ),
-      iconHaloColor: (map["paint"]["icon-halo-color"] as List?)?.toRGBAInt(),
+      iconHaloColor: styleColorFromJson(map["paint"]["icon-halo-color"]),
       iconHaloColorExpression: styleOptionalCastList(
         map["paint"]["icon-halo-color"],
+      ),
+      iconHaloColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["icon-halo-color-use-theme"],
+      ),
+      iconHaloColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["icon-halo-color-use-theme"],
       ),
       iconHaloWidth: styleOptionalCast(map["paint"]["icon-halo-width"]),
       iconHaloWidthExpression: styleOptionalCastList(
@@ -1655,8 +1731,14 @@ final class SymbolLayer extends Layer {
       symbolZOffsetExpression: styleOptionalCastList(
         map["paint"]["symbol-z-offset"],
       ),
-      textColor: (map["paint"]["text-color"] as List?)?.toRGBAInt(),
+      textColor: styleColorFromJson(map["paint"]["text-color"]),
       textColorExpression: styleOptionalCastList(map["paint"]["text-color"]),
+      textColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["text-color-use-theme"],
+      ),
+      textColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["text-color-use-theme"],
+      ),
       textEmissiveStrength: styleOptionalCast(
         map["paint"]["text-emissive-strength"],
       ),
@@ -1667,9 +1749,15 @@ final class SymbolLayer extends Layer {
       textHaloBlurExpression: styleOptionalCastList(
         map["paint"]["text-halo-blur"],
       ),
-      textHaloColor: (map["paint"]["text-halo-color"] as List?)?.toRGBAInt(),
+      textHaloColor: styleColorFromJson(map["paint"]["text-halo-color"]),
       textHaloColorExpression: styleOptionalCastList(
         map["paint"]["text-halo-color"],
+      ),
+      textHaloColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["text-halo-color-use-theme"],
+      ),
+      textHaloColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["text-halo-color-use-theme"],
       ),
       textHaloWidth: styleOptionalCast(map["paint"]["text-halo-width"]),
       textHaloWidthExpression: styleOptionalCastList(

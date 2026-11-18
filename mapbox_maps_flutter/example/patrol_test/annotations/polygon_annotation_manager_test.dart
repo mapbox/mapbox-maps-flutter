@@ -108,6 +108,25 @@ void main() {
     await manager.setFillZOffset(1.0);
     var fillZOffset = await manager.getFillZOffset();
     expect(1.0, fillZOffset);
+
+    await manager.setFillBridgeGuardRailColorUseTheme(ColorUseTheme.none);
+    var fillBridgeGuardRailColorUseTheme = await manager
+        .getFillBridgeGuardRailColorUseTheme();
+    expect(ColorUseTheme.none, fillBridgeGuardRailColorUseTheme);
+
+    await manager.setFillColorUseTheme(ColorUseTheme.none);
+    var fillColorUseTheme = await manager.getFillColorUseTheme();
+    expect(ColorUseTheme.none, fillColorUseTheme);
+
+    await manager.setFillOutlineColorUseTheme(ColorUseTheme.none);
+    var fillOutlineColorUseTheme = await manager.getFillOutlineColorUseTheme();
+    expect(ColorUseTheme.none, fillOutlineColorUseTheme);
+
+    await manager.setFillTunnelStructureColorUseTheme(ColorUseTheme.none);
+    var fillTunnelStructureColorUseTheme = await manager
+        .getFillTunnelStructureColorUseTheme();
+    expect(ColorUseTheme.none, fillTunnelStructureColorUseTheme);
   });
 }
+
 // End of generated file.

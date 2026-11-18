@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -22,6 +22,8 @@ final class BackgroundLayer extends Layer {
 
     this.backgroundColor,
     this.backgroundColorExpression,
+    this.backgroundColorUseTheme,
+    this.backgroundColorUseThemeExpression,
     this.backgroundEmissiveStrength,
     this.backgroundEmissiveStrengthExpression,
     this.backgroundOpacity,
@@ -42,6 +44,14 @@ final class BackgroundLayer extends Layer {
   /// The color with which the background will be drawn.
   /// Default value: "#000000".
   List<Object>? backgroundColorExpression;
+
+  /// Sets if the color theme of the style changes `backgroundColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? backgroundColorUseTheme;
+
+  /// Sets if the color theme of the style changes `backgroundColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? backgroundColorUseThemeExpression;
 
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 0. Minimum value: 0. The unit of backgroundEmissiveStrength is in intensity.
@@ -94,6 +104,12 @@ final class BackgroundLayer extends Layer {
       paint["background-color"] = backgroundColorExpression;
     } else if (backgroundColor != null) {
       paint["background-color"] = backgroundColor?.toRGBA();
+    }
+
+    if (backgroundColorUseThemeExpression != null) {
+      paint["background-color-use-theme"] = backgroundColorUseThemeExpression;
+    } else if (backgroundColorUseTheme != null) {
+      paint["background-color-use-theme"] = backgroundColorUseTheme?.value;
     }
 
     if (backgroundEmissiveStrengthExpression != null) {
@@ -168,9 +184,15 @@ final class BackgroundLayer extends Layer {
             ),
       visibilityExpression: styleOptionalCastList(map["layout"]["visibility"]),
       filter: styleOptionalCastList(map["filter"]),
-      backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
+      backgroundColor: styleColorFromJson(map["paint"]["background-color"]),
       backgroundColorExpression: styleOptionalCastList(
         map["paint"]["background-color"],
+      ),
+      backgroundColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["background-color-use-theme"],
+      ),
+      backgroundColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["background-color-use-theme"],
       ),
       backgroundEmissiveStrength: styleOptionalCast(
         map["paint"]["background-emissive-strength"],

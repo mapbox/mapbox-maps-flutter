@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -53,14 +52,18 @@ void main() {
         fillSortKey: 1.0,
         fillAntialias: true,
         fillBridgeGuardRailColor: Colors.red.value,
+        fillBridgeGuardRailColorUseTheme: ColorUseTheme.none,
         fillColor: Colors.red.value,
+        fillColorUseTheme: ColorUseTheme.none,
         fillEmissiveStrength: 1.0,
         fillOpacity: 1.0,
         fillOutlineColor: Colors.red.value,
+        fillOutlineColorUseTheme: ColorUseTheme.none,
         fillPattern: "abc",
         fillTranslate: [0.0, 1.0],
         fillTranslateAnchor: FillTranslateAnchor.MAP,
         fillTunnelStructureColor: Colors.red.value,
+        fillTunnelStructureColorUseTheme: ColorUseTheme.none,
         fillZOffset: 1.0,
       ),
     );
@@ -75,14 +78,18 @@ void main() {
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
     expect(layer.fillBridgeGuardRailColor, Colors.red.value);
+    expect(layer.fillBridgeGuardRailColorUseTheme, ColorUseTheme.none);
     expect(layer.fillColor, Colors.red.value);
+    expect(layer.fillColorUseTheme, ColorUseTheme.none);
     expect(layer.fillEmissiveStrength, 1.0);
     expect(layer.fillOpacity, 1.0);
     expect(layer.fillOutlineColor, Colors.red.value);
+    expect(layer.fillOutlineColorUseTheme, ColorUseTheme.none);
     expect(layer.fillPattern, "abc");
     expect(layer.fillTranslate, [0.0, 1.0]);
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
     expect(layer.fillTunnelStructureColor, Colors.red.value);
+    expect(layer.fillTunnelStructureColorUseTheme, ColorUseTheme.none);
     expect(layer.fillZOffset, 1.0);
   });
 
@@ -126,10 +133,16 @@ void main() {
         fillSortKeyExpression: ['number', 1.0],
         fillAntialiasExpression: ['==', true, true],
         fillBridgeGuardRailColorExpression: ['rgba', 255, 0, 0, 1],
+        fillBridgeGuardRailColorUseTheme: ColorUseTheme.useDefault,
+        fillBridgeGuardRailColorUseThemeExpression: ['string', 'none'],
         fillColorExpression: ['rgba', 255, 0, 0, 1],
+        fillColorUseTheme: ColorUseTheme.useDefault,
+        fillColorUseThemeExpression: ['string', 'none'],
         fillEmissiveStrengthExpression: ['number', 1.0],
         fillOpacityExpression: ['number', 1.0],
         fillOutlineColorExpression: ['rgba', 255, 0, 0, 1],
+        fillOutlineColorUseTheme: ColorUseTheme.useDefault,
+        fillOutlineColorUseThemeExpression: ['string', 'none'],
         fillPatternExpression: ['image', "abc"],
         fillTranslateExpression: [
           'literal',
@@ -137,6 +150,8 @@ void main() {
         ],
         fillTranslateAnchorExpression: ['string', 'map'],
         fillTunnelStructureColorExpression: ['rgba', 255, 0, 0, 1],
+        fillTunnelStructureColorUseTheme: ColorUseTheme.useDefault,
+        fillTunnelStructureColorUseThemeExpression: ['string', 'none'],
         fillZOffsetExpression: ['number', 1.0],
       ),
     );
@@ -156,15 +171,35 @@ void main() {
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
     expect(layer.fillBridgeGuardRailColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.fillBridgeGuardRailColorUseThemeExpression ??
+          layer.fillBridgeGuardRailColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.fillColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.fillColorUseThemeExpression ?? layer.fillColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.fillEmissiveStrength, 1.0);
     expect(layer.fillOpacity, 1.0);
     expect(layer.fillOutlineColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.fillOutlineColorUseThemeExpression ??
+          layer.fillOutlineColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.fillPatternExpression, ['image', "abc"]);
     expect(layer.fillTranslate, [0.0, 1.0]);
     expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
     expect(layer.fillTunnelStructureColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.fillTunnelStructureColorUseThemeExpression ??
+          layer.fillTunnelStructureColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.fillZOffset, 1.0);
   });
 }
+
 // End of generated file.

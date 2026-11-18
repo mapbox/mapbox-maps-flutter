@@ -8,12 +8,12 @@ import 'package:flutter/foundation.dart' show UniqueKey;
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
-import 'package:turf/turf.dart'
-    show GeometryObject, Point, Position, bbox, bearing;
+import 'package:turf/turf.dart' show GeometryObject, Point, Position, bbox;
 import 'package:web/web.dart' show Blob, window;
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
+import 'bindings/performance_statistics_bindings.dart';
 import 'bindings/style_bindings.dart';
 import 'cluster_queries.dart';
 import 'gestures_controller.dart';
@@ -25,6 +25,8 @@ import 'ornaments/attribution_controller.dart';
 import 'ornaments/compass_controller.dart';
 import 'ornaments/logo_controller.dart';
 import 'ornaments/scale_bar_controller.dart';
+import 'performance_statistics_web.dart';
+import 'rotate_by_math.dart';
 import 'style_controller_web.dart';
 import 'unsupported_sub_interfaces.dart';
 import 'viewport/viewport_web.dart';
@@ -122,22 +124,29 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
       UnsupportedMapRecorderWeb();
 
   // ===== Performance statistics =====
-  //
-  // GL JS exposes a performance API but wiring it up sits in the
-  // web-parity follow-up epic; throw until then.
+
+  var _collectingPerformanceStatistics = false;
 
   @override
   void startPerformanceStatisticsCollection(
     PerformanceStatisticsOptions options,
     PerformanceStatisticsListener listener,
-  ) => throw UnimplementedError(
-    'startPerformanceStatisticsCollection is not yet implemented on web.',
-  );
+  ) {
+    _map.startPerformanceStatisticsCollection(
+      options.toJS(),
+      ((JSPerformanceStatistics statistics) =>
+              listener.onPerformanceStatisticsCollected(statistics.toDart()))
+          .toJS,
+    );
+    _collectingPerformanceStatistics = true;
+  }
 
   @override
-  void stopPerformanceStatisticsCollection() => throw UnimplementedError(
-    'stopPerformanceStatisticsCollection is not yet implemented on web.',
-  );
+  void stopPerformanceStatisticsCollection() {
+    if (!_collectingPerformanceStatistics) return;
+    _map.stopPerformanceStatisticsCollection();
+    _collectingPerformanceStatistics = false;
+  }
 
   // ===== Style loading =====
 
@@ -506,7 +515,8 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     ScreenCoordinate screenCoordinate,
     MapAnimationOptions? mapAnimationOptions,
   ) async => _map.panBy(
-    JSScreenPoint(screenCoordinate.x, screenCoordinate.y),
+    // GL JS moves the camera by the offset; the native SDKs move the content.
+    JSScreenPoint(-screenCoordinate.x, -screenCoordinate.y),
     JSCameraOptions()
       ..essential = true
       ..withDurationMs(mapAnimationOptions?.duration),
@@ -518,14 +528,17 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     ScreenCoordinate second,
     MapAnimationOptions? mapAnimationOptions,
   ) async {
-    final lngLat1 = _map.unproject(JSScreenPoint(first.x, first.y));
-    final lngLat2 = _map.unproject(JSScreenPoint(second.x, second.y));
-    final p1 = Point(coordinates: Position(lngLat1.lng, lngLat1.lat));
-    final p2 = Point(coordinates: Position(lngLat2.lng, lngLat2.lat));
-    _map.rotateTo(
-      bearing(p1, p2).toDouble(),
+    final centre = _map.project(_map.getCenter());
+    final delta = rotateByBearingDelta(
+      first: math.Point(first.x, first.y),
+      second: math.Point(second.x, second.y),
+      centre: math.Point(centre.x.toDouble(), centre.y.toDouble()),
+      pixelRatio: window.devicePixelRatio,
+    );
+    _map.easeTo(
       JSCameraOptions()
         ..essential = true
+        ..bearing = _map.getBearing() + delta
         ..withDurationMs(mapAnimationOptions?.duration),
     );
   }
@@ -1090,6 +1103,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   void dispose() {
     // The JSMap instance is owned by `_MapWebWidgetState` and torn down in
     // its own `dispose()` (see map_widget.dart).
+    stopPerformanceStatisticsCollection();
     _disposables.dispose();
   }
 }

@@ -187,6 +187,12 @@ interface _PolylineAnnotationMessenger {
   fun getLineTrimOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setLineWidth(managerId: String, lineWidth: Double, callback: (Result<Unit>) -> Unit)
   fun getLineWidth(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineBorderColorUseTheme(managerId: String, lineBorderColorUseTheme: String, callback: (Result<Unit>) -> Unit)
+  fun getLineBorderColorUseTheme(managerId: String, callback: (Result<String?>) -> Unit)
+  fun setLineColorUseTheme(managerId: String, lineColorUseTheme: String, callback: (Result<Unit>) -> Unit)
+  fun getLineColorUseTheme(managerId: String, callback: (Result<String?>) -> Unit)
+  fun setLineTrimColorUseTheme(managerId: String, lineTrimColorUseTheme: String, callback: (Result<Unit>) -> Unit)
+  fun getLineTrimColorUseTheme(managerId: String, callback: (Result<String?>) -> Unit)
 
   companion object {
     /** The codec used by _PolylineAnnotationMessenger. */
@@ -1525,6 +1531,126 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineBorderColorUseThemeArg = args[1] as String
+            api.setLineBorderColorUseTheme(managerIdArg, lineBorderColorUseThemeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineBorderColorUseTheme(managerIdArg) { result: Result<String?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineColorUseThemeArg = args[1] as String
+            api.setLineColorUseTheme(managerIdArg, lineColorUseThemeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineColorUseTheme(managerIdArg) { result: Result<String?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineTrimColorUseThemeArg = args[1] as String
+            api.setLineTrimColorUseTheme(managerIdArg, lineTrimColorUseThemeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineTrimColorUseTheme(managerIdArg) { result: Result<String?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

@@ -409,6 +409,14 @@ protocol _PointAnnotationMessenger {
   func getTextTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextTranslateAnchor(managerId: String, completion: @escaping (Result<TextTranslateAnchor?, Error>) -> Void)
+  func setIconColorUseTheme(managerId: String, iconColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setIconHaloColorUseTheme(managerId: String, iconHaloColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconHaloColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setTextColorUseTheme(managerId: String, textColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setTextHaloColorUseTheme(managerId: String, textHaloColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextHaloColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -2920,6 +2928,146 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getTextTranslateAnchorChannel.setMessageHandler(nil)
+    }
+    let setIconColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconColorUseThemeArg = args[1] as! String
+        api.setIconColorUseTheme(managerId: managerIdArg, iconColorUseTheme: iconColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getIconColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setIconHaloColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconHaloColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconHaloColorUseThemeArg = args[1] as! String
+        api.setIconHaloColorUseTheme(managerId: managerIdArg, iconHaloColorUseTheme: iconHaloColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconHaloColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getIconHaloColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconHaloColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconHaloColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconHaloColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setTextColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textColorUseThemeArg = args[1] as! String
+        api.setTextColorUseTheme(managerId: managerIdArg, textColorUseTheme: textColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getTextColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setTextHaloColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextHaloColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textHaloColorUseThemeArg = args[1] as! String
+        api.setTextHaloColorUseTheme(managerId: managerIdArg, textHaloColorUseTheme: textHaloColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextHaloColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getTextHaloColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextHaloColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextHaloColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextHaloColorUseThemeChannel.setMessageHandler(nil)
     }
   }
 }

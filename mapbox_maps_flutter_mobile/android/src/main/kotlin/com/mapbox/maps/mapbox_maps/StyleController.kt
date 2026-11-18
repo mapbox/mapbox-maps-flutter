@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
+import com.mapbox.maps.ColorTheme
+import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.RuntimeStylingOptions
 import com.mapbox.maps.extension.localization.localizeLabels
@@ -214,6 +216,82 @@ class StyleController(private val context: Context, private val styleManager: Ma
   override fun setStyleImportConfigProperty(importId: String, config: String, value: Any) {
     styleManager.setStyleImportConfigProperty(importId, config, value.toValue())
   }
+
+  @OptIn(MapboxExperimental::class)
+  override fun setStyleColorTheme(data: Any?) {
+    styleManager.setStyleColorTheme(data?.toColorTheme())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  @OptIn(MapboxExperimental::class)
+  override fun setStyleImportColorTheme(importId: String, data: Any?) {
+    styleManager.setImportColorTheme(importId, data?.toColorTheme())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  override fun setStyleAtmosphere(properties: String?) {
+    styleManager.setStyleAtmosphere(properties.toStyleObjectValue())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  override fun getStyleAtmosphereProperty(property: String): StylePropertyValue =
+    styleManager.getStyleAtmosphereProperty(property).toFLTStylePropertyValue()
+
+  override fun setStyleAtmosphereProperty(property: String, value: Any) {
+    styleManager.setStyleAtmosphereProperty(property, value.toValue())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  @OptIn(MapboxExperimental::class)
+  override fun setStyleSnow(properties: String?) {
+    styleManager.setStyleSnow(properties.toStyleObjectValue())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  @OptIn(MapboxExperimental::class)
+  override fun getStyleSnowProperty(property: String): StylePropertyValue =
+    styleManager.getStyleSnowProperty(property).toFLTStylePropertyValue()
+
+  @OptIn(MapboxExperimental::class)
+  override fun setStyleSnowProperty(property: String, value: Any) {
+    styleManager.setStyleSnowProperty(property, value.toValue())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  @OptIn(MapboxExperimental::class)
+  override fun setStyleRain(properties: String?) {
+    styleManager.setStyleRain(properties.toStyleObjectValue())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  @OptIn(MapboxExperimental::class)
+  override fun getStyleRainProperty(property: String): StylePropertyValue =
+    styleManager.getStyleRainProperty(property).toFLTStylePropertyValue()
+
+  @OptIn(MapboxExperimental::class)
+  override fun setStyleRainProperty(property: String, value: Any) {
+    styleManager.setStyleRainProperty(property, value.toValue())
+      .error?.let { throw RuntimeException(it) }
+  }
+
+  // A null value removes the style object.
+  private fun String?.toStyleObjectValue(): Value {
+    if (this == null) return Value.nullValue()
+    val value = Value.fromJson(this)
+    return value.value ?: throw RuntimeException(value.error)
+  }
+
+  // A string is a base64-encoded LUT. Any other value is an expression.
+  private fun Any.toColorTheme(): ColorTheme = ColorTheme.valueOf(
+    com.mapbox.maps.StylePropertyValue(
+      toValue(),
+      if (this is String) {
+        com.mapbox.maps.StylePropertyValueKind.CONSTANT
+      } else {
+        com.mapbox.maps.StylePropertyValueKind.EXPRESSION
+      }
+    )
+  )
 
   override fun setStyleTransition(
     transitionOptions: TransitionOptions,

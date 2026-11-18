@@ -504,11 +504,11 @@ final class PointAnnotationManager
   Future<OcclusionOpacityMode?> getOcclusionOpacityMode() =>
       impl.getOcclusionOpacityMode();
 
-  /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation from the ground. Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   Future<void> setSymbolZOffset(double symbolZOffset) =>
       impl.setSymbolZOffset(symbolZOffset);
 
-  /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation from the ground. Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   Future<double?> getSymbolZOffset() => impl.getSymbolZOffset();
 
   /// The color with which the text will be drawn. Default value: "#000000".
@@ -574,6 +574,44 @@ final class PointAnnotationManager
   /// Controls the frame of reference for `text-translate`. Default value: "map".
   Future<TextTranslateAnchor?> getTextTranslateAnchor() =>
       impl.getTextTranslateAnchor();
+
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  @experimental
+  Future<void> setIconColorUseTheme(ColorUseTheme iconColorUseTheme) =>
+      impl.setIconColorUseTheme(iconColorUseTheme);
+
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getIconColorUseTheme() => impl.getIconColorUseTheme();
+
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  @experimental
+  Future<void> setIconHaloColorUseTheme(ColorUseTheme iconHaloColorUseTheme) =>
+      impl.setIconHaloColorUseTheme(iconHaloColorUseTheme);
+
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getIconHaloColorUseTheme() =>
+      impl.getIconHaloColorUseTheme();
+
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  @experimental
+  Future<void> setTextColorUseTheme(ColorUseTheme textColorUseTheme) =>
+      impl.setTextColorUseTheme(textColorUseTheme);
+
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getTextColorUseTheme() => impl.getTextColorUseTheme();
+
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  @experimental
+  Future<void> setTextHaloColorUseTheme(ColorUseTheme textHaloColorUseTheme) =>
+      impl.setTextHaloColorUseTheme(textHaloColorUseTheme);
+
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getTextHaloColorUseTheme() =>
+      impl.getTextHaloColorUseTheme();
 }
 
 // End of generated file.

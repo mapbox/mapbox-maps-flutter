@@ -158,10 +158,9 @@ abstract base class _BrowserEventGuard
   _BrowserEventGuard({
     required this.container,
     required this.mapViewKey,
-    required List<String> eventTypes,
+    required this._eventTypes,
     required bool capture,
-  }) : _eventTypes = eventTypes,
-       _capture = capture {
+  }) : _capture = capture {
     _listener = _onEvent.toJS;
     for (final type in _eventTypes) {
       container.addEventListener(
@@ -410,10 +409,9 @@ abstract base class _MapEventGuard with _MapHitTesting implements _EventGuard {
   _MapEventGuard({
     required this.container,
     required this.mapViewKey,
-    required JSMap map,
-    required String eventType,
-  }) : _map = map,
-       _eventType = eventType {
+    required this._map,
+    required this._eventType,
+  }) {
     _listener = _onEvent.toJS;
     _map.on(_eventType, _listener);
   }

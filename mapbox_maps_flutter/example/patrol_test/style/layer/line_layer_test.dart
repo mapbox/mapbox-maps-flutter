@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -60,9 +59,12 @@ void main() {
         lineZOffset: 1.0,
         lineBlur: 1.0,
         lineBorderColor: Colors.red.value,
+        lineBorderColorUseTheme: ColorUseTheme.none,
         lineBorderGradient: Colors.red.value,
+        lineBorderGradientUseTheme: ColorUseTheme.none,
         lineBorderWidth: 1.0,
         lineColor: Colors.red.value,
+        lineColorUseTheme: ColorUseTheme.none,
         lineCutoutFadeWidth: 1.0,
         lineCutoutOpacity: 1.0,
         lineDasharray: [1.0, 2.0],
@@ -70,6 +72,7 @@ void main() {
         lineEmissiveStrength: 1.0,
         lineGapWidth: 1.0,
         lineGradient: Colors.red.value,
+        lineGradientUseTheme: ColorUseTheme.none,
         lineOcclusionOpacity: 1.0,
         lineOffset: 1.0,
         lineOpacity: 1.0,
@@ -77,6 +80,7 @@ void main() {
         lineTranslate: [0.0, 1.0],
         lineTranslateAnchor: LineTranslateAnchor.MAP,
         lineTrimColor: Colors.red.value,
+        lineTrimColorUseTheme: ColorUseTheme.none,
         lineTrimFadeRange: [0.5, 0.5],
         lineTrimOffset: [0.5, 0.5],
         lineWidth: 1.0,
@@ -100,9 +104,12 @@ void main() {
     expect(layer.lineZOffset, 1.0);
     expect(layer.lineBlur, 1.0);
     expect(layer.lineBorderColor, Colors.red.value);
+    expect(layer.lineBorderColorUseTheme, ColorUseTheme.none);
     expect(layer.lineBorderGradient, Colors.red.value);
+    expect(layer.lineBorderGradientUseTheme, ColorUseTheme.none);
     expect(layer.lineBorderWidth, 1.0);
     expect(layer.lineColor, Colors.red.value);
+    expect(layer.lineColorUseTheme, ColorUseTheme.none);
     if (!kIsWeb) {
       expect(layer.lineCutoutFadeWidth, 1.0);
     }
@@ -116,6 +123,7 @@ void main() {
     expect(layer.lineEmissiveStrength, 1.0);
     expect(layer.lineGapWidth, 1.0);
     expect(layer.lineGradient, Colors.red.value);
+    expect(layer.lineGradientUseTheme, ColorUseTheme.none);
     if (!kIsWeb) {
       expect(layer.lineOcclusionOpacity, 1.0);
     }
@@ -125,6 +133,7 @@ void main() {
     expect(layer.lineTranslate, [0.0, 1.0]);
     expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
     expect(layer.lineTrimColor, Colors.red.value);
+    expect(layer.lineTrimColorUseTheme, ColorUseTheme.none);
     expect(layer.lineTrimFadeRange, [0.5, 0.5]);
     expect(layer.lineTrimOffset, [0.5, 0.5]);
     expect(layer.lineWidth, 1.0);
@@ -177,9 +186,15 @@ void main() {
         lineZOffsetExpression: ['number', 1.0],
         lineBlurExpression: ['number', 1.0],
         lineBorderColorExpression: ['rgba', 255, 0, 0, 1],
+        lineBorderColorUseTheme: ColorUseTheme.useDefault,
+        lineBorderColorUseThemeExpression: ['string', 'none'],
         lineBorderGradientExpression: ['rgba', 255, 0, 0, 1],
+        lineBorderGradientUseTheme: ColorUseTheme.useDefault,
+        lineBorderGradientUseThemeExpression: ['string', 'none'],
         lineBorderWidthExpression: ['number', 1.0],
         lineColorExpression: ['rgba', 255, 0, 0, 1],
+        lineColorUseTheme: ColorUseTheme.useDefault,
+        lineColorUseThemeExpression: ['string', 'none'],
         lineCutoutFadeWidth: 1.0,
         lineCutoutOpacityExpression: ['number', 1.0],
         lineDasharrayExpression: [
@@ -190,6 +205,8 @@ void main() {
         lineEmissiveStrengthExpression: ['number', 1.0],
         lineGapWidthExpression: ['number', 1.0],
         lineGradientExpression: ['rgba', 255, 0, 0, 1],
+        lineGradientUseTheme: ColorUseTheme.useDefault,
+        lineGradientUseThemeExpression: ['string', 'none'],
         lineOcclusionOpacityExpression: ['number', 1.0],
         lineOffsetExpression: ['number', 1.0],
         lineOpacityExpression: ['number', 1.0],
@@ -200,6 +217,8 @@ void main() {
         ],
         lineTranslateAnchorExpression: ['string', 'map'],
         lineTrimColorExpression: ['rgba', 255, 0, 0, 1],
+        lineTrimColorUseTheme: ColorUseTheme.useDefault,
+        lineTrimColorUseThemeExpression: ['string', 'none'],
         lineTrimFadeRangeExpression: [
           'literal',
           [0.5, 0.5],
@@ -231,9 +250,22 @@ void main() {
     expect(layer.lineZOffset, 1.0);
     expect(layer.lineBlur, 1.0);
     expect(layer.lineBorderColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.lineBorderColorUseThemeExpression ?? layer.lineBorderColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.lineBorderGradientExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.lineBorderGradientUseThemeExpression ??
+          layer.lineBorderGradientUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.lineBorderWidth, 1.0);
     expect(layer.lineColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.lineColorUseThemeExpression ?? layer.lineColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     if (!kIsWeb) {
       expect(layer.lineCutoutFadeWidth, 1.0);
     }
@@ -247,6 +279,10 @@ void main() {
     expect(layer.lineEmissiveStrength, 1.0);
     expect(layer.lineGapWidth, 1.0);
     expect(layer.lineGradientExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.lineGradientUseThemeExpression ?? layer.lineGradientUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     if (!kIsWeb) {
       expect(layer.lineOcclusionOpacity, 1.0);
     }
@@ -256,9 +292,14 @@ void main() {
     expect(layer.lineTranslate, [0.0, 1.0]);
     expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
     expect(layer.lineTrimColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.lineTrimColorUseThemeExpression ?? layer.lineTrimColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.lineTrimFadeRange, [0.5, 0.5]);
     expect(layer.lineTrimOffset, [0.5, 0.5]);
     expect(layer.lineWidth, 1.0);
   });
 }
+
 // End of generated file.

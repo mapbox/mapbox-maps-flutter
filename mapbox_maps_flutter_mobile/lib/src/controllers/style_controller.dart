@@ -1,3 +1,4 @@
+// ignore_for_file: experimental_member_use
 part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 /// Mobile [StylePlatformInterface] implementation, backed by the
@@ -395,6 +396,52 @@ class StyleController implements StylePlatformInterface {
     String config,
     Object value,
   ) => _api.setStyleImportConfigProperty(importId, config, value);
+
+  @override
+  Future<void> setStyleColorTheme(ColorTheme? colorTheme) =>
+      _api.setStyleColorTheme(colorTheme?.toJson()['data']);
+
+  @override
+  Future<void> setStyleImportColorTheme(
+    String importId,
+    ColorTheme? colorTheme,
+  ) => _api.setStyleImportColorTheme(importId, colorTheme?.toJson()['data']);
+
+  @override
+  Future<void> setStyleAtmosphere(String? properties) =>
+      _api.setStyleAtmosphere(properties);
+
+  @override
+  Future<StylePropertyValue> getStyleAtmosphereProperty(String property) =>
+      _api.getStyleAtmosphereProperty(property);
+
+  @override
+  Future<void> setStyleAtmosphereProperty(String property, Object value) =>
+      _api.setStyleAtmosphereProperty(property, value);
+
+  @override
+  Future<void> setStyleSnow(String? properties) =>
+      _api.setStyleSnow(properties);
+
+  @override
+  Future<StylePropertyValue> getStyleSnowProperty(String property) =>
+      _api.getStyleSnowProperty(property);
+
+  @override
+  Future<void> setStyleSnowProperty(String property, Object value) =>
+      _api.setStyleSnowProperty(property, value);
+
+  @override
+  Future<void> setStyleRain(String? properties) =>
+      _api.setStyleRain(properties);
+
+  @override
+  Future<StylePropertyValue> getStyleRainProperty(String property) =>
+      _api.getStyleRainProperty(property);
+
+  @override
+  Future<void> setStyleRainProperty(String property, Object value) =>
+      _api.setStyleRainProperty(property, value);
 
   @override
   Future<void> setStyleImportConfigProperties(

@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -27,6 +27,8 @@ final class RasterParticleLayer extends Layer {
     this.rasterParticleArrayBandExpression,
     this.rasterParticleColor,
     this.rasterParticleColorExpression,
+    this.rasterParticleColorUseTheme,
+    this.rasterParticleColorUseThemeExpression,
     this.rasterParticleCount,
     this.rasterParticleCountExpression,
     this.rasterParticleFadeOpacityFactor,
@@ -63,6 +65,14 @@ final class RasterParticleLayer extends Layer {
   /// Defines a color map by which to colorize a raster particle layer, parameterized by the `["raster-particle-speed"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-particle-max-speed`.
   @experimental
   List<Object>? rasterParticleColorExpression;
+
+  /// Sets if the color theme of the style changes `rasterParticleColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? rasterParticleColorUseTheme;
+
+  /// Sets if the color theme of the style changes `rasterParticleColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? rasterParticleColorUseThemeExpression;
 
   /// Defines the amount of particles per tile.
   /// Default value: 512. Minimum value: 1.
@@ -139,6 +149,14 @@ final class RasterParticleLayer extends Layer {
       paint["raster-particle-color"] = rasterParticleColorExpression;
     } else if (rasterParticleColor != null) {
       paint["raster-particle-color"] = rasterParticleColor?.toRGBA();
+    }
+
+    if (rasterParticleColorUseThemeExpression != null) {
+      paint["raster-particle-color-use-theme"] =
+          rasterParticleColorUseThemeExpression;
+    } else if (rasterParticleColorUseTheme != null) {
+      paint["raster-particle-color-use-theme"] =
+          rasterParticleColorUseTheme?.value;
     }
 
     if (rasterParticleCountExpression != null) {
@@ -233,10 +251,17 @@ final class RasterParticleLayer extends Layer {
       rasterParticleArrayBandExpression: styleOptionalCastList(
         map["paint"]["raster-particle-array-band"],
       ),
-      rasterParticleColor: (map["paint"]["raster-particle-color"] as List?)
-          ?.toRGBAInt(),
+      rasterParticleColor: styleColorFromJson(
+        map["paint"]["raster-particle-color"],
+      ),
       rasterParticleColorExpression: styleOptionalCastList(
         map["paint"]["raster-particle-color"],
+      ),
+      rasterParticleColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["raster-particle-color-use-theme"],
+      ),
+      rasterParticleColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["raster-particle-color-use-theme"],
       ),
       rasterParticleCount: styleOptionalCast(
         map["paint"]["raster-particle-count"],

@@ -218,6 +218,39 @@ class CircleAnnotationManager extends BaseAnnotationManager
   @override
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
       _annotationMessenger.getCircleTranslateAnchor(id);
+
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setCircleColorUseTheme(ColorUseTheme circleColorUseTheme) =>
+      _annotationMessenger.setCircleColorUseTheme(
+        id,
+        circleColorUseTheme.value,
+      );
+
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getCircleColorUseTheme() => _annotationMessenger
+      .getCircleColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setCircleStrokeColorUseTheme(
+    ColorUseTheme circleStrokeColorUseTheme,
+  ) => _annotationMessenger.setCircleStrokeColorUseTheme(
+    id,
+    circleStrokeColorUseTheme.value,
+  );
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getCircleStrokeColorUseTheme() => _annotationMessenger
+      .getCircleStrokeColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
 }
 
 // End of generated file.

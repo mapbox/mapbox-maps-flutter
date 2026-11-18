@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -24,6 +24,8 @@ final class HeatmapLayer extends Layer {
 
     this.heatmapColor,
     this.heatmapColorExpression,
+    this.heatmapColorUseTheme,
+    this.heatmapColorUseThemeExpression,
     this.heatmapIntensity,
     this.heatmapIntensityExpression,
     this.heatmapOpacity,
@@ -51,6 +53,14 @@ final class HeatmapLayer extends Layer {
   /// Default value: ["interpolate",["linear"],["heatmap-density"],0,"rgba(0, 0, 255, 0)",0.1,"royalblue",0.3,"cyan",0.5,"lime",0.7,"yellow",1,"red"].
   List<Object>? heatmapColorExpression;
 
+  /// Sets if the color theme of the style changes `heatmapColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? heatmapColorUseTheme;
+
+  /// Sets if the color theme of the style changes `heatmapColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? heatmapColorUseThemeExpression;
+
   /// Similar to `heatmap-weight` but controls the intensity of the heatmap globally. Primarily used for adjusting the heatmap based on zoom level.
   /// Default value: 1. Minimum value: 0.
   double? heatmapIntensity;
@@ -67,11 +77,11 @@ final class HeatmapLayer extends Layer {
   /// Default value: 1. Value range: [0, 1]
   List<Object>? heatmapOpacityExpression;
 
-  /// Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
+  /// Radius of influence of one heatmap point. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
   /// Default value: 30. Minimum value: 1. The unit of heatmapRadius is in pixels.
   double? heatmapRadius;
 
-  /// Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
+  /// Radius of influence of one heatmap point. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
   /// Default value: 30. Minimum value: 1. The unit of heatmapRadius is in pixels.
   List<Object>? heatmapRadiusExpression;
 
@@ -102,6 +112,12 @@ final class HeatmapLayer extends Layer {
       paint["heatmap-color"] = heatmapColorExpression;
     } else if (heatmapColor != null) {
       paint["heatmap-color"] = heatmapColor?.toRGBA();
+    }
+
+    if (heatmapColorUseThemeExpression != null) {
+      paint["heatmap-color-use-theme"] = heatmapColorUseThemeExpression;
+    } else if (heatmapColorUseTheme != null) {
+      paint["heatmap-color-use-theme"] = heatmapColorUseTheme?.value;
     }
 
     if (heatmapIntensityExpression != null) {
@@ -179,9 +195,15 @@ final class HeatmapLayer extends Layer {
             ),
       visibilityExpression: styleOptionalCastList(map["layout"]["visibility"]),
       filter: styleOptionalCastList(map["filter"]),
-      heatmapColor: (map["paint"]["heatmap-color"] as List?)?.toRGBAInt(),
+      heatmapColor: styleColorFromJson(map["paint"]["heatmap-color"]),
       heatmapColorExpression: styleOptionalCastList(
         map["paint"]["heatmap-color"],
+      ),
+      heatmapColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["heatmap-color-use-theme"],
+      ),
+      heatmapColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["heatmap-color-use-theme"],
       ),
       heatmapIntensity: styleOptionalCast(map["paint"]["heatmap-intensity"]),
       heatmapIntensityExpression: styleOptionalCastList(

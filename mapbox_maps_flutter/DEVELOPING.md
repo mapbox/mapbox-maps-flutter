@@ -8,7 +8,7 @@ This guide covers everything you need to set up a development environment and co
 
 ## Prerequisites
 
-- **Flutter SDK** 3.38.1 or higher (Dart SDK 3.10.0+)
+- **Flutter SDK** 3.44.2 or higher (Dart SDK 3.12.0+)
 - **Xcode** (for iOS development) — iOS deployment target is 14.0+
 - **Android Studio** or the Android SDK (API level 21+, compile SDK 36)
 - A modern browser with WebGL 2 support (for web development)

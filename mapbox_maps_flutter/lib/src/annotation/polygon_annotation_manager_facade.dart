@@ -186,14 +186,60 @@ final class PolygonAnnotationManager
   Future<int?> getFillTunnelStructureColor() =>
       impl.getFillTunnelStructureColor();
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   Future<void> setFillZOffset(double fillZOffset) =>
       impl.setFillZOffset(fillZOffset);
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   Future<double?> getFillZOffset() => impl.getFillZOffset();
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillBridgeGuardRailColorUseTheme(
+    ColorUseTheme fillBridgeGuardRailColorUseTheme,
+  ) => impl.setFillBridgeGuardRailColorUseTheme(
+    fillBridgeGuardRailColorUseTheme,
+  );
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillBridgeGuardRailColorUseTheme() =>
+      impl.getFillBridgeGuardRailColorUseTheme();
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillColorUseTheme(ColorUseTheme fillColorUseTheme) =>
+      impl.setFillColorUseTheme(fillColorUseTheme);
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillColorUseTheme() => impl.getFillColorUseTheme();
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillOutlineColorUseTheme(
+    ColorUseTheme fillOutlineColorUseTheme,
+  ) => impl.setFillOutlineColorUseTheme(fillOutlineColorUseTheme);
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillOutlineColorUseTheme() =>
+      impl.getFillOutlineColorUseTheme();
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillTunnelStructureColorUseTheme(
+    ColorUseTheme fillTunnelStructureColorUseTheme,
+  ) => impl.setFillTunnelStructureColorUseTheme(
+    fillTunnelStructureColorUseTheme,
+  );
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillTunnelStructureColorUseTheme() =>
+      impl.getFillTunnelStructureColorUseTheme();
 }
 
 // End of generated file.

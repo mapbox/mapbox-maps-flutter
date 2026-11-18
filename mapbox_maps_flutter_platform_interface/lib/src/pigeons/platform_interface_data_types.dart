@@ -1689,8 +1689,13 @@ class PerformanceStatisticsOptions {
   /// It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
   /// The effective collection interval can be observed through the `PerformanceStatistics` instance.
   /// Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
+  /// The value is truncated to whole milliseconds.
   ///
-  /// A negative sampling duration is an error and results in no operation.
+  /// A sampling window closes only when the map renders a frame. A map that does not render does not
+  /// deliver statistics.
+  ///
+  /// A negative sampling duration is an error: `MapboxMap.startPerformanceStatisticsCollection` throws an
+  /// [ArgumentError].
   double samplingDurationMillis;
 
   List<Object?> _toList() {
@@ -1781,22 +1786,29 @@ class CumulativeRenderingStatistics {
     this.fboSwitchCount,
   });
 
-  /// The number of draw calls at the end of the collection window.
+  /// The number of draw calls in the last frame of the collection window.
+  /// This value is not a total. It can decrease between two snapshots.
   int? drawCalls;
 
   /// The amount of texture memory in use at the end of the collection window.
+  /// The value is null on iOS and web.
   int? textureBytes;
 
   /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
+  /// The value is null on iOS and web.
   int? vertexBytes;
 
-  /// The number of graphics pipeline programs created.
+  /// The number of graphics pipeline programs created since the renderer started.
+  /// The value does not reset when collection stops or starts again.
   int? graphicsPrograms;
 
-  /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
+  /// The total amount of time spent on all graphics pipeline program creation since the renderer started,
+  /// in milliseconds. On web, the time counts from the start of collection.
   double? graphicsProgramsCreationTimeMillis;
 
-  /// The number of FBO switches.
+  /// The number of FBO switches since the renderer started.
+  /// The value does not reset when collection stops or starts again.
+  /// On web, the count starts from zero when collection starts.
   int? fboSwitchCount;
 
   List<Object?> _toList() {
@@ -1856,7 +1868,7 @@ class GroupPerformanceStatistics {
     required this.name,
   });
 
-  /// The duration of the group or layer on the CPU timeline.
+  /// The longest duration of the group or layer in one frame of the sampling window, on the CPU timeline.
   double durationMillis;
 
   /// The name of the group or layer.
@@ -1904,13 +1916,16 @@ class PerFrameRenderingStatistics {
     required this.uploadDurationStatistics,
   });
 
-  /// The CPU timeline duration statistics of each render group, in descending order by duration.
+  /// The 10 slowest render groups and layers, in descending order by duration.
+  /// Group names are renderer internals and can change between releases.
   List<GroupPerformanceStatistics> topRenderGroups;
 
-  /// The CPU timeline duration statistics of each layer, in descending order by duration.
+  /// The 10 slowest layers, in descending order by duration.
   List<GroupPerformanceStatistics> topRenderLayers;
 
   /// The CPU timeline duration of the shadowmap render pass.
+  /// On Android and iOS, the renderer currently reports 0 for this value. To see the shadow map passes
+  /// there, read the `shadowmap` entries in [topRenderGroups].
   DurationStatistics shadowMapDurationStatistics;
 
   /// The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass.
@@ -2241,6 +2256,7 @@ class FlatLight {
     this.intensityTransition,
     this.position,
     this.positionTransition,
+    this.colorUseTheme,
   });
 
   /// Unique light name
@@ -2267,6 +2283,9 @@ class FlatLight {
   /// Transition property for `position`
   TransitionOptions? positionTransition;
 
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  String? colorUseTheme;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2277,6 +2296,7 @@ class FlatLight {
       intensityTransition,
       position,
       positionTransition,
+      colorUseTheme,
     ];
   }
 
@@ -2295,6 +2315,7 @@ class FlatLight {
       intensityTransition: result[5] as TransitionOptions?,
       position: (result[6] as List<Object?>?)?.cast<double?>(),
       positionTransition: result[7] as TransitionOptions?,
+      colorUseTheme: result[8] as String?,
     );
   }
 
@@ -2314,7 +2335,8 @@ class FlatLight {
         intensity == other.intensity &&
         intensityTransition == other.intensityTransition &&
         _deepEquals(position, other.position) &&
-        positionTransition == other.positionTransition;
+        positionTransition == other.positionTransition &&
+        colorUseTheme == other.colorUseTheme;
   }
 
   @override
@@ -2338,6 +2360,7 @@ class DirectionalLight {
     this.shadowIntensity,
     this.shadowIntensityTransition,
     this.shadowDrawBeforeLayer,
+    this.colorUseTheme,
   });
 
   /// Unique light name
@@ -2373,6 +2396,9 @@ class DirectionalLight {
   /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
   String? shadowDrawBeforeLayer;
 
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  String? colorUseTheme;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2386,6 +2412,7 @@ class DirectionalLight {
       shadowIntensity,
       shadowIntensityTransition,
       shadowDrawBeforeLayer,
+      colorUseTheme,
     ];
   }
 
@@ -2407,6 +2434,7 @@ class DirectionalLight {
       shadowIntensity: result[8] as double?,
       shadowIntensityTransition: result[9] as TransitionOptions?,
       shadowDrawBeforeLayer: result[10] as String?,
+      colorUseTheme: result[11] as String?,
     );
   }
 
@@ -2429,7 +2457,8 @@ class DirectionalLight {
         intensityTransition == other.intensityTransition &&
         shadowIntensity == other.shadowIntensity &&
         shadowIntensityTransition == other.shadowIntensityTransition &&
-        shadowDrawBeforeLayer == other.shadowDrawBeforeLayer;
+        shadowDrawBeforeLayer == other.shadowDrawBeforeLayer &&
+        colorUseTheme == other.colorUseTheme;
   }
 
   @override
@@ -2447,6 +2476,7 @@ class AmbientLight {
     this.colorTransition,
     this.intensity,
     this.intensityTransition,
+    this.colorUseTheme,
   });
 
   /// Unique light name
@@ -2464,6 +2494,9 @@ class AmbientLight {
   /// Transition property for `intensity`
   TransitionOptions? intensityTransition;
 
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  String? colorUseTheme;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2471,6 +2504,7 @@ class AmbientLight {
       colorTransition,
       intensity,
       intensityTransition,
+      colorUseTheme,
     ];
   }
 
@@ -2486,6 +2520,7 @@ class AmbientLight {
       colorTransition: result[2] as TransitionOptions?,
       intensity: result[3] as double?,
       intensityTransition: result[4] as TransitionOptions?,
+      colorUseTheme: result[5] as String?,
     );
   }
 
@@ -2502,7 +2537,8 @@ class AmbientLight {
         color == other.color &&
         colorTransition == other.colorTransition &&
         intensity == other.intensity &&
-        intensityTransition == other.intensityTransition;
+        intensityTransition == other.intensityTransition &&
+        colorUseTheme == other.colorUseTheme;
   }
 
   @override

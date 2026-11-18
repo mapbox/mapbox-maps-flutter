@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../pigeons/annotation_data_types.dart';
 import '../pigeons/platform_interface_data_types.dart';
+import '../public/color_theme.dart';
 import 'annotations_interface.dart';
 
 /// Abstract interface for managing polygon annotations.
@@ -133,13 +134,51 @@ abstract interface class PolygonAnnotationManagerPlatformInterface
   @experimental
   Future<int?> getFillTunnelStructureColor();
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   Future<void> setFillZOffset(double fillZOffset);
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   Future<double?> getFillZOffset();
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillBridgeGuardRailColorUseTheme(
+    ColorUseTheme fillBridgeGuardRailColorUseTheme,
+  );
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillBridgeGuardRailColorUseTheme();
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillColorUseTheme(ColorUseTheme fillColorUseTheme);
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillColorUseTheme();
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillOutlineColorUseTheme(
+    ColorUseTheme fillOutlineColorUseTheme,
+  );
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillOutlineColorUseTheme();
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  @experimental
+  Future<void> setFillTunnelStructureColorUseTheme(
+    ColorUseTheme fillTunnelStructureColorUseTheme,
+  );
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getFillTunnelStructureColorUseTheme();
 }
 
 // End of generated file.

@@ -1,6 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
 import com.mapbox.bindgen.Value
+import com.mapbox.common.CombinedSettings
 import com.mapbox.common.MapboxCommonSettings
 import com.mapbox.common.MapboxOptions
 import com.mapbox.common.SettingsServiceFactory
@@ -60,7 +61,7 @@ class MapboxOptionsController(
   }
 
   override fun getWorldview(): String? {
-    val result = settingsService.get(MapboxCommonSettings.WORLDVIEW)
+    val result = CombinedSettings.get(MapboxCommonSettings.WORLDVIEW)
     return result.value?.contents as? String
   }
 
@@ -73,7 +74,7 @@ class MapboxOptionsController(
   }
 
   override fun getLanguage(): String? {
-    val result = settingsService.get(MapboxCommonSettings.LANGUAGE)
+    val result = CombinedSettings.get(MapboxCommonSettings.LANGUAGE)
     return result.value?.contents as? String
   }
 

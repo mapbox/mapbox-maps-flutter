@@ -3273,6 +3273,57 @@ protocol StyleManager {
   /// @param config The style import config name.
   /// @param value The style import config value.
   func setStyleImportConfigProperty(importId: String, config: String, value: Any) throws
+  /// Sets the style color theme. A `null` value removes the color theme.
+  ///
+  /// @param data The `data` of the `color-theme`: a base64-encoded PNG LUT, or
+  /// an expression that evaluates to one.
+  func setStyleColorTheme(data: Any?) throws
+  /// Sets the color theme of a style import. This overrides the color theme
+  /// of the imported style. A `null` value removes the override.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param data The `data` of the `color-theme`: a base64-encoded PNG LUT, or
+  /// an expression that evaluates to one.
+  func setStyleImportColorTheme(importId: String, data: Any?) throws
+  /// Sets the style atmosphere. A `null` value removes the atmosphere.
+  ///
+  /// @param properties The JSON-encoded `fog` properties of the style.
+  func setStyleAtmosphere(properties: String?) throws
+  /// Gets the value of a style atmosphere property.
+  ///
+  /// @param property The style atmosphere property name.
+  func getStyleAtmosphereProperty(property: String) throws -> StylePropertyValue
+  /// Sets the value of a style atmosphere property.
+  ///
+  /// @param property The style atmosphere property name.
+  /// @param value The style atmosphere property value.
+  func setStyleAtmosphereProperty(property: String, value: Any) throws
+  /// Sets the style snow. A `null` value removes the snow.
+  ///
+  /// @param properties The JSON-encoded `snow` properties of the style.
+  func setStyleSnow(properties: String?) throws
+  /// Gets the value of a style snow property.
+  ///
+  /// @param property The style snow property name.
+  func getStyleSnowProperty(property: String) throws -> StylePropertyValue
+  /// Sets the value of a style snow property.
+  ///
+  /// @param property The style snow property name.
+  /// @param value The style snow property value.
+  func setStyleSnowProperty(property: String, value: Any) throws
+  /// Sets the style rain. A `null` value removes the rain.
+  ///
+  /// @param properties The JSON-encoded `rain` properties of the style.
+  func setStyleRain(properties: String?) throws
+  /// Gets the value of a style rain property.
+  ///
+  /// @param property The style rain property name.
+  func getStyleRainProperty(property: String) throws -> StylePropertyValue
+  /// Sets the value of a style rain property.
+  ///
+  /// @param property The style rain property name.
+  /// @param value The style rain property value.
+  func setStyleRainProperty(property: String, value: Any) throws
   /// Overrides the map style's transition options with user-provided options.
   ///
   /// The style transition is re-evaluated when a new style is loaded.
@@ -4037,6 +4088,215 @@ class StyleManagerSetup {
       }
     } else {
       setStyleImportConfigPropertyChannel.setMessageHandler(nil)
+    }
+    /// Sets the style color theme. A `null` value removes the color theme.
+    ///
+    /// @param data The `data` of the `color-theme`: a base64-encoded PNG LUT, or
+    /// an expression that evaluates to one.
+    let setStyleColorThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleColorTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleColorThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let dataArg: Any? = args[0]
+        do {
+          try api.setStyleColorTheme(data: dataArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleColorThemeChannel.setMessageHandler(nil)
+    }
+    /// Sets the color theme of a style import. This overrides the color theme
+    /// of the imported style. A `null` value removes the override.
+    ///
+    /// @param importId Identifier of the style import.
+    /// @param data The `data` of the `color-theme`: a base64-encoded PNG LUT, or
+    /// an expression that evaluates to one.
+    let setStyleImportColorThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportColorTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleImportColorThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let importIdArg = args[0] as! String
+        let dataArg: Any? = args[1]
+        do {
+          try api.setStyleImportColorTheme(importId: importIdArg, data: dataArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleImportColorThemeChannel.setMessageHandler(nil)
+    }
+    /// Sets the style atmosphere. A `null` value removes the atmosphere.
+    ///
+    /// @param properties The JSON-encoded `fog` properties of the style.
+    let setStyleAtmosphereChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleAtmosphere\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleAtmosphereChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertiesArg: String? = nilOrValue(args[0])
+        do {
+          try api.setStyleAtmosphere(properties: propertiesArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleAtmosphereChannel.setMessageHandler(nil)
+    }
+    /// Gets the value of a style atmosphere property.
+    ///
+    /// @param property The style atmosphere property name.
+    let getStyleAtmospherePropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleAtmosphereProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getStyleAtmospherePropertyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertyArg = args[0] as! String
+        do {
+          let result = try api.getStyleAtmosphereProperty(property: propertyArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getStyleAtmospherePropertyChannel.setMessageHandler(nil)
+    }
+    /// Sets the value of a style atmosphere property.
+    ///
+    /// @param property The style atmosphere property name.
+    /// @param value The style atmosphere property value.
+    let setStyleAtmospherePropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleAtmosphereProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleAtmospherePropertyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertyArg = args[0] as! String
+        let valueArg = args[1]!
+        do {
+          try api.setStyleAtmosphereProperty(property: propertyArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleAtmospherePropertyChannel.setMessageHandler(nil)
+    }
+    /// Sets the style snow. A `null` value removes the snow.
+    ///
+    /// @param properties The JSON-encoded `snow` properties of the style.
+    let setStyleSnowChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSnow\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleSnowChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertiesArg: String? = nilOrValue(args[0])
+        do {
+          try api.setStyleSnow(properties: propertiesArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleSnowChannel.setMessageHandler(nil)
+    }
+    /// Gets the value of a style snow property.
+    ///
+    /// @param property The style snow property name.
+    let getStyleSnowPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSnowProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getStyleSnowPropertyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertyArg = args[0] as! String
+        do {
+          let result = try api.getStyleSnowProperty(property: propertyArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getStyleSnowPropertyChannel.setMessageHandler(nil)
+    }
+    /// Sets the value of a style snow property.
+    ///
+    /// @param property The style snow property name.
+    /// @param value The style snow property value.
+    let setStyleSnowPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSnowProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleSnowPropertyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertyArg = args[0] as! String
+        let valueArg = args[1]!
+        do {
+          try api.setStyleSnowProperty(property: propertyArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleSnowPropertyChannel.setMessageHandler(nil)
+    }
+    /// Sets the style rain. A `null` value removes the rain.
+    ///
+    /// @param properties The JSON-encoded `rain` properties of the style.
+    let setStyleRainChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleRain\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleRainChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertiesArg: String? = nilOrValue(args[0])
+        do {
+          try api.setStyleRain(properties: propertiesArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleRainChannel.setMessageHandler(nil)
+    }
+    /// Gets the value of a style rain property.
+    ///
+    /// @param property The style rain property name.
+    let getStyleRainPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleRainProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getStyleRainPropertyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertyArg = args[0] as! String
+        do {
+          let result = try api.getStyleRainProperty(property: propertyArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getStyleRainPropertyChannel.setMessageHandler(nil)
+    }
+    /// Sets the value of a style rain property.
+    ///
+    /// @param property The style rain property name.
+    /// @param value The style rain property value.
+    let setStyleRainPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleRainProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleRainPropertyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let propertyArg = args[0] as! String
+        let valueArg = args[1]!
+        do {
+          try api.setStyleRainProperty(property: propertyArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleRainPropertyChannel.setMessageHandler(nil)
     }
     /// Overrides the map style's transition options with user-provided options.
     ///

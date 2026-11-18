@@ -171,6 +171,19 @@ void main() {
     await manager.setLineWidth(1.0);
     var lineWidth = await manager.getLineWidth();
     expect(1.0, lineWidth);
+
+    await manager.setLineBorderColorUseTheme(ColorUseTheme.none);
+    var lineBorderColorUseTheme = await manager.getLineBorderColorUseTheme();
+    expect(ColorUseTheme.none, lineBorderColorUseTheme);
+
+    await manager.setLineColorUseTheme(ColorUseTheme.none);
+    var lineColorUseTheme = await manager.getLineColorUseTheme();
+    expect(ColorUseTheme.none, lineColorUseTheme);
+
+    await manager.setLineTrimColorUseTheme(ColorUseTheme.none);
+    var lineTrimColorUseTheme = await manager.getLineTrimColorUseTheme();
+    expect(ColorUseTheme.none, lineTrimColorUseTheme);
   });
 }
+
 // End of generated file.

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -49,6 +48,7 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         heatmapColor: Colors.red.value,
+        heatmapColorUseTheme: ColorUseTheme.none,
         heatmapIntensity: 1.0,
         heatmapOpacity: 1.0,
         heatmapRadius: 1.0,
@@ -62,6 +62,7 @@ void main() {
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.heatmapColor, Colors.red.value);
+    expect(layer.heatmapColorUseTheme, ColorUseTheme.none);
     expect(layer.heatmapIntensity, 1.0);
     expect(layer.heatmapOpacity, 1.0);
     expect(layer.heatmapRadius, 1.0);
@@ -104,6 +105,8 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         heatmapColorExpression: ['rgba', 255, 0, 0, 1],
+        heatmapColorUseTheme: ColorUseTheme.useDefault,
+        heatmapColorUseThemeExpression: ['string', 'none'],
         heatmapIntensityExpression: ['number', 1.0],
         heatmapOpacityExpression: ['number', 1.0],
         heatmapRadiusExpression: ['number', 1.0],
@@ -122,10 +125,15 @@ void main() {
       "Feature",
     ]);
     expect(layer.heatmapColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.heatmapColorUseThemeExpression ?? layer.heatmapColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.heatmapIntensity, 1.0);
     expect(layer.heatmapOpacity, 1.0);
     expect(layer.heatmapRadius, 1.0);
     expect(layer.heatmapWeight, 1.0);
   });
 }
+
 // End of generated file.

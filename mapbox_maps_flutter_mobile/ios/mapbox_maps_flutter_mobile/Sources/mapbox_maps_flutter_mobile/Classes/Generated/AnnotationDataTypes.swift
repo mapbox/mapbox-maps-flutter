@@ -59,10 +59,22 @@ struct PolygonAnnotation {
   /// Default value: "rgba(241, 236, 225, 255)".
   /// @experimental
   var fillTunnelStructureColor: Int64? = nil
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   /// @experimental
   var fillZOffset: Double? = nil
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  /// @experimental
+  var fillBridgeGuardRailColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  /// @experimental
+  var fillColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  /// @experimental
+  var fillOutlineColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  /// @experimental
+  var fillTunnelStructureColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -82,8 +94,12 @@ struct PolygonAnnotation {
     let fillPattern: String? = nilOrValue(pigeonVar_list[8])
     let fillTunnelStructureColor: Int64? = nilOrValue(pigeonVar_list[9])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[10])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[11])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[12])
+    let fillBridgeGuardRailColorUseTheme: String? = nilOrValue(pigeonVar_list[11])
+    let fillColorUseTheme: String? = nilOrValue(pigeonVar_list[12])
+    let fillOutlineColorUseTheme: String? = nilOrValue(pigeonVar_list[13])
+    let fillTunnelStructureColorUseTheme: String? = nilOrValue(pigeonVar_list[14])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[15])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[16])
 
     return PolygonAnnotation(
       id: id,
@@ -97,6 +113,10 @@ struct PolygonAnnotation {
       fillPattern: fillPattern,
       fillTunnelStructureColor: fillTunnelStructureColor,
       fillZOffset: fillZOffset,
+      fillBridgeGuardRailColorUseTheme: fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme: fillColorUseTheme,
+      fillOutlineColorUseTheme: fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme: fillTunnelStructureColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -114,6 +134,10 @@ struct PolygonAnnotation {
       fillPattern,
       fillTunnelStructureColor,
       fillZOffset,
+      fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme,
+      fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -148,10 +172,22 @@ struct PolygonAnnotationOptions {
   /// Default value: "rgba(241, 236, 225, 255)".
   /// @experimental
   var fillTunnelStructureColor: Int64? = nil
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   /// @experimental
   var fillZOffset: Double? = nil
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  /// @experimental
+  var fillBridgeGuardRailColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  /// @experimental
+  var fillColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  /// @experimental
+  var fillOutlineColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  /// @experimental
+  var fillTunnelStructureColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -170,8 +206,12 @@ struct PolygonAnnotationOptions {
     let fillPattern: String? = nilOrValue(pigeonVar_list[7])
     let fillTunnelStructureColor: Int64? = nilOrValue(pigeonVar_list[8])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[9])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[10])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[11])
+    let fillBridgeGuardRailColorUseTheme: String? = nilOrValue(pigeonVar_list[10])
+    let fillColorUseTheme: String? = nilOrValue(pigeonVar_list[11])
+    let fillOutlineColorUseTheme: String? = nilOrValue(pigeonVar_list[12])
+    let fillTunnelStructureColorUseTheme: String? = nilOrValue(pigeonVar_list[13])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[14])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[15])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
@@ -184,6 +224,10 @@ struct PolygonAnnotationOptions {
       fillPattern: fillPattern,
       fillTunnelStructureColor: fillTunnelStructureColor,
       fillZOffset: fillZOffset,
+      fillBridgeGuardRailColorUseTheme: fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme: fillColorUseTheme,
+      fillOutlineColorUseTheme: fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme: fillTunnelStructureColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -200,6 +244,10 @@ struct PolygonAnnotationOptions {
       fillPattern,
       fillTunnelStructureColor,
       fillZOffset,
+      fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme,
+      fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -246,17 +294,17 @@ struct PolylineAnnotation {
   var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double? = nil
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-  /// Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment.
+  /// Default value: 0. The unit of lineZOffset is in meters.
   var lineZOffset: Double? = nil
-  /// Blur applied to the line, in pixels.
+  /// Blur applied to the line.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
   var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
@@ -278,6 +326,12 @@ struct PolylineAnnotation {
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   var lineWidth: Double? = nil
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  /// @experimental
+  var lineBorderColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  /// @experimental
+  var lineColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -302,8 +356,10 @@ struct PolylineAnnotation {
     let lineOpacity: Double? = nilOrValue(pigeonVar_list[13])
     let linePattern: String? = nilOrValue(pigeonVar_list[14])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[15])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[16])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[17])
+    let lineBorderColorUseTheme: String? = nilOrValue(pigeonVar_list[16])
+    let lineColorUseTheme: String? = nilOrValue(pigeonVar_list[17])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[18])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[19])
 
     return PolylineAnnotation(
       id: id,
@@ -322,6 +378,8 @@ struct PolylineAnnotation {
       lineOpacity: lineOpacity,
       linePattern: linePattern,
       lineWidth: lineWidth,
+      lineBorderColorUseTheme: lineBorderColorUseTheme,
+      lineColorUseTheme: lineColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -344,6 +402,8 @@ struct PolylineAnnotation {
       lineOpacity,
       linePattern,
       lineWidth,
+      lineBorderColorUseTheme,
+      lineColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -362,17 +422,17 @@ struct PolylineAnnotationOptions {
   var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double? = nil
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-  /// Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment.
+  /// Default value: 0. The unit of lineZOffset is in meters.
   var lineZOffset: Double? = nil
-  /// Blur applied to the line, in pixels.
+  /// Blur applied to the line.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
   var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
@@ -394,6 +454,12 @@ struct PolylineAnnotationOptions {
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   var lineWidth: Double? = nil
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  /// @experimental
+  var lineBorderColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  /// @experimental
+  var lineColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -417,8 +483,10 @@ struct PolylineAnnotationOptions {
     let lineOpacity: Double? = nilOrValue(pigeonVar_list[12])
     let linePattern: String? = nilOrValue(pigeonVar_list[13])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[14])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[15])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[16])
+    let lineBorderColorUseTheme: String? = nilOrValue(pigeonVar_list[15])
+    let lineColorUseTheme: String? = nilOrValue(pigeonVar_list[16])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[17])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[18])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
@@ -436,6 +504,8 @@ struct PolylineAnnotationOptions {
       lineOpacity: lineOpacity,
       linePattern: linePattern,
       lineWidth: lineWidth,
+      lineBorderColorUseTheme: lineBorderColorUseTheme,
+      lineColorUseTheme: lineColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -457,6 +527,8 @@ struct PolylineAnnotationOptions {
       lineOpacity,
       linePattern,
       lineWidth,
+      lineBorderColorUseTheme,
+      lineColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -495,8 +567,16 @@ struct PointAnnotation {
   var id: String
   /// The geometry that determines the location/shape of this annotation
   var geometry: Point
-  /// The bitmap image for this Annotation
-  /// Will not take effect if [iconImage] has been set.
+  /// The encoded (PNG/JPEG) bytes of this annotation's icon.
+  ///
+  /// [iconImage] names the style image these bytes upload to. If you leave
+  /// [iconImage] unset, the SDK derives one from a hash of [image]. So
+  /// `update()` re-uploads the icon when [image] changes, and does nothing
+  /// when it does not — bytes are never compared, only the hash. Set
+  /// [iconImage] yourself for direct control: for example, to reuse one
+  /// name across annotations, or to point at a style image added
+  /// elsewhere without uploading [image]. Reusing the same [iconImage]
+  /// with different [image] bytes is still a no-op by design.
   var image: FlutterStandardTypedData? = nil
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
@@ -574,9 +654,8 @@ struct PointAnnotation {
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double? = nil
-  /// Specifies an uniform elevation from the ground, in meters.
-  /// Default value: 0. Minimum value: 0.
-  /// @experimental
+  /// Specifies an uniform elevation from the ground.
+  /// Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   var symbolZOffset: Double? = nil
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
@@ -599,6 +678,18 @@ struct PointAnnotation {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double? = nil
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  /// @experimental
+  var iconColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  /// @experimental
+  var iconHaloColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  /// @experimental
+  var textColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  /// @experimental
+  var textHaloColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -644,8 +735,12 @@ struct PointAnnotation {
     let textHaloWidth: Double? = nilOrValue(pigeonVar_list[34])
     let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[35])
     let textOpacity: Double? = nilOrValue(pigeonVar_list[36])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[37])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[38])
+    let iconColorUseTheme: String? = nilOrValue(pigeonVar_list[37])
+    let iconHaloColorUseTheme: String? = nilOrValue(pigeonVar_list[38])
+    let textColorUseTheme: String? = nilOrValue(pigeonVar_list[39])
+    let textHaloColorUseTheme: String? = nilOrValue(pigeonVar_list[40])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[41])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[42])
 
     return PointAnnotation(
       id: id,
@@ -685,6 +780,10 @@ struct PointAnnotation {
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
       textOpacity: textOpacity,
+      iconColorUseTheme: iconColorUseTheme,
+      iconHaloColorUseTheme: iconHaloColorUseTheme,
+      textColorUseTheme: textColorUseTheme,
+      textHaloColorUseTheme: textHaloColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -728,6 +827,10 @@ struct PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      iconColorUseTheme,
+      iconHaloColorUseTheme,
+      textColorUseTheme,
+      textHaloColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -738,8 +841,16 @@ struct PointAnnotation {
 struct PointAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Point
-  /// The bitmap image for this Annotation
-  /// Will not take effect if [iconImage] has been set.
+  /// The encoded (PNG/JPEG) bytes of this annotation's icon.
+  ///
+  /// [iconImage] names the style image these bytes upload to. If you leave
+  /// [iconImage] unset, the SDK derives one from a hash of [image]. So
+  /// `update()` re-uploads the icon when [image] changes, and does nothing
+  /// when it does not — bytes are never compared, only the hash. Set
+  /// [iconImage] yourself for direct control: for example, to reuse one
+  /// name across annotations, or to point at a style image added
+  /// elsewhere without uploading [image]. Reusing the same [iconImage]
+  /// with different [image] bytes is still a no-op by design.
   var image: FlutterStandardTypedData? = nil
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
@@ -817,9 +928,8 @@ struct PointAnnotationOptions {
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double? = nil
-  /// Specifies an uniform elevation from the ground, in meters.
-  /// Default value: 0. Minimum value: 0.
-  /// @experimental
+  /// Specifies an uniform elevation from the ground.
+  /// Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   var symbolZOffset: Double? = nil
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
@@ -842,6 +952,18 @@ struct PointAnnotationOptions {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double? = nil
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  /// @experimental
+  var iconColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  /// @experimental
+  var iconHaloColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  /// @experimental
+  var textColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  /// @experimental
+  var textHaloColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -886,8 +1008,12 @@ struct PointAnnotationOptions {
     let textHaloWidth: Double? = nilOrValue(pigeonVar_list[33])
     let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[34])
     let textOpacity: Double? = nilOrValue(pigeonVar_list[35])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[36])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[37])
+    let iconColorUseTheme: String? = nilOrValue(pigeonVar_list[36])
+    let iconHaloColorUseTheme: String? = nilOrValue(pigeonVar_list[37])
+    let textColorUseTheme: String? = nilOrValue(pigeonVar_list[38])
+    let textHaloColorUseTheme: String? = nilOrValue(pigeonVar_list[39])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[40])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[41])
 
     return PointAnnotationOptions(
       geometry: geometry,
@@ -926,6 +1052,10 @@ struct PointAnnotationOptions {
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
       textOpacity: textOpacity,
+      iconColorUseTheme: iconColorUseTheme,
+      iconHaloColorUseTheme: iconHaloColorUseTheme,
+      textColorUseTheme: textColorUseTheme,
+      textHaloColorUseTheme: textHaloColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -968,6 +1098,10 @@ struct PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      iconColorUseTheme,
+      iconHaloColorUseTheme,
+      textColorUseTheme,
+      textHaloColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -1029,6 +1163,12 @@ struct CircleAnnotation {
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   var circleStrokeWidth: Double? = nil
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  /// @experimental
+  var circleColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  /// @experimental
+  var circleStrokeColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -1047,8 +1187,10 @@ struct CircleAnnotation {
     let circleStrokeColor: Int64? = nilOrValue(pigeonVar_list[7])
     let circleStrokeOpacity: Double? = nilOrValue(pigeonVar_list[8])
     let circleStrokeWidth: Double? = nilOrValue(pigeonVar_list[9])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[10])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[11])
+    let circleColorUseTheme: String? = nilOrValue(pigeonVar_list[10])
+    let circleStrokeColorUseTheme: String? = nilOrValue(pigeonVar_list[11])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[12])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[13])
 
     return CircleAnnotation(
       id: id,
@@ -1061,6 +1203,8 @@ struct CircleAnnotation {
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
       circleStrokeWidth: circleStrokeWidth,
+      circleColorUseTheme: circleColorUseTheme,
+      circleStrokeColorUseTheme: circleStrokeColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -1077,6 +1221,8 @@ struct CircleAnnotation {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleColorUseTheme,
+      circleStrokeColorUseTheme,
       isDraggable,
       customData,
     ]
@@ -1110,6 +1256,12 @@ struct CircleAnnotationOptions {
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   var circleStrokeWidth: Double? = nil
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  /// @experimental
+  var circleColorUseTheme: String? = nil
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  /// @experimental
+  var circleStrokeColorUseTheme: String? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
   /// JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field.
@@ -1127,8 +1279,10 @@ struct CircleAnnotationOptions {
     let circleStrokeColor: Int64? = nilOrValue(pigeonVar_list[6])
     let circleStrokeOpacity: Double? = nilOrValue(pigeonVar_list[7])
     let circleStrokeWidth: Double? = nilOrValue(pigeonVar_list[8])
-    let isDraggable: Bool? = nilOrValue(pigeonVar_list[9])
-    let customData: [String: Any]? = nilOrValue(pigeonVar_list[10])
+    let circleColorUseTheme: String? = nilOrValue(pigeonVar_list[9])
+    let circleStrokeColorUseTheme: String? = nilOrValue(pigeonVar_list[10])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[11])
+    let customData: [String: Any]? = nilOrValue(pigeonVar_list[12])
 
     return CircleAnnotationOptions(
       geometry: geometry,
@@ -1140,6 +1294,8 @@ struct CircleAnnotationOptions {
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
       circleStrokeWidth: circleStrokeWidth,
+      circleColorUseTheme: circleColorUseTheme,
+      circleStrokeColorUseTheme: circleStrokeColorUseTheme,
       isDraggable: isDraggable,
       customData: customData
     )
@@ -1155,6 +1311,8 @@ struct CircleAnnotationOptions {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleColorUseTheme,
+      circleStrokeColorUseTheme,
       isDraggable,
       customData,
     ]

@@ -1,4 +1,5 @@
 // This file is generated.
+// ignore_for_file: experimental_member_use
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// Web stub. Methods that mutate the map throw [UnimplementedError];
@@ -274,6 +275,31 @@ class UnsupportedPolylineAnnotationManagerWeb
 
   @override
   Future<double?> getLineWidth() => _unimplemented('getLineWidth');
+
+  @override
+  Future<void> setLineBorderColorUseTheme(
+    ColorUseTheme lineBorderColorUseTheme,
+  ) => _unimplemented('setLineBorderColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getLineBorderColorUseTheme() =>
+      _unimplemented('getLineBorderColorUseTheme');
+
+  @override
+  Future<void> setLineColorUseTheme(ColorUseTheme lineColorUseTheme) =>
+      _unimplemented('setLineColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getLineColorUseTheme() =>
+      _unimplemented('getLineColorUseTheme');
+
+  @override
+  Future<void> setLineTrimColorUseTheme(ColorUseTheme lineTrimColorUseTheme) =>
+      _unimplemented('setLineTrimColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getLineTrimColorUseTheme() =>
+      _unimplemented('getLineTrimColorUseTheme');
 }
 
 // End of generated file.

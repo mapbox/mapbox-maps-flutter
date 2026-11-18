@@ -106,6 +106,16 @@ void main() {
     await manager.setCircleTranslateAnchor(CircleTranslateAnchor.MAP);
     var circleTranslateAnchor = await manager.getCircleTranslateAnchor();
     expect(CircleTranslateAnchor.MAP, circleTranslateAnchor);
+
+    await manager.setCircleColorUseTheme(ColorUseTheme.none);
+    var circleColorUseTheme = await manager.getCircleColorUseTheme();
+    expect(ColorUseTheme.none, circleColorUseTheme);
+
+    await manager.setCircleStrokeColorUseTheme(ColorUseTheme.none);
+    var circleStrokeColorUseTheme = await manager
+        .getCircleStrokeColorUseTheme();
+    expect(ColorUseTheme.none, circleStrokeColorUseTheme);
   });
 }
+
 // End of generated file.

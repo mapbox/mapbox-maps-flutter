@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -30,6 +30,8 @@ final class RasterLayer extends Layer {
     this.rasterBrightnessMinExpression,
     this.rasterColor,
     this.rasterColorExpression,
+    this.rasterColorUseTheme,
+    this.rasterColorUseThemeExpression,
     this.rasterColorMix,
     this.rasterColorMixExpression,
     this.rasterColorRange,
@@ -93,6 +95,14 @@ final class RasterLayer extends Layer {
   /// Defines the color ramp used to colorize a raster layer, parameterized by the `["raster-value"]` expression and evaluated over the range specified by `raster-color-range`. Raster values are spaced evenly across the range by default.
   List<Object>? rasterColorExpression;
 
+  /// Sets if the color theme of the style changes `rasterColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? rasterColorUseTheme;
+
+  /// Sets if the color theme of the style changes `rasterColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? rasterColorUseThemeExpression;
+
   /// When `raster-color` is active, specifies how the raster value is computed from a non-`rasterarray` source's channels, using the equation `mix.r - src.r + mix.g - src.g + mix.b - src.b + mix.a`. The first three components weight the source's red, green, and blue channels; the fourth is a constant offset and is not multiplied by source alpha. Source alpha is carried through and applied as opacity to the colorized result. The default corresponds to RGB luminosity. `rasterarray` sources ignore this property, as their raster value is decoded directly from the source data.
   /// Default value: [0.2126,0.7152,0.0722,0].
   List<double?>? rasterColorMix;
@@ -125,13 +135,13 @@ final class RasterLayer extends Layer {
   /// Default value: 0. Value range: [-1, 1]
   List<Object>? rasterContrastExpression;
 
-  /// Defines an uniform elevation from the base specified in raster-elevation-reference, in meters.
-  /// Default value: 0. Minimum value: 0.
+  /// Defines an uniform elevation from the base specified in raster-elevation-reference.
+  /// Default value: 0. Minimum value: 0. The unit of rasterElevation is in meters.
   @experimental
   double? rasterElevation;
 
-  /// Defines an uniform elevation from the base specified in raster-elevation-reference, in meters.
-  /// Default value: 0. Minimum value: 0.
+  /// Defines an uniform elevation from the base specified in raster-elevation-reference.
+  /// Default value: 0. Minimum value: 0. The unit of rasterElevation is in meters.
   @experimental
   List<Object>? rasterElevationExpression;
 
@@ -220,6 +230,12 @@ final class RasterLayer extends Layer {
       paint["raster-color"] = rasterColorExpression;
     } else if (rasterColor != null) {
       paint["raster-color"] = rasterColor?.toRGBA();
+    }
+
+    if (rasterColorUseThemeExpression != null) {
+      paint["raster-color-use-theme"] = rasterColorUseThemeExpression;
+    } else if (rasterColorUseTheme != null) {
+      paint["raster-color-use-theme"] = rasterColorUseTheme?.value;
     }
 
     if (rasterColorMixExpression != null) {
@@ -359,9 +375,15 @@ final class RasterLayer extends Layer {
       rasterBrightnessMinExpression: styleOptionalCastList(
         map["paint"]["raster-brightness-min"],
       ),
-      rasterColor: (map["paint"]["raster-color"] as List?)?.toRGBAInt(),
+      rasterColor: styleColorFromJson(map["paint"]["raster-color"]),
       rasterColorExpression: styleOptionalCastList(
         map["paint"]["raster-color"],
+      ),
+      rasterColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["raster-color-use-theme"],
+      ),
+      rasterColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["raster-color-use-theme"],
       ),
       rasterColorMix: (map["paint"]["raster-color-mix"] as List?)
           ?.map<double?>((e) => e.toDouble())

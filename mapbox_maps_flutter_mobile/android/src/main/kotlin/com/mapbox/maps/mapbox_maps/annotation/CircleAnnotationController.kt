@@ -191,6 +191,12 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     annotation.circleStrokeWidth?.let {
       originalAnnotation.circleStrokeWidth = it
     }
+    annotation.circleColorUseTheme?.let {
+      originalAnnotation.circleColorUseTheme = it
+    }
+    annotation.circleStrokeColorUseTheme?.let {
+      originalAnnotation.circleStrokeColorUseTheme = it
+    }
     annotation.customData?.let {
       originalAnnotation.setData(Gson().toJsonTree(it))
     }
@@ -518,6 +524,52 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
       callback(Result.success(null))
     }
   }
+
+  override fun setCircleColorUseTheme(
+    managerId: String,
+    circleColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleColorUseTheme = circleColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleStrokeColorUseTheme(
+    managerId: String,
+    circleStrokeColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleStrokeColorUseTheme = circleStrokeColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleStrokeColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleStrokeColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
 }
 
 fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnnotation(): CircleAnnotation {
@@ -534,6 +586,8 @@ fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnno
     circleStrokeColor = circleStrokeColorInt?.toUInt()?.toLong(),
     circleStrokeOpacity = circleStrokeOpacity,
     circleStrokeWidth = circleStrokeWidth,
+    circleColorUseTheme = circleColorUseTheme,
+    circleStrokeColorUseTheme = circleStrokeColorUseTheme,
     customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
@@ -569,6 +623,12 @@ fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.
   }
   this.circleStrokeWidth?.let {
     options.withCircleStrokeWidth(it)
+  }
+  this.circleColorUseTheme?.let {
+    options.withCircleColorUseTheme(it)
+  }
+  this.circleStrokeColorUseTheme?.let {
+    options.withCircleStrokeColorUseTheme(it)
   }
   this.customData?.let {
     options.withData(Gson().toJsonTree(it))

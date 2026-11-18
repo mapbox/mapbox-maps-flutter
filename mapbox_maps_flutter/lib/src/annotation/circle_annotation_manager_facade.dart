@@ -186,6 +186,27 @@ final class CircleAnnotationManager
   /// Controls the frame of reference for `circle-translate`. Default value: "map".
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
       impl.getCircleTranslateAnchor();
+
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  @experimental
+  Future<void> setCircleColorUseTheme(ColorUseTheme circleColorUseTheme) =>
+      impl.setCircleColorUseTheme(circleColorUseTheme);
+
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getCircleColorUseTheme() =>
+      impl.getCircleColorUseTheme();
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  @experimental
+  Future<void> setCircleStrokeColorUseTheme(
+    ColorUseTheme circleStrokeColorUseTheme,
+  ) => impl.setCircleStrokeColorUseTheme(circleStrokeColorUseTheme);
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getCircleStrokeColorUseTheme() =>
+      impl.getCircleStrokeColorUseTheme();
 }
 
 // End of generated file.

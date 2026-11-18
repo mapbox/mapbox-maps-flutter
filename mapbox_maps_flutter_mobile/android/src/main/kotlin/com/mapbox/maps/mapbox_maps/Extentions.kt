@@ -168,6 +168,9 @@ fun FlatLight.toFlatLight(): com.mapbox.maps.extension.style.light.generated.Fla
     color?.let {
       color(it.toInt())
     }
+    colorUseTheme?.let {
+      colorUseTheme(it)
+    }
     colorTransition?.let {
       colorTransition(it.toStyleTransition())
     }
@@ -193,6 +196,9 @@ fun AmbientLight.toAmbientLight(): com.mapbox.maps.extension.style.light.generat
     color?.let {
       color(it.toInt())
     }
+    colorUseTheme?.let {
+      colorUseTheme(it)
+    }
     colorTransition?.let {
       colorTransition(it.toStyleTransition())
     }
@@ -212,6 +218,9 @@ fun DirectionalLight.toDirectionalLight(): com.mapbox.maps.extension.style.light
     }
     color?.let {
       color(it.toInt())
+    }
+    colorUseTheme?.let {
+      colorUseTheme(it)
     }
     colorTransition?.let {
       colorTransition(it.toStyleTransition())

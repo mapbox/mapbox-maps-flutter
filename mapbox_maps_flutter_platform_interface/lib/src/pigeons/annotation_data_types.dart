@@ -40,6 +40,10 @@ class PolygonAnnotation {
     this.fillPattern,
     this.fillTunnelStructureColor,
     this.fillZOffset,
+    this.fillBridgeGuardRailColorUseTheme,
+    this.fillColorUseTheme,
+    this.fillOutlineColorUseTheme,
+    this.fillTunnelStructureColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -82,10 +86,26 @@ class PolygonAnnotation {
   /// @experimental
   int? fillTunnelStructureColor;
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   /// @experimental
   double? fillZOffset;
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  /// @experimental
+  String? fillBridgeGuardRailColorUseTheme;
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  /// @experimental
+  String? fillColorUseTheme;
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  /// @experimental
+  String? fillOutlineColorUseTheme;
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  /// @experimental
+  String? fillTunnelStructureColorUseTheme;
 
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
@@ -106,6 +126,10 @@ class PolygonAnnotation {
       fillPattern,
       fillTunnelStructureColor,
       fillZOffset,
+      fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme,
+      fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -129,8 +153,12 @@ class PolygonAnnotation {
       fillPattern: result[8] as String?,
       fillTunnelStructureColor: result[9] as int?,
       fillZOffset: result[10] as double?,
-      isDraggable: result[11] as bool?,
-      customData: (result[12] as Map<Object?, Object?>?)
+      fillBridgeGuardRailColorUseTheme: result[11] as String?,
+      fillColorUseTheme: result[12] as String?,
+      fillOutlineColorUseTheme: result[13] as String?,
+      fillTunnelStructureColorUseTheme: result[14] as String?,
+      isDraggable: result[15] as bool?,
+      customData: (result[16] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -155,6 +183,12 @@ class PolygonAnnotation {
         fillPattern == other.fillPattern &&
         fillTunnelStructureColor == other.fillTunnelStructureColor &&
         fillZOffset == other.fillZOffset &&
+        fillBridgeGuardRailColorUseTheme ==
+            other.fillBridgeGuardRailColorUseTheme &&
+        fillColorUseTheme == other.fillColorUseTheme &&
+        fillOutlineColorUseTheme == other.fillOutlineColorUseTheme &&
+        fillTunnelStructureColorUseTheme ==
+            other.fillTunnelStructureColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -176,6 +210,10 @@ class PolygonAnnotationOptions {
     this.fillPattern,
     this.fillTunnelStructureColor,
     this.fillZOffset,
+    this.fillBridgeGuardRailColorUseTheme,
+    this.fillColorUseTheme,
+    this.fillOutlineColorUseTheme,
+    this.fillTunnelStructureColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -215,10 +253,26 @@ class PolygonAnnotationOptions {
   /// @experimental
   int? fillTunnelStructureColor;
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   /// @experimental
   double? fillZOffset;
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  /// @experimental
+  String? fillBridgeGuardRailColorUseTheme;
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  /// @experimental
+  String? fillColorUseTheme;
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  /// @experimental
+  String? fillOutlineColorUseTheme;
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  /// @experimental
+  String? fillTunnelStructureColorUseTheme;
 
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
@@ -238,6 +292,10 @@ class PolygonAnnotationOptions {
       fillPattern,
       fillTunnelStructureColor,
       fillZOffset,
+      fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme,
+      fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -260,8 +318,12 @@ class PolygonAnnotationOptions {
       fillPattern: result[7] as String?,
       fillTunnelStructureColor: result[8] as int?,
       fillZOffset: result[9] as double?,
-      isDraggable: result[10] as bool?,
-      customData: (result[11] as Map<Object?, Object?>?)
+      fillBridgeGuardRailColorUseTheme: result[10] as String?,
+      fillColorUseTheme: result[11] as String?,
+      fillOutlineColorUseTheme: result[12] as String?,
+      fillTunnelStructureColorUseTheme: result[13] as String?,
+      isDraggable: result[14] as bool?,
+      customData: (result[15] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -286,6 +348,12 @@ class PolygonAnnotationOptions {
         fillPattern == other.fillPattern &&
         fillTunnelStructureColor == other.fillTunnelStructureColor &&
         fillZOffset == other.fillZOffset &&
+        fillBridgeGuardRailColorUseTheme ==
+            other.fillBridgeGuardRailColorUseTheme &&
+        fillColorUseTheme == other.fillColorUseTheme &&
+        fillOutlineColorUseTheme == other.fillOutlineColorUseTheme &&
+        fillTunnelStructureColorUseTheme ==
+            other.fillTunnelStructureColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -359,6 +427,8 @@ class PolylineAnnotation {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.lineBorderColorUseTheme,
+    this.lineColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -380,11 +450,11 @@ class PolylineAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-  /// Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment.
+  /// Default value: 0. The unit of lineZOffset is in meters.
   double? lineZOffset;
 
-  /// Blur applied to the line, in pixels.
+  /// Blur applied to the line.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   double? lineBlur;
 
@@ -393,7 +463,7 @@ class PolylineAnnotation {
   int? lineBorderColor;
 
   /// The width of the line border. A value of zero means no border.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   double? lineBorderWidth;
 
   /// The color with which the line will be drawn.
@@ -423,6 +493,14 @@ class PolylineAnnotation {
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   double? lineWidth;
 
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  /// @experimental
+  String? lineBorderColorUseTheme;
+
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  /// @experimental
+  String? lineColorUseTheme;
+
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
@@ -447,6 +525,8 @@ class PolylineAnnotation {
       lineOpacity,
       linePattern,
       lineWidth,
+      lineBorderColorUseTheme,
+      lineColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -475,8 +555,10 @@ class PolylineAnnotation {
       lineOpacity: result[13] as double?,
       linePattern: result[14] as String?,
       lineWidth: result[15] as double?,
-      isDraggable: result[16] as bool?,
-      customData: (result[17] as Map<Object?, Object?>?)
+      lineBorderColorUseTheme: result[16] as String?,
+      lineColorUseTheme: result[17] as String?,
+      isDraggable: result[18] as bool?,
+      customData: (result[19] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -506,6 +588,8 @@ class PolylineAnnotation {
         lineOpacity == other.lineOpacity &&
         linePattern == other.linePattern &&
         lineWidth == other.lineWidth &&
+        lineBorderColorUseTheme == other.lineBorderColorUseTheme &&
+        lineColorUseTheme == other.lineColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -532,6 +616,8 @@ class PolylineAnnotationOptions {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.lineBorderColorUseTheme,
+    this.lineColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -550,11 +636,11 @@ class PolylineAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-  /// Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment.
+  /// Default value: 0. The unit of lineZOffset is in meters.
   double? lineZOffset;
 
-  /// Blur applied to the line, in pixels.
+  /// Blur applied to the line.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   double? lineBlur;
 
@@ -563,7 +649,7 @@ class PolylineAnnotationOptions {
   int? lineBorderColor;
 
   /// The width of the line border. A value of zero means no border.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   double? lineBorderWidth;
 
   /// The color with which the line will be drawn.
@@ -593,6 +679,14 @@ class PolylineAnnotationOptions {
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   double? lineWidth;
 
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  /// @experimental
+  String? lineBorderColorUseTheme;
+
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  /// @experimental
+  String? lineColorUseTheme;
+
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
@@ -616,6 +710,8 @@ class PolylineAnnotationOptions {
       lineOpacity,
       linePattern,
       lineWidth,
+      lineBorderColorUseTheme,
+      lineColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -643,8 +739,10 @@ class PolylineAnnotationOptions {
       lineOpacity: result[12] as double?,
       linePattern: result[13] as String?,
       lineWidth: result[14] as double?,
-      isDraggable: result[15] as bool?,
-      customData: (result[16] as Map<Object?, Object?>?)
+      lineBorderColorUseTheme: result[15] as String?,
+      lineColorUseTheme: result[16] as String?,
+      isDraggable: result[17] as bool?,
+      customData: (result[18] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -674,6 +772,8 @@ class PolylineAnnotationOptions {
         lineOpacity == other.lineOpacity &&
         linePattern == other.linePattern &&
         lineWidth == other.lineWidth &&
+        lineBorderColorUseTheme == other.lineBorderColorUseTheme &&
+        lineColorUseTheme == other.lineColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -769,6 +869,10 @@ class PointAnnotation {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.iconColorUseTheme,
+    this.iconHaloColorUseTheme,
+    this.textColorUseTheme,
+    this.textHaloColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -779,8 +883,16 @@ class PointAnnotation {
   /// The geometry that determines the location/shape of this annotation
   Point geometry;
 
-  /// The bitmap image for this Annotation
-  /// Will not take effect if [iconImage] has been set.
+  /// The encoded (PNG/JPEG) bytes of this annotation's icon.
+  ///
+  /// [iconImage] names the style image these bytes upload to. If you leave
+  /// [iconImage] unset, the SDK derives one from a hash of [image]. So
+  /// `update()` re-uploads the icon when [image] changes, and does nothing
+  /// when it does not — bytes are never compared, only the hash. Set
+  /// [iconImage] yourself for direct control: for example, to reuse one
+  /// name across annotations, or to point at a style image added
+  /// elsewhere without uploading [image]. Reusing the same [iconImage]
+  /// with different [image] bytes is still a no-op by design.
   Uint8List? image;
 
   /// Part of the icon placed closest to the anchor.
@@ -885,9 +997,8 @@ class PointAnnotation {
   /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
 
-  /// Specifies an uniform elevation from the ground, in meters.
-  /// Default value: 0. Minimum value: 0.
-  /// @experimental
+  /// Specifies an uniform elevation from the ground.
+  /// Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   double? symbolZOffset;
 
   /// The color with which the text will be drawn.
@@ -917,6 +1028,22 @@ class PointAnnotation {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
+
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  /// @experimental
+  String? iconColorUseTheme;
+
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  /// @experimental
+  String? iconHaloColorUseTheme;
+
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  /// @experimental
+  String? textColorUseTheme;
+
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  /// @experimental
+  String? textHaloColorUseTheme;
 
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
@@ -963,6 +1090,10 @@ class PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      iconColorUseTheme,
+      iconHaloColorUseTheme,
+      textColorUseTheme,
+      textHaloColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -1012,8 +1143,12 @@ class PointAnnotation {
       textHaloWidth: result[34] as double?,
       textOcclusionOpacity: result[35] as double?,
       textOpacity: result[36] as double?,
-      isDraggable: result[37] as bool?,
-      customData: (result[38] as Map<Object?, Object?>?)
+      iconColorUseTheme: result[37] as String?,
+      iconHaloColorUseTheme: result[38] as String?,
+      textColorUseTheme: result[39] as String?,
+      textHaloColorUseTheme: result[40] as String?,
+      isDraggable: result[41] as bool?,
+      customData: (result[42] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -1064,6 +1199,10 @@ class PointAnnotation {
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
         textOpacity == other.textOpacity &&
+        iconColorUseTheme == other.iconColorUseTheme &&
+        iconHaloColorUseTheme == other.iconHaloColorUseTheme &&
+        textColorUseTheme == other.textColorUseTheme &&
+        textHaloColorUseTheme == other.textHaloColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -1111,6 +1250,10 @@ class PointAnnotationOptions {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.iconColorUseTheme,
+    this.iconHaloColorUseTheme,
+    this.textColorUseTheme,
+    this.textHaloColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -1118,8 +1261,16 @@ class PointAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   Point geometry;
 
-  /// The bitmap image for this Annotation
-  /// Will not take effect if [iconImage] has been set.
+  /// The encoded (PNG/JPEG) bytes of this annotation's icon.
+  ///
+  /// [iconImage] names the style image these bytes upload to. If you leave
+  /// [iconImage] unset, the SDK derives one from a hash of [image]. So
+  /// `update()` re-uploads the icon when [image] changes, and does nothing
+  /// when it does not — bytes are never compared, only the hash. Set
+  /// [iconImage] yourself for direct control: for example, to reuse one
+  /// name across annotations, or to point at a style image added
+  /// elsewhere without uploading [image]. Reusing the same [iconImage]
+  /// with different [image] bytes is still a no-op by design.
   Uint8List? image;
 
   /// Part of the icon placed closest to the anchor.
@@ -1224,9 +1375,8 @@ class PointAnnotationOptions {
   /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
 
-  /// Specifies an uniform elevation from the ground, in meters.
-  /// Default value: 0. Minimum value: 0.
-  /// @experimental
+  /// Specifies an uniform elevation from the ground.
+  /// Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   double? symbolZOffset;
 
   /// The color with which the text will be drawn.
@@ -1256,6 +1406,22 @@ class PointAnnotationOptions {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
+
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  /// @experimental
+  String? iconColorUseTheme;
+
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  /// @experimental
+  String? iconHaloColorUseTheme;
+
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  /// @experimental
+  String? textColorUseTheme;
+
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  /// @experimental
+  String? textHaloColorUseTheme;
 
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
@@ -1301,6 +1467,10 @@ class PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      iconColorUseTheme,
+      iconHaloColorUseTheme,
+      textColorUseTheme,
+      textHaloColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -1349,8 +1519,12 @@ class PointAnnotationOptions {
       textHaloWidth: result[33] as double?,
       textOcclusionOpacity: result[34] as double?,
       textOpacity: result[35] as double?,
-      isDraggable: result[36] as bool?,
-      customData: (result[37] as Map<Object?, Object?>?)
+      iconColorUseTheme: result[36] as String?,
+      iconHaloColorUseTheme: result[37] as String?,
+      textColorUseTheme: result[38] as String?,
+      textHaloColorUseTheme: result[39] as String?,
+      isDraggable: result[40] as bool?,
+      customData: (result[41] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -1400,6 +1574,10 @@ class PointAnnotationOptions {
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
         textOpacity == other.textOpacity &&
+        iconColorUseTheme == other.iconColorUseTheme &&
+        iconHaloColorUseTheme == other.iconHaloColorUseTheme &&
+        textColorUseTheme == other.textColorUseTheme &&
+        textHaloColorUseTheme == other.textHaloColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -1467,6 +1645,8 @@ class CircleAnnotation {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.circleColorUseTheme,
+    this.circleStrokeColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -1508,6 +1688,14 @@ class CircleAnnotation {
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  /// @experimental
+  String? circleColorUseTheme;
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  /// @experimental
+  String? circleStrokeColorUseTheme;
+
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
@@ -1526,6 +1714,8 @@ class CircleAnnotation {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleColorUseTheme,
+      circleStrokeColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -1548,8 +1738,10 @@ class CircleAnnotation {
       circleStrokeColor: result[7] as int?,
       circleStrokeOpacity: result[8] as double?,
       circleStrokeWidth: result[9] as double?,
-      isDraggable: result[10] as bool?,
-      customData: (result[11] as Map<Object?, Object?>?)
+      circleColorUseTheme: result[10] as String?,
+      circleStrokeColorUseTheme: result[11] as String?,
+      isDraggable: result[12] as bool?,
+      customData: (result[13] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -1573,6 +1765,8 @@ class CircleAnnotation {
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
         circleStrokeWidth == other.circleStrokeWidth &&
+        circleColorUseTheme == other.circleColorUseTheme &&
+        circleStrokeColorUseTheme == other.circleStrokeColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }
@@ -1593,6 +1787,8 @@ class CircleAnnotationOptions {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.circleColorUseTheme,
+    this.circleStrokeColorUseTheme,
     this.isDraggable,
     this.customData,
   });
@@ -1631,6 +1827,14 @@ class CircleAnnotationOptions {
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
+  /// Whether the style color theme applies to `circleColor`: `default` or `none`.
+  /// @experimental
+  String? circleColorUseTheme;
+
+  /// Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+  /// @experimental
+  String? circleStrokeColorUseTheme;
+
   /// Property to determine whether annotation can be manually moved around map.
   bool? isDraggable;
 
@@ -1648,6 +1852,8 @@ class CircleAnnotationOptions {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleColorUseTheme,
+      circleStrokeColorUseTheme,
       isDraggable,
       customData,
     ];
@@ -1669,8 +1875,10 @@ class CircleAnnotationOptions {
       circleStrokeColor: result[6] as int?,
       circleStrokeOpacity: result[7] as double?,
       circleStrokeWidth: result[8] as double?,
-      isDraggable: result[9] as bool?,
-      customData: (result[10] as Map<Object?, Object?>?)
+      circleColorUseTheme: result[9] as String?,
+      circleStrokeColorUseTheme: result[10] as String?,
+      isDraggable: result[11] as bool?,
+      customData: (result[12] as Map<Object?, Object?>?)
           ?.cast<String, Object>(),
     );
   }
@@ -1693,6 +1901,8 @@ class CircleAnnotationOptions {
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
         circleStrokeWidth == other.circleStrokeWidth &&
+        circleColorUseTheme == other.circleColorUseTheme &&
+        circleStrokeColorUseTheme == other.circleStrokeColorUseTheme &&
         isDraggable == other.isDraggable &&
         _deepEquals(customData, other.customData);
   }

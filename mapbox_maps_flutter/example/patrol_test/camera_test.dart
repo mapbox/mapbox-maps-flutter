@@ -428,7 +428,7 @@ void main() {
     expect(coordinates.length, 2);
   });
 
-  patrolTest('setCamera', skip: kIsWeb, ($) async {
+  patrolTest('setCamera', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: $.tester,
@@ -444,9 +444,41 @@ void main() {
       pitch: 30,
     );
     await mapboxMap.setCamera(option);
+
+    final padding = (await mapboxMap.getCameraState()).padding;
+    expect(padding.top, 1);
+    expect(padding.left, 2);
+    expect(padding.bottom, 3);
+    expect(padding.right, 4);
   });
 
-  patrolTest('getCameraState', skip: kIsWeb, ($) async {
+  // Web only: Android sends the padding of this event in physical pixels.
+  // iOS is not checked yet.
+  patrolTest('onCameraChanged reports the camera padding', skip: !kIsWeb, (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
+    await mapboxMap.setCamera(
+      CameraOptions(
+        padding: MbxEdgeInsets(top: 10, left: 20, bottom: 30, right: 40),
+      ),
+    );
+
+    app.events.resetOnCameraChanged();
+    await mapboxMap.setCamera(CameraOptions(zoom: 5));
+    final event =
+        (await app.events.onCameraChanged.future) as CameraChangedEventData;
+    final state = event.cameraState;
+
+    expect(state.padding.top, 10);
+    expect(state.padding.left, 20);
+    expect(state.padding.bottom, 30);
+    expect(state.padding.right, 40);
+  });
+
+  patrolTest('getCameraState', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: $.tester,

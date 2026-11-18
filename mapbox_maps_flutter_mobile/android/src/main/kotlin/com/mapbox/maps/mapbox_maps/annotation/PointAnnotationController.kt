@@ -328,6 +328,18 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.textOpacity?.let {
       originalAnnotation.textOpacity = it
     }
+    annotation.iconColorUseTheme?.let {
+      originalAnnotation.iconColorUseTheme = it
+    }
+    annotation.iconHaloColorUseTheme?.let {
+      originalAnnotation.iconHaloColorUseTheme = it
+    }
+    annotation.textColorUseTheme?.let {
+      originalAnnotation.textColorUseTheme = it
+    }
+    annotation.textHaloColorUseTheme?.let {
+      originalAnnotation.textHaloColorUseTheme = it
+    }
     annotation.customData?.let {
       originalAnnotation.setData(Gson().toJsonTree(it))
     }
@@ -1897,6 +1909,98 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
       callback(Result.success(null))
     }
   }
+
+  override fun setIconColorUseTheme(
+    managerId: String,
+    iconColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconColorUseTheme = iconColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.iconColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setIconHaloColorUseTheme(
+    managerId: String,
+    iconHaloColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconHaloColorUseTheme = iconHaloColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconHaloColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.iconHaloColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setTextColorUseTheme(
+    managerId: String,
+    textColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.textColorUseTheme = textColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getTextColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.textColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setTextHaloColorUseTheme(
+    managerId: String,
+    textHaloColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.textHaloColorUseTheme = textHaloColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getTextHaloColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.textHaloColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
 }
 
 fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnotation(): PointAnnotation {
@@ -1946,6 +2050,10 @@ fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnota
     textHaloWidth = textHaloWidth,
     textOcclusionOpacity = textOcclusionOpacity,
     textOpacity = textOpacity,
+    iconColorUseTheme = iconColorUseTheme,
+    iconHaloColorUseTheme = iconHaloColorUseTheme,
+    textColorUseTheme = textColorUseTheme,
+    textHaloColorUseTheme = textHaloColorUseTheme,
     customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
@@ -2067,6 +2175,18 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   }
   this.textOpacity?.let {
     options.withTextOpacity(it)
+  }
+  this.iconColorUseTheme?.let {
+    options.withIconColorUseTheme(it)
+  }
+  this.iconHaloColorUseTheme?.let {
+    options.withIconHaloColorUseTheme(it)
+  }
+  this.textColorUseTheme?.let {
+    options.withTextColorUseTheme(it)
+  }
+  this.textHaloColorUseTheme?.let {
+    options.withTextHaloColorUseTheme(it)
   }
   this.customData?.let {
     options.withData(Gson().toJsonTree(it))

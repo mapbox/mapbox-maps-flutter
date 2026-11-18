@@ -156,16 +156,18 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     _mapboxMap = mapboxMap;
 
     final mapCreated = Completer<void>();
-    final onMapEvent = widget.onMapEvent;
-    if (onMapEvent != null) {
-      _eventBridge = MapEventBridge(nativeMap, (event) {
-        if (mapCreated.isCompleted) {
-          onMapEvent(event);
-        } else {
-          mapCreated.future.then((_) => onMapEvent(event));
-        }
-      });
-    }
+    // Read `widget.onMapEvent` on each event, so that the listeners of the
+    // latest build get it.
+    void dispatch(MapEvent event) => widget.onMapEvent?.call(event);
+    _eventBridge = MapEventBridge(nativeMap, (event) {
+      if (mapCreated.isCompleted) {
+        dispatch(event);
+      } else {
+        mapCreated.future.then((_) {
+          if (mounted) dispatch(event);
+        });
+      }
+    });
 
     try {
       widget.onMapCreated?.call(mapboxMap);

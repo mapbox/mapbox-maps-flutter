@@ -1,3 +1,4 @@
+// ignore_for_file: experimental_member_use
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
@@ -233,6 +234,83 @@ final class StyleController implements StylePlatformInterface {
     String config,
     Object value,
   ) async => _map.setConfigProperty(importId, config, value.jsify());
+
+  @override
+  Future<void> setStyleColorTheme(ColorTheme? colorTheme) async =>
+      _map.setColorTheme(colorTheme?.toJson().jsify());
+
+  @override
+  Future<void> setStyleImportColorTheme(
+    String importId,
+    ColorTheme? colorTheme,
+  ) async => _map.setImportColorTheme(importId, colorTheme?.toJson().jsify());
+
+  @override
+  Future<void> setStyleAtmosphere(String? properties) async =>
+      _map.setFog(_decodeJs(properties));
+
+  @override
+  Future<StylePropertyValue> getStyleAtmosphereProperty(
+    String property,
+  ) async => _styleObjectProperty(_map.getFog(), property);
+
+  @override
+  Future<void> setStyleAtmosphereProperty(
+    String property,
+    Object value,
+  ) async =>
+      _map.setFog(_withStyleObjectProperty(_map.getFog(), property, value));
+
+  @override
+  Future<void> setStyleSnow(String? properties) async =>
+      _map.setSnow(_decodeJs(properties));
+
+  @override
+  Future<StylePropertyValue> getStyleSnowProperty(String property) async =>
+      _styleObjectProperty(_map.getSnow(), property);
+
+  @override
+  Future<void> setStyleSnowProperty(String property, Object value) async =>
+      _map.setSnow(_withStyleObjectProperty(_map.getSnow(), property, value));
+
+  @override
+  Future<void> setStyleRain(String? properties) async =>
+      _map.setRain(_decodeJs(properties));
+
+  @override
+  Future<StylePropertyValue> getStyleRainProperty(String property) async =>
+      _styleObjectProperty(_map.getRain(), property);
+
+  @override
+  Future<void> setStyleRainProperty(String property, Object value) async =>
+      _map.setRain(_withStyleObjectProperty(_map.getRain(), property, value));
+
+  JSAny? _decodeJs(String? json) =>
+      json == null ? null : (jsonDecode(json) as Object).jsify();
+
+  /// Returns the value of [property] in the GL JS style object [object],
+  /// such as the result of `getFog`.
+  StylePropertyValue _styleObjectProperty(JSAny? object, String property) {
+    final properties = object?.dartify();
+    return _wrap(
+      properties is core.Map ? properties[property] as Object? : null,
+      property: property,
+    );
+  }
+
+  /// Returns a copy of the GL JS style object [object] with [property] set
+  /// to [value]. GL JS has no setter for a single property of these objects.
+  JSAny? _withStyleObjectProperty(
+    JSAny? object,
+    String property,
+    Object value,
+  ) {
+    final properties = object?.dartify();
+    return <Object?, Object?>{
+      if (properties is core.Map) ...properties,
+      property: value,
+    }.jsify();
+  }
 
   @override
   Future<void> setStyleImportConfigProperties(

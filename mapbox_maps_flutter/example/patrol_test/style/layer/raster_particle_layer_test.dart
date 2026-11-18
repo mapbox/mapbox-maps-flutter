@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -42,6 +41,7 @@ void main() {
         slot: LayerSlot.BOTTOM,
         rasterParticleArrayBand: "abc",
         rasterParticleColor: Colors.red.value,
+        rasterParticleColorUseTheme: ColorUseTheme.none,
         rasterParticleCount: 1.0,
         rasterParticleFadeOpacityFactor: 1.0,
         rasterParticleMaxSpeed: 1.0,
@@ -57,6 +57,7 @@ void main() {
     expect(layer.visibility, Visibility.NONE);
     expect(layer.rasterParticleArrayBand, "abc");
     expect(layer.rasterParticleColor, Colors.red.value);
+    expect(layer.rasterParticleColorUseTheme, ColorUseTheme.none);
     expect(layer.rasterParticleCount, 1.0);
     expect(layer.rasterParticleFadeOpacityFactor, 1.0);
     expect(layer.rasterParticleMaxSpeed, 1.0);
@@ -93,6 +94,8 @@ void main() {
         slot: LayerSlot.BOTTOM,
         rasterParticleArrayBand: "abc",
         rasterParticleColorExpression: ['rgba', 255, 0, 0, 1],
+        rasterParticleColorUseTheme: ColorUseTheme.useDefault,
+        rasterParticleColorUseThemeExpression: ['string', 'none'],
         rasterParticleCount: 1.0,
         rasterParticleFadeOpacityFactorExpression: ['number', 1.0],
         rasterParticleMaxSpeed: 1.0,
@@ -113,6 +116,11 @@ void main() {
     ]);
     expect(layer.rasterParticleArrayBand, "abc");
     expect(layer.rasterParticleColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.rasterParticleColorUseThemeExpression ??
+          layer.rasterParticleColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.rasterParticleCount, 1.0);
     expect(layer.rasterParticleFadeOpacityFactor, 1.0);
     expect(layer.rasterParticleMaxSpeed, 1.0);
@@ -120,4 +128,5 @@ void main() {
     expect(layer.rasterParticleSpeedFactor, 1.0);
   });
 }
+
 // End of generated file.

@@ -3,8 +3,7 @@ part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 class AnnotationManager implements AnnotationManagerPlatformInterface {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
-  AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
-    : _mapboxMapsPlatform = mapboxMapsPlatform;
+  AnnotationManager._({required this._mapboxMapsPlatform});
 
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
   ///

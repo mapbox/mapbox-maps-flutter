@@ -157,6 +157,8 @@ extension type JSAmbientLightProperties._(JSObject _) implements JSObject {
   JSAmbientLightProperties() : _ = JSObject();
 
   external set color(String value);
+  @JS('color-use-theme')
+  external set colorUseTheme(String value);
   @JS('color-transition')
   external set colorTransition(JSTransitionSpecification value);
   external set intensity(double value);
@@ -173,6 +175,8 @@ extension type JSDirectionalLightProperties._(JSObject _) implements JSObject {
   @JS('cast-shadows')
   external set castShadows(bool value);
   external set color(String value);
+  @JS('color-use-theme')
+  external set colorUseTheme(String value);
   @JS('color-transition')
   external set colorTransition(JSTransitionSpecification value);
   external set direction(JSArray<JSNumber> value);
@@ -278,6 +282,14 @@ extension Style on JSMap {
     JSAny? value,
   );
   external JSAny? getSchema(String importId);
+  external void setColorTheme(JSAny? colorTheme);
+  external void setImportColorTheme(String importId, JSAny? colorTheme);
+  external void setFog(JSAny? fog);
+  external JSAny? getFog();
+  external void setSnow(JSAny? snow);
+  external JSAny? getSnow();
+  external void setRain(JSAny? rain);
+  external JSAny? getRain();
 }
 
 // ===== Style spec accessors (returned by JSMap.getStyle()) =====

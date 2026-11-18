@@ -16,6 +16,9 @@ final class PerformanceStatisticsController: _PerformanceStatisticsApi {
 
     func startPerformanceStatisticsCollection(options: PerformanceStatisticsOptions) throws {
         let options = options.toPerformanceStatisticsOptions()
+        // The renderer ignores a start while collection runs, so stop the
+        // previous collection first.
+        collectionCancelable = nil
         collectionCancelable = mapboxMap.collectPerformanceStatistics(options) { [weak self] statistics in
             self?.performanceStatisticsListener?.onPerformanceStatisticsCollected(
                 statistics: statistics.toFLTPerformanceStatistics(),

@@ -219,16 +219,82 @@ class PolygonAnnotationManager extends BaseAnnotationManager
   Future<int?> getFillTunnelStructureColor() =>
       _annotationMessenger.getFillTunnelStructureColor(id);
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   @override
   Future<void> setFillZOffset(double fillZOffset) =>
       _annotationMessenger.setFillZOffset(id, fillZOffset);
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   @override
   Future<double?> getFillZOffset() => _annotationMessenger.getFillZOffset(id);
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setFillBridgeGuardRailColorUseTheme(
+    ColorUseTheme fillBridgeGuardRailColorUseTheme,
+  ) => _annotationMessenger.setFillBridgeGuardRailColorUseTheme(
+    id,
+    fillBridgeGuardRailColorUseTheme.value,
+  );
+
+  /// Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getFillBridgeGuardRailColorUseTheme() =>
+      _annotationMessenger
+          .getFillBridgeGuardRailColorUseTheme(id)
+          .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setFillColorUseTheme(ColorUseTheme fillColorUseTheme) =>
+      _annotationMessenger.setFillColorUseTheme(id, fillColorUseTheme.value);
+
+  /// Whether the style color theme applies to `fillColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getFillColorUseTheme() => _annotationMessenger
+      .getFillColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setFillOutlineColorUseTheme(
+    ColorUseTheme fillOutlineColorUseTheme,
+  ) => _annotationMessenger.setFillOutlineColorUseTheme(
+    id,
+    fillOutlineColorUseTheme.value,
+  );
+
+  /// Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getFillOutlineColorUseTheme() => _annotationMessenger
+      .getFillOutlineColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setFillTunnelStructureColorUseTheme(
+    ColorUseTheme fillTunnelStructureColorUseTheme,
+  ) => _annotationMessenger.setFillTunnelStructureColorUseTheme(
+    id,
+    fillTunnelStructureColorUseTheme.value,
+  );
+
+  /// Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getFillTunnelStructureColorUseTheme() =>
+      _annotationMessenger
+          .getFillTunnelStructureColorUseTheme(id)
+          .then(ColorUseTheme.fromValue);
 }
 
 // End of generated file.

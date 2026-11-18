@@ -1939,8 +1939,13 @@ data class PerformanceStatisticsOptions(
    * It's important to note that the actual collection interval may exceed this duration since statistics are aggregated during render calls.
    * The effective collection interval can be observed through the `PerformanceStatistics` instance.
    * Setting `samplingDurationMillis` to 0 forces the collection of performance statistics every frame.
+   * The value is truncated to whole milliseconds.
    *
-   * A negative sampling duration is an error and results in no operation.
+   * A sampling window closes only when the map renders a frame. A map that does not render does not
+   * deliver statistics.
+   *
+   * A negative sampling duration is an error: `MapboxMap.startPerformanceStatisticsCollection` throws an
+   * [ArgumentError].
    */
   val samplingDurationMillis: Double
 ) {
@@ -2007,17 +2012,36 @@ data class DurationStatistics(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class CumulativeRenderingStatistics(
-  /** The number of draw calls at the end of the collection window. */
+  /**
+   * The number of draw calls in the last frame of the collection window.
+   * This value is not a total. It can decrease between two snapshots.
+   */
   val drawCalls: Long? = null,
-  /** The amount of texture memory in use at the end of the collection window. */
+  /**
+   * The amount of texture memory in use at the end of the collection window.
+   * The value is null on iOS and web.
+   */
   val textureBytes: Long? = null,
-  /** The amount of vertex memory (array and index buffer memory) in use at the end of the collection window. */
+  /**
+   * The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
+   * The value is null on iOS and web.
+   */
   val vertexBytes: Long? = null,
-  /** The number of graphics pipeline programs created. */
+  /**
+   * The number of graphics pipeline programs created since the renderer started.
+   * The value does not reset when collection stops or starts again.
+   */
   val graphicsPrograms: Long? = null,
-  /** The total amount of time spent on all graphics pipeline program creation, in milliseconds. */
+  /**
+   * The total amount of time spent on all graphics pipeline program creation since the renderer started,
+   * in milliseconds. On web, the time counts from the start of collection.
+   */
   val graphicsProgramsCreationTimeMillis: Double? = null,
-  /** The number of FBO switches. */
+  /**
+   * The number of FBO switches since the renderer started.
+   * The value does not reset when collection stops or starts again.
+   * On web, the count starts from zero when collection starts.
+   */
   val fboSwitchCount: Long? = null
 ) {
   companion object {
@@ -2061,7 +2085,7 @@ data class CumulativeRenderingStatistics(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class GroupPerformanceStatistics(
-  /** The duration of the group or layer on the CPU timeline. */
+  /** The longest duration of the group or layer in one frame of the sampling window, on the CPU timeline. */
   val durationMillis: Double,
   /** The name of the group or layer. */
   val name: String
@@ -2095,11 +2119,18 @@ data class GroupPerformanceStatistics(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PerFrameRenderingStatistics(
-  /** The CPU timeline duration statistics of each render group, in descending order by duration. */
+  /**
+   * The 10 slowest render groups and layers, in descending order by duration.
+   * Group names are renderer internals and can change between releases.
+   */
   val topRenderGroups: List<GroupPerformanceStatistics>,
-  /** The CPU timeline duration statistics of each layer, in descending order by duration. */
+  /** The 10 slowest layers, in descending order by duration. */
   val topRenderLayers: List<GroupPerformanceStatistics>,
-  /** The CPU timeline duration of the shadowmap render pass. */
+  /**
+   * The CPU timeline duration of the shadowmap render pass.
+   * On Android and iOS, the renderer currently reports 0 for this value. To see the shadow map passes
+   * there, read the `shadowmap` entries in [topRenderGroups].
+   */
   val shadowMapDurationStatistics: DurationStatistics,
   /** The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass. */
   val uploadDurationStatistics: DurationStatistics
@@ -2388,7 +2419,9 @@ data class FlatLight(
   /** Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below). */
   val position: List<Double?>? = null,
   /** Transition property for `position` */
-  val positionTransition: TransitionOptions? = null
+  val positionTransition: TransitionOptions? = null,
+  /** Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value. */
+  val colorUseTheme: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): FlatLight {
@@ -2400,7 +2433,8 @@ data class FlatLight(
       val intensityTransition = pigeonVar_list[5] as TransitionOptions?
       val position = pigeonVar_list[6] as List<Double?>?
       val positionTransition = pigeonVar_list[7] as TransitionOptions?
-      return FlatLight(id, anchor, color, colorTransition, intensity, intensityTransition, position, positionTransition)
+      val colorUseTheme = pigeonVar_list[8] as String?
+      return FlatLight(id, anchor, color, colorTransition, intensity, intensityTransition, position, positionTransition, colorUseTheme)
     }
   }
   fun toList(): List<Any?> {
@@ -2413,6 +2447,7 @@ data class FlatLight(
       intensityTransition,
       position,
       positionTransition,
+      colorUseTheme,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2429,7 +2464,8 @@ data class FlatLight(
       intensity == other.intensity &&
       intensityTransition == other.intensityTransition &&
       deepEqualsPlatformInterfaceDataTypes(position, other.position) &&
-      positionTransition == other.positionTransition
+      positionTransition == other.positionTransition &&
+      colorUseTheme == other.colorUseTheme
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -2464,7 +2500,9 @@ data class DirectionalLight(
   /** Transition property for `shadowIntensity` */
   val shadowIntensityTransition: TransitionOptions? = null,
   /** Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain. */
-  val shadowDrawBeforeLayer: String? = null
+  val shadowDrawBeforeLayer: String? = null,
+  /** Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value. */
+  val colorUseTheme: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): DirectionalLight {
@@ -2479,7 +2517,8 @@ data class DirectionalLight(
       val shadowIntensity = pigeonVar_list[8] as Double?
       val shadowIntensityTransition = pigeonVar_list[9] as TransitionOptions?
       val shadowDrawBeforeLayer = pigeonVar_list[10] as String?
-      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition, shadowDrawBeforeLayer)
+      val colorUseTheme = pigeonVar_list[11] as String?
+      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition, shadowDrawBeforeLayer, colorUseTheme)
     }
   }
   fun toList(): List<Any?> {
@@ -2495,6 +2534,7 @@ data class DirectionalLight(
       shadowIntensity,
       shadowIntensityTransition,
       shadowDrawBeforeLayer,
+      colorUseTheme,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2514,7 +2554,8 @@ data class DirectionalLight(
       intensityTransition == other.intensityTransition &&
       shadowIntensity == other.shadowIntensity &&
       shadowIntensityTransition == other.shadowIntensityTransition &&
-      shadowDrawBeforeLayer == other.shadowDrawBeforeLayer
+      shadowDrawBeforeLayer == other.shadowDrawBeforeLayer &&
+      colorUseTheme == other.colorUseTheme
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -2537,7 +2578,9 @@ data class AmbientLight(
   /** A multiplier for the color of the ambient light. */
   val intensity: Double? = null,
   /** Transition property for `intensity` */
-  val intensityTransition: TransitionOptions? = null
+  val intensityTransition: TransitionOptions? = null,
+  /** Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value. */
+  val colorUseTheme: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): AmbientLight {
@@ -2546,7 +2589,8 @@ data class AmbientLight(
       val colorTransition = pigeonVar_list[2] as TransitionOptions?
       val intensity = pigeonVar_list[3] as Double?
       val intensityTransition = pigeonVar_list[4] as TransitionOptions?
-      return AmbientLight(id, color, colorTransition, intensity, intensityTransition)
+      val colorUseTheme = pigeonVar_list[5] as String?
+      return AmbientLight(id, color, colorTransition, intensity, intensityTransition, colorUseTheme)
     }
   }
   fun toList(): List<Any?> {
@@ -2556,6 +2600,7 @@ data class AmbientLight(
       colorTransition,
       intensity,
       intensityTransition,
+      colorUseTheme,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2569,7 +2614,8 @@ data class AmbientLight(
       color == other.color &&
       colorTransition == other.colorTransition &&
       intensity == other.intensity &&
-      intensityTransition == other.intensityTransition
+      intensityTransition == other.intensityTransition &&
+      colorUseTheme == other.colorUseTheme
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -3148,6 +3194,12 @@ data class LocationComponentSettings(
 /**
  * Shows the scale bar on the map.
  *
+ * On web the scale bar is the Mapbox GL JS `ScaleControl`, which draws a
+ * bordered label instead of the tick-marked ruler the mobile SDKs draw.
+ * Fields it cannot represent are marked below. Each one is still stored and
+ * returned by `getSettings`, so a value written with `updateSettings`
+ * survives a round-trip through the API.
+ *
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class ScaleBarSettings(
@@ -3362,6 +3414,12 @@ data class ScaleBarSettings(
 
 /**
  * Shows the compass on the map.
+ *
+ * On web the compass is the compass button of the Mapbox GL JS
+ * `NavigationControl`, added without its zoom buttons. Fields it cannot
+ * represent are marked below. Each one is still stored and returned by
+ * `getSettings`, so a value written with `updateSettings` survives a
+ * round-trip through the API.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
@@ -4810,6 +4868,11 @@ data class FeaturesetFeature(
    *
    * The identifier can be `nil` if the underlying source doesn't have identifiers for features.
    * In this case it's impossible to set a feature state for an individual feature.
+   *
+   * On web, GL JS keeps a GeoJSON feature id only if it is a number, or a
+   * string that holds a number. It removes all other string ids, and this
+   * field is then null. Android and iOS keep the id. For an id on all
+   * platforms, use a number, or copy the id into [properties].
    */
   val id: FeaturesetFeatureId? = null,
   /** A featureset descriptor denoting the featureset this feature belongs to. */

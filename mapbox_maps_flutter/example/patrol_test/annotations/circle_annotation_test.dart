@@ -30,6 +30,8 @@ void main() {
       circleStrokeColor: Colors.red.value,
       circleStrokeOpacity: 1.0,
       circleStrokeWidth: 1.0,
+      circleColorUseTheme: ColorUseTheme.none.value,
+      circleStrokeColorUseTheme: ColorUseTheme.none.value,
       customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(circleAnnotationOptions);
@@ -44,6 +46,8 @@ void main() {
     expect(Colors.red.value, annotation.circleStrokeColor);
     expect(1.0, annotation.circleStrokeOpacity);
     expect(1.0, annotation.circleStrokeWidth);
+    expect(ColorUseTheme.none.value, annotation.circleColorUseTheme);
+    expect(ColorUseTheme.none.value, annotation.circleStrokeColorUseTheme);
     expect({'foo': 'bar'}, annotation.customData);
   });
 
@@ -64,7 +68,14 @@ void main() {
       ),
     );
     annotation.geometry = newPoint;
+    annotation.circleColorUseTheme = ColorUseTheme.none.value;
+    annotation.circleStrokeColorUseTheme = ColorUseTheme.none.value;
     await manager.update(annotation);
+    final updated = (await manager.getAnnotations()).firstWhere(
+      (a) => a.id == annotation.id,
+    );
+    expect(updated.circleColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.circleStrokeColorUseTheme, ColorUseTheme.none.value);
     await manager.delete(annotation);
 
     for (var i = 0; i < 10; i++) {

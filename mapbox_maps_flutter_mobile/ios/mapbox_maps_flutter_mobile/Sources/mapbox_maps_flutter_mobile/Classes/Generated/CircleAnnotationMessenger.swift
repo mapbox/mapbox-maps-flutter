@@ -184,6 +184,10 @@ protocol _CircleAnnotationMessenger {
   func getCircleTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setCircleTranslateAnchor(managerId: String, circleTranslateAnchor: CircleTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getCircleTranslateAnchor(managerId: String, completion: @escaping (Result<CircleTranslateAnchor?, Error>) -> Void)
+  func setCircleColorUseTheme(managerId: String, circleColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getCircleColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setCircleStrokeColorUseTheme(managerId: String, circleStrokeColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getCircleStrokeColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -805,6 +809,76 @@ class _CircleAnnotationMessengerSetup {
       }
     } else {
       getCircleTranslateAnchorChannel.setMessageHandler(nil)
+    }
+    let setCircleColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setCircleColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let circleColorUseThemeArg = args[1] as! String
+        api.setCircleColorUseTheme(managerId: managerIdArg, circleColorUseTheme: circleColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setCircleColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getCircleColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getCircleColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getCircleColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getCircleColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setCircleStrokeColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setCircleStrokeColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let circleStrokeColorUseThemeArg = args[1] as! String
+        api.setCircleStrokeColorUseTheme(managerId: managerIdArg, circleStrokeColorUseTheme: circleStrokeColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setCircleStrokeColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getCircleStrokeColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getCircleStrokeColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getCircleStrokeColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getCircleStrokeColorUseThemeChannel.setMessageHandler(nil)
     }
   }
 }

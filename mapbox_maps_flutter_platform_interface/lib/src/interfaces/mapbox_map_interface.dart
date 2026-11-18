@@ -70,9 +70,9 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Starts collecting CPU/GPU render performance statistics with the
   /// given [options], delivering each sampled snapshot to [listener].
-  /// Calling this while collection is already active replaces the
-  /// previous listener; call [stopPerformanceStatisticsCollection]
-  /// before restarting.
+  /// Calling this while collection is already active must stop that
+  /// collection and start a new one with [options] and [listener].
+  /// The facade rejects a negative sampling duration before it calls this.
   void startPerformanceStatisticsCollection(
     PerformanceStatisticsOptions options,
     PerformanceStatisticsListener listener,

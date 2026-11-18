@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart';
 
+import 'style/atmosphere.dart';
 import 'style/layer/background_layer.dart';
 import 'style/layer/circle_layer.dart';
 import 'style/layer/clip_layer.dart';
@@ -20,6 +21,8 @@ import 'style/layer/raster_particle_layer.dart';
 import 'style/layer/sky_layer.dart';
 import 'style/layer/slot_layer.dart';
 import 'style/layer/symbol_layer.dart';
+import 'style/rain.dart';
+import 'style/snow.dart';
 import 'style/source/geojson_source.dart';
 import 'style/source/image_source.dart';
 import 'style/source/model_source.dart';
@@ -455,6 +458,147 @@ base class StyleManager {
     Object value,
   ) => _impl.setStyleImportConfigProperty(importId, config, value);
 
+  /// Sets the style color theme. A color theme applies a color grading
+  /// look-up table (LUT) to all colors of the style, except colors with a
+  /// `*-use-theme` value of [ColorUseTheme.none].
+  ///
+  /// A `null` value removes the color theme.
+  @experimental
+  Future<void> setStyleColorTheme(ColorTheme? colorTheme) =>
+      _impl.setStyleColorTheme(colorTheme);
+
+  /// Sets the color theme of the style import [importId]. This overrides
+  /// the color theme of the imported style.
+  ///
+  /// A `null` value removes the override.
+  @experimental
+  Future<void> setStyleImportColorTheme(
+    String importId,
+    ColorTheme? colorTheme,
+  ) => _impl.setStyleImportColorTheme(importId, colorTheme);
+
+  /// Sets the style atmosphere. The atmosphere renders fog, sky and stars.
+  ///
+  /// The new atmosphere replaces all properties of the old atmosphere. A `null` value
+  /// removes the atmosphere.
+  @experimental
+  Future<void> setStyleAtmosphere(Atmosphere? atmosphere) =>
+      _impl.setStyleAtmosphere(
+        atmosphere == null ? null : jsonEncode(atmosphere.toJson()),
+      );
+
+  /// Returns the style atmosphere, or `null` if the style has no atmosphere.
+  @experimental
+  Future<Atmosphere?> getStyleAtmosphere() async {
+    final json = await _styleProperties(
+      Atmosphere.propertyNames,
+      _impl.getStyleAtmosphereProperty,
+    );
+    return json == null ? null : Atmosphere.fromJson(json);
+  }
+
+  /// Sets the value of a single atmosphere property. [property] is the style
+  /// specification name of the property, for example `"color"`.
+  ///
+  /// [value] is the style-specification value in JSON form: a number, a
+  /// string, a list of numbers, or an expression as a list. Colors are
+  /// strings, for example `"rgba(255, 0, 0, 1)"`. Use-theme values are
+  /// [ColorUseTheme.value] strings.
+  @experimental
+  Future<void> setStyleAtmosphereProperty(String property, Object value) =>
+      _impl.setStyleAtmosphereProperty(property, value);
+
+  /// Sets the style snow. Snow renders falling snow particles over the map.
+  ///
+  /// The new snow replaces all properties of the old snow. A `null` value
+  /// removes the snow.
+  ///
+  /// On iOS, a [Snapshotter] does not support snow. The call throws a
+  /// [PlatformException].
+  @experimental
+  Future<void> setStyleSnow(Snow? snow) =>
+      _impl.setStyleSnow(snow == null ? null : jsonEncode(snow.toJson()));
+
+  /// Returns the style snow, or `null` if the style has no snow.
+  ///
+  /// On iOS, a [Snapshotter] does not support snow. The call throws a
+  /// [PlatformException].
+  @experimental
+  Future<Snow?> getStyleSnow() async {
+    final json = await _styleProperties(
+      Snow.propertyNames,
+      _impl.getStyleSnowProperty,
+    );
+    return json == null ? null : Snow.fromJson(json);
+  }
+
+  /// Sets the value of a single snow property. [property] is the style
+  /// specification name of the property, for example `"color"`.
+  ///
+  /// [value] is the style-specification value in JSON form: a number, a
+  /// string, a list of numbers, or an expression as a list. Colors are
+  /// strings, for example `"rgba(255, 0, 0, 1)"`. Use-theme values are
+  /// [ColorUseTheme.value] strings.
+  ///
+  /// On iOS, a [Snapshotter] does not support snow. The call throws a
+  /// [PlatformException].
+  @experimental
+  Future<void> setStyleSnowProperty(String property, Object value) =>
+      _impl.setStyleSnowProperty(property, value);
+
+  /// Sets the style rain. Rain renders falling rain drops over the map.
+  ///
+  /// The new rain replaces all properties of the old rain. A `null` value
+  /// removes the rain.
+  ///
+  /// On iOS, a [Snapshotter] does not support rain. The call throws a
+  /// [PlatformException].
+  @experimental
+  Future<void> setStyleRain(Rain? rain) =>
+      _impl.setStyleRain(rain == null ? null : jsonEncode(rain.toJson()));
+
+  /// Returns the style rain, or `null` if the style has no rain.
+  ///
+  /// On iOS, a [Snapshotter] does not support rain. The call throws a
+  /// [PlatformException].
+  @experimental
+  Future<Rain?> getStyleRain() async {
+    final json = await _styleProperties(
+      Rain.propertyNames,
+      _impl.getStyleRainProperty,
+    );
+    return json == null ? null : Rain.fromJson(json);
+  }
+
+  /// Sets the value of a single rain property. [property] is the style
+  /// specification name of the property, for example `"color"`.
+  ///
+  /// [value] is the style-specification value in JSON form: a number, a
+  /// string, a list of numbers, or an expression as a list. Colors are
+  /// strings, for example `"rgba(255, 0, 0, 1)"`. Use-theme values are
+  /// [ColorUseTheme.value] strings.
+  ///
+  /// On iOS, a [Snapshotter] does not support rain. The call throws a
+  /// [PlatformException].
+  @experimental
+  Future<void> setStyleRainProperty(String property, Object value) =>
+      _impl.setStyleRainProperty(property, value);
+
+  /// Reads the [properties] with [read]. Returns the defined values by
+  /// property name, or `null` if no property is defined.
+  Future<Map<String, Object?>?> _styleProperties(
+    List<String> properties,
+    Future<StylePropertyValue> Function(String property) read,
+  ) async {
+    final values = await Future.wait(properties.map(read));
+    final json = <String, Object?>{
+      for (final (index, value) in values.indexed)
+        if (value.kind != StylePropertyValueKind.UNDEFINED)
+          properties[index]: value.value,
+    };
+    return json.isEmpty ? null : json;
+  }
+
   /// Sets all configuration properties for an import from a map.
   Future<void> setStyleImportConfigProperties(
     String importId,
@@ -471,7 +615,7 @@ base class StyleManager {
   /// forwards to [StylePlatformInterface.addStyleLayer].
   Future<void> addLayer(Layer layer, [LayerPosition? position]) async {
     final encoded = await layer.encode();
-    return _impl.addStyleLayer(encoded, null);
+    return _impl.addStyleLayer(encoded, position);
   }
 
   /// Adds a persistent [Layer] to the current style. Persistent layers
@@ -484,7 +628,7 @@ base class StyleManager {
     LayerPosition? position,
   ]) async {
     final encoded = await layer.encode();
-    return _impl.addPersistentStyleLayer(encoded, null);
+    return _impl.addPersistentStyleLayer(encoded, position);
   }
 
   /// Updates an existing layer. Serializes the layer to JSON and forwards

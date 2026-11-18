@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -52,6 +51,7 @@ void main() {
         modelAmbientOcclusionIntensity: 1.0,
         modelCastShadows: true,
         modelColor: Colors.red.value,
+        modelColorUseTheme: ColorUseTheme.none,
         modelColorMixIntensity: 1.0,
         modelCutoffFadeRange: 1.0,
         modelElevationReference: ModelElevationReference.SEA,
@@ -78,6 +78,7 @@ void main() {
     expect(layer.modelAmbientOcclusionIntensity, 1.0);
     expect(layer.modelCastShadows, true);
     expect(layer.modelColor, Colors.red.value);
+    expect(layer.modelColorUseTheme, ColorUseTheme.none);
     expect(layer.modelColorMixIntensity, 1.0);
     expect(layer.modelCutoffFadeRange, 1.0);
     expect(layer.modelElevationReference, ModelElevationReference.SEA);
@@ -140,6 +141,8 @@ void main() {
         modelAmbientOcclusionIntensityExpression: ['number', 1.0],
         modelCastShadows: true,
         modelColorExpression: ['rgba', 255, 0, 0, 1],
+        modelColorUseTheme: ColorUseTheme.useDefault,
+        modelColorUseThemeExpression: ['string', 'none'],
         modelColorMixIntensityExpression: ['number', 1.0],
         modelCutoffFadeRangeExpression: ['number', 1.0],
         modelElevationReferenceExpression: ['string', 'sea'],
@@ -183,6 +186,10 @@ void main() {
     expect(layer.modelAmbientOcclusionIntensity, 1.0);
     expect(layer.modelCastShadows, true);
     expect(layer.modelColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.modelColorUseThemeExpression ?? layer.modelColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.modelColorMixIntensity, 1.0);
     expect(layer.modelCutoffFadeRange, 1.0);
     expect(layer.modelElevationReference, ModelElevationReference.SEA);
@@ -206,4 +213,5 @@ void main() {
     expect(layer.modelType, ModelType.COMMON_3D);
   });
 }
+
 // End of generated file.

@@ -316,6 +316,78 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
+
+    func getFillBridgeGuardRailColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillBridgeGuardRailColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillBridgeGuardRailColorUseTheme(managerId: String, fillBridgeGuardRailColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: fillBridgeGuardRailColorUseTheme)
+            try set(\.fillBridgeGuardRailColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillColorUseTheme(managerId: String, fillColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: fillColorUseTheme)
+            try set(\.fillColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillOutlineColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillOutlineColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillOutlineColorUseTheme(managerId: String, fillOutlineColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: fillOutlineColorUseTheme)
+            try set(\.fillOutlineColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillTunnelStructureColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.fillTunnelStructureColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillTunnelStructureColorUseTheme(managerId: String, fillTunnelStructureColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: fillTunnelStructureColorUseTheme)
+            try set(\.fillTunnelStructureColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 }
 
 extension PolygonAnnotationOptions {
@@ -348,6 +420,18 @@ extension PolygonAnnotationOptions {
         }
         if let fillZOffset {
             annotation.fillZOffset = fillZOffset
+        }
+        if let fillBridgeGuardRailColorUseTheme {
+            annotation.fillBridgeGuardRailColorUseTheme = ColorUseTheme(rawValue: fillBridgeGuardRailColorUseTheme)
+        }
+        if let fillColorUseTheme {
+            annotation.fillColorUseTheme = ColorUseTheme(rawValue: fillColorUseTheme)
+        }
+        if let fillOutlineColorUseTheme {
+            annotation.fillOutlineColorUseTheme = ColorUseTheme(rawValue: fillOutlineColorUseTheme)
+        }
+        if let fillTunnelStructureColorUseTheme {
+            annotation.fillTunnelStructureColorUseTheme = ColorUseTheme(rawValue: fillTunnelStructureColorUseTheme)
         }
         if let isDraggable {
             annotation.isDraggable = isDraggable
@@ -390,6 +474,18 @@ extension PolygonAnnotation {
         if let fillZOffset {
             annotation.fillZOffset = fillZOffset
         }
+        if let fillBridgeGuardRailColorUseTheme {
+            annotation.fillBridgeGuardRailColorUseTheme = ColorUseTheme(rawValue: fillBridgeGuardRailColorUseTheme)
+        }
+        if let fillColorUseTheme {
+            annotation.fillColorUseTheme = ColorUseTheme(rawValue: fillColorUseTheme)
+        }
+        if let fillOutlineColorUseTheme {
+            annotation.fillOutlineColorUseTheme = ColorUseTheme(rawValue: fillOutlineColorUseTheme)
+        }
+        if let fillTunnelStructureColorUseTheme {
+            annotation.fillTunnelStructureColorUseTheme = ColorUseTheme(rawValue: fillTunnelStructureColorUseTheme)
+        }
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
@@ -414,6 +510,10 @@ extension MapboxMaps.PolygonAnnotation {
             fillPattern: fillPattern,
             fillTunnelStructureColor: fillTunnelStructureColor?.intValue,
             fillZOffset: fillZOffset,
+            fillBridgeGuardRailColorUseTheme: fillBridgeGuardRailColorUseTheme?.rawValue,
+            fillColorUseTheme: fillColorUseTheme?.rawValue,
+            fillOutlineColorUseTheme: fillOutlineColorUseTheme?.rawValue,
+            fillTunnelStructureColorUseTheme: fillTunnelStructureColorUseTheme?.rawValue,
             isDraggable: isDraggable,
             customData: customData.compactMapValues { $0?.toAny }
         )

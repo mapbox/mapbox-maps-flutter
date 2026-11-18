@@ -1,6 +1,6 @@
 name: mapbox_maps_flutter
 description: "Official Mapbox Maps SDK for Flutter. Add an interactive map widget that renders Mapbox Vector Tile (MVT) maps. Customize it for Android, iOS, and Web."
-version: 3.36.0-SNAPSHOT-11-07--01-22.git-b94777d
+version: 3.37.0-SNAPSHOT-11-18--01-23.git-cb103df
 homepage: https://www.mapbox.com/maps
 repository: https://github.com/mapbox/mapbox-maps-flutter
 issue_tracker: https://github.com/mapbox/mapbox-maps-flutter/issues
@@ -17,8 +17,8 @@ screenshots:
     path: screenshots/map_styles_turku.webp
 
 environment:
-  sdk: ">=3.10.0 <4.0.0"
-  flutter: ">=3.38.1"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.2"
 
 resolution: workspace
 
@@ -27,9 +27,9 @@ dependencies:
   meta: ^1.17.0
   flutter:
     sdk: flutter
-  mapbox_maps_flutter_platform_interface: ^3.36.0-SNAPSHOT-11-07--01-22.git-b94777d
-  mapbox_maps_flutter_mobile: ^3.36.0-SNAPSHOT-11-07--01-22.git-b94777d
-  mapbox_maps_flutter_web: ^3.36.0-SNAPSHOT-11-07--01-22.git-b94777d
+  mapbox_maps_flutter_platform_interface: ^3.37.0-SNAPSHOT-11-18--01-23.git-cb103df
+  mapbox_maps_flutter_mobile: ^3.37.0-SNAPSHOT-11-18--01-23.git-cb103df
+  mapbox_maps_flutter_web: ^3.37.0-SNAPSHOT-11-18--01-23.git-cb103df
 
 dev_dependencies:
   flutter_test:

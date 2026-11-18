@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -24,18 +24,24 @@ final class HillshadeLayer extends Layer {
 
     this.hillshadeAccentColor,
     this.hillshadeAccentColorExpression,
+    this.hillshadeAccentColorUseTheme,
+    this.hillshadeAccentColorUseThemeExpression,
     this.hillshadeEmissiveStrength,
     this.hillshadeEmissiveStrengthExpression,
     this.hillshadeExaggeration,
     this.hillshadeExaggerationExpression,
     this.hillshadeHighlightColor,
     this.hillshadeHighlightColorExpression,
+    this.hillshadeHighlightColorUseTheme,
+    this.hillshadeHighlightColorUseThemeExpression,
     this.hillshadeIlluminationAnchor,
     this.hillshadeIlluminationAnchorExpression,
     this.hillshadeIlluminationDirection,
     this.hillshadeIlluminationDirectionExpression,
     this.hillshadeShadowColor,
     this.hillshadeShadowColorExpression,
+    this.hillshadeShadowColorUseTheme,
+    this.hillshadeShadowColorUseThemeExpression,
   });
 
   @override
@@ -54,6 +60,14 @@ final class HillshadeLayer extends Layer {
   /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
   /// Default value: "#000000".
   List<Object>? hillshadeAccentColorExpression;
+
+  /// Sets if the color theme of the style changes `hillshadeAccentColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? hillshadeAccentColorUseTheme;
+
+  /// Sets if the color theme of the style changes `hillshadeAccentColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? hillshadeAccentColorUseThemeExpression;
 
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 0. Minimum value: 0. The unit of hillshadeEmissiveStrength is in intensity.
@@ -79,6 +93,14 @@ final class HillshadeLayer extends Layer {
   /// Default value: "#FFFFFF".
   List<Object>? hillshadeHighlightColorExpression;
 
+  /// Sets if the color theme of the style changes `hillshadeHighlightColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? hillshadeHighlightColorUseTheme;
+
+  /// Sets if the color theme of the style changes `hillshadeHighlightColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? hillshadeHighlightColorUseThemeExpression;
+
   /// Direction of light source when map is rotated.
   /// Default value: "viewport".
   HillshadeIlluminationAnchor? hillshadeIlluminationAnchor;
@@ -103,6 +125,14 @@ final class HillshadeLayer extends Layer {
   /// Default value: "#000000".
   List<Object>? hillshadeShadowColorExpression;
 
+  /// Sets if the color theme of the style changes `hillshadeShadowColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? hillshadeShadowColorUseTheme;
+
+  /// Sets if the color theme of the style changes `hillshadeShadowColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? hillshadeShadowColorUseThemeExpression;
+
   @override
   @internal
   Future<String> encode() async {
@@ -124,6 +154,14 @@ final class HillshadeLayer extends Layer {
       paint["hillshade-accent-color"] = hillshadeAccentColor?.toRGBA();
     }
 
+    if (hillshadeAccentColorUseThemeExpression != null) {
+      paint["hillshade-accent-color-use-theme"] =
+          hillshadeAccentColorUseThemeExpression;
+    } else if (hillshadeAccentColorUseTheme != null) {
+      paint["hillshade-accent-color-use-theme"] =
+          hillshadeAccentColorUseTheme?.value;
+    }
+
     if (hillshadeEmissiveStrengthExpression != null) {
       paint["hillshade-emissive-strength"] =
           hillshadeEmissiveStrengthExpression;
@@ -141,6 +179,14 @@ final class HillshadeLayer extends Layer {
       paint["hillshade-highlight-color"] = hillshadeHighlightColorExpression;
     } else if (hillshadeHighlightColor != null) {
       paint["hillshade-highlight-color"] = hillshadeHighlightColor?.toRGBA();
+    }
+
+    if (hillshadeHighlightColorUseThemeExpression != null) {
+      paint["hillshade-highlight-color-use-theme"] =
+          hillshadeHighlightColorUseThemeExpression;
+    } else if (hillshadeHighlightColorUseTheme != null) {
+      paint["hillshade-highlight-color-use-theme"] =
+          hillshadeHighlightColorUseTheme?.value;
     }
 
     if (hillshadeIlluminationAnchorExpression != null) {
@@ -164,6 +210,14 @@ final class HillshadeLayer extends Layer {
       paint["hillshade-shadow-color"] = hillshadeShadowColorExpression;
     } else if (hillshadeShadowColor != null) {
       paint["hillshade-shadow-color"] = hillshadeShadowColor?.toRGBA();
+    }
+
+    if (hillshadeShadowColorUseThemeExpression != null) {
+      paint["hillshade-shadow-color-use-theme"] =
+          hillshadeShadowColorUseThemeExpression;
+    } else if (hillshadeShadowColorUseTheme != null) {
+      paint["hillshade-shadow-color-use-theme"] =
+          hillshadeShadowColorUseTheme?.value;
     }
 
     var properties = {
@@ -217,10 +271,17 @@ final class HillshadeLayer extends Layer {
             ),
       visibilityExpression: styleOptionalCastList(map["layout"]["visibility"]),
       filter: styleOptionalCastList(map["filter"]),
-      hillshadeAccentColor: (map["paint"]["hillshade-accent-color"] as List?)
-          ?.toRGBAInt(),
+      hillshadeAccentColor: styleColorFromJson(
+        map["paint"]["hillshade-accent-color"],
+      ),
       hillshadeAccentColorExpression: styleOptionalCastList(
         map["paint"]["hillshade-accent-color"],
+      ),
+      hillshadeAccentColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["hillshade-accent-color-use-theme"],
+      ),
+      hillshadeAccentColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["hillshade-accent-color-use-theme"],
       ),
       hillshadeEmissiveStrength: styleOptionalCast(
         map["paint"]["hillshade-emissive-strength"],
@@ -234,10 +295,17 @@ final class HillshadeLayer extends Layer {
       hillshadeExaggerationExpression: styleOptionalCastList(
         map["paint"]["hillshade-exaggeration"],
       ),
-      hillshadeHighlightColor:
-          (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
+      hillshadeHighlightColor: styleColorFromJson(
+        map["paint"]["hillshade-highlight-color"],
+      ),
       hillshadeHighlightColorExpression: styleOptionalCastList(
         map["paint"]["hillshade-highlight-color"],
+      ),
+      hillshadeHighlightColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["hillshade-highlight-color-use-theme"],
+      ),
+      hillshadeHighlightColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["hillshade-highlight-color-use-theme"],
       ),
       hillshadeIlluminationAnchor:
           map["paint"]["hillshade-illumination-anchor"] == null
@@ -257,10 +325,17 @@ final class HillshadeLayer extends Layer {
       hillshadeIlluminationDirectionExpression: styleOptionalCastList(
         map["paint"]["hillshade-illumination-direction"],
       ),
-      hillshadeShadowColor: (map["paint"]["hillshade-shadow-color"] as List?)
-          ?.toRGBAInt(),
+      hillshadeShadowColor: styleColorFromJson(
+        map["paint"]["hillshade-shadow-color"],
+      ),
       hillshadeShadowColorExpression: styleOptionalCastList(
         map["paint"]["hillshade-shadow-color"],
+      ),
+      hillshadeShadowColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["hillshade-shadow-color-use-theme"],
+      ),
+      hillshadeShadowColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["hillshade-shadow-color-use-theme"],
       ),
     );
   }
