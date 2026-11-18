@@ -42,6 +42,8 @@
   * [Android][iOS] Annotations: for example `CircleAnnotationOptions.circleColorUseTheme` and `CircleAnnotationManager.setCircleColorUseTheme`.
 * Add experimental atmosphere, snow and rain APIs: `setStyleAtmosphere`, `setStyleSnow`, `setStyleRain`, their getters, and `setStyleAtmosphereProperty`, `setStyleSnowProperty` and `setStyleRainProperty`. Each color property has a `*UseTheme` field. On web, snow and rain do not support `*UseTheme`.
 
+### 3.35.1
+
 ### 3.35.0-rc.1
 
 ### 3.35.0
