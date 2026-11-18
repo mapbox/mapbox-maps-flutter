@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -52,12 +51,14 @@ void main() {
         circleSortKey: 1.0,
         circleBlur: 1.0,
         circleColor: Colors.red.value,
+        circleColorUseTheme: ColorUseTheme.none,
         circleEmissiveStrength: 1.0,
         circleOpacity: 1.0,
         circlePitchAlignment: CirclePitchAlignment.MAP,
         circlePitchScale: CirclePitchScale.MAP,
         circleRadius: 1.0,
         circleStrokeColor: Colors.red.value,
+        circleStrokeColorUseTheme: ColorUseTheme.none,
         circleStrokeOpacity: 1.0,
         circleStrokeWidth: 1.0,
         circleTranslate: [0.0, 1.0],
@@ -74,12 +75,14 @@ void main() {
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColor, Colors.red.value);
+    expect(layer.circleColorUseTheme, ColorUseTheme.none);
     expect(layer.circleEmissiveStrength, 1.0);
     expect(layer.circleOpacity, 1.0);
     expect(layer.circlePitchAlignment, CirclePitchAlignment.MAP);
     expect(layer.circlePitchScale, CirclePitchScale.MAP);
     expect(layer.circleRadius, 1.0);
     expect(layer.circleStrokeColor, Colors.red.value);
+    expect(layer.circleStrokeColorUseTheme, ColorUseTheme.none);
     expect(layer.circleStrokeOpacity, 1.0);
     expect(layer.circleStrokeWidth, 1.0);
     expect(layer.circleTranslate, [0.0, 1.0]);
@@ -125,12 +128,16 @@ void main() {
         circleSortKeyExpression: ['number', 1.0],
         circleBlurExpression: ['number', 1.0],
         circleColorExpression: ['rgba', 255, 0, 0, 1],
+        circleColorUseTheme: ColorUseTheme.useDefault,
+        circleColorUseThemeExpression: ['string', 'none'],
         circleEmissiveStrengthExpression: ['number', 1.0],
         circleOpacityExpression: ['number', 1.0],
         circlePitchAlignmentExpression: ['string', 'map'],
         circlePitchScaleExpression: ['string', 'map'],
         circleRadiusExpression: ['number', 1.0],
         circleStrokeColorExpression: ['rgba', 255, 0, 0, 1],
+        circleStrokeColorUseTheme: ColorUseTheme.useDefault,
+        circleStrokeColorUseThemeExpression: ['string', 'none'],
         circleStrokeOpacityExpression: ['number', 1.0],
         circleStrokeWidthExpression: ['number', 1.0],
         circleTranslateExpression: [
@@ -155,12 +162,21 @@ void main() {
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.circleColorUseThemeExpression ?? layer.circleColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.circleEmissiveStrength, 1.0);
     expect(layer.circleOpacity, 1.0);
     expect(layer.circlePitchAlignment, CirclePitchAlignment.MAP);
     expect(layer.circlePitchScale, CirclePitchScale.MAP);
     expect(layer.circleRadius, 1.0);
     expect(layer.circleStrokeColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.circleStrokeColorUseThemeExpression ??
+          layer.circleStrokeColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.circleStrokeOpacity, 1.0);
     expect(layer.circleStrokeWidth, 1.0);
     expect(layer.circleTranslate, [0.0, 1.0]);

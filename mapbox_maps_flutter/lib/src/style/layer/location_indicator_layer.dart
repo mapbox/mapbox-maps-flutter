@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -425,13 +425,15 @@ final class LocationIndicatorLayer extends Layer {
       accuracyRadiusExpression: styleOptionalCastList(
         map["paint"]["accuracy-radius"],
       ),
-      accuracyRadiusBorderColor:
-          (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
+      accuracyRadiusBorderColor: styleColorFromJson(
+        map["paint"]["accuracy-radius-border-color"],
+      ),
       accuracyRadiusBorderColorExpression: styleOptionalCastList(
         map["paint"]["accuracy-radius-border-color"],
       ),
-      accuracyRadiusColor: (map["paint"]["accuracy-radius-color"] as List?)
-          ?.toRGBAInt(),
+      accuracyRadiusColor: styleColorFromJson(
+        map["paint"]["accuracy-radius-color"],
+      ),
       accuracyRadiusColorExpression: styleOptionalCastList(
         map["paint"]["accuracy-radius-color"],
       ),
@@ -445,8 +447,9 @@ final class LocationIndicatorLayer extends Layer {
       bearingImageSizeExpression: styleOptionalCastList(
         map["paint"]["bearing-image-size"],
       ),
-      emphasisCircleColor: (map["paint"]["emphasis-circle-color"] as List?)
-          ?.toRGBAInt(),
+      emphasisCircleColor: styleColorFromJson(
+        map["paint"]["emphasis-circle-color"],
+      ),
       emphasisCircleColorExpression: styleOptionalCastList(
         map["paint"]["emphasis-circle-color"],
       ),

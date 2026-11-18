@@ -11,6 +11,7 @@ library;
 
 export 'src/public/android_platform_view_hosting_mode.dart';
 export 'src/public/cancelable.dart';
+export 'src/public/color_theme.dart';
 export 'src/public/debug_options.dart';
 export 'src/public/default_location_puck_2d.dart';
 export 'src/public/events.dart';

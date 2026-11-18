@@ -1,7 +1,7 @@
 // This file is generated.
 
 /// The style-spec property names of each light type, with the
-/// `-transition` names of the properties that support a transition.
+/// `-use-theme` and `-transition` names of the properties that support them.
 const Map<String, Set<String>> lightPropertyNames = {
   'flat': {
     'anchor',
@@ -12,11 +12,18 @@ const Map<String, Set<String>> lightPropertyNames = {
     'intensity',
     'intensity-transition',
   },
-  'ambient': {'color', 'color-transition', 'intensity', 'intensity-transition'},
+  'ambient': {
+    'color',
+    'color-use-theme',
+    'color-transition',
+    'intensity',
+    'intensity-transition',
+  },
   'directional': {
     'direction',
     'direction-transition',
     'color',
+    'color-use-theme',
     'color-transition',
     'intensity',
     'intensity-transition',

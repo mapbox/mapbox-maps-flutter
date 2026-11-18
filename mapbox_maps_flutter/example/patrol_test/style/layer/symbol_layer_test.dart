@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -94,6 +93,7 @@ void main() {
         textVariableAnchor: ["center", "left"],
         textWritingMode: ["horizontal", "vertical"],
         iconColor: Colors.red.value,
+        iconColorUseTheme: ColorUseTheme.none,
         iconColorBrightnessMax: 1.0,
         iconColorBrightnessMin: 1.0,
         iconColorContrast: 1.0,
@@ -101,6 +101,7 @@ void main() {
         iconEmissiveStrength: 1.0,
         iconHaloBlur: 1.0,
         iconHaloColor: Colors.red.value,
+        iconHaloColorUseTheme: ColorUseTheme.none,
         iconHaloWidth: 1.0,
         iconImageCrossFade: 1.0,
         iconOcclusionOpacity: 1.0,
@@ -110,9 +111,11 @@ void main() {
         occlusionOpacityMode: OcclusionOpacityMode.ANCHOR,
         symbolZOffset: 1.0,
         textColor: Colors.red.value,
+        textColorUseTheme: ColorUseTheme.none,
         textEmissiveStrength: 1.0,
         textHaloBlur: 1.0,
         textHaloColor: Colors.red.value,
+        textHaloColorUseTheme: ColorUseTheme.none,
         textHaloWidth: 1.0,
         textOcclusionOpacity: 1.0,
         textOpacity: 1.0,
@@ -172,6 +175,7 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColor, Colors.red.value);
+    expect(layer.iconColorUseTheme, ColorUseTheme.none);
     expect(layer.iconColorBrightnessMax, 1.0);
     expect(layer.iconColorBrightnessMin, 1.0);
     expect(layer.iconColorContrast, 1.0);
@@ -179,6 +183,7 @@ void main() {
     expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
     expect(layer.iconHaloColor, Colors.red.value);
+    expect(layer.iconHaloColorUseTheme, ColorUseTheme.none);
     expect(layer.iconHaloWidth, 1.0);
     expect(layer.iconImageCrossFade, 1.0);
     expect(layer.iconOcclusionOpacity, 1.0);
@@ -190,9 +195,11 @@ void main() {
     }
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColor, Colors.red.value);
+    expect(layer.textColorUseTheme, ColorUseTheme.none);
     expect(layer.textEmissiveStrength, 1.0);
     expect(layer.textHaloBlur, 1.0);
     expect(layer.textHaloColor, Colors.red.value);
+    expect(layer.textHaloColorUseTheme, ColorUseTheme.none);
     expect(layer.textHaloWidth, 1.0);
     expect(layer.textOcclusionOpacity, 1.0);
     expect(layer.textOpacity, 1.0);
@@ -305,6 +312,8 @@ void main() {
           ["horizontal", "vertical"],
         ],
         iconColorExpression: ['rgba', 255, 0, 0, 1],
+        iconColorUseTheme: ColorUseTheme.useDefault,
+        iconColorUseThemeExpression: ['string', 'none'],
         iconColorBrightnessMaxExpression: ['number', 1.0],
         iconColorBrightnessMinExpression: ['number', 1.0],
         iconColorContrastExpression: ['number', 1.0],
@@ -312,6 +321,8 @@ void main() {
         iconEmissiveStrengthExpression: ['number', 1.0],
         iconHaloBlurExpression: ['number', 1.0],
         iconHaloColorExpression: ['rgba', 255, 0, 0, 1],
+        iconHaloColorUseTheme: ColorUseTheme.useDefault,
+        iconHaloColorUseThemeExpression: ['string', 'none'],
         iconHaloWidthExpression: ['number', 1.0],
         iconImageCrossFadeExpression: ['number', 1.0],
         iconOcclusionOpacityExpression: ['number', 1.0],
@@ -324,9 +335,13 @@ void main() {
         occlusionOpacityMode: OcclusionOpacityMode.ANCHOR,
         symbolZOffsetExpression: ['number', 1.0],
         textColorExpression: ['rgba', 255, 0, 0, 1],
+        textColorUseTheme: ColorUseTheme.useDefault,
+        textColorUseThemeExpression: ['string', 'none'],
         textEmissiveStrengthExpression: ['number', 1.0],
         textHaloBlurExpression: ['number', 1.0],
         textHaloColorExpression: ['rgba', 255, 0, 0, 1],
+        textHaloColorUseTheme: ColorUseTheme.useDefault,
+        textHaloColorUseThemeExpression: ['string', 'none'],
         textHaloWidthExpression: ['number', 1.0],
         textOcclusionOpacityExpression: ['number', 1.0],
         textOpacityExpression: ['number', 1.0],
@@ -394,6 +409,10 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.iconColorUseThemeExpression ?? layer.iconColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.iconColorBrightnessMax, 1.0);
     expect(layer.iconColorBrightnessMin, 1.0);
     expect(layer.iconColorContrast, 1.0);
@@ -401,6 +420,10 @@ void main() {
     expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
     expect(layer.iconHaloColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.iconHaloColorUseThemeExpression ?? layer.iconHaloColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.iconHaloWidth, 1.0);
     expect(layer.iconImageCrossFade, 1.0);
     expect(layer.iconOcclusionOpacity, 1.0);
@@ -412,9 +435,17 @@ void main() {
     }
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.textColorUseThemeExpression ?? layer.textColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.textEmissiveStrength, 1.0);
     expect(layer.textHaloBlur, 1.0);
     expect(layer.textHaloColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.textHaloColorUseThemeExpression ?? layer.textHaloColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.textHaloWidth, 1.0);
     expect(layer.textOcclusionOpacity, 1.0);
     expect(layer.textOpacity, 1.0);

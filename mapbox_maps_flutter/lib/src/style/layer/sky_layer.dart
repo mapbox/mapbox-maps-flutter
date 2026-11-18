@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -22,14 +22,20 @@ final class SkyLayer extends Layer {
 
     this.skyAtmosphereColor,
     this.skyAtmosphereColorExpression,
+    this.skyAtmosphereColorUseTheme,
+    this.skyAtmosphereColorUseThemeExpression,
     this.skyAtmosphereHaloColor,
     this.skyAtmosphereHaloColorExpression,
+    this.skyAtmosphereHaloColorUseTheme,
+    this.skyAtmosphereHaloColorUseThemeExpression,
     this.skyAtmosphereSun,
     this.skyAtmosphereSunExpression,
     this.skyAtmosphereSunIntensity,
     this.skyAtmosphereSunIntensityExpression,
     this.skyGradient,
     this.skyGradientExpression,
+    this.skyGradientUseTheme,
+    this.skyGradientUseThemeExpression,
     this.skyGradientCenter,
     this.skyGradientCenterExpression,
     this.skyGradientRadius,
@@ -51,6 +57,14 @@ final class SkyLayer extends Layer {
   /// Default value: "white".
   List<Object>? skyAtmosphereColorExpression;
 
+  /// Sets if the color theme of the style changes `skyAtmosphereColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? skyAtmosphereColorUseTheme;
+
+  /// Sets if the color theme of the style changes `skyAtmosphereColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? skyAtmosphereColorUseThemeExpression;
+
   /// A color applied to the atmosphere sun halo. The alpha channel describes how strongly the sun halo is represented in an atmosphere sky layer.
   /// Default value: "white".
   int? skyAtmosphereHaloColor;
@@ -58,6 +72,14 @@ final class SkyLayer extends Layer {
   /// A color applied to the atmosphere sun halo. The alpha channel describes how strongly the sun halo is represented in an atmosphere sky layer.
   /// Default value: "white".
   List<Object>? skyAtmosphereHaloColorExpression;
+
+  /// Sets if the color theme of the style changes `skyAtmosphereHaloColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? skyAtmosphereHaloColorUseTheme;
+
+  /// Sets if the color theme of the style changes `skyAtmosphereHaloColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? skyAtmosphereHaloColorUseThemeExpression;
 
   /// Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0 degree north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0 degree is directly above, at zenith, and 90 degree at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
   /// Minimum value: [0,0]. Maximum value: [360,180]. The unit of skyAtmosphereSun is in degrees.
@@ -83,6 +105,14 @@ final class SkyLayer extends Layer {
   /// Default value: ["interpolate",["linear"],["sky-radial-progress"],0.8,"#87ceeb",1,"white"].
   List<Object>? skyGradientExpression;
 
+  /// Sets if the color theme of the style changes `skyGradient`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? skyGradientUseTheme;
+
+  /// Sets if the color theme of the style changes `skyGradient`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? skyGradientUseThemeExpression;
+
   /// Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0 degree north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0 degree is directly above, at zenith, and 90 degree at the horizon.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [360,180]. The unit of skyGradientCenter is in degrees.
   List<double?>? skyGradientCenter;
@@ -91,11 +121,11 @@ final class SkyLayer extends Layer {
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [360,180]. The unit of skyGradientCenter is in degrees.
   List<Object>? skyGradientCenterExpression;
 
-  /// The angular distance (measured in degrees) from `sky-gradient-center` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `sky-gradient-center`.
+  /// The angular distance from `sky-gradient-center` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `sky-gradient-center`.
   /// Default value: 90. Value range: [0, 180]
   double? skyGradientRadius;
 
-  /// The angular distance (measured in degrees) from `sky-gradient-center` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `sky-gradient-center`.
+  /// The angular distance from `sky-gradient-center` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `sky-gradient-center`.
   /// Default value: 90. Value range: [0, 180]
   List<Object>? skyGradientRadiusExpression;
 
@@ -136,10 +166,26 @@ final class SkyLayer extends Layer {
       paint["sky-atmosphere-color"] = skyAtmosphereColor?.toRGBA();
     }
 
+    if (skyAtmosphereColorUseThemeExpression != null) {
+      paint["sky-atmosphere-color-use-theme"] =
+          skyAtmosphereColorUseThemeExpression;
+    } else if (skyAtmosphereColorUseTheme != null) {
+      paint["sky-atmosphere-color-use-theme"] =
+          skyAtmosphereColorUseTheme?.value;
+    }
+
     if (skyAtmosphereHaloColorExpression != null) {
       paint["sky-atmosphere-halo-color"] = skyAtmosphereHaloColorExpression;
     } else if (skyAtmosphereHaloColor != null) {
       paint["sky-atmosphere-halo-color"] = skyAtmosphereHaloColor?.toRGBA();
+    }
+
+    if (skyAtmosphereHaloColorUseThemeExpression != null) {
+      paint["sky-atmosphere-halo-color-use-theme"] =
+          skyAtmosphereHaloColorUseThemeExpression;
+    } else if (skyAtmosphereHaloColorUseTheme != null) {
+      paint["sky-atmosphere-halo-color-use-theme"] =
+          skyAtmosphereHaloColorUseTheme?.value;
     }
 
     if (skyAtmosphereSunExpression != null) {
@@ -159,6 +205,12 @@ final class SkyLayer extends Layer {
       paint["sky-gradient"] = skyGradientExpression;
     } else if (skyGradient != null) {
       paint["sky-gradient"] = skyGradient?.toRGBA();
+    }
+
+    if (skyGradientUseThemeExpression != null) {
+      paint["sky-gradient-use-theme"] = skyGradientUseThemeExpression;
+    } else if (skyGradientUseTheme != null) {
+      paint["sky-gradient-use-theme"] = skyGradientUseTheme?.value;
     }
 
     if (skyGradientCenterExpression != null) {
@@ -230,15 +282,29 @@ final class SkyLayer extends Layer {
             ),
       visibilityExpression: styleOptionalCastList(map["layout"]["visibility"]),
       filter: styleOptionalCastList(map["filter"]),
-      skyAtmosphereColor: (map["paint"]["sky-atmosphere-color"] as List?)
-          ?.toRGBAInt(),
+      skyAtmosphereColor: styleColorFromJson(
+        map["paint"]["sky-atmosphere-color"],
+      ),
       skyAtmosphereColorExpression: styleOptionalCastList(
         map["paint"]["sky-atmosphere-color"],
       ),
-      skyAtmosphereHaloColor:
-          (map["paint"]["sky-atmosphere-halo-color"] as List?)?.toRGBAInt(),
+      skyAtmosphereColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["sky-atmosphere-color-use-theme"],
+      ),
+      skyAtmosphereColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["sky-atmosphere-color-use-theme"],
+      ),
+      skyAtmosphereHaloColor: styleColorFromJson(
+        map["paint"]["sky-atmosphere-halo-color"],
+      ),
       skyAtmosphereHaloColorExpression: styleOptionalCastList(
         map["paint"]["sky-atmosphere-halo-color"],
+      ),
+      skyAtmosphereHaloColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["sky-atmosphere-halo-color-use-theme"],
+      ),
+      skyAtmosphereHaloColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["sky-atmosphere-halo-color-use-theme"],
       ),
       skyAtmosphereSun: (map["paint"]["sky-atmosphere-sun"] as List?)
           ?.map<double?>((e) => e.toDouble())
@@ -252,9 +318,15 @@ final class SkyLayer extends Layer {
       skyAtmosphereSunIntensityExpression: styleOptionalCastList(
         map["paint"]["sky-atmosphere-sun-intensity"],
       ),
-      skyGradient: (map["paint"]["sky-gradient"] as List?)?.toRGBAInt(),
+      skyGradient: styleColorFromJson(map["paint"]["sky-gradient"]),
       skyGradientExpression: styleOptionalCastList(
         map["paint"]["sky-gradient"],
+      ),
+      skyGradientUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["sky-gradient-use-theme"],
+      ),
+      skyGradientUseThemeExpression: styleOptionalCastList(
+        map["paint"]["sky-gradient-use-theme"],
       ),
       skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)
           ?.map<double?>((e) => e.toDouble())

@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -32,6 +32,8 @@ final class ModelLayer extends Layer {
     this.modelCastShadowsExpression,
     this.modelColor,
     this.modelColorExpression,
+    this.modelColorUseTheme,
+    this.modelColorUseThemeExpression,
     this.modelColorMixIntensity,
     this.modelColorMixIntensityExpression,
     this.modelCutoffFadeRange,
@@ -110,6 +112,14 @@ final class ModelLayer extends Layer {
   /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: "#ffffff".
   List<Object>? modelColorExpression;
+
+  /// Sets if the color theme of the style changes `modelColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? modelColorUseTheme;
+
+  /// Sets if the color theme of the style changes `modelColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? modelColorUseThemeExpression;
 
   /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix. Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 1]
@@ -203,12 +213,12 @@ final class ModelLayer extends Layer {
   /// Supported platforms: Android, iOS.
   List<Object>? modelScaleModeExpression;
 
-  /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
-  /// Default value: [0,0,0].
+  /// The translation of the model in form of [longitudal, latitudal, altitude] offsets.
+  /// Default value: [0,0,0]. The unit of modelTranslation is in meters.
   List<double?>? modelTranslation;
 
-  /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
-  /// Default value: [0,0,0].
+  /// The translation of the model in form of [longitudal, latitudal, altitude] offsets.
+  /// Default value: [0,0,0]. The unit of modelTranslation is in meters.
   List<Object>? modelTranslationExpression;
 
   /// Defines rendering behavior of model in respect to other 3D scene objects.
@@ -267,6 +277,12 @@ final class ModelLayer extends Layer {
       paint["model-color"] = modelColorExpression;
     } else if (modelColor != null) {
       paint["model-color"] = modelColor?.toRGBA();
+    }
+
+    if (modelColorUseThemeExpression != null) {
+      paint["model-color-use-theme"] = modelColorUseThemeExpression;
+    } else if (modelColorUseTheme != null) {
+      paint["model-color-use-theme"] = modelColorUseTheme?.value;
     }
 
     if (modelColorMixIntensityExpression != null) {
@@ -423,8 +439,14 @@ final class ModelLayer extends Layer {
       modelCastShadowsExpression: styleOptionalCastList(
         map["paint"]["model-cast-shadows"],
       ),
-      modelColor: (map["paint"]["model-color"] as List?)?.toRGBAInt(),
+      modelColor: styleColorFromJson(map["paint"]["model-color"]),
       modelColorExpression: styleOptionalCastList(map["paint"]["model-color"]),
+      modelColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["model-color-use-theme"],
+      ),
+      modelColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["model-color-use-theme"],
+      ),
       modelColorMixIntensity: styleOptionalCast(
         map["paint"]["model-color-mix-intensity"],
       ),

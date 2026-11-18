@@ -225,6 +225,12 @@ protocol _PolylineAnnotationMessenger {
   func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setLineWidth(managerId: String, lineWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineBorderColorUseTheme(managerId: String, lineBorderColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineBorderColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setLineColorUseTheme(managerId: String, lineColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setLineTrimColorUseTheme(managerId: String, lineTrimColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineTrimColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -1406,6 +1412,111 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineWidthChannel.setMessageHandler(nil)
+    }
+    let setLineBorderColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineBorderColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineBorderColorUseThemeArg = args[1] as! String
+        api.setLineBorderColorUseTheme(managerId: managerIdArg, lineBorderColorUseTheme: lineBorderColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineBorderColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getLineBorderColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineBorderColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineBorderColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineBorderColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setLineColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineColorUseThemeArg = args[1] as! String
+        api.setLineColorUseTheme(managerId: managerIdArg, lineColorUseTheme: lineColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getLineColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setLineTrimColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineTrimColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineTrimColorUseThemeArg = args[1] as! String
+        api.setLineTrimColorUseTheme(managerId: managerIdArg, lineTrimColorUseTheme: lineTrimColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineTrimColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getLineTrimColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineTrimColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineTrimColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineTrimColorUseThemeChannel.setMessageHandler(nil)
     }
   }
 }

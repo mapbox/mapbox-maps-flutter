@@ -166,6 +166,14 @@ protocol _PolygonAnnotationMessenger {
   func getFillTunnelStructureColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setFillZOffset(managerId: String, fillZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setFillBridgeGuardRailColorUseTheme(managerId: String, fillBridgeGuardRailColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillBridgeGuardRailColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setFillColorUseTheme(managerId: String, fillColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setFillOutlineColorUseTheme(managerId: String, fillOutlineColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillOutlineColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func setFillTunnelStructureColorUseTheme(managerId: String, fillTunnelStructureColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillTunnelStructureColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -787,6 +795,146 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       getFillZOffsetChannel.setMessageHandler(nil)
+    }
+    let setFillBridgeGuardRailColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillBridgeGuardRailColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillBridgeGuardRailColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillBridgeGuardRailColorUseThemeArg = args[1] as! String
+        api.setFillBridgeGuardRailColorUseTheme(managerId: managerIdArg, fillBridgeGuardRailColorUseTheme: fillBridgeGuardRailColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillBridgeGuardRailColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getFillBridgeGuardRailColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillBridgeGuardRailColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillBridgeGuardRailColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillBridgeGuardRailColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillBridgeGuardRailColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setFillColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillColorUseThemeArg = args[1] as! String
+        api.setFillColorUseTheme(managerId: managerIdArg, fillColorUseTheme: fillColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getFillColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setFillOutlineColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOutlineColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillOutlineColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillOutlineColorUseThemeArg = args[1] as! String
+        api.setFillOutlineColorUseTheme(managerId: managerIdArg, fillOutlineColorUseTheme: fillOutlineColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillOutlineColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getFillOutlineColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOutlineColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillOutlineColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillOutlineColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillOutlineColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let setFillTunnelStructureColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTunnelStructureColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillTunnelStructureColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillTunnelStructureColorUseThemeArg = args[1] as! String
+        api.setFillTunnelStructureColorUseTheme(managerId: managerIdArg, fillTunnelStructureColorUseTheme: fillTunnelStructureColorUseThemeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillTunnelStructureColorUseThemeChannel.setMessageHandler(nil)
+    }
+    let getFillTunnelStructureColorUseThemeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTunnelStructureColorUseTheme\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillTunnelStructureColorUseThemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillTunnelStructureColorUseTheme(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillTunnelStructureColorUseThemeChannel.setMessageHandler(nil)
     }
   }
 }

@@ -661,12 +661,12 @@ class PointAnnotationManager extends BaseAnnotationManager
   Future<OcclusionOpacityMode?> getOcclusionOpacityMode() =>
       _annotationMessenger.getOcclusionOpacityMode(id);
 
-  /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation from the ground. Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   @override
   Future<void> setSymbolZOffset(double symbolZOffset) =>
       _annotationMessenger.setSymbolZOffset(id, symbolZOffset);
 
-  /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation from the ground. Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
   @override
   Future<double?> getSymbolZOffset() =>
       _annotationMessenger.getSymbolZOffset(id);
@@ -757,6 +757,64 @@ class PointAnnotationManager extends BaseAnnotationManager
   @override
   Future<TextTranslateAnchor?> getTextTranslateAnchor() =>
       _annotationMessenger.getTextTranslateAnchor(id);
+
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setIconColorUseTheme(ColorUseTheme iconColorUseTheme) =>
+      _annotationMessenger.setIconColorUseTheme(id, iconColorUseTheme.value);
+
+  /// Whether the style color theme applies to `iconColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getIconColorUseTheme() => _annotationMessenger
+      .getIconColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setIconHaloColorUseTheme(ColorUseTheme iconHaloColorUseTheme) =>
+      _annotationMessenger.setIconHaloColorUseTheme(
+        id,
+        iconHaloColorUseTheme.value,
+      );
+
+  /// Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getIconHaloColorUseTheme() => _annotationMessenger
+      .getIconHaloColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setTextColorUseTheme(ColorUseTheme textColorUseTheme) =>
+      _annotationMessenger.setTextColorUseTheme(id, textColorUseTheme.value);
+
+  /// Whether the style color theme applies to `textColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getTextColorUseTheme() => _annotationMessenger
+      .getTextColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setTextHaloColorUseTheme(ColorUseTheme textHaloColorUseTheme) =>
+      _annotationMessenger.setTextHaloColorUseTheme(
+        id,
+        textHaloColorUseTheme.value,
+      );
+
+  /// Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getTextHaloColorUseTheme() => _annotationMessenger
+      .getTextHaloColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
 }
 
 // End of generated file.

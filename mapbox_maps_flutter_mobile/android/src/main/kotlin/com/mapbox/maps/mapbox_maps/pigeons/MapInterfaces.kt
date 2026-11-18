@@ -3570,6 +3570,79 @@ interface StyleManager {
    */
   fun setStyleImportConfigProperty(importId: String, config: String, value: Any)
   /**
+   * Sets the style color theme. A `null` value removes the color theme.
+   *
+   * @param data The `data` of the `color-theme`: a base64-encoded PNG LUT, or
+   * an expression that evaluates to one.
+   */
+  fun setStyleColorTheme(data: Any?)
+  /**
+   * Sets the color theme of a style import. This overrides the color theme
+   * of the imported style. A `null` value removes the override.
+   *
+   * @param importId Identifier of the style import.
+   * @param data The `data` of the `color-theme`: a base64-encoded PNG LUT, or
+   * an expression that evaluates to one.
+   */
+  fun setStyleImportColorTheme(importId: String, data: Any?)
+  /**
+   * Sets the style atmosphere. A `null` value removes the atmosphere.
+   *
+   * @param properties The JSON-encoded `fog` properties of the style.
+   */
+  fun setStyleAtmosphere(properties: String?)
+  /**
+   * Gets the value of a style atmosphere property.
+   *
+   * @param property The style atmosphere property name.
+   */
+  fun getStyleAtmosphereProperty(property: String): StylePropertyValue
+  /**
+   * Sets the value of a style atmosphere property.
+   *
+   * @param property The style atmosphere property name.
+   * @param value The style atmosphere property value.
+   */
+  fun setStyleAtmosphereProperty(property: String, value: Any)
+  /**
+   * Sets the style snow. A `null` value removes the snow.
+   *
+   * @param properties The JSON-encoded `snow` properties of the style.
+   */
+  fun setStyleSnow(properties: String?)
+  /**
+   * Gets the value of a style snow property.
+   *
+   * @param property The style snow property name.
+   */
+  fun getStyleSnowProperty(property: String): StylePropertyValue
+  /**
+   * Sets the value of a style snow property.
+   *
+   * @param property The style snow property name.
+   * @param value The style snow property value.
+   */
+  fun setStyleSnowProperty(property: String, value: Any)
+  /**
+   * Sets the style rain. A `null` value removes the rain.
+   *
+   * @param properties The JSON-encoded `rain` properties of the style.
+   */
+  fun setStyleRain(properties: String?)
+  /**
+   * Gets the value of a style rain property.
+   *
+   * @param property The style rain property name.
+   */
+  fun getStyleRainProperty(property: String): StylePropertyValue
+  /**
+   * Sets the value of a style rain property.
+   *
+   * @param property The style rain property name.
+   * @param value The style rain property value.
+   */
+  fun setStyleRainProperty(property: String, value: Any)
+  /**
    * Overrides the map style's transition options with user-provided options.
    *
    * The style transition is re-evaluated when a new style is loaded.
@@ -4371,6 +4444,205 @@ interface StyleManager {
             val valueArg = args[2] as Any
             val wrapped: List<Any?> = try {
               api.setStyleImportConfigProperty(importIdArg, configArg, valueArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleColorTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val dataArg = args[0]
+            val wrapped: List<Any?> = try {
+              api.setStyleColorTheme(dataArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportColorTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val importIdArg = args[0] as String
+            val dataArg = args[1]
+            val wrapped: List<Any?> = try {
+              api.setStyleImportColorTheme(importIdArg, dataArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleAtmosphere$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertiesArg = args[0] as String?
+            val wrapped: List<Any?> = try {
+              api.setStyleAtmosphere(propertiesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleAtmosphereProperty$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertyArg = args[0] as String
+            val wrapped: List<Any?> = try {
+              listOf(api.getStyleAtmosphereProperty(propertyArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleAtmosphereProperty$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertyArg = args[0] as String
+            val valueArg = args[1] as Any
+            val wrapped: List<Any?> = try {
+              api.setStyleAtmosphereProperty(propertyArg, valueArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSnow$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertiesArg = args[0] as String?
+            val wrapped: List<Any?> = try {
+              api.setStyleSnow(propertiesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSnowProperty$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertyArg = args[0] as String
+            val wrapped: List<Any?> = try {
+              listOf(api.getStyleSnowProperty(propertyArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSnowProperty$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertyArg = args[0] as String
+            val valueArg = args[1] as Any
+            val wrapped: List<Any?> = try {
+              api.setStyleSnowProperty(propertyArg, valueArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleRain$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertiesArg = args[0] as String?
+            val wrapped: List<Any?> = try {
+              api.setStyleRain(propertiesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleRainProperty$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertyArg = args[0] as String
+            val wrapped: List<Any?> = try {
+              listOf(api.getStyleRainProperty(propertyArg))
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleRainProperty$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val propertyArg = args[0] as String
+            val valueArg = args[1] as Any
+            val wrapped: List<Any?> = try {
+              api.setStyleRainProperty(propertyArg, valueArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

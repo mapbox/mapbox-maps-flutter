@@ -1,4 +1,5 @@
 // This file is generated.
+// ignore_for_file: experimental_member_use
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// Web stub. Methods that mutate the map throw [UnimplementedError];
@@ -556,6 +557,38 @@ class UnsupportedPointAnnotationManagerWeb
   @override
   Future<TextTranslateAnchor?> getTextTranslateAnchor() =>
       _unimplemented('getTextTranslateAnchor');
+
+  @override
+  Future<void> setIconColorUseTheme(ColorUseTheme iconColorUseTheme) =>
+      _unimplemented('setIconColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getIconColorUseTheme() =>
+      _unimplemented('getIconColorUseTheme');
+
+  @override
+  Future<void> setIconHaloColorUseTheme(ColorUseTheme iconHaloColorUseTheme) =>
+      _unimplemented('setIconHaloColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getIconHaloColorUseTheme() =>
+      _unimplemented('getIconHaloColorUseTheme');
+
+  @override
+  Future<void> setTextColorUseTheme(ColorUseTheme textColorUseTheme) =>
+      _unimplemented('setTextColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getTextColorUseTheme() =>
+      _unimplemented('getTextColorUseTheme');
+
+  @override
+  Future<void> setTextHaloColorUseTheme(ColorUseTheme textHaloColorUseTheme) =>
+      _unimplemented('setTextHaloColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getTextHaloColorUseTheme() =>
+      _unimplemented('getTextHaloColorUseTheme');
 }
 
 // End of generated file.

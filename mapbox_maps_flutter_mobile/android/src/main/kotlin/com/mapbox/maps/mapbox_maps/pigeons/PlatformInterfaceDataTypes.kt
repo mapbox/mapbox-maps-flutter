@@ -2419,7 +2419,9 @@ data class FlatLight(
   /** Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below). */
   val position: List<Double?>? = null,
   /** Transition property for `position` */
-  val positionTransition: TransitionOptions? = null
+  val positionTransition: TransitionOptions? = null,
+  /** Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value. */
+  val colorUseTheme: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): FlatLight {
@@ -2431,7 +2433,8 @@ data class FlatLight(
       val intensityTransition = pigeonVar_list[5] as TransitionOptions?
       val position = pigeonVar_list[6] as List<Double?>?
       val positionTransition = pigeonVar_list[7] as TransitionOptions?
-      return FlatLight(id, anchor, color, colorTransition, intensity, intensityTransition, position, positionTransition)
+      val colorUseTheme = pigeonVar_list[8] as String?
+      return FlatLight(id, anchor, color, colorTransition, intensity, intensityTransition, position, positionTransition, colorUseTheme)
     }
   }
   fun toList(): List<Any?> {
@@ -2444,6 +2447,7 @@ data class FlatLight(
       intensityTransition,
       position,
       positionTransition,
+      colorUseTheme,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2460,7 +2464,8 @@ data class FlatLight(
       intensity == other.intensity &&
       intensityTransition == other.intensityTransition &&
       deepEqualsPlatformInterfaceDataTypes(position, other.position) &&
-      positionTransition == other.positionTransition
+      positionTransition == other.positionTransition &&
+      colorUseTheme == other.colorUseTheme
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -2495,7 +2500,9 @@ data class DirectionalLight(
   /** Transition property for `shadowIntensity` */
   val shadowIntensityTransition: TransitionOptions? = null,
   /** Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain. */
-  val shadowDrawBeforeLayer: String? = null
+  val shadowDrawBeforeLayer: String? = null,
+  /** Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value. */
+  val colorUseTheme: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): DirectionalLight {
@@ -2510,7 +2517,8 @@ data class DirectionalLight(
       val shadowIntensity = pigeonVar_list[8] as Double?
       val shadowIntensityTransition = pigeonVar_list[9] as TransitionOptions?
       val shadowDrawBeforeLayer = pigeonVar_list[10] as String?
-      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition, shadowDrawBeforeLayer)
+      val colorUseTheme = pigeonVar_list[11] as String?
+      return DirectionalLight(id, castShadows, color, colorTransition, direction, directionTransition, intensity, intensityTransition, shadowIntensity, shadowIntensityTransition, shadowDrawBeforeLayer, colorUseTheme)
     }
   }
   fun toList(): List<Any?> {
@@ -2526,6 +2534,7 @@ data class DirectionalLight(
       shadowIntensity,
       shadowIntensityTransition,
       shadowDrawBeforeLayer,
+      colorUseTheme,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2545,7 +2554,8 @@ data class DirectionalLight(
       intensityTransition == other.intensityTransition &&
       shadowIntensity == other.shadowIntensity &&
       shadowIntensityTransition == other.shadowIntensityTransition &&
-      shadowDrawBeforeLayer == other.shadowDrawBeforeLayer
+      shadowDrawBeforeLayer == other.shadowDrawBeforeLayer &&
+      colorUseTheme == other.colorUseTheme
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -2568,7 +2578,9 @@ data class AmbientLight(
   /** A multiplier for the color of the ambient light. */
   val intensity: Double? = null,
   /** Transition property for `intensity` */
-  val intensityTransition: TransitionOptions? = null
+  val intensityTransition: TransitionOptions? = null,
+  /** Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value. */
+  val colorUseTheme: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): AmbientLight {
@@ -2577,7 +2589,8 @@ data class AmbientLight(
       val colorTransition = pigeonVar_list[2] as TransitionOptions?
       val intensity = pigeonVar_list[3] as Double?
       val intensityTransition = pigeonVar_list[4] as TransitionOptions?
-      return AmbientLight(id, color, colorTransition, intensity, intensityTransition)
+      val colorUseTheme = pigeonVar_list[5] as String?
+      return AmbientLight(id, color, colorTransition, intensity, intensityTransition, colorUseTheme)
     }
   }
   fun toList(): List<Any?> {
@@ -2587,6 +2600,7 @@ data class AmbientLight(
       colorTransition,
       intensity,
       intensityTransition,
+      colorUseTheme,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -2600,7 +2614,8 @@ data class AmbientLight(
       color == other.color &&
       colorTransition == other.colorTransition &&
       intensity == other.intensity &&
-      intensityTransition == other.intensityTransition
+      intensityTransition == other.intensityTransition &&
+      colorUseTheme == other.colorUseTheme
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -3179,6 +3194,12 @@ data class LocationComponentSettings(
 /**
  * Shows the scale bar on the map.
  *
+ * On web the scale bar is the Mapbox GL JS `ScaleControl`, which draws a
+ * bordered label instead of the tick-marked ruler the mobile SDKs draw.
+ * Fields it cannot represent are marked below. Each one is still stored and
+ * returned by `getSettings`, so a value written with `updateSettings`
+ * survives a round-trip through the API.
+ *
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class ScaleBarSettings(
@@ -3393,6 +3414,12 @@ data class ScaleBarSettings(
 
 /**
  * Shows the compass on the map.
+ *
+ * On web the compass is the compass button of the Mapbox GL JS
+ * `NavigationControl`, added without its zoom buttons. Fields it cannot
+ * represent are marked below. Each one is still stored and returned by
+ * `getSettings`, so a value written with `updateSettings` survives a
+ * round-trip through the API.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
@@ -4841,6 +4868,11 @@ data class FeaturesetFeature(
    *
    * The identifier can be `nil` if the underlying source doesn't have identifiers for features.
    * In this case it's impossible to set a feature state for an individual feature.
+   *
+   * On web, GL JS keeps a GeoJSON feature id only if it is a number, or a
+   * string that holds a number. It removes all other string ids, and this
+   * field is then null. Android and iOS keep the id. For an id on all
+   * platforms, use a number, or copy the id into [properties].
    */
   val id: FeaturesetFeatureId? = null,
   /** A featureset descriptor denoting the featureset this feature belongs to. */

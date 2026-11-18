@@ -289,4 +289,57 @@ void main() {
     final anchor = await mapboxMap.getStyleLightProperty('flat', 'anchor');
     expect(anchor.value, 'map');
   });
+
+  patrolTest('setLights sets the color use-theme', ($) async {
+    final mapboxMap = await _setupMap($.tester);
+
+    await mapboxMap.setLights(
+      AmbientLight(id: 'ambient', colorUseTheme: ColorUseTheme.none.value),
+      DirectionalLight(
+        id: 'directional',
+        colorUseTheme: ColorUseTheme.none.value,
+      ),
+    );
+
+    final directional = await mapboxMap.getStyleLightProperty(
+      'directional',
+      'color-use-theme',
+    );
+    expect(directional.value, 'none');
+    final ambient = await mapboxMap.getStyleLightProperty(
+      'ambient',
+      'color-use-theme',
+    );
+    expect(ambient.value, 'none');
+  });
+
+  /// GL JS uses the legacy light spec for the flat light, which has no
+  /// `color-use-theme`. Thus web ignores it.
+  patrolTest('setLight sets the flat light color use-theme', ($) async {
+    final mapboxMap = await _setupMap($.tester);
+
+    await mapboxMap.setLight(
+      FlatLight(id: 'flat', colorUseTheme: ColorUseTheme.none.value),
+    );
+
+    final useTheme = await mapboxMap.getStyleLightProperty(
+      'flat',
+      'color-use-theme',
+    );
+    expect(useTheme.value, kIsWeb ? isNull : 'none');
+  });
+
+  /// Like the other light properties, a use-theme without a value returns
+  /// null. The light then uses the `default` theme.
+  patrolTest('the color use-theme is null without a value', ($) async {
+    final mapboxMap = await _setupMap($.tester);
+    await _setLights(mapboxMap);
+
+    final useTheme = await mapboxMap.getStyleLightProperty(
+      'directional',
+      'color-use-theme',
+    );
+    _expectKind(useTheme, StylePropertyValueKind.UNDEFINED);
+    expect(useTheme.value, isNull);
+  });
 }

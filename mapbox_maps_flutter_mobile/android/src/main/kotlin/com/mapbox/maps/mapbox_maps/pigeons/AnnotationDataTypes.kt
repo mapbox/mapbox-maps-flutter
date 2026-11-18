@@ -80,11 +80,31 @@ data class PolygonAnnotation(
    */
   val fillTunnelStructureColor: Long? = null,
   /**
-   * Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-   * Default value: 0. Minimum value: 0.
+   * Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+   * Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
    * @experimental
    */
   val fillZOffset: Double? = null,
+  /**
+   * Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillBridgeGuardRailColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `fillColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillOutlineColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillTunnelStructureColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -103,9 +123,13 @@ data class PolygonAnnotation(
       val fillPattern = pigeonVar_list[8] as String?
       val fillTunnelStructureColor = pigeonVar_list[9] as Long?
       val fillZOffset = pigeonVar_list[10] as Double?
-      val isDraggable = pigeonVar_list[11] as Boolean?
-      val customData = pigeonVar_list[12] as Map<String, Any>?
-      return PolygonAnnotation(id, geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable, customData)
+      val fillBridgeGuardRailColorUseTheme = pigeonVar_list[11] as String?
+      val fillColorUseTheme = pigeonVar_list[12] as String?
+      val fillOutlineColorUseTheme = pigeonVar_list[13] as String?
+      val fillTunnelStructureColorUseTheme = pigeonVar_list[14] as String?
+      val isDraggable = pigeonVar_list[15] as Boolean?
+      val customData = pigeonVar_list[16] as Map<String, Any>?
+      return PolygonAnnotation(id, geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, fillBridgeGuardRailColorUseTheme, fillColorUseTheme, fillOutlineColorUseTheme, fillTunnelStructureColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -121,6 +145,10 @@ data class PolygonAnnotation(
       fillPattern,
       fillTunnelStructureColor,
       fillZOffset,
+      fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme,
+      fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme,
       isDraggable,
       customData,
     )
@@ -143,6 +171,10 @@ data class PolygonAnnotation(
       fillPattern == other.fillPattern &&
       fillTunnelStructureColor == other.fillTunnelStructureColor &&
       fillZOffset == other.fillZOffset &&
+      fillBridgeGuardRailColorUseTheme == other.fillBridgeGuardRailColorUseTheme &&
+      fillColorUseTheme == other.fillColorUseTheme &&
+      fillOutlineColorUseTheme == other.fillOutlineColorUseTheme &&
+      fillTunnelStructureColorUseTheme == other.fillTunnelStructureColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -189,11 +221,31 @@ data class PolygonAnnotationOptions(
    */
   val fillTunnelStructureColor: Long? = null,
   /**
-   * Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-   * Default value: 0. Minimum value: 0.
+   * Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+   * Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
    * @experimental
    */
   val fillZOffset: Double? = null,
+  /**
+   * Whether the style color theme applies to `fillBridgeGuardRailColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillBridgeGuardRailColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `fillColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `fillOutlineColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillOutlineColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `fillTunnelStructureColor`: `default` or `none`.
+   * @experimental
+   */
+  val fillTunnelStructureColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -211,9 +263,13 @@ data class PolygonAnnotationOptions(
       val fillPattern = pigeonVar_list[7] as String?
       val fillTunnelStructureColor = pigeonVar_list[8] as Long?
       val fillZOffset = pigeonVar_list[9] as Double?
-      val isDraggable = pigeonVar_list[10] as Boolean?
-      val customData = pigeonVar_list[11] as Map<String, Any>?
-      return PolygonAnnotationOptions(geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable, customData)
+      val fillBridgeGuardRailColorUseTheme = pigeonVar_list[10] as String?
+      val fillColorUseTheme = pigeonVar_list[11] as String?
+      val fillOutlineColorUseTheme = pigeonVar_list[12] as String?
+      val fillTunnelStructureColorUseTheme = pigeonVar_list[13] as String?
+      val isDraggable = pigeonVar_list[14] as Boolean?
+      val customData = pigeonVar_list[15] as Map<String, Any>?
+      return PolygonAnnotationOptions(geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, fillBridgeGuardRailColorUseTheme, fillColorUseTheme, fillOutlineColorUseTheme, fillTunnelStructureColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -228,6 +284,10 @@ data class PolygonAnnotationOptions(
       fillPattern,
       fillTunnelStructureColor,
       fillZOffset,
+      fillBridgeGuardRailColorUseTheme,
+      fillColorUseTheme,
+      fillOutlineColorUseTheme,
+      fillTunnelStructureColorUseTheme,
       isDraggable,
       customData,
     )
@@ -249,6 +309,10 @@ data class PolygonAnnotationOptions(
       fillPattern == other.fillPattern &&
       fillTunnelStructureColor == other.fillTunnelStructureColor &&
       fillZOffset == other.fillZOffset &&
+      fillBridgeGuardRailColorUseTheme == other.fillBridgeGuardRailColorUseTheme &&
+      fillColorUseTheme == other.fillColorUseTheme &&
+      fillOutlineColorUseTheme == other.fillOutlineColorUseTheme &&
+      fillTunnelStructureColorUseTheme == other.fillTunnelStructureColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -309,12 +373,12 @@ data class PolylineAnnotation(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /**
-   * Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-   * Default value: 0.
+   * Vertical offset from ground. Not supported for globe projection at the moment.
+   * Default value: 0. The unit of lineZOffset is in meters.
    */
   val lineZOffset: Double? = null,
   /**
-   * Blur applied to the line, in pixels.
+   * Blur applied to the line.
    * Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
    */
   val lineBlur: Double? = null,
@@ -325,7 +389,7 @@ data class PolylineAnnotation(
   val lineBorderColor: Long? = null,
   /**
    * The width of the line border. A value of zero means no border.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
    */
   val lineBorderWidth: Double? = null,
   /**
@@ -360,6 +424,16 @@ data class PolylineAnnotation(
    * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
    */
   val lineWidth: Double? = null,
+  /**
+   * Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+   * @experimental
+   */
+  val lineBorderColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `lineColor`: `default` or `none`.
+   * @experimental
+   */
+  val lineColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -383,9 +457,11 @@ data class PolylineAnnotation(
       val lineOpacity = pigeonVar_list[13] as Double?
       val linePattern = pigeonVar_list[14] as String?
       val lineWidth = pigeonVar_list[15] as Double?
-      val isDraggable = pigeonVar_list[16] as Boolean?
-      val customData = pigeonVar_list[17] as Map<String, Any>?
-      return PolylineAnnotation(id, geometry, lineElevationGroundScale, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
+      val lineBorderColorUseTheme = pigeonVar_list[16] as String?
+      val lineColorUseTheme = pigeonVar_list[17] as String?
+      val isDraggable = pigeonVar_list[18] as Boolean?
+      val customData = pigeonVar_list[19] as Map<String, Any>?
+      return PolylineAnnotation(id, geometry, lineElevationGroundScale, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, lineBorderColorUseTheme, lineColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -406,6 +482,8 @@ data class PolylineAnnotation(
       lineOpacity,
       linePattern,
       lineWidth,
+      lineBorderColorUseTheme,
+      lineColorUseTheme,
       isDraggable,
       customData,
     )
@@ -433,6 +511,8 @@ data class PolylineAnnotation(
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
       lineWidth == other.lineWidth &&
+      lineBorderColorUseTheme == other.lineBorderColorUseTheme &&
+      lineColorUseTheme == other.lineColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -457,12 +537,12 @@ data class PolylineAnnotationOptions(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /**
-   * Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-   * Default value: 0.
+   * Vertical offset from ground. Not supported for globe projection at the moment.
+   * Default value: 0. The unit of lineZOffset is in meters.
    */
   val lineZOffset: Double? = null,
   /**
-   * Blur applied to the line, in pixels.
+   * Blur applied to the line.
    * Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
    */
   val lineBlur: Double? = null,
@@ -473,7 +553,7 @@ data class PolylineAnnotationOptions(
   val lineBorderColor: Long? = null,
   /**
    * The width of the line border. A value of zero means no border.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
    */
   val lineBorderWidth: Double? = null,
   /**
@@ -508,6 +588,16 @@ data class PolylineAnnotationOptions(
    * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
    */
   val lineWidth: Double? = null,
+  /**
+   * Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+   * @experimental
+   */
+  val lineBorderColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `lineColor`: `default` or `none`.
+   * @experimental
+   */
+  val lineColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -530,9 +620,11 @@ data class PolylineAnnotationOptions(
       val lineOpacity = pigeonVar_list[12] as Double?
       val linePattern = pigeonVar_list[13] as String?
       val lineWidth = pigeonVar_list[14] as Double?
-      val isDraggable = pigeonVar_list[15] as Boolean?
-      val customData = pigeonVar_list[16] as Map<String, Any>?
-      return PolylineAnnotationOptions(geometry, lineElevationGroundScale, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable, customData)
+      val lineBorderColorUseTheme = pigeonVar_list[15] as String?
+      val lineColorUseTheme = pigeonVar_list[16] as String?
+      val isDraggable = pigeonVar_list[17] as Boolean?
+      val customData = pigeonVar_list[18] as Map<String, Any>?
+      return PolylineAnnotationOptions(geometry, lineElevationGroundScale, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineEmissiveStrength, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, lineBorderColorUseTheme, lineColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -552,6 +644,8 @@ data class PolylineAnnotationOptions(
       lineOpacity,
       linePattern,
       lineWidth,
+      lineBorderColorUseTheme,
+      lineColorUseTheme,
       isDraggable,
       customData,
     )
@@ -578,6 +672,8 @@ data class PolylineAnnotationOptions(
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
       lineWidth == other.lineWidth &&
+      lineBorderColorUseTheme == other.lineBorderColorUseTheme &&
+      lineColorUseTheme == other.lineColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -626,8 +722,16 @@ data class PointAnnotation(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: Point,
   /**
-   * The bitmap image for this Annotation
-   * Will not take effect if [iconImage] has been set.
+   * The encoded (PNG/JPEG) bytes of this annotation's icon.
+   *
+   * [iconImage] names the style image these bytes upload to. If you leave
+   * [iconImage] unset, the SDK derives one from a hash of [image]. So
+   * `update()` re-uploads the icon when [image] changes, and does nothing
+   * when it does not — bytes are never compared, only the hash. Set
+   * [iconImage] yourself for direct control: for example, to reuse one
+   * name across annotations, or to point at a style image added
+   * elsewhere without uploading [image]. Reusing the same [iconImage]
+   * with different [image] bytes is still a no-op by design.
    */
   val image: ByteArray? = null,
   /**
@@ -755,9 +859,8 @@ data class PointAnnotation(
    */
   val iconOpacity: Double? = null,
   /**
-   * Specifies an uniform elevation from the ground, in meters.
-   * Default value: 0. Minimum value: 0.
-   * @experimental
+   * Specifies an uniform elevation from the ground.
+   * Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
    */
   val symbolZOffset: Double? = null,
   /**
@@ -795,6 +898,26 @@ data class PointAnnotation(
    * Default value: 1. Value range: [0, 1]
    */
   val textOpacity: Double? = null,
+  /**
+   * Whether the style color theme applies to `iconColor`: `default` or `none`.
+   * @experimental
+   */
+  val iconColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+   * @experimental
+   */
+  val iconHaloColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `textColor`: `default` or `none`.
+   * @experimental
+   */
+  val textColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+   * @experimental
+   */
+  val textHaloColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -839,9 +962,13 @@ data class PointAnnotation(
       val textHaloWidth = pigeonVar_list[34] as Double?
       val textOcclusionOpacity = pigeonVar_list[35] as Double?
       val textOpacity = pigeonVar_list[36] as Double?
-      val isDraggable = pigeonVar_list[37] as Boolean?
-      val customData = pigeonVar_list[38] as Map<String, Any>?
-      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
+      val iconColorUseTheme = pigeonVar_list[37] as String?
+      val iconHaloColorUseTheme = pigeonVar_list[38] as String?
+      val textColorUseTheme = pigeonVar_list[39] as String?
+      val textHaloColorUseTheme = pigeonVar_list[40] as String?
+      val isDraggable = pigeonVar_list[41] as Boolean?
+      val customData = pigeonVar_list[42] as Map<String, Any>?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, iconColorUseTheme, iconHaloColorUseTheme, textColorUseTheme, textHaloColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -883,6 +1010,10 @@ data class PointAnnotation(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      iconColorUseTheme,
+      iconHaloColorUseTheme,
+      textColorUseTheme,
+      textHaloColorUseTheme,
       isDraggable,
       customData,
     )
@@ -931,6 +1062,10 @@ data class PointAnnotation(
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
       textOpacity == other.textOpacity &&
+      iconColorUseTheme == other.iconColorUseTheme &&
+      iconHaloColorUseTheme == other.iconHaloColorUseTheme &&
+      textColorUseTheme == other.textColorUseTheme &&
+      textHaloColorUseTheme == other.textHaloColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -943,8 +1078,16 @@ data class PointAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: Point,
   /**
-   * The bitmap image for this Annotation
-   * Will not take effect if [iconImage] has been set.
+   * The encoded (PNG/JPEG) bytes of this annotation's icon.
+   *
+   * [iconImage] names the style image these bytes upload to. If you leave
+   * [iconImage] unset, the SDK derives one from a hash of [image]. So
+   * `update()` re-uploads the icon when [image] changes, and does nothing
+   * when it does not — bytes are never compared, only the hash. Set
+   * [iconImage] yourself for direct control: for example, to reuse one
+   * name across annotations, or to point at a style image added
+   * elsewhere without uploading [image]. Reusing the same [iconImage]
+   * with different [image] bytes is still a no-op by design.
    */
   val image: ByteArray? = null,
   /**
@@ -1072,9 +1215,8 @@ data class PointAnnotationOptions(
    */
   val iconOpacity: Double? = null,
   /**
-   * Specifies an uniform elevation from the ground, in meters.
-   * Default value: 0. Minimum value: 0.
-   * @experimental
+   * Specifies an uniform elevation from the ground.
+   * Default value: 0. Minimum value: 0. The unit of symbolZOffset is in meters.
    */
   val symbolZOffset: Double? = null,
   /**
@@ -1112,6 +1254,26 @@ data class PointAnnotationOptions(
    * Default value: 1. Value range: [0, 1]
    */
   val textOpacity: Double? = null,
+  /**
+   * Whether the style color theme applies to `iconColor`: `default` or `none`.
+   * @experimental
+   */
+  val iconColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `iconHaloColor`: `default` or `none`.
+   * @experimental
+   */
+  val iconHaloColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `textColor`: `default` or `none`.
+   * @experimental
+   */
+  val textColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `textHaloColor`: `default` or `none`.
+   * @experimental
+   */
+  val textHaloColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -1155,9 +1317,13 @@ data class PointAnnotationOptions(
       val textHaloWidth = pigeonVar_list[33] as Double?
       val textOcclusionOpacity = pigeonVar_list[34] as Double?
       val textOpacity = pigeonVar_list[35] as Double?
-      val isDraggable = pigeonVar_list[36] as Boolean?
-      val customData = pigeonVar_list[37] as Map<String, Any>?
-      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable, customData)
+      val iconColorUseTheme = pigeonVar_list[36] as String?
+      val iconHaloColorUseTheme = pigeonVar_list[37] as String?
+      val textColorUseTheme = pigeonVar_list[38] as String?
+      val textHaloColorUseTheme = pigeonVar_list[39] as String?
+      val isDraggable = pigeonVar_list[40] as Boolean?
+      val customData = pigeonVar_list[41] as Map<String, Any>?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, iconColorUseTheme, iconHaloColorUseTheme, textColorUseTheme, textHaloColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -1198,6 +1364,10 @@ data class PointAnnotationOptions(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      iconColorUseTheme,
+      iconHaloColorUseTheme,
+      textColorUseTheme,
+      textHaloColorUseTheme,
       isDraggable,
       customData,
     )
@@ -1245,6 +1415,10 @@ data class PointAnnotationOptions(
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
       textOpacity == other.textOpacity &&
+      iconColorUseTheme == other.iconColorUseTheme &&
+      iconHaloColorUseTheme == other.iconHaloColorUseTheme &&
+      textColorUseTheme == other.textColorUseTheme &&
+      textHaloColorUseTheme == other.textHaloColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -1329,6 +1503,16 @@ data class CircleAnnotation(
    * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
    */
   val circleStrokeWidth: Double? = null,
+  /**
+   * Whether the style color theme applies to `circleColor`: `default` or `none`.
+   * @experimental
+   */
+  val circleColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+   * @experimental
+   */
+  val circleStrokeColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -1346,9 +1530,11 @@ data class CircleAnnotation(
       val circleStrokeColor = pigeonVar_list[7] as Long?
       val circleStrokeOpacity = pigeonVar_list[8] as Double?
       val circleStrokeWidth = pigeonVar_list[9] as Double?
-      val isDraggable = pigeonVar_list[10] as Boolean?
-      val customData = pigeonVar_list[11] as Map<String, Any>?
-      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, isDraggable, customData)
+      val circleColorUseTheme = pigeonVar_list[10] as String?
+      val circleStrokeColorUseTheme = pigeonVar_list[11] as String?
+      val isDraggable = pigeonVar_list[12] as Boolean?
+      val customData = pigeonVar_list[13] as Map<String, Any>?
+      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, circleColorUseTheme, circleStrokeColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -1363,6 +1549,8 @@ data class CircleAnnotation(
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleColorUseTheme,
+      circleStrokeColorUseTheme,
       isDraggable,
       customData,
     )
@@ -1384,6 +1572,8 @@ data class CircleAnnotation(
       circleStrokeColor == other.circleStrokeColor &&
       circleStrokeOpacity == other.circleStrokeOpacity &&
       circleStrokeWidth == other.circleStrokeWidth &&
+      circleColorUseTheme == other.circleColorUseTheme &&
+      circleStrokeColorUseTheme == other.circleStrokeColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }
@@ -1432,6 +1622,16 @@ data class CircleAnnotationOptions(
    * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
    */
   val circleStrokeWidth: Double? = null,
+  /**
+   * Whether the style color theme applies to `circleColor`: `default` or `none`.
+   * @experimental
+   */
+  val circleColorUseTheme: String? = null,
+  /**
+   * Whether the style color theme applies to `circleStrokeColor`: `default` or `none`.
+   * @experimental
+   */
+  val circleStrokeColorUseTheme: String? = null,
   /** Property to determine whether annotation can be manually moved around map. */
   val isDraggable: Boolean? = null,
   /** JSON convertible properties associated with the annotation, used to enrich Feature GeoJSON `properties["custom_data"]` field. */
@@ -1448,9 +1648,11 @@ data class CircleAnnotationOptions(
       val circleStrokeColor = pigeonVar_list[6] as Long?
       val circleStrokeOpacity = pigeonVar_list[7] as Double?
       val circleStrokeWidth = pigeonVar_list[8] as Double?
-      val isDraggable = pigeonVar_list[9] as Boolean?
-      val customData = pigeonVar_list[10] as Map<String, Any>?
-      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, isDraggable, customData)
+      val circleColorUseTheme = pigeonVar_list[9] as String?
+      val circleStrokeColorUseTheme = pigeonVar_list[10] as String?
+      val isDraggable = pigeonVar_list[11] as Boolean?
+      val customData = pigeonVar_list[12] as Map<String, Any>?
+      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, circleColorUseTheme, circleStrokeColorUseTheme, isDraggable, customData)
     }
   }
   fun toList(): List<Any?> {
@@ -1464,6 +1666,8 @@ data class CircleAnnotationOptions(
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleColorUseTheme,
+      circleStrokeColorUseTheme,
       isDraggable,
       customData,
     )
@@ -1484,6 +1688,8 @@ data class CircleAnnotationOptions(
       circleStrokeColor == other.circleStrokeColor &&
       circleStrokeOpacity == other.circleStrokeOpacity &&
       circleStrokeWidth == other.circleStrokeWidth &&
+      circleColorUseTheme == other.circleColorUseTheme &&
+      circleStrokeColorUseTheme == other.circleStrokeColorUseTheme &&
       isDraggable == other.isDraggable &&
       deepEqualsAnnotationDataTypes(customData, other.customData)
   }

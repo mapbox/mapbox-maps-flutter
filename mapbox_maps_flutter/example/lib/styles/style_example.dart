@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../scene_scaffold.dart';
+import 'moods/mood_controller.dart';
+import 'moods/mood_controls.dart';
 
 /// Mutates a loaded style and shows each change on the map.
 ///
-/// Three scenes: swapping the whole style, adding and restyling a layer, and
-/// lighting a 3D scene. The HUD counts what the style holds.
+/// Four scenes: swapping the whole style, adding and restyling a layer,
+/// lighting a 3D scene, and moods that combine a color theme, atmosphere,
+/// weather and lights. The HUD counts what the style holds.
 class StyleExample extends StatefulWidget {
   const StyleExample({super.key});
 
@@ -19,7 +22,7 @@ class StyleExample extends StatefulWidget {
   State<StyleExample> createState() => _StyleExampleState();
 }
 
-enum _Scene { basemap, layers, lighting }
+enum _Scene { basemap, layers, lighting, moods }
 
 const _scenes = [
   Scene(
@@ -40,6 +43,12 @@ const _scenes = [
     subtitle: '3D light, shadows and terrain',
     icon: Icons.wb_twilight,
   ),
+  Scene(
+    id: 'moods',
+    title: 'Moods',
+    subtitle: 'Color theme, atmosphere and weather',
+    icon: Icons.palette_outlined,
+  ),
 ];
 
 /// Styles the basemap scene cycles through.
@@ -56,6 +65,7 @@ class _StyleExampleState extends State<StyleExample> {
   static const _terrainSourceId = 'terrain-dem';
 
   MapboxMap? _mapboxMap;
+  final _moods = MoodController();
 
   var _scene = _Scene.basemap;
   var _styleUri = MapboxStyles.STANDARD;
@@ -73,7 +83,18 @@ class _StyleExampleState extends State<StyleExample> {
   var _styleSize = '—';
 
   @override
+  void initState() {
+    super.initState();
+    _moods.addListener(_onMoodChanged);
+  }
+
+  void _onMoodChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
   void dispose() {
+    _moods.dispose();
     MapboxMapsOptions.setLanguage(null);
     MapboxMapsOptions.setWorldview(null);
     super.dispose();
@@ -82,6 +103,7 @@ class _StyleExampleState extends State<StyleExample> {
   void _onMapCreated(MapboxMap mapboxMap) {
     applyCatalogOrnamentDefaults(context, mapboxMap);
     _mapboxMap = mapboxMap;
+    _moods.map = mapboxMap;
   }
 
   void _setLanguage(String language) {
@@ -117,7 +139,11 @@ class _StyleExampleState extends State<StyleExample> {
     setState(() => _layerAdded = false);
     if (_scene == _Scene.layers) await _addLayer();
     if (_scene == _Scene.lighting) await _applyLighting();
-    await _applyLightPreset();
+    if (_scene == _Scene.moods) {
+      await _moods.reapply();
+    } else {
+      await _applyLightPreset();
+    }
     await _refresh();
   }
 
@@ -240,16 +266,30 @@ class _StyleExampleState extends State<StyleExample> {
     await _refresh();
   }
 
+  Future<void> _selectScene(String id) async {
+    final previous = _scene;
+    setState(() => _scene = _Scene.values.firstWhere((s) => s.name == id));
+    if (previous == _Scene.moods && _scene != _Scene.moods) {
+      await _moods.leave();
+      await _applyLightPreset();
+    }
+    if (_scene == _Scene.layers) await _addLayer();
+    if (_scene == _Scene.lighting) await _applyLighting();
+    if (_scene == _Scene.moods && previous != _Scene.moods) {
+      // The moods configure the Standard style import.
+      if (_styleUri != MapboxStyles.STANDARD) {
+        await _setStyle(MapboxStyles.STANDARD);
+      }
+      await _moods.enter();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SceneScaffold(
       scenes: _scenes,
       selectedSceneId: _scene.name,
-      onSceneSelected: (id) {
-        setState(() => _scene = _Scene.values.firstWhere((s) => s.name == id));
-        if (_scene == _Scene.layers) _addLayer();
-        if (_scene == _Scene.lighting) _applyLighting();
-      },
+      onSceneSelected: _selectScene,
       controlsTitle: 'Style',
       onSheetExtentChanged: SceneScaffold.defaultOnSheetExtentChanged(
         _mapboxMap,
@@ -269,26 +309,45 @@ class _StyleExampleState extends State<StyleExample> {
             onMapCreated: _onMapCreated,
             onStyleLoadedListener: _onStyleLoaded,
           ),
-          MapHud(
-            title: 'Loaded style',
-            rows: [
-              MapHudRow(
-                'style',
-                _styles[_styleUri] ?? 'Custom',
-                emphasized: true,
-              ),
-              MapHudRow('layers', '$_layerCount'),
-              MapHudRow('sources', '$_sourceCount'),
-              MapHudRow('style JSON', _styleSize),
-              MapHudRow('your layer', _layerAdded ? 'added' : 'not added'),
-            ],
-          ),
+          if (_scene == _Scene.moods)
+            MapHud(
+              title: 'Mood',
+              rows: [
+                MapHudRow(
+                  'preset',
+                  _moods.preset?.name ?? 'Custom',
+                  emphasized: true,
+                ),
+                MapHudRow('light preset', _moods.mood.lightPreset),
+                MapHudRow('weather', _moods.mood.weather.name),
+                MapHudRow(
+                  'route',
+                  _moods.keepTrueColors ? 'true colors' : 'themed',
+                ),
+              ],
+            )
+          else
+            MapHud(
+              title: 'Loaded style',
+              rows: [
+                MapHudRow(
+                  'style',
+                  _styles[_styleUri] ?? 'Custom',
+                  emphasized: true,
+                ),
+                MapHudRow('layers', '$_layerCount'),
+                MapHudRow('sources', '$_sourceCount'),
+                MapHudRow('style JSON', _styleSize),
+                MapHudRow('your layer', _layerAdded ? 'added' : 'not added'),
+              ],
+            ),
         ],
       ),
       controlsBuilder: () => switch (_scene) {
         _Scene.basemap => _basemapControls(),
         _Scene.layers => _layerControls(),
         _Scene.lighting => _lightingControls(),
+        _Scene.moods => moodControls(_moods),
       },
     );
   }

@@ -148,17 +148,17 @@ final class PolylineAnnotationManager
   @experimental
   Future<LineWidthUnit?> getLineWidthUnit() => impl.getLineWidthUnit();
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment. Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment. Default value: 0. The unit of lineZOffset is in meters.
   Future<void> setLineZOffset(double lineZOffset) =>
       impl.setLineZOffset(lineZOffset);
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment. Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment. Default value: 0. The unit of lineZOffset is in meters.
   Future<double?> getLineZOffset() => impl.getLineZOffset();
 
-  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+  /// Blur applied to the line. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   Future<void> setLineBlur(double lineBlur) => impl.setLineBlur(lineBlur);
 
-  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+  /// Blur applied to the line. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   Future<double?> getLineBlur() => impl.getLineBlur();
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. Default value: "rgba(0, 0, 0, 0)".
@@ -168,11 +168,11 @@ final class PolylineAnnotationManager
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. Default value: "rgba(0, 0, 0, 0)".
   Future<int?> getLineBorderColor() => impl.getLineBorderColor();
 
-  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0.
+  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   Future<void> setLineBorderWidth(double lineBorderWidth) =>
       impl.setLineBorderWidth(lineBorderWidth);
 
-  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0.
+  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   Future<double?> getLineBorderWidth() => impl.getLineBorderWidth();
 
   /// The color with which the line will be drawn. Default value: "#000000".
@@ -302,6 +302,36 @@ final class PolylineAnnotationManager
 
   /// Stroke thickness. Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   Future<double?> getLineWidth() => impl.getLineWidth();
+
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  @experimental
+  Future<void> setLineBorderColorUseTheme(
+    ColorUseTheme lineBorderColorUseTheme,
+  ) => impl.setLineBorderColorUseTheme(lineBorderColorUseTheme);
+
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getLineBorderColorUseTheme() =>
+      impl.getLineBorderColorUseTheme();
+
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  @experimental
+  Future<void> setLineColorUseTheme(ColorUseTheme lineColorUseTheme) =>
+      impl.setLineColorUseTheme(lineColorUseTheme);
+
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getLineColorUseTheme() => impl.getLineColorUseTheme();
+
+  /// Whether the style color theme applies to `lineTrimColor`: `default` or `none`.
+  @experimental
+  Future<void> setLineTrimColorUseTheme(ColorUseTheme lineTrimColorUseTheme) =>
+      impl.setLineTrimColorUseTheme(lineTrimColorUseTheme);
+
+  /// Whether the style color theme applies to `lineTrimColor`: `default` or `none`.
+  @experimental
+  Future<ColorUseTheme?> getLineTrimColorUseTheme() =>
+      impl.getLineTrimColorUseTheme();
 }
 
 // End of generated file.

@@ -1,4 +1,6 @@
-@_spi(Experimental) import MapboxMaps
+@_spi(Experimental) @_spi(Internal) import MapboxMaps
+@_spi(Internal) @_spi(Marshalling) import MapboxCoreMaps
+import MapboxCoreMaps_Private
 import Foundation
 import Flutter
 
@@ -511,6 +513,148 @@ final class StyleController: StyleManager {
             try styleManager.setStyleImportConfigProperty(for: importId, config: config, value: value)
         } catch let styleError {
             throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func setStyleColorTheme(data: Any?) throws {
+        let colorTheme = try colorTheme(from: data)
+        do {
+            if let colorTheme {
+                try styleManager.setColorTheme(colorTheme)
+            } else {
+                try styleManager.removeColorTheme()
+            }
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func setStyleImportColorTheme(importId: String, data: Any?) throws {
+        let colorTheme = try colorTheme(from: data)
+        do {
+            if let colorTheme {
+                try styleManager.setStyleImportColorTheme(importId: importId, colorTheme: colorTheme)
+            } else {
+                try styleManager.removeStyleImportColorTheme(importId: importId)
+            }
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func setStyleAtmosphere(properties: String?) throws {
+        try handleStyleError {
+            if let properties = try styleObjectProperties(from: properties) {
+                try styleManager.setAtmosphere(properties: properties)
+            } else {
+                try styleManager.removeAtmosphere()
+            }
+        }
+    }
+
+    func getStyleAtmosphereProperty(property: String) throws -> StylePropertyValue {
+        styleManager.atmosphereProperty(property).toFLTStylePropertyValue(property: property)
+    }
+
+    func setStyleAtmosphereProperty(property: String, value: Any) throws {
+        try handleStyleError {
+            try styleManager.setAtmosphereProperty(property, value: value)
+        }
+    }
+
+    func setStyleSnow(properties: String?) throws {
+        let properties: Any = try styleObjectProperties(from: properties) ?? NSNull()
+        let expected = try coreStyleManager().setStyleSnowForProperties(properties)
+        if expected.isError() {
+            throw FlutterError(code: StyleController.errorCode, message: expected.error as String, details: nil)
+        }
+    }
+
+    func getStyleSnowProperty(property: String) throws -> StylePropertyValue {
+        try coreStylePropertyValue(try coreStyleManager().getStyleSnowProperty(forProperty: property), property: property)
+    }
+
+    func setStyleSnowProperty(property: String, value: Any) throws {
+        let expected = try coreStyleManager().setStyleSnowPropertyForProperty(property, value: value)
+        if expected.isError() {
+            throw FlutterError(code: StyleController.errorCode, message: expected.error as String, details: nil)
+        }
+    }
+
+    func setStyleRain(properties: String?) throws {
+        let properties: Any = try styleObjectProperties(from: properties) ?? NSNull()
+        let expected = try coreStyleManager().setStyleRainForProperties(properties)
+        if expected.isError() {
+            throw FlutterError(code: StyleController.errorCode, message: expected.error as String, details: nil)
+        }
+    }
+
+    func getStyleRainProperty(property: String) throws -> StylePropertyValue {
+        try coreStylePropertyValue(try coreStyleManager().getStyleRainProperty(forProperty: property), property: property)
+    }
+
+    func setStyleRainProperty(property: String, value: Any) throws {
+        let expected = try coreStyleManager().setStyleRainPropertyForProperty(property, value: value)
+        if expected.isError() {
+            throw FlutterError(code: StyleController.errorCode, message: expected.error as String, details: nil)
+        }
+    }
+
+    /// Decodes the JSON-encoded properties of a style object, such as the atmosphere.
+    /// `nil` means that the style object is removed.
+    private func styleObjectProperties(from json: String?) throws -> [String: Any]? {
+        guard let json else { return nil }
+        guard let data = json.data(using: .utf8),
+              let properties = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw FlutterError(code: StyleController.errorCode, message: "The properties must be a JSON object.", details: nil)
+        }
+        return properties
+    }
+
+    /// MapboxMaps has no public API for the snow and rain properties, so these use the core
+    /// style manager of the map.
+    private func coreStyleManager() throws -> MapboxCoreMaps_Private.Map {
+        guard let mapboxMap = styleManager as? MapboxMap else {
+            throw FlutterError(code: StyleController.errorCode, message: "Snow and rain are only available on a map.", details: nil)
+        }
+        return MapboxCoreMaps.Map.Marshaller.toObjc(mapboxMap.map)
+    }
+
+    private func coreStylePropertyValue(_ value: Any, property: String) -> StylePropertyValue {
+        MapboxCoreMaps.StylePropertyValue.Marshaller.toSwift(value).toFLTStylePropertyValue(property: property)
+    }
+
+    private func handleStyleError(_ body: () throws -> Void) throws {
+        do {
+            try body()
+        } catch let error as FlutterError {
+            throw error
+        } catch {
+            throw FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)
+        }
+    }
+
+    /// Converts the color theme data from Flutter. A string is a base64-encoded LUT,
+    /// a list is an expression, and `nil` or `NSNull` means no color theme.
+    private func colorTheme(from data: Any?) throws -> MapboxMaps.ColorTheme? {
+        switch data {
+        case nil, is NSNull:
+            return nil
+        case let base64 as String:
+            return MapboxMaps.ColorTheme(base64: base64)
+        case let expression as [Any]:
+            do {
+                let json = try JSONSerialization.data(withJSONObject: expression)
+                return MapboxMaps.ColorTheme(base64: try JSONDecoder().decode(Exp.self, from: json))
+            } catch {
+                throw FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)
+            }
+        default:
+            throw FlutterError(
+                code: StyleController.errorCode,
+                message: "The color theme data must be a string or an expression.",
+                details: nil
+            )
         }
     }
 

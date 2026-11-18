@@ -1653,6 +1653,8 @@ struct FlatLight {
   var position: [Double?]? = nil
   /// Transition property for `position`
   var positionTransition: TransitionOptions? = nil
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  var colorUseTheme: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1665,6 +1667,7 @@ struct FlatLight {
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[5])
     let position: [Double?]? = nilOrValue(pigeonVar_list[6])
     let positionTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
+    let colorUseTheme: String? = nilOrValue(pigeonVar_list[8])
 
     return FlatLight(
       id: id,
@@ -1674,7 +1677,8 @@ struct FlatLight {
       intensity: intensity,
       intensityTransition: intensityTransition,
       position: position,
-      positionTransition: positionTransition
+      positionTransition: positionTransition,
+      colorUseTheme: colorUseTheme
     )
   }
   func toList() -> [Any?] {
@@ -1687,6 +1691,7 @@ struct FlatLight {
       intensityTransition,
       position,
       positionTransition,
+      colorUseTheme,
     ]
   }
 }
@@ -1719,6 +1724,8 @@ struct DirectionalLight {
   var shadowIntensityTransition: TransitionOptions? = nil
   /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
   var shadowDrawBeforeLayer: String? = nil
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  var colorUseTheme: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1734,6 +1741,7 @@ struct DirectionalLight {
     let shadowIntensity: Double? = nilOrValue(pigeonVar_list[8])
     let shadowIntensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[9])
     let shadowDrawBeforeLayer: String? = nilOrValue(pigeonVar_list[10])
+    let colorUseTheme: String? = nilOrValue(pigeonVar_list[11])
 
     return DirectionalLight(
       id: id,
@@ -1746,7 +1754,8 @@ struct DirectionalLight {
       intensityTransition: intensityTransition,
       shadowIntensity: shadowIntensity,
       shadowIntensityTransition: shadowIntensityTransition,
-      shadowDrawBeforeLayer: shadowDrawBeforeLayer
+      shadowDrawBeforeLayer: shadowDrawBeforeLayer,
+      colorUseTheme: colorUseTheme
     )
   }
   func toList() -> [Any?] {
@@ -1762,6 +1771,7 @@ struct DirectionalLight {
       shadowIntensity,
       shadowIntensityTransition,
       shadowDrawBeforeLayer,
+      colorUseTheme,
     ]
   }
 }
@@ -1782,6 +1792,8 @@ struct AmbientLight {
   var intensity: Double? = nil
   /// Transition property for `intensity`
   var intensityTransition: TransitionOptions? = nil
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  var colorUseTheme: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1791,13 +1803,15 @@ struct AmbientLight {
     let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[2])
     let intensity: Double? = nilOrValue(pigeonVar_list[3])
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[4])
+    let colorUseTheme: String? = nilOrValue(pigeonVar_list[5])
 
     return AmbientLight(
       id: id,
       color: color,
       colorTransition: colorTransition,
       intensity: intensity,
-      intensityTransition: intensityTransition
+      intensityTransition: intensityTransition,
+      colorUseTheme: colorUseTheme
     )
   }
   func toList() -> [Any?] {
@@ -1807,6 +1821,7 @@ struct AmbientLight {
       colorTransition,
       intensity,
       intensityTransition,
+      colorUseTheme,
     ]
   }
 }
@@ -3585,6 +3600,11 @@ struct FeaturesetFeature {
   ///
   /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
   /// In this case it's impossible to set a feature state for an individual feature.
+  ///
+  /// On web, GL JS keeps a GeoJSON feature id only if it is a number, or a
+  /// string that holds a number. It removes all other string ids, and this
+  /// field is then null. Android and iOS keep the id. For an id on all
+  /// platforms, use a number, or copy the id into [properties].
   var id: FeaturesetFeatureId? = nil
   /// A featureset descriptor denoting the featureset this feature belongs to.
   var featureset: FeaturesetDescriptor

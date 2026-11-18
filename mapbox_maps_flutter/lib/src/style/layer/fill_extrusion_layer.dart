@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -42,12 +42,16 @@ final class FillExtrusionLayer extends Layer {
     this.fillExtrusionCastShadowsExpression,
     this.fillExtrusionColor,
     this.fillExtrusionColorExpression,
+    this.fillExtrusionColorUseTheme,
+    this.fillExtrusionColorUseThemeExpression,
     this.fillExtrusionCutoffFadeRange,
     this.fillExtrusionCutoffFadeRangeExpression,
     this.fillExtrusionEmissiveStrength,
     this.fillExtrusionEmissiveStrengthExpression,
     this.fillExtrusionFloodLightColor,
     this.fillExtrusionFloodLightColorExpression,
+    this.fillExtrusionFloodLightColorUseTheme,
+    this.fillExtrusionFloodLightColorUseThemeExpression,
     this.fillExtrusionFloodLightGroundAttenuation,
     this.fillExtrusionFloodLightGroundAttenuationExpression,
     this.fillExtrusionFloodLightGroundRadius,
@@ -89,12 +93,12 @@ final class FillExtrusionLayer extends Layer {
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
 
-  /// Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+  /// Radius of a fill extrusion edge. If not zero, rounds extrusion edges for a smoother appearance.
   /// Default value: 0. Value range: [0, 1]
   @experimental
   double? fillExtrusionEdgeRadius;
 
-  /// Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+  /// Radius of a fill extrusion edge. If not zero, rounds extrusion edges for a smoother appearance.
   /// Default value: 0. Value range: [0, 1]
   @experimental
   List<Object>? fillExtrusionEdgeRadiusExpression;
@@ -109,13 +113,13 @@ final class FillExtrusionLayer extends Layer {
   @experimental
   List<Object>? fillExtrusionAmbientOcclusionGroundAttenuationExpression;
 
-  /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
-  /// Default value: 3. Minimum value: 0.
+  /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings.
+  /// Default value: 3. Minimum value: 0. The unit of fillExtrusionAmbientOcclusionGroundRadius is in meters.
   @experimental
   double? fillExtrusionAmbientOcclusionGroundRadius;
 
-  /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
-  /// Default value: 3. Minimum value: 0.
+  /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings.
+  /// Default value: 3. Minimum value: 0. The unit of fillExtrusionAmbientOcclusionGroundRadius is in meters.
   @experimental
   List<Object>? fillExtrusionAmbientOcclusionGroundRadiusExpression;
 
@@ -179,6 +183,14 @@ final class FillExtrusionLayer extends Layer {
   /// Default value: "#000000".
   List<Object>? fillExtrusionColorExpression;
 
+  /// Sets if the color theme of the style changes `fillExtrusionColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? fillExtrusionColorUseTheme;
+
+  /// Sets if the color theme of the style changes `fillExtrusionColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? fillExtrusionColorUseThemeExpression;
+
   /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. Fade out is implemented by scaling down and removing buildings in the fade range in a staggered fashion. Opacity is not changed. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   /// Default value: 0. Value range: [0, 1]
   double? fillExtrusionCutoffFadeRange;
@@ -205,6 +217,14 @@ final class FillExtrusionLayer extends Layer {
   @experimental
   List<Object>? fillExtrusionFloodLightColorExpression;
 
+  /// Sets if the color theme of the style changes `fillExtrusionFloodLightColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? fillExtrusionFloodLightColorUseTheme;
+
+  /// Sets if the color theme of the style changes `fillExtrusionFloodLightColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? fillExtrusionFloodLightColorUseThemeExpression;
+
   /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
   /// Default value: 0.69. Value range: [0, 1]
   @experimental
@@ -215,12 +235,12 @@ final class FillExtrusionLayer extends Layer {
   @experimental
   List<Object>? fillExtrusionFloodLightGroundAttenuationExpression;
 
-  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
+  /// The extent of the flood light effect on the ground beneath the extruded buildings. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
   /// Default value: 0. The unit of fillExtrusionFloodLightGroundRadius is in meters.
   @experimental
   double? fillExtrusionFloodLightGroundRadius;
 
-  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
+  /// The extent of the flood light effect on the ground beneath the extruded buildings. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
   /// Default value: 0. The unit of fillExtrusionFloodLightGroundRadius is in meters.
   @experimental
   List<Object>? fillExtrusionFloodLightGroundRadiusExpression;
@@ -235,12 +255,12 @@ final class FillExtrusionLayer extends Layer {
   @experimental
   List<Object>? fillExtrusionFloodLightIntensityExpression;
 
-  /// The extent of the flood light effect on the walls of the extruded buildings in meters.
+  /// The extent of the flood light effect on the walls of the extruded buildings.
   /// Default value: 0. Minimum value: 0. The unit of fillExtrusionFloodLightWallRadius is in meters.
   @experimental
   double? fillExtrusionFloodLightWallRadius;
 
-  /// The extent of the flood light effect on the walls of the extruded buildings in meters.
+  /// The extent of the flood light effect on the walls of the extruded buildings.
   /// Default value: 0. Minimum value: 0. The unit of fillExtrusionFloodLightWallRadius is in meters.
   @experimental
   List<Object>? fillExtrusionFloodLightWallRadiusExpression;
@@ -273,11 +293,11 @@ final class FillExtrusionLayer extends Layer {
   @experimental
   List<Object>? fillExtrusionLineWidthExpression;
 
-  /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
+  /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available. When consecutive `fill-extrusion` and `building` layers are semi-transparent, they are rendered together: they occlude each other and are only transparent against other layers. If another layer type is placed between them, each layer is blended separately and later layers are visible through earlier ones.
   /// Default value: 1. Value range: [0, 1]
   double? fillExtrusionOpacity;
 
-  /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
+  /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available. When consecutive `fill-extrusion` and `building` layers are semi-transparent, they are rendered together: they occlude each other and are only transparent against other layers. If another layer type is placed between them, each layer is blended separately and later layers are visible through earlier ones.
   /// Default value: 1. Value range: [0, 1]
   List<Object>? fillExtrusionOpacityExpression;
 
@@ -428,6 +448,14 @@ final class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-color"] = fillExtrusionColor?.toRGBA();
     }
 
+    if (fillExtrusionColorUseThemeExpression != null) {
+      paint["fill-extrusion-color-use-theme"] =
+          fillExtrusionColorUseThemeExpression;
+    } else if (fillExtrusionColorUseTheme != null) {
+      paint["fill-extrusion-color-use-theme"] =
+          fillExtrusionColorUseTheme?.value;
+    }
+
     if (fillExtrusionCutoffFadeRangeExpression != null) {
       paint["fill-extrusion-cutoff-fade-range"] =
           fillExtrusionCutoffFadeRangeExpression;
@@ -448,6 +476,14 @@ final class FillExtrusionLayer extends Layer {
     } else if (fillExtrusionFloodLightColor != null) {
       paint["fill-extrusion-flood-light-color"] = fillExtrusionFloodLightColor
           ?.toRGBA();
+    }
+
+    if (fillExtrusionFloodLightColorUseThemeExpression != null) {
+      paint["fill-extrusion-flood-light-color-use-theme"] =
+          fillExtrusionFloodLightColorUseThemeExpression;
+    } else if (fillExtrusionFloodLightColorUseTheme != null) {
+      paint["fill-extrusion-flood-light-color-use-theme"] =
+          fillExtrusionFloodLightColorUseTheme?.value;
     }
 
     if (fillExtrusionFloodLightGroundAttenuationExpression != null) {
@@ -671,10 +707,17 @@ final class FillExtrusionLayer extends Layer {
       fillExtrusionCastShadowsExpression: styleOptionalCastList(
         map["paint"]["fill-extrusion-cast-shadows"],
       ),
-      fillExtrusionColor: (map["paint"]["fill-extrusion-color"] as List?)
-          ?.toRGBAInt(),
+      fillExtrusionColor: styleColorFromJson(
+        map["paint"]["fill-extrusion-color"],
+      ),
       fillExtrusionColorExpression: styleOptionalCastList(
         map["paint"]["fill-extrusion-color"],
+      ),
+      fillExtrusionColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["fill-extrusion-color-use-theme"],
+      ),
+      fillExtrusionColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["fill-extrusion-color-use-theme"],
       ),
       fillExtrusionCutoffFadeRange: styleOptionalCast(
         map["paint"]["fill-extrusion-cutoff-fade-range"],
@@ -688,11 +731,17 @@ final class FillExtrusionLayer extends Layer {
       fillExtrusionEmissiveStrengthExpression: styleOptionalCastList(
         map["paint"]["fill-extrusion-emissive-strength"],
       ),
-      fillExtrusionFloodLightColor:
-          (map["paint"]["fill-extrusion-flood-light-color"] as List?)
-              ?.toRGBAInt(),
+      fillExtrusionFloodLightColor: styleColorFromJson(
+        map["paint"]["fill-extrusion-flood-light-color"],
+      ),
       fillExtrusionFloodLightColorExpression: styleOptionalCastList(
         map["paint"]["fill-extrusion-flood-light-color"],
+      ),
+      fillExtrusionFloodLightColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["fill-extrusion-flood-light-color-use-theme"],
+      ),
+      fillExtrusionFloodLightColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["fill-extrusion-flood-light-color-use-theme"],
       ),
       fillExtrusionFloodLightGroundAttenuation: styleOptionalCast(
         map["paint"]["fill-extrusion-flood-light-ground-attenuation"],

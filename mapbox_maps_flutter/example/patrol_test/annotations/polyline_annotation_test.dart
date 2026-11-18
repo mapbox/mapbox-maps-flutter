@@ -39,6 +39,8 @@ void main() {
       lineOpacity: 1.0,
       linePattern: "abc",
       lineWidth: 1.0,
+      lineBorderColorUseTheme: ColorUseTheme.none.value,
+      lineColorUseTheme: ColorUseTheme.none.value,
       customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(polylineAnnotationOptions);
@@ -63,6 +65,8 @@ void main() {
     expect(1.0, annotation.lineOpacity);
     expect("abc", annotation.linePattern);
     expect(1.0, annotation.lineWidth);
+    expect(ColorUseTheme.none.value, annotation.lineBorderColorUseTheme);
+    expect(ColorUseTheme.none.value, annotation.lineColorUseTheme);
     expect({'foo': 'bar'}, annotation.customData);
   });
 
@@ -87,7 +91,14 @@ void main() {
           .toList(),
     );
     annotation.geometry = newlineString;
+    annotation.lineBorderColorUseTheme = ColorUseTheme.none.value;
+    annotation.lineColorUseTheme = ColorUseTheme.none.value;
     await manager.update(annotation);
+    final updated = (await manager.getAnnotations()).firstWhere(
+      (a) => a.id == annotation.id,
+    );
+    expect(updated.lineBorderColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.lineColorUseTheme, ColorUseTheme.none.value);
     await manager.delete(annotation);
 
     for (var i = 0; i < 10; i++) {

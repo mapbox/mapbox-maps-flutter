@@ -341,6 +341,7 @@ extension AmbientLightToJS on AmbientLight {
   JSAmbientLightProperties toJSProperties() {
     final properties = JSAmbientLightProperties();
     if (color case final value?) properties.color = cssColor(value);
+    if (colorUseTheme case final value?) properties.colorUseTheme = value;
     if (colorTransition case final value?) {
       properties.colorTransition = value.toJSTransition();
     }
@@ -357,6 +358,7 @@ extension DirectionalLightToJS on DirectionalLight {
     final properties = JSDirectionalLightProperties();
     if (castShadows case final value?) properties.castShadows = value;
     if (color case final value?) properties.color = cssColor(value);
+    if (colorUseTheme case final value?) properties.colorUseTheme = value;
     if (colorTransition case final value?) {
       properties.colorTransition = value.toJSTransition();
     }

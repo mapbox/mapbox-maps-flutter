@@ -1,4 +1,5 @@
 // This file is generated.
+// ignore_for_file: experimental_member_use
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// Web stub. Methods that mutate the map throw [UnimplementedError];
@@ -161,6 +162,23 @@ class UnsupportedCircleAnnotationManagerWeb
   @override
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
       _unimplemented('getCircleTranslateAnchor');
+
+  @override
+  Future<void> setCircleColorUseTheme(ColorUseTheme circleColorUseTheme) =>
+      _unimplemented('setCircleColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getCircleColorUseTheme() =>
+      _unimplemented('getCircleColorUseTheme');
+
+  @override
+  Future<void> setCircleStrokeColorUseTheme(
+    ColorUseTheme circleStrokeColorUseTheme,
+  ) => _unimplemented('setCircleStrokeColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getCircleStrokeColorUseTheme() =>
+      _unimplemented('getCircleStrokeColorUseTheme');
 }
 
 // End of generated file.

@@ -212,6 +212,12 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.lineWidth?.let {
       originalAnnotation.lineWidth = it
     }
+    annotation.lineBorderColorUseTheme?.let {
+      originalAnnotation.lineBorderColorUseTheme = it
+    }
+    annotation.lineColorUseTheme?.let {
+      originalAnnotation.lineColorUseTheme = it
+    }
     annotation.customData?.let {
       originalAnnotation.setData(Gson().toJsonTree(it))
     }
@@ -907,6 +913,75 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
       callback(Result.success(null))
     }
   }
+
+  override fun setLineBorderColorUseTheme(
+    managerId: String,
+    lineBorderColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineBorderColorUseTheme = lineBorderColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineBorderColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineBorderColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineColorUseTheme(
+    managerId: String,
+    lineColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineColorUseTheme = lineColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineTrimColorUseTheme(
+    managerId: String,
+    lineTrimColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineTrimColorUseTheme = lineTrimColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineTrimColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineTrimColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
 }
 
 fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolylineAnnotation(): PolylineAnnotation {
@@ -929,6 +1004,8 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
     lineOpacity = lineOpacity,
     linePattern = linePattern,
     lineWidth = lineWidth,
+    lineBorderColorUseTheme = lineBorderColorUseTheme,
+    lineColorUseTheme = lineColorUseTheme,
     customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
@@ -982,6 +1059,12 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   }
   this.lineWidth?.let {
     options.withLineWidth(it)
+  }
+  this.lineBorderColorUseTheme?.let {
+    options.withLineBorderColorUseTheme(it)
+  }
+  this.lineColorUseTheme?.let {
+    options.withLineColorUseTheme(it)
   }
   this.customData?.let {
     options.withData(Gson().toJsonTree(it))

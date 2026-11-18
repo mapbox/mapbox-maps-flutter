@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -57,9 +56,11 @@ void main() {
         fillExtrusionBaseAlignment: FillExtrusionBaseAlignment.TERRAIN,
         fillExtrusionCastShadows: true,
         fillExtrusionColor: Colors.red.value,
+        fillExtrusionColorUseTheme: ColorUseTheme.none,
         fillExtrusionCutoffFadeRange: 1.0,
         fillExtrusionEmissiveStrength: 1.0,
         fillExtrusionFloodLightColor: Colors.red.value,
+        fillExtrusionFloodLightColorUseTheme: ColorUseTheme.none,
         fillExtrusionFloodLightGroundAttenuation: 1.0,
         fillExtrusionFloodLightGroundRadius: 1.0,
         fillExtrusionFloodLightIntensity: 1.0,
@@ -95,9 +96,11 @@ void main() {
     );
     expect(layer.fillExtrusionCastShadows, true);
     expect(layer.fillExtrusionColor, Colors.red.value);
+    expect(layer.fillExtrusionColorUseTheme, ColorUseTheme.none);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
     expect(layer.fillExtrusionEmissiveStrength, 1.0);
     expect(layer.fillExtrusionFloodLightColor, Colors.red.value);
+    expect(layer.fillExtrusionFloodLightColorUseTheme, ColorUseTheme.none);
     expect(layer.fillExtrusionFloodLightGroundAttenuation, 1.0);
     expect(layer.fillExtrusionFloodLightGroundRadius, 1.0);
     expect(layer.fillExtrusionFloodLightIntensity, 1.0);
@@ -167,9 +170,13 @@ void main() {
         fillExtrusionBaseAlignment: FillExtrusionBaseAlignment.TERRAIN,
         fillExtrusionCastShadows: true,
         fillExtrusionColorExpression: ['rgba', 255, 0, 0, 1],
+        fillExtrusionColorUseTheme: ColorUseTheme.useDefault,
+        fillExtrusionColorUseThemeExpression: ['string', 'none'],
         fillExtrusionCutoffFadeRangeExpression: ['number', 1.0],
         fillExtrusionEmissiveStrengthExpression: ['number', 1.0],
         fillExtrusionFloodLightColorExpression: ['rgba', 255, 0, 0, 1],
+        fillExtrusionFloodLightColorUseTheme: ColorUseTheme.useDefault,
+        fillExtrusionFloodLightColorUseThemeExpression: ['string', 'none'],
         fillExtrusionFloodLightGroundAttenuationExpression: ['number', 1.0],
         fillExtrusionFloodLightGroundRadiusExpression: ['number', 1.0],
         fillExtrusionFloodLightIntensityExpression: ['number', 1.0],
@@ -213,6 +220,11 @@ void main() {
     );
     expect(layer.fillExtrusionCastShadows, true);
     expect(layer.fillExtrusionColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.fillExtrusionColorUseThemeExpression ??
+          layer.fillExtrusionColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
     expect(layer.fillExtrusionEmissiveStrength, 1.0);
     expect(layer.fillExtrusionFloodLightColorExpression, [
@@ -222,6 +234,11 @@ void main() {
       0,
       1,
     ]);
+    expect(
+      layer.fillExtrusionFloodLightColorUseThemeExpression ??
+          layer.fillExtrusionFloodLightColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.fillExtrusionFloodLightGroundAttenuation, 1.0);
     expect(layer.fillExtrusionFloodLightGroundRadius, 1.0);
     expect(layer.fillExtrusionFloodLightIntensity, 1.0);

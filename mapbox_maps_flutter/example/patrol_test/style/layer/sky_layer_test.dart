@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -35,10 +34,13 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         skyAtmosphereColor: Colors.red.value,
+        skyAtmosphereColorUseTheme: ColorUseTheme.none,
         skyAtmosphereHaloColor: Colors.red.value,
+        skyAtmosphereHaloColorUseTheme: ColorUseTheme.none,
         skyAtmosphereSun: [180.0, 90.0],
         skyAtmosphereSunIntensity: 1.0,
         skyGradient: Colors.red.value,
+        skyGradientUseTheme: ColorUseTheme.none,
         skyGradientCenter: [180.0, 90.0],
         skyGradientRadius: 1.0,
         skyOpacity: 1.0,
@@ -51,10 +53,13 @@ void main() {
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.skyAtmosphereColor, Colors.red.value);
+    expect(layer.skyAtmosphereColorUseTheme, ColorUseTheme.none);
     expect(layer.skyAtmosphereHaloColor, Colors.red.value);
+    expect(layer.skyAtmosphereHaloColorUseTheme, ColorUseTheme.none);
     expect(layer.skyAtmosphereSun, [180.0, 90.0]);
     expect(layer.skyAtmosphereSunIntensity, 1.0);
     expect(layer.skyGradient, Colors.red.value);
+    expect(layer.skyGradientUseTheme, ColorUseTheme.none);
     expect(layer.skyGradientCenter, [180.0, 90.0]);
     expect(layer.skyGradientRadius, 1.0);
     expect(layer.skyOpacity, 1.0);
@@ -83,13 +88,19 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         skyAtmosphereColor: Colors.red.value,
+        skyAtmosphereColorUseTheme: ColorUseTheme.useDefault,
+        skyAtmosphereColorUseThemeExpression: ['string', 'none'],
         skyAtmosphereHaloColor: Colors.red.value,
+        skyAtmosphereHaloColorUseTheme: ColorUseTheme.useDefault,
+        skyAtmosphereHaloColorUseThemeExpression: ['string', 'none'],
         skyAtmosphereSunExpression: [
           'literal',
           [180.0, 90.0],
         ],
         skyAtmosphereSunIntensity: 1.0,
         skyGradientExpression: ['rgba', 255, 0, 0, 1],
+        skyGradientUseTheme: ColorUseTheme.useDefault,
+        skyGradientUseThemeExpression: ['string', 'none'],
         skyGradientCenterExpression: [
           'literal',
           [180.0, 90.0],
@@ -116,10 +127,24 @@ void main() {
       ]);
     }
     expect(layer.skyAtmosphereColor, Colors.red.value);
+    expect(
+      layer.skyAtmosphereColorUseThemeExpression ??
+          layer.skyAtmosphereColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.skyAtmosphereHaloColor, Colors.red.value);
+    expect(
+      layer.skyAtmosphereHaloColorUseThemeExpression ??
+          layer.skyAtmosphereHaloColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.skyAtmosphereSun, [180.0, 90.0]);
     expect(layer.skyAtmosphereSunIntensity, 1.0);
     expect(layer.skyGradientExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.skyGradientUseThemeExpression ?? layer.skyGradientUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.skyGradientCenter, [180.0, 90.0]);
     expect(layer.skyGradientRadius, 1.0);
     expect(layer.skyOpacity, 1.0);

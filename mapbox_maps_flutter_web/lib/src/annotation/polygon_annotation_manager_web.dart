@@ -1,4 +1,5 @@
 // This file is generated.
+// ignore_for_file: experimental_member_use
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 
 /// Web stub. Methods that mutate the map throw [UnimplementedError];
@@ -159,6 +160,41 @@ class UnsupportedPolygonAnnotationManagerWeb
 
   @override
   Future<double?> getFillZOffset() => _unimplemented('getFillZOffset');
+
+  @override
+  Future<void> setFillBridgeGuardRailColorUseTheme(
+    ColorUseTheme fillBridgeGuardRailColorUseTheme,
+  ) => _unimplemented('setFillBridgeGuardRailColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getFillBridgeGuardRailColorUseTheme() =>
+      _unimplemented('getFillBridgeGuardRailColorUseTheme');
+
+  @override
+  Future<void> setFillColorUseTheme(ColorUseTheme fillColorUseTheme) =>
+      _unimplemented('setFillColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getFillColorUseTheme() =>
+      _unimplemented('getFillColorUseTheme');
+
+  @override
+  Future<void> setFillOutlineColorUseTheme(
+    ColorUseTheme fillOutlineColorUseTheme,
+  ) => _unimplemented('setFillOutlineColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getFillOutlineColorUseTheme() =>
+      _unimplemented('getFillOutlineColorUseTheme');
+
+  @override
+  Future<void> setFillTunnelStructureColorUseTheme(
+    ColorUseTheme fillTunnelStructureColorUseTheme,
+  ) => _unimplemented('setFillTunnelStructureColorUseTheme');
+
+  @override
+  Future<ColorUseTheme?> getFillTunnelStructureColorUseTheme() =>
+      _unimplemented('getFillTunnelStructureColorUseTheme');
 }
 
 // End of generated file.

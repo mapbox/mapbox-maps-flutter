@@ -1,3 +1,5 @@
+// ignore_for_file: experimental_member_use
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -412,6 +414,78 @@ class MockStylePlatformInterface implements StylePlatformInterface {
     updateStyleImageSourceImageCallCount++;
     lastSourceId = sourceId;
     lastImage = image;
+  }
+
+  ColorTheme? lastColorTheme;
+
+  @override
+  Future<void> setStyleColorTheme(ColorTheme? colorTheme) async {
+    lastColorTheme = colorTheme;
+  }
+
+  @override
+  Future<void> setStyleImportColorTheme(
+    String importId,
+    ColorTheme? colorTheme,
+  ) async {
+    lastImportId = importId;
+    lastColorTheme = colorTheme;
+  }
+
+  final Map<String, String?> styleProperties = {};
+  final Map<String, Map<String, Object>> stylePropertyValues = {};
+
+  StylePropertyValue _propertyValue(String target, String property) {
+    final value = stylePropertyValues[target]?[property];
+    return StylePropertyValue(
+      value: value,
+      kind: value == null
+          ? StylePropertyValueKind.UNDEFINED
+          : StylePropertyValueKind.CONSTANT,
+    );
+  }
+
+  @override
+  Future<void> setStyleAtmosphere(String? properties) async {
+    styleProperties['atmosphere'] = properties;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleAtmosphereProperty(
+    String property,
+  ) async => _propertyValue('atmosphere', property);
+
+  @override
+  Future<void> setStyleAtmosphereProperty(String property, Object value) async {
+    (stylePropertyValues['atmosphere'] ??= {})[property] = value;
+  }
+
+  @override
+  Future<void> setStyleSnow(String? properties) async {
+    styleProperties['snow'] = properties;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleSnowProperty(String property) async =>
+      _propertyValue('snow', property);
+
+  @override
+  Future<void> setStyleSnowProperty(String property, Object value) async {
+    (stylePropertyValues['snow'] ??= {})[property] = value;
+  }
+
+  @override
+  Future<void> setStyleRain(String? properties) async {
+    styleProperties['rain'] = properties;
+  }
+
+  @override
+  Future<StylePropertyValue> getStyleRainProperty(String property) async =>
+      _propertyValue('rain', property);
+
+  @override
+  Future<void> setStyleRainProperty(String property, Object value) async {
+    (stylePropertyValues['rain'] ??= {})[property] = value;
   }
 
   @override
@@ -1240,6 +1314,82 @@ void main() {
       expect(mockImpl.lastImportId, 'import-1');
       expect(mockImpl.lastProperty, 'theme');
       expect(mockImpl.lastValue, 'dark');
+    });
+
+    test('setStyleColorTheme passes the theme to the platform', () async {
+      await style.setStyleColorTheme(const ColorTheme.base64('lut'));
+
+      expect(mockImpl.lastColorTheme?.toJson(), {'data': 'lut'});
+    });
+
+    test('setStyleImportColorTheme passes the import and theme', () async {
+      await style.setStyleImportColorTheme('import-1', null);
+
+      expect(mockImpl.lastImportId, 'import-1');
+      expect(mockImpl.lastColorTheme, isNull);
+    });
+
+    test('setStyleAtmosphere encodes the atmosphere', () async {
+      await style.setStyleAtmosphere(
+        Atmosphere(
+          color: 0xFFFF0000,
+          colorUseTheme: ColorUseTheme.none,
+          range: [1.0, 8.0],
+          starIntensityExpression: ['zoom'],
+        ),
+      );
+
+      expect(jsonDecode(mockImpl.styleProperties['atmosphere']!), {
+        'color': 'rgba(255, 0, 0, 1.0)',
+        'color-use-theme': 'none',
+        'range': [1.0, 8.0],
+        'star-intensity': ['zoom'],
+      });
+    });
+
+    test('setStyleSnow and setStyleRain pass null to remove', () async {
+      await style.setStyleSnow(null);
+      await style.setStyleRain(null);
+
+      expect(mockImpl.styleProperties, {'snow': null, 'rain': null});
+    });
+
+    test('getStyleAtmosphere returns null without properties', () async {
+      expect(await style.getStyleAtmosphere(), isNull);
+    });
+
+    test('getStyleAtmosphere decodes the defined properties', () async {
+      await style.setStyleAtmosphereProperty('color', 'rgba(255, 0, 0, 1)');
+      await style.setStyleAtmosphereProperty('color-use-theme', 'none');
+      await style.setStyleAtmosphereProperty('range', [1, 8]);
+      await style.setStyleAtmosphereProperty('star-intensity', [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        5,
+        0.4,
+        6,
+        0,
+      ]);
+
+      final atmosphere = await style.getStyleAtmosphere();
+
+      expect(atmosphere?.color, 0xFFFF0000);
+      expect(atmosphere?.colorExpression, isNull);
+      expect(atmosphere?.colorUseTheme, ColorUseTheme.none);
+      expect(atmosphere?.range, [1.0, 8.0]);
+      expect(atmosphere?.rangeExpression, isNull);
+      expect(atmosphere?.starIntensity, isNull);
+      expect(atmosphere?.starIntensityExpression?.first, 'interpolate');
+      expect(atmosphere?.highColor, isNull);
+    });
+
+    test('getStyleSnow and getStyleRain decode their properties', () async {
+      await style.setStyleSnowProperty('intensity', 0.8);
+      await style.setStyleRainProperty('droplet-size', [2, 10]);
+
+      expect((await style.getStyleSnow())?.intensity, 0.8);
+      expect((await style.getStyleRain())?.dropletSize, [2.0, 10.0]);
     });
 
     test('setStyleImportConfigProperties delegates to interface', () async {

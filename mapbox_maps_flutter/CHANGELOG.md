@@ -20,6 +20,12 @@
 * [Web] `CameraState.padding` now reports the current camera padding in `getCameraState`, `onCameraChanged` and gesture contexts. Before, it was always zero.
 * [Web] `onSourceDataLoaded` now sends a `TILE` event with the tile ID for each loaded tile, and a `METADATA` event when the source metadata loads. As on Android and iOS, events for sources of imported styles are not sent.
 * [Web] Fix map event listeners after a rebuild of `MapWidget`. Before, web called the listeners of the first build, and a listener added later got no events.
+* Add experimental color theme support. `setStyleColorTheme` and `setStyleImportColorTheme` apply a color grading look-up table (LUT) to the style or to a style import. Use `ColorTheme.base64` or `ColorTheme.expression` to create a theme, and `null` to remove it.
+* Add experimental `ColorUseTheme` control for color properties. Use `ColorUseTheme.none` to keep a color unchanged by the color theme. The control is available on:
+  * Layers: a `*UseTheme` field and a `*UseThemeExpression` field for each color property, for example `FillLayer.fillColorUseTheme`.
+  * Lights: `colorUseTheme` on `FlatLight`, `AmbientLight` and `DirectionalLight`. On web, `FlatLight` does not support it.
+  * [Android][iOS] Annotations: for example `CircleAnnotationOptions.circleColorUseTheme` and `CircleAnnotationManager.setCircleColorUseTheme`.
+* Add experimental atmosphere, snow and rain APIs: `setStyleAtmosphere`, `setStyleSnow`, `setStyleRain`, their getters, and `setStyleAtmosphereProperty`, `setStyleSnowProperty` and `setStyleRainProperty`. Each color property has a `*UseTheme` field. On web, snow and rain do not support `*UseTheme`.
 
 ### 3.35.0-rc.1
 

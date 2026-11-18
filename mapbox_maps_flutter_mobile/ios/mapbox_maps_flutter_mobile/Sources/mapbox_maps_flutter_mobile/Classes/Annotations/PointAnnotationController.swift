@@ -1288,6 +1288,78 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
+
+    func getIconColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.iconColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconColorUseTheme(managerId: String, iconColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: iconColorUseTheme)
+            try set(\.iconColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getIconHaloColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.iconHaloColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconHaloColorUseTheme(managerId: String, iconHaloColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: iconHaloColorUseTheme)
+            try set(\.iconHaloColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getTextColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.textColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setTextColorUseTheme(managerId: String, textColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: textColorUseTheme)
+            try set(\.textColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getTextHaloColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.textHaloColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setTextHaloColorUseTheme(managerId: String, textHaloColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: textHaloColorUseTheme)
+            try set(\.textHaloColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 }
 
 extension PointAnnotationOptions {
@@ -1398,6 +1470,18 @@ extension PointAnnotationOptions {
         }
         if let textOpacity {
             annotation.textOpacity = textOpacity
+        }
+        if let iconColorUseTheme {
+            annotation.iconColorUseTheme = ColorUseTheme(rawValue: iconColorUseTheme)
+        }
+        if let iconHaloColorUseTheme {
+            annotation.iconHaloColorUseTheme = ColorUseTheme(rawValue: iconHaloColorUseTheme)
+        }
+        if let textColorUseTheme {
+            annotation.textColorUseTheme = ColorUseTheme(rawValue: textColorUseTheme)
+        }
+        if let textHaloColorUseTheme {
+            annotation.textHaloColorUseTheme = ColorUseTheme(rawValue: textHaloColorUseTheme)
         }
         if let isDraggable {
             annotation.isDraggable = isDraggable
@@ -1518,6 +1602,18 @@ extension PointAnnotation {
         if let textOpacity {
             annotation.textOpacity = textOpacity
         }
+        if let iconColorUseTheme {
+            annotation.iconColorUseTheme = ColorUseTheme(rawValue: iconColorUseTheme)
+        }
+        if let iconHaloColorUseTheme {
+            annotation.iconHaloColorUseTheme = ColorUseTheme(rawValue: iconHaloColorUseTheme)
+        }
+        if let textColorUseTheme {
+            annotation.textColorUseTheme = ColorUseTheme(rawValue: textColorUseTheme)
+        }
+        if let textHaloColorUseTheme {
+            annotation.textHaloColorUseTheme = ColorUseTheme(rawValue: textHaloColorUseTheme)
+        }
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
@@ -1568,6 +1664,10 @@ extension MapboxMaps.PointAnnotation {
             textHaloWidth: textHaloWidth,
             textOcclusionOpacity: textOcclusionOpacity,
             textOpacity: textOpacity,
+            iconColorUseTheme: iconColorUseTheme?.rawValue,
+            iconHaloColorUseTheme: iconHaloColorUseTheme?.rawValue,
+            textColorUseTheme: textColorUseTheme?.rawValue,
+            textHaloColorUseTheme: textHaloColorUseTheme?.rawValue,
             isDraggable: isDraggable,
             customData: customData.compactMapValues { $0?.toAny }
         )

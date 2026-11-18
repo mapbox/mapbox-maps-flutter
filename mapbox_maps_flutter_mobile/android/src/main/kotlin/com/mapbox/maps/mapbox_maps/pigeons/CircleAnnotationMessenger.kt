@@ -146,6 +146,10 @@ interface _CircleAnnotationMessenger {
   fun getCircleTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setCircleTranslateAnchor(managerId: String, circleTranslateAnchor: CircleTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getCircleTranslateAnchor(managerId: String, callback: (Result<CircleTranslateAnchor?>) -> Unit)
+  fun setCircleColorUseTheme(managerId: String, circleColorUseTheme: String, callback: (Result<Unit>) -> Unit)
+  fun getCircleColorUseTheme(managerId: String, callback: (Result<String?>) -> Unit)
+  fun setCircleStrokeColorUseTheme(managerId: String, circleStrokeColorUseTheme: String, callback: (Result<Unit>) -> Unit)
+  fun getCircleStrokeColorUseTheme(managerId: String, callback: (Result<String?>) -> Unit)
 
   companion object {
     /** The codec used by _CircleAnnotationMessenger. */
@@ -844,6 +848,86 @@ interface _CircleAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getCircleTranslateAnchor(managerIdArg) { result: Result<CircleTranslateAnchor?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleColorUseThemeArg = args[1] as String
+            api.setCircleColorUseTheme(managerIdArg, circleColorUseThemeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleColorUseTheme(managerIdArg) { result: Result<String?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleStrokeColorUseThemeArg = args[1] as String
+            api.setCircleStrokeColorUseTheme(managerIdArg, circleStrokeColorUseThemeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeColorUseTheme$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleStrokeColorUseTheme(managerIdArg) { result: Result<String?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

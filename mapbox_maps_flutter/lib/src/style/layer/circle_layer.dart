@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -30,6 +30,8 @@ final class CircleLayer extends Layer {
     this.circleBlurExpression,
     this.circleColor,
     this.circleColorExpression,
+    this.circleColorUseTheme,
+    this.circleColorUseThemeExpression,
     this.circleEmissiveStrength,
     this.circleEmissiveStrengthExpression,
     this.circleOpacity,
@@ -42,6 +44,8 @@ final class CircleLayer extends Layer {
     this.circleRadiusExpression,
     this.circleStrokeColor,
     this.circleStrokeColorExpression,
+    this.circleStrokeColorUseTheme,
+    this.circleStrokeColorUseThemeExpression,
     this.circleStrokeOpacity,
     this.circleStrokeOpacityExpression,
     this.circleStrokeWidth,
@@ -93,6 +97,14 @@ final class CircleLayer extends Layer {
   /// Default value: "#000000".
   List<Object>? circleColorExpression;
 
+  /// Sets if the color theme of the style changes `circleColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? circleColorUseTheme;
+
+  /// Sets if the color theme of the style changes `circleColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? circleColorUseThemeExpression;
+
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 0. Minimum value: 0. The unit of circleEmissiveStrength is in intensity.
   double? circleEmissiveStrength;
@@ -140,6 +152,14 @@ final class CircleLayer extends Layer {
   /// The stroke color of the circle.
   /// Default value: "#000000".
   List<Object>? circleStrokeColorExpression;
+
+  /// Sets if the color theme of the style changes `circleStrokeColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? circleStrokeColorUseTheme;
+
+  /// Sets if the color theme of the style changes `circleStrokeColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? circleStrokeColorUseThemeExpression;
 
   /// The opacity of the circle's stroke.
   /// Default value: 1. Value range: [0, 1]
@@ -216,6 +236,12 @@ final class CircleLayer extends Layer {
       paint["circle-color"] = circleColor?.toRGBA();
     }
 
+    if (circleColorUseThemeExpression != null) {
+      paint["circle-color-use-theme"] = circleColorUseThemeExpression;
+    } else if (circleColorUseTheme != null) {
+      paint["circle-color-use-theme"] = circleColorUseTheme?.value;
+    }
+
     if (circleEmissiveStrengthExpression != null) {
       paint["circle-emissive-strength"] = circleEmissiveStrengthExpression;
     } else if (circleEmissiveStrength != null) {
@@ -254,6 +280,13 @@ final class CircleLayer extends Layer {
       paint["circle-stroke-color"] = circleStrokeColorExpression;
     } else if (circleStrokeColor != null) {
       paint["circle-stroke-color"] = circleStrokeColor?.toRGBA();
+    }
+
+    if (circleStrokeColorUseThemeExpression != null) {
+      paint["circle-stroke-color-use-theme"] =
+          circleStrokeColorUseThemeExpression;
+    } else if (circleStrokeColorUseTheme != null) {
+      paint["circle-stroke-color-use-theme"] = circleStrokeColorUseTheme?.value;
     }
 
     if (circleStrokeOpacityExpression != null) {
@@ -351,9 +384,15 @@ final class CircleLayer extends Layer {
       ),
       circleBlur: styleOptionalCast(map["paint"]["circle-blur"]),
       circleBlurExpression: styleOptionalCastList(map["paint"]["circle-blur"]),
-      circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
+      circleColor: styleColorFromJson(map["paint"]["circle-color"]),
       circleColorExpression: styleOptionalCastList(
         map["paint"]["circle-color"],
+      ),
+      circleColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["circle-color-use-theme"],
+      ),
+      circleColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["circle-color-use-theme"],
       ),
       circleEmissiveStrength: styleOptionalCast(
         map["paint"]["circle-emissive-strength"],
@@ -391,10 +430,17 @@ final class CircleLayer extends Layer {
       circleRadiusExpression: styleOptionalCastList(
         map["paint"]["circle-radius"],
       ),
-      circleStrokeColor: (map["paint"]["circle-stroke-color"] as List?)
-          ?.toRGBAInt(),
+      circleStrokeColor: styleColorFromJson(
+        map["paint"]["circle-stroke-color"],
+      ),
       circleStrokeColorExpression: styleOptionalCastList(
         map["paint"]["circle-stroke-color"],
+      ),
+      circleStrokeColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["circle-stroke-color-use-theme"],
+      ),
+      circleStrokeColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["circle-stroke-color-use-theme"],
       ),
       circleStrokeOpacity: styleOptionalCast(
         map["paint"]["circle-stroke-opacity"],

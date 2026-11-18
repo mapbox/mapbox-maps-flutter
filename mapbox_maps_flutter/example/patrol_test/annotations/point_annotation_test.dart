@@ -62,6 +62,10 @@ void main() {
       textHaloWidth: 1.0,
       textOcclusionOpacity: 1.0,
       textOpacity: 1.0,
+      iconColorUseTheme: ColorUseTheme.none.value,
+      iconHaloColorUseTheme: ColorUseTheme.none.value,
+      textColorUseTheme: ColorUseTheme.none.value,
+      textHaloColorUseTheme: ColorUseTheme.none.value,
       customData: {'foo': 'bar'},
     );
     final annotation = await manager.create(pointAnnotationOptions);
@@ -103,6 +107,10 @@ void main() {
     expect(1.0, annotation.textHaloWidth);
     expect(1.0, annotation.textOcclusionOpacity);
     expect(1.0, annotation.textOpacity);
+    expect(ColorUseTheme.none.value, annotation.iconColorUseTheme);
+    expect(ColorUseTheme.none.value, annotation.iconHaloColorUseTheme);
+    expect(ColorUseTheme.none.value, annotation.textColorUseTheme);
+    expect(ColorUseTheme.none.value, annotation.textHaloColorUseTheme);
     expect({'foo': 'bar'}, annotation.customData);
   });
 
@@ -123,7 +131,18 @@ void main() {
       ),
     );
     annotation.geometry = newPoint;
+    annotation.iconColorUseTheme = ColorUseTheme.none.value;
+    annotation.iconHaloColorUseTheme = ColorUseTheme.none.value;
+    annotation.textColorUseTheme = ColorUseTheme.none.value;
+    annotation.textHaloColorUseTheme = ColorUseTheme.none.value;
     await manager.update(annotation);
+    final updated = (await manager.getAnnotations()).firstWhere(
+      (a) => a.id == annotation.id,
+    );
+    expect(updated.iconColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.iconHaloColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.textColorUseTheme, ColorUseTheme.none.value);
+    expect(updated.textHaloColorUseTheme, ColorUseTheme.none.value);
     await manager.delete(annotation);
 
     for (var i = 0; i < 10; i++) {

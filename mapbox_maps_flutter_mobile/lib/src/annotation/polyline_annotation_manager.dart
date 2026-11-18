@@ -169,21 +169,21 @@ class PolylineAnnotationManager extends BaseAnnotationManager
   Future<LineWidthUnit?> getLineWidthUnit() =>
       _annotationMessenger.getLineWidthUnit(id);
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment. Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment. Default value: 0. The unit of lineZOffset is in meters.
   @override
   Future<void> setLineZOffset(double lineZOffset) =>
       _annotationMessenger.setLineZOffset(id, lineZOffset);
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment. Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment. Default value: 0. The unit of lineZOffset is in meters.
   @override
   Future<double?> getLineZOffset() => _annotationMessenger.getLineZOffset(id);
 
-  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+  /// Blur applied to the line. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   @override
   Future<void> setLineBlur(double lineBlur) =>
       _annotationMessenger.setLineBlur(id, lineBlur);
 
-  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+  /// Blur applied to the line. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   @override
   Future<double?> getLineBlur() => _annotationMessenger.getLineBlur(id);
 
@@ -197,12 +197,12 @@ class PolylineAnnotationManager extends BaseAnnotationManager
   Future<int?> getLineBorderColor() =>
       _annotationMessenger.getLineBorderColor(id);
 
-  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0.
+  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   @override
   Future<void> setLineBorderWidth(double lineBorderWidth) =>
       _annotationMessenger.setLineBorderWidth(id, lineBorderWidth);
 
-  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0.
+  /// The width of the line border. A value of zero means no border. Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   @override
   Future<double?> getLineBorderWidth() =>
       _annotationMessenger.getLineBorderWidth(id);
@@ -381,6 +381,52 @@ class PolylineAnnotationManager extends BaseAnnotationManager
   /// Stroke thickness. Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   @override
   Future<double?> getLineWidth() => _annotationMessenger.getLineWidth(id);
+
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setLineBorderColorUseTheme(
+    ColorUseTheme lineBorderColorUseTheme,
+  ) => _annotationMessenger.setLineBorderColorUseTheme(
+    id,
+    lineBorderColorUseTheme.value,
+  );
+
+  /// Whether the style color theme applies to `lineBorderColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getLineBorderColorUseTheme() => _annotationMessenger
+      .getLineBorderColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setLineColorUseTheme(ColorUseTheme lineColorUseTheme) =>
+      _annotationMessenger.setLineColorUseTheme(id, lineColorUseTheme.value);
+
+  /// Whether the style color theme applies to `lineColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getLineColorUseTheme() => _annotationMessenger
+      .getLineColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
+
+  /// Whether the style color theme applies to `lineTrimColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<void> setLineTrimColorUseTheme(ColorUseTheme lineTrimColorUseTheme) =>
+      _annotationMessenger.setLineTrimColorUseTheme(
+        id,
+        lineTrimColorUseTheme.value,
+      );
+
+  /// Whether the style color theme applies to `lineTrimColor`: `default` or `none`.
+  @experimental
+  @override
+  Future<ColorUseTheme?> getLineTrimColorUseTheme() => _annotationMessenger
+      .getLineTrimColorUseTheme(id)
+      .then(ColorUseTheme.fromValue);
 }
 
 // End of generated file.

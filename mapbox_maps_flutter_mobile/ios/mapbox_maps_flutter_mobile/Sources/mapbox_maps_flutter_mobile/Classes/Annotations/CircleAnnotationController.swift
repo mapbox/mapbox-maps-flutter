@@ -316,6 +316,42 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
             completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
+
+    func getCircleColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.circleColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleColorUseTheme(managerId: String, circleColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: circleColorUseTheme)
+            try set(\.circleColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeColorUseTheme(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.circleStrokeColorUseTheme, managerId: managerId)?.rawValue))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeColorUseTheme(managerId: String, circleStrokeColorUseTheme: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = ColorUseTheme(rawValue: circleStrokeColorUseTheme)
+            try set(\.circleStrokeColorUseTheme, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 }
 
 extension CircleAnnotationOptions {
@@ -345,6 +381,12 @@ extension CircleAnnotationOptions {
         }
         if let circleStrokeWidth {
             annotation.circleStrokeWidth = circleStrokeWidth
+        }
+        if let circleColorUseTheme {
+            annotation.circleColorUseTheme = ColorUseTheme(rawValue: circleColorUseTheme)
+        }
+        if let circleStrokeColorUseTheme {
+            annotation.circleStrokeColorUseTheme = ColorUseTheme(rawValue: circleStrokeColorUseTheme)
         }
         if let isDraggable {
             annotation.isDraggable = isDraggable
@@ -384,6 +426,12 @@ extension CircleAnnotation {
         if let circleStrokeWidth {
             annotation.circleStrokeWidth = circleStrokeWidth
         }
+        if let circleColorUseTheme {
+            annotation.circleColorUseTheme = ColorUseTheme(rawValue: circleColorUseTheme)
+        }
+        if let circleStrokeColorUseTheme {
+            annotation.circleStrokeColorUseTheme = ColorUseTheme(rawValue: circleStrokeColorUseTheme)
+        }
         if let isDraggable {
             annotation.isDraggable = isDraggable
         }
@@ -407,6 +455,8 @@ extension MapboxMaps.CircleAnnotation {
             circleStrokeColor: circleStrokeColor?.intValue,
             circleStrokeOpacity: circleStrokeOpacity,
             circleStrokeWidth: circleStrokeWidth,
+            circleColorUseTheme: circleColorUseTheme?.rawValue,
+            circleStrokeColorUseTheme: circleStrokeColorUseTheme?.rawValue,
             isDraggable: isDraggable,
             customData: customData.compactMapValues { $0?.toAny }
         )

@@ -11,6 +11,9 @@ extension MapboxMaps.DirectionalLight {
         if let color = fltValue.color {
             self.color = .constant(StyleColor(rgb: color))
         }
+        if let colorUseTheme = fltValue.colorUseTheme {
+            self.colorUseTheme = ColorUseTheme(rawValue: colorUseTheme).map { .constant($0) }
+        }
         self.colorTransition = fltValue.colorTransition?.toStyleTransition()
         if let direction = fltValue.direction {
             self.direction = .constant(direction.compactMap { $0 })
@@ -36,6 +39,9 @@ extension MapboxMaps.AmbientLight {
         if let color = fltValue.color {
             self.color = .constant(StyleColor(rgb: color))
         }
+        if let colorUseTheme = fltValue.colorUseTheme {
+            self.colorUseTheme = ColorUseTheme(rawValue: colorUseTheme).map { .constant($0) }
+        }
         self.colorTransition = fltValue.colorTransition?.toStyleTransition()
         if let intensity = fltValue.intensity {
             self.intensity = .constant(intensity)
@@ -52,6 +58,9 @@ extension MapboxMaps.FlatLight {
         }
         if let color = fltValue.color {
             self.color = .constant(StyleColor(rgb: color))
+        }
+        if let colorUseTheme = fltValue.colorUseTheme {
+            self.colorUseTheme = ColorUseTheme(rawValue: colorUseTheme).map { .constant($0) }
         }
         self.colorTransition = fltValue.colorTransition?.toStyleTransition()
         if let intensity = fltValue.intensity {

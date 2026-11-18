@@ -2256,6 +2256,7 @@ class FlatLight {
     this.intensityTransition,
     this.position,
     this.positionTransition,
+    this.colorUseTheme,
   });
 
   /// Unique light name
@@ -2282,6 +2283,9 @@ class FlatLight {
   /// Transition property for `position`
   TransitionOptions? positionTransition;
 
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  String? colorUseTheme;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2292,6 +2296,7 @@ class FlatLight {
       intensityTransition,
       position,
       positionTransition,
+      colorUseTheme,
     ];
   }
 
@@ -2310,6 +2315,7 @@ class FlatLight {
       intensityTransition: result[5] as TransitionOptions?,
       position: (result[6] as List<Object?>?)?.cast<double?>(),
       positionTransition: result[7] as TransitionOptions?,
+      colorUseTheme: result[8] as String?,
     );
   }
 
@@ -2329,7 +2335,8 @@ class FlatLight {
         intensity == other.intensity &&
         intensityTransition == other.intensityTransition &&
         _deepEquals(position, other.position) &&
-        positionTransition == other.positionTransition;
+        positionTransition == other.positionTransition &&
+        colorUseTheme == other.colorUseTheme;
   }
 
   @override
@@ -2353,6 +2360,7 @@ class DirectionalLight {
     this.shadowIntensity,
     this.shadowIntensityTransition,
     this.shadowDrawBeforeLayer,
+    this.colorUseTheme,
   });
 
   /// Unique light name
@@ -2388,6 +2396,9 @@ class DirectionalLight {
   /// Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.
   String? shadowDrawBeforeLayer;
 
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  String? colorUseTheme;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2401,6 +2412,7 @@ class DirectionalLight {
       shadowIntensity,
       shadowIntensityTransition,
       shadowDrawBeforeLayer,
+      colorUseTheme,
     ];
   }
 
@@ -2422,6 +2434,7 @@ class DirectionalLight {
       shadowIntensity: result[8] as double?,
       shadowIntensityTransition: result[9] as TransitionOptions?,
       shadowDrawBeforeLayer: result[10] as String?,
+      colorUseTheme: result[11] as String?,
     );
   }
 
@@ -2444,7 +2457,8 @@ class DirectionalLight {
         intensityTransition == other.intensityTransition &&
         shadowIntensity == other.shadowIntensity &&
         shadowIntensityTransition == other.shadowIntensityTransition &&
-        shadowDrawBeforeLayer == other.shadowDrawBeforeLayer;
+        shadowDrawBeforeLayer == other.shadowDrawBeforeLayer &&
+        colorUseTheme == other.colorUseTheme;
   }
 
   @override
@@ -2462,6 +2476,7 @@ class AmbientLight {
     this.colorTransition,
     this.intensity,
     this.intensityTransition,
+    this.colorUseTheme,
   });
 
   /// Unique light name
@@ -2479,6 +2494,9 @@ class AmbientLight {
   /// Transition property for `intensity`
   TransitionOptions? intensityTransition;
 
+  /// Set whether or not the color property is affected by the style color theme. Use a [ColorUseTheme] value.
+  String? colorUseTheme;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -2486,6 +2504,7 @@ class AmbientLight {
       colorTransition,
       intensity,
       intensityTransition,
+      colorUseTheme,
     ];
   }
 
@@ -2501,6 +2520,7 @@ class AmbientLight {
       colorTransition: result[2] as TransitionOptions?,
       intensity: result[3] as double?,
       intensityTransition: result[4] as TransitionOptions?,
+      colorUseTheme: result[5] as String?,
     );
   }
 
@@ -2517,7 +2537,8 @@ class AmbientLight {
         color == other.color &&
         colorTransition == other.colorTransition &&
         intensity == other.intensity &&
-        intensityTransition == other.intensityTransition;
+        intensityTransition == other.intensityTransition &&
+        colorUseTheme == other.colorUseTheme;
   }
 
   @override

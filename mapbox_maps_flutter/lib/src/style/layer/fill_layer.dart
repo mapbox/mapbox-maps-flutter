@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -32,14 +32,20 @@ final class FillLayer extends Layer {
     this.fillAntialiasExpression,
     this.fillBridgeGuardRailColor,
     this.fillBridgeGuardRailColorExpression,
+    this.fillBridgeGuardRailColorUseTheme,
+    this.fillBridgeGuardRailColorUseThemeExpression,
     this.fillColor,
     this.fillColorExpression,
+    this.fillColorUseTheme,
+    this.fillColorUseThemeExpression,
     this.fillEmissiveStrength,
     this.fillEmissiveStrengthExpression,
     this.fillOpacity,
     this.fillOpacityExpression,
     this.fillOutlineColor,
     this.fillOutlineColorExpression,
+    this.fillOutlineColorUseTheme,
+    this.fillOutlineColorUseThemeExpression,
     this.fillPattern,
     this.fillPatternExpression,
     this.fillPatternCrossFade,
@@ -50,6 +56,8 @@ final class FillLayer extends Layer {
     this.fillTranslateAnchorExpression,
     this.fillTunnelStructureColor,
     this.fillTunnelStructureColorExpression,
+    this.fillTunnelStructureColorUseTheme,
+    this.fillTunnelStructureColorUseThemeExpression,
     this.fillZOffset,
     this.fillZOffsetExpression,
   });
@@ -119,6 +127,18 @@ final class FillLayer extends Layer {
   @experimental
   List<Object>? fillBridgeGuardRailColorExpression;
 
+  /// Sets if the color theme of the style changes `fillBridgeGuardRailColor`. If you do not set this property, the color theme changes the color.
+  ///
+  /// Supported platforms: Android, iOS.
+  @experimental
+  ColorUseTheme? fillBridgeGuardRailColorUseTheme;
+
+  /// Sets if the color theme of the style changes `fillBridgeGuardRailColor`. If you do not set this property, the color theme changes the color.
+  ///
+  /// Supported platforms: Android, iOS.
+  @experimental
+  List<Object>? fillBridgeGuardRailColorUseThemeExpression;
+
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   int? fillColor;
@@ -126,6 +146,14 @@ final class FillLayer extends Layer {
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   List<Object>? fillColorExpression;
+
+  /// Sets if the color theme of the style changes `fillColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? fillColorUseTheme;
+
+  /// Sets if the color theme of the style changes `fillColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? fillColorUseThemeExpression;
 
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 0. Minimum value: 0. The unit of fillEmissiveStrength is in intensity.
@@ -148,6 +176,14 @@ final class FillLayer extends Layer {
 
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
   List<Object>? fillOutlineColorExpression;
+
+  /// Sets if the color theme of the style changes `fillOutlineColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? fillOutlineColorUseTheme;
+
+  /// Sets if the color theme of the style changes `fillOutlineColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? fillOutlineColorUseThemeExpression;
 
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
@@ -193,13 +229,25 @@ final class FillLayer extends Layer {
   @experimental
   List<Object>? fillTunnelStructureColorExpression;
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-  /// Default value: 0. Minimum value: 0.
+  /// Sets if the color theme of the style changes `fillTunnelStructureColor`. If you do not set this property, the color theme changes the color.
+  ///
+  /// Supported platforms: Android, iOS.
+  @experimental
+  ColorUseTheme? fillTunnelStructureColorUseTheme;
+
+  /// Sets if the color theme of the style changes `fillTunnelStructureColor`. If you do not set this property, the color theme changes the color.
+  ///
+  /// Supported platforms: Android, iOS.
+  @experimental
+  List<Object>? fillTunnelStructureColorUseThemeExpression;
+
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   double? fillZOffset;
 
-  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
-  /// Default value: 0. Minimum value: 0.
+  /// Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0. The unit of fillZOffset is in meters.
   @experimental
   List<Object>? fillZOffsetExpression;
 
@@ -256,10 +304,24 @@ final class FillLayer extends Layer {
           ?.toRGBA();
     }
 
+    if (fillBridgeGuardRailColorUseThemeExpression != null) {
+      paint["fill-bridge-guard-rail-color-use-theme"] =
+          fillBridgeGuardRailColorUseThemeExpression;
+    } else if (fillBridgeGuardRailColorUseTheme != null) {
+      paint["fill-bridge-guard-rail-color-use-theme"] =
+          fillBridgeGuardRailColorUseTheme?.value;
+    }
+
     if (fillColorExpression != null) {
       paint["fill-color"] = fillColorExpression;
     } else if (fillColor != null) {
       paint["fill-color"] = fillColor?.toRGBA();
+    }
+
+    if (fillColorUseThemeExpression != null) {
+      paint["fill-color-use-theme"] = fillColorUseThemeExpression;
+    } else if (fillColorUseTheme != null) {
+      paint["fill-color-use-theme"] = fillColorUseTheme?.value;
     }
 
     if (fillEmissiveStrengthExpression != null) {
@@ -278,6 +340,13 @@ final class FillLayer extends Layer {
       paint["fill-outline-color"] = fillOutlineColorExpression;
     } else if (fillOutlineColor != null) {
       paint["fill-outline-color"] = fillOutlineColor?.toRGBA();
+    }
+
+    if (fillOutlineColorUseThemeExpression != null) {
+      paint["fill-outline-color-use-theme"] =
+          fillOutlineColorUseThemeExpression;
+    } else if (fillOutlineColorUseTheme != null) {
+      paint["fill-outline-color-use-theme"] = fillOutlineColorUseTheme?.value;
     }
 
     if (fillPatternExpression != null) {
@@ -310,6 +379,14 @@ final class FillLayer extends Layer {
       paint["fill-tunnel-structure-color"] = fillTunnelStructureColorExpression;
     } else if (fillTunnelStructureColor != null) {
       paint["fill-tunnel-structure-color"] = fillTunnelStructureColor?.toRGBA();
+    }
+
+    if (fillTunnelStructureColorUseThemeExpression != null) {
+      paint["fill-tunnel-structure-color-use-theme"] =
+          fillTunnelStructureColorUseThemeExpression;
+    } else if (fillTunnelStructureColorUseTheme != null) {
+      paint["fill-tunnel-structure-color-use-theme"] =
+          fillTunnelStructureColorUseTheme?.value;
     }
 
     if (fillZOffsetExpression != null) {
@@ -394,13 +471,26 @@ final class FillLayer extends Layer {
       fillAntialiasExpression: styleOptionalCastList(
         map["paint"]["fill-antialias"],
       ),
-      fillBridgeGuardRailColor:
-          (map["paint"]["fill-bridge-guard-rail-color"] as List?)?.toRGBAInt(),
+      fillBridgeGuardRailColor: styleColorFromJson(
+        map["paint"]["fill-bridge-guard-rail-color"],
+      ),
       fillBridgeGuardRailColorExpression: styleOptionalCastList(
         map["paint"]["fill-bridge-guard-rail-color"],
       ),
-      fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
+      fillBridgeGuardRailColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["fill-bridge-guard-rail-color-use-theme"],
+      ),
+      fillBridgeGuardRailColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["fill-bridge-guard-rail-color-use-theme"],
+      ),
+      fillColor: styleColorFromJson(map["paint"]["fill-color"]),
       fillColorExpression: styleOptionalCastList(map["paint"]["fill-color"]),
+      fillColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["fill-color-use-theme"],
+      ),
+      fillColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["fill-color-use-theme"],
+      ),
       fillEmissiveStrength: styleOptionalCast(
         map["paint"]["fill-emissive-strength"],
       ),
@@ -411,10 +501,15 @@ final class FillLayer extends Layer {
       fillOpacityExpression: styleOptionalCastList(
         map["paint"]["fill-opacity"],
       ),
-      fillOutlineColor: (map["paint"]["fill-outline-color"] as List?)
-          ?.toRGBAInt(),
+      fillOutlineColor: styleColorFromJson(map["paint"]["fill-outline-color"]),
       fillOutlineColorExpression: styleOptionalCastList(
         map["paint"]["fill-outline-color"],
+      ),
+      fillOutlineColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["fill-outline-color-use-theme"],
+      ),
+      fillOutlineColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["fill-outline-color-use-theme"],
       ),
       fillPattern: styleOptionalCast(map["paint"]["fill-pattern"]),
       fillPatternExpression: styleOptionalCastList(
@@ -443,10 +538,17 @@ final class FillLayer extends Layer {
       fillTranslateAnchorExpression: styleOptionalCastList(
         map["paint"]["fill-translate-anchor"],
       ),
-      fillTunnelStructureColor:
-          (map["paint"]["fill-tunnel-structure-color"] as List?)?.toRGBAInt(),
+      fillTunnelStructureColor: styleColorFromJson(
+        map["paint"]["fill-tunnel-structure-color"],
+      ),
       fillTunnelStructureColorExpression: styleOptionalCastList(
         map["paint"]["fill-tunnel-structure-color"],
+      ),
+      fillTunnelStructureColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["fill-tunnel-structure-color-use-theme"],
+      ),
+      fillTunnelStructureColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["fill-tunnel-structure-color-use-theme"],
       ),
       fillZOffset: styleOptionalCast(map["paint"]["fill-z-offset"]),
       fillZOffsetExpression: styleOptionalCastList(

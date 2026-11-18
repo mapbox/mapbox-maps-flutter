@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -35,6 +34,7 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         backgroundColor: Colors.red.value,
+        backgroundColorUseTheme: ColorUseTheme.none,
         backgroundEmissiveStrength: 1.0,
         backgroundOpacity: 1.0,
         backgroundPattern: "abc",
@@ -47,6 +47,7 @@ void main() {
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.backgroundColor, Colors.red.value);
+    expect(layer.backgroundColorUseTheme, ColorUseTheme.none);
     expect(layer.backgroundEmissiveStrength, 1.0);
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPattern, "abc");
@@ -75,6 +76,8 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         backgroundColorExpression: ['rgba', 255, 0, 0, 1],
+        backgroundColorUseTheme: ColorUseTheme.useDefault,
+        backgroundColorUseThemeExpression: ['string', 'none'],
         backgroundEmissiveStrengthExpression: ['number', 1.0],
         backgroundOpacityExpression: ['number', 1.0],
         backgroundPatternExpression: ['image', "abc"],
@@ -98,6 +101,10 @@ void main() {
       ]);
     }
     expect(layer.backgroundColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.backgroundColorUseThemeExpression ?? layer.backgroundColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.backgroundEmissiveStrength, 1.0);
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPatternExpression, ['image', "abc"]);

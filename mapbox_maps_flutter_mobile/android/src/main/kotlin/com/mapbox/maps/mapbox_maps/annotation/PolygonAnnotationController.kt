@@ -190,6 +190,18 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     annotation.fillZOffset?.let {
       originalAnnotation.fillZOffset = it
     }
+    annotation.fillBridgeGuardRailColorUseTheme?.let {
+      originalAnnotation.fillBridgeGuardRailColorUseTheme = it
+    }
+    annotation.fillColorUseTheme?.let {
+      originalAnnotation.fillColorUseTheme = it
+    }
+    annotation.fillOutlineColorUseTheme?.let {
+      originalAnnotation.fillOutlineColorUseTheme = it
+    }
+    annotation.fillTunnelStructureColorUseTheme?.let {
+      originalAnnotation.fillTunnelStructureColorUseTheme = it
+    }
     annotation.customData?.let {
       originalAnnotation.setData(Gson().toJsonTree(it))
     }
@@ -517,6 +529,98 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
       callback(Result.success(null))
     }
   }
+
+  override fun setFillBridgeGuardRailColorUseTheme(
+    managerId: String,
+    fillBridgeGuardRailColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillBridgeGuardRailColorUseTheme = fillBridgeGuardRailColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillBridgeGuardRailColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillBridgeGuardRailColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillColorUseTheme(
+    managerId: String,
+    fillColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillColorUseTheme = fillColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillOutlineColorUseTheme(
+    managerId: String,
+    fillOutlineColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillOutlineColorUseTheme = fillOutlineColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillOutlineColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillOutlineColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setFillTunnelStructureColorUseTheme(
+    managerId: String,
+    fillTunnelStructureColorUseTheme: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillTunnelStructureColorUseTheme = fillTunnelStructureColorUseTheme
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillTunnelStructureColorUseTheme(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillTunnelStructureColorUseTheme
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
 }
 
 fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAnnotation(): PolygonAnnotation {
@@ -536,6 +640,10 @@ fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAn
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillTunnelStructureColor = fillTunnelStructureColorInt?.toUInt()?.toLong(),
     fillZOffset = fillZOffset,
+    fillBridgeGuardRailColorUseTheme = fillBridgeGuardRailColorUseTheme,
+    fillColorUseTheme = fillColorUseTheme,
+    fillOutlineColorUseTheme = fillOutlineColorUseTheme,
+    fillTunnelStructureColorUseTheme = fillTunnelStructureColorUseTheme,
     customData = if (getData() != null) Gson().fromJson<Map<String, Any>>(getData()!!, Map::class.java) else null
   )
 }
@@ -574,6 +682,18 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   }
   this.fillZOffset?.let {
     options.withFillZOffset(it)
+  }
+  this.fillBridgeGuardRailColorUseTheme?.let {
+    options.withFillBridgeGuardRailColorUseTheme(it)
+  }
+  this.fillColorUseTheme?.let {
+    options.withFillColorUseTheme(it)
+  }
+  this.fillOutlineColorUseTheme?.let {
+    options.withFillOutlineColorUseTheme(it)
+  }
+  this.fillTunnelStructureColorUseTheme?.let {
+    options.withFillTunnelStructureColorUseTheme(it)
   }
   this.customData?.let {
     options.withData(Gson().toJsonTree(it))

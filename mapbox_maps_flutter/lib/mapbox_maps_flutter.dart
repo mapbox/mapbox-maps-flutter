@@ -48,6 +48,9 @@ export 'src/interactive_features/standard_poi.dart';
 // enums are declared in codegen/pigeons/platform_interface_data_types.dart
 // and re-exported through the platform-interface package.
 export 'src/style/style_types.dart';
+export 'src/style/atmosphere.dart';
+export 'src/style/rain.dart';
+export 'src/style/snow.dart';
 export 'src/style/layer/layer.dart';
 export 'src/style/layer/background_layer.dart';
 export 'src/style/layer/circle_layer.dart';

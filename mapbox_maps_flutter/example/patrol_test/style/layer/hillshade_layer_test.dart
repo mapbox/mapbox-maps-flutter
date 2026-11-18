@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
 import '../../patrol.dart';
 
 import '../../empty_map_widget.dart' as app;
@@ -43,12 +42,15 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         hillshadeAccentColor: Colors.red.value,
+        hillshadeAccentColorUseTheme: ColorUseTheme.none,
         hillshadeEmissiveStrength: 1.0,
         hillshadeExaggeration: 1.0,
         hillshadeHighlightColor: Colors.red.value,
+        hillshadeHighlightColorUseTheme: ColorUseTheme.none,
         hillshadeIlluminationAnchor: HillshadeIlluminationAnchor.MAP,
         hillshadeIlluminationDirection: 1.0,
         hillshadeShadowColor: Colors.red.value,
+        hillshadeShadowColorUseTheme: ColorUseTheme.none,
       ),
     );
     var layer = await mapboxMap.getLayer('layer') as HillshadeLayer;
@@ -58,12 +60,15 @@ void main() {
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.hillshadeAccentColor, Colors.red.value);
+    expect(layer.hillshadeAccentColorUseTheme, ColorUseTheme.none);
     expect(layer.hillshadeEmissiveStrength, 1.0);
     expect(layer.hillshadeExaggeration, 1.0);
     expect(layer.hillshadeHighlightColor, Colors.red.value);
+    expect(layer.hillshadeHighlightColorUseTheme, ColorUseTheme.none);
     expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);
     expect(layer.hillshadeIlluminationDirection, 1.0);
     expect(layer.hillshadeShadowColor, Colors.red.value);
+    expect(layer.hillshadeShadowColorUseTheme, ColorUseTheme.none);
   });
 
   patrolTest('Add HillshadeLayer with expressions', ($) async {
@@ -96,12 +101,18 @@ void main() {
         maxZoom: 20.0,
         slot: LayerSlot.BOTTOM,
         hillshadeAccentColorExpression: ['rgba', 255, 0, 0, 1],
+        hillshadeAccentColorUseTheme: ColorUseTheme.useDefault,
+        hillshadeAccentColorUseThemeExpression: ['string', 'none'],
         hillshadeEmissiveStrengthExpression: ['number', 1.0],
         hillshadeExaggerationExpression: ['number', 1.0],
         hillshadeHighlightColorExpression: ['rgba', 255, 0, 0, 1],
+        hillshadeHighlightColorUseTheme: ColorUseTheme.useDefault,
+        hillshadeHighlightColorUseThemeExpression: ['string', 'none'],
         hillshadeIlluminationAnchorExpression: ['string', 'map'],
         hillshadeIlluminationDirectionExpression: ['number', 1.0],
         hillshadeShadowColorExpression: ['rgba', 255, 0, 0, 1],
+        hillshadeShadowColorUseTheme: ColorUseTheme.useDefault,
+        hillshadeShadowColorUseThemeExpression: ['string', 'none'],
       ),
     );
     var layer = await mapboxMap.getLayer('layer') as HillshadeLayer;
@@ -116,12 +127,27 @@ void main() {
       "Feature",
     ]);
     expect(layer.hillshadeAccentColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.hillshadeAccentColorUseThemeExpression ??
+          layer.hillshadeAccentColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.hillshadeEmissiveStrength, 1.0);
     expect(layer.hillshadeExaggeration, 1.0);
     expect(layer.hillshadeHighlightColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.hillshadeHighlightColorUseThemeExpression ??
+          layer.hillshadeHighlightColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
     expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);
     expect(layer.hillshadeIlluminationDirection, 1.0);
     expect(layer.hillshadeShadowColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(
+      layer.hillshadeShadowColorUseThemeExpression ??
+          layer.hillshadeShadowColorUseTheme,
+      anyOf(equals(['string', 'none']), ColorUseTheme.none),
+    );
   });
 }
 

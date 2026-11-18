@@ -1,6 +1,8 @@
+import 'package:meta/meta.dart';
 import 'package:turf/turf.dart';
 
 import '../pigeons/platform_interface_data_types.dart';
+import '../public/color_theme.dart';
 import '../public/style_image.dart';
 
 /// Abstract interface for managing the map's style.
@@ -331,6 +333,66 @@ abstract interface class StylePlatformInterface {
     String config,
     Object value,
   );
+
+  /// Sets the style color theme. A color theme applies a color grading
+  /// look-up table (LUT) to all colors of the style, except colors with a
+  /// `*-use-theme` value of [ColorUseTheme.none].
+  ///
+  /// A `null` value removes the color theme.
+  @experimental
+  Future<void> setStyleColorTheme(ColorTheme? colorTheme);
+
+  /// Sets the color theme of the style import [importId]. This overrides
+  /// the color theme of the imported style.
+  ///
+  /// A `null` value removes the override.
+  @experimental
+  Future<void> setStyleImportColorTheme(
+    String importId,
+    ColorTheme? colorTheme,
+  );
+
+  /// Sets the style atmosphere from its JSON-encoded `fog` properties.
+  ///
+  /// A `null` value removes the atmosphere.
+  @experimental
+  Future<void> setStyleAtmosphere(String? properties);
+
+  /// Returns the value of a single atmosphere property.
+  @experimental
+  Future<StylePropertyValue> getStyleAtmosphereProperty(String property);
+
+  /// Sets the value of a single atmosphere property.
+  @experimental
+  Future<void> setStyleAtmosphereProperty(String property, Object value);
+
+  /// Sets the style snow from its JSON-encoded `snow` properties.
+  ///
+  /// A `null` value removes the snow.
+  @experimental
+  Future<void> setStyleSnow(String? properties);
+
+  /// Returns the value of a single snow property.
+  @experimental
+  Future<StylePropertyValue> getStyleSnowProperty(String property);
+
+  /// Sets the value of a single snow property.
+  @experimental
+  Future<void> setStyleSnowProperty(String property, Object value);
+
+  /// Sets the style rain from its JSON-encoded `rain` properties.
+  ///
+  /// A `null` value removes the rain.
+  @experimental
+  Future<void> setStyleRain(String? properties);
+
+  /// Returns the value of a single rain property.
+  @experimental
+  Future<StylePropertyValue> getStyleRainProperty(String property);
+
+  /// Sets the value of a single rain property.
+  @experimental
+  Future<void> setStyleRainProperty(String property, Object value);
 
   /// Sets all configuration properties for an import from a map.
   Future<void> setStyleImportConfigProperties(

@@ -1,5 +1,5 @@
 // This file is generated.
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, experimental_member_use
 import 'dart:convert';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
@@ -46,12 +46,18 @@ final class LineLayer extends Layer {
     this.lineBlurExpression,
     this.lineBorderColor,
     this.lineBorderColorExpression,
+    this.lineBorderColorUseTheme,
+    this.lineBorderColorUseThemeExpression,
     this.lineBorderGradient,
     this.lineBorderGradientExpression,
+    this.lineBorderGradientUseTheme,
+    this.lineBorderGradientUseThemeExpression,
     this.lineBorderWidth,
     this.lineBorderWidthExpression,
     this.lineColor,
     this.lineColorExpression,
+    this.lineColorUseTheme,
+    this.lineColorUseThemeExpression,
     this.lineCutoutFadeWidth,
     this.lineCutoutFadeWidthExpression,
     this.lineCutoutOpacity,
@@ -66,6 +72,8 @@ final class LineLayer extends Layer {
     this.lineGapWidthExpression,
     this.lineGradient,
     this.lineGradientExpression,
+    this.lineGradientUseTheme,
+    this.lineGradientUseThemeExpression,
     this.lineOcclusionOpacity,
     this.lineOcclusionOpacityExpression,
     this.lineOffset,
@@ -82,6 +90,8 @@ final class LineLayer extends Layer {
     this.lineTranslateAnchorExpression,
     this.lineTrimColor,
     this.lineTrimColorExpression,
+    this.lineTrimColorUseTheme,
+    this.lineTrimColorUseThemeExpression,
     this.lineTrimFadeRange,
     this.lineTrimFadeRangeExpression,
     this.lineTrimOffset,
@@ -179,19 +189,19 @@ final class LineLayer extends Layer {
   @experimental
   List<Object>? lineWidthUnitExpression;
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-  /// Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment.
+  /// Default value: 0. The unit of lineZOffset is in meters.
   double? lineZOffset;
 
-  /// Vertical offset from ground, in meters. Not supported for globe projection at the moment.
-  /// Default value: 0.
+  /// Vertical offset from ground. Not supported for globe projection at the moment.
+  /// Default value: 0. The unit of lineZOffset is in meters.
   List<Object>? lineZOffsetExpression;
 
-  /// Blur applied to the line, in pixels.
+  /// Blur applied to the line.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   double? lineBlur;
 
-  /// Blur applied to the line, in pixels.
+  /// Blur applied to the line.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   List<Object>? lineBlurExpression;
 
@@ -203,6 +213,14 @@ final class LineLayer extends Layer {
   /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? lineBorderColorExpression;
 
+  /// Sets if the color theme of the style changes `lineBorderColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? lineBorderColorUseTheme;
+
+  /// Sets if the color theme of the style changes `lineBorderColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? lineBorderColorUseThemeExpression;
+
   /// A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `line-border-color`. Has no effect unless `line-border-width` is greater than zero. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
   @experimental
   int? lineBorderGradient;
@@ -211,12 +229,20 @@ final class LineLayer extends Layer {
   @experimental
   List<Object>? lineBorderGradientExpression;
 
+  /// Sets if the color theme of the style changes `lineBorderGradient`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? lineBorderGradientUseTheme;
+
+  /// Sets if the color theme of the style changes `lineBorderGradient`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? lineBorderGradientUseThemeExpression;
+
   /// The width of the line border. A value of zero means no border.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   double? lineBorderWidth;
 
   /// The width of the line border. A value of zero means no border.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of lineBorderWidth is in pixels.
   List<Object>? lineBorderWidthExpression;
 
   /// The color with which the line will be drawn.
@@ -226,6 +252,14 @@ final class LineLayer extends Layer {
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
   List<Object>? lineColorExpression;
+
+  /// Sets if the color theme of the style changes `lineColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? lineColorUseTheme;
+
+  /// Sets if the color theme of the style changes `lineColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? lineColorUseThemeExpression;
 
   /// The width of the cutout fade effect as a proportion of the cutout width.
   /// Default value: 0.4. Value range: [0, 1]
@@ -297,6 +331,14 @@ final class LineLayer extends Layer {
   /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
   List<Object>? lineGradientExpression;
 
+  /// Sets if the color theme of the style changes `lineGradient`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? lineGradientUseTheme;
+
+  /// Sets if the color theme of the style changes `lineGradient`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? lineGradientUseThemeExpression;
+
   /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
   /// Default value: 0. Value range: [0, 1]
   double? lineOcclusionOpacity;
@@ -360,6 +402,14 @@ final class LineLayer extends Layer {
   /// Default value: "transparent".
   @experimental
   List<Object>? lineTrimColorExpression;
+
+  /// Sets if the color theme of the style changes `lineTrimColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  ColorUseTheme? lineTrimColorUseTheme;
+
+  /// Sets if the color theme of the style changes `lineTrimColor`. If you do not set this property, the color theme changes the color.
+  @experimental
+  List<Object>? lineTrimColorUseThemeExpression;
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
@@ -490,10 +540,24 @@ final class LineLayer extends Layer {
       paint["line-border-color"] = lineBorderColor?.toRGBA();
     }
 
+    if (lineBorderColorUseThemeExpression != null) {
+      paint["line-border-color-use-theme"] = lineBorderColorUseThemeExpression;
+    } else if (lineBorderColorUseTheme != null) {
+      paint["line-border-color-use-theme"] = lineBorderColorUseTheme?.value;
+    }
+
     if (lineBorderGradientExpression != null) {
       paint["line-border-gradient"] = lineBorderGradientExpression;
     } else if (lineBorderGradient != null) {
       paint["line-border-gradient"] = lineBorderGradient?.toRGBA();
+    }
+
+    if (lineBorderGradientUseThemeExpression != null) {
+      paint["line-border-gradient-use-theme"] =
+          lineBorderGradientUseThemeExpression;
+    } else if (lineBorderGradientUseTheme != null) {
+      paint["line-border-gradient-use-theme"] =
+          lineBorderGradientUseTheme?.value;
     }
 
     if (lineBorderWidthExpression != null) {
@@ -506,6 +570,12 @@ final class LineLayer extends Layer {
       paint["line-color"] = lineColorExpression;
     } else if (lineColor != null) {
       paint["line-color"] = lineColor?.toRGBA();
+    }
+
+    if (lineColorUseThemeExpression != null) {
+      paint["line-color-use-theme"] = lineColorUseThemeExpression;
+    } else if (lineColorUseTheme != null) {
+      paint["line-color-use-theme"] = lineColorUseTheme?.value;
     }
 
     if (lineCutoutFadeWidthExpression != null) {
@@ -548,6 +618,12 @@ final class LineLayer extends Layer {
       paint["line-gradient"] = lineGradientExpression;
     } else if (lineGradient != null) {
       paint["line-gradient"] = lineGradient?.toRGBA();
+    }
+
+    if (lineGradientUseThemeExpression != null) {
+      paint["line-gradient-use-theme"] = lineGradientUseThemeExpression;
+    } else if (lineGradientUseTheme != null) {
+      paint["line-gradient-use-theme"] = lineGradientUseTheme?.value;
     }
 
     if (lineOcclusionOpacityExpression != null) {
@@ -598,6 +674,12 @@ final class LineLayer extends Layer {
       paint["line-trim-color"] = lineTrimColorExpression;
     } else if (lineTrimColor != null) {
       paint["line-trim-color"] = lineTrimColor?.toRGBA();
+    }
+
+    if (lineTrimColorUseThemeExpression != null) {
+      paint["line-trim-color-use-theme"] = lineTrimColorUseThemeExpression;
+    } else if (lineTrimColorUseTheme != null) {
+      paint["line-trim-color-use-theme"] = lineTrimColorUseTheme?.value;
     }
 
     if (lineTrimFadeRangeExpression != null) {
@@ -737,22 +819,40 @@ final class LineLayer extends Layer {
       ),
       lineBlur: styleOptionalCast(map["paint"]["line-blur"]),
       lineBlurExpression: styleOptionalCastList(map["paint"]["line-blur"]),
-      lineBorderColor: (map["paint"]["line-border-color"] as List?)
-          ?.toRGBAInt(),
+      lineBorderColor: styleColorFromJson(map["paint"]["line-border-color"]),
       lineBorderColorExpression: styleOptionalCastList(
         map["paint"]["line-border-color"],
       ),
-      lineBorderGradient: (map["paint"]["line-border-gradient"] as List?)
-          ?.toRGBAInt(),
+      lineBorderColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["line-border-color-use-theme"],
+      ),
+      lineBorderColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["line-border-color-use-theme"],
+      ),
+      lineBorderGradient: styleColorFromJson(
+        map["paint"]["line-border-gradient"],
+      ),
       lineBorderGradientExpression: styleOptionalCastList(
         map["paint"]["line-border-gradient"],
+      ),
+      lineBorderGradientUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["line-border-gradient-use-theme"],
+      ),
+      lineBorderGradientUseThemeExpression: styleOptionalCastList(
+        map["paint"]["line-border-gradient-use-theme"],
       ),
       lineBorderWidth: styleOptionalCast(map["paint"]["line-border-width"]),
       lineBorderWidthExpression: styleOptionalCastList(
         map["paint"]["line-border-width"],
       ),
-      lineColor: (map["paint"]["line-color"] as List?)?.toRGBAInt(),
+      lineColor: styleColorFromJson(map["paint"]["line-color"]),
       lineColorExpression: styleOptionalCastList(map["paint"]["line-color"]),
+      lineColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["line-color-use-theme"],
+      ),
+      lineColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["line-color-use-theme"],
+      ),
       lineCutoutFadeWidth: styleOptionalCast(
         map["paint"]["line-cutout-fade-width"],
       ),
@@ -785,9 +885,15 @@ final class LineLayer extends Layer {
       lineGapWidthExpression: styleOptionalCastList(
         map["paint"]["line-gap-width"],
       ),
-      lineGradient: (map["paint"]["line-gradient"] as List?)?.toRGBAInt(),
+      lineGradient: styleColorFromJson(map["paint"]["line-gradient"]),
       lineGradientExpression: styleOptionalCastList(
         map["paint"]["line-gradient"],
+      ),
+      lineGradientUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["line-gradient-use-theme"],
+      ),
+      lineGradientUseThemeExpression: styleOptionalCastList(
+        map["paint"]["line-gradient-use-theme"],
       ),
       lineOcclusionOpacity: styleOptionalCast(
         map["paint"]["line-occlusion-opacity"],
@@ -828,9 +934,15 @@ final class LineLayer extends Layer {
       lineTranslateAnchorExpression: styleOptionalCastList(
         map["paint"]["line-translate-anchor"],
       ),
-      lineTrimColor: (map["paint"]["line-trim-color"] as List?)?.toRGBAInt(),
+      lineTrimColor: styleColorFromJson(map["paint"]["line-trim-color"]),
       lineTrimColorExpression: styleOptionalCastList(
         map["paint"]["line-trim-color"],
+      ),
+      lineTrimColorUseTheme: ColorUseTheme.fromValue(
+        map["paint"]["line-trim-color-use-theme"],
+      ),
+      lineTrimColorUseThemeExpression: styleOptionalCastList(
+        map["paint"]["line-trim-color-use-theme"],
       ),
       lineTrimFadeRange: (map["paint"]["line-trim-fade-range"] as List?)
           ?.map<double?>((e) => e.toDouble())
