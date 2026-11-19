@@ -69,6 +69,16 @@ class _StyleExampleState extends State<StyleExample> {
 
   var _scene = _Scene.basemap;
   var _styleUri = MapboxStyles.STANDARD;
+  final _projections = {
+    StyleProjection.mercator: 'Mercator',
+    StyleProjection.globe: 'Globe',
+    StyleProjection.albers(): 'Albers',
+    StyleProjection.albers(
+      center: Point(coordinates: Position(10, 50)),
+      parallels: (start: 43, end: 62),
+    ): 'Albers (Europe)',
+  };
+  var _projection = StyleProjection.mercator;
   var _lightPreset = 'day';
   var _language = '';
   var _worldview = '';
@@ -124,8 +134,11 @@ class _StyleExampleState extends State<StyleExample> {
     final layers = await map.getStyleLayers();
     final sources = await map.getStyleSources();
     final json = await map.getStyleJSON();
+    final projection = await map.getProjection();
     if (!mounted) return;
     setState(() {
+      // No projection in the style or set at runtime means Mercator.
+      _projection = projection ?? StyleProjection.mercator;
       _layerCount = layers.length;
       _sourceCount = sources.length;
       _styleSize = '${(json.length / 1024).toStringAsFixed(0)} kB';
@@ -153,6 +166,24 @@ class _StyleExampleState extends State<StyleExample> {
   Future<void> _setStyle(String uri) async {
     setState(() => _styleUri = uri);
     await _mapboxMap?.setStyleURI(uri);
+  }
+
+  Future<void> _setProjection(StyleProjection projection) async {
+    final map = _mapboxMap;
+    if (map == null) return;
+    setState(() => _projection = projection);
+    await map.setProjection(projection);
+    // Projections only differ visibly at low zoom.
+    await map.flyTo(
+      CameraOptions(
+        center: Point(coordinates: Position(-98, 39)),
+        zoom: 2.5,
+        pitch: 0,
+        bearing: 0,
+      ),
+      MapAnimationOptions(duration: 1500),
+    );
+    await _refresh();
   }
 
   Future<void> _applyLightPreset() async {
@@ -335,6 +366,7 @@ class _StyleExampleState extends State<StyleExample> {
                   _styles[_styleUri] ?? 'Custom',
                   emphasized: true,
                 ),
+                MapHudRow('projection', _projections[_projection] ?? ''),
                 MapHudRow('layers', '$_layerCount'),
                 MapHudRow('sources', '$_sourceCount'),
                 MapHudRow('style JSON', _styleSize),
@@ -359,6 +391,14 @@ class _StyleExampleState extends State<StyleExample> {
         options: _styles,
         value: _styleUri,
         onChanged: _setStyle,
+      ),
+    ),
+    ControlRow(
+      label: 'Projection',
+      child: ControlChoices<StyleProjection>(
+        options: _projections,
+        value: _projection,
+        onChanged: _setProjection,
       ),
     ),
     if (_styleUri.contains('standard'))
@@ -407,7 +447,8 @@ class _StyleExampleState extends State<StyleExample> {
     const SizedBox(height: 4),
     const Text(
       'Each style is a different set of layers and sources — watch the counts '
-      'change as you swap. The light preset is a config property of the '
+      'change as you swap. Globe shows at low zoom, and Albers fits the '
+      'continental US. The light preset is a config property of the '
       'Standard style import, not a separate style. Language and worldview '
       'apply to every map, and reload the sources of the one on screen.',
       style: TextStyle(

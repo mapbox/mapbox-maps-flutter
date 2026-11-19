@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
+import com.mapbox.geojson.Point
 import com.mapbox.maps.ColorTheme
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.RuntimeStylingOptions
 import com.mapbox.maps.extension.localization.localizeLabels
+import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.setLight
+import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.extension.style.terrain.generated.removeTerrain
@@ -28,7 +31,8 @@ import com.mapbox.maps.mapbox_maps.pigeons.StyleImageWire
 import com.mapbox.maps.mapbox_maps.pigeons.StyleImageWireRgba
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons.StyleObjectInfo
-import com.mapbox.maps.mapbox_maps.pigeons.StyleProjection
+import com.mapbox.maps.mapbox_maps.pigeons.StyleProjectionType
+import com.mapbox.maps.mapbox_maps.pigeons.StyleProjectionWire
 import com.mapbox.maps.mapbox_maps.pigeons.StylePropertyValue
 import com.mapbox.maps.mapbox_maps.pigeons.StylePropertyValueKind
 import com.mapbox.maps.mapbox_maps.pigeons.TransitionOptions
@@ -740,12 +744,34 @@ class StyleController(private val context: Context, private val styleManager: Ma
     callback(Result.success(styleManager.isStyleLoaded()))
   }
 
-  override fun getProjection(): StyleProjection? {
-    return styleManager.getProjection()?.toFLTProjection()
+  @OptIn(MapboxExperimental::class)
+  override fun getProjection(): StyleProjectionWire? {
+    val projection = try {
+      styleManager.getProjection()
+    } catch (e: RuntimeException) {
+      // getProjection() throws for projections the Android SDK does not have.
+      null
+    } ?: return null
+    val type = projection.name.toFLTStyleProjectionType() ?: return null
+    if (type != StyleProjectionType.ALBERS) return StyleProjectionWire(type)
+    return StyleProjectionWire(
+      type,
+      center = projection.center?.let { Point.fromLngLat(it[0], it[1]) },
+      parallels = projection.parallels,
+    )
   }
 
-  override fun setProjection(projection: StyleProjection) {
-    styleManager.setProjection(projection.toProjection())
+  @OptIn(MapboxExperimental::class)
+  override fun setProjection(projection: StyleProjectionType, center: Point?, parallels: List<Double?>?) {
+    val name = when (projection) {
+      StyleProjectionType.MERCATOR -> ProjectionName.MERCATOR
+      StyleProjectionType.GLOBE -> ProjectionName.GLOBE
+      StyleProjectionType.ALBERS -> ProjectionName.ALBERS
+    }
+    val styleProjection = Projection(name)
+    center?.let { styleProjection.center(listOf(it.longitude(), it.latitude())) }
+    parallels?.let { styleProjection.parallels(it.filterNotNull()) }
+    styleManager.setProjection(styleProjection)
   }
 
   override fun localizeLabels(

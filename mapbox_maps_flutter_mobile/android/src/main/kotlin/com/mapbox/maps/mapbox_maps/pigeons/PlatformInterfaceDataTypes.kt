@@ -96,13 +96,14 @@ enum class GlyphsRasterizationMode(val raw: Int) {
   }
 }
 
-/** The style projection name. */
-enum class StyleProjectionName(val raw: Int) {
+/** The style projection type. Internal, not exported to the public API. */
+enum class StyleProjectionType(val raw: Int) {
   MERCATOR(0),
-  GLOBE(1);
+  GLOBE(1),
+  ALBERS(2);
 
   companion object {
-    fun ofRaw(raw: Int): StyleProjectionName? {
+    fun ofRaw(raw: Int): StyleProjectionType? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -1806,38 +1807,6 @@ data class StyleObjectInfo(
     }
     return id == other.id &&
       type == other.type
-  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/**
- * The style projection.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class StyleProjection(
-  val name: StyleProjectionName
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): StyleProjection {
-      val name = pigeonVar_list[0] as StyleProjectionName
-      return StyleProjection(name)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      name,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is StyleProjection) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return name == other.name
   }
 
   override fun hashCode(): Int = toList().hashCode()

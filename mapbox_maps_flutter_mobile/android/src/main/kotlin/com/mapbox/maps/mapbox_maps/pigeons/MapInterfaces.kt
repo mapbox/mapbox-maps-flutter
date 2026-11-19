@@ -361,6 +361,48 @@ data class _RenderedQueryGeometry(
 }
 
 /**
+ * The projection that is currently applied to the map.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StyleProjectionWire(
+  val type: StyleProjectionType,
+  /** The projection center, or `null` if not set. */
+  val center: Point? = null,
+  /** The projection parallels as [lat0, lat1], or `null` if not set. */
+  val parallels: List<Double?>? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StyleProjectionWire {
+      val type = pigeonVar_list[0] as StyleProjectionType
+      val center = pigeonVar_list[1] as Point?
+      val parallels = pigeonVar_list[2] as List<Double?>?
+      return StyleProjectionWire(type, center, parallels)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      type,
+      center,
+      parallels,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StyleProjectionWire) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return type == other.type &&
+      center == other.center &&
+      deepEqualsMapInterfaces(parallels, other.parallels)
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * Wire representation of `FreeCameraOptions` for the mobile platform channel.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -422,7 +464,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       133.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StyleProjectionName.ofRaw(it.toInt())
+          StyleProjectionType.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
@@ -597,102 +639,102 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          LayerPosition.fromList(it)
         }
       }
       169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
+          ImportPosition.fromList(it)
         }
       }
       170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImportPosition.fromList(it)
+          TransitionOptions.fromList(it)
         }
       }
       171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
+          MapOptions.fromList(it)
         }
       }
       174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          FeatureExtensionValue.fromList(it)
         }
       }
       177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          FeaturesetFeatureId.fromList(it)
         }
       }
       181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeatureId.fromList(it)
+          FeatureState.fromList(it)
         }
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureState.fromList(it)
+          _InteractionPigeon.fromList(it)
         }
       }
       183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _InteractionPigeon.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetDescriptor.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeature.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          StyleProjectionWire.fromList(it)
         }
       }
       188.toByte() -> {
@@ -781,7 +823,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is StyleProjectionName -> {
+      is StyleProjectionType -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
@@ -921,83 +963,83 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is LayerPosition -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is LayerPosition -> {
+      is ImportPosition -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is ImportPosition -> {
+      is TransitionOptions -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
+      is MapOptions -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is MapOptions -> {
+      is RenderedQueryOptions -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is SourceQueryOptions -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is FeatureExtensionValue -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is FeatureExtensionValue -> {
+      is QueriedRenderedFeature -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is QueriedFeature -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is FeaturesetFeatureId -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeatureId -> {
+      is FeatureState -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is FeatureState -> {
+      is _InteractionPigeon -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is _InteractionPigeon -> {
+      is FeaturesetDescriptor -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is FeaturesetDescriptor -> {
+      is FeaturesetFeature -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeature -> {
+      is MapContentGestureContext -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is _RenderedQueryGeometry -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is StyleProjectionWire -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
@@ -4083,13 +4125,15 @@ interface StyleManager {
    *
    * @return Projection that is currently applied to the map
    */
-  fun getProjection(): StyleProjection?
+  fun getProjection(): StyleProjectionWire?
   /**
    * Function to set the projection provided by the Style Extension.
    *
    * @param projection The projection to be set.
+   * @param center The projection center, only applied to conic projections.
+   * @param parallels The projection parallels as [lat0, lat1], only applied to conic projections.
    */
-  fun setProjection(projection: StyleProjection)
+  fun setProjection(projection: StyleProjectionType, center: Point?, parallels: List<Double?>?)
   /**
    * Function to localize style labels.
    *
@@ -5508,9 +5552,11 @@ interface StyleManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val projectionArg = args[0] as StyleProjection
+            val projectionArg = args[0] as StyleProjectionType
+            val centerArg = args[1] as Point?
+            val parallelsArg = args[2] as List<Double?>?
             val wrapped: List<Any?> = try {
-              api.setProjection(projectionArg)
+              api.setProjection(projectionArg, centerArg, parallelsArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

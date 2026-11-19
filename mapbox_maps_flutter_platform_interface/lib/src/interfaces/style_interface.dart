@@ -4,6 +4,7 @@ import 'package:turf/turf.dart';
 import '../pigeons/platform_interface_data_types.dart';
 import '../public/color_theme.dart';
 import '../public/style_image.dart';
+import '../public/style_projection.dart';
 
 /// Abstract interface for managing the map's style.
 ///

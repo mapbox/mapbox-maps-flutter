@@ -313,7 +313,7 @@ class MockStylePlatformInterface implements StylePlatformInterface {
   @override
   Future<StyleProjection?> getProjection() async {
     getProjectionCallCount++;
-    return StyleProjection(name: StyleProjectionName.mercator);
+    return StyleProjection.mercator;
   }
 
   @override
@@ -1238,15 +1238,29 @@ void main() {
       final result = await style.getProjection();
 
       expect(mockImpl.getProjectionCallCount, 1);
-      expect(result?.name, StyleProjectionName.mercator);
+      expect(result, StyleProjection.mercator);
     });
 
     test('setProjection delegates to interface', () async {
-      await style.setProjection(
-        StyleProjection(name: StyleProjectionName.globe),
-      );
+      await style.setProjection(StyleProjection.globe);
 
       expect(mockImpl.setProjectionCallCount, 1);
+    });
+
+    test('albers projections compare center and parallels', () {
+      StyleProjection albers({double lng = 10, double lat0 = 43}) =>
+          // ignore: experimental_member_use
+          StyleProjection.albers(
+            center: Point(coordinates: Position(lng, 50)),
+            parallels: (start: lat0, end: 62),
+          );
+
+      expect(albers(), albers());
+      expect(albers().hashCode, albers().hashCode);
+      expect(albers(), isNot(albers(lng: 11)));
+      expect(albers(), isNot(albers(lat0: 44)));
+      // ignore: experimental_member_use
+      expect(albers(), isNot(StyleProjection.albers()));
     });
 
     // ===== Low-level property access =====

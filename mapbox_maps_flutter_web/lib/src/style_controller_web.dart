@@ -940,11 +940,41 @@ final class StyleController implements StylePlatformInterface {
   // ===== Projection =====
 
   @override
-  Future<StyleProjection?> getProjection() async => throw _ni('getProjection');
+  Future<StyleProjection?> getProjection() async {
+    final projection = _map.getProjection()?.dartify();
+    if (projection is! core.Map) return null;
+    final type = StyleProjectionType.values.asNameMap()[projection['name']];
+    if (type == null) return null;
+    if (type != StyleProjectionType.albers) return createStyleProjection(type);
+    return createStyleProjection(
+      type,
+      center: switch (projection['center']) {
+        [final num lng, final num lat] => Point(
+          coordinates: Position(lng, lat),
+        ),
+        _ => null,
+      },
+      parallels: switch (projection['parallels']) {
+        [final num lat0, final num lat1] => (
+          start: lat0.toDouble(),
+          end: lat1.toDouble(),
+        ),
+        _ => null,
+      },
+    );
+  }
 
   @override
   Future<void> setProjection(StyleProjection projection) async =>
-      throw _ni('setProjection');
+      _map.setProjection(
+        {
+          'name': projection.styleProjectionType.name,
+          if (projection.center case final center?)
+            'center': [center.coordinates.lng, center.coordinates.lat],
+          if (projection.parallels case final parallels?)
+            'parallels': [parallels.start, parallels.end],
+        }.jsify()!,
+      );
 
   // ===== Custom geometry sources =====
 

@@ -274,6 +274,38 @@ struct _RenderedQueryGeometry {
   }
 }
 
+/// The projection that is currently applied to the map.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StyleProjectionWire {
+  var type: StyleProjectionType
+  /// The projection center, or `null` if not set.
+  var center: Point? = nil
+  /// The projection parallels as [lat0, lat1], or `null` if not set.
+  var parallels: [Double?]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StyleProjectionWire? {
+    let type = pigeonVar_list[0] as! StyleProjectionType
+    let center: Point? = nilOrValue(pigeonVar_list[1])
+    let parallels: [Double?]? = nilOrValue(pigeonVar_list[2])
+
+    return StyleProjectionWire(
+      type: type,
+      center: center,
+      parallels: parallels
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      type,
+      center,
+      parallels,
+    ]
+  }
+}
+
 /// Wire representation of `FreeCameraOptions` for the mobile platform channel.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -332,7 +364,7 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 133:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StyleProjectionName(rawValue: enumResultAsInt)
+        return StyleProjectionType(rawValue: enumResultAsInt)
       }
       return nil
     case 134:
@@ -476,45 +508,45 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 167:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 168:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 169:
       return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 170:
+    case 169:
       return ImportPosition.fromList(self.readValue() as! [Any?])
-    case 171:
+    case 170:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
-    case 172:
+    case 171:
       return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 173:
+    case 172:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 174:
+    case 173:
       return MapOptions.fromList(self.readValue() as! [Any?])
-    case 175:
+    case 174:
       return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 176:
+    case 175:
       return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 177:
+    case 176:
       return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 178:
+    case 177:
       return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 179:
+    case 178:
       return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 180:
+    case 179:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 181:
+    case 180:
       return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
-    case 182:
+    case 181:
       return FeatureState.fromList(self.readValue() as! [Any?])
-    case 183:
+    case 182:
       return _InteractionPigeon.fromList(self.readValue() as! [Any?])
-    case 184:
+    case 183:
       return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
-    case 185:
+    case 184:
       return FeaturesetFeature.fromList(self.readValue() as! [Any?])
-    case 186:
+    case 185:
       return MapContentGestureContext.fromList(self.readValue() as! [Any?])
-    case 187:
+    case 186:
       return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+    case 187:
+      return StyleProjectionWire.fromList(self.readValue() as! [Any?])
     case 188:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 189:
@@ -561,7 +593,7 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? GlyphsRasterizationMode {
       super.writeByte(132)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StyleProjectionName {
+    } else if let value = value as? StyleProjectionType {
       super.writeByte(133)
       super.writeValue(value.rawValue)
     } else if let value = value as? ContextMode {
@@ -666,64 +698,64 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? StyleObjectInfo {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? LayerPosition {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
+    } else if let value = value as? ImportPosition {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? ImportPosition {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? MapOptions {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? FeatureExtensionValue {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? FeaturesetFeatureId {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeatureId {
+    } else if let value = value as? FeatureState {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureState {
+    } else if let value = value as? _InteractionPigeon {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? _InteractionPigeon {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? StyleProjectionWire {
       super.writeByte(187)
       super.writeValue(value.toList())
     } else if let value = value as? ProjectedMeters {
@@ -3683,11 +3715,13 @@ protocol StyleManager {
   /// Function to get the projection provided by the Style Extension.
   ///
   /// @return Projection that is currently applied to the map
-  func getProjection() throws -> StyleProjection?
+  func getProjection() throws -> StyleProjectionWire?
   /// Function to set the projection provided by the Style Extension.
   ///
   /// @param projection The projection to be set.
-  func setProjection(projection: StyleProjection) throws
+  /// @param center The projection center, only applied to conic projections.
+  /// @param parallels The projection parallels as [lat0, lat1], only applied to conic projections.
+  func setProjection(projection: StyleProjectionType, center: Point?, parallels: [Double?]?) throws
   /// Function to localize style labels.
   ///
   /// @param locale The locale to apply for localization
@@ -5366,13 +5400,17 @@ class StyleManagerSetup {
     /// Function to set the projection provided by the Style Extension.
     ///
     /// @param projection The projection to be set.
+    /// @param center The projection center, only applied to conic projections.
+    /// @param parallels The projection parallels as [lat0, lat1], only applied to conic projections.
     let setProjectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setProjectionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let projectionArg = args[0] as! StyleProjection
+        let projectionArg = args[0] as! StyleProjectionType
+        let centerArg: Point? = nilOrValue(args[1])
+        let parallelsArg: [Double?]? = nilOrValue(args[2])
         do {
-          try api.setProjection(projection: projectionArg)
+          try api.setProjection(projection: projectionArg, center: centerArg, parallels: parallelsArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))

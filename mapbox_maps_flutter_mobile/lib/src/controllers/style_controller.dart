@@ -300,11 +300,28 @@ class StyleController implements StylePlatformInterface {
   // ===== Projection =====
 
   @override
-  Future<StyleProjection?> getProjection() => _api.getProjection();
+  Future<StyleProjection?> getProjection() async {
+    final projection = await _api.getProjection();
+    if (projection == null) return null;
+    return createStyleProjection(
+      projection.type,
+      center: projection.center,
+      parallels: switch (projection.parallels) {
+        [final lat0?, final lat1?] => (start: lat0, end: lat1),
+        _ => null,
+      },
+    );
+  }
 
   @override
-  Future<void> setProjection(StyleProjection projection) =>
-      _api.setProjection(projection);
+  Future<void> setProjection(StyleProjection projection) {
+    final parallels = projection.parallels;
+    return _api.setProjection(
+      projection.styleProjectionType,
+      projection.center,
+      parallels == null ? null : [parallels.start, parallels.end],
+    );
+  }
 
   // ===== Low-level property access =====
 

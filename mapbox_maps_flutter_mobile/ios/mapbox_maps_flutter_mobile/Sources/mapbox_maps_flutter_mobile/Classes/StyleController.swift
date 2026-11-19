@@ -710,13 +710,25 @@ final class StyleController: StyleManager {
 
     // MARK: Style Projection
 
-    func getProjection() throws -> StyleProjection? {
-        return styleManager.projection?.toFLTStyleProjection()
+    func getProjection() throws -> StyleProjectionWire? {
+        guard let projection = styleManager.projection,
+              let type = projection.name.toFLTStyleProjectionType() else { return nil }
+        guard type == .albers else { return StyleProjectionWire(type: type) }
+        return StyleProjectionWire(
+            type: type,
+            center: projection.center.map(Point.init),
+            parallels: projection.parallels.map { [$0.lowerBound, $0.upperBound] }
+        )
     }
 
-    func setProjection(projection: StyleProjection) throws {
+    func setProjection(projection: StyleProjectionType, center: Point?, parallels: [Double?]?) throws {
+        var styleProjection = StyleProjection(name: StyleProjectionName(projection))
+        styleProjection.center = center?.coordinates
+        if let parallels = parallels?.compactMap({ $0 }), parallels.count == 2 {
+            styleProjection.parallels = min(parallels[0], parallels[1])...max(parallels[0], parallels[1])
+        }
         do {
-            try styleManager.setProjection(MapboxMaps.StyleProjection(name: MapboxMaps.StyleProjectionName(projection.name)))
+            try styleManager.setProjection(styleProjection)
         } catch let styleError {
             throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
         }

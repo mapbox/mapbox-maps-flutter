@@ -406,6 +406,11 @@ base class StyleManager {
   // ===== Projection =====
 
   /// Returns the style projection.
+  ///
+  /// Returns null if neither the style nor [setProjection] sets a projection,
+  /// or if the projection is not one of the [StyleProjection] values. On web, Mapbox
+  /// GL JS always has a projection, so for an unset projection this returns
+  /// Mercator instead of null.
   Future<StyleProjection?> getProjection() => _impl.getProjection();
 
   /// Sets the style projection.

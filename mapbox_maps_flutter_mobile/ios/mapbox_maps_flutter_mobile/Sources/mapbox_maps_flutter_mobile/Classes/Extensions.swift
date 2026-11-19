@@ -1072,26 +1072,21 @@ struct SupportedStyleColor: Encodable {
 
 extension MapboxMaps.StyleProjectionName {
 
-    init(_ fltValue: StyleProjectionName) {
+    init(_ fltValue: StyleProjectionType) {
         switch fltValue {
         case .mercator: self = .mercator
         case .globe: self = .globe
+        case .albers: self = .albers
         }
     }
 
-    func toFLTStyleProjectionName() -> StyleProjectionName? {
+    func toFLTStyleProjectionType() -> StyleProjectionType? {
         switch self {
         case .globe: return .globe
         case .mercator: return .mercator
+        case .albers: return .albers
         default: return nil
         }
-    }
-}
-
-extension MapboxMaps.StyleProjection {
-
-    func toFLTStyleProjection() -> StyleProjection? {
-        name.toFLTStyleProjectionName().map(StyleProjection.init(name:))
     }
 }
 

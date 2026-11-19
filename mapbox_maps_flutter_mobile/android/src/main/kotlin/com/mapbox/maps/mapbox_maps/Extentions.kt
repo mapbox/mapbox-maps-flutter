@@ -17,12 +17,10 @@ import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
-import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.maps.extension.style.light.generated.ambientLight
 import com.mapbox.maps.extension.style.light.generated.directionalLight
 import com.mapbox.maps.extension.style.light.generated.flatLight
-import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
 import com.mapbox.maps.interactions.FeatureState
 import com.mapbox.maps.interactions.TypedFeaturesetDescriptor
@@ -133,16 +131,6 @@ fun TileStoreUsageMode.toTileStoreUsageMode(): com.mapbox.maps.TileStoreUsageMod
   }
 }
 
-fun StyleProjectionName.toProjectionName(): ProjectionName {
-  return when (this) {
-    StyleProjectionName.GLOBE -> ProjectionName.GLOBE
-    StyleProjectionName.MERCATOR -> ProjectionName.MERCATOR
-  }
-}
-
-fun StyleProjection.toProjection(): com.mapbox.maps.extension.style.projection.generated.Projection {
-  return com.mapbox.maps.extension.style.projection.generated.Projection(name.toProjectionName())
-}
 fun TransitionOptions.toStyleTransition(): StyleTransition {
   val builder = StyleTransition.Builder()
   duration?.let {
@@ -627,22 +615,18 @@ fun com.mapbox.maps.plugin.ModelElevationReference.toFLTModelElevationReference(
   }
 }
 
-fun com.mapbox.maps.StylePropertyValue.toFLTStylePropertyValue(): StylePropertyValue {
-  return StylePropertyValue(value.toFLTValue(), StylePropertyValueKind.values()[kind.ordinal])
-}
-
-fun ProjectionName.toFLTProjectionName(): StyleProjectionName {
+@OptIn(MapboxExperimental::class)
+fun com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName.toFLTStyleProjectionType(): StyleProjectionType? {
   return when (this) {
-    ProjectionName.GLOBE -> StyleProjectionName.GLOBE
-    ProjectionName.MERCATOR -> StyleProjectionName.MERCATOR
-    else -> {
-      throw java.lang.RuntimeException("Projection $this is not supported.")
-    }
+    com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName.MERCATOR -> StyleProjectionType.MERCATOR
+    com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName.GLOBE -> StyleProjectionType.GLOBE
+    com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName.ALBERS -> StyleProjectionType.ALBERS
+    else -> null
   }
 }
 
-fun Projection.toFLTProjection(): StyleProjection {
-  return StyleProjection(name.toFLTProjectionName())
+fun com.mapbox.maps.StylePropertyValue.toFLTStylePropertyValue(): StylePropertyValue {
+  return StylePropertyValue(value.toFLTValue(), StylePropertyValueKind.values()[kind.ordinal])
 }
 
 fun com.mapbox.maps.StyleObjectInfo.toFLTStyleObjectInfo(): StyleObjectInfo {

@@ -322,6 +322,54 @@ class _RenderedQueryGeometry {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// The projection that is currently applied to the map.
+class StyleProjectionWire {
+  StyleProjectionWire({required this.type, this.center, this.parallels});
+
+  StyleProjectionType type;
+
+  /// The projection center, or `null` if not set.
+  Point? center;
+
+  /// The projection parallels as [lat0, lat1], or `null` if not set.
+  List<double?>? parallels;
+
+  List<Object?> _toList() {
+    return <Object?>[type, center, parallels];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static StyleProjectionWire decode(Object result) {
+    result as List<Object?>;
+    return StyleProjectionWire(
+      type: result[0]! as StyleProjectionType,
+      center: result[1] as Point?,
+      parallels: (result[2] as List<Object?>?)?.cast<double?>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! StyleProjectionWire || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return type == other.type &&
+        center == other.center &&
+        _deepEquals(parallels, other.parallels);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// Wire representation of `FreeCameraOptions` for the mobile platform channel.
 class FreeCameraOptionsWire {
   FreeCameraOptionsWire({this.position, this.orientation});
@@ -385,7 +433,7 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
     } else if (value is GlyphsRasterizationMode) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    } else if (value is StyleProjectionName) {
+    } else if (value is StyleProjectionType) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
     } else if (value is ContextMode) {
@@ -490,64 +538,64 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
     } else if (value is StyleObjectInfo) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is LayerPosition) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
+    } else if (value is ImportPosition) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is ImportPosition) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is MapOptions) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is FeatureExtensionValue) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is FeaturesetFeatureId) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeatureId) {
+    } else if (value is FeatureState) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureState) {
+    } else if (value is _InteractionPigeon) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is _InteractionPigeon) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetDescriptor) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeature) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is StyleProjectionWire) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
     } else if (value is ProjectedMeters) {
@@ -611,7 +659,7 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
         return value == null ? null : GlyphsRasterizationMode.values[value];
       case 133:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StyleProjectionName.values[value];
+        return value == null ? null : StyleProjectionType.values[value];
       case 134:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ContextMode.values[value];
@@ -703,45 +751,45 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
       case 167:
         return StyleObjectInfo.decode(readValue(buffer)!);
       case 168:
-        return StyleProjection.decode(readValue(buffer)!);
-      case 169:
         return LayerPosition.decode(readValue(buffer)!);
-      case 170:
+      case 169:
         return ImportPosition.decode(readValue(buffer)!);
-      case 171:
+      case 170:
         return TransitionOptions.decode(readValue(buffer)!);
-      case 172:
+      case 171:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 173:
+      case 172:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 174:
+      case 173:
         return MapOptions.decode(readValue(buffer)!);
-      case 175:
+      case 174:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 176:
+      case 175:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 177:
+      case 176:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 178:
+      case 177:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 179:
+      case 178:
         return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 180:
+      case 179:
         return QueriedFeature.decode(readValue(buffer)!);
-      case 181:
+      case 180:
         return FeaturesetFeatureId.decode(readValue(buffer)!);
-      case 182:
+      case 181:
         return FeatureState.decode(readValue(buffer)!);
-      case 183:
+      case 182:
         return _InteractionPigeon.decode(readValue(buffer)!);
-      case 184:
+      case 183:
         return FeaturesetDescriptor.decode(readValue(buffer)!);
-      case 185:
+      case 184:
         return FeaturesetFeature.decode(readValue(buffer)!);
-      case 186:
+      case 185:
         return MapContentGestureContext.decode(readValue(buffer)!);
-      case 187:
+      case 186:
         return _RenderedQueryGeometry.decode(readValue(buffer)!);
+      case 187:
+        return StyleProjectionWire.decode(readValue(buffer)!);
       case 188:
         return ProjectedMeters.decode(readValue(buffer)!);
       case 189:
@@ -6714,7 +6762,7 @@ class StyleManager {
   /// Function to get the projection provided by the Style Extension.
   ///
   /// @return Projection that is currently applied to the map
-  Future<StyleProjection?> getProjection() async {
+  Future<StyleProjectionWire?> getProjection() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getProjection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -6735,14 +6783,20 @@ class StyleManager {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as StyleProjection?);
+      return (pigeonVar_replyList[0] as StyleProjectionWire?);
     }
   }
 
   /// Function to set the projection provided by the Style Extension.
   ///
   /// @param projection The projection to be set.
-  Future<void> setProjection(StyleProjection projection) async {
+  /// @param center The projection center, only applied to conic projections.
+  /// @param parallels The projection parallels as [lat0, lat1], only applied to conic projections.
+  Future<void> setProjection(
+    StyleProjectionType projection,
+    Point? center,
+    List<double?>? parallels,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -6752,7 +6806,7 @@ class StyleManager {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[projection],
+      <Object?>[projection, center, parallels],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

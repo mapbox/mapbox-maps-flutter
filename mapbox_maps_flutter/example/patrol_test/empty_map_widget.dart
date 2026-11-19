@@ -415,3 +415,10 @@ extension CompleterExpect<T> on Completer<T> {
     }
   }
 }
+
+extension Also<T> on T {
+  T also(void Function(T) block) {
+    block(this);
+    return this;
+  }
+}

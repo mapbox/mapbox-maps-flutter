@@ -27,7 +27,7 @@ void main() {
 
   Future<MapboxMap> pumpMap(
     WidgetTester tester, {
-    required StyleProjectionName projection,
+    required String projection,
     required double zoom,
   }) async {
     // A style with only a background, so the test needs no network and the
@@ -37,7 +37,7 @@ void main() {
       viewport: CameraViewportState(center: _helsinki, zoom: zoom),
       styleJson: jsonEncode({
         'version': 8,
-        'projection': {'name': projection.name},
+        'projection': {'name': projection},
         'sources': <String, Object>{},
         'layers': [
           {'id': 'background', 'type': 'background'},
@@ -101,11 +101,7 @@ void main() {
   }
 
   patrolTest('free camera pose reads back on mercator', ($) async {
-    final mapboxMap = await pumpMap(
-      $.tester,
-      projection: StyleProjectionName.mercator,
-      zoom: 14,
-    );
+    final mapboxMap = await pumpMap($.tester, projection: 'mercator', zoom: 14);
 
     final camera = const FreeCameraOptions()
         .withLocation(
@@ -129,11 +125,7 @@ void main() {
   });
 
   patrolTest('free camera pose reads back on globe', ($) async {
-    final mapboxMap = await pumpMap(
-      $.tester,
-      projection: StyleProjectionName.globe,
-      zoom: 3,
-    );
+    final mapboxMap = await pumpMap($.tester, projection: 'globe', zoom: 3);
 
     final camera = const FreeCameraOptions()
         .withLocation(Point(coordinates: Position(20, 55)), altitude: 3000000)
@@ -158,11 +150,7 @@ void main() {
   });
 
   patrolTest('lookingAt centers the camera on the target', ($) async {
-    final mapboxMap = await pumpMap(
-      $.tester,
-      projection: StyleProjectionName.mercator,
-      zoom: 14,
-    );
+    final mapboxMap = await pumpMap($.tester, projection: 'mercator', zoom: 14);
     final target = Point(coordinates: Position(24.95, 60.17));
 
     // 0.009 degrees of latitude south of the target is 1000.75 m away on
@@ -198,11 +186,7 @@ void main() {
   });
 
   patrolTest('orientation alone keeps the camera position', ($) async {
-    final mapboxMap = await pumpMap(
-      $.tester,
-      projection: StyleProjectionName.mercator,
-      zoom: 14,
-    );
+    final mapboxMap = await pumpMap($.tester, projection: 'mercator', zoom: 14);
     final before = await mapboxMap.getFreeCameraOptions();
 
     final orientation = const FreeCameraOptions()

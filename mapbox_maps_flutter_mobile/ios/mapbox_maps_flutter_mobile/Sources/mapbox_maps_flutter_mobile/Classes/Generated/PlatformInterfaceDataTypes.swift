@@ -61,10 +61,11 @@ enum GlyphsRasterizationMode: Int {
   case aLLGLYPHSRASTERIZEDLOCALLY = 2
 }
 
-/// The style projection name.
-enum StyleProjectionName: Int {
+/// The style projection type. Internal, not exported to the public API.
+enum StyleProjectionType: Int {
   case mercator = 0
   case globe = 1
+  case albers = 2
 }
 
 /// Raw Pigeon enum underlying the [MapWidgetDebugOptions] typed wrapper.
@@ -1186,28 +1187,6 @@ struct StyleObjectInfo {
     return [
       id,
       type,
-    ]
-  }
-}
-
-/// The style projection.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct StyleProjection {
-  var name: StyleProjectionName
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> StyleProjection? {
-    let name = pigeonVar_list[0] as! StyleProjectionName
-
-    return StyleProjection(
-      name: name
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      name
     ]
   }
 }

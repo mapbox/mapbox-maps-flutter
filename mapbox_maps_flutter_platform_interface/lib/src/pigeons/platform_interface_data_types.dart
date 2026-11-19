@@ -73,8 +73,8 @@ enum GlyphsRasterizationMode {
   ALL_GLYPHS_RASTERIZED_LOCALLY,
 }
 
-/// The style projection name.
-enum StyleProjectionName { mercator, globe }
+/// The style projection type. Internal, not exported to the public API.
+enum StyleProjectionType { mercator, globe, albers }
 
 /// Raw Pigeon enum underlying the [MapWidgetDebugOptions] typed wrapper.
 /// Exposed publicly (rather than with an underscore prefix) because the
@@ -1542,42 +1542,6 @@ class StyleObjectInfo {
       return true;
     }
     return id == other.id && type == other.type;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList());
-}
-
-/// The style projection.
-class StyleProjection {
-  StyleProjection({required this.name});
-
-  StyleProjectionName name;
-
-  List<Object?> _toList() {
-    return <Object?>[name];
-  }
-
-  Object encode() {
-    return _toList();
-  }
-
-  static StyleProjection decode(Object result) {
-    result as List<Object?>;
-    return StyleProjection(name: result[0]! as StyleProjectionName);
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! StyleProjection || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return name == other.name;
   }
 
   @override

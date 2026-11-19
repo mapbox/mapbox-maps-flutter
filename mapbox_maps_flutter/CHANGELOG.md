@@ -1,6 +1,16 @@
 ### main
 
 * Fix `StyleManager.addLayer` and `addPersistentLayer` ignoring their `position` argument.
+* Add the experimental Albers equal-area projection, with optional `center` and `parallels`, and the `StyleProjection.mercator` and `StyleProjection.globe` constants. `StyleProjectionName`, the `StyleProjection(name:)` constructor and `StyleProjection.name` are deprecated. Web now supports `getProjection` and `setProjection`.
+  ```dart
+  mapboxMap.setProjection(StyleProjection.globe);
+  mapboxMap.setProjection(
+    StyleProjection.albers(
+      center: Point(coordinates: Position(10, 50)),
+      parallels: (start: 43, end: 62),
+    ),
+  );
+  ```
 
 ### 3.36.0-rc.1
 
