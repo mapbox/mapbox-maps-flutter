@@ -5,10 +5,13 @@ import 'dart:core';
 import 'dart:core' as core;
 import 'dart:developer';
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:turf/turf.dart' show Feature, Point, Position;
+import 'package:web/web.dart' as web;
 
 import 'bindings/binding_adapters.dart';
 import 'bindings/map_bindings.dart';
@@ -18,7 +21,7 @@ import 'style/lights.dart';
 import 'style/source_properties.dart';
 
 /// Web [StylePlatformInterface] implementation backed by Mapbox GL JS.
-final class StyleController implements StylePlatformInterface {
+final class StyleController implements StylePlatformInterface, Disposable {
   final JSMap _map;
 
   StyleController(this._map);
@@ -26,15 +29,20 @@ final class StyleController implements StylePlatformInterface {
   // ===== Style loading =====
 
   @override
-  Future<void> setStyleURI(String uri) async => _map.setStyle(uri.toJS);
+  Future<void> setStyleURI(String uri) async {
+    _revokeAllImageSourceObjectUrls();
+    _map.setStyle(uri.toJS);
+  }
 
   @override
   Future<String> getStyleURI() =>
       throw UnsupportedError("Style.getStyleURI() is not supported on web");
 
   @override
-  Future<void> setStyleJSON(String json) async =>
-      _map.setStyle(jsonParse(json));
+  Future<void> setStyleJSON(String json) async {
+    _revokeAllImageSourceObjectUrls();
+    _map.setStyle(jsonParse(json));
+  }
 
   @override
   Future<String> getStyleJSON() async => jsonStringify(_map.getStyle());
@@ -481,8 +489,10 @@ final class StyleController implements StylePlatformInterface {
   }
 
   @override
-  Future<void> removeStyleSource(String sourceId) async =>
-      _map.removeSource(sourceId);
+  Future<void> removeStyleSource(String sourceId) async {
+    _map.removeSource(sourceId);
+    _revokeImageSourceObjectUrl(sourceId);
+  }
 
   @override
   Future<bool> styleSourceExists(String sourceId) async =>
@@ -684,8 +694,9 @@ final class StyleController implements StylePlatformInterface {
 
   // ===== Images =====
   //
-  // gl-js `Map.addImage` errors when the id already exists; the platform
-  // contract replaces, so we remove-then-add when needed.
+  // gl-js `Map.addImage` errors when the id already exists, but the platform
+  // contract replaces. A replacement with the same size and options uses the
+  // cheaper `Map.updateImage`; any other replacement removes and re-adds.
 
   @override
   Future<bool> hasStyleImage(String imageId) async => _map.hasImage(imageId);
@@ -704,31 +715,120 @@ final class StyleController implements StylePlatformInterface {
     List<ImageStretches?> stretchY,
     ImageContent? content,
   ) async {
-    final options = JSAddImageOptions(
-      pixelRatio: scale,
-      sdf: sdf,
-      stretchX: stretchX.whereType<ImageStretches>().toList().toJS(),
-      stretchY: stretchY.whereType<ImageStretches>().toList().toJS(),
-      content: content?.toJS(),
-    );
+    final jsImage = await image.toJSImage();
+    final stretchesX = stretchX.whereType<ImageStretches>().toList();
+    final stretchesY = stretchY.whereType<ImageStretches>().toList();
     if (_map.hasImage(imageId)) {
+      final existing = _internalStyleImage(imageId);
+      if (existing != null &&
+          _hasSameLayout(
+            existing,
+            jsImage,
+            scale,
+            sdf,
+            stretchesX,
+            stretchesY,
+            content,
+          )) {
+        _map.updateImage(imageId, jsImage);
+        return;
+      }
       _map.removeImage(imageId);
     }
-    _map.addImage(imageId, await image.toJSImage(), options);
+    _map.addImage(
+      imageId,
+      jsImage,
+      JSAddImageOptions(
+        pixelRatio: scale,
+        sdf: sdf,
+        stretchX: stretchesX.toJS(),
+        stretchY: stretchesY.toJS(),
+        content: content?.toJS(),
+      ),
+    );
+  }
+
+  /// Whether [image] and its options match [existing], so that gl-js
+  /// `Map.updateImage` can replace the pixels.
+  bool _hasSameLayout(
+    JSInternalStyleImage existing,
+    JSSizedImage image,
+    double scale,
+    bool sdf,
+    List<ImageStretches> stretchX,
+    List<ImageStretches> stretchY,
+    ImageContent? content,
+  ) {
+    final pixels = existing.data;
+    if (pixels == null) return false;
+    if (pixels.width != image.width || pixels.height != image.height) {
+      return false;
+    }
+    return existing.pixelRatio == scale &&
+        existing.sdf == sdf &&
+        listEquals(existing.stretchX.toImageStretches(), stretchX) &&
+        listEquals(existing.stretchY.toImageStretches(), stretchY) &&
+        existing.content?.toImageContent() == content;
+  }
+
+  /// Object URLs that currently back image sources, by source id. gl-js
+  /// re-reads the current URL on coordinates-only updates, so a URL is
+  /// revoked only after a new one replaces it or the source is removed.
+  final _imageSourceObjectUrls = <String, String>{};
+
+  @override
+  Future<void> updateStyleImageSourceImage(
+    String sourceId,
+    StyleImage image,
+  ) async {
+    final source = _map.getSource(sourceId);
+    if (source == null || source.type != 'image') {
+      throw ArgumentError.value(sourceId, 'sourceId', 'is not an image source');
+    }
+    final imageSource = source as JSImageSource;
+    final url = web.URL.createObjectURL(await image.toBlob());
+    imageSource.updateImage(JSImageSourceUpdateOptions(url: url));
+    _revokeImageSourceObjectUrl(sourceId);
+    _imageSourceObjectUrls[sourceId] = url;
+  }
+
+  void _revokeImageSourceObjectUrl(String sourceId) {
+    final url = _imageSourceObjectUrls.remove(sourceId);
+    if (url != null) web.URL.revokeObjectURL(url);
+  }
+
+  /// A new style removes all sources without [removeStyleSource], so their
+  /// object URLs are revoked here.
+  void _revokeAllImageSourceObjectUrls() {
+    for (final url in _imageSourceObjectUrls.values) {
+      web.URL.revokeObjectURL(url);
+    }
+    _imageSourceObjectUrls.clear();
   }
 
   @override
-  Future<void> updateStyleImageSourceImage(String sourceId, StyleImage image) =>
-      throw _ni('updateStyleImageSourceImage');
+  void dispose() => _revokeAllImageSourceObjectUrls();
 
   @override
-  Future<StyleImageRgba?> getStyleImage(
-    String imageId,
-  ) => throw UnsupportedError(
-    // GL JS exposes add/update/remove/has/listImages on Map, but not a
-    // public getImage. Pixel readout lives on the internal Style class only.
-    'Style.getStyleImage() is not supported on web',
-  );
+  Future<StyleImageRgba?> getStyleImage(String imageId) async {
+    if (!_map.hasImage(imageId)) return null;
+    final style = _internalStyle;
+    if (style == null) {
+      throw UnsupportedError(
+        'Style.getStyleImage() is not supported by this GL JS version',
+      );
+    }
+    return style.getImage(imageId)?.data?.toStyleImage();
+  }
+
+  /// The internal gl-js style, or null when its `getImage` is not available.
+  JSInternalStyle? get _internalStyle {
+    final style = _map.internalStyle;
+    return style != null && style.has('getImage') ? style : null;
+  }
+
+  JSInternalStyleImage? _internalStyleImage(String imageId) =>
+      _internalStyle?.getImage(imageId);
 
   // ===== Models =====
 

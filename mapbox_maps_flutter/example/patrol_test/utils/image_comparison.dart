@@ -72,3 +72,16 @@ Future<Uint8List> _rawRgba(ui.Image image) async {
   final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
   return data!.buffer.asUint8List();
 }
+
+/// The straight RGBA color of the center pixel of the PNG [bytes], for
+/// example a map snapshot.
+Future<List<int>> centerPixel(Uint8List bytes) async {
+  final image = await _decode(bytes);
+  try {
+    final pixels = await _rawRgba(image);
+    final offset = 4 * ((image.height ~/ 2) * image.width + image.width ~/ 2);
+    return pixels.sublist(offset, offset + 4);
+  } finally {
+    image.dispose();
+  }
+}

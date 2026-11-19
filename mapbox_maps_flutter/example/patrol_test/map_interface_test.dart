@@ -762,9 +762,7 @@ void main() {
     await mapboxMap.addImage(imageId, 1.0, image);
     expect(await mapboxMap.hasStyleImage(imageId), isTrue);
 
-    if (!kIsWeb) {
-      expect(await mapboxMap.getImage(imageId), isNotNull);
-    }
+    expect(await mapboxMap.getImage(imageId), isNotNull);
 
     await mapboxMap.removeStyleImage(imageId);
     expect(await mapboxMap.hasStyleImage(imageId), isFalse);

@@ -246,12 +246,31 @@ base class StyleManager {
 
   // ===== Images =====
 
-  /// Returns whether an image with the given id exists.
+  /// Returns whether the style has an image with the id [imageId].
+  ///
+  /// Covers images from the style sprite and images added with [addImage].
   Future<bool> hasStyleImage(String imageId) => _impl.hasStyleImage(imageId);
 
-  /// Adds an image to the style. Existing images with the same [imageId] are
-  /// replaced. [stretchX] and [stretchY] default to empty lists; [content]
-  /// and [sdf] to null/false — mirroring the most common usage.
+  /// Adds [image] to the style with the id [imageId].
+  ///
+  /// Layers refer to the image by [imageId], for example in `icon-image`,
+  /// `fill-pattern` or `line-pattern`. If the style already has an image
+  /// with this id, the new image replaces it.
+  ///
+  /// - [scale] is the pixel ratio of [image]: the number of image pixels for
+  ///   each logical pixel on the screen. A 64 px image with scale 2 shows at
+  ///   32 logical pixels. Use the device pixel ratio for sharp icons.
+  /// - [sdf] marks the image as a signed distance field (SDF). The alpha
+  ///   channel then holds the distance to the edge of a shape, and the color
+  ///   channels are ignored. Symbol layers color SDF icons at runtime with
+  ///   `icon-color`, `icon-halo-color` and `icon-halo-width`.
+  /// - [stretchX] and [stretchY] are the horizontal and vertical ranges of
+  ///   [image] that can stretch, in image pixels. The ranges outside of them
+  ///   keep their size. Use them with `icon-text-fit` to make a label
+  ///   background, for example a rounded box whose corners do not stretch.
+  /// - [content] is the area of [image] that holds the text when
+  ///   `icon-text-fit` is set, in image pixels. The icon grows so that this
+  ///   area fits the text.
   Future<void> addImage(
     String imageId,
     double scale,
@@ -292,7 +311,10 @@ base class StyleManager {
     content,
   );
 
-  /// Replaces the image data of an existing image-type style source.
+  /// Replaces the image that the image source [sourceId] shows.
+  ///
+  /// The source must exist and have the type `image`, otherwise the call
+  /// fails. The source keeps its coordinates.
   Future<void> updateImageForSource(String sourceId, StyleImage image) =>
       _impl.updateStyleImageSourceImage(sourceId, image);
 
@@ -305,7 +327,11 @@ base class StyleManager {
   Future<void> updateStyleImageSourceImage(String sourceId, MbxImage image) =>
       _impl.updateStyleImageSourceImage(sourceId, image.toStyleImage());
 
-  /// Removes a style image.
+  /// Removes the image with the id [imageId] from the style.
+  ///
+  /// Layers that refer to the image stop showing it. If a layer still needs
+  /// the image, the map reports it through the `onStyleImageMissingListener`
+  /// of `MapWidget`.
   Future<void> removeStyleImage(String imageId) =>
       _impl.removeStyleImage(imageId);
 
@@ -365,7 +391,15 @@ base class StyleManager {
 
   // ===== Image lookup =====
 
-  /// Returns a previously-added style image, or null when [imageId] is unknown.
+  /// Returns the pixels of the style image [imageId], or null if the style
+  /// has no image with this id.
+  ///
+  /// The result is premultiplied RGBA, also for images added with
+  /// [StyleImage.bytes].
+  ///
+  /// On web, this method finds only images of the root style, not images of
+  /// imported styles. It returns null for images that the map draws only
+  /// when needed, for example SVG icons from an iconset.
   Future<StyleImageRgba?> getImage(String imageId) =>
       _impl.getStyleImage(imageId);
 

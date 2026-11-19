@@ -21,61 +21,55 @@ const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
-  patrolTest(
-    'getImage returns raw RGBA pixels, not an encoded container',
-    skip: kIsWeb,
-    ($) async {
-      final tester = $.tester;
-      final mapboxMap = await app.pumpMap(tester: $.tester);
-      await tester.pumpAndSettle();
+  patrolTest('getImage returns raw RGBA pixels, not an encoded container', (
+    $,
+  ) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(tester: $.tester);
+    await tester.pumpAndSettle();
 
-      const width = 4;
-      const height = 4;
-      // Fully opaque with three different, non-zero channel values. A channel
-      // reordering bug (e.g. reading BGRA as RGBA) or a premultiplication bug
-      // changes this color to a visibly different one, instead of silently
-      // matching by coincidence the way a pure red/green/blue fixture could.
-      const color = Color.fromARGB(255, 10, 90, 200);
-      final sourcePng = await _solidColorPng(
-        color,
-        width: width,
-        height: height,
-      );
+    const width = 4;
+    const height = 4;
+    // Fully opaque with three different, non-zero channel values. A channel
+    // reordering bug (e.g. reading BGRA as RGBA) or a premultiplication bug
+    // changes this color to a visibly different one, instead of silently
+    // matching by coincidence the way a pure red/green/blue fixture could.
+    const color = Color.fromARGB(255, 10, 90, 200);
+    final sourcePng = await _solidColorPng(color, width: width, height: height);
 
-      await mapboxMap.addImage(
-        'style-image-encoding-icon',
-        1.0,
-        StyleImage.bytes(sourcePng),
-      );
+    await mapboxMap.addImage(
+      'style-image-encoding-icon',
+      1.0,
+      StyleImage.bytes(sourcePng),
+    );
 
-      final styleImage = await mapboxMap.getImage('style-image-encoding-icon');
-      expect(styleImage, isNotNull);
+    final styleImage = await mapboxMap.getImage('style-image-encoding-icon');
+    expect(styleImage, isNotNull);
 
-      // A compressed container is never exactly `4 * width * height` bytes
-      // for a real image. This catches that case before the pixel
-      // comparison below even runs.
-      expect(
-        styleImage!.pixels.length,
-        4 * styleImage.width * styleImage.height,
-        reason:
-            'getImage() must return raw RGBA pixels, not a compressed '
-            'image container',
-      );
+    // A compressed container is never exactly `4 * width * height` bytes
+    // for a real image. This catches that case before the pixel
+    // comparison below even runs.
+    expect(
+      styleImage!.pixels.length,
+      4 * styleImage.width * styleImage.height,
+      reason:
+          'getImage() must return raw RGBA pixels, not a compressed '
+          'image container',
+    );
 
-      // The round trip: the pixels read back must be the exact pixels
-      // implied by the PNG that was added, not just the right byte count.
-      expect(
-        await isSameImage(
-          styleImage.pixels,
-          sourcePng,
-          widthA: styleImage.width,
-          heightA: styleImage.height,
-        ),
-        isTrue,
-        reason: 'getImage() must round-trip the exact pixels that were added',
-      );
-    },
-  );
+    // The round trip: the pixels read back must be the exact pixels
+    // implied by the PNG that was added, not just the right byte count.
+    expect(
+      await isSameImage(
+        styleImage.pixels,
+        sourcePng,
+        widthA: styleImage.width,
+        heightA: styleImage.height,
+      ),
+      isTrue,
+      reason: 'getImage() must round-trip the exact pixels that were added',
+    );
+  });
 }
 
 /// Renders a solid-color square and encodes it as a PNG.

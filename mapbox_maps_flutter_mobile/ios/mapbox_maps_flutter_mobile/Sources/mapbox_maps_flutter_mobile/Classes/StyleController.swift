@@ -14,6 +14,21 @@ private func rawRGBAPremultipliedData(from image: UIImage) -> Data? {
     let height = Int(image.size.height * image.scale)
     guard width > 0, height > 0 else { return nil }
 
+    // A style image wraps the premultiplied core pixels but labels them as straight
+    // alpha. Redrawing it would premultiply the color channels a second time, so
+    // copy the backing bytes when they already have the expected layout.
+    // Remove this workaround when https://mapbox.atlassian.net/browse/MAPSIOS-2472 is fixed.
+    if cgImage.width == width,
+       cgImage.height == height,
+       cgImage.bitsPerPixel == 32,
+       cgImage.bytesPerRow == width * 4,
+       [.last, .premultipliedLast].contains(cgImage.alphaInfo),
+       [.orderDefault, .order32Big].contains(cgImage.byteOrderInfo),
+       let data = cgImage.dataProvider?.data as Data?,
+       data.count == height * width * 4 {
+        return data
+    }
+
     let bytesPerRow = width * 4
     var rawBytes = [UInt8](repeating: 0, count: height * bytesPerRow)
     let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
@@ -254,6 +269,11 @@ final class StyleController: StyleManager {
     }
 
     func updateStyleImageSourceImage(sourceId: String, image: StyleImageWire, completion: @escaping (Result<Void, Error>) -> Void) {
+        // Core ignores image data for a source that is not an image source.
+        guard styleManager.allSourceIdentifiers.contains(where: { $0.id == sourceId && $0.type == .image }) else {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: "Source '\(sourceId)' is not an image source.", details: nil)))
+            return
+        }
         guard let image = image.toUIImage(scale: UIScreen.main.scale) else {
             completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not initialize the image from the specified data.", details: nil)))
             return

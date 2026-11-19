@@ -2056,10 +2056,10 @@ class StylePropertyValue {
 class MbxImage {
   MbxImage({required this.width, required this.height, required this.data});
 
-  /// The width of the image, in screen pixels.
+  /// The width of the image, in image pixels.
   int width;
 
-  /// The height of the image, in screen pixels.
+  /// The height of the image, in image pixels.
   int height;
 
   /// 32-bit premultiplied RGBA image data.
@@ -2103,14 +2103,17 @@ class MbxImage {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// Describes the image stretch areas.
+/// A range of an image that can stretch, in image pixels.
+///
+/// Used for the `stretchX` and `stretchY` arguments of `addImage`. The parts
+/// of the image outside of the ranges keep their size.
 class ImageStretches {
   ImageStretches({required this.first, required this.second});
 
-  /// The first stretchable part in screen pixel units.
+  /// The start of the range, in image pixels.
   double first;
 
-  /// The second stretchable part in screen pixel units.
+  /// The end of the range, in image pixels.
   double second;
 
   List<Object?> _toList() {
@@ -2146,9 +2149,15 @@ class ImageStretches {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// Describes the image content, e.g. where text can be fit into an image.
+/// The area of an image that holds text, in image pixels.
 ///
-/// When sizing icons with `icon-text-fit`, the icon size will be adjusted so that the this content box fits exactly around the text.
+/// Used for the `content` argument of `addImage`. With `icon-text-fit`, the
+/// icon grows so that this area fits the text.
+///
+/// The values are positions in the image, not distances from its edges. The
+/// top-left corner of the image is (0, 0), and the bottom-right corner of a
+/// 48x32 image is (48, 32). For example, for a 10 px margin on all sides of
+/// a 48x32 image, use `left: 10, top: 10, right: 38, bottom: 22`.
 class ImageContent {
   ImageContent({
     required this.left,
@@ -2157,16 +2166,16 @@ class ImageContent {
     required this.bottom,
   });
 
-  /// Distance to the left, in screen pixels.
+  /// The x coordinate of the left edge, in image pixels.
   double left;
 
-  /// Distance to the top, in screen pixels.
+  /// The y coordinate of the top edge, in image pixels.
   double top;
 
-  /// Distance to the right, in screen pixels.
+  /// The x coordinate of the right edge, in image pixels.
   double right;
 
-  /// Distance to the bottom, in screen pixels.
+  /// The y coordinate of the bottom edge, in image pixels.
   double bottom;
 
   List<Object?> _toList() {

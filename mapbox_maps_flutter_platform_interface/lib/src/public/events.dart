@@ -338,8 +338,14 @@ class StyleDataLoadedEventData extends MapEvent {
 }
 
 /// Data for the `styleImageMissing` event.
+///
+/// The map sends this event when a layer needs an image that the style does
+/// not have. Add the image with `addImage` to show it.
 class StyleImageMissingEventData extends MapEvent {
+  /// The time of the event, in microseconds since the Unix epoch.
   final int timestamp;
+
+  /// The id of the missing image.
   final String id;
 
   StyleImageMissingEventData({required this.timestamp, required this.id});
@@ -525,7 +531,7 @@ typedef OnSourceRemovedListener =
 typedef OnStyleDataLoadedListener =
     void Function(StyleDataLoadedEventData styleDataLoadedEventData);
 
-/// Invoked when the style has a missing image.
+/// Invoked when a layer needs an image that the style does not have.
 typedef OnStyleImageMissingListener =
     void Function(StyleImageMissingEventData styleImageMissingEventData);
 

@@ -17,8 +17,7 @@ import 'bindings/style_bindings.dart';
 ///
 ///  * `onMapLoadError` — GL JS has `error` events, but shape differs enough
 ///    that adapting into `MapLoadingErrorEventData` would mint every field.
-///  * `onStyleImageMissing` / `onStyleImageUnused` — GL JS surfaces these via
-///    `styleimagemissing` only; "unused" is not emitted.
+///  * `onStyleImageUnused` — GL JS has no equivalent event.
 ///  * `onResourceRequest` — GL JS `resourcerequest` has a different
 ///    request/response shape that would require a dedicated adapter epic.
 ///  * `onSourceAdded` / `onSourceRemoved` — GL JS has no source-lifecycle
@@ -49,6 +48,12 @@ class MapEventBridge {
     _on(JSMapEvents.cameraMove, (_) => _onMapEvent(_adaptCameraChanged()));
     _on(JSMapEvents.renderStart, (_) => _onMapEvent(_adaptRenderStart()));
     _on(JSMapEvents.render, (_) => _onMapEvent(_adaptRenderFinished()));
+    _on(
+      JSMapEvents.styleImageMissing,
+      (event) => _onMapEvent(
+        _adaptStyleImageMissing(event as JSStyleImageMissingEvent),
+      ),
+    );
   }
 
   void dispose() {
@@ -140,6 +145,10 @@ class MapEventBridge {
     timestamp: _nowMicros(),
     cameraState: _map.getCameraState(),
   );
+
+  StyleImageMissingEventData _adaptStyleImageMissing(
+    JSStyleImageMissingEvent event,
+  ) => StyleImageMissingEventData(timestamp: _nowMicros(), id: event.id);
 
   MapIdleEventData _adaptIdle() => MapIdleEventData(timestamp: _nowMicros());
 

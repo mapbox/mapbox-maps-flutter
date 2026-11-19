@@ -1,5 +1,10 @@
 ### main
 
+* [Web] Add `StyleManager.getImage` support.
+* [Web] Add `StyleManager.updateImageForSource` support.
+* [Web] `onStyleImageMissingListener` now receives events.
+* [iOS] Fix `StyleManager.getImage` returning too dark color values for semi-transparent pixels.
+* [Android][iOS] `StyleManager.updateImageForSource` now throws when the source is not an image source.
 * Fix `StyleManager.addLayer` and `addPersistentLayer` ignoring their `position` argument.
 * Add the experimental Albers equal-area projection, with optional `center` and `parallels`, and the `StyleProjection.mercator` and `StyleProjection.globe` constants. `StyleProjectionName`, the `StyleProjection(name:)` constructor and `StyleProjection.name` are deprecated. Web now supports `getProjection` and `setProjection`.
   ```dart

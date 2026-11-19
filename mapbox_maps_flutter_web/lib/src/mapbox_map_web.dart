@@ -80,7 +80,9 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Sub-interfaces =====
 
   @override
-  late final StylePlatformInterface style = StyleController(_map);
+  late final StylePlatformInterface style = StyleController(
+    _map,
+  ).addToDisposeBag(_disposables);
   @override
   late final GesturesSettingsPlatformInterface gestures = GesturesController(
     _map,
@@ -151,14 +153,10 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   // ===== Style loading =====
 
   @override
-  Future<void> loadStyleURI(String styleURI) async {
-    _map.setStyle(styleURI.toJS);
-  }
+  Future<void> loadStyleURI(String styleURI) => style.setStyleURI(styleURI);
 
   @override
-  Future<void> loadStyleJson(String styleJson) async {
-    _map.setStyle(jsonParse(styleJson));
-  }
+  Future<void> loadStyleJson(String styleJson) => style.setStyleJSON(styleJson);
 
   // ===== Camera =====
 

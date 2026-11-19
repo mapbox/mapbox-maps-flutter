@@ -25,8 +25,10 @@ sealed class StyleImage {
 
   /// Premultiplied RGBA pixel buffer.
   ///
-  /// [pixels] must contain exactly `4 * width * height` bytes (one scanline
-  /// after another). Prefer [StyleImage.bytes] unless you are generating
+  /// [pixels] must contain exactly `4 * width * height` bytes, one row after
+  /// another from the top. Each pixel is red, green, blue and alpha, one byte
+  /// each. Premultiplied means that each color byte is already multiplied by
+  /// `alpha / 255`: a half-transparent red pixel is `[128, 0, 0, 128]`. Prefer [StyleImage.bytes] unless you are generating
   /// pixels procedurally.
   factory StyleImage.rgba({
     required int width,

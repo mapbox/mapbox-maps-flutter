@@ -1509,9 +1509,9 @@ struct StylePropertyValue {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct MbxImage {
-  /// The width of the image, in screen pixels.
+  /// The width of the image, in image pixels.
   var width: Int64
-  /// The height of the image, in screen pixels.
+  /// The height of the image, in image pixels.
   var height: Int64
   /// 32-bit premultiplied RGBA image data.
   ///
@@ -1542,13 +1542,16 @@ struct MbxImage {
   }
 }
 
-/// Describes the image stretch areas.
+/// A range of an image that can stretch, in image pixels.
+///
+/// Used for the `stretchX` and `stretchY` arguments of `addImage`. The parts
+/// of the image outside of the ranges keep their size.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct ImageStretches {
-  /// The first stretchable part in screen pixel units.
+  /// The start of the range, in image pixels.
   var first: Double
-  /// The second stretchable part in screen pixel units.
+  /// The end of the range, in image pixels.
   var second: Double
 
 
@@ -1570,19 +1573,25 @@ struct ImageStretches {
   }
 }
 
-/// Describes the image content, e.g. where text can be fit into an image.
+/// The area of an image that holds text, in image pixels.
 ///
-/// When sizing icons with `icon-text-fit`, the icon size will be adjusted so that the this content box fits exactly around the text.
+/// Used for the `content` argument of `addImage`. With `icon-text-fit`, the
+/// icon grows so that this area fits the text.
+///
+/// The values are positions in the image, not distances from its edges. The
+/// top-left corner of the image is (0, 0), and the bottom-right corner of a
+/// 48x32 image is (48, 32). For example, for a 10 px margin on all sides of
+/// a 48x32 image, use `left: 10, top: 10, right: 38, bottom: 22`.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct ImageContent {
-  /// Distance to the left, in screen pixels.
+  /// The x coordinate of the left edge, in image pixels.
   var left: Double
-  /// Distance to the top, in screen pixels.
+  /// The y coordinate of the top edge, in image pixels.
   var top: Double
-  /// Distance to the right, in screen pixels.
+  /// The x coordinate of the right edge, in image pixels.
   var right: Double
-  /// Distance to the bottom, in screen pixels.
+  /// The y coordinate of the bottom edge, in image pixels.
   var bottom: Double
 
 

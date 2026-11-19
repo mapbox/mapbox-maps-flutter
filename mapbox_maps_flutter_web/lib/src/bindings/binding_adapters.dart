@@ -243,27 +243,74 @@ extension JSMapFeatureToQueried on JSMapFeature {
 
 /// Converts [StyleImage] for gl-js `Map.addImage`.
 extension StyleImageToJS on StyleImage {
-  Future<JSAny> toJSImage() async {
+  Future<JSSizedImage> toJSImage() async {
     switch (this) {
       case StyleImageRgba(:final width, :final height, :final pixels):
         return web.ImageData(
-          pixels.unpremultiplied().toJSUint8ClampedArray(),
-          width,
-          height.toJS,
-        );
+              pixels.unpremultiplied().toJSUint8ClampedArray(),
+              width,
+              height.toJS,
+            )
+            as JSSizedImage;
       case StyleImageBytes(:final bytes):
         final blob = web.Blob(
           [bytes.toJS].toJS,
           web.BlobPropertyBag(type: StyleImageFormat.fromBytes(bytes).mimeType),
         );
-        return await web.window.createImageBitmap(blob).toDart;
+        return await web.window.createImageBitmap(blob).toDart as JSSizedImage;
     }
   }
+
+  /// Encodes this image as a PNG or JPEG [web.Blob] for URL-based gl-js
+  /// APIs such as `ImageSource.updateImage`.
+  Future<web.Blob> toBlob() async {
+    switch (this) {
+      case StyleImageRgba(:final width, :final height):
+        final canvas = web.OffscreenCanvas(width, height);
+        final context =
+            canvas.getContext('2d') as web.OffscreenCanvasRenderingContext2D?;
+        if (context == null) {
+          throw StateError(
+            'The browser has no 2D context for OffscreenCanvas.',
+          );
+        }
+        context.putImageData(await toJSImage() as web.ImageData, 0, 0);
+        return await canvas.convertToBlob().toDart;
+      case StyleImageBytes(:final bytes):
+        return web.Blob(
+          [bytes.toJS].toJS,
+          web.BlobPropertyBag(type: StyleImageFormat.fromBytes(bytes).mimeType),
+        );
+    }
+  }
+}
+
+/// Converts the straight-alpha image data of the internal gl-js `StyleImage`
+/// to the premultiplied [StyleImageRgba] contract.
+extension InternalStyleImageToStyleImage on JSInternalRGBAImage {
+  StyleImageRgba toStyleImage() => StyleImageRgba(
+    width: width,
+    height: height,
+    pixels: data.toDart.premultiplied(),
+  );
 }
 
 extension on Uint8List {
   JSUint8ClampedArray toJSUint8ClampedArray() =>
       JSUint8ClampedArray(buffer.toJS, offsetInBytes, this.length);
+
+  /// Applies alpha premultiplication to straight RGBA pixels. Returns a copy.
+  Uint8List premultiplied() {
+    final result = Uint8List(this.length);
+    for (var i = 0; i < this.length; i += 4) {
+      final alpha = this[i + 3];
+      result[i] = (this[i] * alpha / 255).round();
+      result[i + 1] = (this[i + 1] * alpha / 255).round();
+      result[i + 2] = (this[i + 2] * alpha / 255).round();
+      result[i + 3] = alpha;
+    }
+    return result;
+  }
 
   /// Reverses alpha premultiplication for `web.ImageData`, which stores
   /// straight (non-premultiplied) alpha; GL JS re-premultiplies on texture
@@ -284,6 +331,31 @@ extension on Uint8List {
       result[i + 3] = alpha;
     }
     return result;
+  }
+}
+
+/// Reads `[[first, second], …]` gl-js stretch arrays. A null array is an
+/// empty list.
+extension JSStretchesToImageStretches on JSArray<JSArray<JSNumber>>? {
+  List<ImageStretches> toImageStretches() => [
+    for (final pair in this?.toDart ?? const <JSArray<JSNumber>>[])
+      ImageStretches(
+        first: pair.toDart[0].toDartDouble,
+        second: pair.toDart[1].toDartDouble,
+      ),
+  ];
+}
+
+/// Reads a gl-js `[left, top, right, bottom]` content array.
+extension JSContentToImageContent on JSArray<JSNumber> {
+  ImageContent toImageContent() {
+    final values = [for (final v in toDart) v.toDartDouble];
+    return ImageContent(
+      left: values[0],
+      top: values[1],
+      right: values[2],
+      bottom: values[3],
+    );
   }
 }
 

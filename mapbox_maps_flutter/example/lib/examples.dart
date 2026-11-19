@@ -147,8 +147,9 @@ final List<Example> examples = [
     leading: const Icon(Icons.image_outlined),
     title: 'Style images',
     subtitle:
-        'Runtime StyleImage.rgba/.bytes icons you can hide and re-add, plus '
-        'colorized vector icon flags.',
+        'Style image APIs: runtime rgba/bytes images, SDF, '
+        'stretchable labels, pixel ratio, missing images and an animated '
+        'image source.',
     builder: (_) => const StyleImagesExample(),
   ),
   Example(

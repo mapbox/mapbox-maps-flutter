@@ -410,9 +410,18 @@ class JSMapEvents {
   static const sourceData = 'sourcedata';
   static const renderStart = 'renderstart';
   static const render = 'render';
+  static const styleImageMissing = 'styleimagemissing';
 }
 
 // ===== Event payload extern types =====
+
+/// Payload of `styleimagemissing`. [id] is the image id that a layer
+/// references but the style does not contain.
+@JS()
+@anonymous
+extension type JSStyleImageMissingEvent._(JSObject _) implements JSObject {
+  external String get id;
+}
 
 /// Shared shape of every Mapbox GL JS map event. Carries `type`; the full
 /// object also exposes `target: JSMap` but we reach the map via closure

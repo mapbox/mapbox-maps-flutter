@@ -11,6 +11,7 @@ class Events {
   var onStyleDataLoaded = Completer();
   var onSourceDataLoaded = Completer();
   var onCameraChanged = Completer();
+  var onStyleImageMissing = Completer<String>();
   List<MapContentGestureContext> mapInteractions = [];
   var sourceDataIDs = [""];
   List<String> loadedSourceIds = [];
@@ -26,6 +27,7 @@ class Events {
   };
   void resetOnCameraChanged() => onCameraChanged = Completer();
   void resetOnMapIdle() => onMapIdle = Completer();
+  void resetOnStyleImageMissing() => onStyleImageMissing = Completer<String>();
   void resetMapInteractions() => mapInteractions.clear();
   void resetMapLoadingErrors() => mapLoadingErrors.clear();
 
@@ -216,6 +218,11 @@ Future<MapboxMap?> _pumpMapApp({
     onCameraChangeListener: (CameraChangedEventData data) {
       if (!events.onCameraChanged.isCompleted) {
         events.onCameraChanged.complete(data);
+      }
+    },
+    onStyleImageMissingListener: (StyleImageMissingEventData data) {
+      if (!events.onStyleImageMissing.isCompleted) {
+        events.onStyleImageMissing.complete(data.id);
       }
     },
     onMapIdleListener: (MapIdleEventData data) {

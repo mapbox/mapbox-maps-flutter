@@ -90,9 +90,11 @@ class MapWidget extends StatelessWidget {
   /// Invoked when the requested style data has been loaded.
   final OnStyleDataLoadedListener? onStyleDataLoadedListener;
 
-  /// Invoked whenever a style has a missing image. This event is emitted when the Map renders visible tiles and
-  /// one of the required images is missing in the sprite sheet. Subscriber has to provide the missing image
-  /// by calling StyleManager#addImage method.
+  /// Invoked when a layer needs an image that the style does not have.
+  ///
+  /// The map sends the event while it renders the visible tiles. To show the
+  /// image, add it with `MapboxMap.addImage` and the id from the event. Use
+  /// this to add images only when the map needs them.
   final OnStyleImageMissingListener? onStyleImageMissingListener;
 
   /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.

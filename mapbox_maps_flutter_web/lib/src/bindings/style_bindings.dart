@@ -106,6 +106,38 @@ extension type JSImportSpecification._(JSObject _) implements JSObject {
   });
 }
 
+/// An `ImageData` or `ImageBitmap`, the image types that gl-js `addImage`
+/// and `updateImage` accept.
+extension type JSSizedImage._(JSObject _) implements JSObject {
+  external int get width;
+  external int get height;
+}
+
+// ===== Internal style image access =====
+
+extension type JSInternalStyle._(JSObject _) implements JSObject {
+  /// Accepts a plain id string: the lookup only calls `toString()` on it.
+  /// Searches the root style scope only, not imported styles.
+  external JSInternalStyleImage? getImage(String id);
+}
+
+extension type JSInternalStyleImage._(JSObject _) implements JSObject {
+  /// Straight (non-premultiplied) RGBA pixels. Null for images that GL JS
+  /// rasterizes on demand, for example SVG icons from an iconset.
+  external JSInternalRGBAImage? get data;
+  external double get pixelRatio;
+  external bool get sdf;
+  external JSArray<JSArray<JSNumber>>? get stretchX;
+  external JSArray<JSArray<JSNumber>>? get stretchY;
+  external JSArray<JSNumber>? get content;
+}
+
+extension type JSInternalRGBAImage._(JSObject _) implements JSObject {
+  external int get width;
+  external int get height;
+  external JSUint8Array get data;
+}
+
 /// Mirrors gl-js's `TransitionSpecification`.
 ///
 /// Set only the values that exist. GL JS validation rejects a `null` value.
@@ -251,6 +283,10 @@ extension Style on JSMap {
   external void removeImage(String id);
   external bool hasImage(String id);
   external void updateImage(String id, JSAny image);
+
+  /// The internal GL JS `Style` instance. Null before the first style load.
+  @JS('style')
+  external JSInternalStyle? get internalStyle;
 
   // ----- Models -----
   external void addModel(String id, String url);

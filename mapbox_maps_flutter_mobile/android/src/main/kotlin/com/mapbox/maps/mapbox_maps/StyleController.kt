@@ -554,6 +554,11 @@ class StyleController(private val context: Context, private val styleManager: Ma
     image: StyleImageWire,
     callback: (Result<Unit>) -> Unit
   ) {
+    // Core ignores image data for a source that is not an image source.
+    if (styleManager.styleSources.none { it.id == sourceId && it.type == "image" }) {
+      callback(Result.failure(IllegalArgumentException("Source '$sourceId' is not an image source")))
+      return
+    }
     val mapboxImage = try {
       image.toMapboxImage()
     } catch (e: Exception) {
