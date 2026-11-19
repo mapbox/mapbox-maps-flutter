@@ -31,7 +31,6 @@ export 'src/interfaces/offline_interface.dart';
 export 'src/interfaces/point_annotation_manager_interface.dart';
 export 'src/interfaces/polygon_annotation_manager_interface.dart';
 export 'src/interfaces/polyline_annotation_manager_interface.dart';
-export 'src/interfaces/projection_interface.dart';
 export 'src/interfaces/settings_interfaces.dart';
 export 'src/interfaces/snapshotter_interface.dart';
 export 'src/interfaces/style_interface.dart';

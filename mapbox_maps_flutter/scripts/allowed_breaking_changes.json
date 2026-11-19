@@ -924,7 +924,7 @@
   },
   {
     "changeDescription": "Projection: Constructor \"new\" removed",
-    "reason": "WS2b: facade Projection is now a hand-written wrapper over ProjectionPlatformInterface; the mobile-only Pigeon constructor is internal"
+    "reason": "WS2b: facade Projection is now pure Dart on all platforms; the constructor is internal"
   },
   {
     "changeDescription": "Projection: Field \"pigeonChannelCodec\" removed",

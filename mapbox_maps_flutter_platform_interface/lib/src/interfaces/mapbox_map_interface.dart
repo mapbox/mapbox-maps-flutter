@@ -12,7 +12,6 @@ import 'indoor_interface.dart';
 import 'location_settings_interface.dart';
 import 'map_recorder_interface.dart';
 import '../public/performance_statistics_listener.dart';
-import 'projection_interface.dart';
 import 'settings_interfaces.dart';
 import 'style_interface.dart';
 
@@ -58,9 +57,6 @@ abstract interface class MapboxMapPlatformInterface
 
   /// Provides access to annotation manager creation.
   AnnotationManagerPlatformInterface get annotations;
-
-  /// Provides access to Spherical Mercator projection math.
-  ProjectionPlatformInterface get projection;
 
   /// Provides access to recording and replaying API calls on the map.
   @experimental

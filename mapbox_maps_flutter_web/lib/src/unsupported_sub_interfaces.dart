@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
 import 'package:meta/meta.dart';
-import 'package:turf/turf.dart' show Point;
 
 import 'annotation/circle_annotation_manager_web.dart';
 import 'annotation/point_annotation_manager_web.dart';
@@ -53,24 +52,6 @@ class UnsupportedAnnotationManagerWeb
   @override
   Future<void> removeAnnotationManagerById(String id) =>
       throw _unimplemented('removeAnnotationManagerById', 'AnnotationManager');
-}
-
-class UnsupportedProjectionWeb implements ProjectionPlatformInterface {
-  @override
-  Future<double> getMetersPerPixelAtLatitude(double latitude, double zoom) =>
-      throw _unimplemented('getMetersPerPixelAtLatitude', 'Projection');
-  @override
-  Future<ProjectedMeters> projectedMetersForCoordinate(Point coordinate) =>
-      throw _unimplemented('projectedMetersForCoordinate', 'Projection');
-  @override
-  Future<Point> coordinateForProjectedMeters(ProjectedMeters projectedMeters) =>
-      throw _unimplemented('coordinateForProjectedMeters', 'Projection');
-  @override
-  Future<MercatorCoordinate> project(Point coordinate, double zoomScale) =>
-      throw _unimplemented('project', 'Projection');
-  @override
-  Future<Point> unproject(MercatorCoordinate coordinate, double zoomScale) =>
-      throw _unimplemented('unproject', 'Projection');
 }
 
 @experimental

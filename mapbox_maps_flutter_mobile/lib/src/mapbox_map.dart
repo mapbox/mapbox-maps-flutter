@@ -73,14 +73,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   @experimental
   MapRecorderPlatformInterface get mapRecorder => _mapRecorderMessenger;
 
-  // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
-  /// The map projection of the style.
-  @override
-  late final ProjectionPlatformInterface projection = Projection(
-    binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-    messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString(),
-  );
-
   /// The interface to access gesture settings and event streams.
   @override
   late final GesturesController gestures = GesturesController(

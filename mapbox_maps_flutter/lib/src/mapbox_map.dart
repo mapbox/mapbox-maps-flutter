@@ -88,7 +88,7 @@ base class MapboxMap extends StyleManager implements MapboxMapInterface {
   MapboxHttpService get httpService => MapboxHttpService.instance;
 
   /// Provides access to Spherical Mercator projection math.
-  late final Projection projection = Projection(_impl.projection);
+  late final Projection projection = const Projection();
 
   /// Provides access to recording and replaying API calls on the map.
   @experimental

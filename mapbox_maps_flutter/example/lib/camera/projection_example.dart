@@ -12,9 +12,6 @@ import '../scene_scaffold.dart';
 /// coordinates and as projected meters — the same place expressed four ways.
 /// The scale row shows how many meters one pixel covers, which is why the
 /// numbers change as you zoom.
-///
-/// [MapboxMap.projection] is backed only by the native maps, so the example
-/// app lists this example on Android and iOS only.
 class ProjectionExample extends StatefulWidget {
   const ProjectionExample({super.key});
 

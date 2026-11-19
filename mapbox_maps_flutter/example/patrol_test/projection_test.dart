@@ -1,5 +1,4 @@
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'patrol.dart';
@@ -8,13 +7,8 @@ import 'empty_map_widget.dart' as app;
 
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
-// Projection APIs are not yet wired to GL JS on web; the web stub throws
-// UnimplementedError. Skip the whole suite on web until MapboxStyleWeb's
-// projection math lands as part of the web-parity epic.
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
-
-  if (kIsWeb) return;
 
   patrolTest('getMetersPerPixelAtLatitude', ($) async {
     final tester = $.tester;

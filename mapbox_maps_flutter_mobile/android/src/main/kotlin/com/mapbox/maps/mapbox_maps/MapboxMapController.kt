@@ -23,7 +23,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.IndoorSelectorSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.LogoSettingsInterface
-import com.mapbox.maps.mapbox_maps.pigeons.Projection
 import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
@@ -84,7 +83,6 @@ class MapboxMapController(
 
   private val styleController: StyleController
   private val cameraController: CameraController
-  private val projectionController: MapProjectionController
   private val mapInterfaceController: MapInterfaceController
   private val animationController: AnimationController
   private val annotationController: AnnotationController
@@ -172,7 +170,6 @@ class MapboxMapController(
     eventHandler = MapboxEventHandler(mapboxMap.styleManager, messenger, eventTypes, this.channelSuffix)
     styleController = StyleController(context, mapboxMap)
     cameraController = CameraController(mapboxMap, context)
-    projectionController = MapProjectionController(mapboxMap)
     mapInterfaceController = MapInterfaceController(mapboxMap, mapView, context)
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView, messenger, this.channelSuffix)
@@ -192,7 +189,6 @@ class MapboxMapController(
 
     StyleManager.setUp(messenger, styleController, this.channelSuffix)
     _CameraManager.setUp(messenger, cameraController, this.channelSuffix)
-    Projection.setUp(messenger, projectionController, this.channelSuffix)
     _MapInterface.setUp(messenger, mapInterfaceController, this.channelSuffix)
     _AnimationManager.setUp(messenger, animationController, this.channelSuffix)
     annotationController.setup()
@@ -268,7 +264,6 @@ class MapboxMapController(
 
     StyleManager.setUp(messenger, null, channelSuffix)
     _CameraManager.setUp(messenger, null, channelSuffix)
-    Projection.setUp(messenger, null, channelSuffix)
     _MapInterface.setUp(messenger, null, channelSuffix)
     _AnimationManager.setUp(messenger, null, channelSuffix)
     annotationController.dispose()

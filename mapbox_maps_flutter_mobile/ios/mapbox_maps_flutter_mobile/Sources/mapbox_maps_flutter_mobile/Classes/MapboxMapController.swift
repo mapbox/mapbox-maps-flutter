@@ -67,9 +67,6 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         let mapInterfaceController = MapInterfaceController(withMapboxMap: mapboxMap, mapView: mapView)
         _MapInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: mapInterfaceController, messageChannelSuffix: binaryMessenger.suffix)
 
-        let mapProjectionController = MapProjectionController()
-        ProjectionSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: mapProjectionController, messageChannelSuffix: binaryMessenger.suffix)
-
         let animationController = AnimationController(withMapView: mapView)
         _AnimationManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: animationController, messageChannelSuffix: binaryMessenger.suffix)
 
@@ -170,7 +167,6 @@ public final class MapboxMapController: NSObject, FlutterPlatformView {
         StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _CameraManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _MapInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
-        ProjectionSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _AnimationManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)

@@ -84,11 +84,6 @@ class StubMapboxHttpServicePlatformInterface
   dynamic noSuchMethod(Invocation invocation) => null;
 }
 
-class StubProjectionPlatformInterface implements ProjectionPlatformInterface {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => null;
-}
-
 class StubMapRecorderPlatformInterface implements MapRecorderPlatformInterface {
   @override
   dynamic noSuchMethod(Invocation invocation) => null;
@@ -136,9 +131,6 @@ class MockMapboxMapPlatformInterface implements MapboxMapPlatformInterface {
   @override
   final AnnotationManagerPlatformInterface annotations =
       StubAnnotationManagerPlatformInterface();
-  @override
-  final ProjectionPlatformInterface projection =
-      StubProjectionPlatformInterface();
   @override
   final MapRecorderPlatformInterface mapRecorder =
       StubMapRecorderPlatformInterface();
