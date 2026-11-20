@@ -1,3 +1,7 @@
+### 3.33.3
+
+* See the changelog for 3.33.3 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.3/changelog).
+
 ### 3.33.2
 
 * See the changelog for 3.33.2 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.2/changelog).
