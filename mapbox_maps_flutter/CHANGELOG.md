@@ -1,8 +1,8 @@
 ### main
 
-### 2.31.3
+### 3.0.5
 
-### 2.31.2
+### 3.0.4
 
 > [!IMPORTANT]
 > ⚠️ Breaking changes
