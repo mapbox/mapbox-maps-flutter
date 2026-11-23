@@ -12,8 +12,7 @@ part of 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 /// [Texture] and composites like any other widget.
 ///
 /// The trade is that flutter owns the hit test, so gestures are forwarded
-/// rather than handled by the map's own recognisers. Pan and pinch are wired;
-/// rotate and pitch are not yet.
+/// rather than handled by the map's own recognisers.
 class MapTexture extends StatefulWidget {
   const MapTexture({
     super.key,
@@ -29,7 +28,8 @@ class MapTexture extends StatefulWidget {
   /// one [MapWidget] hands back.
   final void Function(MapboxMap map)? onMapCreated;
 
-  /// Forward pan and pinch to the map. Turn off to drive the camera yourself.
+  /// Forward pan, pinch, rotate and pitch to the map. Turn off to drive the
+  /// camera yourself.
   final bool gesturesEnabled;
 
   @override
@@ -37,21 +37,25 @@ class MapTexture extends StatefulWidget {
 }
 
 class _MapTextureState extends State<MapTexture> {
-  static const _channel =
-      MethodChannel('plugins.flutter.io/mapbox_maps_headless');
+  static const _channel = MethodChannel(
+    'plugins.flutter.io/mapbox_maps_headless',
+  );
   static int _nextSuffix = 90000;
 
   int? _textureId;
+  MapboxMap? _map;
   ui.Size? _size;
   Timer? _pump;
   bool _creating = false;
   double _lastRotation = 0;
+  double _lastScale = 1;
   Offset? _lastFocal;
   Uint8List? _ornaments;
 
   @override
   void dispose() {
     _pump?.cancel();
+    _map?.dispose();
     final id = _textureId;
     if (id != null) {
       _channel.invokeMethod<void>('dispose', {'textureId': id});
@@ -68,12 +72,18 @@ class _MapTextureState extends State<MapTexture> {
       'styleUri': widget.styleUri,
       'channelSuffix': suffix,
     });
-    if (!mounted || id == null || id < 0) return;
+    if (id == null || id < 0) return;
+    if (!mounted) {
+      _channel.invokeMethod<void>('dispose', {'textureId': id});
+      return;
+    }
     setState(() {
       _textureId = id;
       _size = size;
     });
-    widget.onMapCreated?.call(MapboxMap.headless(channelSuffix: suffix));
+    final map = MapboxMap.fromNativeController(suffix);
+    _map = map;
+    widget.onMapCreated?.call(map);
     _loadOrnaments(id);
     // the map draws on demand, so a still map stops vending frames and the
     // texture freezes on whatever it last published.
@@ -90,8 +100,9 @@ class _MapTextureState extends State<MapTexture> {
     // guessing at a delay
     await WidgetsBinding.instance.endOfFrame;
     if (!mounted) return;
-    final bytes = await _channel
-        .invokeMethod<Uint8List>('ornaments', {'textureId': id});
+    final bytes = await _channel.invokeMethod<Uint8List>('ornaments', {
+      'textureId': id,
+    });
     if (!mounted || bytes == null) return;
     setState(() => _ornaments = bytes);
   }
@@ -138,6 +149,7 @@ class _MapTextureState extends State<MapTexture> {
           behavior: HitTestBehavior.opaque,
           onScaleStart: (d) {
             _lastRotation = 0;
+            _lastScale = 1;
             _lastFocal = d.localFocalPoint;
             _send('panBegin', {
               'x': d.localFocalPoint.dx,
@@ -164,12 +176,20 @@ class _MapTextureState extends State<MapTexture> {
             _lastFocal = Offset(x, y);
 
             _send('panUpdate', {'x': x, 'y': y});
-            if ((d.scale - 1).abs() > 0.01) {
-              _send('zoomBy', {'delta': (d.scale - 1) * 0.5, 'x': x, 'y': y});
+            if ((d.scale - _lastScale).abs() > 0.01) {
+              _send('zoomBy', {
+                'delta': math.log(d.scale / _lastScale) / math.ln2,
+                'x': x,
+                'y': y,
+              });
+              _lastScale = d.scale;
             }
             if (d.rotation.abs() > 0.01) {
-              _send('rotateBy',
-                  {'radians': d.rotation - _lastRotation, 'x': x, 'y': y});
+              _send('rotateBy', {
+                'radians': d.rotation - _lastRotation,
+                'x': x,
+                'y': y,
+              });
               _lastRotation = d.rotation;
             }
           },

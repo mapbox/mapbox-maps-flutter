@@ -1,5 +1,8 @@
+import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,16 +21,16 @@ void main() {
     calls = <MethodCall>[];
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (call) async {
-      calls.add(call);
-      switch (call.method) {
-        case 'create':
-          return 7;
-        case 'ornaments':
-          return null;
-        default:
-          return null;
-      }
-    });
+          calls.add(call);
+          switch (call.method) {
+            case 'create':
+              return 7;
+            case 'ornaments':
+              return null;
+            default:
+              return null;
+          }
+        });
   });
 
   tearDown(() {
@@ -35,7 +38,10 @@ void main() {
         .setMockMethodCallHandler(channel, null);
   });
 
-  Future<void> pumpMap(WidgetTester tester, {ui.Size size = const ui.Size(320, 640)}) async {
+  Future<void> pumpMap(
+    WidgetTester tester, {
+    ui.Size size = const ui.Size(320, 640),
+  }) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Center(
@@ -86,7 +92,8 @@ void main() {
     calls.clear();
     await tester.pumpWidget(const SizedBox.shrink());
     await pumpMap(tester);
-    final second = callNamed(calls, 'create')!.arguments['channelSuffix'] as int;
+    final second =
+        callNamed(calls, 'create')!.arguments['channelSuffix'] as int;
     expect(second, isNot(first));
     await unmount(tester);
   });
@@ -97,13 +104,16 @@ void main() {
     );
     await tester.pump();
     await tester.pump();
-    expect(callNamed(calls, 'create')!.arguments['styleUri'],
-        'mapbox://styles/test');
+    expect(
+      callNamed(calls, 'create')!.arguments['styleUri'],
+      'mapbox://styles/test',
+    );
     await unmount(tester);
   });
 
-  testWidgets('resizes the host map when the constraints change',
-      (tester) async {
+  testWidgets('resizes the host map when the constraints change', (
+    tester,
+  ) async {
     await pumpMap(tester, size: const ui.Size(300, 500));
     calls.clear();
     await pumpMap(tester, size: const ui.Size(200, 400));
@@ -124,8 +134,7 @@ void main() {
     expect(dispose!.arguments['textureId'], 7);
   });
 
-  testWidgets('a drag forwards panBegin, panUpdate and panEnd',
-      (tester) async {
+  testWidgets('a drag forwards panBegin, panUpdate and panEnd', (tester) async {
     await pumpMap(tester);
     calls.clear();
     await tester.drag(find.byType(Texture), const Offset(-40, -20));
@@ -153,5 +162,82 @@ void main() {
     await tester.pumpAndSettle();
     expect(callNamed(calls, 'panBegin'), isNull);
     await unmount(tester);
+  });
+
+  testWidgets('releases the map channels when it leaves the tree', (
+    tester,
+  ) async {
+    await pumpMap(tester);
+    final suffix = callNamed(calls, 'create')!.arguments['channelSuffix'];
+    final mapChannel = MethodChannel('plugins.flutter.io.$suffix');
+    final mapCalls = <String>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(mapChannel, (call) async {
+          mapCalls.add(call.method);
+          return null;
+        });
+    await unmount(tester);
+    expect(mapCalls, contains('platform#releaseMethodChannels'));
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(mapChannel, null);
+  });
+
+  testWidgets('disposes a host map that finishes creating after unmount', (
+    tester,
+  ) async {
+    final created = Completer<int>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+          calls.add(call);
+          return call.method == 'create' ? created.future : null;
+        });
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: SizedBox(width: 320, height: 640, child: MapTexture()),
+      ),
+    );
+    await tester.pump();
+    await unmount(tester);
+    created.complete(7);
+    await tester.pump();
+    final dispose = callNamed(calls, 'dispose');
+    expect(dispose, isNotNull);
+    expect(dispose!.arguments['textureId'], 7);
+  });
+
+  testWidgets('a pinch zooms by the change since the last update', (
+    tester,
+  ) async {
+    await pumpMap(tester);
+    calls.clear();
+    final center = tester.getCenter(find.byType(Texture));
+    final a = await tester.startGesture(center - const Offset(50, 0));
+    final b = await tester.startGesture(center + const Offset(50, 0));
+    for (var i = 1; i <= 10; i++) {
+      await a.moveTo(center - Offset(50.0 + i * 5, 0));
+      await b.moveTo(center + Offset(50.0 + i * 5, 0));
+      await tester.pump();
+    }
+    await a.up();
+    await b.up();
+    await tester.pumpAndSettle();
+    final zoom = calls
+        .where((call) => call.method == 'zoomBy')
+        .fold<double>(
+          0,
+          (sum, call) => sum + (call.arguments['delta'] as double),
+        );
+    final expected = math.log(200 / 100) / math.ln2;
+    expect(zoom, closeTo(expected, 0.1));
+    await unmount(tester);
+  });
+
+  test('buildTextureView is ios only', () {
+    final platform = MapboxMapsFlutterMobile();
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    expect(() => platform.buildTextureView(), throwsUnsupportedError);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    expect(platform.buildTextureView(), isA<MapTexture>());
+    debugDefaultTargetPlatformOverride = null;
   });
 }

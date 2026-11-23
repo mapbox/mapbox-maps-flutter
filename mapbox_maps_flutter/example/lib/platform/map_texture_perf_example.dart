@@ -56,13 +56,15 @@ class MapTexturePerfExampleState extends State<MapTexturePerfExample> {
 
     // a fixed path, so both modes do identical work
     for (var i = 0; i < 40; i++) {
-      await map.setCamera(CameraOptions(
-        center: Point(
-          coordinates: Position(-0.0880 + i * 0.0015, 51.5140 + i * 0.0008),
+      await map.setCamera(
+        CameraOptions(
+          center: Point(
+            coordinates: Position(-0.0880 + i * 0.0015, 51.5140 + i * 0.0008),
+          ),
+          zoom: 12.5 + (i % 10) * 0.05,
+          bearing: i * 3.0,
         ),
-        zoom: 12.5 + (i % 10) * 0.05,
-        bearing: i * 3.0,
-      ));
+      );
       await Future<void>.delayed(const Duration(milliseconds: 50));
     }
 
@@ -126,9 +128,10 @@ class MapTexturePerfExampleState extends State<MapTexturePerfExample> {
                   child: Text(
                     _result.isEmpty ? 'pick a mode, then run' : _result,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontFamily: 'monospace'),
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontFamily: 'monospace',
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),

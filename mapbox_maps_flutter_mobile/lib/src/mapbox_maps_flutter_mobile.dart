@@ -56,6 +56,9 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
     PlatformMapCreatedCallback? onMapCreated,
     bool gesturesEnabled = true,
   }) {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      throw UnsupportedError('MapTexture is only supported on iOS.');
+    }
     return MapTexture(
       styleUri: styleUri,
       onMapCreated: onMapCreated,

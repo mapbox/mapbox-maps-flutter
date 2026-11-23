@@ -18,22 +18,6 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
     );
   }
 
-  /// Binds to a map created without a platform view, by the headless texture
-  /// mode. Same controller on the host side, so every api here behaves as it
-  /// does for a [MapWidget]; the only difference is that the map's frames go
-  /// to a flutter texture instead of a UIKit view.
-  static MapboxMap headless({
-    required int channelSuffix,
-    BinaryMessenger? binaryMessenger,
-  }) =>
-      MapboxMap._(
-        mapboxMapsPlatform: _MapboxMapsPlatform(
-          channelSuffix: channelSuffix,
-          binaryMessenger:
-              binaryMessenger ?? ServicesBinding.instance.defaultBinaryMessenger,
-        ),
-      );
-
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded StyleManager object.
