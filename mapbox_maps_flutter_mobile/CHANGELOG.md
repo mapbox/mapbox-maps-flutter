@@ -1,0 +1,111 @@
+### 3.36.0-rc.1
+
+* See the changelog for 3.36.0-rc.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.36.0-rc.1/changelog).
+
+### 3.35.2
+
+* See the changelog for 3.35.2 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.35.2/changelog).
+
+### 3.35.1
+
+* See the changelog for 3.35.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.35.1/changelog).
+
+### 3.35.0
+
+* See the changelog for 3.35.0 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.35.0/changelog).
+
+### 3.35.0-rc.1
+
+* See the changelog for 3.35.0-rc.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.35.0-rc.1/changelog).
+
+### 3.34.4
+
+* See the changelog for 3.34.4 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.34.4/changelog).
+
+### 3.34.3
+
+* See the changelog for 3.34.3 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.34.3/changelog).
+
+### 3.34.2
+
+* See the changelog for 3.34.2 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.34.2/changelog).
+
+### 3.34.1
+
+* See the changelog for 3.34.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.34.1/changelog).
+
+### 3.34.0-rc.1
+
+* See the changelog for 3.34.0-rc.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.34.0-rc.1/changelog).
+
+### 3.33.3
+
+* See the changelog for 3.33.3 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.3/changelog).
+
+### 3.33.2
+
+* See the changelog for 3.33.2 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.2/changelog).
+
+### 3.33.1
+
+* See the changelog for 3.33.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.1/changelog).
+
+### 3.33.0
+
+* See the changelog for 3.33.0 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.0/changelog).
+
+### 3.33.0-rc.1
+
+* See the changelog for 3.33.0-rc.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.33.0-rc.1/changelog).
+
+### 3.0.5
+
+* See the changelog for 3.0.5 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.5/changelog).
+
+### 3.0.4
+
+* See the changelog for 3.0.4 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.4/changelog).
+
+### 3.0.3
+
+* See the changelog for 3.0.3 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.3/changelog).
+
+### 3.0.2
+
+* See the changelog for 3.0.2 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.2/changelog).
+
+### 3.0.1
+
+* See the changelog for 3.0.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.1/changelog).
+
+### 3.0.0
+
+* See the changelog for 3.0.0 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0/changelog).
+
+### 3.0.0-rc.1
+
+* See the changelog for 3.0.0-rc.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-rc.1/changelog).
+
+### 3.0.0-alpha.31
+
+* See the changelog for 3.0.0-alpha.31 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.31/changelog).
+
+### 3.0.0-alpha.30
+
+* See the changelog for 3.0.0-alpha.30 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.30/changelog).
+
+### 3.0.0-alpha.29
+
+* See the changelog for 3.0.0-alpha.29 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.29/changelog).
+
+### 3.0.0-alpha.28
+
+* See the changelog for 3.0.0-alpha.28 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.28/changelog).
+
+### 3.0.0-alpha.27
+
+* See the changelog for 3.0.0-alpha.27 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.27/changelog).
+
+### 3.0.0-alpha.1
+
+* See the changelog for 3.0.0-alpha.1 in [mapbox_maps_flutter](https://pub.dev/packages/mapbox_maps_flutter/versions/3.0.0-alpha.1/changelog).

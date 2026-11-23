@@ -1,0 +1,232 @@
+import 'dart:async';
+import 'dart:js_interop';
+import 'dart:ui_web';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
+import 'package:web/web.dart';
+
+import 'bindings/map_bindings.dart';
+import 'hit_test_guard.dart';
+import 'event_adapters.dart';
+import 'http_headers_registry.dart';
+import 'gl_js_loader.dart';
+import 'mapbox_map_web.dart';
+import 'request_parameters.dart';
+import 'viewport/viewport_web.dart';
+
+class MapWebWidget extends StatefulWidget {
+  final String styleUri;
+  final PlatformMapCreatedCallback? onMapCreated;
+  final void Function(MapEvent)? onMapEvent;
+  final ViewportState? viewport;
+  final ViewportTransition? viewportTransition;
+  final void Function(bool)? viewportTransitionCompletion;
+  final ValueListenable<String?>? language;
+  final ValueListenable<String?>? worldview;
+
+  const MapWebWidget({
+    super.key,
+    required this.styleUri,
+    this.onMapCreated,
+    this.onMapEvent,
+    this.viewport,
+    this.viewportTransition,
+    this.viewportTransitionCompletion,
+    this.language,
+    this.worldview,
+  });
+
+  @override
+  State<MapWebWidget> createState() => _MapWebWidgetState();
+}
+
+class _MapWebWidgetState extends State<MapWebWidget> {
+  static int _nextViewId = 0;
+
+  late final String _viewType;
+  late final HTMLDivElement _mapElement;
+  final ViewportWeb _viewport = ViewportWeb();
+  final GlobalKey _mapViewKey = GlobalKey();
+  JSMap? _currentMap;
+  MapboxMapWeb? _mapboxMap;
+  ResizeObserver? _resizeObserver;
+  MapEventBridge? _eventBridge;
+  bool _initialViewportApplied = false;
+  HitTestGuard? _hitTestGuard;
+
+  @visibleForTesting
+  JSMap? get currentMap => _currentMap;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final viewId = _nextViewId++;
+    _viewType = 'mapbox-maps-flutter-web/$viewId';
+
+    platformViewRegistry.registerViewFactory(_viewType, (int id) {
+      _mapElement = document.createElement('div') as HTMLDivElement
+        ..style.position = 'absolute'
+        ..style.top = '0'
+        ..style.bottom = '0'
+        ..style.height = '100%'
+        ..style.width = '100%';
+      return _mapElement;
+    });
+
+    widget.language?.addListener(_applyLanguage);
+    widget.worldview?.addListener(_applyWorldview);
+  }
+
+  void _applyLanguage() {
+    final value = widget.language?.value;
+    if (value == null) {
+      _currentMap?.setLanguage();
+    } else {
+      _currentMap?.setLanguage(value);
+    }
+  }
+
+  void _applyWorldview() => _currentMap?.setWorldview(widget.worldview?.value);
+
+  void _onPlatformViewCreated(int viewId) async {
+    await ensureMapboxGlJsLoaded();
+    if (!mounted) return;
+
+    // Wait for element to be attached to DOM before creating map.
+    // GL JS's _detectMissingCSS() check requires the element to be
+    // connected so CSS rules from document.head cascade properly.
+    final attachmentCompleter = Completer<void>();
+
+    _resizeObserver = ResizeObserver(
+      ((JSArray entries, JSAny observer) {
+        if (!attachmentCompleter.isCompleted && _mapElement.isConnected) {
+          attachmentCompleter.complete();
+        }
+        if (attachmentCompleter.isCompleted) {
+          _currentMap?.resize();
+        }
+        if (!_initialViewportApplied &&
+            _mapElement.clientWidth != 0 &&
+            _mapElement.clientHeight != 0) {
+          _initialViewportApplied = true;
+          _applyViewport();
+        }
+      }).toJS,
+    );
+    _resizeObserver!.observe(_mapElement);
+    await attachmentCompleter.future;
+    if (!mounted) return;
+
+    // `preserveDrawingBuffer` keeps the WebGL backbuffer readable after
+    // render, which `MapboxMap.snapshot()` needs to call `toDataURL()` on
+    // the canvas. It costs an extra backbuffer copy per frame.
+    //
+    // The style must be set here, not in a later `setStyle` call. gl-js
+    // otherwise loads its empty default style and fires `style.load` for it,
+    // then discards everything the caller added from that callback.
+    final options = JSMapOptions(
+      container: _mapElement,
+      minZoom: 0,
+      preserveDrawingBuffer: true,
+      style: widget.styleUri.toJS,
+      transformRequest: _transformRequest.toJS,
+    );
+    final languageValue = widget.language?.value;
+    if (languageValue != null) options.language = languageValue;
+    final worldviewValue = widget.worldview?.value;
+    if (worldviewValue != null) options.worldview = worldviewValue;
+    final nativeMap = JSMap(options);
+    _currentMap = nativeMap;
+
+    _hitTestGuard = HitTestGuard(
+      container: _mapElement,
+      mapViewKey: _mapViewKey,
+      map: nativeMap,
+    );
+
+    // Wire cross-domain dependencies into the viewport before flushing
+    // pending viewport state — `FollowPuckViewportState` needs them set
+    // or it's silently dropped at apply time.
+    final mapboxMap = MapboxMapWeb(nativeMap);
+    mapboxMap.attachViewport(_viewport);
+
+    _mapboxMap = mapboxMap;
+
+    final mapCreated = Completer<void>();
+    // Read `widget.onMapEvent` on each event, so that the listeners of the
+    // latest build get it.
+    void dispatch(MapEvent event) => widget.onMapEvent?.call(event);
+    _eventBridge = MapEventBridge(nativeMap, (event) {
+      if (mapCreated.isCompleted) {
+        dispatch(event);
+      } else {
+        mapCreated.future.then((_) {
+          if (mounted) dispatch(event);
+        });
+      }
+    });
+
+    try {
+      widget.onMapCreated?.call(mapboxMap);
+    } finally {
+      mapCreated.complete();
+    }
+  }
+
+  @override
+  void didUpdateWidget(MapWebWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Before the container is sized, the ResizeObserver applies the latest
+    // viewport once it can; after, apply changes directly.
+    if (widget.viewport != oldWidget.viewport && _initialViewportApplied) {
+      _applyViewport();
+    }
+  }
+
+  void _applyViewport() {
+    final viewport = widget.viewport;
+    if (viewport == null) return;
+    _viewport.applyIfChanged(
+      viewport,
+      widget.viewportTransition,
+      widget.viewportTransitionCompletion,
+    );
+  }
+
+  @override
+  void dispose() {
+    widget.language?.removeListener(_applyLanguage);
+    widget.worldview?.removeListener(_applyWorldview);
+    _hitTestGuard?.dispose();
+    _hitTestGuard = null;
+    _eventBridge?.dispose();
+    _eventBridge = null;
+    _resizeObserver?.disconnect();
+    _resizeObserver = null;
+    _currentMap?.remove();
+    _currentMap = null;
+    _mapboxMap?.dispose();
+    _mapboxMap = null;
+    _viewport.reset();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HtmlElementView(
+      key: _mapViewKey,
+      viewType: _viewType,
+      onPlatformViewCreated: _onPlatformViewCreated,
+    );
+  }
+}
+
+/// Adds the registered custom headers to a GL JS request.
+///
+/// GL JS calls this for each request of every map. It reads the registry on
+/// each call, so header changes apply to the next request.
+JSRequestParameters _transformRequest(String url, JSAny? resourceType) =>
+    requestParametersFor(url, HttpHeadersRegistry.instance);

@@ -1,0 +1,23 @@
+import 'package:flutter/foundation.dart';
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
+
+/// Controls the Mapbox network stack connectivity.
+///
+/// {@macro supported_platforms_mobile}
+class OfflineSwitch {
+  final OfflineSwitchPlatformInterface _impl;
+
+  @internal
+  OfflineSwitch(this._impl);
+
+  static final OfflineSwitch shared = OfflineSwitch(
+    MapboxMapsFlutterPlatform.instance.offlineSwitch,
+  );
+
+  /// Returns whether the Mapbox network stack is connected.
+  Future<bool> get isMapboxStackConnected => _impl.isMapboxStackConnected;
+
+  /// Enables or disables the Mapbox network stack.
+  Future<void> setMapboxStackConnected(bool isConnected) =>
+      _impl.setMapboxStackConnected(isConnected);
+}

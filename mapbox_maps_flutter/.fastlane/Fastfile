@@ -1,0 +1,51 @@
+default_platform(:ios)
+
+ENV["FASTLANE_SKIP_UPDATE_CHECK"] = "1"
+ENV["SPACESHIP_SKIP_2FA_UPGRADE"] = "1"
+
+platform :ios do
+
+  # Syncs the match development profiles. A `com.mapbox.*` wildcard, which also
+  # covers RunnerUITests: Xcode appends `.xctrunner` to the UI-test bundle id
+  # when building for a device.
+  #
+  # Returns the profile name, and exports it as MAPBOX_PROVISIONING_PROFILE for
+  # later workflow steps. The source build has no project for fastlane to edit —
+  # CMake generates one, and update_code_signing_settings refuses a project
+  # whose PBXProject carries no TargetAttributes — so it names the profile in
+  # cmake/runner.cmake instead, through that variable.
+  lane :sync_patrol_signing do
+    setup_ci
+    sync_code_signing(type: "development")
+
+    profile = lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.*"]
+    github_env = ENV["GITHUB_ENV"]
+    File.write(github_env, "MAPBOX_PROVISIONING_PROFILE=#{profile}\n", mode: "a") if github_env
+    profile
+  end
+
+  # Syncs match provisioning profiles and switches the example app + its test
+  # targets to manual signing. The actual build-for-testing is done by
+  # `patrol build ios` in CI (this lane only prepares code signing).
+  #
+  # For the project Flutter generates. The source build uses
+  # sync_patrol_signing.
+  lane :sign_patrol_tests do
+    project_path = "example/ios/Runner.xcodeproj"
+    targets = ["Runner", "RunnerUITests"]
+
+    profile = sync_patrol_signing
+
+    targets.each do |target|
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: project_path,
+        team_id: "GJZR2MEM28", # Developer Portal Team ID
+        profile_name: profile,
+        targets: [target],
+        code_sign_identity: "Apple Development: Created via API",
+      )
+    end
+  end
+
+end

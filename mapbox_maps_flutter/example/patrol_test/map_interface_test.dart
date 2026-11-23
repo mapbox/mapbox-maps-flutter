@@ -1,0 +1,828 @@
+// ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'patrol.dart';
+import 'package:turf/turf.dart' show Point, Position;
+
+import 'empty_map_widget.dart' as app;
+
+const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+const _fallbackGlyphURL = 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
+const _importGlyphURL = 'test://import/{fontstack}/{range}.pbf';
+
+void main() {
+  setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
+
+  patrolTest('styleGlyphURL', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    final styleGlyphURL = 'test://test/test/{fontstack}/{range}.pbf';
+
+    await mapboxMap.setStyleGlyphURL(styleGlyphURL);
+    expect(await mapboxMap.styleGlyphURL(), styleGlyphURL);
+  });
+
+  patrolTest('styleGlyphURL resolves an empty URL', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    await mapboxMap.setStyleGlyphURL('');
+    expect(await mapboxMap.styleGlyphURL(), _fallbackGlyphURL);
+  });
+
+  patrolTest('styleGlyphURL uses the URL of the first import', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleJson: jsonEncode({
+        'version': 8,
+        'sources': {},
+        'layers': [],
+        'imports': [
+          {
+            'id': 'nested',
+            'url': 'test://styles/nested',
+            'data': {
+              'version': 8,
+              'glyphs': _importGlyphURL,
+              'sources': {},
+              'layers': [],
+            },
+          },
+        ],
+      }),
+    );
+    await tester.pumpAndSettle();
+
+    expect(await mapboxMap.styleGlyphURL(), _importGlyphURL);
+
+    await mapboxMap.setStyleGlyphURL('test://root/{fontstack}/{range}.pbf');
+    await mapboxMap.setStyleGlyphURL('');
+    expect(await mapboxMap.styleGlyphURL(), _importGlyphURL);
+  });
+
+  patrolTest('styleGlyphURL resets on style load', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    await mapboxMap.setStyleGlyphURL(_importGlyphURL);
+    app.events.resetOnStyleLoaded();
+    await mapboxMap.loadStyleJson(
+      jsonEncode({'version': 8, 'sources': {}, 'layers': []}),
+    );
+    await app.events.onStyleLoaded.future;
+
+    expect(await mapboxMap.styleGlyphURL(), _fallbackGlyphURL);
+  });
+
+  patrolTest('loadStyleURI', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    await mapboxMap.loadStyleURI(MapboxStyles.DARK);
+    var style = await mapboxMap.getStyleURI();
+    expect(MapboxStyles.DARK, style);
+  });
+
+  patrolTest('loadStyleJson', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString('assets/style.json');
+    app.events.resetOnStyleLoaded();
+    mapboxMap.loadStyleJson(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
+
+    var getStyleJson = await mapboxMap.getStyleJSON();
+    // Compare parsed JSON rather than raw strings: web's getStyleJSON()
+    // round-trips through GL JS, which re-serializes with different
+    // whitespace and key order than the source file.
+    expect(jsonDecode(getStyleJson), jsonDecode(styleJson));
+  });
+
+  patrolTest('loadRasterArray', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    var styleJson = await rootBundle.loadString(
+      'assets/raster_array_layers.json',
+    );
+    var expectedValue = [
+      RasterDataLayer("temperature", [
+        "1659898800",
+        "1659902400",
+        "1659906000",
+        "1659909600",
+        "1659913200",
+        "1659916800",
+      ]),
+      RasterDataLayer("humidity", [
+        "1659898800",
+        "1659902400",
+        "1659906000",
+        "1659909600",
+        "1659913200",
+        "1659916800",
+      ]),
+    ];
+    app.events.resetOnStyleLoaded();
+    mapboxMap.loadStyleJson(styleJson);
+
+    await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
+
+    var getStyleJson = await mapboxMap.getStyleJSON();
+    expect(styleJson, getStyleJson);
+
+    // Test getStyleSourceProperty method
+    var rasterLayers = await mapboxMap.getStyleSourceProperty(
+      "mapbox",
+      "rasterLayers",
+    );
+    final Map<Object?, Object?> dataMap =
+        rasterLayers.value as Map<Object?, Object?>;
+    List<RasterDataLayer> rasterDataLayers = [];
+
+    dataMap.forEach((key, value) {
+      rasterDataLayers.add(
+        RasterDataLayer(key as String, (value as List).cast<String>()),
+      );
+    });
+    expect(rasterDataLayers.contains(expectedValue.first), true);
+    expect(rasterDataLayers.contains(expectedValue.last), true);
+
+    // Test getting the value from the source directly
+    var source = await mapboxMap.getSource("mapbox");
+    if (source is RasterArraySource) {
+      var layers = await source.rasterLayers;
+      expect(layers?.contains(expectedValue.first), true);
+      expect(layers?.contains(expectedValue.last), true);
+    } else {
+      fail("Expected source to be RasterArraySource");
+    }
+  });
+
+  patrolTest('style terrain', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    await mapboxMap.addSource(
+      RasterDemSource(
+        id: 'terrain-dem',
+        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        tileSize: 514,
+      ),
+    );
+    await mapboxMap.setStyleTerrain(
+      json.encode({'source': 'terrain-dem', 'exaggeration': 1.5}),
+    );
+
+    final source = await mapboxMap.getStyleTerrainProperty('source');
+    expect(source.kind, StylePropertyValueKind.CONSTANT);
+    expect(source.value, 'terrain-dem');
+
+    final exaggeration = await mapboxMap.getStyleTerrainProperty(
+      'exaggeration',
+    );
+    expect(exaggeration.kind, StylePropertyValueKind.CONSTANT);
+    expect(exaggeration.value, 1.5);
+
+    await mapboxMap.setStyleTerrainProperty('exaggeration', 2.0);
+    final updated = await mapboxMap.getStyleTerrainProperty('exaggeration');
+    expect(updated.value, 2.0);
+
+    await mapboxMap.removeStyleTerrain();
+    final removed = await mapboxMap.getStyleTerrainProperty('source');
+    // On web the style's own terrain (from its imports) takes over.
+    expect(removed.value, isNot('terrain-dem'));
+
+    await mapboxMap.removeStyleSource('terrain-dem');
+    expect(await mapboxMap.styleSourceExists('terrain-dem'), isFalse);
+  });
+
+  patrolTest('clearData', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    mapboxMap.clearData();
+  });
+
+  patrolTest('setTileCacheBudget', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    mapboxMap.setTileCacheBudget(TileCacheBudgetInMegabytes(size: 100), null);
+    mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
+  });
+
+  patrolTest('getSize', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+      final throwsPlatformException = throwsA(
+        predicate(
+          (p) => p is PlatformException && p.message == 'Not available.',
+        ),
+      );
+      expect(() async => await mapboxMap.getSize(), throwsPlatformException);
+    } else {
+      var size = await mapboxMap.getSize();
+      expect(
+        size.width,
+        closeTo(tester.binding.renderViews.first.size.width, 1),
+      );
+      expect(
+        size.height,
+        closeTo(tester.binding.renderViews.first.size.height, 1),
+      );
+    }
+  });
+
+  patrolTest('reduceMemoryUse', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    await mapboxMap.reduceMemoryUse();
+  });
+
+  patrolTest('triggerRepaint', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    await mapboxMap.triggerRepaint();
+  });
+
+  patrolTest('PrefetchZoomDelta', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    await mapboxMap.setPrefetchZoomDelta(10);
+    var prefetchZoomDelta = await mapboxMap.getPrefetchZoomDelta();
+    expect(prefetchZoomDelta, 10);
+  });
+
+  patrolTest('MapOptions', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    final options = await mapboxMap.getMapOptions();
+    expect(options.orientation, NorthOrientation.UPWARDS);
+    expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
+    expect(options.contextMode, isNull);
+    expect(options.viewportMode, ViewportMode.DEFAULT);
+
+    expect(options.crossSourceCollisions, true);
+    expect(options.pixelRatio, tester.view.devicePixelRatio);
+    expect(options.glyphsRasterizationOptions, isNull);
+    expect(options.size!.width, greaterThan(0));
+    expect(options.size!.height, greaterThan(0));
+  });
+
+  patrolTest('MapOptions reflect setters', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    if (kIsWeb) {
+      // GL JS cannot change these options, so the web setters have no effect
+      // and the options keep their fixed values.
+      await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
+      await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
+      await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
+
+      final options = await mapboxMap.getMapOptions();
+      expect(options.orientation, NorthOrientation.UPWARDS);
+      expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
+      expect(options.viewportMode, ViewportMode.DEFAULT);
+      return;
+    }
+
+    await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
+    await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
+    await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
+
+    final options = await mapboxMap.getMapOptions();
+    expect(options.orientation, NorthOrientation.DOWNWARDS);
+    expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
+    expect(options.viewportMode, ViewportMode.FLIPPED_Y);
+  });
+
+  patrolTest('isGestureInProgress', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    expect(await mapboxMap.isGestureInProgress(), false);
+
+    await mapboxMap.setGestureInProgress(true);
+    expect(await mapboxMap.isGestureInProgress(), true);
+  });
+
+  patrolTest('isUserAnimationInProgress', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    expect(await mapboxMap.isUserAnimationInProgress(), false);
+
+    await mapboxMap.setUserAnimationInProgress(true);
+    expect(await mapboxMap.isUserAnimationInProgress(), true);
+  });
+
+  patrolTest('debugOptions', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    await mapboxMap.setDebugOptions([MapWidgetDebugOptions.tileBorders]);
+    var debugOptions = await mapboxMap.getDebugOptions();
+    expect(debugOptions.length, 1);
+    expect(debugOptions.first, MapWidgetDebugOptions.tileBorders);
+  });
+
+  patrolTest('featureState', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    var source = await rootBundle.loadString('assets/source.json');
+    var layer = await rootBundle.loadString('assets/point_layer.json');
+
+    app.events.resetOnStyleDataLoaded();
+    app.events.resetOnMapIdle();
+    mapboxMap.addStyleSource('source', source);
+    mapboxMap.addStyleLayer(layer, null);
+
+    await app.waitForEvent($.tester, app.events.onSourceDataLoaded.future);
+    await app.waitForEvent($.tester, app.events.onMapIdle.future);
+
+    await mapboxMap.setFeatureState(
+      'source',
+      null,
+      'point',
+      json.encode({'choose': true}),
+    );
+    var featureState = await mapboxMap.getFeatureState('source', null, 'point');
+    var stateMap = json.decode(featureState);
+    expect(stateMap.length, 1);
+    expect(stateMap['choose'], true);
+
+    await mapboxMap.removeFeatureState('source', null, 'point', 'choose');
+    featureState = await mapboxMap.getFeatureState('source', null, 'point');
+    stateMap = json.decode(featureState);
+    expect(stateMap.length, 0);
+  });
+
+  patrolTest('MapboxMapsOptions default values', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final _ = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    expect(await MapboxOptions.accessToken, isNotNull);
+    expect(await MapboxMapsOptions.getBaseUrl(), 'https://api.mapbox.com');
+    expect(await MapboxMapsOptions.getDataPath(), isNotNull);
+    expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
+    expect(
+      await MapboxMapsOptions.getTileStoreUsageMode(),
+      TileStoreUsageMode.READ_ONLY,
+    );
+  });
+
+  patrolTest('MapboxMapsOptions read and update', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final _ = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    final originalAccessToken = await MapboxOptions.accessToken;
+    final originalBaseURL = await MapboxMapsOptions.getBaseUrl();
+    final originalDataPath = await MapboxMapsOptions.getDataPath();
+    final originalAssetPath = await MapboxMapsOptions.getAssetPath();
+    final originalTileStoreUsageMode =
+        await MapboxMapsOptions.getTileStoreUsageMode();
+
+    // given
+    final token = 'test token';
+    final baseUrl = 'https://test.mapbox.com/maps-flutter-test';
+    final dataPath = 'data/path';
+    final assetPath = 'asset/path';
+    final tileStoreUsageMode = TileStoreUsageMode.DISABLED;
+    final language = "ua";
+    final worldview = "MA";
+
+    // when
+    MapboxOptions.setAccessToken(token);
+    MapboxMapsOptions.setBaseUrl(baseUrl);
+    MapboxMapsOptions.setDataPath(dataPath);
+    MapboxMapsOptions.setAssetPath(assetPath);
+    MapboxMapsOptions.setTileStoreUsageMode(tileStoreUsageMode);
+    MapboxMapsOptions.setLanguage(language);
+    MapboxMapsOptions.setWorldview(worldview);
+
+    // then
+    expect(await MapboxOptions.accessToken, token);
+    expect(await MapboxMapsOptions.getBaseUrl(), baseUrl);
+    expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
+    expect(
+      await MapboxMapsOptions.getAssetPath(),
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+          ? ""
+          : endsWith(assetPath),
+    );
+    expect(await MapboxMapsOptions.getTileStoreUsageMode(), tileStoreUsageMode);
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+
+    // restore original values
+    MapboxOptions.setAccessToken(originalAccessToken);
+    MapboxMapsOptions.setBaseUrl(originalBaseURL);
+    MapboxMapsOptions.setDataPath(originalDataPath);
+    MapboxMapsOptions.setAssetPath(originalAssetPath);
+    MapboxMapsOptions.setTileStoreUsageMode(originalTileStoreUsageMode);
+    MapboxMapsOptions.setLanguage(null);
+    MapboxMapsOptions.setWorldview(null);
+  });
+
+  patrolTest('MapboxMapsOptions language and worldview', ($) async {
+    addTearDown(() {
+      MapboxMapsOptions.setLanguage(null);
+      MapboxMapsOptions.setWorldview(null);
+    });
+
+    final language = "fi";
+    final worldview = "FI";
+
+    MapboxMapsOptions.setLanguage(language);
+    MapboxMapsOptions.setWorldview(worldview);
+
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+
+    await app.pumpMap(tester: $.tester, styleUri: MapboxStyles.STANDARD);
+    await $.tester.pumpAndSettle();
+
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+  });
+
+  patrolTest('queryRenderedFeatures', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    var options = CameraOptions(
+      center: Point(coordinates: Position(-77.032667, 38.913175)),
+      zoom: 10,
+    );
+
+    app.events.resetOnCameraChanged();
+    mapboxMap.setCamera(options);
+    await app.waitForEvent($.tester, app.events.onCameraChanged.future);
+
+    var source = await rootBundle.loadString('assets/source.json');
+    var layer = await rootBundle.loadString('assets/point_layer.json');
+    final ByteData bytes = await rootBundle.load(
+      'assets/symbols/custom-icon.png',
+    );
+    final Uint8List list = bytes.buffer.asUint8List();
+    await mapboxMap.addImage(
+      'icon',
+      1.0,
+      StyleImage.bytes(list),
+      sdf: true,
+      stretchX: [],
+      stretchY: [],
+      content: null,
+    );
+
+    app.events.resetOnSourceDataLoaded();
+    app.events.resetOnMapIdle();
+    app.events.resetMapLoadingErrors();
+    await mapboxMap.style.addStyleSource('source', source);
+    await mapboxMap.style.addStyleLayer(layer, null);
+    await _waitForSourceDataLoaded(app.events, 'source');
+    await app.events.onMapIdle.future;
+
+    // Query the whole canvas: a box sized for one platform's viewport can
+    // miss a centered marker on another's. mapboxMap.getSize() is the
+    // correct source for this (the render view's size is the full window,
+    // not the map view's actual size), but it is not supported on iOS. Use
+    // the window size here as an approximation until iOS support lands.
+    var size = tester.binding.renderViews.first.size;
+    var screenBox = ScreenBox(
+      min: ScreenCoordinate(x: 0.0, y: 0.0),
+      max: ScreenCoordinate(x: size.width, y: size.height),
+    );
+    var renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(screenBox);
+    var query = await mapboxMap.queryRenderedFeatures(
+      renderedQueryGeometry,
+      RenderedQueryOptions(layerIds: ['points'], filter: null),
+    );
+    expect(query.length, greaterThan(0));
+    expect(query[0]!.queriedFeature.source, 'source');
+    if (!kIsWeb) {
+      // Skipped on web: the fixture's GeoJSON feature has a string id
+      // ("point"), and GL JS's internal vector-tile pipeline only
+      // round-trips numeric feature ids through queryRenderedFeatures, same
+      // as the querySourceFeatures limitation noted below.
+      expect(query[0]!.queriedFeature.feature['id'], 'point');
+    }
+
+    query = await mapboxMap.queryRenderedFeatures(
+      RenderedQueryGeometry.fromScreenCoordinate(
+        ScreenCoordinate(x: 0.0, y: 0.0),
+      ),
+      RenderedQueryOptions(layerIds: ['points'], filter: null),
+    );
+    expect(query.length, 0);
+    query = await mapboxMap.queryRenderedFeatures(
+      RenderedQueryGeometry.fromList([
+        ScreenCoordinate(x: 0.0, y: 0.0),
+        ScreenCoordinate(x: 1.0, y: 1.0),
+      ]),
+      RenderedQueryOptions(layerIds: ['points'], filter: null),
+    );
+    expect(query.length, 0);
+  });
+
+  // Skipped on web: the fixture's GeoJSON feature has a string id ("point"),
+  // and GL JS's internal vector-tile pipeline only round-trips numeric
+  // feature ids through querySourceFeatures.
+  patrolTest('querySourceFeatures', skip: kIsWeb, ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    var options = CameraOptions(
+      center: Point(coordinates: Position(-77.032667, 38.913175)),
+      zoom: 10,
+      pitch: 0,
+    );
+
+    await app.waitForEvent($.tester, app.events.onMapLoaded.future);
+
+    app.events.resetOnCameraChanged();
+    mapboxMap.setCamera(options);
+    await app.waitForEvent($.tester, app.events.onCameraChanged.future);
+
+    var source = await rootBundle.loadString('assets/source.json');
+    var layer = await rootBundle.loadString('assets/point_layer.json');
+
+    app.events.resetOnSourceDataLoaded();
+    app.events.resetOnMapIdle();
+    app.events.resetMapLoadingErrors();
+    await mapboxMap.style.addStyleSource('source', source);
+    await mapboxMap.style.addStyleLayer(layer, null);
+    await _waitForSourceDataLoaded(app.events, 'source');
+    await app.events.onMapIdle.future;
+
+    var query = await mapboxMap.querySourceFeatures(
+      'source',
+      SourceQueryOptions(filter: ''),
+    );
+    expect(query.length, greaterThan(0));
+    expect(query[0]!.queriedFeature.source, 'source');
+    expect(query[0]!.queriedFeature.feature['id'], 'point');
+  });
+
+  patrolTest('queryFeatureExtensions', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    var source = await rootBundle.loadString(
+      'assets/cluster/cluster_source.json',
+    );
+    var layer = await rootBundle.loadString(
+      'assets/cluster/cluster_layer.json',
+    );
+    var clusterCountLayer = await rootBundle.loadString(
+      'assets/cluster/cluster_count_layer.json',
+    );
+    var unclusteredLayer = await rootBundle.loadString(
+      'assets/cluster/unclustered_point_layer.json',
+    );
+
+    app.events.resetOnSourceDataLoaded();
+    app.events.resetOnMapIdle();
+    app.events.resetMapLoadingErrors();
+    await mapboxMap.style.addStyleSource("earthquakes", source);
+    await mapboxMap.style.addStyleLayer(layer, null);
+    await mapboxMap.style.addStyleLayer(clusterCountLayer, null);
+    await mapboxMap.style.addStyleLayer(unclusteredLayer, null);
+    // "earthquakes" data is fetched from a remote URL (see cluster_source.json),
+    // unlike the inline GeoJSON used elsewhere in this file, so give it more
+    // time to land under a cold cache.
+    await _waitForSourceDataLoaded(
+      app.events,
+      "earthquakes",
+      timeout: const Duration(seconds: 20),
+    );
+    await app.events.onMapIdle.future;
+
+    // The queried clusters come from the tiles at the camera zoom. Zoom 0
+    // gives the clusters that GL Native and GL JS make at zoom 0.
+    app.events.resetOnMapIdle();
+    await mapboxMap.setCamera(CameraOptions(zoom: 0));
+    await app.events.onMapIdle.future;
+
+    // GL Native and GL JS number clusters differently, so the test finds
+    // the cluster by its position and size, not by a fixed `cluster_id`.
+    final clusters = await mapboxMap.querySourceFeatures(
+      'earthquakes',
+      SourceQueryOptions(filter: jsonEncode(['has', 'point_count'])),
+    );
+    final feature = clusters
+        .map((c) => c!.queriedFeature.feature)
+        .where((f) => (f['properties'] as Map)['point_count'] == 10)
+        .reduce(
+          (a, b) =>
+              _distanceTo(a, -29.794921875, 59.220934076150456) <=
+                  _distanceTo(b, -29.794921875, 59.220934076150456)
+              ? a
+              : b,
+        );
+
+    var clusterLeaves = await mapboxMap.getGeoJsonClusterLeaves(
+      'earthquakes',
+      feature,
+      null,
+      null,
+    );
+    expect(clusterLeaves.featureCollection!.length, 10);
+
+    var clusterChildren = await mapboxMap.getGeoJsonClusterChildren(
+      'earthquakes',
+      feature,
+    );
+    expect(clusterChildren.featureCollection!.length, 2);
+
+    var clusterExpansionZoom = await mapboxMap.getGeoJsonClusterExpansionZoom(
+      'earthquakes',
+      feature,
+    );
+    expect(clusterExpansionZoom.value, '1');
+  });
+
+  patrolTest('addImage StyleImage.rgba', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+
+    const imageId = 'rgba-pixel';
+    final image = StyleImage.rgba(
+      width: 1,
+      height: 1,
+      pixels: Uint8List.fromList(const [255, 0, 0, 255]),
+    );
+
+    expect(await mapboxMap.hasStyleImage(imageId), isFalse);
+    await mapboxMap.addImage(imageId, 1.0, image);
+    expect(await mapboxMap.hasStyleImage(imageId), isTrue);
+
+    expect(await mapboxMap.getImage(imageId), isNotNull);
+
+    await mapboxMap.removeStyleImage(imageId);
+    expect(await mapboxMap.hasStyleImage(imageId), isFalse);
+  });
+
+  patrolTest('snapshot', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await tester.pumpAndSettle();
+    await mapboxMap.loadStyleURI(MapboxStyles.DARK);
+    await app.waitForEvent($.tester, app.events.onMapIdle.future);
+    final snapshot = await mapboxMap.snapshot();
+    expect(snapshot, isNotNull);
+  });
+}
+
+/// Waits until a `SourceDataLoaded` event for [sourceId] has been observed.
+///
+/// `onSourceDataLoaded.future` resolves on the first `SourceDataLoaded` event
+/// after the last reset, which can belong to any source already streaming
+/// tiles in the background - not necessarily [sourceId]. This waits for the
+/// specific source instead.
+Future<void> _waitForSourceDataLoaded(
+  app.Events events,
+  String sourceId, {
+  Duration timeout = const Duration(seconds: 5),
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (!events.loadedSourceIds.contains(sourceId) &&
+      DateTime.now().isBefore(deadline)) {
+    await Future.delayed(const Duration(milliseconds: 50));
+  }
+  if (!events.loadedSourceIds.contains(sourceId)) {
+    fail(
+      'No SourceDataLoaded event for "$sourceId" after ${timeout.inSeconds}s - '
+      'observed sources: ${events.loadedSourceIds}, '
+      'mapLoadingErrors: ${_describeMapLoadingErrors(events)}',
+    );
+  }
+}
+
+/// Formats collected `MapLoadingError`s for a failure message, excluding
+/// per-tile errors: background tile fetches routinely get cancelled by
+/// widget teardown and camera moves, which would otherwise drown out the
+/// style/source/sprite/glyphs errors this diagnostic exists to surface.
+String _describeMapLoadingErrors(app.Events events) {
+  return events.mapLoadingErrors
+      .where((e) => e.type != MapLoadErrorType.TILE)
+      .map((e) => '${e.type}: ${e.message}')
+      .toList()
+      .toString();
+}
+
+/// The squared distance in degrees from the point [feature] to [lng], [lat].
+double _distanceTo(Map<String?, Object?> feature, double lng, double lat) {
+  final coordinates = (feature['geometry'] as Map)['coordinates'] as List;
+  final dx = (coordinates[0] as num) - lng;
+  final dy = (coordinates[1] as num) - lat;
+  return (dx * dx + dy * dy).toDouble();
+}

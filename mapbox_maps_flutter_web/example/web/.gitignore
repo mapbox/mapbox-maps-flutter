@@ -1,0 +1,3 @@
+# Mapbox GL JS built from source by `make build-gl-js`.
+mapbox-gl-dev.js
+mapbox-gl-dev.css

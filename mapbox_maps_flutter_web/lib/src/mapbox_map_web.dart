@@ -1,0 +1,1107 @@
+import 'dart:convert';
+import 'dart:async';
+import 'dart:js_interop';
+import 'dart:math' as math;
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart' show UniqueKey;
+import 'package:flutter/services.dart' show PlatformException;
+import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface_internal.dart';
+import 'package:meta/meta.dart';
+import 'package:turf/turf.dart' show GeometryObject, Point, Position, bbox;
+import 'package:web/web.dart' show Blob, window;
+
+import 'bindings/binding_adapters.dart';
+import 'bindings/map_bindings.dart';
+import 'bindings/performance_statistics_bindings.dart';
+import 'bindings/style_bindings.dart';
+import 'cluster_queries.dart';
+import 'gestures_controller.dart';
+import 'indoor/indoor_controller.dart';
+import 'indoor/indoor_selector_controller.dart';
+import 'interaction_handler.dart';
+import 'location/location_controller.dart';
+import 'ornaments/attribution_controller.dart';
+import 'ornaments/compass_controller.dart';
+import 'ornaments/logo_controller.dart';
+import 'ornaments/scale_bar_controller.dart';
+import 'performance_statistics_web.dart';
+import 'rotate_by_math.dart';
+import 'style_controller_web.dart';
+import 'unsupported_sub_interfaces.dart';
+import 'viewport/viewport_web.dart';
+
+/// Web [MapboxMapPlatformInterface] implementation backed by Mapbox GL JS.
+///
+/// The WS2.5 scope is deliberately narrow: this class exists to give
+/// `onMapCreated` a non-null controller so the facade integration suite can
+/// run on Chrome. Only the handful of methods used by the passing tests
+/// (camera read/write, style load) are backed by GL JS. Everything else
+/// throws [UnimplementedError] for "GL JS has an analogue we haven't wired
+/// yet" or [UnsupportedError] for "web does not support this by design".
+///
+/// Sub-interfaces are backed by GL JS where they are implemented — style,
+/// gestures, location, the scale bar, the compass, attribution, the logo
+/// and indoor — and otherwise return the throwing stubs in
+/// [unsupported_sub_interfaces.dart].
+base class MapboxMapWeb implements MapboxMapPlatformInterface {
+  final JSMap _map;
+  final _disposables = DisposeBag();
+
+  MapboxMapWeb(this._map) {
+    // Every ornament is enabled by default, matching the mobile SDKs, so the
+    // controllers are built here rather than on first use. A `late final`
+    // field would leave the map without the ornaments `getSettings` reports
+    // — or, for the indoor selector, without its `IndoorControl` ever being
+    // added — until something touched the field.
+    //
+    // GL JS builds the corner containers, the attribution control and the
+    // logo in the `Map` constructor, so this is safe before the `load` event.
+    scaleBar;
+    compass;
+    attribution;
+    logo;
+    indoorSelector;
+  }
+
+  /// The GL JS map this wraps. For tests that need to assert on the DOM GL
+  /// JS manages, so they read the same map instance the controllers use.
+  @visibleForTesting
+  JSMap get jsMap => _map;
+
+  /// Wires [viewport] with cross-domain dependencies from this map.
+  @internal
+  void attachViewport(ViewportWeb viewport) {
+    viewport.onMapCreated(_map);
+    viewport.positionStreamProvider = () =>
+        (location as LocationController).locationUpdates;
+  }
+
+  // ===== Sub-interfaces =====
+
+  @override
+  late final StylePlatformInterface style = StyleController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
+  late final GesturesSettingsPlatformInterface gestures = GesturesController(
+    _map,
+  );
+  @override
+  late final LocationSettingsPlatformInterface location = LocationController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
+  late final ScaleBarSettingsPlatformInterface scaleBar = ScaleBarController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
+  late final CompassSettingsPlatformInterface compass = CompassController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
+  late final AttributionSettingsPlatformInterface attribution =
+      AttributionController(_map).addToDisposeBag(_disposables);
+  @override
+  late final LogoSettingsPlatformInterface logo = LogoController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
+  @experimental
+  late final IndoorPlatformInterface indoor = IndoorController(
+    _map,
+  ).addToDisposeBag(_disposables);
+  @override
+  late final IndoorSelectorSettingsPlatformInterface indoorSelector =
+      IndoorSelectorController(_map, indoor).addToDisposeBag(_disposables);
+  @override
+  late final AnnotationManagerPlatformInterface annotations =
+      UnsupportedAnnotationManagerWeb();
+  @override
+  @experimental
+  late final MapRecorderPlatformInterface mapRecorder =
+      UnsupportedMapRecorderWeb();
+
+  // ===== Performance statistics =====
+
+  var _collectingPerformanceStatistics = false;
+
+  @override
+  void startPerformanceStatisticsCollection(
+    PerformanceStatisticsOptions options,
+    PerformanceStatisticsListener listener,
+  ) {
+    _map.startPerformanceStatisticsCollection(
+      options.toJS(),
+      ((JSPerformanceStatistics statistics) =>
+              listener.onPerformanceStatisticsCollected(statistics.toDart()))
+          .toJS,
+    );
+    _collectingPerformanceStatistics = true;
+  }
+
+  @override
+  void stopPerformanceStatisticsCollection() {
+    if (!_collectingPerformanceStatistics) return;
+    _map.stopPerformanceStatisticsCollection();
+    _collectingPerformanceStatistics = false;
+  }
+
+  // ===== Style loading =====
+
+  @override
+  Future<void> loadStyleURI(String styleURI) => style.setStyleURI(styleURI);
+
+  @override
+  Future<void> loadStyleJson(String styleJson) => style.setStyleJSON(styleJson);
+
+  // ===== Camera =====
+
+  @override
+  Future<CameraState> getCameraState() async => _map.getCameraState();
+
+  @override
+  Future<void> setCamera(CameraOptions cameraOptions) async => _map.jumpTo(
+    JSCameraOptions()
+      ..withCenter(cameraOptions.center?.toJSLngLat())
+      ..withZoom(cameraOptions.zoom)
+      ..withBearing(cameraOptions.bearing)
+      ..withPitch(cameraOptions.pitch)
+      ..withPadding(cameraOptions.padding?.toJSPadding())
+      ..withAnchor(
+        cameraOptions.anchor != null
+            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
+            : null,
+      ),
+  );
+
+  @override
+  Future<FreeCameraOptions> getFreeCameraOptions() async =>
+      _map.getFreeCameraOptions().toFreeCameraOptions();
+
+  @override
+  Future<void> setFreeCameraOptions(FreeCameraOptions options) async =>
+      _map.setFreeCameraOptions(options.toJSFreeCameraOptions());
+
+  // ===== Camera convenience =====
+
+  @override
+  Future<CameraOptions> cameraForCoordinatesPadding(
+    List<Point> coordinates,
+    CameraOptions camera,
+    MbxEdgeInsets? coordinatesPadding,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) async {
+    final result = _map.cameraForBounds(
+      coordinates.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(coordinatesPadding?.toJSPadding())
+        ..withBearing(camera.bearing)
+        ..withPitch(camera.pitch)
+        ..withMaxZoom(maxZoom)
+        ..withOffset(offset?.toJSScreenPoint()),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+      padding: coordinatesPadding,
+    );
+  }
+
+  @override
+  Future<CameraOptions> cameraForCoordinateBounds(
+    CoordinateBounds bounds,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) async {
+    final result = _map.cameraForBounds(
+      bounds.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(padding.toJSPadding())
+        ..withBearing(bearing)
+        ..withPitch(pitch)
+        ..withMaxZoom(maxZoom)
+        ..withOffset(offset?.toJSScreenPoint()),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+    );
+  }
+
+  @override
+  Future<CameraOptions> cameraForCoordinates(
+    List<Point> coordinates,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) async {
+    final result = _map.cameraForBounds(
+      coordinates.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(padding.toJSPadding())
+        ..withBearing(bearing)
+        ..withPitch(pitch),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+    );
+  }
+
+  @override
+  Future<CameraOptions> cameraForCoordinatesCameraOptions(
+    List<Point> coordinates,
+    CameraOptions camera,
+    ScreenBox box,
+  ) async {
+    final container = _map.getContainer();
+    final padTop = box.min.y;
+    final padLeft = box.min.x;
+    final padRight = container.clientWidth - box.max.x;
+    final padBottom = container.clientHeight - box.max.y;
+    final result = _map.cameraForBounds(
+      coordinates.toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..padding = JSPadding(
+          top: padTop,
+          left: padLeft,
+          right: padRight,
+          bottom: padBottom,
+        )
+        ..withBearing(camera.bearing)
+        ..withPitch(camera.pitch)
+        ..withMaxZoom(camera.zoom),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+      padding: MbxEdgeInsets(
+        top: padTop,
+        left: padLeft,
+        right: padRight,
+        bottom: padBottom,
+      ),
+    );
+  }
+
+  @override
+  Future<CameraOptions> cameraForGeometry(
+    Map<String?, Object?> geometry,
+    MbxEdgeInsets padding,
+    double? bearing,
+    double? pitch,
+  ) async {
+    final geo = GeometryObject.deserialize(geometry.cast<String, dynamic>());
+    final result = _map.cameraForBounds(
+      bbox(geo).toJSLngLatBounds(),
+      JSCameraForBoundsOptions()
+        ..withPadding(padding.toJSPadding())
+        ..withBearing(bearing)
+        ..withPitch(pitch),
+    );
+    return CameraOptions(
+      center: result?.center?.toPoint(),
+      zoom: result?.zoom,
+      bearing: result?.bearing,
+      pitch: result?.pitch,
+    );
+  }
+
+  @override
+  Future<CoordinateBounds> coordinateBoundsForCamera(
+    CameraOptions camera,
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: true).bounds;
+
+  @override
+  Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
+    CameraOptions camera,
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: false).bounds;
+
+  @override
+  Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
+    CameraOptions camera,
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: true);
+
+  @override
+  Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
+    CameraOptions camera,
+  ) async => _coordinateBoundsZoomForCamera(camera, wrapped: false);
+
+  /// GL JS can only report the bounds of the current camera, so [camera] is
+  /// applied to a copy of the map transform. Fields that [camera] leaves out
+  /// come from the current camera. The copy constrains the camera the same
+  /// as `jumpTo` does, and its zoom is the returned zoom.
+  CoordinateBoundsZoom _coordinateBoundsZoomForCamera(
+    CameraOptions camera, {
+    required bool wrapped,
+  }) {
+    final transform = _map.transform.clone();
+    if (camera.padding case final p?) transform.padding = p.toJSPadding();
+    if (camera.zoom case final z?) transform.zoom = z;
+    if (camera.center case final c?) transform.center = c.toJSLngLat();
+    if (camera.bearing case final b?) transform.bearing = b;
+    if (camera.pitch case final p?) transform.pitch = p;
+
+    final bounds = transform.getBounds();
+    var west = bounds.getSouthWest().lng;
+    var east = bounds.getNorthEast().lng;
+    if (wrapped) {
+      (west, east) = _wrapLongitudes(west, east);
+    }
+    return CoordinateBoundsZoom(
+      bounds: CoordinateBounds(
+        southwest: Point(
+          coordinates: Position(west, bounds.getSouthWest().lat),
+        ),
+        northeast: Point(
+          coordinates: Position(east, bounds.getNorthEast().lat),
+        ),
+        infiniteBounds: false,
+      ),
+      zoom: transform.zoom,
+    );
+  }
+
+  /// Moves the longitudes [west] and [east] into the range [-180, 180].
+  /// Bounds that cross the antimeridian become the full longitude range.
+  static (double, double) _wrapLongitudes(double west, double east) {
+    if (east - west >= 360) return (-180, 180);
+    final wrappedWest = _wrapLongitude(west);
+    final wrappedEast = _wrapLongitude(east);
+    if (wrappedWest > wrappedEast) return (-180, 180);
+    return (wrappedWest, wrappedEast);
+  }
+
+  static double _wrapLongitude(double lng) =>
+      lng == 180 ? lng : (lng + 180) % 360 - 180;
+
+  // ===== Camera bounds =====
+
+  @override
+  Future<void> setBounds(CameraBoundsOptions options) async {
+    final bounds = options.bounds;
+    if (bounds != null) {
+      _map.setMaxBounds(
+        bounds.infiniteBounds
+            ? null
+            : JSLngLatBounds(
+                bounds.southwest.toJSLngLat(),
+                bounds.northeast.toJSLngLat(),
+              ),
+      );
+    }
+    if (options.minZoom != null) _map.setMinZoom(options.minZoom);
+    if (options.maxZoom != null) _map.setMaxZoom(options.maxZoom);
+    if (options.minPitch != null) _map.setMinPitch(options.minPitch);
+    if (options.maxPitch != null) _map.setMaxPitch(options.maxPitch);
+  }
+
+  @override
+  Future<CameraBounds> getBounds() async {
+    final maxBounds = _map.getMaxBounds();
+    final CoordinateBounds coordinateBounds;
+    if (maxBounds == null) {
+      coordinateBounds = CoordinateBounds(
+        southwest: Point(coordinates: Position(-180, -90)),
+        northeast: Point(coordinates: Position(180, 90)),
+        infiniteBounds: true,
+      );
+    } else {
+      final sw = maxBounds.getSouthWest();
+      final ne = maxBounds.getNorthEast();
+      coordinateBounds = CoordinateBounds(
+        southwest: Point(coordinates: Position(sw.lng, sw.lat)),
+        northeast: Point(coordinates: Position(ne.lng, ne.lat)),
+        infiniteBounds: false,
+      );
+    }
+    return CameraBounds(
+      bounds: coordinateBounds,
+      maxZoom: _map.getMaxZoom(),
+      minZoom: _map.getMinZoom(),
+      maxPitch: _map.getMaxPitch(),
+      minPitch: _map.getMinPitch(),
+    );
+  }
+
+  // ===== Animation =====
+
+  @override
+  Future<void> easeTo(
+    CameraOptions cameraOptions,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async => _map.easeTo(
+    JSCameraOptions()
+      ..essential = true
+      ..withCenter(cameraOptions.center?.toJSLngLat())
+      ..withZoom(cameraOptions.zoom)
+      ..withBearing(cameraOptions.bearing)
+      ..withPitch(cameraOptions.pitch)
+      ..withPadding(cameraOptions.padding?.toJSPadding())
+      ..withAnchor(
+        cameraOptions.anchor != null
+            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
+            : null,
+      )
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
+
+  @override
+  Future<void> flyTo(
+    CameraOptions cameraOptions,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async => _map.flyTo(
+    JSCameraOptions()
+      ..essential = true
+      ..withCenter(cameraOptions.center?.toJSLngLat())
+      ..withZoom(cameraOptions.zoom)
+      ..withBearing(cameraOptions.bearing)
+      ..withPitch(cameraOptions.pitch)
+      ..withPadding(cameraOptions.padding?.toJSPadding())
+      ..withAnchor(
+        cameraOptions.anchor != null
+            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
+            : null,
+      )
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
+
+  @override
+  Future<void> pitchBy(
+    double pitch,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async => _map.easeTo(
+    JSCameraOptions()
+      ..essential = true
+      ..pitch = _map.getPitch() + pitch
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
+
+  @override
+  Future<void> scaleBy(
+    double amount,
+    ScreenCoordinate? anchor,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async => _map.zoomTo(
+    _map.getZoom() + math.log(amount) / math.ln2,
+    JSCameraOptions()
+      ..essential = true
+      ..withAnchor(
+        anchor != null ? _map.unproject(anchor.toJSScreenPoint()) : null,
+      )
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
+
+  @override
+  Future<void> moveBy(
+    ScreenCoordinate screenCoordinate,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async => _map.panBy(
+    // GL JS moves the camera by the offset; the native SDKs move the content.
+    JSScreenPoint(-screenCoordinate.x, -screenCoordinate.y),
+    JSCameraOptions()
+      ..essential = true
+      ..withDurationMs(mapAnimationOptions?.duration),
+  );
+
+  @override
+  Future<void> rotateBy(
+    ScreenCoordinate first,
+    ScreenCoordinate second,
+    MapAnimationOptions? mapAnimationOptions,
+  ) async {
+    final centre = _map.project(_map.getCenter());
+    final delta = rotateByBearingDelta(
+      first: math.Point(first.x, first.y),
+      second: math.Point(second.x, second.y),
+      centre: math.Point(centre.x.toDouble(), centre.y.toDouble()),
+      pixelRatio: window.devicePixelRatio,
+    );
+    _map.easeTo(
+      JSCameraOptions()
+        ..essential = true
+        ..bearing = _map.getBearing() + delta
+        ..withDurationMs(mapAnimationOptions?.duration),
+    );
+  }
+
+  @override
+  Future<void> cancelCameraAnimation() async => _map.stop();
+
+  // ===== Coordinate / pixel conversion =====
+
+  @override
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) async {
+    final point = _map.project(coordinate.toJSLngLat());
+    return ScreenCoordinate(x: point.x, y: point.y);
+  }
+
+  @override
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) async {
+    final lngLat = _map.unproject(JSScreenPoint(pixel.x, pixel.y));
+    return Point(coordinates: Position(lngLat.lng, lngLat.lat));
+  }
+
+  @override
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
+    List<Point> coordinates,
+  ) async => [for (final c in coordinates) await pixelForCoordinate(c)];
+
+  @override
+  Future<List<Point>> coordinatesForPixels(
+    List<ScreenCoordinate> pixels,
+  ) async => [for (final p in pixels) await coordinateForPixel(p)];
+
+  // ===== Map state =====
+
+  @override
+  Future<Size> getSize() async {
+    final container = _map.getContainer();
+    return Size(
+      width: container.clientWidth.toDouble(),
+      height: container.clientHeight.toDouble(),
+    );
+  }
+
+  @override
+  Future<void> triggerRepaint() async => _map.triggerRepaint();
+
+  @override
+  Future<double?> getElevation(Point coordinate) async =>
+      _map.queryTerrainElevation(coordinate.toJSLngLat(), null);
+
+  @override
+  Future<void> reduceMemoryUse() => throw _ni('reduceMemoryUse');
+
+  @override
+  Future<void> setTileCacheBudget(
+    TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
+    TileCacheBudgetInTiles? tileCacheBudgetInTiles,
+  ) => throw _ni('setTileCacheBudget');
+
+  @override
+  Future<void> clearData() {
+    final completer = Completer<void>();
+
+    clearStorage(
+      ([JSAny? error]) {
+        if (error != null) {
+          completer.completeError(error);
+        } else {
+          completer.complete();
+        }
+      }.toJS,
+    );
+    return completer.future;
+  }
+
+  /// Builds the options from the live map state.
+  ///
+  /// GL JS has no API that returns its constructor options, so each field
+  /// comes from the value that GL JS uses:
+  ///
+  ///  * [MapOptions.size] is the size of the map container.
+  ///  * [MapOptions.pixelRatio] is the browser device pixel ratio, which GL
+  ///    JS uses to size its canvas.
+  ///  * [MapOptions.constrainMode] is [ConstrainMode.HEIGHT_ONLY], because GL
+  ///    JS always limits the latitude and wraps the longitude.
+  ///  * [MapOptions.crossSourceCollisions] is `true`. The map does not set
+  ///    this GL JS option, so the GL JS default applies.
+  ///  * [MapOptions.glyphsRasterizationOptions] is null. The map does not set
+  ///    the GL JS local font options, so the GL JS defaults apply.
+  ///  * [MapOptions.orientation] and [MapOptions.viewportMode] are the
+  ///    defaults, because GL JS cannot change them.
+  ///  * [MapOptions.contextMode] is null, because GL JS has no equivalent.
+  @override
+  Future<MapOptions> getMapOptions() async => MapOptions(
+    constrainMode: ConstrainMode.HEIGHT_ONLY,
+    viewportMode: ViewportMode.DEFAULT,
+    orientation: NorthOrientation.UPWARDS,
+    crossSourceCollisions: true,
+    size: await getSize(),
+    pixelRatio: window.devicePixelRatio,
+  );
+
+  @override
+  Future<Uint8List> snapshot() async {
+    try {
+      final blobCompleter = Completer<Blob?>();
+      _map.getCanvas().toBlob(
+        ((Blob? blob) => blobCompleter.complete(blob)).toJS,
+        'image/png',
+      );
+      final blob = await blobCompleter.future;
+      if (blob == null) throw StateError('no blob produced');
+      final buffer = await blob.arrayBuffer().toDart;
+      return buffer.toDart.asUint8List();
+    } catch (e) {
+      throw PlatformException(
+        code: 'snapshot-failed',
+        message: 'snapshot returned no image bytes: $e',
+      );
+    }
+  }
+
+  // ===== Gesture / animation flags =====
+
+  @override
+  Future<void> setGestureInProgress(bool inProgress) =>
+      throw _ni('setGestureInProgress');
+
+  @override
+  Future<bool> isGestureInProgress() => throw _ni('isGestureInProgress');
+
+  @override
+  Future<void> setUserAnimationInProgress(bool inProgress) =>
+      throw _ni('setUserAnimationInProgress');
+
+  @override
+  Future<bool> isUserAnimationInProgress() =>
+      throw _ni('isUserAnimationInProgress');
+
+  @override
+  Future<void> setPrefetchZoomDelta(int delta) =>
+      throw _ni('setPrefetchZoomDelta');
+
+  @override
+  Future<int> getPrefetchZoomDelta() => throw _ni('getPrefetchZoomDelta');
+
+  @override
+  Future<void> dispatch(
+    String gesture,
+    ScreenCoordinate screenCoordinate,
+  ) async {
+    final eventType = switch (gesture) {
+      'click' => 'click',
+      'drag' => 'drag',
+      'dragBegin' => 'dragstart',
+      'dragEnd' => 'dragend',
+      _ => throw ArgumentError.value(gesture, 'gesture', 'Invalid gesture'),
+    };
+    final point = JSScreenPoint(screenCoordinate.x, screenCoordinate.y);
+    final lngLat = _map.unproject(point);
+    _map.fire(
+      eventType,
+      {'point': point, 'lngLat': lngLat}.jsify() as JSObject,
+    );
+  }
+
+  // ===== Snapshotter / glyphs =====
+
+  @override
+  Future<void> setSnapshotLegacyMode(bool enabled) =>
+      throw _ni('setSnapshotLegacyMode');
+
+  /// The glyph URL that gl-native and GL JS use when no style sets one.
+  static const _fallbackGlyphURL =
+      'mapbox://fonts/mapbox/{fontstack}/{range}.pbf';
+
+  // GL JS returns only the glyph URL of the root style. gl-native resolves
+  // an empty URL through the first import, then the fallback URL.
+  @override
+  Future<String> styleGlyphURL() async {
+    final rootURL = _map.getGlyphsUrl();
+    if (rootURL != null && rootURL.isNotEmpty) return rootURL;
+    return _resolveImportGlyphURL();
+  }
+
+  String _resolveImportGlyphURL() =>
+      _resolveGlyphURL(_firstImportStyle(_map.getStyle()));
+
+  String _resolveGlyphURL(JSStyleSpec? style) {
+    if (style == null) return _fallbackGlyphURL;
+    final glyphs = style.glyphs;
+    if (glyphs != null && glyphs.isNotEmpty) return glyphs;
+    return _resolveGlyphURL(_firstImportStyle(style));
+  }
+
+  JSStyleSpec? _firstImportStyle(JSStyleSpec style) =>
+      (style.imports?.toDart.firstOrNull as JSImportSpec?)?.data;
+
+  // For an empty URL, GL JS loads glyphs from its fallback URL and ignores
+  // the imports. gl-native loads them from the URL that [styleGlyphURL]
+  // returns, so set that URL.
+  @override
+  Future<void> setStyleGlyphURL(String glyphURL) async =>
+      _map.setGlyphsUrl(glyphURL.isEmpty ? _resolveImportGlyphURL() : glyphURL);
+
+  // ===== Orientation =====
+
+  @override
+  Future<void> setNorthOrientation(NorthOrientation orientation) async {}
+
+  @override
+  Future<void> setConstrainMode(ConstrainMode mode) async {}
+
+  @override
+  Future<void> setViewportMode(ViewportMode mode) async {}
+
+  // ===== Interactions =====
+
+  late final _interactionHandler = InteractionHandler();
+
+  @override
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
+    TypedInteraction<T> interaction, {
+    String? interactionID,
+  }) {
+    final id = interactionID ?? UniqueKey().toString();
+    final filter = interaction.filter;
+
+    final handler = ((JSInteractionEvent event) => _interactionHandler(
+      interaction,
+      event,
+    )).toJS;
+
+    _map.addInteraction(
+      id,
+      JSInteraction(
+        type: interaction.interactionType.jsInteractionType,
+        target: interaction.featuresetDescriptor?.toJSTargetDescriptor(),
+        filter: filter == null ? null : jsonDecode(filter).jsify() as JSObject?,
+        handler: handler,
+      ),
+    );
+  }
+
+  @override
+  void removeInteraction(String interactionID) =>
+      _map.removeInteraction(interactionID);
+
+  // ===== Feature queries =====
+
+  @override
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+    RenderedQueryGeometry geometry,
+    RenderedQueryOptions options,
+  ) async {
+    // An empty point list has no GL JS representation: a missing geometry
+    // means "query the whole viewport" in GL JS. Handle it here, before
+    // calling toJS(). An empty query area matches no features, the same as
+    // the native mobile behavior for an empty shape.
+    if (geometry case ScreenCoordinateListRenderedQueryGeometry(points: [])) {
+      return <QueriedRenderedFeature?>[];
+    }
+
+    final layerIds = options.layerIds?.nonNulls.toList();
+    final filter = options.filter?.trim();
+    final jsOpts = JSQueryRenderedFeaturesOptions(
+      layers: (layerIds != null && layerIds.isNotEmpty)
+          ? layerIds.map((e) => e.toJS).toList().toJS
+          : null,
+      filter: (filter != null && filter.isNotEmpty)
+          ? FilterSpecification.fromJson(filter)
+          : null,
+    );
+
+    return _map
+        .queryRenderedFeatures(geometry.toJS(), jsOpts)
+        .toDart
+        .map(
+          (f) => QueriedRenderedFeature(
+            queriedFeature: f.toQueriedFeature(
+              source: f.source,
+              sourceLayer: f.sourceLayer,
+            ),
+            layers: f.layer != null ? [f.layer!.id] : [],
+          ),
+        )
+        .toList();
+  }
+
+  @override
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+    String sourceId,
+    SourceQueryOptions options,
+  ) async {
+    final sourceLayerIds = options.sourceLayerIds?.nonNulls.toList();
+    final layersToQuery = (sourceLayerIds == null || sourceLayerIds.isEmpty)
+        ? <String?>[null]
+        : sourceLayerIds.map<String?>((e) => e).toList();
+    final filter = options.filter.trim();
+    final jsFilter = filter.isNotEmpty
+        ? FilterSpecification.fromJson(filter)
+        : null;
+
+    final results = <QueriedSourceFeature?>[];
+    for (final layerId in layersToQuery) {
+      final jsOpts = JSQuerySourceFeaturesOptions(
+        sourceLayer: layerId,
+        filter: jsFilter,
+      );
+      results.addAll(
+        _map
+            .querySourceFeatures(sourceId, jsOpts)
+            .toDart
+            .map(
+              (f) => QueriedSourceFeature(
+                queriedFeature: f.toQueriedFeature(
+                  source: sourceId,
+                  sourceLayer: layerId,
+                ),
+              ),
+            ),
+      );
+    }
+    return results;
+  }
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+    int? limit,
+    int? offset,
+  ) async {
+    final features = await _clusterQuery<JSArray<JSObject>>(
+      sourceIdentifier,
+      cluster,
+      (source, clusterId, callback) => source.getClusterLeaves(
+        clusterId,
+        limit ?? defaultClusterLeavesLimit,
+        offset ?? defaultClusterLeavesOffset,
+        callback,
+      ),
+    );
+    return FeatureExtensionValue(featureCollection: _featureList(features));
+  }
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterChildren(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) async {
+    final features = await _clusterQuery<JSArray<JSObject>>(
+      sourceIdentifier,
+      cluster,
+      (source, clusterId, callback) =>
+          source.getClusterChildren(clusterId, callback),
+    );
+    return FeatureExtensionValue(featureCollection: _featureList(features));
+  }
+
+  @override
+  Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
+    String sourceIdentifier,
+    Map<String?, Object?> cluster,
+  ) async {
+    final zoom = await _clusterQuery<JSNumber>(
+      sourceIdentifier,
+      cluster,
+      (source, clusterId, callback) =>
+          source.getClusterExpansionZoom(clusterId, callback),
+    );
+    return FeatureExtensionValue(
+      value: zoom != null
+          ? formatClusterExpansionZoom(zoom.toDartDouble)
+          : null,
+    );
+  }
+
+  /// Runs a GL JS cluster query on the source [sourceId].
+  ///
+  /// Matches the mobile SDKs: a missing source is an error, but a source that
+  /// is not GeoJSON, a feature without `cluster_id` and an unknown cluster id
+  /// all give a `null` result.
+  Future<T?> _clusterQuery<T extends JSAny>(
+    String sourceId,
+    Map<String?, Object?> cluster,
+    void Function(JSGeoJSONSource source, int clusterId, JSFunction callback)
+    query,
+  ) {
+    final source = _map.getSource(sourceId);
+    if (source == null) {
+      throw PlatformException(
+        code: 'source-error',
+        message: "Source '$sourceId' does not exist.",
+      );
+    }
+    final clusterId = clusterIdOf(cluster);
+    if (source.type != 'geojson' || clusterId == null) {
+      return Future.value();
+    }
+    final completer = Completer<T?>();
+    query(
+      source as JSGeoJSONSource,
+      clusterId,
+      ((JSAny? error, JSAny? result) {
+        completer.complete(error == null ? result as T? : null);
+      }).toJS,
+    );
+    return completer.future;
+  }
+
+  static List<Map<String?, Object?>?>? _featureList(
+    JSArray<JSObject>? features,
+  ) => features?.toDart
+      .map((f) => (f.dartify() as Map).cast<String?, Object?>())
+      .toList();
+
+  @override
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset({
+    required FeaturesetDescriptor featureset,
+    RenderedQueryGeometry? geometry,
+    String? filter,
+  }) async {
+    if (geometry case ScreenCoordinateListRenderedQueryGeometry(points: [])) {
+      return <FeaturesetFeature>[];
+    }
+
+    final normalizedFilter = filter?.trim();
+    final options = JSQueryRenderedFeaturesOptions(
+      target: featureset.toJSTargetDescriptor(),
+      filter: normalizedFilter != null && normalizedFilter.isNotEmpty
+          ? FilterSpecification.fromJson(normalizedFilter)
+          : null,
+    );
+
+    return _map
+        .queryRenderedFeaturesForTarget(geometry?.toJS(), options)
+        .toDart
+        .map((feature) => feature.toFeaturesetFeature())
+        .toList();
+  }
+
+  // ===== Source-feature state (pre-Featureset shapes) =====
+
+  @override
+  Future<void> setFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String state,
+  ) async => _map.setFeatureState(
+    JSFeatureSelector(
+      source: sourceId,
+      sourceLayer: sourceLayerId,
+      id: featureId,
+    ),
+    JSDictionary<String, Object?>.fromJson(state),
+  );
+
+  @override
+  Future<String> getFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+  ) async => json.encode(
+    _map
+            .getFeatureState(
+              JSFeatureSelector(
+                source: sourceId,
+                sourceLayer: sourceLayerId,
+                id: featureId,
+              ),
+            )
+            ?.toDart() ??
+        <String, Object?>{},
+  );
+
+  @override
+  Future<void> removeFeatureState(
+    String sourceId,
+    String? sourceLayerId,
+    String featureId,
+    String? stateKey,
+  ) async => _map.removeFeatureState(
+    JSFeatureSelector(
+      source: sourceId,
+      sourceLayer: sourceLayerId,
+      id: featureId,
+    ),
+    stateKey,
+  );
+
+  // ===== Featureset state =====
+
+  @override
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+    FeatureState state,
+  ) async => _map.setFeatureState(
+    featureId.toJSTargetFeature(featureset),
+    JSDictionary<String, Object?>.fromDart(state.map),
+  );
+
+  @override
+  Future<void> setFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+    FeatureState state,
+  ) async => _map.setFeatureState(
+    feature.toJSTargetFeature(),
+    JSDictionary<String, Object?>.fromDart(state.map),
+  );
+
+  @override
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+    FeaturesetDescriptor featureset,
+    FeaturesetFeatureId featureId,
+  ) async =>
+      _map.getFeatureState(featureId.toJSTargetFeature(featureset))?.toDart() ??
+      <String, Object?>{};
+
+  @override
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+    FeaturesetFeature feature,
+  ) async =>
+      _map.getFeatureState(feature.toJSTargetFeature())?.toDart() ??
+      <String, Object?>{};
+
+  @override
+  Future<void> removeFeatureStateForFeaturesetDescriptor({
+    required FeaturesetDescriptor featureset,
+    required FeaturesetFeatureId featureId,
+    String? stateKey,
+  }) async => _map.removeFeatureState(
+    featureId.toJSTargetFeature(featureset),
+    stateKey,
+  );
+
+  @override
+  Future<void> removeFeatureStateForFeaturesetFeature({
+    required FeaturesetFeature feature,
+    String? stateKey,
+  }) async => _map.removeFeatureState(feature.toJSTargetFeature(), stateKey);
+
+  @override
+  Future<void> resetFeatureStatesForFeatureset(
+    FeaturesetDescriptor featureset,
+  ) async => _map.resetFeatureStates(featureset.toJSTargetDescriptor());
+
+  // ===== Debug options =====
+
+  @override
+  Future<List<MapWidgetDebugOptions>> getDebugOptions() =>
+      throw UnsupportedError('MapWidgetDebugOptions is not supported on web.');
+
+  @override
+  Future<void> setDebugOptions(List<MapWidgetDebugOptions> options) =>
+      throw UnsupportedError('MapWidgetDebugOptions is not supported on web.');
+
+  // ===== Lifecycle =====
+
+  @override
+  void dispose() {
+    // The JSMap instance is owned by `_MapWebWidgetState` and torn down in
+    // its own `dispose()` (see map_widget.dart).
+    stopPerformanceStatisticsCollection();
+    _disposables.dispose();
+  }
+}
+
+UnimplementedError _ni(String method) =>
+    UnimplementedError('MapboxMap.$method is not yet implemented on web.');

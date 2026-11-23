@@ -1,0 +1,950 @@
+### main
+
+* [Web] Add `StyleManager.getImage` support.
+* [Web] Add `StyleManager.updateImageForSource` support.
+* [Web] `onStyleImageMissingListener` now receives events.
+* [iOS] Fix `StyleManager.getImage` returning too dark color values for semi-transparent pixels.
+* [Android][iOS] `StyleManager.updateImageForSource` now throws when the source is not an image source.
+* Fix `StyleManager.addLayer` and `addPersistentLayer` ignoring their `position` argument.
+* Add the experimental Albers equal-area projection, with optional `center` and `parallels`, and the `StyleProjection.mercator` and `StyleProjection.globe` constants. `StyleProjectionName`, the `StyleProjection(name:)` constructor and `StyleProjection.name` are deprecated. Web now supports `getProjection` and `setProjection`.
+  ```dart
+  mapboxMap.setProjection(StyleProjection.globe);
+  mapboxMap.setProjection(
+    StyleProjection.albers(
+      center: Point(coordinates: Position(10, 50)),
+      parallels: (start: 43, end: 62),
+    ),
+  );
+  ```
+
+### 3.36.0-rc.1
+
+> [!IMPORTANT]
+> * The minimum supported SDK version is now Flutter 3.44.2 / Dart 3.12.0.
+> * [Android] The plugin uses built-in Kotlin and no longer applies the Kotlin Gradle Plugin. This fixes the `Could not find method kotlin()` build error with AGP 9 and `android.builtInKotlin=false` ([#1149](https://github.com/mapbox/mapbox-maps-flutter/issues/1149)).
+
+* Add `MapboxHttpService.instance` to configure the HTTP requests of the Mapbox SDK without a map, so custom headers also apply to the first style request. The settings are process-wide. `MapboxMap.httpService` is deprecated; it returns `MapboxHttpService.instance`.
+* `MapboxHttpService.setMaxRequestsPerHost` clamps the value to the range that the platform supports: 1..255, and 1..127 on Android. Before, Android sent values above 127 as negative numbers, which made HTTP requests fail.
+* [Web] Add support for `MapboxHttpService.setCustomHeadersForHost` and `clearCustomHeaders`. The server must allow the custom headers in CORS, and the Mapbox tile endpoints do not allow them. `setMaxRequestsPerHost` has no effect on web.
+* Add `MapboxMap.getFreeCameraOptions` and `MapboxMap.setFreeCameraOptions` to control the camera position and orientation directly, for example to follow a moving object ([#691](https://github.com/mapbox/mapbox-maps-flutter/issues/691)). The `FreeCameraOptionsGeography` extension adds the `location` and `altitude` getters and the `withLocation`, `withAltitude`, `withPitchBearing` and `lookingAt` helpers. The helpers give the same result on Android, iOS and web.
+* [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
+* [Web] Add support for `MapboxMap.startPerformanceStatisticsCollection` and `stopPerformanceStatisticsCollection`.
+* [iOS] Fix `MapboxMap.startPerformanceStatisticsCollection` when collection is already active. The second call stopped the collection. Now it starts a new collection.
+* `MapboxMap.startPerformanceStatisticsCollection` throws an `ArgumentError` for a negative sampling duration. Before, the call did nothing.
+* [Web] Fix `moveBy`, which moved the camera in the wrong direction, and `rotateBy`, which set an absolute bearing. Both now move the map by the same amount as on Android.
+* [Web] `CameraState.padding` now reports the current camera padding in `getCameraState`, `onCameraChanged` and gesture contexts. Before, it was always zero.
+* [Web] `onSourceDataLoaded` now sends a `TILE` event with the tile ID for each loaded tile, and a `METADATA` event when the source metadata loads. As on Android and iOS, events for sources of imported styles are not sent.
+* [Web] Fix map event listeners after a rebuild of `MapWidget`. Before, web called the listeners of the first build, and a listener added later got no events.
+* Add experimental color theme support. `setStyleColorTheme` and `setStyleImportColorTheme` apply a color grading look-up table (LUT) to the style or to a style import. Use `ColorTheme.base64` or `ColorTheme.expression` to create a theme, and `null` to remove it.
+* Add experimental `ColorUseTheme` control for color properties. Use `ColorUseTheme.none` to keep a color unchanged by the color theme. The control is available on:
+  * Layers: a `*UseTheme` field and a `*UseThemeExpression` field for each color property, for example `FillLayer.fillColorUseTheme`.
+  * Lights: `colorUseTheme` on `FlatLight`, `AmbientLight` and `DirectionalLight`. On web, `FlatLight` does not support it.
+  * [Android][iOS] Annotations: for example `CircleAnnotationOptions.circleColorUseTheme` and `CircleAnnotationManager.setCircleColorUseTheme`.
+* Add experimental atmosphere, snow and rain APIs: `setStyleAtmosphere`, `setStyleSnow`, `setStyleRain`, their getters, and `setStyleAtmosphereProperty`, `setStyleSnowProperty` and `setStyleRainProperty`. Each color property has a `*UseTheme` field. On web, snow and rain do not support `*UseTheme`.
+
+### 3.35.2
+
+### 3.35.1
+
+### 3.35.0-rc.1
+
+### 3.35.0
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
+* Add geofencing on Android and iOS through `GeofencingService` and `GeofencingUtils`. `addFeature` monitors a GeoJSON feature. Entry, dwell, and exit events are delivered as streams.
+* [Android] Fix the map drawing over Flutter UI after the app resumes from the background on Android 13 and older ([#1147](https://github.com/mapbox/mapbox-maps-flutter/issues/1147)). When `MapWidget.textureView` is unset, the map now uses a `TextureView` below Android 14 and a `SurfaceView` on Android 14+.
+* Add `MapboxMap.projection` support on web. `Projection` is now pure Dart and gives the same results on all platforms. On Android and iOS, a latitude outside ±90 is now clamped instead of rejected.
+* [Web] Add style light support: `setLight`, `setLights`, `getStyleLights`, `getStyleLightProperty`, and `setStyleLightProperty`.
+* [Web] Add support for `MapboxMap.styleGlyphURL` and `MapboxMap.setStyleGlyphURL`.
+* [Android] Fix `PlatformException`s (`IllegalArgumentException: invalid pointerIndex -1` or `NullPointerException`) during multi-finger gestures ([#1146](https://github.com/mapbox/mapbox-maps-flutter/issues/1146)). Flutter can forward touch events with inconsistent pointer ids ([flutter/flutter#195431](https://github.com/flutter/flutter/issues/195431)); the map now ignores such events instead of throwing.
+* [Web] `setStyleSourceProperty` and `setStyleSourceProperties` can now change `tiles` and `url` of raster-dem and raster-array sources, `minzoom` and `maxzoom` of raster, raster-dem, raster-array and vector sources, and `models` of model sources. For a property that GL JS cannot change, the error message now gives the reason.
+
+### 3.34.4
+
+### 3.34.3
+
+### 3.34.2
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
+### 3.34.1
+
+* Version 3.34.0 is skipped: it was published to pub.dev by mistake on 2026-10-05 and retracted, so this release ships as 3.34.1.
+
+### 3.33.3
+
+### 3.33.2
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
+### 3.33.1
+
+### 3.33.0
+
+### 3.0.5
+
+### 3.0.4
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
+### 3.0.3
+
+### 3.0.2
+
+### 3.0.1
+
+### 3.0.0
+
+> [!IMPORTANT]
+> On web, Mapbox GL JS is loaded automatically: the plugin injects the `<script>`/`<link>` tags for the GL JS version it pins into the page on first map use.
+>
+> If your app enforces a Content-Security-Policy, it must allow script and style sources from `api.mapbox.com`.
+
+* **Add web support.**
+  * Support `MapWidget`, `MapboxMap`, gestures, camera, the viewport API (Camera, FollowPuck, Idle, Overview, StyleDefault states, with Default/Easing/Fly transitions), and the location puck. The Interaction API is supported except for `LongTapInteraction`. Annotation managers (Circle, Point, Polyline, Polygon) are not yet implemented on web.
+  * Add ornament settings support: `compass`, `scaleBar`, `logo` and `attribution` are backed by the Mapbox GL JS controls and support partial updates, matching Android and iOS. Some fields have no GL JS counterpart and are stored and returned by `getSettings` without being applied; see each field's documentation. Note `LogoSettings.enabled` and `AttributionSettings.enabled` are a restricted API.
+  * Add `MapboxMap.snapshot()` support. It captures the map's current canvas as PNG-encoded bytes, matching Android and iOS.
+  * Add `loadStyleJson` support.
+  * Add `gestures.keyboard.gestureEvents`, delivering keyboard-driven camera changes (arrow keys, `+`/`-`, shift+arrows), and make keyboard input follow the same gesture settings as pointer/touch input: `GesturesSettings.scrollEnabled` gates arrow-key pan, and `.rotateEnabled`/`.pitchEnabled` independently gate Shift+arrow rotate and pitch.
+  * Add `GesturesSettings.scrollZoomEnabled`, `.boxZoomEnabled`, and `.pitchWithRotateEnabled` to control mouse-wheel/trackpad zoom, box zoom, and whether ctrl+drag combines rotate with pitch (web only; no effect on Android/iOS).
+  * `GesturesSettings.quickZoomEnabled` controls tap-and-drag zoom.
+  * Flutter widgets stacked over the map block clicks/taps, scroll-zoom, and cursor styling from reaching Mapbox GL JS underneath, matching how a widget stacked over a native view would behave.
+  * `MapWidget.styleUri` loads the requested style directly, without first loading a default style.
+  * Document how web keeps a GeoJSON feature id. GL JS keeps the id only if it is a number, or a string that holds a number. It removes all other string ids, and the feature then has no id on web. Use a number for these ids, or put the id in a feature property.
+  * Add `GeoJsonSource.dynamicData`, mapping to the `dynamic` option in the style specification. Set it to true for the source to accept `addGeoJSONSourceFeatures`, `updateGeoJSONSourceFeatures`, and `removeGeoJSONSourceFeatures`. No-op on Android and iOS, which accept feature updates on all GeoJSON sources regardless.
+  * Decode `rgb`, `hsl`, and `hsla` style-color expressions correctly. `rgba` expressions were already decoded correctly. gl-native (Android/iOS) folds these into `rgba` before Flutter reads them back, so mobile is not affected either way.
+* Split the plugin into federated packages: `mapbox_maps_flutter` (public facade), `mapbox_maps_flutter_platform_interface`, `mapbox_maps_flutter_mobile`, and `mapbox_maps_flutter_web`. Add `mapbox_maps_flutter` as the app-facing dependency; mobile and web packages are endorsed automatically.
+* Remove APIs deprecated in v2: `MapWidget.cameraOptions` (use `viewport`), `MapWidget.getMapboxMap()` (use `onMapCreated`), `MapboxMap.setCustomHeaders` and `MapboxHttpService.setCustomHeaders` (use `setCustomHeadersForHost`), `PointAnnotation.iconImageCrossFade` / `PointAnnotationOptions.iconImageCrossFade` (use `PointAnnotationManager.iconImageCrossFade`), and the `OnMapTapListener` / `OnMapLongTapListener` typedefs (use the Interaction API).
+* [Web] Add style terrain support: `setStyleTerrain`, `getStyleTerrainProperty`, and `setStyleTerrainProperty`.
+* Add `StyleManager.removeStyleTerrain()` to remove the style terrain while keeping its source. On web with the globe projection, terrain defined by the style's imports applies again after removal.
+* [Web] Bump Mapbox GL JS to 3.32.0.
+* [Web] Add `MapboxMapsOptions` language and worldview support. As on the other platforms, both apply to the maps already on screen and to the ones created later.
+* [Web] Add support for `MapboxMap.coordinateBoundsForCamera`, `coordinateBoundsForCameraUnwrapped`, `coordinateBoundsZoomForCamera`, and `coordinateBoundsZoomForCameraUnwrapped`. On web, the bounds cover only the area inside the camera padding, and they include the terrain elevation.
+* [Web] Add `MapboxMap.getMapOptions()` support. The options come from the live Mapbox GL JS map state: the map container size and the browser device pixel ratio. Options that GL JS cannot change return fixed values; see the method documentation.
+* Add experimental `MapboxMap.indoor` (`IndoorManager`): indoor floor state as a stream (`indoorUpdates`) and `selectFloor(floorId)`, on Android, iOS, and web. Also fix `MapboxMap.indoorSelector` on all three platforms: implemented on web, no longer throws on Android, and appears by default on iOS.
+* [Android] Change the default platform-view hosting mode to Hybrid Composition (`AndroidPlatformViewHostingMode.HC`); it was previously Virtual Display. Set `MapWidget.androidHostingMode` explicitly to keep the old behaviour.
+* [Android] Render the map into a `SurfaceView` by default instead of a `TextureView`, avoiding the per-frame copy a `TextureView` requires. Set `MapWidget.textureView` to `true` for a transparent background (`isOpaque: false`) and for the `VD` and `TLHC_VD` hosting modes, which cannot display a `SurfaceView`.
+* Introduce `StyleImage` (`.bytes` for PNG/JPEG/WebP, `.rgba` for premultiplied pixels) and prefer it via `addImage`, `updateImageForSource`, and `getImage`. Deprecate the `MbxImage`-based `addStyleImage`, `updateStyleImageSourceImage`, and `getStyleImage` wrappers. Style image add/has/remove is implemented on web; `getImage` and image-source updates remain mobile-only for now.
+* `getStyleImage` (and the deprecated `getStyleImage`/`getImage` wrappers built on it) now return raw premultiplied RGBA pixel data instead of a PNG-encoded image, matching Android's existing behavior. Code that decoded the returned `data` as PNG must decode it as raw RGBA instead.
+* `tileCover` and `Snapshotter.tileCover` are marked experimental and now return `OverscaledTileID` instead of `CanonicalTileID`, matching the native SDKs. `OverscaledTileID` keeps the canonical tile coordinate in its `canonical` field, and adds `overscaledZ` and `wrap` so callers can distinguish overscaled tiles from their canonical zoom level, and tiles that repeat across the antimeridian.
+* `RenderedQueryGeometry` is now a sealed class hierarchy (`ScreenCoordinateRenderedQueryGeometry`, `ScreenBoxRenderedQueryGeometry`, `ScreenCoordinateListRenderedQueryGeometry`) instead of an untyped `{value, type}` pair. Construct it the same way as before, via `fromScreenCoordinate()`/`fromScreenBox()`/`fromList()`. Use pattern matching on the subclasses to inspect it instead of the now-deprecated, read-only `value`/`type` accessors.
+* Fix `PointAnnotationManager.update()` not applying a new `image` on iOS and Android when the annotation's `iconImage` still named a previous registration ([#532](https://github.com/mapbox/mapbox-maps-flutter/issues/532)). If you leave `iconImage` unset, the SDK derives one from a hash of `image`, so a content change now applies automatically. Set `iconImage` yourself for full control of the style-image name: for example, to reuse one name across annotations, or to point at a style image added elsewhere without uploading `image`.
+
+### 2.31.2
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [iOS] CocoaPods distribution is no longer supported. New versions of the iOS plugin are available through Swift Package Manager only; previously released versions remain available on CocoaPods. Swift Package Manager is on by default since Flutter 3.44; on older Flutter versions enable it with `flutter config --enable-swift-package-manager` or `enable-swift-package-manager: true` under `flutter: config:` in your app's `pubspec.yaml`.
+
+### 2.31.0
+
+* Introduce experimental `RasterLayer.rasterColorScale` property, resulting in more precise visualization with long-tailed raster-array data source.
+* Promote `SymbolLayer.symbolZOffset` to stable.
+* Fix `PointAnnotation.iconImageCrossFade` and `PointAnnotationOptions.iconImageCrossFade` missing their `@Deprecated` annotation, so the analyzer and IDEs showed no warning. Both fields are deprecated in favor of `PointAnnotationManager.iconImageCrossFade`.
+
+### 2.30.4
+
+### 2.30.3
+
+### 2.30.2
+
+### 2.30.1
+
+* Update Maps SDK to v11.30.1
+
+### 2.30.0
+
+* Add `LineLayer.lineBorderGradient` and `.lineBorderGradientExpression` to color a line's border along its length with a gradient driven by `line-progress`. Requires a GeoJSON source with `lineMetrics: true`.
+* Fix an uncatchable crash in `MapWidget` when the platform view is created before layout completes, on iOS (always) and Android's `HC` hosting mode ([#1141](https://github.com/mapbox/mapbox-maps-flutter/issues/1141)).
+* Mark `Snapshotter.tileCover` as experimental since the underlying native APIs are experimental.
+
+### 2.28.0
+
+* Add `ModelSource` API, exposing the 3D model source (a collection of 3D models, each with its own position, orientation, and node/material overrides).
+* Add `MapWidget.isOpaque` option to control whether the map is rendered as opaque or supports a transparent background. Set to `false` (together with a transparent style) to enable transparency on iOS; Android already supports this via `MapWidget.textureView` ([#415](https://github.com/mapbox/mapbox-maps-flutter/issues/415)).
+* [iOS] Fix `updateSettings` on `CompassSettings`, `AttributionSettings`, `LogoSettings`, `IndoorSelectorSettings`, `ScaleBarSettings`, `GesturesSettings`, and `LocationComponentSettings` resetting omitted fields (position, margins, `enabled`, `scrollMode`, puck configuration) to defaults instead of preserving them, matching Android's partial-update behaviour.
+* [Android] Fix `LocationComponentSettings.updateSettings` dropping the previously configured 2D or 3D puck's settings when switching between puck types.
+
+### 2.27.0
+
+* [iOS] Support `GesturesSettings.scrollDecelerationEnabled` on iOS ([#1127](https://github.com/mapbox/mapbox-maps-flutter/issues/1127)).
+* [Android] Migrate to built-in Kotlin.
+* Add `MapboxMap.httpService.setCustomHeadersForHost` to attach custom HTTP headers to a single host only, and `MapboxMap.httpService.clearCustomHeaders` to remove all configured headers. Host-scoped headers are matched against the request's exact URL host (case-insensitive, no subdomain or substring matching).
+* Deprecate `MapboxMap.setCustomHeaders`: headers set this way are attached to every host the map fetches from — including third-party hosts referenced by styles, sources, sprites, glyphs and tiles — which can leak credentials. Use `setCustomHeadersForHost` instead.
+
+### 2.26.0
+
+* [iOS] Fix iOS compass ignoring `CompassSettings.fadeWhenFacingNorth` (and visibility in general) unless `enabled` was also set. `enabled` and `fadeWhenFacingNorth` are now applied independently, matching the Android behaviour ([#602](https://github.com/mapbox/mapbox-maps-flutter/issues/602)).
+* [Android] Use flutter.compileSdkVersion to align Android compileSdk with Flutter SDK
+
+### 2.25.0
+
+* Deprecate `MapboxMap.onTapListener` and `MapboxMap.onLongTapListener` in favor of the `MapboxMap.addInterfaction` API.
+* Add `MapboxMap.httpService.setMaxRequestsPerHost` to cap the number of concurrent HTTP requests per host issued by the underlying HTTP service. Useful for reducing the chance of hitting per-token rate limits during offline tile region downloads.
+
+### 2.24.0
+
+* Add `TileStore.setOptionForKey` to allow setting custom tile store options by arbitrary string key, in addition to the existing predefined options (`diskQuota`, `mapboxApiUrl`, `tileUrlTemplate`).
+
+### 2.23.0
+
+* Deprecate `MapWidget.cameraOptions` in favor of the `viewport` API.
+* Deprecate `MapWidget.onTapListener` and `MapWidget.onLongTapListener` in favor of the `MapboxMap.addInteraction` API.
+
+### 2.22.0
+
+* Update Maps SDK to v11.22.0
+
+### 2.21.2
+
+### 2.20.1
+
+* Update Maps SDK to v11.21.1
+
+### 2.21.0
+
+* Update Maps SDK to v11.21.0
+
+### 2.20.0
+
+* Add experimental `shadowDrawBeforeLayer` property to directional light to allow specifying the position in the layer stack for drawing shadows on the ground.
+* Introduce new `LineLayer.lineElevationGroundScale` property to scale elevated lines with terrain exaggeration.
+* Promote elevated lines properties to stable: `LineLayer.lineZOffset` and `LineLayer.lineElevationReference`.
+* Add experimental `ModelLayer.modelAllowDensityReduction` property to disable density reduction in model layers.
+* Add `FollowPuckViewportState.padding` to control camera padding when following the user's location puck, allowing the puck to be offset from the viewport center (e.g. for navigation UIs where the puck should appear near the bottom of the screen).
+* Update Maps SDK to v11.20.0
+
+### 2.19.1
+
+* [Android] Fix Gradle build failure when `SDK_REGISTRY_TOKEN` is not set in the environment or `gradle.properties`.
+* [Android] Fix `customData` not being applied when updating Circle, Point, Polygon, and Polyline annotations.
+
+### 2.19.0
+
+* Update Maps SDK to v11.19.0
+
+### 2.18.0
+
+* Add `deleteMulti()` method to all annotation managers to enable batch deletion of annotations.
+* Add experimental MapRecorder API to record and replay map interactions for debugging and performance testing.
+* Update Maps SDK to v11.18.0
+
+### 2.17.0
+
+> [!NOTE]
+> Version numbering has been updated to align with Mapbox's cross-platform SDK versioning scheme. This release skips from 2.12.0 to 2.17.0 to synchronize with other Mapbox SDKs (version x.17.0), ensuring consistent version numbers across all platforms.
+
+* Promote `ModelLayer` to stable.
+* Add `SymbolLayer.iconColorBrightnessMax`, `SymbolLayer.iconColorBrightnessMin`, `SymbolLayer.iconColorContrast`, `SymbolLayer.occlusionOpacityMode`, `FillExtrusionLayer.fillExtrusionCastShadows`, `RasterArraySource.volatile`, and `PolylineAnnotation.lineEmissiveStrength` properties.
+* Update default value for experimental `LineLayer.lineCutoutOpacity` from 0 to 1.0.
+* [iOS] Fix annotation interaction handlers (tap, drag etc.) not working after annotation update.
+* Add the ability to get all annotations from an annotation manager.
+* Add `customData` field to annotations to be able to pass user data.
+* Add nautical miles scale bar distance unit.
+* Update property type for experimental `LineLayer.lineCutoutOpacity`, and `LineLayer.lineCutoutFadeWidth` from layout to paint.
+* Fix memory leaks on Android.
+* Bump Flutter SDK minimum required version to 3.27.0 and `compileSdk` to 35 on Android.
+* Update Maps SDK to v11.17.0
+
+### 2.12.0
+
+> [!NOTE]
+> This release adds support for Android 16KB page size requirements.
+
+* Update Maps SDK to v11.16.0
+  * Maps SDK Android dependency now includes NDK 27 support and [support for 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes).
+* Fix multi-touch gestures not working in map widget when being nested in `GestureDetector`.
+* Expose `LineLayer.lineCutoutOpacity`, `LineLayer.lineCutoutWidth` and `LineLayer.lineCutoutFadeWidth` to make route lines visible through obstructing 3D buildings and other aboveground features.
+
+### 2.11.0
+
+* Update Maps SDK to v11.15.0
+* Fix map events not being called if annotations are presented
+* Fix Mapbox expression handling on Android by converting List expressions starting with strings to JSON format.
+
+### 2.10.0
+
+* Update Maps SDK to v11.14.0
+  * Fixed FillExtrusionLayer flickering when transitioning between flat and globe projection
+* Fix crash when receiving annotation interactions.
+* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`.
+* Introduce `tapEvents` and `longPressEvents` API to the Annotation Managers to handle tap and long press event callbacks for annotations:
+  Example usage:
+  ```dart
+  manager.tapEvents(
+    onTap: (annotation) {
+      print("Tapped annotation: ${annotation.id}");
+    },
+  );
+  manager.longPressEvents(
+    onLongPress: (annotation) {
+      print("Long press annotation: ${annotation.id}");
+    },
+  );
+  ```
+
+> [!NOTE]
+> As part of this change, `AnnotationOnClickListener` is now deprecated.
+> Tap events will now not propagate to annotations below the topmost one. If you tap on overlapping annotations, only the top annotation's tap event will be triggered.
+
+### 2.9.0
+
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
+> * `PointAnnotation.iconImageCrossFade` has been deprecated and setting a value to it will not have any impact. Use `PointAnnotationManager.iconImageCrossFade` instead.
+> * The STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
+
+* In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
+  * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
+* Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
+* Introduce `dragEvents` API to the Annotation Managers to handle drag event callbacks for annotations:
+  * `onBegin`: Called when a drag gesture starts on an annotation.
+  * `onChanged`: Called continuously as the annotation is dragged.
+  * `onEnd`: Called once the drag gesture completes.
+
+  Example usage:
+  ```dart
+  manager.dragEvents(
+    onBegin: (annotation) {
+      print("Drag started for: ${annotation.id}");
+    },
+    onChanged: (annotation) {
+      print("Dragging at: ${annotation.geometry}");
+    },
+    onEnd: (annotation) {
+      print("Drag ended at: ${annotation.geometry}");
+    },
+  );
+* Promote interaction APIs to stable. The following APIs are now stable:
+  * `MapboxMap.addInteraction`
+  * `MapboxMap.removeInteraction`
+  * `MapboxMap.setFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.setFeatureStateForFeaturesetFeature`
+  * `MapboxMap.getFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.getFeatureStateForFeaturesetFeature`
+  * `MapboxMap.removeFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.removeFeatureStateForFeaturesetFeature`
+  * `MapboxMap.resetFeatureStatesForFeatureset`
+  * `MapboxMap.queryRenderedFeaturesForFeatureset`
+* Move experimental `modelElevationReference` property to `LocationPuck3D`.
+* Fixed an issue where style expressions did not override constant values when both were present.
+* [ios] Fix crash when force unwrapping UIImage for point annotations.
+* Update MapboxMaps to v11.13.0
+
+### 2.8.0
+
+* Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
+* [Android] Fix color alpha value conversion.
+* Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
+* Update Maps SDK to 11.12.0
+
+### 2.7.0
+
+* Update Maps SDK to 11.11.0
+* Introduce a `setCustomHttpHeader` method to allow the plugin to modify HTTP headers dynamically.
+* Experimental `StandardBuildingState` has been removed. Use `StandardBuildingsState` instead.
+* `top-image`, `bearing-image`, and `shadow-image` properties on `LocationIndicatorLayer` are now paint properties instead of layout properties.
+* Introduce `onZoomListener` to `MapWidget` to allowing listening to zoom events resulting from user gestures: pinching, double-tapping, or quick zooming. The event returns `MapContentGestureContext`, which includes `touchPosition` (the location of the gesture on the screen), `point` (the geographical coordinates of the gesture), and `gestureState` (the state of the gesture). See `gestures_example.dart` for implementation guidance.
+* Expose `SymbolLayer.iconSizeScaleRange`, `SymbolLayer.iconSizeScaleRangeExpression`, `SymbolLayer.textSizeScaleRange`, `SymbolLayer.textSizeScaleRangeExpression`, `LineLayer.lineCrossSlope`, `LineLayer.lineElevationReference`, `LineLayer.lineWidthUnit`, `FillLayer.fillElevationReference`.
+* Expose `PointAnnotationManager.setIconSizeScaleRange()`, `PointAnnotationManager.getIconSizeScaleRange()`, `PointAnnotationManager.setTextSizeScaleRange()`, `PointAnnotationManager.getTextSizeScaleRange()` , `PolygonAnnotationManager.setFillElevationReference()`, `PolygonAnnotationManager.getFillElevationReference()`, `PolylineAnnotationManager.setLineCrossSlope()`, `PolylineAnnotationManager.getLineCrossSlope()`, `PolylineAnnotationManager.setLineElevationReference()`, `PolylineAnnotationManager.getLineElevationReference()`, `PolylineAnnotationManager.setLineWidthUnit()`, `PolylineAnnotationManager.getLineWidthUnit()` as experimental.
+* Mark `ClipLayer.clipLayerScope` and `ClipLayer.clipLayerTypes` as stable
+* Mark `BackgroundLayer.backgroundPitchAlignment` as experimental
+* [Android] Fix rare NPE upon native view disposal.
+
+### 2.6.0
+
+> [!IMPORTANT]
+> The iOS minimum deployment target is now iOS 14.0.
+
+* Update Maps SDK to 11.10.0
+* Align tap propagation behavior on Android and iOS.
+* Introduce the experimental Interactions API, a toolset that allows you to handle interactions on both layers and basemap features for styles. This API introduces a new concept called `Featureset`, which allows Evolving Basemap styles, such as Standard, to export an abstract set of features, such as POI, buildings, and place labels, regardless of which layers they are rendered on. An `Interaction` can then be targeted to these features, modifying their state when interacted with. For example, you can add a `TapInteraction` to your map which targets the `buildings` `Featureset`. When a user taps on a building, the building will be highlighted and its color will change to blue.
+
+```dart
+var tapInteraction = TapInteraction(StandardBuildings(),
+    (_, feature) {
+  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingsState(highlight: true));
+  log("Building group: ${feature.group}");
+});
+mapboxMap.addInteraction(tapInteraction);
+```
+Specific changes:
+  * Introduce the experimental `MapboxMap.addInteraction` method, which allows you to add interactions to the map.
+  * Introduce the experimental `MapboxMap.removeInteraction` method, which allows you to remove interactions from the map using an identifier `mapboxMap.removeInteraction("tap_interaction_poi")`
+  * Introduce the ability to add `TapInteraction` and `LongTapInteraction` targeting the map itself.
+  * Introduce `TapInteraction` and `LongTapInteraction`, which allow you to add tap and longTap interactions to the map.
+  * Introduce `FeaturesetDescriptor` -- and convenience descriptors for `StandardBuildings`, `StandardPOIs`, and `StandardPlaceLabels` -- which allow you to describe the featureset you want `Interactions` to target.
+  * Introduce low-level methods for creating and manipulating interactive features: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`
+* For more guidance with using these new features see `interactive_features_example.dart`.
+* Add support for Swift Package Manager.
+
+### 2.5.2
+
+* Bump Maps SDK to 11.9.2
+
+### 2.5.1
+
+* Bump Maps SDK to 11.9.1
+
+### 2.5.0
+
+* Mark `ClipLayer` as stable.
+* Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
+  * Update experimental `symbolElevationReference` property on `SymbolLayer`.
+  * Introduce `backgroundPitchAlignment` property on `BackgroundLayer`.
+  * Introduce experimental `fillZOffset` property on `FillLayer`.
+  * Introduce experimental `fillExtrusionBaseAlignment` and `fillExtrusionHeightAlignment` properties on `FillExtrusionLayer`.
+  * Mark get and set `ZOffset` methods on `PolygonAnnotationManager`, `PolylineAnnotationManager`, and `PointAnnotationManager` as experimental.
+  * Mark get and set `symbolElevationReference` methods on `PointAnnotationManager` as experimental.
+  * Mark get and set line trim methods on `PolylineAnnotationManager` as experimental.
+  * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.
+  * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`.
+  * Introduce `FillExtrusionBaseAlignment` and `FillExtrusionHeightAlignment`, and `BackgroundPitchAlignment` enums.
+* Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
+  ```dart
+  MapWidget(
+    viewport: CameraViewportState(
+      center: Point(coordinates: Position(-117.918976, 33.812092)),
+      zoom: 15.0,
+    ),
+  );
+  ```
+
+### 2.4.1
+
+* Fix annotation click listeners not working.
+
+### 2.4.0
+
+> [!IMPORTANT]
+> Configuring Mapbox's secret token is no longer required when installing our SDKs.
+
+* Update Maps SDK to 11.8.0
+* Updated the minimum required Flutter SDK to version 3.22.3 and Dart to version 3.4.4. With the fix for Virtual Display hosting mode on Android in Flutter 3.22, we’ve changed the default map view hosting mode to Virtual Display composition. This update should eliminate the brief visibility of the map after it has been dismissed.
+* Introduce experimental property `MapboxMap.styleGlyphURL`. Use this property to apply custom fonts to the map at runtime, without modifying the base style.
+* Expose current map's camera state on `CameraChanged` event. [#704](https://github.com/mapbox/mapbox-maps-flutter/pull/704)
+
+You can now observe the map's camera updates with `onCameraChangeListener`
+
+```dart
+onCameraChangeListener(CameraChangedEventData data) {
+  print("CameraChangedEventData: timestamp: ${data.timestamp}, cameraState: ${data.cameraState}");
+}
+```
+* Print to console native Maps SDK logs in debug configuration. [#710](https://github.com/mapbox/mapbox-maps-flutter/pull/710)
+Logs are proxied only in debug configuration and can be disabled completely by passing environment flag `MAPBOX_LOG_DEBUG` with false value.
+* Fix rare crash in `Snapshotter`. The crash could happen when creating/destroying multiple instances of `Snapshotter` in succession. [#728](https://github.com/mapbox/mapbox-maps-flutter/pull/728)
+* Fix a crash that occurs when the widget state is updated before the platform view is created. [#724](https://github.com/mapbox/mapbox-maps-flutter/pull/724)
+* Fix a crash in Snapshotter when GlyphsRasterizationMode is specified in MapSnapshotOptions. [#738](https://github.com/mapbox/mapbox-maps-flutter/pull/738)
+* Remove `ProxyBinaryMessenger`, instead setup channel with a `messageChannelSuffix`. [#715](https://github.com/mapbox/mapbox-maps-flutter/pull/715).
+
+# 2.3.0
+
+* Deprecate untyped default constructor of `RenderedQueryGeometry` with typed constructors: `RenderedQueryGeometry.fromList()/fromScreenBox()/fromScreenCoordinate()`.
+
+This change improves type safety and clarity in the code. By using specific constructors, you can ensure that the `RenderedQueryGeometry` is created with the correct type of data, reducing the risk of runtime errors and making the code easier to understand and maintain.
+
+**Example:**
+
+*Before:*
+```dart
+// Using the untyped default constructor
+final geometry = RenderedQueryGeometry(type: Type.SCREEN_COORDINATE, value jsonEncode(screenCoordinate.encode()));
+```
+
+*After:*
+```dart
+// Using a typed constructor
+final geometry = RenderedQueryGeometry.fromScreenCoordinate(screenCoordinate);
+```
+* Expose API to clear map data, and to set options to `TileStore`.
+
+You can now clear temporary map data from the data path defined in the given resource options, which is useful when you want reduce the disk usage or in case the disk cache contains invalid data.
+```dart
+await MapboxMapsOptions.clearData();
+```
+And you can now set additional options to a `TileStore`, for example, a maximum amount of bytes TileStore can use to store files., base URL to use for requests to the Mapbox API, or URL template for making tile requests.
+```dart
+// Set the disk quota to zero, so that tile regions are fully evicted
+// when removed.
+// This removes the tiles from the predictive cache.
+tileStore.setDiskQuota(0);
+```
+* Add support for partial GeoJSON updates.
+
+Instead of setting a whole new GeoJSON object anew every time a single feature has changed, now you can apply more granular, partial GeoJSON updates.
+If your features have associated identifiers - you can add, update, and remove them on individual basis in your ``GeoJSONSource``. This is especially beneficial for ``GeoJSONSource``s hosting a large amount of features - in this case adding a feature can be up to 4x faster with the partial GeoJSON update API.
+
+```dart
+mapboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
+mapboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
+mapboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
+```
+* Fix `StyleManager.getLayer()` failing for `ModelLayer`, `RasterParticleLayer` and `SlotLayer`.
+* Expose data-driven properties on annotation managers. Now it's possible to set data-driven properties globally on annotation manager and specify per-annotation overrides.
+Previously user had to specify those properties on each annotation and couldn't specify them globally.
+
+In this case each even annotation will have random color, but others will use the global default specified in the annotation manager.
+```dart
+final circleAnnotationManager = await mapboxMap.annotations.createCircleAnnotationManager();
+var annotations = <CircleAnnotationOptions>[];
+for (var i = 0; i < 2000; i++){
+  var annotation = CircleAnnotationOptions(
+    geometry: createRandomPoint(),
+    circleColor: (i % 2 == 0) ? createRandomColor() : null,
+    );
+
+  annotations.add(annotation);
+}
+circleAnnotationManager.setCircleColor(Colors.blue.value);
+```
+* Expose `autoMaxZoom` property for `GeoJsonSource` to fix rendering issues with `FillExtrusionLayer` in some cases.
+* Expose experimental `ClipLayer` to remove 3D data (fill extrusions, landmarks, trees) and symbols.
+* Deprecate `SlotLayer.sourceId` and `SlotLayer.sourceLayer` as they have no effect in this layer.
+* Expose experimental `SymbolLayer.symbolElevationReference` and `SymbolLayer.symbolZOffset`.
+* Add missing `@experimental` annotations to `Layer`'s `Expression` properties.
+* Remove experimental `model-front-cutoff` property from `ModelLayer`.
+* Expose experimental `lineTrimColor` and `lineTrimFadeRange` on `LineLayer` which allow to set custom color for trimmed line and fade effect for trim.
+* Add experimental `FillExtrusionLayer.fillExtrusionLineWidth` that can switch fill extrusion rendering into wall rendering mode. Use this property to render the feature with the given width over the outlines of the geometry.
+* Add experimental `MapboxMap.setSnapshotLegacyMode()` to help avoiding `MapboxMap.snapshot()` native crash on some Samsung devices running Android 14. `MapboxMap.setSnapshotLegacyMode()` has no effect on iOS.
+* Fix build errors when using Flutter SDK 3.24.
+* Add `GestureState` to `MapContentGestureContext` to indicate whether gesture has been started, its touches have changed or it has ended.
+* Bump Maps SDK to 11.7.0.
+
+### 2.2.0
+
+* Bump Maps SDK to 11.6.0
+* Update Pigeon to `21.1.0`
+
+### 2.2.0-rc.1
+
+* Expose `MapboxStyles.STANDARD_SATELLITE` style.
+* `MapDebugOptions` is superseded by `MapWidgetDebugOptions`, expanding existing debug options with the new `light`, `camera`, and `padding` debug options in addition to the new Android-specific options: `layers2DWireframe` and `layers3DWireframe`.
+* Bump Maps SDK to 11.6.0-rc.1
+
+### 2.2.0-beta.1
+
+* Support local assets for 3D puck and `ModelLayer`. To use a local assets, please specify it with `asset://` scheme in the uri.
+* Fix map view crashing upon host activity destruction when using a cached Flutter engine.
+* Fix a rare crash happening when map widget is being disposed.
+
+### 2.1.0
+
+* Add ModelLayer API.
+* Support for offline map, allowing users to download and store map data on their devices for use in environments with limited or no internet connectivity.
+* Layer expressions support. Specify expressions when constructing a layer with all new expression support for layers.
+*Before:*
+```dart
+mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
+    '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
+
+```
+*After:*
+```dart
+LineLayer(
+  ...
+  lineGradientExpression: [
+    "interpolate",
+    ["linear"],
+    ["line-progress"],
+    0.0,
+    ["rgb", 255, 0, 0],
+    0.4,
+    ["rgb", 0, 255, 0],
+    1.0,
+    ["rgb", 0, 0, 255]
+  ],
+);
+```
+* Expose `text-occlusion-opacity`, `icon-occlusion-opacity`, `line-occlusion-opacity`, `model-front-cutoff`, `lineZOffset` as experimental.
+* Add min/max/default values for most of the style properties.
+* Expose `clusterMinPoints` property for `GeoJSONSource`.
+* Expose `SlotLayer` and `RasterParticleLayer`.
+* Expose `LocationComponentSettings.slot`.
+* Add `@experimental` annotation to relevant APIs.
+* Expose `LineJoin.NONE`.
+* Bump Maps SDK to 11.5.0 for Android and 11.5.1 for iOS.
+
+### 2.1.0-rc.1
+
+* Bump Maps SDK to 11.5.0-rc.1
+* Expose `text-occlusion-opacity`, `icon-occlusion-opacity`, `line-occlusion-opacity`, `model-front-cutoff`, `lineZOffset` as experimental.
+* Add min/max/default values for most of the style properties.
+* Expose `clusterMinPoints` property for `GeoJSONSource`.
+* Expose `SlotLayer` and `RasterParticleLayer`.
+* Expose `LocationComponentSettings.slot`.
+* Add `@experimental` annotation to relevant APIs.
+
+### 2.1.0-beta.1
+
+* Add ModelLayer API.
+* Support for offline map, allowing users to download and store map data on their devices for use in environments with limited or no internet connectivity.
+* Layer expressions support. Specify expressions when constructing a layer with all new expression support for layers.
+*Before:*
+```dart
+mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
+    '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
+
+```
+*After:*
+```dart
+LineLayer(
+  ...
+  lineGradientExpression: [
+    "interpolate",
+    ["linear"],
+    ["line-progress"],
+    0.0,
+    ["rgb", 255, 0, 0],
+    0.4,
+    ["rgb", 0, 255, 0],
+    1.0,
+    ["rgb", 0, 0, 255]
+  ],
+);
+```
+* Bump Maps SDK to 11.5.0-beta.1
+
+### 2.0.0
+
+#### ⚠️ Breaking changes
+
+##### Leveraging [Turf](https://pub.dev/packages/turf)'s geometries as a replacement for Map<String, Any?>
+
+You now have the convenience of directly initializing annotations with Turf's geometries, eliminating the need for converting geometry to JSON.
+
+##### Geographical position represented by `Point`s
+
+Geographical positions denoted by `Map<String?, Object?>?` are migrated to [`Point`](https://pub.dev/documentation/turf/latest/turf/Point-class.html) type from [turf](https://pub.dev/packages/turf) package.
+Pass `Point`s directly instead of converting them to JSON.
+*Before:*
+```dart
+CameraOptions(
+    center: Point(
+        coordinates: Position(
+        -0.11968,
+        51.50325,
+    )).toJson())
+```
+*After:*
+```dart
+CameraOptions(
+    center: Point(
+        coordinates: Position(
+        -0.11968,
+        51.50325,
+    )))
+```
+
+##### Screen and geographical positions in map interaction(gestures) callbacks
+`MapWidget`'s `onTapListener`/`onLongTapListener`/`onScrollListener` now receive `MapContentGestureContext` containing both touch position of the gesture, as well as the projected map coordinate corresponding to the touch position.
+*Before:*
+```dart
+onTapListener: { (coordinate)
+    final lat = coordinate.x;
+    final lng = coordinate.y;
+    ...
+}
+```
+
+*After:*
+```dart
+onTapListener: { (context)
+    final coordinates = context.point.coordinates; // Position
+    final touchPosition = context.touchPosition; // ScreenCoordinate
+    ...
+}
+```
+##### Creating an annotation with a given geometry
+*Before:*
+```dart
+PointAnnotationOptions(
+  geometry: Point(
+    coordinates: Position(0.381457, 6.687337)
+  ).toJson()
+)
+PolygonAnnotationOptions(
+  geometry: Polygon(coordinates: [
+    [
+      Position(-3.363937, -10.733102),
+      Position(1.754703, -19.716317),
+      Position(-15.747196, -21.085074),
+      Position(-3.363937, -10.733102)
+    ]
+  ]).toJson()
+)
+PolylineAnnotationOptions(
+  geometry: LineString(coordinates: [
+    Position(1.0, 2.0),
+    Position(10.0, 20.0)
+  ]).toJson()
+)
+```
+
+*After:*
+```dart
+PointAnnotationOptions(
+  geometry: Point(
+    coordinates: Position(0.381457, 6.687337)
+  )
+)
+PolygonAnnotationOptions(
+  geometry: Polygon(coordinates: [
+    [
+      Position(-3.363937, -10.733102),
+      Position(1.754703, -19.716317),
+      Position(-15.747196, -21.085074),
+      Position(-3.363937, -10.733102)
+    ]
+  ])
+)
+PolylineAnnotationOptions(
+  geometry: LineString(coordinates: [
+    Position(1.0, 2.0),
+    Position(10.0, 20.0)
+  ])
+)
+```
+##### Snapshots
+
+###### Standalone snapshotter
+
+Show multiple maps at the same time with no performance penalty. With the all new `Snapshotter` you can get image snapshots of the map, styled the same way as `MapWidget`.
+
+The `Snapshotter` class is highly configurable. You can set the final result at the time of construction using the `MapSnapshotOptions`. Once you've configured your snapshot, you can start the snapshotting process.
+
+One of the key features of the `Snapshotter` class is the `style` object. This object can be manipulated to set different styles for your snapshot, as well as to apply runtime styling to the style, giving you the flexibility to create a snapshot that fits your needs.
+
+```dart
+final snapshotter = await Snapshotter.create(
+  options: MapSnapshotOptions(
+      size: Size(width: 400, height: 400),
+      pixelRatio: MediaQuery.of(context).devicePixelRatio),
+  onStyleLoadedListener: (_) {
+    // apply runtime styling
+    final layer = CircleLayer(id: "circle-layer", sourceId: "poi-source");
+    snapshotter?.style.addLayer(layer);
+  },
+);
+snapshotter.style.setStyleURI(MapboxStyles.STANDARD);
+snapshotter.setCamera(CameraOptions(center: Point(...)));
+
+...
+
+final snapshotImage = await snapshotter.start()
+```
+##### Map widget snapshotting
+
+Create snapshots of the map displayed in the `MapWidget` with `MapboxMap.snapshot()`. This new feature allows you to capture a static image of the current map view.
+
+The `snapshot()` method captures the current state of the Mapbox map, including all visible layers, markers, and user interactions.
+
+To use the snapshot() method, simply call it on your Mapbox map instance. The method will return a Future that resolves to the image of the current map view.
+
+```dart
+final snapshotImage = await mapboxMap.snapshot();
+```
+
+Please note that the `snapshot()` method works best if the Mapbox Map is fully loaded before capturing an image. If the map is not fully loaded, the method might return a blank image.
+
+* Fix camera center not applied from map init options.
+* [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
+* Fix multi-word enum cases decoding/encoding when being sent to/from the platform side.
+* [Android] Add Gradle 8 compatibility.
+* Introduce experimental `RasterArraySource`, note that `rasterLayers` is a get-only property and cannot be set.
+* Introduce `TileCacheBudget`, a property to set per-source cache budgets in either megabytes or tiles.
+* Expose `iconColorSaturation`, `rasterArrayBand`, `rasterElevation`, `rasterEmissiveStrength`, `hillshadeEmissiveStrength`, and `fillExtrusionEmissiveStrength` on their respective layers.
+* Mark `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()` as experimental.
+* Bump Pigeon to 17.1.2
+* [iOS] Fix crash in `onStyleImageMissingListener`.
+* Deprecate `cameraForCoordinates`, please use `cameraForCoordinatesPadding` instead.
+* Add a way to disable default puck's image(s) when using `DefaultLocationPuck2D`. By passing an empty byte array, for example, the following code shows a puck 2D with custom top image, default bearing image and no shadow image.
+```dart
+mapboxMap?.location.updateSettings(LocationComponentSettings(
+    enabled: true,
+    puckBearingEnabled: true,
+    locationPuck:
+        LocationPuck(locationPuck2D: DefaultLocationPuck2D(topImage: list, shadowImage: Uint8List.fromList([]))))
+);
+```
+* Update Maps SDK to 11.4.0.
+
+### 1.1.0
+
+* [Android] Fix `maps-lifecycle` plugin crash with `java.lang.IllegalStateException: Please ensure that the hosting activity/fragment is a valid LifecycleOwner`.
+* Mark `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()` as experimental.
+* Update Maps SDK to 11.3.0.
+
+### 1.0.0
+
+* Add `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
+Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldview/) and [language support](https://docs.mapbox.com/help/troubleshooting/change-language/).
+* Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
+* Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
+* Add `DefaultLocationPuck2D` type interchangeable with `LocationPuck2D` that allows customization of the default location indicator appearance.
+* Add `_AnnotationManager.removeAnnotationManagerById()` allowing to remove annotation manager by its id, without having to store a reference to the manager.
+* Fix point annotation image disappearing after update on iOS.
+* Bump Pigeon to v16.0.0.
+* Updater minimum Flutter SDK version to 3.10.0 and above.
+* Update minumum Dart SDK version to 3.0.0 and above.
+* Convert `MapboxMapsOptions.setBaseUrl()`, `MapboxMapsOptions.getDataPath()`, `MapboxMapsOptions.setDataPath()`, `MapboxMapsOptions.getAssetPath()`, `MapboxMapsOptions.setAssetPath()`, `MapboxMapsOptions.getTileStoreUsageMode()` and `MapboxMapsOptions.setTileStoreUsageMode()` to static methods.
+* Fix 2D puck's opacity not being respected on iOS.
+* Make `padding` parameter optional in `MapboxMap.cameraForCoordinateBounds()` and `MapboxMap.cameraForCoordinates()`.
+* Fix initial camera options passed to `MapWidget` not being applied on Android.
+* Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
+* [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
+* [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md) guide from the Flutter team.
+* [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
+* Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
+* Add `MapWidget.onResourceRequestListener` that can be used to subscribe to resource requests made by the map.
+* [iOS] Re-wire `MapWidget`'s `onScroll` event to be triggered whenever map is being panned instead of triggering it only after pan ends.
+* [iOS] Address crashes on iOS happening when user location is being shown.
+* Bump platform Maps SDK dependencies to 11.1.0.
+
+### 1.0.0-rc.1
+
+* Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
+* Add `MapWidget.onResourceRequestListener` that can be used to subscribe to resource requests made by the map.
+* [iOS] Re-wire `MapWidget`'s `onScroll` event to be triggered whenever map is being panned instead of triggering it only after pan ends.
+* [iOS] Address crashes on iOS happening when user location is being shown.
+
+### 1.0.0-beta.3
+
+* Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
+* [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
+* [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/blob/master/docs/platforms/android/Android-Platform-Views.md) guide from the Flutter team.
+* [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
+* Bump platform Maps SDK dependencies to 11.2.0-beta.1.
+
+### 1.0.0-beta.2
+
+* Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
+* Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
+* Add `DefaultLocationPuck2D` type interchangeable with `LocationPuck2D` that allows customization of the default location indicator appearance.
+* Add `_AnnotationManager.removeAnnotationManagerById()` allowing to remove annotation manager by its id, without having to store a reference to the manager.
+* Fix point annotation image disappearing after update on iOS.
+* Bump Pigeon to v16.0.0.
+* Updater minimum Flutter SDK version to 3.10.0 and above.
+* Update minumum Dart SDK version to 3.0.0 and above.
+* Convert `MapboxMapsOptions.setBaseUrl()`, `MapboxMapsOptions.getDataPath()`, `MapboxMapsOptions.setDataPath()`, `MapboxMapsOptions.getAssetPath()`, `MapboxMapsOptions.setAssetPath()`, `MapboxMapsOptions.getTileStoreUsageMode()` and `MapboxMapsOptions.setTileStoreUsageMode()` to static methods.
+* Fix 2D puck's opacity not being respected on iOS.
+* Make `padding` parameter optional in `MapboxMap.cameraForCoordinateBounds()` and `MapboxMap.cameraForCoordinates()`.
+* Fix initial camera options passed to `MapWidget` not being applied on Android.
+* Bump platform Maps SDK dependencies to 11.1.0.
+
+### 1.0.0-beta.1
+
+Bump platform Maps SDK dependencies to 11.0.0.
+
+### 0.5.1
+### Android
+
+* Fix registry token lookup failing with an unrelated error in certain circumstances.
+
+## 0.5.0
+### Common
+
+* Screen-related units(screen coordinates, dimentions, etc.) are expected to be provided in logical pixels.
+We have matched screen-related units expected by the maps plugin to the units that Flutter operates with(logical pixels).
+
+## 0.4.5
+### Common
+
+* Update pigeon to v11 ([#248](https://github.com/mapbox/mapbox-maps-flutter/pull/234)).
+* Fix typecasting exeption when trying to access nested collections [#249](https://github.com/mapbox/mapbox-maps-flutter/pull/249)).
+* Set default style to `MapboxStyles.MAPBOX_STREETS` ([#248](https://github.com/mapbox/mapbox-maps-flutter/pull/234)).
+
+### iOS
+* Add support for 2d puck pulsing ([#253](https://github.com/mapbox/mapbox-maps-flutter/pull/253)).
+* Fix attribution button color not being applied ([#252](https://github.com/mapbox/mapbox-maps-flutter/pull/252)).
+
+### Android
+* Fix scale bar and location component settings color decoding ([#255](https://github.com/mapbox/mapbox-maps-flutter/pull/255)).
+
+## 0.4.4
+### Android
+* Bump platform Maps SDK to 10.13.0.
+
+### iOS
+* Bump platform Maps SDK to 10.13.1.
+* Fix 2d puck bearing not displayed.
+* Fix pinchZoomEnabled gesture setting not applied.
+
+## 0.4.3
+### Common
+* Fix multiple memory leaks.
+
+## 0.4.2
+### Common
+* Add methods to set gesture listeners dynamically.
+
+### iOS
+* Apply scale factor to UIImage.
+* Apply scale factor to UIEdgeInsets.
+* Fix vertical scrollMode lock on gesture settings update.
+
+### Android
+* Fix ImageStretches mapping.
+
+## 0.4.1
+
+### Common
+* Expose `package:turf/helpers.dart`.
+* Bump platform Maps SDK dependencies to 10.10.0.
+* Fix issue with multiple maps overriding platform channels of the previous instances.
+* Fix exception accessing `style.getLayer` when layer property is an Expression.
+
+### iOS
+* Fix `pixelsForCoordinates` implementation.
+
+## 0.4.0
+
+### Common
+* Expose `style.localizeLabels`.
+* Expose `mapboxMap.attribution`, `mapboxMap.logo`, `mapboxMap.compass` and `mapboxMap.scaleBar` settings.
+
+### iOS
+* Fix deployment target for iOS to 11.
+
+## 0.3.0
+
+### Common
+* Rename library to `mapbox_maps_flutter` due to naming conflict to be able publish to `pub.dev`.
+
+### Android
+* Align Kotlin version 1.5.31 with the Maps SDK.
+
+## 0.2.0
+
+### Common
+* Rename `MapView` to `MapWidget`.
+* Remove `RenderCacheOptions`.
+* Rename `MapboxMap.cameraForCoordinates2` to `MapboxMap.cameraForCoordinatesCameraOptions`.
+* Rename `styles.dart` to `mapbox_styles.dart`.
+* Rename `fill-extrusion_layer.dart` to `fill_extrusion_layer.dart`,
+`location-indicator_layer.dart` to `location_indicator_layer.dart`.
+* Fix exception thrown by `MapboxMap.coordinatesForPixels`.
+* Fix camera example `_coordinateForPixel`.
+* Add gesture listeners `MapWidget.onTapListener`, `MapWidget.onLongTapListener`, `MapWidget.onScrollListener`.
+
+## 0.1.1
+
+### Common
+* Decrease min flutter version to 2.10.5.
+
+## 0.1.0
+
+### Common
+* Initial release.
