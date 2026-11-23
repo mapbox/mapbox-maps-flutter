@@ -171,6 +171,10 @@ void main() {
     final suffix = callNamed(calls, 'create')!.arguments['channelSuffix'];
     final mapChannel = MethodChannel('plugins.flutter.io.$suffix');
     final mapCalls = <String>[];
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(mapChannel, null),
+    );
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(mapChannel, (call) async {
           mapCalls.add(call.method);
@@ -178,8 +182,6 @@ void main() {
         });
     await unmount(tester);
     expect(mapCalls, contains('platform#releaseMethodChannels'));
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(mapChannel, null);
   });
 
   testWidgets('disposes a host map that finishes creating after unmount', (
@@ -197,12 +199,25 @@ void main() {
       ),
     );
     await tester.pump();
+    final suffix = callNamed(calls, 'create')!.arguments['channelSuffix'];
+    final mapChannel = MethodChannel('plugins.flutter.io.$suffix');
+    final mapCalls = <String>[];
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(mapChannel, null),
+    );
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(mapChannel, (call) async {
+          mapCalls.add(call.method);
+          return null;
+        });
     await unmount(tester);
     created.complete(7);
     await tester.pump();
     final dispose = callNamed(calls, 'dispose');
     expect(dispose, isNotNull);
     expect(dispose!.arguments['textureId'], 7);
+    expect(mapCalls, contains('platform#releaseMethodChannels'));
   });
 
   testWidgets('a pinch zooms by the change since the last update', (
@@ -234,10 +249,10 @@ void main() {
 
   test('buildTextureView is ios only', () {
     final platform = MapboxMapsFlutterMobile();
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     expect(() => platform.buildTextureView(), throwsUnsupportedError);
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
     expect(platform.buildTextureView(), isA<MapTexture>());
-    debugDefaultTargetPlatformOverride = null;
   });
 }

@@ -74,6 +74,7 @@ class _MapTextureState extends State<MapTexture> {
     });
     if (id == null || id < 0) return;
     if (!mounted) {
+      MapboxMap.fromNativeController(suffix).dispose();
       _channel.invokeMethod<void>('dispose', {'textureId': id});
       return;
     }
@@ -176,7 +177,7 @@ class _MapTextureState extends State<MapTexture> {
             _lastFocal = Offset(x, y);
 
             _send('panUpdate', {'x': x, 'y': y});
-            if ((d.scale - _lastScale).abs() > 0.01) {
+            if (d.scale > 0 && (d.scale - _lastScale).abs() > 0.01) {
               _send('zoomBy', {
                 'delta': math.log(d.scale / _lastScale) / math.ln2,
                 'x': x,
