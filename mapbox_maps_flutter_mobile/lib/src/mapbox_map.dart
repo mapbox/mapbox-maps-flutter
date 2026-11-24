@@ -455,9 +455,9 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   ) => _mapInterface.querySourceFeatures(sourceId, options);
 
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
-  /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
+  /// to return, and offset is the amount of points to skip (for pagination).
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires creating the `GeoJsonSource` with `cluster: true`.
   @override
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
     String sourceIdentifier,
@@ -474,7 +474,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
   /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires creating the `GeoJsonSource` with `cluster: true`.
   @override
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
     String sourceIdentifier,
@@ -484,7 +484,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
   /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires creating the `GeoJsonSource` with `cluster: true`.
   @override
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
     String sourceIdentifier,

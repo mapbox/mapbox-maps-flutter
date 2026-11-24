@@ -1687,7 +1687,7 @@ protocol _MapInterface {
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return, and offset is the amount of points to skip (for pagination).
   ///
-  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
+  /// Requires creating the `GeoJsonSource` with `cluster: true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
   /// @param cluster Cluster to retrieve leaves from.
@@ -1699,7 +1699,7 @@ protocol _MapInterface {
   /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
   /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
+  /// Requires creating the `GeoJsonSource` with `cluster: true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
   /// @param cluster Cluster to retrieve children from.
@@ -1709,7 +1709,7 @@ protocol _MapInterface {
   /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
   /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
+  /// Requires creating the `GeoJsonSource` with `cluster: true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
   /// @param cluster Cluster to retrieve the expansion zoom from.
@@ -1794,7 +1794,7 @@ protocol _MapInterface {
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   func reduceMemoryUse() throws
   /// Gets elevation for the given coordinate.
-  /// Note: Elevation is only available for the visible region on the screen.
+  /// Note: Elevation is only available for the visible region of the map and only when terrain is enabled.
   ///
   /// @param coordinate The `coordinate` defined as longitude-latitude pair.
   /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
@@ -2225,7 +2225,7 @@ class _MapInterfaceSetup {
     /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
     /// to return, and offset is the amount of points to skip (for pagination).
     ///
-    /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
+    /// Requires creating the `GeoJsonSource` with `cluster: true`.
     ///
     /// @param sourceIdentifier GeoJsonSource identifier.
     /// @param cluster Cluster to retrieve leaves from.
@@ -2256,7 +2256,7 @@ class _MapInterfaceSetup {
     /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
     /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
     ///
-    /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
+    /// Requires creating the `GeoJsonSource` with `cluster: true`.
     ///
     /// @param sourceIdentifier GeoJsonSource identifier.
     /// @param cluster Cluster to retrieve children from.
@@ -2283,7 +2283,7 @@ class _MapInterfaceSetup {
     /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
     /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
     ///
-    /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
+    /// Requires creating the `GeoJsonSource` with `cluster: true`.
     ///
     /// @param sourceIdentifier GeoJsonSource identifier.
     /// @param cluster Cluster to retrieve the expansion zoom from.
@@ -2572,7 +2572,7 @@ class _MapInterfaceSetup {
       reduceMemoryUseChannel.setMessageHandler(nil)
     }
     /// Gets elevation for the given coordinate.
-    /// Note: Elevation is only available for the visible region on the screen.
+    /// Note: Elevation is only available for the visible region of the map and only when terrain is enabled.
     ///
     /// @param coordinate The `coordinate` defined as longitude-latitude pair.
     /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
@@ -3516,7 +3516,7 @@ protocol StyleManager {
   func removeStyleModel(modelId: String, completion: @escaping (Result<Void, Error>) -> Void)
   /// Invalidate tile for provided custom geometry source.
   ///
-  /// @param sourceId A style source identifier,.
+  /// @param sourceId A style source identifier.
   /// @param tileId A `canonical tile id` of the tile.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
@@ -5132,7 +5132,7 @@ class StyleManagerSetup {
     }
     /// Invalidate tile for provided custom geometry source.
     ///
-    /// @param sourceId A style source identifier,.
+    /// @param sourceId A style source identifier.
     /// @param tileId A `canonical tile id` of the tile.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
