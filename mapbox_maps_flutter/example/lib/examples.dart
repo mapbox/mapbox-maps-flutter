@@ -309,6 +309,15 @@ final List<Example> examples = [
         'live.',
     builder: (_) => const PerformanceStatisticsExample(),
   ),
+  Example(
+    slug: 'debug_options',
+    category: ExampleCategory.platform,
+    leading: const Icon(Icons.construction),
+    title: 'Map debug options',
+    subtitle:
+        'Toggle tile borders, collision boxes, wireframes and more, live.',
+    builder: (_) => const DebugOptionsExample(),
+  ),
   // These APIs have no web implementation.
   if (isMobile) ...[
     Example(
@@ -319,15 +328,6 @@ final List<Example> examples = [
       title: 'Offline map',
       subtitle: 'Use OfflineManager and TileStore to download regions.',
       builder: (_) => const OfflineMapExample(),
-    ),
-    Example(
-      slug: 'debug_options',
-      category: ExampleCategory.platform,
-      leading: const Icon(Icons.construction),
-      title: 'Map debug options',
-      subtitle:
-          'Toggle tile borders, collision boxes, wireframes and more, live.',
-      builder: (_) => const DebugOptionsExample(),
     ),
     Example(
       slug: 'map_recorder',

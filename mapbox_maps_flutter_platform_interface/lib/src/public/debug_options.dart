@@ -12,74 +12,104 @@ class MapWidgetDebugOptions {
 
   /// Edges of tile boundaries are shown as thick, red lines to help
   /// diagnose tile clipping issues.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions tileBorders = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.tileBorders,
   );
 
   /// Each tile shows its tile coordinate (x/y/z) in the upper-left corner.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions parseStatus = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.parseStatus,
   );
 
   /// Each tile shows a timestamps with modified and expires dates or n/a
   /// if timestamp is not available.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions timestamps = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.timestamps,
   );
 
   /// Edges of glyphs and symbols are shown as faint, green lines to help
   /// diagnose collision and label placement issues.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions collision = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.collision,
   );
 
   /// Each drawing operation is replaced by a translucent fill. Overlapping
   /// drawing operations appear more prominent to help diagnose overdrawing.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions overdraw = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.overdraw,
   );
 
   /// The stencil buffer is shown instead of the color buffer.
+  ///
+  /// Supported on Android and iOS.
   static const MapWidgetDebugOptions stencilClip = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.stencilClip,
   );
 
   /// The depth buffer is shown instead of the color buffer.
+  ///
+  /// Supported on Android and iOS.
   static const MapWidgetDebugOptions depthBuffer = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.depthBuffer,
   );
 
   /// Show 3D model bounding boxes.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions modelBounds = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.modelBounds,
   );
 
-  /// Show a wireframe for terrain. Supported on Android only.
+  /// Show a wireframe for terrain.
+  ///
+  /// Supported on Android and web.
   static const MapWidgetDebugOptions terrainWireframe = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.terrainWireframe,
   );
 
-  /// Show a wireframe for 2D layers. Supported on Android only.
+  /// Show a wireframe for 2D layers.
+  ///
+  /// Supported on Android and web.
   static const MapWidgetDebugOptions layers2DWireframe =
       MapWidgetDebugOptions._(MapWidgetDebugOptionsData.layers2DWireframe);
 
-  /// Show a wireframe for 3D layers. Supported on Android only.
+  /// Show a wireframe for 3D layers.
+  ///
+  /// Supported on Android and web.
   static const MapWidgetDebugOptions layers3DWireframe =
       MapWidgetDebugOptions._(MapWidgetDebugOptionsData.layers3DWireframe);
 
   /// Each tile shows its local lighting conditions in the upper-left
   /// corner. (If `lights` properties are used, otherwise they show zero.)
+  /// On web, the values come from the GL JS lighting model and can differ
+  /// from the native values.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions light = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.light,
   );
 
   /// Show a debug overlay with information about the CameraState
   /// including lat, long, zoom, pitch, & bearing.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions camera = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.camera,
   );
 
   /// Draws camera padding frame.
+  ///
+  /// Supported on Android, iOS and web.
   static const MapWidgetDebugOptions padding = MapWidgetDebugOptions._(
     MapWidgetDebugOptionsData.padding,
   );

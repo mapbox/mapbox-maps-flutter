@@ -16,6 +16,7 @@
     ),
   );
   ```
+* [Web] Add support for `MapboxMap.setDebugOptions` and `getDebugOptions` with all options except `stencilClip` and `depthBuffer`, which `setDebugOptions` ignores on web.
 
 ### 3.36.0-rc.1
 

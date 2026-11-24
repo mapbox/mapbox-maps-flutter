@@ -239,6 +239,20 @@ extension type JSMap._(JSObject _) implements JSObject {
   /// Recalculates the map's dimensions and re-renders.
   external void resize();
 
+  /// Debug overlay flags. Each flag re-renders the map when set.
+  external bool showTileBoundaries;
+  external bool showParseStatus;
+  external bool showCollisionBoxes;
+  external bool showOverdrawInspector;
+  external bool showTerrainWireframe;
+  external bool showLayers2DWireframe;
+  external bool showLayers3DWireframe;
+  external bool showPadding;
+  external bool showTimestamps;
+  external bool showCameraDebug;
+  external bool showLightDebug;
+  external bool showModelBounds;
+
   /// Cleans up all resources associated with this map instance:
   /// destroys the WebGL context, removes DOM elements, clears event listeners.
   external void remove();

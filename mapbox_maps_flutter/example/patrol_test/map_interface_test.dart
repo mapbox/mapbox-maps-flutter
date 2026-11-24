@@ -393,7 +393,7 @@ void main() {
     expect(await mapboxMap.isUserAnimationInProgress(), true);
   });
 
-  patrolTest('debugOptions', skip: kIsWeb, ($) async {
+  patrolTest('debugOptions', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: $.tester,
@@ -404,6 +404,36 @@ void main() {
     var debugOptions = await mapboxMap.getDebugOptions();
     expect(debugOptions.length, 1);
     expect(debugOptions.first, MapWidgetDebugOptions.tileBorders);
+
+    await mapboxMap.setDebugOptions([
+      MapWidgetDebugOptions.tileBorders,
+      MapWidgetDebugOptions.collision,
+    ]);
+    expect((await mapboxMap.getDebugOptions()).toSet(), {
+      MapWidgetDebugOptions.tileBorders,
+      MapWidgetDebugOptions.collision,
+    });
+
+    await mapboxMap.setDebugOptions([]);
+    expect(await mapboxMap.getDebugOptions(), isEmpty);
+
+    await mapboxMap.setDebugOptions([
+      MapWidgetDebugOptions.timestamps,
+      MapWidgetDebugOptions.camera,
+      MapWidgetDebugOptions.light,
+      MapWidgetDebugOptions.modelBounds,
+    ]);
+    expect((await mapboxMap.getDebugOptions()).toSet(), {
+      MapWidgetDebugOptions.timestamps,
+      MapWidgetDebugOptions.camera,
+      MapWidgetDebugOptions.light,
+      MapWidgetDebugOptions.modelBounds,
+    });
+
+    if (kIsWeb) {
+      await mapboxMap.setDebugOptions([MapWidgetDebugOptions.depthBuffer]);
+      expect(await mapboxMap.getDebugOptions(), isEmpty);
+    }
   });
 
   patrolTest('featureState', ($) async {

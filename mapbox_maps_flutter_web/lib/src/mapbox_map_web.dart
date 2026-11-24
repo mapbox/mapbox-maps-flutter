@@ -1084,13 +1084,75 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
 
   // ===== Debug options =====
 
-  @override
-  Future<List<MapWidgetDebugOptions>> getDebugOptions() =>
-      throw UnsupportedError('MapWidgetDebugOptions is not supported on web.');
+  /// Debug options that GL JS supports, with the map flag that each one
+  /// reads and writes. Options that are not in this table have no effect on
+  /// web.
+  static final Map<MapWidgetDebugOptions, _DebugFlag> _debugFlags = {
+    MapWidgetDebugOptions.tileBorders: (
+      get: (map) => map.showTileBoundaries,
+      set: (map, value) => map.showTileBoundaries = value,
+    ),
+    MapWidgetDebugOptions.parseStatus: (
+      get: (map) => map.showParseStatus,
+      set: (map, value) => map.showParseStatus = value,
+    ),
+    MapWidgetDebugOptions.collision: (
+      get: (map) => map.showCollisionBoxes,
+      set: (map, value) => map.showCollisionBoxes = value,
+    ),
+    MapWidgetDebugOptions.overdraw: (
+      get: (map) => map.showOverdrawInspector,
+      set: (map, value) => map.showOverdrawInspector = value,
+    ),
+    MapWidgetDebugOptions.terrainWireframe: (
+      get: (map) => map.showTerrainWireframe,
+      set: (map, value) => map.showTerrainWireframe = value,
+    ),
+    MapWidgetDebugOptions.layers2DWireframe: (
+      get: (map) => map.showLayers2DWireframe,
+      set: (map, value) => map.showLayers2DWireframe = value,
+    ),
+    MapWidgetDebugOptions.layers3DWireframe: (
+      get: (map) => map.showLayers3DWireframe,
+      set: (map, value) => map.showLayers3DWireframe = value,
+    ),
+    MapWidgetDebugOptions.padding: (
+      get: (map) => map.showPadding,
+      set: (map, value) => map.showPadding = value,
+    ),
+    MapWidgetDebugOptions.timestamps: (
+      get: (map) => map.showTimestamps,
+      set: (map, value) => map.showTimestamps = value,
+    ),
+    MapWidgetDebugOptions.camera: (
+      get: (map) => map.showCameraDebug,
+      set: (map, value) => map.showCameraDebug = value,
+    ),
+    MapWidgetDebugOptions.light: (
+      get: (map) => map.showLightDebug,
+      set: (map, value) => map.showLightDebug = value,
+    ),
+    MapWidgetDebugOptions.modelBounds: (
+      get: (map) => map.showModelBounds,
+      set: (map, value) => map.showModelBounds = value,
+    ),
+  };
 
   @override
-  Future<void> setDebugOptions(List<MapWidgetDebugOptions> options) =>
-      throw UnsupportedError('MapWidgetDebugOptions is not supported on web.');
+  Future<List<MapWidgetDebugOptions>> getDebugOptions() async => [
+    for (final MapEntry(key: option, value: flag) in _debugFlags.entries)
+      if (flag.get(_map)) option,
+  ];
+
+  /// Replaces the enabled debug options with [options]. Options that GL JS
+  /// does not support are ignored.
+  @override
+  Future<void> setDebugOptions(List<MapWidgetDebugOptions> options) async {
+    final enabled = options.toSet();
+    for (final MapEntry(key: option, value: flag) in _debugFlags.entries) {
+      flag.set(_map, enabled.contains(option));
+    }
+  }
 
   // ===== Lifecycle =====
 
@@ -1105,3 +1167,9 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
 
 UnimplementedError _ni(String method) =>
     UnimplementedError('MapboxMap.$method is not yet implemented on web.');
+
+/// Reads and writes one GL JS debug flag on a map.
+typedef _DebugFlag = ({
+  bool Function(JSMap map) get,
+  void Function(JSMap map, bool value) set,
+});
