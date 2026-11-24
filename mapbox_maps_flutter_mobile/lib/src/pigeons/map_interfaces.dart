@@ -822,7 +822,7 @@ class _MapInterfacesPigeonCodec extends StandardMessageCodec {
   }
 }
 
-/// Interface for managing animation.
+/// Interface for managing camera animations.
 class _AnimationManager {
   /// Constructor for [_AnimationManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
@@ -2627,14 +2627,14 @@ class _MapInterface {
   }
 
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
-  /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
+  /// to return, and offset is the amount of points to skip (for pagination).
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
-  /// @param cluster Cluster from which to retrieve leaves from
-  /// @param limit The number of points to return from the query (must use type [Long], set to maximum for all points). Defaults to 10.
-  /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
+  /// @param cluster Cluster to retrieve leaves from.
+  /// @param limit The number of points to return from the query (set to maximum for all points). Defaults to 10.
+  /// @param offset The amount of points to skip (for pagination). Defaults to 0.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
@@ -2677,10 +2677,10 @@ class _MapInterface {
   /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
   /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
-  /// @param cluster cluster from which to retrieve children from
+  /// @param cluster Cluster to retrieve children from.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
@@ -2721,10 +2721,10 @@ class _MapInterface {
   /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
   /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
-  /// @param cluster cluster from which to retrieve the expansion zoom from
+  /// @param cluster Cluster to retrieve the expansion zoom from.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
@@ -6415,11 +6415,6 @@ class StyleManager {
     }
   }
 
-  /// Set tile data of a custom geometry.
-  ///
-  /// @param sourceId A style source identifier.
-  /// @param tileId A `canonical tile id` of the tile.
-  /// @param featureCollection An array with the features to add.
   /// Invalidate tile for provided custom geometry source.
   ///
   /// @param sourceId A style source identifier,.

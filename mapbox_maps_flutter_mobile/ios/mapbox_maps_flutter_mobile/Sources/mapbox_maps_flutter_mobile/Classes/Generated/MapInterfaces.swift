@@ -817,7 +817,7 @@ class MapInterfacesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable
   static let shared = MapInterfacesPigeonCodec(readerWriter: MapInterfacesPigeonCodecReaderWriter())
 }
 
-/// Interface for managing animation.
+/// Interface for managing camera animations.
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _AnimationManager {
@@ -1685,34 +1685,34 @@ protocol _MapInterface {
   /// @param completion The `query features completion` called when the query completes.
   func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void)
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
-  /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
+  /// to return, and offset is the amount of points to skip (for pagination).
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
-  /// @param cluster Cluster from which to retrieve leaves from
-  /// @param limit The number of points to return from the query (must use type [Long], set to maximum for all points). Defaults to 10.
-  /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
+  /// @param cluster Cluster to retrieve leaves from.
+  /// @param limit The number of points to return from the query (set to maximum for all points). Defaults to 10.
+  /// @param offset The amount of points to skip (for pagination). Defaults to 0.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   func getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: [String?: Any?], limit: Int64?, offset: Int64?, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
   /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
   /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
-  /// @param cluster cluster from which to retrieve children from
+  /// @param cluster Cluster to retrieve children from.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   func getGeoJsonClusterChildren(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
   /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
   /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
-  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
   ///
   /// @param sourceIdentifier GeoJsonSource identifier.
-  /// @param cluster cluster from which to retrieve the expansion zoom from
+  /// @param cluster Cluster to retrieve the expansion zoom from.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
   func getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
@@ -2223,14 +2223,14 @@ class _MapInterfaceSetup {
       querySourceFeaturesChannel.setMessageHandler(nil)
     }
     /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
-    /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
+    /// to return, and offset is the amount of points to skip (for pagination).
     ///
-    /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+    /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
     ///
     /// @param sourceIdentifier GeoJsonSource identifier.
-    /// @param cluster Cluster from which to retrieve leaves from
-    /// @param limit The number of points to return from the query (must use type [Long], set to maximum for all points). Defaults to 10.
-    /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
+    /// @param cluster Cluster to retrieve leaves from.
+    /// @param limit The number of points to return from the query (set to maximum for all points). Defaults to 10.
+    /// @param offset The amount of points to skip (for pagination). Defaults to 0.
     /// @param completion The result will be returned through the completion block.
     ///         The result is a feature collection or a string describing an error if the operation was not successful.
     let getGeoJsonClusterLeavesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterLeaves\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
@@ -2256,10 +2256,10 @@ class _MapInterfaceSetup {
     /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
     /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
     ///
-    /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+    /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
     ///
     /// @param sourceIdentifier GeoJsonSource identifier.
-    /// @param cluster cluster from which to retrieve children from
+    /// @param cluster Cluster to retrieve children from.
     /// @param completion The result will be returned through the completion block.
     ///         The result is a feature collection or a string describing an error if the operation was not successful.
     let getGeoJsonClusterChildrenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterChildren\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
@@ -2283,10 +2283,10 @@ class _MapInterfaceSetup {
     /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
     /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
     ///
-    /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+    /// Requires configuring the source as a cluster by setting [GeoJsonSource.cluster] to `true`.
     ///
     /// @param sourceIdentifier GeoJsonSource identifier.
-    /// @param cluster cluster from which to retrieve the expansion zoom from
+    /// @param cluster Cluster to retrieve the expansion zoom from.
     /// @param completion The result will be returned through the completion block.
     ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
     let getGeoJsonClusterExpansionZoomChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterExpansionZoom\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
@@ -3514,11 +3514,6 @@ protocol StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   func removeStyleModel(modelId: String, completion: @escaping (Result<Void, Error>) -> Void)
-  /// Set tile data of a custom geometry.
-  ///
-  /// @param sourceId A style source identifier.
-  /// @param tileId A `canonical tile id` of the tile.
-  /// @param featureCollection An array with the features to add.
   /// Invalidate tile for provided custom geometry source.
   ///
   /// @param sourceId A style source identifier,.
@@ -5135,11 +5130,6 @@ class StyleManagerSetup {
     } else {
       removeStyleModelChannel.setMessageHandler(nil)
     }
-    /// Set tile data of a custom geometry.
-    ///
-    /// @param sourceId A style source identifier.
-    /// @param tileId A `canonical tile id` of the tile.
-    /// @param featureCollection An array with the features to add.
     /// Invalidate tile for provided custom geometry source.
     ///
     /// @param sourceId A style source identifier,.

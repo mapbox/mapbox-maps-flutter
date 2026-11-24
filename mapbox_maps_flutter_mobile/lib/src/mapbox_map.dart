@@ -634,7 +634,7 @@ class MapboxMap extends ChangeNotifier implements MapboxMapPlatformInterface {
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
 
   /// Gets elevation for the given coordinate.
-  /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
+  /// Note: Elevation is only available for the visible region of the map and only when terrain is enabled.
   @override
   Future<double?> getElevation(Point coordinate) => _mapInterface.getElevation(
     Point(coordinates: coordinate.coordinates, bbox: coordinate.bbox),
