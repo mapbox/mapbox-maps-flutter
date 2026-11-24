@@ -16,6 +16,8 @@ final bool _relativeCameraMovesSupported = kIsWeb || !Platform.isIOS;
 ///
 ///  * **Animations** — the imperative `flyTo`, `easeTo` and relative moves.
 ///  * **Viewport** — declarative [ViewportState]s with a transition.
+///  * **Transitions** — the viewport transition options and how long each
+///    transition takes.
 ///  * **Auto-spin** — a continuous `easeTo` loop driven by camera changes.
 class CameraPlaygroundExample extends StatefulWidget {
   const CameraPlaygroundExample({super.key});
@@ -25,7 +27,13 @@ class CameraPlaygroundExample extends StatefulWidget {
       _CameraPlaygroundExampleState();
 }
 
-enum _Mode { animations, viewport, spin }
+enum _Mode { animations, viewport, transitions, spin }
+
+enum _TransitionKind { defaultTransition, easing, fly, immediate }
+
+enum _Curve { linear, easeIn, easeOut, easeInOut }
+
+enum _Target { nearCity, farCity, overview }
 
 const _scenes = [
   Scene(
@@ -41,12 +49,44 @@ const _scenes = [
     icon: Icons.crop_free,
   ),
   Scene(
+    id: 'transitions',
+    title: 'Transitions',
+    subtitle: 'Transition options and their duration',
+    icon: Icons.timer_outlined,
+  ),
+  Scene(
     id: 'spin',
     title: 'Auto-spin',
     subtitle: 'A globe that rotates continuously',
     icon: Icons.threesixty_outlined,
   ),
 ];
+
+/// Point on the map view, in logical pixels, that anchored zoom changes keep
+/// fixed.
+const _anchor = Offset(140, 180);
+
+/// The start camera of the transitions scene. The near city target zooms in from here, so a default
+/// transition to it is short.
+final _startCenter = Point(coordinates: Position(24.9384, 60.1699));
+const _startZoom = 9.0;
+
+final _nearCity = Point(coordinates: Position(24.7536, 59.4370));
+final _farCity = Point(coordinates: Position(-74.0060, 40.7128));
+const _cityZoom = 11.0;
+
+final _overviewGeometry = Polygon.fromPoints(
+  points: [
+    [
+      Point(coordinates: Position(17.7737, 59.4276)),
+      Point(coordinates: Position(17.7737, 59.2076)),
+      Point(coordinates: Position(25.1113, 59.2076)),
+      Point(coordinates: Position(25.1113, 60.2611)),
+      Point(coordinates: Position(17.7737, 60.2611)),
+      Point(coordinates: Position(17.7737, 59.4276)),
+    ],
+  ],
+);
 
 /// A city the viewport scene can frame.
 class _City {
@@ -99,6 +139,16 @@ class _CameraPlaygroundExampleState extends State<CameraPlaygroundExample> {
   var _mode = _Mode.animations;
   var _cityIndex = 0;
   var _pitched = true;
+
+  // Transitions state.
+  var _kind = _TransitionKind.defaultTransition;
+  var _curve = _Curve.easeInOut;
+  var _easingDurationMs = 1500.0;
+  var _maxDurationMs = 3500.0;
+  var _target = _Target.nearCity;
+  var _anchored = false;
+  int? _lastDurationMs;
+  bool? _lastFinished;
 
   // Auto-spin state. The stream serialises the easeTo calls so a new one only
   // starts after the previous camera change lands.
@@ -222,6 +272,18 @@ class _CameraPlaygroundExampleState extends State<CameraPlaygroundExample> {
         );
       case _Mode.viewport:
         _moveToCity(_cities[_cityIndex % _cities.length]);
+      case _Mode.transitions:
+        _viewportController.moveTo(
+          CameraViewportState(
+            center: _startCenter,
+            zoom: _startZoom,
+            pitch: 0,
+            bearing: 0,
+          ),
+          transition: FlyViewportTransition(
+            duration: const Duration(milliseconds: 1200),
+          ),
+        );
       case _Mode.spin:
         _viewportController.moveTo(
           CameraViewportState(
@@ -258,6 +320,83 @@ class _CameraPlaygroundExampleState extends State<CameraPlaygroundExample> {
         pitch: _pitched ? 60 : 0,
       ),
       transition: FlyViewportTransition(duration: city.duration),
+    );
+  }
+
+  ViewportTransition get _transition => switch (_kind) {
+    _TransitionKind.defaultTransition => DefaultViewportTransition(
+      maxDuration: Duration(milliseconds: _maxDurationMs.round()),
+    ),
+    _TransitionKind.easing => EasingViewportTransition(
+      curve: switch (_curve) {
+        _Curve.linear => const Cubic(0, 0, 1, 1),
+        _Curve.easeIn => Curves.easeIn,
+        _Curve.easeOut => Curves.easeOut,
+        _Curve.easeInOut => Curves.easeInOut,
+      },
+      duration: Duration(milliseconds: _easingDurationMs.round()),
+    ),
+    _TransitionKind.fly => const FlyViewportTransition(),
+    _TransitionKind.immediate => const ImmediateViewportTransition(),
+  };
+
+  void _moveWithTransition(ViewportState state) {
+    final stopwatch = Stopwatch()..start();
+    _viewportController.moveTo(
+      state,
+      transition: _transition,
+      completion: (finished) {
+        if (!mounted) return;
+        setState(() {
+          _lastDurationMs = stopwatch.elapsedMilliseconds;
+          _lastFinished = finished;
+        });
+      },
+    );
+  }
+
+  void _runTarget() {
+    _moveWithTransition(switch (_target) {
+      _Target.nearCity => CameraViewportState(
+        center: _nearCity,
+        zoom: _cityZoom,
+        pitch: 0,
+        bearing: 0,
+      ),
+      _Target.farCity => CameraViewportState(
+        center: _farCity,
+        zoom: _cityZoom,
+        pitch: 0,
+        bearing: 0,
+      ),
+      _Target.overview => OverviewViewportState(geometry: _overviewGeometry),
+    });
+  }
+
+  /// Changes the zoom by [delta] around [_anchor].
+  ///
+  /// `anchor` and `center` are mutually exclusive, so the state sends the
+  /// zoom only.
+  Future<void> _zoomAtAnchor(double delta) async {
+    final camera = await _mapboxMap?.getCameraState();
+    if (camera == null) return;
+    _moveWithTransition(
+      CameraViewportState(
+        zoom: camera.zoom + delta,
+        anchor: _anchored ? _anchor : null,
+      ),
+    );
+  }
+
+  /// Returns the camera to the start position with the same transition.
+  void _reverse() {
+    _moveWithTransition(
+      CameraViewportState(
+        center: _startCenter,
+        zoom: _startZoom,
+        pitch: 0,
+        bearing: 0,
+      ),
     );
   }
 
@@ -380,6 +519,119 @@ class _CameraPlaygroundExampleState extends State<CameraPlaygroundExample> {
             ),
           ),
         ];
+      case _Mode.transitions:
+        return [
+          ControlRow(
+            label: 'Transition',
+            child: ControlChoices<_TransitionKind>(
+              options: const {
+                _TransitionKind.defaultTransition: 'Default',
+                _TransitionKind.easing: 'Easing',
+                _TransitionKind.fly: 'Fly',
+                _TransitionKind.immediate: 'Immediate',
+              },
+              value: _kind,
+              onChanged: (value) => setState(() => _kind = value),
+            ),
+          ),
+          if (_kind == _TransitionKind.defaultTransition)
+            ControlSlider(
+              label: 'Max duration',
+              value: _maxDurationMs,
+              min: 0,
+              max: 5000,
+              fractionDigits: 0,
+              unit: ' ms',
+              onChanged: (value) => setState(() => _maxDurationMs = value),
+            ),
+          if (_kind == _TransitionKind.easing) ...[
+            ControlRow(
+              label: 'Curve',
+              child: ControlChoices<_Curve>(
+                options: const {
+                  _Curve.linear: 'Linear',
+                  _Curve.easeIn: 'Ease in',
+                  _Curve.easeOut: 'Ease out',
+                  _Curve.easeInOut: 'Ease in-out',
+                },
+                value: _curve,
+                onChanged: (value) => setState(() => _curve = value),
+              ),
+            ),
+            ControlSlider(
+              label: 'Duration',
+              value: _easingDurationMs,
+              min: 0,
+              max: 5000,
+              fractionDigits: 0,
+              unit: ' ms',
+              onChanged: (value) => setState(() => _easingDurationMs = value),
+            ),
+          ],
+          ControlRow(
+            label: 'Target',
+            child: ControlChoices<_Target>(
+              options: const {
+                _Target.nearCity: 'Near city',
+                _Target.farCity: 'Far city',
+                _Target.overview: 'Overview',
+              },
+              value: _target,
+              onChanged: (value) => setState(() => _target = value),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: ControlAction(
+                  key: const ValueKey('runTransition'),
+                  label: 'Forward',
+                  icon: Icons.play_arrow,
+                  onPressed: _runTarget,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: ControlAction(
+                  key: const ValueKey('reverseTransition'),
+                  label: 'Reverse',
+                  icon: Icons.replay,
+                  onPressed: _reverse,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ControlSwitch(
+            label: 'Anchor at marker',
+            icon: Icons.push_pin_outlined,
+            value: _anchored,
+            onChanged: (value) => setState(() => _anchored = value),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text(
+              'When on, the zoom buttons keep the map point under the marker in '
+              'place. When off, the zoom changes around the center of the view. '
+              'The default transition ignores the anchor.',
+              style: TextStyle(
+                fontSize: 11,
+                height: 1.35,
+                color: MapboxGlass.labelFaint,
+              ),
+            ),
+          ),
+          ControlAction(
+            label: 'Zoom in',
+            icon: Icons.zoom_in,
+            onPressed: () => _zoomAtAnchor(1),
+          ),
+          ControlAction(
+            label: 'Zoom out',
+            icon: Icons.zoom_out,
+            onPressed: () => _zoomAtAnchor(-1),
+          ),
+        ];
       case _Mode.spin:
         return [
           ControlSwitch(
@@ -423,16 +675,44 @@ class _CameraPlaygroundExampleState extends State<CameraPlaygroundExample> {
         _mapboxMap,
       ),
       // One map persists across scenes, and _flyToScene animates it.
-      map: MapWidget(
-        key: const ValueKey('mapWidget'),
-        styleUri: MapboxStyles.STANDARD,
-        viewport: CameraViewportState(
-          center: Point(coordinates: Position(0, 20)),
-          zoom: 2,
-        ),
-        viewportController: _viewportController,
-        onMapCreated: _onMapCreated,
-        onCameraChangeListener: _onCameraChanged,
+      map: Stack(
+        fit: StackFit.expand,
+        children: [
+          MapWidget(
+            key: const ValueKey('mapWidget'),
+            styleUri: MapboxStyles.STANDARD,
+            viewport: CameraViewportState(
+              center: Point(coordinates: Position(0, 20)),
+              zoom: 2,
+            ),
+            viewportController: _viewportController,
+            onMapCreated: _onMapCreated,
+            onCameraChangeListener: _onCameraChanged,
+          ),
+          if (_mode == _Mode.transitions) ...[
+            if (_anchored)
+              Positioned(
+                left: _anchor.dx - 12,
+                top: _anchor.dy - 12,
+                child: const IgnorePointer(
+                  child: Icon(Icons.add_circle_outline, size: 24),
+                ),
+              ),
+            MapHud(
+              rows: [
+                MapHudRow(
+                  'duration',
+                  _lastDurationMs == null ? '—' : '$_lastDurationMs ms',
+                  emphasized: true,
+                ),
+                MapHudRow(
+                  'finished',
+                  _lastFinished == null ? '—' : '$_lastFinished',
+                ),
+              ],
+            ),
+          ],
+        ],
       ),
       controlsBuilder: _buildControls,
     );

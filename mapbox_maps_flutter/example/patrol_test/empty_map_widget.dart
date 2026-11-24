@@ -78,6 +78,7 @@ Future<MapboxMap> pumpMap({
   bool isOpaque = true,
   bool textureView = true,
   Color? background,
+  MapOptions? mapOptions,
 }) async {
   final mapboxMap = await _pumpMapApp(
     tester: tester,
@@ -90,6 +91,7 @@ Future<MapboxMap> pumpMap({
     isOpaque: isOpaque,
     textureView: textureView,
     background: background,
+    mapOptions: mapOptions,
     waitForLoad: true,
   );
   return mapboxMap!;
@@ -143,6 +145,7 @@ Future<MapboxMap?> _pumpMapApp({
   // Solid backdrop placed behind the map, useful for asserting on
   // transparency of the map surface itself.
   Color? background,
+  MapOptions? mapOptions,
   required bool waitForLoad,
 }) async {
   final completer = Completer<MapboxMap>();
@@ -181,6 +184,7 @@ Future<MapboxMap?> _pumpMapApp({
     styleUri: styleJson == null ? styleUri! : '',
     isOpaque: isOpaque,
     textureView: textureView,
+    mapOptions: mapOptions,
     onMapCreated: (MapboxMap mapboxMap) async {
       if (styleJson != null) {
         await mapboxMap.setStyleJSON(styleJson);

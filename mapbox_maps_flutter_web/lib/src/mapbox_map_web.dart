@@ -30,6 +30,7 @@ import 'rotate_by_math.dart';
 import 'style_controller_web.dart';
 import 'unsupported_sub_interfaces.dart';
 import 'viewport/viewport_web.dart';
+import 'viewport/viewport_utils.dart';
 
 /// Web [MapboxMapPlatformInterface] implementation backed by Mapbox GL JS.
 ///
@@ -48,7 +49,16 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   final JSMap _map;
   final _disposables = DisposeBag();
 
-  MapboxMapWeb(this._map) {
+  /// The options that the map was created with, or null.
+  final MapOptions? mapOptions;
+
+  final String? _initialStyleURI;
+
+  /// Creates the map interface for [_map]. [mapOptions] are the options
+  /// that [_map] was created with. [styleURI] is the style URI that [_map]
+  /// was created with.
+  MapboxMapWeb(this._map, {this.mapOptions, String? styleURI})
+    : _initialStyleURI = styleURI {
     // Every ornament is enabled by default, matching the mobile SDKs, so the
     // controllers are built here rather than on first use. A `late final`
     // field would leave the map without the ornaments `getSettings` reports
@@ -82,6 +92,7 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   @override
   late final StylePlatformInterface style = StyleController(
     _map,
+    styleURI: _initialStyleURI,
   ).addToDisposeBag(_disposables);
   @override
   late final GesturesSettingsPlatformInterface gestures = GesturesController(
@@ -161,19 +172,21 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   Future<CameraState> getCameraState() async => _map.getCameraState();
 
   @override
-  Future<void> setCamera(CameraOptions cameraOptions) async => _map.jumpTo(
-    JSCameraOptions()
+  Future<void> setCamera(CameraOptions cameraOptions) async {
+    final options = JSCameraOptions()
       ..withCenter(cameraOptions.center?.toJSLngLat())
       ..withZoom(cameraOptions.zoom)
       ..withBearing(cameraOptions.bearing)
       ..withPitch(cameraOptions.pitch)
-      ..withPadding(cameraOptions.padding?.toJSPadding())
-      ..withAnchor(
-        cameraOptions.anchor != null
-            ? _map.unproject(cameraOptions.anchor!.toJSScreenPoint())
-            : null,
-      ),
-  );
+      ..withPadding(cameraOptions.padding?.toJSPadding());
+    // As on mobile, a center takes precedence over the anchor.
+    final anchor = cameraOptions.center == null ? cameraOptions.anchor : null;
+    if (anchor == null) {
+      _map.jumpTo(options);
+      return;
+    }
+    jumpAround(_map, options, _map.unproject(anchor.toJSScreenPoint()));
+  }
 
   @override
   Future<FreeCameraOptions> getFreeCameraOptions() async =>
@@ -618,10 +631,10 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
   ///    JS uses to size its canvas.
   ///  * [MapOptions.constrainMode] is [ConstrainMode.HEIGHT_ONLY], because GL
   ///    JS always limits the latitude and wraps the longitude.
-  ///  * [MapOptions.crossSourceCollisions] is `true`. The map does not set
-  ///    this GL JS option, so the GL JS default applies.
-  ///  * [MapOptions.glyphsRasterizationOptions] is null. The map does not set
-  ///    the GL JS local font options, so the GL JS defaults apply.
+  ///  * [MapOptions.crossSourceCollisions] and
+  ///    [MapOptions.glyphsRasterizationOptions] are the values given to
+  ///    `MapWidget.mapOptions`. Without a value, they are `true` and null,
+  ///    which are the GL JS defaults.
   ///  * [MapOptions.orientation] and [MapOptions.viewportMode] are the
   ///    defaults, because GL JS cannot change them.
   ///  * [MapOptions.contextMode] is null, because GL JS has no equivalent.
@@ -630,9 +643,10 @@ base class MapboxMapWeb implements MapboxMapPlatformInterface {
     constrainMode: ConstrainMode.HEIGHT_ONLY,
     viewportMode: ViewportMode.DEFAULT,
     orientation: NorthOrientation.UPWARDS,
-    crossSourceCollisions: true,
+    crossSourceCollisions: mapOptions?.crossSourceCollisions ?? true,
     size: await getSize(),
     pixelRatio: window.devicePixelRatio,
+    glyphsRasterizationOptions: mapOptions?.glyphsRasterizationOptions,
   );
 
   @override

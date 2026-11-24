@@ -30,8 +30,17 @@
 * Add `MapboxMap.getFreeCameraOptions` and `MapboxMap.setFreeCameraOptions` to control the camera position and orientation directly, for example to follow a moving object ([#691](https://github.com/mapbox/mapbox-maps-flutter/issues/691)). The `FreeCameraOptionsGeography` extension adds the `location` and `altitude` getters and the `withLocation`, `withAltitude`, `withPitchBearing` and `lookingAt` helpers. The helpers give the same result on Android, iOS and web.
 * [Web] Add support for `getGeoJsonClusterLeaves`, `getGeoJsonClusterChildren`, and `getGeoJsonClusterExpansionZoom`. Before, these methods threw `UnimplementedError` on web.
 * [Web] Add support for `MapboxMap.startPerformanceStatisticsCollection` and `stopPerformanceStatisticsCollection`.
+* [Web] Add support for `StyleManager.getStyleURI`. It returns the URI of the last style set through `MapWidget.styleUri`, `setStyleURI` or `loadStyleURI`, and an empty string after a JSON style load. Before, it threw `UnsupportedError` on web.
 * [iOS] Fix `MapboxMap.startPerformanceStatisticsCollection` when collection is already active. The second call stopped the collection. Now it starts a new collection.
 * `MapboxMap.startPerformanceStatisticsCollection` throws an `ArgumentError` for a negative sampling duration. Before, the call did nothing.
+* [Web] `MapWidget.mapOptions` sets `crossSourceCollisions` and `glyphsRasterizationOptions` of the GL JS map, and `MapboxMap.getMapOptions` returns them. A null font family uses `sans-serif`. Other map options have no effect on web.
+* [Web] `EasingViewportTransition.curve` takes effect. Before, web used the GL JS default easing.
+* [Web] `DefaultViewportTransition` computes its duration from the camera change, as on Android and iOS, and uses `maxDuration` as the upper limit. Before, the transition always took `maxDuration`.
+* [Web] `CameraViewportState.anchor` and `CameraOptions.anchor` in `MapboxMap.setCamera` take effect. As on mobile, a center takes precedence over the anchor. `FlyViewportTransition` ignores the anchor on web, and `DefaultViewportTransition` ignores it on all platforms.
+* [Web] `OverviewViewportState` follows the curve of an `EasingViewportTransition` and computes the duration of a `DefaultViewportTransition` from the camera change. Before, a curve that was not linear used a fly animation, and the default transition always took `maxDuration`.
+* `ViewportController.moveTo` with the current state moves the camera again after a gesture when the call passes a completion or a transition that is different from the previous call. Before, the call did nothing.
+* [Web] An `OverviewViewportState` without a transition jumps to the geometry. Before, it animated for `animationDuration`.
+* [Web] A viewport transition that does not animate, or that interrupts a running animation, calls its completion when the camera arrives. Before, the completion was not called or was called too early.
 * [Web] Fix `moveBy`, which moved the camera in the wrong direction, and `rotateBy`, which set an absolute bearing. Both now move the map by the same amount as on Android.
 * [Web] `CameraState.padding` now reports the current camera padding in `getCameraState`, `onCameraChanged` and gesture contexts. Before, it was always zero.
 * [Web] `onSourceDataLoaded` now sends a `TILE` event with the tile ID for each loaded tile, and a `METADATA` event when the source metadata loads. As on Android and iOS, events for sources of imported styles are not sent.

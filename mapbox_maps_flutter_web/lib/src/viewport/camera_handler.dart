@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 
 import 'viewport_handler.dart';
@@ -22,10 +20,12 @@ final class CameraHandler extends WebViewportStateHandler {
       state.pitch,
       state.padding?.toJSPadding(),
       transition ?? const ImmediateViewportTransition(),
+      around: switch (state.anchor) {
+        final anchor? => map.unproject(anchor.toJSScreenPoint()),
+        null => null,
+      },
     );
 
-    if (transition != null) {
-      await map.onceAsync('moveend').toDart;
-    }
+    await moveEnded(map);
   }
 }

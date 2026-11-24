@@ -1,6 +1,4 @@
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -12,7 +10,7 @@ const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 void main() {
   setUpAll(() => MapboxOptions.setAccessToken(ACCESS_TOKEN));
 
-  patrolTest('CameraViewportState test', skip: kIsWeb, ($) async {
+  patrolTest('CameraViewportState test', ($) async {
     final tester = $.tester;
     final cameraViewport = CameraViewportState(
       center: Point(coordinates: Position(5, 6)),
@@ -43,6 +41,7 @@ void main() {
     expect(camera.pitch, moreOrLessEquals(cameraViewport.pitch!.toDouble()));
   });
 
+  // GL JS rejects the test style: it has no `version`, `sources` or `layers`.
   patrolTest('StyleDefaultViewportState test', skip: kIsWeb, ($) async {
     final tester = $.tester;
     final styleDefaultCamera = CameraOptions(
@@ -102,7 +101,7 @@ void main() {
     );
   });
 
-  patrolTest('OverviewViewportState test', skip: kIsWeb, ($) async {
+  patrolTest('OverviewViewportState test', ($) async {
     final tester = $.tester;
     final overviewViewport = OverviewViewportState(
       geometry: Polygon.fromPoints(
@@ -119,17 +118,32 @@ void main() {
       bearing: 30.0,
       pitch: 45.0,
     );
+    // At zoom 0 on a portrait screen, the map constrains the latitude to 0.
+    // On Android, the default transition moves the center before the zoom
+    // increases, so the center keeps that latitude. Start at a zoom level
+    // where the world fills the view.
     final mapboxMap = await app.pumpMap(
       tester: $.tester,
-      viewport: overviewViewport,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(0, 0)),
+        zoom: 3,
+      ),
     );
-    await tester.pumpAndSettle();
+    await app.waitForEvent(tester, app.events.onMapIdle.future);
+    app.events.resetOnMapIdle();
+    await app.pumpMapUpdate(tester: $.tester, viewport: overviewViewport);
+    // The map is not idle while the camera moves, so the next idle event
+    // comes after the transition.
+    await app.waitForEvent(
+      tester,
+      app.events.onMapIdle.future,
+      description: () => 'The map did not become idle after the transition',
+    );
     final camera = await mapboxMap.getCameraState();
 
-    // Android has a bug that overview viewport state is not applying correctly.
-    // The bug appears rarely in real use case scenarios, but is more prominent in tests.
-    // TODO: Remove this once https://mapbox.atlassian.net/browse/MAPSAND-1907 is fixed.
-    if (!Platform.isAndroid) {
+    // On web, GL JS `fitBounds` with pitch puts the camera center away from
+    // the geometry center.
+    if (!kIsWeb) {
       expect(camera.center.coordinates.lng, moreOrLessEquals(5, epsilon: 0.1));
       expect(camera.center.coordinates.lat, moreOrLessEquals(5, epsilon: 0.1));
     }
@@ -140,7 +154,7 @@ void main() {
     expect(camera.pitch, moreOrLessEquals(overviewViewport.pitch!.toDouble()));
   });
 
-  patrolTest('IdleViewportState test', skip: kIsWeb, ($) async {
+  patrolTest('IdleViewportState test', ($) async {
     final tester = $.tester;
     final idleViewport = IdleViewportState();
     await app.pumpMap(tester: $.tester, viewport: idleViewport);

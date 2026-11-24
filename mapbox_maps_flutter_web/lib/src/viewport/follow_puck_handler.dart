@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:js_interop';
 
 import 'package:mapbox_maps_flutter_platform_interface/mapbox_maps_flutter_platform_interface.dart';
 import 'package:web/web.dart';
@@ -44,7 +43,7 @@ final class FollowPuckHandler extends WebViewportStateHandler {
           padding,
           transition ?? const DefaultViewportTransition(),
         );
-        await map.onceAsync('moveend').toDart;
+        await moveEnded(map);
 
         _subscription?.resume();
         firstUpdate.complete();

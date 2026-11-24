@@ -26,8 +26,6 @@ final class StyleDefaultHandler extends WebViewportStateHandler {
       transition ?? const ImmediateViewportTransition(),
     );
 
-    if (transition != null) {
-      await map.onceAsync('moveend').toDart;
-    }
+    await moveEnded(map);
   }
 }

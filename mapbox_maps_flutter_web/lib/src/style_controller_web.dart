@@ -24,22 +24,31 @@ import 'style/source_properties.dart';
 final class StyleController implements StylePlatformInterface, Disposable {
   final JSMap _map;
 
-  StyleController(this._map);
+  /// The URI of the last style set through Dart, or null when no style URI
+  /// was set or the last style was JSON.
+  String? _styleURI;
+
+  StyleController(this._map, {this._styleURI});
 
   // ===== Style loading =====
 
   @override
   Future<void> setStyleURI(String uri) async {
+    _styleURI = uri;
     _revokeAllImageSourceObjectUrls();
     _map.setStyle(uri.toJS);
   }
 
+  /// Returns the URI of the last style set through Dart.
+  ///
+  /// GL JS does not keep the style URI, so this value comes from the widget
+  /// `styleUri` and the style setters. After a JSON style load, it is empty.
   @override
-  Future<String> getStyleURI() =>
-      throw UnsupportedError("Style.getStyleURI() is not supported on web");
+  Future<String> getStyleURI() async => _styleURI ?? '';
 
   @override
   Future<void> setStyleJSON(String json) async {
+    _styleURI = null;
     _revokeAllImageSourceObjectUrls();
     _map.setStyle(jsonParse(json));
   }

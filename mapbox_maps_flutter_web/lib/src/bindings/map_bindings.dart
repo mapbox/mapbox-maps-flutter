@@ -76,6 +76,11 @@ extension type JSMapOptions._(JSObject _) implements JSObject {
 
   external set language(String value);
   external set worldview(String value);
+  external set crossSourceCollisions(bool value);
+  external set localFontFamily(String value);
+
+  /// A font family string, or `false` to load all glyphs from the server.
+  external set localIdeographFontFamily(JSAny value);
 }
 
 /// GL JS `RequestParameters`, returned from the `transformRequest` option.
@@ -156,6 +161,10 @@ extension type JSMap._(JSObject _) implements JSObject {
 
   /// Stops any current camera animation.
   external void stop();
+
+  /// Whether a camera animation is running.
+  external bool isEasing();
+  external bool getRenderWorldCopies();
 
   /// Returns the map's current center as a LngLat object.
   external JSLngLat getCenter();

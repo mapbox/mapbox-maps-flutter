@@ -26,6 +26,10 @@ class MapWebWidget extends StatefulWidget {
   final ValueListenable<String?>? language;
   final ValueListenable<String?>? worldview;
 
+  /// The options for the GL JS map. Only [MapOptions.crossSourceCollisions]
+  /// and [MapOptions.glyphsRasterizationOptions] apply.
+  final MapOptions? mapOptions;
+
   const MapWebWidget({
     super.key,
     required this.styleUri,
@@ -36,6 +40,7 @@ class MapWebWidget extends StatefulWidget {
     this.viewportTransitionCompletion,
     this.language,
     this.worldview,
+    this.mapOptions,
   });
 
   @override
@@ -138,6 +143,7 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     if (languageValue != null) options.language = languageValue;
     final worldviewValue = widget.worldview?.value;
     if (worldviewValue != null) options.worldview = worldviewValue;
+    _applyMapOptions(options, widget.mapOptions);
     final nativeMap = JSMap(options);
     _currentMap = nativeMap;
 
@@ -150,7 +156,11 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     // Wire cross-domain dependencies into the viewport before flushing
     // pending viewport state — `FollowPuckViewportState` needs them set
     // or it's silently dropped at apply time.
-    final mapboxMap = MapboxMapWeb(nativeMap);
+    final mapboxMap = MapboxMapWeb(
+      nativeMap,
+      mapOptions: widget.mapOptions,
+      styleURI: widget.styleUri,
+    );
     mapboxMap.attachViewport(_viewport);
 
     _mapboxMap = mapboxMap;
@@ -181,7 +191,15 @@ class _MapWebWidgetState extends State<MapWebWidget> {
     super.didUpdateWidget(oldWidget);
     // Before the container is sized, the ResizeObserver applies the latest
     // viewport once it can; after, apply changes directly.
-    if (widget.viewport != oldWidget.viewport && _initialViewportApplied) {
+    if (_initialViewportApplied &&
+        viewportNeedsUpdate(
+          viewport: widget.viewport,
+          oldViewport: oldWidget.viewport,
+          transition: widget.viewportTransition,
+          oldTransition: oldWidget.viewportTransition,
+          completion: widget.viewportTransitionCompletion,
+          oldCompletion: oldWidget.viewportTransitionCompletion,
+        )) {
       _applyViewport();
     }
   }
@@ -221,6 +239,29 @@ class _MapWebWidgetState extends State<MapWebWidget> {
       viewType: _viewType,
       onPlatformViewCreated: _onPlatformViewCreated,
     );
+  }
+}
+
+/// Sets the GL JS options that match [mapOptions].
+///
+/// The function sets only the options that have a value, because GL JS
+/// does not use its default for an option that is `null`.
+void _applyMapOptions(JSMapOptions options, MapOptions? mapOptions) {
+  final crossSourceCollisions = mapOptions?.crossSourceCollisions;
+  if (crossSourceCollisions != null) {
+    options.crossSourceCollisions = crossSourceCollisions;
+  }
+  final glyphs = mapOptions?.glyphsRasterizationOptions;
+  if (glyphs == null) return;
+  // GL JS needs a font family to rasterize glyphs locally.
+  final fontFamily = glyphs.fontFamily ?? 'sans-serif';
+  switch (glyphs.rasterizationMode) {
+    case GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY:
+      options.localIdeographFontFamily = false.toJS;
+    case GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY:
+      options.localIdeographFontFamily = fontFamily.toJS;
+    case GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY:
+      options.localFontFamily = fontFamily;
   }
 }
 

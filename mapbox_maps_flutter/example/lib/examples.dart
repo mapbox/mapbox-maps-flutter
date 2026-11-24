@@ -66,8 +66,8 @@ final List<Example> examples = [
     leading: const Icon(Icons.videocam_outlined),
     title: 'Camera playground',
     subtitle:
-        'Imperative animations, declarative viewport states and a globe that '
-        'spins on its own.',
+        'Imperative animations, declarative viewport states, transition '
+        'options and a globe that spins on its own.',
     builder: (_) => const CameraPlaygroundExample(),
   ),
   Example(

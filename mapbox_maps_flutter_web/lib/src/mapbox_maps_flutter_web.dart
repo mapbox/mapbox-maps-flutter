@@ -53,8 +53,10 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
     bool? isOpaque = true,
   }) {
-    // mapOptions / textureView / androidHostingMode / gestureRecognizers
-    // are mobile-platform-view tuning knobs and are ignored on web.
+    // From mapOptions, only crossSourceCollisions and
+    // glyphsRasterizationOptions apply on web. textureView,
+    // androidHostingMode and gestureRecognizers are mobile platform view
+    // settings and are ignored on web.
     //
     // isOpaque is also ignored: gl-js always renders to an alpha-capable
     // canvas, so a transparent background works out of the box.
@@ -67,6 +69,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform
       viewportTransitionCompletion: viewportTransitionCompletion,
       language: language,
       worldview: worldview,
+      mapOptions: mapOptions,
     );
   }
 

@@ -91,7 +91,7 @@ void main() {
     expect(await mapboxMap.styleGlyphURL(), _fallbackGlyphURL);
   });
 
-  patrolTest('loadStyleURI', skip: kIsWeb, ($) async {
+  patrolTest('loadStyleURI', ($) async {
     final tester = $.tester;
     final mapboxMap = await app.pumpMap(
       tester: $.tester,
@@ -101,6 +101,57 @@ void main() {
     await mapboxMap.loadStyleURI(MapboxStyles.DARK);
     var style = await mapboxMap.getStyleURI();
     expect(MapboxStyles.DARK, style);
+  });
+
+  patrolTest('getStyleURI returns the widget style URI', ($) async {
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.DARK,
+    );
+    await $.tester.pumpAndSettle();
+
+    expect(await mapboxMap.style.getStyleURI(), MapboxStyles.DARK);
+  });
+
+  patrolTest('getStyleURI after setStyleURI', ($) async {
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await $.tester.pumpAndSettle();
+    app.events.resetOnStyleLoaded();
+    await mapboxMap.style.setStyleURI(MapboxStyles.LIGHT);
+    await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
+
+    expect(await mapboxMap.style.getStyleURI(), MapboxStyles.LIGHT);
+  });
+
+  patrolTest('getStyleURI is empty after setStyleJSON', ($) async {
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await $.tester.pumpAndSettle();
+    final styleJson = await rootBundle.loadString('assets/style.json');
+    app.events.resetOnStyleLoaded();
+    await mapboxMap.style.setStyleJSON(styleJson);
+    await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
+
+    expect(await mapboxMap.style.getStyleURI(), '');
+  });
+
+  patrolTest('getStyleURI is empty after loadStyleJson', ($) async {
+    final mapboxMap = await app.pumpMap(
+      tester: $.tester,
+      styleUri: MapboxStyles.STANDARD,
+    );
+    await $.tester.pumpAndSettle();
+    final styleJson = await rootBundle.loadString('assets/style.json');
+    app.events.resetOnStyleLoaded();
+    await mapboxMap.loadStyleJson(styleJson);
+    await app.waitForEvent($.tester, app.events.onStyleLoaded.future);
+
+    expect(await mapboxMap.style.getStyleURI(), '');
   });
 
   patrolTest('loadStyleJson', ($) async {
@@ -331,6 +382,68 @@ void main() {
     expect(options.glyphsRasterizationOptions, isNull);
     expect(options.size!.width, greaterThan(0));
     expect(options.size!.height, greaterThan(0));
+  });
+
+  patrolTest('MapOptions crossSourceCollisions', ($) async {
+    final tester = $.tester;
+    final mapboxMap = await app.pumpMap(
+      tester: tester,
+      styleUri: MapboxStyles.STANDARD,
+      mapOptions: MapOptions(
+        pixelRatio: tester.view.devicePixelRatio,
+        crossSourceCollisions: false,
+      ),
+    );
+    await tester.pumpAndSettle();
+    final options = await mapboxMap.getMapOptions();
+    expect(options.crossSourceCollisions, false);
+  });
+
+  // Android and iOS do not return the glyph options from getMapOptions.
+  for (final mode in GlyphsRasterizationMode.values) {
+    patrolTest(
+      'MapOptions glyphsRasterizationOptions ${mode.name}',
+      skip: !kIsWeb,
+      ($) async {
+        final tester = $.tester;
+        final mapboxMap = await app.pumpMap(
+          tester: tester,
+          styleUri: MapboxStyles.STANDARD,
+          mapOptions: MapOptions(
+            pixelRatio: tester.view.devicePixelRatio,
+            glyphsRasterizationOptions: GlyphsRasterizationOptions(
+              rasterizationMode: mode,
+              fontFamily: 'serif',
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final glyphs =
+            (await mapboxMap.getMapOptions()).glyphsRasterizationOptions;
+        expect(glyphs?.rasterizationMode, mode);
+        expect(glyphs?.fontFamily, 'serif');
+      },
+    );
+  }
+
+  patrolTest('MapOptions all glyphs rasterized locally without a font family', (
+    $,
+  ) async {
+    final tester = $.tester;
+    await app.pumpMap(
+      tester: tester,
+      styleUri: MapboxStyles.STANDARD,
+      mapOptions: MapOptions(
+        pixelRatio: tester.view.devicePixelRatio,
+        glyphsRasterizationOptions: GlyphsRasterizationOptions(
+          rasterizationMode:
+              GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY,
+        ),
+      ),
+    );
+    await app.events.onStyleLoaded.future;
+    await tester.pumpAndSettle();
+    expect(app.events.mapLoadingErrors, isEmpty);
   });
 
   patrolTest('MapOptions reflect setters', ($) async {

@@ -16,6 +16,7 @@ export 'src/internal/mapbox_maps_flutter_platform.dart';
 export 'src/internal/style_image_conversions.dart';
 export 'src/internal/style_image_format.dart';
 export 'src/internal/style_projection_conversions.dart';
+export 'src/internal/viewport_update.dart';
 export 'src/interfaces/annotations_interface.dart';
 export 'src/interfaces/geofencing_interface.dart';
 export 'src/interfaces/circle_annotation_manager_interface.dart';

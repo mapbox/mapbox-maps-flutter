@@ -264,7 +264,15 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
     final currentViewport = widget.viewport;
-    if (currentViewport == oldWidget?.viewport || currentViewport == null) {
+    if (currentViewport == null ||
+        !viewportNeedsUpdate(
+          viewport: currentViewport,
+          oldViewport: oldWidget?.viewport,
+          transition: widget.viewportTransition,
+          oldTransition: oldWidget?.viewportTransition,
+          completion: widget.viewportTransitionCompletion,
+          oldCompletion: oldWidget?.viewportTransitionCompletion,
+        )) {
       return;
     }
     final gen = ++_viewportGeneration;

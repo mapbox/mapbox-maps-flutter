@@ -68,5 +68,6 @@ extension type JSFitBoundsOptions._(JSObject _) implements JSObject {
   external set offset(JSScreenPoint value);
   external set duration(int value);
   external set linear(bool value);
+  external set easing(JSFunction value);
   external set maxZoom(double value);
 }
