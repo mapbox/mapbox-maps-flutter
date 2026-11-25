@@ -91,21 +91,27 @@ final class TileStore implements TileStorePlatformInterface {
   ///     to change. Please contact Mapbox if you require a higher limit.
   ///     Additional charges may apply.
   @override
-  Future<TileRegion> loadTileRegion(
+  CancelableFuture<TileRegion> loadTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     OnTileRegionLoadProgressListener? progressListener,
-  ) async {
-    if (progressListener != null) {
-      await _api.addTileRegionLoadProgressListener(id);
-      final eventChannel = EventChannel(
-        "com.mapbox.maps.flutter/$_messageChannel/tile-region-$id",
-      );
-      eventChannel.receiveBroadcastStream().listen((event) {
-        progressListener(TileRegionLoadProgress.decode(event));
-      });
-    }
-    return _api.loadTileRegion(id, loadOptions);
+  ) {
+    StreamSubscription<dynamic>? progressSubscription;
+    return CancelableOperations.instance.start(
+      prepare: progressListener == null
+          ? null
+          : (operationId) async {
+              await _api.addTileRegionLoadProgressListener(id, operationId);
+              progressSubscription =
+                  EventChannel(
+                    "com.mapbox.maps.flutter/$_messageChannel/tile-region-$operationId",
+                  ).receiveBroadcastStream().listen((event) {
+                    progressListener(TileRegionLoadProgress.decode(event));
+                  });
+            },
+      run: (operationId) => _api.loadTileRegion(id, loadOptions, operationId),
+      onDone: () => progressSubscription?.cancel(),
+    );
   }
 
   /// Estimates the storage and transfer size of a tile region.
@@ -123,22 +129,33 @@ final class TileStore implements TileStorePlatformInterface {
   ///
   /// Estimating a tile region does not mutate existing tile regions on the tile store.
   @override
-  Future<TileRegionEstimateResult> estimateTileRegion(
+  CancelableFuture<TileRegionEstimateResult> estimateTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,
     OnTileRegionEstimateProgressListener? progressListener,
-  ) async {
-    if (progressListener != null) {
-      await _api.addTileRegionEstimateProgressListener(id);
-      final eventChannel = EventChannel(
-        "com.mapbox.maps.flutter/$_messageChannel/tile-region-estimate-$id",
-      );
-      eventChannel.receiveBroadcastStream().listen((event) {
-        progressListener(TileRegionEstimateProgress.decode(event));
-      });
-    }
-    return _api.estimateTileRegion(id, loadOptions, estimateOptions);
+  ) {
+    StreamSubscription<dynamic>? progressSubscription;
+    return CancelableOperations.instance.start(
+      prepare: progressListener == null
+          ? null
+          : (operationId) async {
+              await _api.addTileRegionEstimateProgressListener(id, operationId);
+              progressSubscription =
+                  EventChannel(
+                    "com.mapbox.maps.flutter/$_messageChannel/tile-region-estimate-$operationId",
+                  ).receiveBroadcastStream().listen((event) {
+                    progressListener(TileRegionEstimateProgress.decode(event));
+                  });
+            },
+      run: (operationId) => _api.estimateTileRegion(
+        id,
+        loadOptions,
+        estimateOptions,
+        operationId,
+      ),
+      onDone: () => progressSubscription?.cancel(),
+    );
   }
 
   /// Fetch the array of the existing tile regions.

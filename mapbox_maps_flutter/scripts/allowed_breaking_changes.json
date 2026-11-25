@@ -1493,5 +1493,17 @@
   {
     "changeDescription": "Snapshotter: tileCover: Experimental Flag changed. false -> true",
     "reason": "tileCover was previously marked stable by mistake; the underlying native tileCover API is experimental. Also switches the return type to OverscaledTileID instead of CanonicalTileID, matching the native SDKs. Remove this entry once mapbox_maps_flutter 2.30 is released, since the pub.dev baseline will then already have tileCover marked experimental."
+  },
+  {
+    "changeDescription": "OfflineManager: loadStylePack: Return type changed. Future<StylePack> -> CancelableFuture<StylePack>",
+    "reason": "Return type narrowed to CancelableFuture, a subtype of Future that adds cancel(). Code that awaits the result or stores it as a Future compiles without change. Classes that implement OfflineManager must change the return type of their override."
+  },
+  {
+    "changeDescription": "TileStore: loadTileRegion: Return type changed. Future<TileRegion> -> CancelableFuture<TileRegion>",
+    "reason": "Return type narrowed to CancelableFuture, a subtype of Future that adds cancel(). Code that awaits the result or stores it as a Future compiles without change. Classes that implement OfflineManager must change the return type of their override."
+  },
+  {
+    "changeDescription": "TileStore: estimateTileRegion: Return type changed. Future<TileRegionEstimateResult> -> CancelableFuture<TileRegionEstimateResult>",
+    "reason": "Return type narrowed to CancelableFuture, a subtype of Future that adds cancel(). Code that awaits the result or stores it as a Future compiles without change. Classes that implement OfflineManager must change the return type of their override."
   }
 ]

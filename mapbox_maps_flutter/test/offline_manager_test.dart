@@ -16,7 +16,8 @@ class MockOfflineManagerPlatformInterface
 
   final StylePack _stubStylePack = StylePack(
     styleURI: 'mapbox://styles/mapbox/streets-v12',
-    glyphsRasterizationMode: GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY,
+    glyphsRasterizationMode:
+        GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY,
     requiredResourceCount: 10,
     completedResourceCount: 10,
     completedResourceSize: 1024,
@@ -24,16 +25,16 @@ class MockOfflineManagerPlatformInterface
   );
 
   @override
-  Future<StylePack> loadStylePack(
+  CancelableFuture<StylePack> loadStylePack(
     String styleURI,
     StylePackLoadOptions loadOptions,
     OnStylePackLoadProgressListener? progressListener,
-  ) async {
+  ) {
     loadStylePackCallCount++;
     lastStyleURI = styleURI;
     lastLoadOptions = loadOptions;
     lastProgressListener = progressListener;
-    return _stubStylePack;
+    return CancelableFuture(Future.value(_stubStylePack), () {});
   }
 
   @override
@@ -97,8 +98,9 @@ void main() {
     });
 
     test('removeStylePack delegates to interface', () async {
-      final result = await offlineManager
-          .removeStylePack('mapbox://styles/mapbox/streets-v12');
+      final result = await offlineManager.removeStylePack(
+        'mapbox://styles/mapbox/streets-v12',
+      );
 
       expect(mockImpl.removeStylePackCallCount, 1);
       expect(mockImpl.lastStyleURI, 'mapbox://styles/mapbox/streets-v12');
@@ -106,8 +108,9 @@ void main() {
     });
 
     test('stylePack delegates to interface', () async {
-      final result =
-          await offlineManager.stylePack('mapbox://styles/mapbox/streets-v12');
+      final result = await offlineManager.stylePack(
+        'mapbox://styles/mapbox/streets-v12',
+      );
 
       expect(mockImpl.stylePackCallCount, 1);
       expect(mockImpl.lastStyleURI, 'mapbox://styles/mapbox/streets-v12');
@@ -115,8 +118,9 @@ void main() {
     });
 
     test('stylePackMetadata delegates to interface', () async {
-      final result = await offlineManager
-          .stylePackMetadata('mapbox://styles/mapbox/streets-v12');
+      final result = await offlineManager.stylePackMetadata(
+        'mapbox://styles/mapbox/streets-v12',
+      );
 
       expect(mockImpl.stylePackMetadataCallCount, 1);
       expect(mockImpl.lastStyleURI, 'mapbox://styles/mapbox/streets-v12');

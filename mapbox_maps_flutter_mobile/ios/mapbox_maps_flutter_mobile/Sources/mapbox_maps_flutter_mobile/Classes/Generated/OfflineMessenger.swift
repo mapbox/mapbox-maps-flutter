@@ -251,9 +251,9 @@ class OfflineMessengerPigeonCodec: FlutterStandardMessageCodec, @unchecked Senda
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _OfflineManager {
-  func loadStylePack(styleURI: String, loadOptions: StylePackLoadOptions, completion: @escaping (Result<StylePack, Error>) -> Void)
+  func loadStylePack(styleURI: String, loadOptions: StylePackLoadOptions, operationId: Int64, completion: @escaping (Result<StylePack, Error>) -> Void)
   func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
-  func addStylePackLoadProgressListener(styleURI: String) throws
+  func addStylePackLoadProgressListener(styleURI: String, operationId: Int64) throws
   func stylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
   func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String: Any], Error>) -> Void)
   func allStylePacks(completion: @escaping (Result<[StylePack], Error>) -> Void)
@@ -271,7 +271,8 @@ class _OfflineManagerSetup {
         let args = message as! [Any?]
         let styleURIArg = args[0] as! String
         let loadOptionsArg = args[1] as! StylePackLoadOptions
-        api.loadStylePack(styleURI: styleURIArg, loadOptions: loadOptionsArg) { result in
+        let operationIdArg = args[2] as! Int64
+        api.loadStylePack(styleURI: styleURIArg, loadOptions: loadOptionsArg, operationId: operationIdArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -305,8 +306,9 @@ class _OfflineManagerSetup {
       addStylePackLoadProgressListenerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let styleURIArg = args[0] as! String
+        let operationIdArg = args[1] as! Int64
         do {
-          try api.addStylePackLoadProgressListener(styleURI: styleURIArg)
+          try api.addStylePackLoadProgressListener(styleURI: styleURIArg, operationId: operationIdArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
@@ -368,10 +370,10 @@ class _OfflineManagerSetup {
 }
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _TileStore {
-  func loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, completion: @escaping (Result<TileRegion, Error>) -> Void)
-  func addTileRegionLoadProgressListener(id: String) throws
-  func estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, completion: @escaping (Result<TileRegionEstimateResult, Error>) -> Void)
-  func addTileRegionEstimateProgressListener(id: String) throws
+  func loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, operationId: Int64, completion: @escaping (Result<TileRegion, Error>) -> Void)
+  func addTileRegionLoadProgressListener(id: String, operationId: Int64) throws
+  func estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, operationId: Int64, completion: @escaping (Result<TileRegionEstimateResult, Error>) -> Void)
+  func addTileRegionEstimateProgressListener(id: String, operationId: Int64) throws
   func tileRegionMetadata(id: String, completion: @escaping (Result<[String: Any], Error>) -> Void)
   func tileRegionContainsDescriptor(id: String, options: [TilesetDescriptorOptions], completion: @escaping (Result<Bool, Error>) -> Void)
   func allTileRegions(completion: @escaping (Result<[TileRegion], Error>) -> Void)
@@ -392,7 +394,8 @@ class _TileStoreSetup {
         let args = message as! [Any?]
         let idArg = args[0] as! String
         let loadOptionsArg = args[1] as! TileRegionLoadOptions
-        api.loadTileRegion(id: idArg, loadOptions: loadOptionsArg) { result in
+        let operationIdArg = args[2] as! Int64
+        api.loadTileRegion(id: idArg, loadOptions: loadOptionsArg, operationId: operationIdArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -409,8 +412,9 @@ class _TileStoreSetup {
       addTileRegionLoadProgressListenerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let idArg = args[0] as! String
+        let operationIdArg = args[1] as! Int64
         do {
-          try api.addTileRegionLoadProgressListener(id: idArg)
+          try api.addTileRegionLoadProgressListener(id: idArg, operationId: operationIdArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
@@ -426,7 +430,8 @@ class _TileStoreSetup {
         let idArg = args[0] as! String
         let loadOptionsArg = args[1] as! TileRegionLoadOptions
         let estimateOptionsArg: TileRegionEstimateOptions? = nilOrValue(args[2])
-        api.estimateTileRegion(id: idArg, loadOptions: loadOptionsArg, estimateOptions: estimateOptionsArg) { result in
+        let operationIdArg = args[3] as! Int64
+        api.estimateTileRegion(id: idArg, loadOptions: loadOptionsArg, estimateOptions: estimateOptionsArg, operationId: operationIdArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -443,8 +448,9 @@ class _TileStoreSetup {
       addTileRegionEstimateProgressListenerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let idArg = args[0] as! String
+        let operationIdArg = args[1] as! Int64
         do {
-          try api.addTileRegionEstimateProgressListener(id: idArg)
+          try api.addTileRegionEstimateProgressListener(id: idArg, operationId: operationIdArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))

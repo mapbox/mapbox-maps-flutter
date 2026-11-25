@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 final _helsinki = Point(coordinates: Position(24.9384, 60.1699));
 
-enum _DownloadState { idle, downloading, downloaded }
+enum _DownloadState { idle, downloading, canceled, downloaded }
 
 class OfflineMapExample extends StatefulWidget {
   const OfflineMapExample({super.key});
@@ -25,9 +26,12 @@ class _OfflineMapExampleState extends State<OfflineMapExample> {
   OfflineManager? _offlineManager;
   final _tileRegionId = "my-tile-region";
   _DownloadState _state = _DownloadState.idle;
+  CancelableFuture<StylePack>? _stylePackLoad;
+  CancelableFuture<TileRegion>? _tileRegionLoad;
 
   @override
   void dispose() {
+    _cancelDownload();
     _stylePackProgress.close();
     _tileRegionLoadProgress.close();
     OfflineSwitch.shared.setMapboxStackConnected(true);
@@ -81,7 +85,7 @@ class _OfflineMapExampleState extends State<OfflineMapExample> {
   }
 
   Future<void> _downloadStylePack() async {
-    await _offlineManager?.loadStylePack(
+    final load = _offlineManager?.loadStylePack(
       MapboxStyles.STANDARD_SATELLITE,
       StylePackLoadOptions(
         glyphsRasterizationMode:
@@ -94,11 +98,13 @@ class _OfflineMapExampleState extends State<OfflineMapExample> {
         progress.completedResourceCount / progress.requiredResourceCount,
       ),
     );
+    _stylePackLoad = load;
+    await load;
     _finish(_stylePackProgress);
   }
 
   Future<void> _downloadTileRegion() async {
-    await _tileStore?.loadTileRegion(
+    final load = _tileStore?.loadTileRegion(
       _tileRegionId,
       TileRegionLoadOptions(
         geometry: _helsinki.toJson(),
@@ -119,6 +125,8 @@ class _OfflineMapExampleState extends State<OfflineMapExample> {
         progress.completedResourceCount / progress.requiredResourceCount,
       ),
     );
+    _tileRegionLoad = load;
+    await load;
     _finish(_tileRegionLoadProgress);
   }
 
@@ -162,14 +170,18 @@ class _OfflineMapExampleState extends State<OfflineMapExample> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                _OfflineButton(
-                  label: _state == _DownloadState.downloading
-                      ? 'Downloading…'
-                      : 'Download map',
-                  onPressed: _state == _DownloadState.downloading
-                      ? null
-                      : _download,
-                ),
+                if (_state == _DownloadState.downloading)
+                  _OfflineButton(
+                    label: 'Cancel download',
+                    onPressed: _cancelDownload,
+                  )
+                else
+                  _OfflineButton(
+                    label: _state == _DownloadState.canceled
+                        ? 'Resume download'
+                        : 'Download map',
+                    onPressed: _download,
+                  ),
               ],
             ),
           ),
@@ -192,15 +204,23 @@ class _OfflineMapExampleState extends State<OfflineMapExample> {
   Future<void> _download() async {
     setState(() => _state = _DownloadState.downloading);
     await _initOfflineMap();
-    _downloadStylePack();
-    _downloadTileRegion();
-    await Future.wait([
-      _tileRegionLoadProgress.sink.done,
-      _stylePackProgress.sink.done,
-    ]);
+    try {
+      await Future.wait([_downloadStylePack(), _downloadTileRegion()]);
+    } on PlatformException catch (error) {
+      if (error.code != 'CANCELED') rethrow;
+      // A canceled load keeps the downloaded part on disk, so a new download
+      // continues from there.
+      if (mounted) setState(() => _state = _DownloadState.canceled);
+      return;
+    }
     await OfflineSwitch.shared.setMapboxStackConnected(false);
     if (!mounted) return;
     setState(() => _state = _DownloadState.downloaded);
+  }
+
+  void _cancelDownload() {
+    _stylePackLoad?.cancel();
+    _tileRegionLoad?.cancel();
   }
 
   Widget _progress(String label, Stream<double> stream) {

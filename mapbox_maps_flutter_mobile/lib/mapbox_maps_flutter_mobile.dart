@@ -57,6 +57,8 @@ part 'src/performance_statistics.dart';
 part 'src/extensions.dart';
 part 'src/map_events.dart';
 part 'src/offline/offline_messenger.dart';
+part 'src/offline/cancelable_operation_messenger.dart';
+part 'src/cancelable_operations.dart';
 part 'src/offline/offline_manager.dart';
 part 'src/offline/tile_store.dart';
 part 'src/offline/offline_switch.dart';

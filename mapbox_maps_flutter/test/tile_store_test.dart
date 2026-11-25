@@ -36,34 +36,39 @@ class MockTileStorePlatformInterface implements TileStorePlatformInterface {
   );
 
   @override
-  Future<TileRegion> loadTileRegion(
+  CancelableFuture<TileRegion> loadTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     OnTileRegionLoadProgressListener? progressListener,
-  ) async {
+  ) {
     loadTileRegionCallCount++;
     lastId = id;
     lastLoadOptions = loadOptions;
     lastProgressListener = progressListener;
-    return _stubTileRegion;
+    return CancelableFuture(Future.value(_stubTileRegion), () {});
   }
 
   @override
-  Future<TileRegionEstimateResult> estimateTileRegion(
+  CancelableFuture<TileRegionEstimateResult> estimateTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,
     OnTileRegionEstimateProgressListener? progressListener,
-  ) async {
+  ) {
     estimateTileRegionCallCount++;
     lastId = id;
     lastLoadOptions = loadOptions;
     lastEstimateOptions = estimateOptions;
     lastEstimateProgressListener = progressListener;
-    return TileRegionEstimateResult(
-      errorMargin: 0.1,
-      transferSize: 512,
-      storageSize: 1024,
+    return CancelableFuture(
+      Future.value(
+        TileRegionEstimateResult(
+          errorMargin: 0.1,
+          transferSize: 512,
+          storageSize: 1024,
+        ),
+      ),
+      () {},
     );
   }
 

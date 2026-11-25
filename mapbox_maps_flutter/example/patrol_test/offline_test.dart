@@ -1,5 +1,6 @@
 // ignore_for_file: experimental_member_use, invalid_use_of_visible_for_testing_member
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'empty_map_widget.dart' as app;
 import 'package:mapbox_maps_flutter_examples/utils.dart';
@@ -116,5 +117,110 @@ void main() {
     tileStore.setDiskQuota(0);
     await tileStore.allTileRegions();
     tileStore.setDiskQuota(null);
+  });
+
+  Matcher isCanceled() => isA<PlatformException>().having(
+    (error) => error.code,
+    'code',
+    'CANCELED',
+  );
+
+  patrolTest("cancel stops a running tile region load", skip: kIsWeb, (
+    $,
+  ) async {
+    await app.runEmpty($.tester);
+    await $.tester.pumpAndSettle();
+    final tileStore = await TileStore.createDefault();
+
+    // Cancel on the first progress event, so the native load is running.
+    late final CancelableFuture<TileRegion> load;
+    var progressCount = 0;
+    load = tileStore.loadTileRegion(
+      "cancel-tile-region-id",
+      _tileRegionLoadOptions,
+      (_) {
+        if (progressCount++ == 0) load.cancel();
+      },
+    );
+
+    await expectLater(load, throwsA(isCanceled()));
+    expect(progressCount, greaterThan(0));
+
+    // The native load stopped: the stored region does not grow any more.
+    final canceled = await tileStore.tileRegion("cancel-tile-region-id");
+    await Future<void>.delayed(const Duration(seconds: 3));
+    final later = await tileStore.tileRegion("cancel-tile-region-id");
+    expect(later.completedResourceCount, canceled.completedResourceCount);
+    expect(later.completedResourceCount, lessThan(later.requiredResourceCount));
+    tileStore.removeRegion("cancel-tile-region-id");
+  });
+
+  patrolTest("cancel stops a running tile region estimate", skip: kIsWeb, (
+    $,
+  ) async {
+    await app.runEmpty($.tester);
+    await $.tester.pumpAndSettle();
+    final tileStore = await TileStore.createDefault();
+
+    late final CancelableFuture<TileRegionEstimateResult> estimate;
+    var progressCount = 0;
+    estimate = tileStore.estimateTileRegion(
+      "cancel-estimate-region-id",
+      _tileRegionLoadOptions,
+      null,
+      (_) {
+        if (progressCount++ == 0) estimate.cancel();
+      },
+    );
+
+    await expectLater(estimate, throwsA(isCanceled()));
+    expect(progressCount, greaterThan(0));
+  });
+
+  patrolTest("cancel stops a running style pack load", skip: kIsWeb, ($) async {
+    await app.runEmpty($.tester);
+    await $.tester.pumpAndSettle();
+    final offlineManager = await OfflineManager.create();
+
+    late final CancelableFuture<StylePack> load;
+    var progressCount = 0;
+    load = offlineManager.loadStylePack(
+      MapboxStyles.SATELLITE_STREETS,
+      _stylePackLoadOptions,
+      (_) {
+        if (progressCount++ == 0) load.cancel();
+      },
+    );
+
+    await expectLater(load, throwsA(isCanceled()));
+    expect(progressCount, greaterThan(0));
+
+    // The native load stopped: the stored style pack does not grow any more.
+    final canceled = await offlineManager.stylePack(
+      MapboxStyles.SATELLITE_STREETS,
+    );
+    await Future<void>.delayed(const Duration(seconds: 3));
+    final later = await offlineManager.stylePack(
+      MapboxStyles.SATELLITE_STREETS,
+    );
+    expect(later.completedResourceCount, canceled.completedResourceCount);
+    expect(later.completedResourceCount, lessThan(later.requiredResourceCount));
+  });
+
+  patrolTest("estimate reports progress", skip: kIsWeb, ($) async {
+    await app.runEmpty($.tester);
+    await $.tester.pumpAndSettle();
+    final tileStore = await TileStore.createDefault();
+
+    var progressCount = 0;
+    final result = await tileStore.estimateTileRegion(
+      "estimate-progress-region-id",
+      _tileRegionLoadOptions,
+      null,
+      (_) => progressCount++,
+    );
+
+    expect(result.transferSize, greaterThan(0));
+    expect(progressCount, greaterThan(0));
   });
 }

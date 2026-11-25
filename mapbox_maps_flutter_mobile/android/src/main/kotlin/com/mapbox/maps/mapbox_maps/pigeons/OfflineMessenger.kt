@@ -299,9 +299,9 @@ private open class OfflineMessengerPigeonCodec : StandardMessageCodec() {
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _OfflineManager {
-  fun loadStylePack(styleURI: String, loadOptions: StylePackLoadOptions, callback: (Result<StylePack>) -> Unit)
+  fun loadStylePack(styleURI: String, loadOptions: StylePackLoadOptions, operationId: Long, callback: (Result<StylePack>) -> Unit)
   fun removeStylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
-  fun addStylePackLoadProgressListener(styleURI: String)
+  fun addStylePackLoadProgressListener(styleURI: String, operationId: Long)
   fun stylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
   fun stylePackMetadata(styleURI: String, callback: (Result<Map<String, Any>>) -> Unit)
   fun allStylePacks(callback: (Result<List<StylePack>>) -> Unit)
@@ -322,7 +322,8 @@ interface _OfflineManager {
             val args = message as List<Any?>
             val styleURIArg = args[0] as String
             val loadOptionsArg = args[1] as StylePackLoadOptions
-            api.loadStylePack(styleURIArg, loadOptionsArg) { result: Result<StylePack> ->
+            val operationIdArg = args[2] as Long
+            api.loadStylePack(styleURIArg, loadOptionsArg, operationIdArg) { result: Result<StylePack> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -362,8 +363,9 @@ interface _OfflineManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val styleURIArg = args[0] as String
+            val operationIdArg = args[1] as Long
             val wrapped: List<Any?> = try {
-              api.addStylePackLoadProgressListener(styleURIArg)
+              api.addStylePackLoadProgressListener(styleURIArg, operationIdArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -437,10 +439,10 @@ interface _OfflineManager {
 }
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _TileStore {
-  fun loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, callback: (Result<TileRegion>) -> Unit)
-  fun addTileRegionLoadProgressListener(id: String)
-  fun estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, callback: (Result<TileRegionEstimateResult>) -> Unit)
-  fun addTileRegionEstimateProgressListener(id: String)
+  fun loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, operationId: Long, callback: (Result<TileRegion>) -> Unit)
+  fun addTileRegionLoadProgressListener(id: String, operationId: Long)
+  fun estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, operationId: Long, callback: (Result<TileRegionEstimateResult>) -> Unit)
+  fun addTileRegionEstimateProgressListener(id: String, operationId: Long)
   fun tileRegionMetadata(id: String, callback: (Result<Map<String, Any>>) -> Unit)
   fun tileRegionContainsDescriptor(id: String, options: List<TilesetDescriptorOptions>, callback: (Result<Boolean>) -> Unit)
   fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit)
@@ -464,7 +466,8 @@ interface _TileStore {
             val args = message as List<Any?>
             val idArg = args[0] as String
             val loadOptionsArg = args[1] as TileRegionLoadOptions
-            api.loadTileRegion(idArg, loadOptionsArg) { result: Result<TileRegion> ->
+            val operationIdArg = args[2] as Long
+            api.loadTileRegion(idArg, loadOptionsArg, operationIdArg) { result: Result<TileRegion> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -484,8 +487,9 @@ interface _TileStore {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val idArg = args[0] as String
+            val operationIdArg = args[1] as Long
             val wrapped: List<Any?> = try {
-              api.addTileRegionLoadProgressListener(idArg)
+              api.addTileRegionLoadProgressListener(idArg, operationIdArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -504,7 +508,8 @@ interface _TileStore {
             val idArg = args[0] as String
             val loadOptionsArg = args[1] as TileRegionLoadOptions
             val estimateOptionsArg = args[2] as TileRegionEstimateOptions?
-            api.estimateTileRegion(idArg, loadOptionsArg, estimateOptionsArg) { result: Result<TileRegionEstimateResult> ->
+            val operationIdArg = args[3] as Long
+            api.estimateTileRegion(idArg, loadOptionsArg, estimateOptionsArg, operationIdArg) { result: Result<TileRegionEstimateResult> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -524,8 +529,9 @@ interface _TileStore {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val idArg = args[0] as String
+            val operationIdArg = args[1] as Long
             val wrapped: List<Any?> = try {
-              api.addTileRegionEstimateProgressListener(idArg)
+              api.addTileRegionEstimateProgressListener(idArg, operationIdArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

@@ -42,10 +42,14 @@ class OfflineManager {
   /// fails, the load request proceeds trying to load the remaining style package
   /// resources.
   ///
+  /// Call [CancelableFuture.cancel] on the returned future to stop the load.
+  /// The future then fails with a `PlatformException` with code `CANCELED`.
+  /// The resources that loaded before the cancel stay on disk.
+  ///
   /// [styleURI]: The URI of the style package's associated style.
   /// [loadOptions]: The style package load options.
   /// [progressListener]: Invoked when loading progress is updated.
-  Future<StylePack> loadStylePack(
+  CancelableFuture<StylePack> loadStylePack(
     String styleURI,
     StylePackLoadOptions loadOptions,
     OnStylePackLoadProgressListener? progressListener,

@@ -3,17 +3,19 @@ package com.mapbox.maps.mapbox_maps.offline
 import android.content.Context
 import com.mapbox.common.TileStore
 import com.mapbox.maps.MapboxMapsOptions
+import com.mapbox.maps.mapbox_maps.CancelableOperationRegistry
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import io.flutter.plugin.common.BinaryMessenger
 
 class OfflineMapInstanceManager(
   private val context: Context,
   private val messenger: BinaryMessenger,
+  private val operationRegistry: CancelableOperationRegistry,
 ) : _OfflineMapInstanceManager, _TileStoreInstanceManager {
 
   override fun setupOfflineManager(channelSuffix: String) {
-    val offlineControler = OfflineController(context, messenger, channelSuffix)
-    _OfflineManager.setUp(messenger, offlineControler, channelSuffix)
+    val offlineController = OfflineController(context, messenger, channelSuffix, operationRegistry)
+    _OfflineManager.setUp(messenger, offlineController, channelSuffix)
   }
 
   override fun tearDownOfflineManager(channelSuffix: String) {
@@ -28,7 +30,7 @@ class OfflineMapInstanceManager(
     }
     val tileStore = TileStore.create()
     MapboxMapsOptions.tileStore = tileStore
-    val tileStoreController = TileStoreController(context, messenger, channelSuffix, tileStore)
+    val tileStoreController = TileStoreController(context, messenger, channelSuffix, tileStore, operationRegistry)
     _TileStore.setUp(messenger, tileStoreController, channelSuffix)
   }
 

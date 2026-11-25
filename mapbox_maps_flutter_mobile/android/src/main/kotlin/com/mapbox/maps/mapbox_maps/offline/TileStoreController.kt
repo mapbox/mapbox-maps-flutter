@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import com.mapbox.common.TileStore
 import com.mapbox.maps.OfflineManager
+import com.mapbox.maps.mapbox_maps.CancelableOperationRegistry
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTTileRegion
 import com.mapbox.maps.mapbox_maps.toFLTTileRegionEstimateProgress
@@ -27,44 +28,49 @@ class TileStoreController(
   private val context: Context,
   private val binaryMessenger: BinaryMessenger,
   private val channelSuffix: String,
-  private val tileStore: TileStore
+  private val tileStore: TileStore,
+  private val operationRegistry: CancelableOperationRegistry
 ) : _TileStore {
 
   private val offlineManager = OfflineManager()
-  private var tileRegionLoadProgressHandlers = HashMap<String, EventChannel.EventSink>()
-  private var tileRegionEstimateProgressHandlers = HashMap<String, EventChannel.EventSink>()
+  private val tileRegionLoadProgressHandlers = HashMap<Long, EventChannel.EventSink>()
+  private val tileRegionEstimateProgressHandlers = HashMap<Long, EventChannel.EventSink>()
   private val mainHandler = Handler(context.mainLooper)
 
   override fun loadTileRegion(
     id: String,
     loadOptions: TileRegionLoadOptions,
+    operationId: Long,
     callback: (Result<TileRegion>) -> Unit
   ) {
-    tileStore.loadTileRegion(
+    val cancelable = tileStore.loadTileRegion(
       id, offlineManager.tileRegionLoadOptions(loadOptions, context),
       { progress ->
         mainHandler.post {
-          tileRegionLoadProgressHandlers[id]?.success(progress.toFLTTileRegionLoadProgress().toList())
+          tileRegionLoadProgressHandlers[operationId]?.success(progress.toFLTTileRegionLoadProgress().toList())
         }
       },
       { expected ->
         mainHandler.post {
+          operationRegistry.unregister(operationId)
           callback(expected.toResult { it.toFLTTileRegion() })
-          tileRegionLoadProgressHandlers.remove(id)?.endOfStream()
+          tileRegionLoadProgressHandlers.remove(operationId)?.endOfStream()
         }
       }
     )
+    operationRegistry.register(operationId, cancelable)
   }
 
-  override fun addTileRegionLoadProgressListener(id: String) {
-    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/$channelSuffix/tile-region-$id")
+  override fun addTileRegionLoadProgressListener(id: String, operationId: Long) {
+    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/$channelSuffix/tile-region-$operationId")
     eventChannel.setStreamHandler(
       object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-          events?.let { tileRegionLoadProgressHandlers[id] = it }
+          events?.let { tileRegionLoadProgressHandlers[operationId] = it }
         }
         override fun onCancel(arguments: Any?) {
-          tileRegionLoadProgressHandlers.remove(id)
+          tileRegionLoadProgressHandlers.remove(operationId)
+          eventChannel.setStreamHandler(null)
         }
       }
     )
@@ -74,37 +80,41 @@ class TileStoreController(
     id: String,
     loadOptions: TileRegionLoadOptions,
     estimateOptions: TileRegionEstimateOptions?,
+    operationId: Long,
     callback: (Result<TileRegionEstimateResult>) -> Unit
   ) {
-    tileStore.estimateTileRegion(
+    val cancelable = tileStore.estimateTileRegion(
       id,
       offlineManager.tileRegionLoadOptions(loadOptions, context),
       estimateOptions?.toTileRegionEstimateOptions() ?: com.mapbox.common.TileRegionEstimateOptions(null),
       { progress ->
         mainHandler.post {
-          tileRegionEstimateProgressHandlers[id]?.success(
+          tileRegionEstimateProgressHandlers[operationId]?.success(
             progress.toFLTTileRegionEstimateProgress().toList()
           )
         }
       },
       { expected ->
         mainHandler.post {
+          operationRegistry.unregister(operationId)
           callback(expected.toResult { it.toFLTTileRegionEstimateResult() })
-          tileRegionEstimateProgressHandlers.remove(id)?.endOfStream()
+          tileRegionEstimateProgressHandlers.remove(operationId)?.endOfStream()
         }
       }
     )
+    operationRegistry.register(operationId, cancelable)
   }
 
-  override fun addTileRegionEstimateProgressListener(id: String) {
-    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/$channelSuffix/tile-region-estimate$id")
+  override fun addTileRegionEstimateProgressListener(id: String, operationId: Long) {
+    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/$channelSuffix/tile-region-estimate-$operationId")
     eventChannel.setStreamHandler(
       object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-          events?.let { tileRegionEstimateProgressHandlers[id] = it }
+          events?.let { tileRegionEstimateProgressHandlers[operationId] = it }
         }
         override fun onCancel(arguments: Any?) {
-          tileRegionEstimateProgressHandlers.remove(id)
+          tileRegionEstimateProgressHandlers.remove(operationId)
+          eventChannel.setStreamHandler(null)
         }
       }
     )

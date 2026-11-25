@@ -1,3 +1,4 @@
+import '../public/cancelable.dart';
 import '../public/offline_progress_listeners.dart';
 import '../pigeons/platform_interface_data_types.dart';
 
@@ -6,7 +7,7 @@ import '../pigeons/platform_interface_data_types.dart';
 /// Abstract interface for managing offline style packages.
 abstract interface class OfflineManagerPlatformInterface {
   /// Loads or updates a style package.
-  Future<StylePack> loadStylePack(
+  CancelableFuture<StylePack> loadStylePack(
     String styleURI,
     StylePackLoadOptions loadOptions,
     OnStylePackLoadProgressListener? progressListener,
@@ -28,14 +29,14 @@ abstract interface class OfflineManagerPlatformInterface {
 /// Abstract interface for managing tile store downloads.
 abstract interface class TileStorePlatformInterface {
   /// Loads or updates a tile region.
-  Future<TileRegion> loadTileRegion(
+  CancelableFuture<TileRegion> loadTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     OnTileRegionLoadProgressListener? progressListener,
   );
 
   /// Estimates the storage and transfer size of a tile region.
-  Future<TileRegionEstimateResult> estimateTileRegion(
+  CancelableFuture<TileRegionEstimateResult> estimateTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,

@@ -65,21 +65,31 @@ final class OfflineManager implements OfflineManagerPlatformInterface {
   /// to change. Please contact Mapbox if you require a higher limit.
   /// Additional charges may apply.
   @override
-  Future<StylePack> loadStylePack(
+  CancelableFuture<StylePack> loadStylePack(
     String styleURI,
     StylePackLoadOptions loadOptions,
     OnStylePackLoadProgressListener? progressListener,
-  ) async {
-    if (progressListener != null) {
-      await _api.addStylePackLoadProgressListener(styleURI);
-      final eventChannel = EventChannel(
-        "com.mapbox.maps.flutter/$_messageChannel/$styleURI",
-      );
-      eventChannel.receiveBroadcastStream().listen((event) {
-        progressListener(StylePackLoadProgress.decode(event));
-      });
-    }
-    return _api.loadStylePack(styleURI, loadOptions);
+  ) {
+    StreamSubscription<dynamic>? progressSubscription;
+    return CancelableOperations.instance.start(
+      prepare: progressListener == null
+          ? null
+          : (operationId) async {
+              await _api.addStylePackLoadProgressListener(
+                styleURI,
+                operationId,
+              );
+              progressSubscription =
+                  EventChannel(
+                    "com.mapbox.maps.flutter/$_messageChannel/style-pack-$operationId",
+                  ).receiveBroadcastStream().listen((event) {
+                    progressListener(StylePackLoadProgress.decode(event));
+                  });
+            },
+      run: (operationId) =>
+          _api.loadStylePack(styleURI, loadOptions, operationId),
+      onDone: () => progressSubscription?.cancel(),
+    );
   }
 
   /// Removes a style package.

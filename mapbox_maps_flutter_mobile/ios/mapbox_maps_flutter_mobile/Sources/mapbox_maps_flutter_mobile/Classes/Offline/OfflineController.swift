@@ -8,16 +8,19 @@ final class OfflineController: _OfflineManager {
     }
 
     private lazy var offlineManager = MapboxCoreMaps.OfflineManager()
-    private var progressHandlers: [String: AnyFlutterStreamHandler] = [:]
+    private var progressHandlers: [Int64: AnyFlutterStreamHandler] = [:]
     private let messenger: SuffixBinaryMessenger
+    private let cancelableOperationRegistry: CancelableOperationRegistry
 
-    init(messenger: SuffixBinaryMessenger) {
+    init(messenger: SuffixBinaryMessenger, cancelableOperationRegistry: CancelableOperationRegistry) {
         self.messenger = messenger
+        self.cancelableOperationRegistry = cancelableOperationRegistry
     }
 
     func loadStylePack(
         styleURI uri: String,
         loadOptions: StylePackLoadOptions,
+        operationId: Int64,
         completion: @escaping (Result<StylePack, Swift.Error>) -> Void
     ) {
         guard let styleURI = StyleURI(rawValue: uri) else {
@@ -29,21 +32,30 @@ final class OfflineController: _OfflineManager {
             return
         }
 
-        offlineManager.loadStylePack(
+        let cancelable = offlineManager.loadStylePack(
             for: styleURI,
             loadOptions: loadOptions) { [weak self] progress in
-                self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
+                DispatchQueue.main.async {
+                    self?.progressHandlers[operationId]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
+                }
             } completion: { [weak self] result in
-                executeOnMainThread(completion)(result.map { $0.toFLTStylePack() }.mapPigeonError())
-                self?.progressHandlers.removeValue(forKey: uri)
+                DispatchQueue.main.async {
+                    completion(result.map { $0.toFLTStylePack() }.mapPigeonError())
+                    self?.cancelableOperationRegistry.unregister(operationId: operationId)
+                    self?.progressHandlers.removeValue(forKey: operationId)?.eventSink?(FlutterEndOfEventStream)
+                }
             }
+        cancelableOperationRegistry.register(operationId: operationId, cancelable: cancelable)
     }
 
-    func addStylePackLoadProgressListener(styleURI: String) {
-        let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/\(styleURI)", binaryMessenger: messenger.messenger)
+    func addStylePackLoadProgressListener(styleURI: String, operationId: Int64) {
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/style-pack-\(operationId)", binaryMessenger: messenger.messenger)
+        let handler = AnyFlutterStreamHandler { [weak self] in
+            self?.progressHandlers.removeValue(forKey: operationId)
+            eventChannel.setStreamHandler(nil)
+        }
         eventChannel.setStreamHandler(handler)
-        progressHandlers[styleURI] = handler
+        progressHandlers[operationId] = handler
     }
 
     func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, Swift.Error>) -> Void) {

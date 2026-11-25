@@ -23,7 +23,10 @@
 > [!IMPORTANT]
 > * The minimum supported SDK version is now Flutter 3.44.2 / Dart 3.12.0.
 > * [Android] The plugin uses built-in Kotlin and no longer applies the Kotlin Gradle Plugin. This fixes the `Could not find method kotlin()` build error with AGP 9 and `android.builtInKotlin=false` ([#1149](https://github.com/mapbox/mapbox-maps-flutter/issues/1149)).
+> * `TileStore.loadTileRegion`, `TileStore.estimateTileRegion` and `OfflineManager.loadStylePack` now return a `CancelableFuture`. Call `cancel()` on it to stop the operation on Android and iOS. The future then fails with a `PlatformException` with code `CANCELED`. Code that awaits the result or stores it as a `Future` works without change. A class that implements `OfflineManager`, for example a test fake, must change the return type of `loadStylePack` to `CancelableFuture<StylePack>`.
 
+* [Android] Fix `estimateTileRegion`, which did not call the progress listener.
+* Fix the progress listeners of `loadTileRegion`, `estimateTileRegion` and `loadStylePack`, which stayed subscribed after the operation completed. Two operations on the same region or style at the same time now each get their own progress events.
 * Add `MapboxHttpService.instance` to configure the HTTP requests of the Mapbox SDK without a map, so custom headers also apply to the first style request. The settings are process-wide. `MapboxMap.httpService` is deprecated; it returns `MapboxHttpService.instance`.
 * `MapboxHttpService.setMaxRequestsPerHost` clamps the value to the range that the platform supports: 1..255, and 1..127 on Android. Before, Android sent values above 127 as negative numbers, which made HTTP requests fail.
 * [Web] Add support for `MapboxHttpService.setCustomHeadersForHost` and `clearCustomHeaders`. The server must allow the custom headers in CORS, and the Mapbox tile endpoints do not allow them. `setMaxRequestsPerHost` has no effect on web.

@@ -3,6 +3,7 @@ package com.mapbox.maps.mapbox_maps.offline
 import android.content.Context
 import android.os.Handler
 import com.mapbox.maps.OfflineManager
+import com.mapbox.maps.mapbox_maps.CancelableOperationRegistry
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
 import com.mapbox.maps.mapbox_maps.toFLTStylePackLoadProgress
@@ -17,32 +18,36 @@ class OfflineController(
   private val context: Context,
   private val messenger: BinaryMessenger,
   private val channelSuffix: String,
+  private val operationRegistry: CancelableOperationRegistry,
 ) : _OfflineManager {
 
   private val offlineManager = OfflineManager()
-  private var progressHandlers = HashMap<String, EventChannel.EventSink>()
+  private val progressHandlers = HashMap<Long, EventChannel.EventSink>()
   private val mainHandler = Handler(context.mainLooper)
 
   override fun loadStylePack(
     styleURI: String,
     loadOptions: StylePackLoadOptions,
+    operationId: Long,
     callback: (Result<StylePack>) -> Unit
   ) {
-    offlineManager.loadStylePack(
+    val cancelable = offlineManager.loadStylePack(
       styleURI,
       loadOptions.toStylePackLoadOptions(),
       { progress ->
         mainHandler.post {
-          progressHandlers[styleURI]?.success(progress.toFLTStylePackLoadProgress().toList())
+          progressHandlers[operationId]?.success(progress.toFLTStylePackLoadProgress().toList())
         }
       },
       { expected ->
         mainHandler.post {
+          operationRegistry.unregister(operationId)
           callback(expected.toResult { it.toFLTStylePack() })
-          progressHandlers.remove(styleURI)?.endOfStream()
+          progressHandlers.remove(operationId)?.endOfStream()
         }
       }
     )
+    operationRegistry.register(operationId, cancelable)
   }
 
   override fun removeStylePack(styleURI: String, callback: (Result<StylePack>) -> Unit) {
@@ -55,16 +60,17 @@ class OfflineController(
     }
   }
 
-  override fun addStylePackLoadProgressListener(styleURI: String) {
-    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/$channelSuffix/$styleURI")
+  override fun addStylePackLoadProgressListener(styleURI: String, operationId: Long) {
+    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/$channelSuffix/style-pack-$operationId")
     eventChannel.setStreamHandler(
       object : StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-          events?.let { progressHandlers[styleURI] = it }
+          events?.let { progressHandlers[operationId] = it }
         }
 
         override fun onCancel(arguments: Any?) {
-          progressHandlers.remove(styleURI)
+          progressHandlers.remove(operationId)
+          eventChannel.setStreamHandler(null)
         }
       }
     )

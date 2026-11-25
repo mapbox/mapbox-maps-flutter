@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.offline.OfflineMapInstanceManager
 import com.mapbox.maps.mapbox_maps.offline.OfflineSwitch
+import com.mapbox.maps.mapbox_maps.pigeons._CancelableOperationMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._GeofencingMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._HttpServiceMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
@@ -24,6 +25,8 @@ import io.flutter.plugin.common.BinaryMessenger
 class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private var lifecycle: Lifecycle? = null
   private var geofencingController: GeofencingController? = null
+  private var operationRegistry: CancelableOperationRegistry? = null
+  private var staticBinaryMessenger: BinaryMessenger? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     flutterPluginBinding
@@ -50,7 +53,11 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger, flutterAssets: FlutterAssets) {
     val optionsController = MapboxOptionsController(flutterAssets)
     val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
-    val offlineMapInstanceManager = OfflineMapInstanceManager(context, binaryMessenger)
+    val registry = CancelableOperationRegistry()
+    operationRegistry = registry
+    staticBinaryMessenger = binaryMessenger
+    _CancelableOperationMessenger.setUp(binaryMessenger, registry)
+    val offlineMapInstanceManager = OfflineMapInstanceManager(context, binaryMessenger, registry)
     val offlineSwitch = OfflineSwitch()
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
@@ -67,6 +74,10 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     geofencingController?.dispose()
     geofencingController = null
+    staticBinaryMessenger?.let { _CancelableOperationMessenger.setUp(it, null) }
+    staticBinaryMessenger = null
+    operationRegistry?.cancelAll()
+    operationRegistry = null
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {

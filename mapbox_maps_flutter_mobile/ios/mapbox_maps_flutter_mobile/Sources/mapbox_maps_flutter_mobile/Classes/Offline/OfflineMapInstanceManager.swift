@@ -7,13 +7,18 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
     }
 
     private let binaryMessenger: FlutterBinaryMessenger
+    private let cancelableOperationRegistry: CancelableOperationRegistry
 
-    init(binaryMessenger: FlutterBinaryMessenger) {
+    init(binaryMessenger: FlutterBinaryMessenger, cancelableOperationRegistry: CancelableOperationRegistry) {
         self.binaryMessenger = binaryMessenger
+        self.cancelableOperationRegistry = cancelableOperationRegistry
     }
 
     func setupOfflineManager(channelSuffix: String) throws {
-        let offlineController = OfflineController(messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix))
+        let offlineController = OfflineController(
+            messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix),
+            cancelableOperationRegistry: cancelableOperationRegistry
+        )
         _OfflineManagerSetup.setUp(binaryMessenger: binaryMessenger, api: offlineController, messageChannelSuffix: channelSuffix)
     }
 
@@ -30,7 +35,11 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
         }
 
         MapboxMapsOptions.tileStore = tileStore
-        let tileStoreController = TileStoreController(messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix), tileStore: tileStore)
+        let tileStoreController = TileStoreController(
+            messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix),
+            tileStore: tileStore,
+            cancelableOperationRegistry: cancelableOperationRegistry
+        )
 
         _TileStoreSetup.setUp(binaryMessenger: binaryMessenger, api: tileStoreController, messageChannelSuffix: channelSuffix)
     }

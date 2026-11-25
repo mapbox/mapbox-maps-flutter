@@ -215,6 +215,7 @@ class _OfflineManager {
   Future<StylePack> loadStylePack(
     String styleURI,
     StylePackLoadOptions loadOptions,
+    int operationId,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.loadStylePack$pigeonVar_messageChannelSuffix';
@@ -225,7 +226,7 @@ class _OfflineManager {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[styleURI, loadOptions],
+      <Object?>[styleURI, loadOptions, operationId],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -279,7 +280,10 @@ class _OfflineManager {
     }
   }
 
-  Future<void> addStylePackLoadProgressListener(String styleURI) async {
+  Future<void> addStylePackLoadProgressListener(
+    String styleURI,
+    int operationId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -289,7 +293,7 @@ class _OfflineManager {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[styleURI],
+      <Object?>[styleURI, operationId],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -423,6 +427,7 @@ class _TileStore {
   Future<TileRegion> loadTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
+    int operationId,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.loadTileRegion$pigeonVar_messageChannelSuffix';
@@ -433,7 +438,7 @@ class _TileStore {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[id, loadOptions],
+      <Object?>[id, loadOptions, operationId],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -455,7 +460,10 @@ class _TileStore {
     }
   }
 
-  Future<void> addTileRegionLoadProgressListener(String id) async {
+  Future<void> addTileRegionLoadProgressListener(
+    String id,
+    int operationId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionLoadProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -465,7 +473,7 @@ class _TileStore {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[id],
+      <Object?>[id, operationId],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -486,6 +494,7 @@ class _TileStore {
     String id,
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,
+    int operationId,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.estimateTileRegion$pigeonVar_messageChannelSuffix';
@@ -496,7 +505,7 @@ class _TileStore {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[id, loadOptions, estimateOptions],
+      <Object?>[id, loadOptions, estimateOptions, operationId],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -518,7 +527,10 @@ class _TileStore {
     }
   }
 
-  Future<void> addTileRegionEstimateProgressListener(String id) async {
+  Future<void> addTileRegionEstimateProgressListener(
+    String id,
+    int operationId,
+  ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionEstimateProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -528,7 +540,7 @@ class _TileStore {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[id],
+      <Object?>[id, operationId],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

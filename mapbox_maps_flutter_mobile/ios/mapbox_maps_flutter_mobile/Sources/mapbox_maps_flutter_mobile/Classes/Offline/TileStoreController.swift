@@ -11,60 +11,78 @@ final class TileStoreController: _TileStore {
     private let tileStore: TileStore
 
     private lazy var offlineManager = OfflineManager()
-    private var tileRegionLoadProgressHandlers: [String: AnyFlutterStreamHandler] = [:]
-    private var tileRegionEstimateProgressHandlers: [String: AnyFlutterStreamHandler] = [:]
+    private let cancelableOperationRegistry: CancelableOperationRegistry
+    private var tileRegionLoadProgressHandlers: [Int64: AnyFlutterStreamHandler] = [:]
+    private var tileRegionEstimateProgressHandlers: [Int64: AnyFlutterStreamHandler] = [:]
 
-    init(messenger: SuffixBinaryMessenger, tileStore: TileStore) {
+    init(messenger: SuffixBinaryMessenger, tileStore: TileStore, cancelableOperationRegistry: CancelableOperationRegistry) {
         self.messenger = messenger
         self.tileStore = tileStore
+        self.cancelableOperationRegistry = cancelableOperationRegistry
     }
 
-    func loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, completion: @escaping (Result<TileRegion, Swift.Error>) -> Void) {
+    func loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, operationId: Int64, completion: @escaping (Result<TileRegion, Swift.Error>) -> Void) {
         guard let loadOptions = offlineManager.tileRegionLoadOptions(loadOptions) else {
             completion(.failure(Error.invalidTileRegionLoadOptions))
             return
         }
 
-        tileStore.loadTileRegion(forId: id, loadOptions: loadOptions) { [weak self] progress in
-            guard let self else { return }
-            self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
+        let cancelable = tileStore.loadTileRegion(forId: id, loadOptions: loadOptions) { [weak self] progress in
+            DispatchQueue.main.async {
+                self?.tileRegionLoadProgressHandlers[operationId]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
+            }
         } completion: { [weak self] result in
-            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() }.mapPigeonError())
-            self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
+            DispatchQueue.main.async {
+                completion(result.map { $0.toFLTTileRegion() }.mapPigeonError())
+                self?.cancelableOperationRegistry.unregister(operationId: operationId)
+                self?.tileRegionLoadProgressHandlers.removeValue(forKey: operationId)?.eventSink?(FlutterEndOfEventStream)
+            }
         }
+        cancelableOperationRegistry.register(operationId: operationId, cancelable: cancelable)
     }
 
-    func addTileRegionLoadProgressListener(id: String) throws {
-        let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/tile-region-\(id)", binaryMessenger: messenger.messenger)
+    func addTileRegionLoadProgressListener(id: String, operationId: Int64) throws {
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/tile-region-\(operationId)", binaryMessenger: messenger.messenger)
+        let handler = AnyFlutterStreamHandler { [weak self] in
+            self?.tileRegionLoadProgressHandlers.removeValue(forKey: operationId)
+            eventChannel.setStreamHandler(nil)
+        }
         eventChannel.setStreamHandler(handler)
-        tileRegionLoadProgressHandlers[id] = handler
+        tileRegionLoadProgressHandlers[operationId] = handler
     }
 
-    func estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, completion: @escaping (Result<TileRegionEstimateResult, Swift.Error>) -> Void) {
+    func estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, operationId: Int64, completion: @escaping (Result<TileRegionEstimateResult, Swift.Error>) -> Void) {
 
         guard let loadOptions = offlineManager.tileRegionLoadOptions(loadOptions) else {
             completion(.failure(Error.invalidTileRegionLoadOptions))
             return
         }
 
-        tileStore.estimateTileRegion(
+        let cancelable = tileStore.estimateTileRegion(
             forId: id,
             loadOptions: loadOptions,
             estimateOptions: estimateOptions.map(MapboxCommon.TileRegionEstimateOptions.init(fltValue:))) { [weak self] progress in
-                guard let self else { return }
-                self.tileRegionEstimateProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
+                DispatchQueue.main.async {
+                    self?.tileRegionEstimateProgressHandlers[operationId]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
+                }
             } completion: { [weak self] result in
-                executeOnMainThread(completion)(result.map { $0.toFLTTileRegionEstimateResult() }.mapPigeonError())
-                self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
+                DispatchQueue.main.async {
+                    completion(result.map { $0.toFLTTileRegionEstimateResult() }.mapPigeonError())
+                    self?.cancelableOperationRegistry.unregister(operationId: operationId)
+                    self?.tileRegionEstimateProgressHandlers.removeValue(forKey: operationId)?.eventSink?(FlutterEndOfEventStream)
+                }
             }
+        cancelableOperationRegistry.register(operationId: operationId, cancelable: cancelable)
     }
 
-    func addTileRegionEstimateProgressListener(id: String) throws {
-        let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/tile-region-estimate-\(id)", binaryMessenger: messenger.messenger)
+    func addTileRegionEstimateProgressListener(id: String, operationId: Int64) throws {
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/tile-region-estimate-\(operationId)", binaryMessenger: messenger.messenger)
+        let handler = AnyFlutterStreamHandler { [weak self] in
+            self?.tileRegionEstimateProgressHandlers.removeValue(forKey: operationId)
+            eventChannel.setStreamHandler(nil)
+        }
         eventChannel.setStreamHandler(handler)
-        tileRegionEstimateProgressHandlers[id] = handler
+        tileRegionEstimateProgressHandlers[operationId] = handler
     }
 
     func tileRegionMetadata(id: String, completion: @escaping (Result<[String: Any], Swift.Error>) -> Void) {

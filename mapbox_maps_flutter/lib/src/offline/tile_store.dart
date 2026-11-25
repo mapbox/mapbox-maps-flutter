@@ -59,6 +59,10 @@ final class TileStore {
   /// the given id, the pending loading operation will fail with an error of
   /// `Canceled` type.
   ///
+  /// Call [CancelableFuture.cancel] on the returned future to stop the load.
+  /// The future then fails with a `PlatformException` with code `CANCELED`.
+  /// The resources that loaded before the cancel stay on disk.
+  ///
   /// - Note:
   ///     The user-provided callbacks will be executed on a
   ///     TileStore-controlled worker thread; it is the responsibility of the
@@ -70,7 +74,7 @@ final class TileStore {
   ///     will fail until excess regions are deleted. This limit is subject
   ///     to change. Please contact Mapbox if you require a higher limit.
   ///     Additional charges may apply.
-  Future<TileRegion> loadTileRegion(
+  CancelableFuture<TileRegion> loadTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     OnTileRegionLoadProgressListener? progressListener,
@@ -90,7 +94,11 @@ final class TileStore {
   /// provided in the region load options.
   ///
   /// Estimating a tile region does not mutate existing tile regions on the tile store.
-  Future<TileRegionEstimateResult> estimateTileRegion(
+  ///
+  /// Call [CancelableFuture.cancel] on the returned future to stop the
+  /// estimate. The future then fails with a `PlatformException` with code
+  /// `CANCELED`.
+  CancelableFuture<TileRegionEstimateResult> estimateTileRegion(
     String id,
     TileRegionLoadOptions loadOptions,
     TileRegionEstimateOptions? estimateOptions,
