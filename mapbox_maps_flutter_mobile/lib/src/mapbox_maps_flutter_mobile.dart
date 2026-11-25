@@ -51,6 +51,22 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform
   }
 
   @override
+  Widget buildTextureView({
+    String? styleUri,
+    PlatformMapCreatedCallback? onMapCreated,
+    bool gesturesEnabled = true,
+  }) {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      throw UnsupportedError('MapTexture is only supported on iOS.');
+    }
+    return MapTexture(
+      styleUri: styleUri,
+      onMapCreated: onMapCreated,
+      gesturesEnabled: gesturesEnabled,
+    );
+  }
+
+  @override
   Future<String> getAccessToken() => MapboxOptions.getAccessToken();
 
   @override

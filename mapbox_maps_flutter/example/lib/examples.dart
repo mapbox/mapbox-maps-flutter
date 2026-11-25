@@ -21,11 +21,13 @@ import 'getting_started/simple_map_example.dart';
 import 'interaction/annotations_example.dart';
 import 'interaction/gestures_example.dart';
 import 'interaction/overlay_playground_example.dart';
-import 'platform.dart' show isMobile, isWeb;
+import 'platform.dart' show isIOS, isMobile, isWeb;
 import 'platform/debug_options_example.dart';
 import 'platform/geofencing_example.dart';
 import 'platform/map_interface_example.dart';
 import 'platform/map_recorder_example.dart';
+import 'platform/map_texture_example.dart';
+import 'platform/map_texture_perf_example.dart';
 import 'platform/performance_statistics_example.dart';
 import 'styles/indoor_example.dart';
 import 'styles/light_example.dart';
@@ -352,6 +354,24 @@ final List<Example> examples = [
       title: 'Projection interface',
       subtitle: 'Tap to see one point in four coordinate spaces.',
       builder: (_) => const ProjectionExample(),
+    ),
+  ],
+  if (isIOS) ...[
+    Example(
+      slug: 'map_texture',
+      category: ExampleCategory.platform,
+      leading: const Icon(Icons.photo_camera_back),
+      title: 'Map in a flutter texture',
+      subtitle: 'No platform view, so the map can be captured.',
+      builder: (_) => const MapTextureExample(),
+    ),
+    Example(
+      slug: 'map_texture_perf',
+      category: ExampleCategory.platform,
+      leading: const Icon(Icons.speed),
+      title: 'Map texture vs platform view',
+      subtitle: 'Same camera path, frame times from the engine.',
+      builder: (_) => const MapTexturePerfExample(),
     ),
   ],
 ];

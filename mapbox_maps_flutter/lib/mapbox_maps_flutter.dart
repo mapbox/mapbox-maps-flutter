@@ -13,6 +13,7 @@ export 'src/indoor.dart';
 export 'src/indoor_selector_settings.dart';
 export 'src/location_settings.dart';
 export 'src/logo_settings.dart';
+export 'src/map_texture.dart';
 export 'src/map_widget.dart';
 export 'src/viewport_controller.dart';
 export 'src/scale_bar_settings.dart';

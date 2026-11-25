@@ -97,6 +97,15 @@ abstract base class MapboxMapsFlutterPlatform {
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
     bool? isOpaque = true,
   });
+
+  /// Builds a map that renders into a flutter texture instead of a platform view.
+  Widget buildTextureView({
+    String? styleUri,
+    PlatformMapCreatedCallback? onMapCreated,
+    bool gesturesEnabled = true,
+  }) {
+    throw UnsupportedError('MapTexture is not supported on this platform.');
+  }
 }
 
 /// Callback signature invoked when a map instance is ready.

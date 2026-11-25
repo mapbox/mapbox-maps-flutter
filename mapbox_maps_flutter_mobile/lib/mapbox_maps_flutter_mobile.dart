@@ -2,7 +2,9 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui' as ui;
 import 'dart:developer' as developer;
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -36,6 +38,7 @@ part 'src/internal/point_annotation_icon_image.dart';
 part 'src/mapbox_map.dart';
 part 'src/mapbox_maps_options.dart';
 part 'src/mapbox_maps_platform.dart';
+part 'src/map_texture.dart';
 part 'src/pigeons/circle_annotation_messenger.dart';
 part 'src/pigeons/point_annotation_messenger.dart';
 part 'src/pigeons/polygon_annotation_messenger.dart';

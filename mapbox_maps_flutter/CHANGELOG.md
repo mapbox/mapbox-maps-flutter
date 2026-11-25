@@ -1,5 +1,6 @@
 ### main
 
+* [iOS] Add `MapTexture`, a map rendered into a Flutter texture instead of a platform view, so it can be captured and sampled by shaders and backdrop filters.
 * [Web] Add `StyleManager.getImage` support.
 * [Web] Add `StyleManager.updateImageForSource` support.
 * [Web] `onStyleImageMissingListener` now receives events.
