@@ -1,5 +1,7 @@
 ### main
 
+* [Web] Add `StyleManager.getStyleTransition` and `StyleManager.setStyleTransition` support.
+* [iOS] Fix `StyleManager.getStyleTransition` and `StyleManager.setStyleTransition` using seconds for `duration` and `delay`. They now use milliseconds, as documented and as on Android.
 * [Web] Add `StyleManager.getImage` support.
 * [Web] Add `StyleManager.updateImageForSource` support.
 * [Web] `onStyleImageMissingListener` now receives events.

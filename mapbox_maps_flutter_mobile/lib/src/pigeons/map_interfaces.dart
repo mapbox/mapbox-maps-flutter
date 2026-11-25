@@ -4123,12 +4123,10 @@ class StyleManager {
     }
   }
 
-  /// Returns the map style's transition options. By default, the style parser will attempt
-  /// to read the style default transition options, if any, fallbacking to an immediate transition
-  /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
-  /// reset once a new style has been loaded.
-  ///
-  /// The style transition is re-evaluated when a new style is loaded.
+  /// Returns the map style's transition options. By default, the style parser reads the
+  /// transition options of the style. If the style has none, the duration is 300 milliseconds
+  /// and the delay is 0 milliseconds. `setStyleTransition` overrides the options until a new
+  /// style is loaded.
   ///
   /// @return The `transition options` of the current style in use.
   Future<TransitionOptions> getStyleTransition() async {
@@ -4952,7 +4950,7 @@ class StyleManager {
 
   /// Overrides the map style's transition options with user-provided options.
   ///
-  /// The style transition is re-evaluated when a new style is loaded.
+  /// The override is removed when a new style is loaded.
   ///
   /// @param transitionOptions The `transition options`.
   Future<void> setStyleTransition(TransitionOptions transitionOptions) async {

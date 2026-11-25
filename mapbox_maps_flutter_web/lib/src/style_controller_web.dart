@@ -28,7 +28,11 @@ final class StyleController implements StylePlatformInterface, Disposable {
   /// was set or the last style was JSON.
   String? _styleURI;
 
-  StyleController(this._map, {this._styleURI});
+  StyleController(this._map, {this._styleURI}) {
+    _map.on(JSMapEvents.styleLoad, _syncLabelFadeListener);
+    _map.on(JSMapEvents.styleData, _syncLabelFadeListener);
+    _syncLabelFade();
+  }
 
   // ===== Style loading =====
 
@@ -76,15 +80,66 @@ final class StyleController implements StylePlatformInterface, Disposable {
 
   // ===== Transition =====
 
+  static const _defaultTransitionDuration = 300;
+  static const _defaultTransitionDelay = 0;
+
+  // GL JS has no placement transition option. The label fade duration gives
+  // the same result, and this field keeps the value for the getter.
+  bool _placementTransitionsEnabled = true;
+
+  // The stylesheet that the label fade duration agrees with. GL JS makes a
+  // new stylesheet for each new style.
+  JSStyleSpecification? _labelFadeStylesheet;
+
+  late final JSFunction _syncLabelFadeListener = _syncLabelFade.toJS;
+
   @override
-  Future<TransitionOptions> getStyleTransition() => throw UnsupportedError(
-    "Style.getStyleTransition() is not supported on web",
+  Future<TransitionOptions> getStyleTransition() async {
+    _syncLabelFade();
+    final transition = _map.getTransition();
+    return TransitionOptions(
+      duration: transition?.duration ?? _defaultTransitionDuration,
+      delay: transition?.delay ?? _defaultTransitionDelay,
+      enablePlacementTransitions: _placementTransitionsEnabled,
+    );
+  }
+
+  @override
+  Future<void> setStyleTransition(TransitionOptions transitionOptions) async {
+    final duration = transitionOptions.duration ?? _defaultTransitionDuration;
+    // GL JS merges the transition into the current one. Android and iOS
+    // replace it, thus set the two values each time.
+    _map.setTransition(
+      JSTransitionSpecification()
+        ..duration = duration
+        ..delay = transitionOptions.delay ?? _defaultTransitionDelay,
+    );
+    _labelFadeStylesheet = _map.style?.loadedStylesheet;
+    _placementTransitionsEnabled =
+        transitionOptions.enablePlacementTransitions ?? true;
+    _setLabelFade(duration);
+  }
+
+  /// Keeps the label fade duration equal to the transition duration.
+  ///
+  /// A new style removes the transition override on all platforms. GL JS does
+  /// this for the transition, but not for the label fade duration. GL JS can
+  /// change the transition of a new style after its first style data event,
+  /// for example when its imports load, thus each event sets the duration.
+  void _syncLabelFade() {
+    final stylesheet = _map.style?.loadedStylesheet;
+    if (stylesheet == null) return;
+    if (!(_labelFadeStylesheet?.strictEquals(stylesheet).toDart ?? false)) {
+      _labelFadeStylesheet = stylesheet;
+      _placementTransitionsEnabled = true;
+    }
+    _setLabelFade(_map.getTransition()?.duration ?? _defaultTransitionDuration);
+  }
+
+  // Android and iOS fade labels for the transition duration, or not at all.
+  void _setLabelFade(int transitionDuration) => _map.setFadeDuration(
+    _placementTransitionsEnabled ? transitionDuration : 0,
   );
-  @override
-  Future<void> setStyleTransition(TransitionOptions transitionOptions) =>
-      throw UnsupportedError(
-        "Style.setStyleTransition() is not supported on web",
-      );
 
   // ===== Style imports =====
 
@@ -816,7 +871,11 @@ final class StyleController implements StylePlatformInterface, Disposable {
   }
 
   @override
-  void dispose() => _revokeAllImageSourceObjectUrls();
+  void dispose() {
+    _map.off(JSMapEvents.styleLoad, _syncLabelFadeListener);
+    _map.off(JSMapEvents.styleData, _syncLabelFadeListener);
+    _revokeAllImageSourceObjectUrls();
+  }
 
   @override
   Future<StyleImageRgba?> getStyleImage(String imageId) async {

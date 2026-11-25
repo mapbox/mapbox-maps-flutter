@@ -358,11 +358,12 @@ extension ImportPosition {
     }
 }
 
+// The Flutter options are in milliseconds. The Maps SDK options are in seconds.
 extension TransitionOptions {
     func toTransitionOptions() -> MapboxMaps.TransitionOptions {
         return MapboxMaps.TransitionOptions(
-            duration: self.duration.map(TimeInterval.init),
-            delay: self.delay.map(TimeInterval.init),
+            duration: self.duration.map { TimeInterval($0) / 1000 },
+            delay: self.delay.map { TimeInterval($0) / 1000 },
             enablePlacementTransitions: self.enablePlacementTransitions)
     }
 
@@ -679,8 +680,8 @@ extension MapboxMaps.CameraOptions {
 extension MapboxMaps.TransitionOptions {
     func toFLTTransitionOptions() -> TransitionOptions {
         return TransitionOptions(
-            duration: duration.map(Int64.init),
-            delay: delay.map(Int64.init),
+            duration: duration.map { Int64(($0 * 1000).rounded()) },
+            delay: delay.map { Int64(($0 * 1000).rounded()) },
             enablePlacementTransitions: enablePlacementTransitions
         )
     }

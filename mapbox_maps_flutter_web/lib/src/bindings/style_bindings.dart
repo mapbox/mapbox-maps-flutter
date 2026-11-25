@@ -144,7 +144,9 @@ extension type JSInternalRGBAImage._(JSObject _) implements JSObject {
 extension type JSTransitionSpecification._(JSObject _) implements JSObject {
   JSTransitionSpecification() : _ = JSObject();
 
+  external int? get duration;
   external set duration(int value);
+  external int? get delay;
   external set delay(int value);
 }
 
@@ -233,6 +235,11 @@ extension StyleFlatLight on JSStyle {
 
   /// The style JSON that GL JS loaded. `Map.setLights` does not change it.
   external JSStyleSpecification get stylesheet;
+
+  /// The [stylesheet], or null before the style loads. GL JS makes a new
+  /// object for each new style.
+  @JS('stylesheet')
+  external JSStyleSpecification? get loadedStylesheet;
 }
 
 /// The lights of a style JSON.
@@ -326,6 +333,19 @@ extension Style on JSMap {
   external JSAny? getSnow();
   external void setRain(JSAny? rain);
   external JSAny? getRain();
+
+  // ----- Transition -----
+  external void setTransition(JSTransitionSpecification transition);
+
+  /// Returns the transition with the GL JS default values for a duration or
+  /// delay that the style does not set.
+  external JSTransitionSpecification? getTransition();
+
+  /// Sets the duration of the label fade, in milliseconds.
+  external void setFadeDuration(int duration);
+
+  /// Returns the duration of the label fade, in milliseconds.
+  external int getFadeDuration();
 }
 
 // ===== Style spec accessors (returned by JSMap.getStyle()) =====

@@ -59,10 +59,18 @@ base class StyleManager {
   Future<CameraOptions> getStyleDefaultCamera() =>
       _impl.getStyleDefaultCamera();
 
-  /// Returns the current style transition options.
+  /// Returns the style transition options.
+  ///
+  /// The options are those of the style. If the style has none, the duration is
+  /// 300 milliseconds and the delay is 0 milliseconds.
   Future<TransitionOptions> getStyleTransition() => _impl.getStyleTransition();
 
-  /// Sets the style transition options.
+  /// Overrides the style transition options.
+  ///
+  /// A property change without its own transition uses these options. A
+  /// duration or delay that is null uses its default value. If
+  /// [TransitionOptions.enablePlacementTransitions] is false, labels show and
+  /// hide without a fade. The override is removed when a new style is loaded.
   Future<void> setStyleTransition(TransitionOptions transitionOptions) =>
       _impl.setStyleTransition(transitionOptions);
 

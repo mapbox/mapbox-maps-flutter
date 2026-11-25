@@ -3053,12 +3053,10 @@ protocol StyleManager {
   ///
   /// @return The default `camera options` of the current style in use.
   func getStyleDefaultCamera(completion: @escaping (Result<CameraOptions, Error>) -> Void)
-  /// Returns the map style's transition options. By default, the style parser will attempt
-  /// to read the style default transition options, if any, fallbacking to an immediate transition
-  /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
-  /// reset once a new style has been loaded.
-  ///
-  /// The style transition is re-evaluated when a new style is loaded.
+  /// Returns the map style's transition options. By default, the style parser reads the
+  /// transition options of the style. If the style has none, the duration is 300 milliseconds
+  /// and the delay is 0 milliseconds. `setStyleTransition` overrides the options until a new
+  /// style is loaded.
   ///
   /// @return The `transition options` of the current style in use.
   func getStyleTransition(completion: @escaping (Result<TransitionOptions, Error>) -> Void)
@@ -3187,7 +3185,7 @@ protocol StyleManager {
   func setStyleRainProperty(property: String, value: Any) throws
   /// Overrides the map style's transition options with user-provided options.
   ///
-  /// The style transition is re-evaluated when a new style is loaded.
+  /// The override is removed when a new style is loaded.
   ///
   /// @param transitionOptions The `transition options`.
   func setStyleTransition(transitionOptions: TransitionOptions, completion: @escaping (Result<Void, Error>) -> Void)
@@ -3667,12 +3665,10 @@ class StyleManagerSetup {
     } else {
       getStyleDefaultCameraChannel.setMessageHandler(nil)
     }
-    /// Returns the map style's transition options. By default, the style parser will attempt
-    /// to read the style default transition options, if any, fallbacking to an immediate transition
-    /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
-    /// reset once a new style has been loaded.
-    ///
-    /// The style transition is re-evaluated when a new style is loaded.
+    /// Returns the map style's transition options. By default, the style parser reads the
+    /// transition options of the style. If the style has none, the duration is 300 milliseconds
+    /// and the delay is 0 milliseconds. `setStyleTransition` overrides the options until a new
+    /// style is loaded.
     ///
     /// @return The `transition options` of the current style in use.
     let getStyleTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
@@ -4158,7 +4154,7 @@ class StyleManagerSetup {
     }
     /// Overrides the map style's transition options with user-provided options.
     ///
-    /// The style transition is re-evaluated when a new style is loaded.
+    /// The override is removed when a new style is loaded.
     ///
     /// @param transitionOptions The `transition options`.
     let setStyleTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

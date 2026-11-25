@@ -12,9 +12,9 @@ import 'moods/mood_controls.dart';
 
 /// Mutates a loaded style and shows each change on the map.
 ///
-/// Four scenes: swapping the whole style, adding and restyling a layer,
-/// lighting a 3D scene, and moods that combine a color theme, atmosphere,
-/// weather and lights. The HUD counts what the style holds.
+/// Five scenes: swapping the whole style, adding and restyling a layer,
+/// lighting a 3D scene, moods that combine a color theme, atmosphere,
+/// weather and lights, and the style transition with the label fade. The HUD counts what the style holds.
 class StyleExample extends StatefulWidget {
   const StyleExample({super.key});
 
@@ -22,7 +22,7 @@ class StyleExample extends StatefulWidget {
   State<StyleExample> createState() => _StyleExampleState();
 }
 
-enum _Scene { basemap, layers, lighting, moods }
+enum _Scene { basemap, layers, lighting, moods, transitions }
 
 const _scenes = [
   Scene(
@@ -48,6 +48,12 @@ const _scenes = [
     title: 'Moods',
     subtitle: 'Color theme, atmosphere and weather',
     icon: Icons.palette_outlined,
+  ),
+  Scene(
+    id: 'transitions',
+    title: 'Transitions',
+    subtitle: 'Paint, config and label fade timing',
+    icon: Icons.animation,
   ),
 ];
 
@@ -87,6 +93,9 @@ class _StyleExampleState extends State<StyleExample> {
   var _layerAdded = false;
   var _below = false;
   var _terrain = false;
+  var _transitionDuration = 300.0;
+  var _transitionDelay = 0.0;
+  var _placementTransitions = true;
 
   int _layerCount = 0;
   int _sourceCount = 0;
@@ -152,6 +161,10 @@ class _StyleExampleState extends State<StyleExample> {
     setState(() => _layerAdded = false);
     if (_scene == _Scene.layers) await _addLayer();
     if (_scene == _Scene.lighting) await _applyLighting();
+    if (_scene == _Scene.transitions) {
+      await _addLayer();
+      await _readTransition();
+    }
     if (_scene == _Scene.moods) {
       await _moods.reapply();
     } else {
@@ -297,6 +310,57 @@ class _StyleExampleState extends State<StyleExample> {
     await _refresh();
   }
 
+  /// Reads back the transition the map uses. A new style resets it to the
+  /// `transition` of the style JSON, or to 300 ms if the style has none.
+  Future<void> _readTransition() async {
+    final transition = await _mapboxMap?.getStyleTransition();
+    if (!mounted || transition == null) return;
+    setState(() {
+      _transitionDuration = (transition.duration ?? 0).toDouble();
+      _transitionDelay = (transition.delay ?? 0).toDouble();
+      _placementTransitions = transition.enablePlacementTransitions ?? true;
+    });
+  }
+
+  Future<void> _applyTransition() async {
+    await _mapboxMap?.setStyleTransition(
+      TransitionOptions(
+        duration: _transitionDuration.round(),
+        delay: _transitionDelay.round(),
+        enablePlacementTransitions: _placementTransitions,
+      ),
+    );
+    await _readTransition();
+  }
+
+  /// Changes a paint property, which animates with the style transition.
+  Future<void> _cycleLineColor() async {
+    final names = _lineColors.keys.toList();
+    final next = names[(names.indexOf(_layerColorName) + 1) % names.length];
+    setState(() => _layerColorName = next);
+    await _setLayerProperty(
+      'line-color',
+      _lineColors[next]!.toARGB32().toRGBA(),
+    );
+  }
+
+  /// Changes a Standard config property, which animates with the style
+  /// transition.
+  Future<void> _toggleDayNight() async {
+    setState(() => _lightPreset = _lightPreset == 'night' ? 'day' : 'night');
+    await _applyLightPreset();
+  }
+
+  /// Jumps one zoom level in or out without animation. The new zoom level
+  /// shows other labels, which fade in and out for the transition duration.
+  Future<void> _jumpZoom() async {
+    final map = _mapboxMap;
+    if (map == null) return;
+    final camera = await map.getCameraState();
+    final zoom = camera.zoom.round().isEven ? camera.zoom + 1 : camera.zoom - 1;
+    await map.setCamera(CameraOptions(zoom: zoom));
+  }
+
   Future<void> _selectScene(String id) async {
     final previous = _scene;
     setState(() => _scene = _Scene.values.firstWhere((s) => s.name == id));
@@ -306,6 +370,10 @@ class _StyleExampleState extends State<StyleExample> {
     }
     if (_scene == _Scene.layers) await _addLayer();
     if (_scene == _Scene.lighting) await _applyLighting();
+    if (_scene == _Scene.transitions) {
+      await _addLayer();
+      await _readTransition();
+    }
     if (_scene == _Scene.moods && previous != _Scene.moods) {
       // The moods configure the Standard style import.
       if (_styleUri != MapboxStyles.STANDARD) {
@@ -340,7 +408,20 @@ class _StyleExampleState extends State<StyleExample> {
             onMapCreated: _onMapCreated,
             onStyleLoadedListener: _onStyleLoaded,
           ),
-          if (_scene == _Scene.moods)
+          if (_scene == _Scene.transitions)
+            MapHud(
+              title: 'Style transition',
+              rows: [
+                MapHudRow(
+                  'duration',
+                  '${_transitionDuration.round()} ms',
+                  emphasized: true,
+                ),
+                MapHudRow('delay', '${_transitionDelay.round()} ms'),
+                MapHudRow('placement', _placementTransitions ? 'on' : 'off'),
+              ],
+            )
+          else if (_scene == _Scene.moods)
             MapHud(
               title: 'Mood',
               rows: [
@@ -380,6 +461,7 @@ class _StyleExampleState extends State<StyleExample> {
         _Scene.layers => _layerControls(),
         _Scene.lighting => _lightingControls(),
         _Scene.moods => moodControls(_moods),
+        _Scene.transitions => _transitionControls(),
       },
     );
   }
@@ -507,6 +589,77 @@ class _StyleExampleState extends State<StyleExample> {
       'existing layer. The switch moves it between the Standard slots: '
       "'middle' draws under trees, 3D buildings and road labels, 'top' draws "
       'over them. Pitch the map to see the difference.',
+      style: TextStyle(
+        fontSize: 11,
+        height: 1.35,
+        color: MapboxGlass.labelFaint,
+      ),
+    ),
+  ];
+
+  List<Widget> _transitionControls() => [
+    ControlSlider(
+      label: 'Duration',
+      fractionDigits: 0,
+      unit: ' ms',
+      value: _transitionDuration,
+      min: 0,
+      max: 3000,
+      onChanged: (value) => setState(() => _transitionDuration = value),
+      onChangeEnd: (_) => _applyTransition(),
+    ),
+    ControlSlider(
+      label: 'Delay',
+      fractionDigits: 0,
+      unit: ' ms',
+      value: _transitionDelay,
+      min: 0,
+      max: 2000,
+      onChanged: (value) => setState(() => _transitionDelay = value),
+      onChangeEnd: (_) => _applyTransition(),
+    ),
+    ControlSwitch(
+      label: 'Label fade',
+      value: _placementTransitions,
+      onChanged: (value) {
+        setState(() => _placementTransitions = value);
+        _applyTransition();
+      },
+    ),
+    ControlAction(
+      label: 'Change line color',
+      icon: Icons.format_color_fill,
+      onPressed: _cycleLineColor,
+    ),
+    ControlAction(
+      label: _lightPreset == 'night' ? 'Switch to day' : 'Switch to night',
+      icon: Icons.brightness_4_outlined,
+      onPressed: _toggleDayNight,
+    ),
+    ControlAction(
+      label: 'Jump one zoom level',
+      icon: Icons.zoom_in,
+      onPressed: _jumpZoom,
+    ),
+    ControlAction(
+      label: _styleUri == MapboxStyles.STANDARD
+          ? 'Switch to Satellite'
+          : 'Switch to Standard',
+      icon: Icons.swap_horiz,
+      onPressed: () => _setStyle(
+        _styleUri == MapboxStyles.STANDARD
+            ? MapboxStyles.STANDARD_SATELLITE
+            : MapboxStyles.STANDARD,
+      ),
+    ),
+    const SizedBox(height: 4),
+    const Text(
+      'The duration and delay apply to paint and config changes: change the '
+      'line color or the light preset to see them. Label fade sets the '
+      'enablePlacementTransitions option. When it is on, labels fade in and '
+      'out for the duration as the zoom level changes. When it is off, they '
+      'appear and go at once. A style switch resets all values to the '
+      'default of the new style.',
       style: TextStyle(
         fontSize: 11,
         height: 1.35,
