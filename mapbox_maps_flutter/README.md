@@ -21,7 +21,7 @@ This is the app-facing plugin package. It endorses:
 
 ```yaml
 dependencies:
-  mapbox_maps_flutter: ^3.37.0-SNAPSHOT-11-25--01-24.git-d71058c
+  mapbox_maps_flutter: ^3.37.0-SNAPSHOT-11-25--16-29.git-c7b5405
 ```
 
 Then run `flutter pub get`.
