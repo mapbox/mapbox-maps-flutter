@@ -1,6 +1,6 @@
 name: mapbox_maps_flutter_web
 description: Web implementation of the Mapbox Maps Flutter plugin.
-version: 3.37.0-SNAPSHOT-11-25--16-29.git-c7b5405
+version: 3.37.0-SNAPSHOT-11-26--01-23.git-9c12421
 homepage: https://www.mapbox.com/maps
 repository: https://github.com/mapbox/mapbox-maps-flutter
 issue_tracker: https://github.com/mapbox/mapbox-maps-flutter/issues
@@ -19,7 +19,7 @@ dependencies:
   web: ^1.0.0
   meta: ^1.17.0
   turf: ^0.0.14
-  mapbox_maps_flutter_platform_interface: ^3.37.0-SNAPSHOT-11-25--16-29.git-c7b5405
+  mapbox_maps_flutter_platform_interface: ^3.37.0-SNAPSHOT-11-26--01-23.git-9c12421
 
 dev_dependencies:
   flutter_test:
